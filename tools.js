@@ -53,6 +53,13 @@ function calcR5() {
   const min = val * (1 - tol/100), max = val * (1 + tol/100);
   document.getElementById('r5result').textContent =
     'ค่าความต้านทาน: ' + formatOhm(val) + ' ±' + tol + '% (ช่วง: ' + formatOhm(min) + ' ถึง ' + formatOhm(max) + ')';
+  if (document.getElementById('r5_b1')) {
+    document.getElementById('r5_b1').style.background = colorBg[b1.toString()];
+    document.getElementById('r5_b2').style.background = colorBg[b2.toString()];
+    document.getElementById('r5_b3').style.background = colorBg[b3.toString()];
+    document.getElementById('r5_b4').style.background = multMap[mult.toString()] || '#d4af37';
+    document.getElementById('r5_b5').style.background = tolMap[tol.toString()] || '#8B4513';
+  }
 }
 
 // ===== OHM'S LAW =====
