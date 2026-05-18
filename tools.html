@@ -254,6 +254,50 @@
     <div class="result-box" id="uc_result"></div>
   </div>
 
+  <!-- 7. REVERSE RESISTOR -->
+  <div class="tool-box">
+    <div class="tool-title"><span>7</span> ค้นหารหัสสีจากค่าความต้านทาน (Value → Color)</div>
+    <p style="color:var(--text-light);font-size:0.92rem;">กรอกค่าที่ต้องการ แล้วดูว่าต้องหยิบตัวต้านทานสีอะไร</p>
+    <div class="grid-2" style="gap:0.75rem;align-items:end;">
+      <div>
+        <label>ค่าความต้านทาน</label>
+        <div style="display:flex;gap:0.5rem;">
+          <input type="number" id="rev_val" placeholder="เช่น 4.7" step="any" style="flex:1;margin-top:0;">
+          <select id="rev_unit" style="width:90px;margin-top:0;">
+            <option value="1">Ω</option>
+            <option value="1000" selected>kΩ</option>
+            <option value="1000000">MΩ</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;gap:0.75rem;">
+        <div style="flex:1;">
+          <label>แถบสี</label>
+          <select id="rev_bands" style="margin-top:0;">
+            <option value="4">4 แถบ</option>
+            <option value="5">5 แถบ</option>
+          </select>
+        </div>
+        <div style="flex:1;">
+          <label>ค่าผิดพลาด</label>
+          <select id="rev_tol" style="margin-top:0;">
+            <option value="5">±5% ทอง</option>
+            <option value="10">±10% เงิน</option>
+            <option value="1">±1% น้ำตาล</option>
+            <option value="2">±2% แดง</option>
+            <option value="0.5">±0.5% เขียว</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-green" onclick="calcReverse()">🔍 ค้นหารหัสสี</button>
+    <div id="rev_visual" style="margin-top:1.25rem;display:none;">
+      <div id="rev_resistor_wrap" style="display:flex;align-items:center;justify-content:center;margin-bottom:1rem;"></div>
+      <div id="rev_band_labels" style="display:flex;justify-content:center;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.75rem;"></div>
+      <div class="result-box" id="rev_result"></div>
+    </div>
+  </div>
+
   <div class="page-nav">
     <a href="soldering.html">← การบัดกรี</a>
     <a class="next" href="quiz.html">แบบทดสอบ →</a>

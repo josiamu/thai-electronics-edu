@@ -167,6 +167,142 @@ function calcCP() {
   res.className='result-box'; res.textContent = 'C_T = ' + vals.join(' + ') + ' = ' + vals.reduce((a,b)=>a+b,0).toPrecision(4) + ' μF';
 }
 
+// ===== REVERSE RESISTOR =====
+const REV_DIGITS = [
+  {n:'ดำ (Black)',   bg:'#111'},
+  {n:'น้ำตาล (Brown)', bg:'#8B4513'},
+  {n:'แดง (Red)',    bg:'#f00'},
+  {n:'ส้ม (Orange)', bg:'#ff7700'},
+  {n:'เหลือง (Yellow)',bg:'#ffee00'},
+  {n:'เขียว (Green)', bg:'#0a0'},
+  {n:'น้ำเงิน (Blue)', bg:'#00f'},
+  {n:'ม่วง (Violet)', bg:'#8b008b'},
+  {n:'เทา (Gray)',   bg:'#888'},
+  {n:'ขาว (White)',  bg:'#eee'},
+];
+const REV_MULTS = [
+  {v:0.01, n:'เงิน (Silver)',   bg:'#aaa'},
+  {v:0.1,  n:'ทอง (Gold)',      bg:'#d4af37'},
+  {v:1,    n:'ดำ (Black)',      bg:'#111'},
+  {v:10,   n:'น้ำตาล (Brown)',  bg:'#8B4513'},
+  {v:100,  n:'แดง (Red)',       bg:'#f00'},
+  {v:1000, n:'ส้ม (Orange)',    bg:'#ff7700'},
+  {v:10000,n:'เหลือง (Yellow)', bg:'#ffee00'},
+  {v:1e5,  n:'เขียว (Green)',   bg:'#0a0'},
+  {v:1e6,  n:'น้ำเงิน (Blue)',  bg:'#00f'},
+  {v:1e7,  n:'ม่วง (Violet)',   bg:'#8b008b'},
+];
+const REV_TOLS = {
+  '5':  {n:'ทอง (Gold)',      bg:'#d4af37', t:'±5%'},
+  '10': {n:'เงิน (Silver)',   bg:'#aaa',    t:'±10%'},
+  '1':  {n:'น้ำตาล (Brown)', bg:'#8B4513', t:'±1%'},
+  '2':  {n:'แดง (Red)',       bg:'#f00',    t:'±2%'},
+  '0.5':{n:'เขียว (Green)',   bg:'#0a0',    t:'±0.5%'},
+};
+
+function calcReverse() {
+  const raw  = parseFloat(document.getElementById('rev_val').value);
+  const unit = parseFloat(document.getElementById('rev_unit').value);
+  const bands= parseInt(document.getElementById('rev_bands').value);
+  const tolK = document.getElementById('rev_tol').value;
+
+  const vis  = document.getElementById('rev_visual');
+  const res  = document.getElementById('rev_result');
+
+  if (isNaN(raw) || raw <= 0) {
+    vis.style.display = 'none';
+    res.textContent = 'กรุณากรอกค่าความต้านทานที่ถูกต้อง';
+    res.className = 'result-box result-error';
+    vis.style.display = 'block';
+    return;
+  }
+
+  const ohms   = raw * unit;
+  const sigFigs = bands - 2;           // 2 for 4-band, 3 for 5-band
+  const minD   = Math.pow(10, sigFigs - 1);   // 10 or 100
+  const maxD   = Math.pow(10, sigFigs) - 1;   // 99 or 999
+
+  // Find best multiplier — minimize rounding error
+  let bestMult = null, bestDigits = 0, bestErr = Infinity;
+  for (const m of REV_MULTS) {
+    const raw2   = ohms / m.v;
+    const rounded = Math.round(raw2);
+    if (rounded < minD || rounded > maxD) continue;
+    const err = Math.abs(rounded * m.v - ohms) / ohms;
+    if (err < bestErr) { bestErr = err; bestMult = m; bestDigits = rounded; }
+  }
+
+  if (!bestMult) {
+    res.textContent = 'ค่านี้อยู่นอกช่วงที่รองรับ (0.1 Ω – 99 MΩ)';
+    res.className = 'result-box result-error';
+    vis.style.display = 'block';
+    return;
+  }
+
+  // Extract individual digits
+  let tmp = bestDigits;
+  const dArr = [];
+  for (let i = sigFigs - 1; i >= 0; i--) {
+    const p = Math.pow(10, i);
+    dArr.push(Math.floor(tmp / p));
+    tmp = Math.round(tmp % p);
+  }
+
+  const tol     = REV_TOLS[tolK] || REV_TOLS['5'];
+  const actualVal = bestDigits * bestMult.v;
+  const tolPct    = parseFloat(tolK);
+  const bandObjs  = [...dArr.map(d => REV_DIGITS[d]), bestMult, tol];
+  const bandLabels = [...dArr.map((d,i)=>`แถบ${i+1}: ${REV_DIGITS[d].n}`), `แถบ${sigFigs+1}: ${bestMult.n} (×${bestMult.v})`, `แถบ${sigFigs+2}: ${tol.n} (${tol.t})`];
+
+  // Render resistor visual
+  const bandW = bands === 4 ? 26 : 22;
+  const gaps  = [14, ...Array(sigFigs - 1).fill(8), 8, 18, 14]; // gaps before each band + end
+  let bodyHTML = '';
+  bandObjs.forEach((b, i) => {
+    bodyHTML += `<div style="background:${b.bg};width:${gaps[i]}px;opacity:0.6;background:#d4a96a;"></div>`;
+    // override the gap divs to be base color
+    bodyHTML = bodyHTML.replace(/background:#d4a96a;opacity:0\.6;background:#d4a96a;/, 'background:#d4a96a;');
+    bodyHTML += `<div style="background:${b.bg};width:${bandW}px;" title="${b.n}"></div>`;
+  });
+  bodyHTML += `<div style="background:#d4a96a;width:14px;"></div>`;
+
+  // Rebuild cleaner
+  let inner = '';
+  inner += `<div style="background:#d4a96a;width:14px;"></div>`;
+  dArr.forEach((d, i) => {
+    if (i > 0) inner += `<div style="background:#d4a96a;width:8px;"></div>`;
+    inner += `<div style="background:${REV_DIGITS[d].bg};width:${bandW}px;" title="${REV_DIGITS[d].n}"></div>`;
+  });
+  inner += `<div style="background:#d4a96a;width:8px;"></div>`;
+  inner += `<div style="background:${bestMult.bg};width:${bandW}px;" title="${bestMult.n}"></div>`;
+  inner += `<div style="background:#d4a96a;width:18px;"></div>`;
+  inner += `<div style="background:${tol.bg};width:${bandW}px;" title="${tol.n}"></div>`;
+  inner += `<div style="background:#d4a96a;width:14px;"></div>`;
+
+  document.getElementById('rev_resistor_wrap').innerHTML =
+    `<div style="width:50px;height:4px;background:#888;"></div>` +
+    `<div style="display:flex;align-items:stretch;height:44px;border-radius:8px;overflow:hidden;border:2px solid #555;">${inner}</div>` +
+    `<div style="width:50px;height:4px;background:#888;"></div>`;
+
+  // Band labels
+  const labelsHTML = bandLabels.map((l, i) => {
+    const bg = bandObjs[i].bg;
+    const light = ['#ffee00','#eee','#d4af37','#aaa','#888'].includes(bg);
+    return `<div style="background:${bg};color:${light?'#111':'#fff'};border-radius:6px;padding:0.3rem 0.6rem;font-size:0.82rem;font-weight:700;border:1px solid rgba(0,0,0,0.15);">${l}</div>`;
+  }).join('');
+  document.getElementById('rev_band_labels').innerHTML = labelsHTML;
+
+  // Result text
+  const pct = Math.round(bestErr * 10000) / 100;
+  res.className = 'result-box';
+  res.innerHTML =
+    `<strong>ค่าความต้านทาน: ${formatOhm(actualVal)}</strong> ${tol.t}<br>` +
+    `ช่วงค่าจริง: ${formatOhm(actualVal*(1-tolPct/100))} – ${formatOhm(actualVal*(1+tolPct/100))}` +
+    (pct > 0.01 ? `<br><span style="color:#92400e;">⚠️ ค่าที่ใกล้ที่สุด (ปัดเศษ ${pct.toFixed(2)}%)</span>` : '');
+
+  vis.style.display = 'block';
+}
+
 // ===== UNIT CONVERTER =====
 const toBase = {
   V_MV:1e6,V_kV:1e3,V_V:1,V_mV:1e-3,V_uV:1e-6,
