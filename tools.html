@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เครื่องคิดเลขเชิงโต้ตอบ | สื่อการเรียนการสอน</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="nav-placeholder"></div>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🧮</div>
+    <div>
+      <h1>เครื่องคิดเลขเชิงโต้ตอบ</h1>
+      <p>รหัสสีตัวต้านทาน • กฎโอห์ม • กำลังไฟฟ้า • อนุกรม/ขนาน • แปลงหน่วย</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 1. RESISTOR COLOR CODE -->
+  <div class="tool-box">
+    <div class="tool-title"><span>1</span> รหัสสีตัวต้านทาน (Resistor Color Code)</div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab(this,'r4band','r5band')">4 แถบ</button>
+      <button class="tab-btn" onclick="switchTab(this,'r5band','r4band')">5 แถบ</button>
+    </div>
+
+    <div id="r4band" class="tab-content active">
+      <div class="grid-2" style="gap:0.75rem;">
+        <div>
+          <label>แถบที่ 1 (เลขหน้า)</label>
+          <select id="r4b1" onchange="calcR4()">
+            <option value="0">0 — ดำ</option><option value="1">1 — น้ำตาล</option><option value="2">2 — แดง</option>
+            <option value="3">3 — ส้ม</option><option value="4">4 — เหลือง</option><option value="5">5 — เขียว</option>
+            <option value="6">6 — น้ำเงิน</option><option value="7">7 — ม่วง</option><option value="8">8 — เทา</option><option value="9">9 — ขาว</option>
+          </select>
+          <label>แถบที่ 2 (เลขหลัง)</label>
+          <select id="r4b2" onchange="calcR4()">
+            <option value="0">0 — ดำ</option><option value="1">1 — น้ำตาล</option><option value="2">2 — แดง</option>
+            <option value="3">3 — ส้ม</option><option value="4">4 — เหลือง</option><option value="5">5 — เขียว</option>
+            <option value="6">6 — น้ำเงิน</option><option value="7">7 — ม่วง</option><option value="8">8 — เทา</option><option value="9">9 — ขาว</option>
+          </select>
+        </div>
+        <div>
+          <label>แถบที่ 3 (ตัวคูณ)</label>
+          <select id="r4b3" onchange="calcR4()">
+            <option value="1">×1 — ดำ</option><option value="10">×10 — น้ำตาล</option><option value="100" selected>×100 — แดง</option>
+            <option value="1000">×1k — ส้ม</option><option value="10000">×10k — เหลือง</option>
+            <option value="100000">×100k — เขียว</option><option value="1000000">×1M — น้ำเงิน</option>
+            <option value="0.1">×0.1 — ทอง</option><option value="0.01">×0.01 — เงิน</option>
+          </select>
+          <label>แถบที่ 4 (ค่าผิดพลาด)</label>
+          <select id="r4b4" onchange="calcR4()">
+            <option value="5">±5% — ทอง</option><option value="10">±10% — เงิน</option>
+            <option value="20">±20% — ไม่มีสี</option><option value="1">±1% — น้ำตาล</option>
+            <option value="2">±2% — แดง</option><option value="0.5">±0.5% — เขียว</option>
+            <option value="0.25">±0.25% — น้ำเงิน</option><option value="0.1">±0.1% — ม่วง</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:center;margin:1.25rem 0;gap:0;">
+        <div style="width:50px;height:4px;background:#888;"></div>
+        <div style="display:flex;align-items:stretch;height:44px;border-radius:8px;overflow:hidden;border:2px solid #555;min-width:200px;">
+          <div style="background:#d4a96a;width:20px;"></div>
+          <div id="r4_b1" style="background:#111;width:28px;"></div>
+          <div style="background:#d4a96a;width:12px;"></div>
+          <div id="r4_b2" style="background:#111;width:28px;"></div>
+          <div style="background:#d4a96a;width:12px;"></div>
+          <div id="r4_b3" style="background:#f00;width:28px;"></div>
+          <div style="background:#d4a96a;width:24px;"></div>
+          <div id="r4_b4" style="background:#d4af37;width:28px;"></div>
+          <div style="background:#d4a96a;width:20px;"></div>
+        </div>
+        <div style="width:50px;height:4px;background:#888;"></div>
+      </div>
+      <div class="result-box" id="r4result"></div>
+    </div>
+
+    <div id="r5band" class="tab-content">
+      <div class="grid-3" style="gap:0.75rem;">
+        <div>
+          <label>แถบที่ 1</label>
+          <select id="r5b1" onchange="calcR5()">
+            <option value="0">0 — ดำ</option><option value="1">1 — น้ำตาล</option><option value="2">2 — แดง</option>
+            <option value="3">3 — ส้ม</option><option value="4">4 — เหลือง</option><option value="5">5 — เขียว</option>
+            <option value="6">6 — น้ำเงิน</option><option value="7">7 — ม่วง</option><option value="8">8 — เทา</option><option value="9">9 — ขาว</option>
+          </select>
+          <label>แถบที่ 2</label>
+          <select id="r5b2" onchange="calcR5()">
+            <option value="0">0 — ดำ</option><option value="1">1 — น้ำตาล</option><option value="2">2 — แดง</option>
+            <option value="3">3 — ส้ม</option><option value="4">4 — เหลือง</option><option value="5">5 — เขียว</option>
+            <option value="6">6 — น้ำเงิน</option><option value="7">7 — ม่วง</option><option value="8">8 — เทา</option><option value="9">9 — ขาว</option>
+          </select>
+        </div>
+        <div>
+          <label>แถบที่ 3</label>
+          <select id="r5b3" onchange="calcR5()">
+            <option value="0">0 — ดำ</option><option value="1">1 — น้ำตาล</option><option value="2">2 — แดง</option>
+            <option value="3">3 — ส้ม</option><option value="4">4 — เหลือง</option><option value="5">5 — เขียว</option>
+            <option value="6">6 — น้ำเงิน</option><option value="7">7 — ม่วง</option><option value="8">8 — เทา</option><option value="9">9 — ขาว</option>
+          </select>
+          <label>แถบที่ 4 (ตัวคูณ)</label>
+          <select id="r5b4" onchange="calcR5()">
+            <option value="1">×1 — ดำ</option><option value="10">×10 — น้ำตาล</option><option value="100">×100 — แดง</option>
+            <option value="1000">×1k — ส้ม</option><option value="10000">×10k — เหลือง</option>
+            <option value="0.1">×0.1 — ทอง</option><option value="0.01">×0.01 — เงิน</option>
+          </select>
+        </div>
+        <div>
+          <label>แถบที่ 5 (ค่าผิดพลาด)</label>
+          <select id="r5b5" onchange="calcR5()">
+            <option value="1">±1% — น้ำตาล</option><option value="2">±2% — แดง</option>
+            <option value="0.5">±0.5% — เขียว</option><option value="0.25">±0.25% — น้ำเงิน</option>
+            <option value="0.1">±0.1% — ม่วง</option><option value="5">±5% — ทอง</option>
+          </select>
+        </div>
+      </div>
+      <div class="result-box" id="r5result" style="margin-top:1rem;"></div>
+    </div>
+  </div>
+
+  <!-- 2. OHM'S LAW -->
+  <div class="tool-box">
+    <div class="tool-title"><span>2</span> กฎของโอห์ม (Ohm's Law)</div>
+    <p style="color:var(--text-light);font-size:0.92rem;">กรอก 2 ค่าใดก็ได้ ปล่อยค่าที่ต้องการคำนวณว่างไว้</p>
+    <div class="grid-3">
+      <div><label>แรงดัน E (V)</label><input type="number" id="ohm_e" placeholder="เว้นว่างเพื่อคำนวณ" step="any"></div>
+      <div><label>กระแส I (A)</label><input type="number" id="ohm_i" placeholder="เว้นว่างเพื่อคำนวณ" step="any"></div>
+      <div><label>ความต้านทาน R (Ω)</label><input type="number" id="ohm_r" placeholder="เว้นว่างเพื่อคำนวณ" step="any"></div>
+    </div>
+    <button class="btn" onclick="calcOhm()">คำนวณ</button>
+    <button class="btn" style="background:#6b7280;margin-left:0.5rem;" onclick="clearOhm()">ล้างค่า</button>
+    <div class="result-box" id="ohm_result"></div>
+  </div>
+
+  <!-- 3. POWER -->
+  <div class="tool-box">
+    <div class="tool-title"><span>3</span> กำลังไฟฟ้า (Power Calculator)</div>
+    <p style="color:var(--text-light);font-size:0.92rem;">กรอก 2 ค่าใดก็ได้</p>
+    <div class="grid-2">
+      <div>
+        <label>กำลังไฟฟ้า P (W)</label><input type="number" id="pow_p" placeholder="เว้นว่างเพื่อคำนวณ" step="any">
+        <label>แรงดัน E (V)</label><input type="number" id="pow_e" placeholder="เว้นว่างเพื่อคำนวณ" step="any">
+      </div>
+      <div>
+        <label>กระแส I (A)</label><input type="number" id="pow_i" placeholder="เว้นว่างเพื่อคำนวณ" step="any">
+        <label>ความต้านทาน R (Ω)</label><input type="number" id="pow_r" placeholder="เว้นว่างเพื่อคำนวณ" step="any">
+      </div>
+    </div>
+    <button class="btn" onclick="calcPower()">คำนวณ</button>
+    <button class="btn" style="background:#6b7280;margin-left:0.5rem;" onclick="clearPower()">ล้างค่า</button>
+    <div class="result-box" id="pow_result"></div>
+  </div>
+
+  <!-- 4. ENERGY -->
+  <div class="tool-box">
+    <div class="tool-title"><span>4</span> พลังงานไฟฟ้า (W = P × t)</div>
+    <div class="grid-3">
+      <div><label>กำลังไฟฟ้า (W)</label><input type="number" id="eng_p" placeholder="เช่น 100" step="any"></div>
+      <div><label>เวลา (ชั่วโมง)</label><input type="number" id="eng_t" placeholder="เช่น 5" step="any"></div>
+      <div style="display:flex;align-items:flex-end;"><button class="btn btn-green" onclick="calcEnergy()" style="width:100%;margin-top:0;">คำนวณ</button></div>
+    </div>
+    <div class="result-box" id="eng_result"></div>
+  </div>
+
+  <!-- 5. SERIES/PARALLEL -->
+  <div class="tool-box">
+    <div class="tool-title"><span>5</span> วงจรอนุกรม/ขนาน</div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab(this,'circ_rs','circ_rp','circ_cs','circ_cp')">R อนุกรม</button>
+      <button class="tab-btn" onclick="switchTab(this,'circ_rp','circ_rs','circ_cs','circ_cp')">R ขนาน</button>
+      <button class="tab-btn" onclick="switchTab(this,'circ_cs','circ_rs','circ_rp','circ_cp')">C อนุกรม</button>
+      <button class="tab-btn" onclick="switchTab(this,'circ_cp','circ_rs','circ_rp','circ_cs')">C ขนาน</button>
+    </div>
+    <div id="circ_rs" class="tab-content active">
+      <p style="color:var(--text-light);font-size:0.9rem;margin-bottom:0.75rem;">R<sub>T</sub> = R₁ + R₂ + ... (Ω คั่นด้วย ,)</p>
+      <input type="text" id="rs_vals" placeholder="เช่น 100, 220, 470">
+      <button class="btn" onclick="calcRS()">คำนวณ</button>
+      <div class="result-box" id="rs_result"></div>
+    </div>
+    <div id="circ_rp" class="tab-content">
+      <p style="color:var(--text-light);font-size:0.9rem;margin-bottom:0.75rem;">1/R<sub>T</sub> = 1/R₁ + 1/R₂ + ... (Ω คั่นด้วย ,)</p>
+      <input type="text" id="rp_vals" placeholder="เช่น 1000, 2200, 4700">
+      <button class="btn" onclick="calcRP()">คำนวณ</button>
+      <div class="result-box" id="rp_result"></div>
+    </div>
+    <div id="circ_cs" class="tab-content">
+      <p style="color:var(--text-light);font-size:0.9rem;margin-bottom:0.75rem;">1/C<sub>T</sub> = 1/C₁ + 1/C₂ + ... (μF คั่นด้วย ,)</p>
+      <input type="text" id="cs_vals" placeholder="เช่น 10, 22, 47">
+      <button class="btn btn-green" onclick="calcCS()">คำนวณ</button>
+      <div class="result-box" id="cs_result"></div>
+    </div>
+    <div id="circ_cp" class="tab-content">
+      <p style="color:var(--text-light);font-size:0.9rem;margin-bottom:0.75rem;">C<sub>T</sub> = C₁ + C₂ + ... (μF คั่นด้วย ,)</p>
+      <input type="text" id="cp_vals" placeholder="เช่น 10, 22, 47">
+      <button class="btn btn-green" onclick="calcCP()">คำนวณ</button>
+      <div class="result-box" id="cp_result"></div>
+    </div>
+  </div>
+
+  <!-- 6. UNIT CONVERTER -->
+  <div class="tool-box">
+    <div class="tool-title"><span>6</span> แปลงหน่วย (Unit Converter)</div>
+    <div class="grid-2">
+      <div>
+        <label>ค่าที่ต้องการแปลง</label>
+        <input type="number" id="uc_val" placeholder="เช่น 4700" step="any">
+        <label>หน่วยต้นทาง</label>
+        <select id="uc_from">
+          <optgroup label="แรงดัน"><option value="V_MV">MV</option><option value="V_kV">kV</option><option value="V_V">V</option><option value="V_mV">mV</option><option value="V_uV">μV</option></optgroup>
+          <optgroup label="กระแส"><option value="A_kA">kA</option><option value="A_A">A</option><option value="A_mA">mA</option><option value="A_uA">μA</option></optgroup>
+          <optgroup label="ความต้านทาน"><option value="R_MO">MΩ</option><option value="R_kO">kΩ</option><option value="R_O">Ω</option><option value="R_mO">mΩ</option></optgroup>
+          <optgroup label="กำลังไฟฟ้า"><option value="W_MW">MW</option><option value="W_kW">kW</option><option value="W_W">W</option><option value="W_mW">mW</option></optgroup>
+          <optgroup label="ความจุ"><option value="C_F">F</option><option value="C_uF">μF</option><option value="C_nF">nF</option><option value="C_pF">pF</option></optgroup>
+          <optgroup label="ค่าเหนี่ยวนำ"><option value="L_H">H</option><option value="L_mH">mH</option><option value="L_uH">μH</option></optgroup>
+        </select>
+      </div>
+      <div>
+        <label>หน่วยปลายทาง</label>
+        <select id="uc_to">
+          <optgroup label="แรงดัน"><option value="V_MV">MV</option><option value="V_kV">kV</option><option value="V_V" selected>V</option><option value="V_mV">mV</option><option value="V_uV">μV</option></optgroup>
+          <optgroup label="กระแส"><option value="A_kA">kA</option><option value="A_A">A</option><option value="A_mA">mA</option><option value="A_uA">μA</option></optgroup>
+          <optgroup label="ความต้านทาน"><option value="R_MO">MΩ</option><option value="R_kO">kΩ</option><option value="R_O">Ω</option><option value="R_mO">mΩ</option></optgroup>
+          <optgroup label="กำลังไฟฟ้า"><option value="W_MW">MW</option><option value="W_kW">kW</option><option value="W_W">W</option><option value="W_mW">mW</option></optgroup>
+          <optgroup label="ความจุ"><option value="C_F">F</option><option value="C_uF">μF</option><option value="C_nF">nF</option><option value="C_pF">pF</option></optgroup>
+          <optgroup label="ค่าเหนี่ยวนำ"><option value="L_H">H</option><option value="L_mH">mH</option><option value="L_uH">μH</option></optgroup>
+        </select>
+        <button class="btn" onclick="calcUnit()" style="width:100%;margin-top:1.35rem;">แปลงหน่วย</button>
+      </div>
+    </div>
+    <div class="result-box" id="uc_result"></div>
+  </div>
+
+  <div class="page-nav">
+    <a href="soldering.html">← การบัดกรี</a>
+    <a class="next" href="quiz.html">แบบทดสอบ →</a>
+  </div>
+</div>
+
+<footer><strong>สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong></footer>
+<script>const CURRENT_PAGE='tools';</script>
+<script src="nav.js"></script>
+<script src="tools.js"></script>
+<script>
+function switchTab(btn, showId, ...hideIds) {
+  [...hideIds, showId].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('active');
+  });
+  document.getElementById(showId).classList.add('active');
+  btn.closest('.tool-box').querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+calcR4(); calcR5();
+</script>
+</body>
+</html>

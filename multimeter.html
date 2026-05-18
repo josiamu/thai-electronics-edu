@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เครื่องมือวัดไฟฟ้า | สื่อการเรียนการสอน</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="nav-placeholder"></div>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">📏</div>
+    <div>
+      <h1>เครื่องมือวัดไฟฟ้าเบื้องต้น</h1>
+      <p>Multimeter อนาล็อก • Multimeter ดิจิตัล (DMM) • DCV/ACV/Ω/mA</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section">
+    <div class="section-title">มัลติมิเตอร์แบบอนาล็อก (Analog Multimeter)</div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list">
+            <li>ใช้เข็มชี้ค่าบนสเกล</li>
+            <li>ต้องตั้งศูนย์ (Zero Adjust) ก่อนใช้งาน</li>
+            <li>วัดได้ทั้ง DCV, ACV, DCmA, Ω</li>
+            <li>ต้องเลือกย่านวัดให้ถูกต้อง</li>
+          </ul>
+        </div>
+        <div class="warn-box">
+          <strong>ข้อควรระวัง:</strong><br>
+          • ห้ามวัดแรงดัน/กระแสเกินย่านที่ตั้ง<br>
+          • วัด DC ต้องต่อขั้วให้ถูก (+ ไป + / − ไป −)<br>
+          • วัด Ω ต้องตัดไฟวงจรก่อน<br>
+          • ห้ามวัด ACV ในย่าน DCmA
+        </div>
+      </div>
+      <div style="margin-top:1rem;">
+        <table>
+          <tr><th>การวัด</th><th>ย่านที่มี</th><th>หมายเหตุ</th></tr>
+          <tr><td>DCV (แรงดันตรง)</td><td>0.1V, 0.5V, 2.5V, 10V, 50V, 250V, 1000V</td><td>เลือกย่านสูงกว่าแรงดันที่จะวัด</td></tr>
+          <tr><td>ACV (แรงดันสลับ)</td><td>10V, 50V, 250V, 1000V</td><td>ไฟบ้าน 220V → ใช้ย่าน 250V</td></tr>
+          <tr><td>DCmA (กระแสตรง)</td><td>50μA, 2.5mA, 25mA, 250mA</td><td>ต่ออนุกรมกับวงจร</td></tr>
+          <tr><td>Ω (ความต้านทาน)</td><td>×1, ×10, ×100, ×1k, ×10k</td><td>ตั้ง Zero Ω ก่อนวัด</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">มัลติมิเตอร์แบบดิจิตัล (Digital Multimeter — DMM)</div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list">
+            <li>แสดงค่าเป็นตัวเลขบน LCD</li>
+            <li>ความแม่นยำสูงกว่าแบบอนาล็อก</li>
+            <li>บางรุ่นมี Auto-Range (เลือกย่านอัตโนมัติ)</li>
+            <li>วัดได้ทั้ง DCV, ACV, DCA, ACA, Ω, Diode, hFE</li>
+          </ul>
+        </div>
+        <div class="info-box">
+          <strong>สัญลักษณ์ที่ควรรู้</strong><br>
+          • V~ = ACV (แรงดันสลับ)<br>
+          • V⎓ = DCV (แรงดันตรง)<br>
+          • A~ = ACA (กระแสสลับ)<br>
+          • A⎓ = DCA (กระแสตรง)<br>
+          • Ω = ความต้านทาน<br>
+          • ))) = Continuity (มีเสียง)<br>
+          • ⊣▷ = ทดสอบ Diode
+        </div>
+      </div>
+      <div class="warn-box" style="margin-top:0.75rem;">
+        <strong>ข้อควรระวัง DMM:</strong> ดูตำแหน่งสายวัด (COM, VΩ, mA, 10A) ให้ถูกต้องก่อนวัดทุกครั้ง
+        ผิดตำแหน่งอาจทำให้มิเตอร์เสียหายได้
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">วิธีการวัดที่ถูกต้อง</div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>การวัดแรงดัน (Voltage)</h3>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content">ตั้งย่านวัดให้สูงกว่าแรงดันที่คาดไว้</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content">ต่อสายวัด <strong>ขนาน</strong> กับส่วนที่ต้องการวัด</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content">สายแดง (+) ที่ขั้วบวก, สายดำ (−) ที่ขั้วลบ (สำหรับ DC)</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>การวัดกระแส (Current)</h3>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content">ตัดวงจรที่จะวัดออก</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content">ต่อสายวัด <strong>อนุกรม</strong> กับวงจร (ให้กระแสไหลผ่านมิเตอร์)</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content">เปิดวงจรและอ่านค่า</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="inductor.html">← ตัวเหนี่ยวนำ</a>
+    <a class="next" href="soldering.html">การบัดกรี →</a>
+  </div>
+</div>
+
+<footer><strong>สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong></footer>
+<script>const CURRENT_PAGE='multimeter';</script>
+<script src="nav.js"></script>
+</body>
+</html>

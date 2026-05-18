@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>การบัดกรี | สื่อการเรียนการสอน</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="nav-placeholder"></div>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🔥</div>
+    <div>
+      <h1>การบัดกรี (Soldering)</h1>
+      <p>อุปกรณ์ • 4 ขั้นตอน • รอยบัดกรีที่ดีและไม่ดี</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section">
+    <div class="section-title">อุปกรณ์ที่ใช้ในการบัดกรี</div>
+    <div class="card">
+      <div class="grid-2">
+        <ul class="content-list">
+          <li><strong>หัวแร้งบัดกรี (Soldering Iron)</strong> — ให้ความร้อน ขนาด 25–40W</li>
+          <li><strong>ตะกั่วบัดกรี (Solder Wire)</strong> — ผสม Sn/Pb + Flux ในตัว</li>
+          <li><strong>น้ำยาประสาน (Flux)</strong> — ช่วยให้ตะกั่วติดดีขึ้น</li>
+          <li><strong>ฟองน้ำ (Sponge)</strong> — เช็ดทำความสะอาดหัวแร้ง</li>
+        </ul>
+        <ul class="content-list">
+          <li><strong>แท่นวางหัวแร้ง (Iron Stand)</strong> — วางหัวแร้งขณะพัก</li>
+          <li><strong>ดีบุกดูด (Desoldering Pump)</strong> — ดูดตะกั่วส่วนเกินออก</li>
+          <li><strong>สายดูดตะกั่ว (Desoldering Braid)</strong> — ดูดตะกั่วออกด้วยไส้ทองแดง</li>
+          <li><strong>ที่จับชิ้นงาน (PCB Holder)</strong> — ยึดแผ่นวงจรขณะบัดกรี</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">ขั้นตอนการบัดกรี 4 ขั้นตอน</div>
+    <div class="card">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <strong>ให้ความร้อน (Heat)</strong><br>
+            นำหัวแร้งแตะที่ขาอุปกรณ์และ Pad พร้อมกัน ประมาณ <strong>2–3 วินาที</strong> ให้ทั้งสองส่วนร้อนเท่ากัน
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <strong>ป้อนตะกั่ว (Add Solder)</strong><br>
+            ป้อนตะกั่วบัดกรีที่ <strong>จุดต่อ</strong> (ไม่ใช่ที่หัวแร้ง) ให้ตะกั่วไหลเข้าจุดต่อเอง
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <strong>ให้ความร้อนต่อ (Continue Heating)</strong><br>
+            ยังคงให้ความร้อนต่ออีก <strong>1–2 วินาที</strong> เพื่อให้ตะกั่วไหลทั่วจุดต่อ
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <strong>ถอดหัวแร้ง (Remove Iron)</strong><br>
+            ถอดหัวแร้งออก รอให้เย็นตามธรรมชาติ <strong>ห้ามเป่า</strong> เพราะจะเกิด Cold Joint
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">ลักษณะรอยบัดกรี</div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="info-box">
+          <strong>✓ รอยบัดกรีที่ดี (Good Joint)</strong><br>
+          • ผิวเรียบมันวาว<br>
+          • รูปกรวยปลายแหลม<br>
+          • ตะกั่วกระจายทั่วจุดต่อ<br>
+          • ติดแน่นไม่หลุดง่าย
+        </div>
+      </div>
+      <div class="card">
+        <div class="warn-box">
+          <strong>✗ รอยบัดกรีที่ไม่ดี</strong><br>
+          • <strong>Cold Joint</strong> — ผิวขรุขระ ขุ่นมัว (เป่า/สั่น)<br>
+          • <strong>Solder Bridge</strong> — ตะกั่วล้นเชื่อม Pad อื่น<br>
+          • <strong>ตะกั่วน้อยเกิน</strong> — ติดไม่แน่น นำไฟฟ้าไม่ดี<br>
+          • <strong>Dry Joint</strong> — ตะกั่วไม่ละลายเข้าจุดต่อ
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="multimeter.html">← เครื่องมือวัด</a>
+    <a class="next" href="tools.html">เครื่องคิดเลข →</a>
+  </div>
+</div>
+
+<footer><strong>สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong></footer>
+<script>const CURRENT_PAGE='soldering';</script>
+<script src="nav.js"></script>
+</body>
+</html>

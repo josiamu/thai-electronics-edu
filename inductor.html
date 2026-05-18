@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ตัวเหนี่ยวนำและหม้อแปลง | สื่อการเรียนการสอน</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="nav-placeholder"></div>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🌀</div>
+    <div>
+      <h1>ตัวเหนี่ยวนำและหม้อแปลงไฟฟ้า</h1>
+      <p>Inductor • Transformer • H/mH/μH • วงจรอนุกรม/ขนาน</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section">
+    <div class="section-title">ตัวเหนี่ยวนำ (Inductor / Coil)</div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list">
+            <li>เก็บพลังงานในรูปสนามแม่เหล็ก</li>
+            <li>ต่อต้านการเปลี่ยนแปลงกระแส</li>
+            <li>ใช้ใน Filter, Oscillator, Power Supply</li>
+            <li>หน่วย: เฮนรี (Henry, H)</li>
+          </ul>
+          <div class="info-box" style="margin-top:0.75rem;">
+            <strong>การแปลงหน่วย</strong><br>
+            1 H = 1,000 mH = 1,000,000 μH<br>
+            1 mH = 0.001 H = 1,000 μH<br>
+            1 μH = 0.001 mH = 0.000001 H
+          </div>
+        </div>
+        <div>
+          <div class="card" style="box-shadow:none;border:1px solid var(--border);">
+            <h3>วงจรอนุกรม</h3>
+            <div class="formula-box"><div class="formula">L<sub>T</sub> = L₁ + L₂ + L₃</div></div>
+            <h3 style="margin-top:0.75rem;">วงจรขนาน</h3>
+            <div class="formula-box"><div class="formula">1/L<sub>T</sub> = 1/L₁ + 1/L₂ + 1/L₃</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">หม้อแปลงไฟฟ้า (Transformer)</div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list">
+            <li>แปลงแรงดัน AC ขึ้นหรือลงตามอัตราส่วนรอบขด</li>
+            <li>ขดปฐมภูมิ (Primary) รับแรงดันเข้า</li>
+            <li>ขดทุติยภูมิ (Secondary) ส่งแรงดันออก</li>
+            <li>ไม่เปลี่ยนความถี่</li>
+            <li>กำลังไฟฟ้าเข้า ≈ กำลังไฟฟ้าออก (ไม่คิดสูญเสีย)</li>
+          </ul>
+          <div class="formula-box" style="margin-top:0.75rem;">
+            <div class="formula">V₁/V₂ = N₁/N₂ = I₂/I₁</div>
+          </div>
+        </div>
+        <div class="info-box">
+          <strong>ชนิดของหม้อแปลง</strong><br>
+          • <strong>Step-Up</strong>: แรงดันออก > แรงดันเข้า (N₂ > N₁)<br>
+          • <strong>Step-Down</strong>: แรงดันออก < แรงดันเข้า (N₂ < N₁)<br>
+          • <strong>Isolation</strong>: แรงดันเท่ากัน แยก Ground<br>
+          • <strong>Auto Transformer</strong>: ขดเดียว มี Tap<br><br>
+          <strong>ตัวอย่าง:</strong><br>
+          หม้อแปลง 220V/12V มีรอบขด N₁:N₂ = 220:12<br>
+          ถ้า I₂ = 1A → I₁ = 12/220 = 0.055 A
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="capacitor.html">← ตัวเก็บประจุ</a>
+    <a class="next" href="multimeter.html">เครื่องมือวัด →</a>
+  </div>
+</div>
+
+<footer><strong>สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong></footer>
+<script>const CURRENT_PAGE='inductor';</script>
+<script src="nav.js"></script>
+</body>
+</html>

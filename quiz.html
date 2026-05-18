@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แบบทดสอบ | สื่อการเรียนการสอน</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="nav-placeholder"></div>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">📝</div>
+    <div>
+      <h1>แบบทดสอบ</h1>
+      <p>50 ข้อ • 7 หมวด • เลือกหมวด • บันทึกคะแนนสูงสุด</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div id="quiz-cat-selector">
+    <p style="color:var(--text-light);margin-bottom:1rem;">เลือกหมวดที่ต้องการทดสอบ แล้วกด "เริ่มทำแบบทดสอบ"</p>
+    <div class="quiz-cat-grid" id="quiz-cat-grid"></div>
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center;">
+      <button class="btn" onclick="startQuiz()">▶ เริ่มทำแบบทดสอบ</button>
+      <button class="btn" style="background:#6b7280;" onclick="selectAllCats()">เลือกทุกหมวด</button>
+      <span id="quiz-selected-info" style="color:var(--text-light);font-size:0.9rem;"></span>
+    </div>
+  </div>
+
+  <div class="quiz-score-bar" id="quiz-score-bar" style="display:none;">
+    <div class="quiz-score-item"><div class="sq-num" id="sq-current">0</div><div class="sq-label">ข้อปัจจุบัน</div></div>
+    <div style="width:1px;background:var(--border);height:36px;"></div>
+    <div class="quiz-score-item"><div class="sq-num" id="sq-correct" style="color:#10b981;">0</div><div class="sq-label">ถูก</div></div>
+    <div class="quiz-score-item"><div class="sq-num" id="sq-wrong" style="color:#ef4444;">0</div><div class="sq-label">ผิด</div></div>
+    <div class="quiz-score-item"><div class="sq-num" id="sq-total">0</div><div class="sq-label">ทั้งหมด</div></div>
+    <div class="quiz-score-best" id="sq-best" style="display:none;"></div>
+    <button class="btn" style="background:#6b7280;margin-left:auto;" onclick="backToMenu()">← เมนู</button>
+  </div>
+
+  <div class="quiz-box" id="quiz-box" style="display:none;">
+    <div class="quiz-progress"><div class="quiz-progress-fill" id="quiz-prog-fill" style="width:0%"></div></div>
+    <div class="quiz-qnum" id="quiz-qnum"></div>
+    <div class="quiz-question" id="quiz-question"></div>
+    <div class="quiz-options" id="quiz-options"></div>
+    <div id="quiz-explain" style="display:none;"></div>
+    <div class="quiz-nav" id="quiz-nav"></div>
+  </div>
+
+  <div class="quiz-box quiz-finish" id="quiz-finish" style="display:none;">
+    <div class="big-score" id="qf-score"></div>
+    <div class="score-label" id="qf-label"></div>
+    <div class="score-msg" id="qf-msg"></div>
+    <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;">
+      <button class="btn" onclick="retryQuiz()">🔄 ทำซ้ำ</button>
+      <button class="btn btn-green" onclick="backToMenu()">📋 เลือกหมวดใหม่</button>
+    </div>
+    <div class="quiz-review" id="qf-review"></div>
+  </div>
+
+  <div class="page-nav" style="margin-top:2rem;">
+    <a href="tools.html">← เครื่องคิดเลข</a>
+    <a class="next" href="downloads.html">ดาวน์โหลด PDF →</a>
+  </div>
+</div>
+
+<footer><strong>สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong></footer>
+<script>const CURRENT_PAGE='quiz';</script>
+<script src="nav.js"></script>
+<script>
+const QUIZ_CATEGORIES = [
+  { id:'electricity', icon:'⚡', name:'แหล่งกำเนิดไฟฟ้า', questions:[
+    {q:'ไฟฟ้าที่เกิดจากการกดหรือบิดผลึกควอตซ์ เรียกว่าอะไร?',opts:['Thermoelectric Effect','Piezoelectric Effect','Photoelectric Effect','Electromagnetic Induction'],ans:1,exp:'Piezoelectric Effect คือการเกิดไฟฟ้าจากแรงกดดันบนผลึกบางชนิด เช่น ควอตซ์ ใช้ในไฟแช็คและลำโพง'},
+    {q:'Thermocouple ผลิตไฟฟ้าจากแหล่งกำเนิดใด?',opts:['แสงสว่าง','การเสียดสี','ความร้อน','สนามแม่เหล็ก'],ans:2,exp:'Thermocouple เกิดจากการต่อโลหะต่างชนิดสองเส้นแล้วให้ความร้อนที่รอยต่อ จะเกิดแรงดันไฟฟ้า ใช้วัดอุณหภูมิสูง'},
+    {q:'Solar Cell แปลงพลังงานใดเป็นพลังงานไฟฟ้า?',opts:['ความร้อน','การเสียดสี','สนามแม่เหล็ก','แสงสว่าง'],ans:3,exp:'Solar Cell ใช้หลัก Photoelectric Effect โดยแสงกระทบสารกึ่งตัวนำ (Silicon) แล้วปลดปล่อยอิเล็กตรอนเกิดกระแสไฟฟ้า'},
+    {q:'Generator ใช้หลักการใดในการผลิตไฟฟ้า?',opts:['Piezoelectric Effect','Chemical Reaction','Photoelectric Effect','Electromagnetic Induction'],ans:3,exp:'Generator ใช้หลัก Electromagnetic Induction คือตัวนำตัดสนามแม่เหล็ก ทำให้เกิด EMF ตามกฎของฟาราเดย์'},
+    {q:'แบตเตอรี่ผลิตไฟฟ้าจากแหล่งกำเนิดใด?',opts:['ความร้อน','ปฏิกิริยาเคมี','แสงสว่าง','การเสียดสี'],ans:1,exp:'แบตเตอรี่ใช้ปฏิกิริยาเคมีระหว่างสารเคมีภายใน เรียกว่า Voltaic Cell แปลงพลังงานเคมีเป็นพลังงานไฟฟ้า'},
+    {q:'ไฟฟ้าสถิต (Static Electricity) แตกต่างจากไฟฟ้ากระแสอย่างไร?',opts:['มีแรงดันสูงกว่า','ประจุไม่ไหล ไม่เคลื่อนที่','เป็น AC','อันตรายกว่า'],ans:1,exp:'ไฟฟ้าสถิตคือประจุที่สะสมอยู่นิ่ง ไม่ไหลในวงจร ส่วนไฟฟ้ากระแสคืออิเล็กตรอนที่เคลื่อนที่ในตัวนำอย่างต่อเนื่อง'},
+    {q:'ไฟฟ้า AC ต่างจาก DC อย่างไร?',opts:['AC แรงดันสูงกว่าเสมอ','AC กระแสไหลทิศทางเดียว','AC กระแสเปลี่ยนทิศทางตามความถี่','AC ใช้ในแบตเตอรี่'],ans:2,exp:'AC คือกระแสที่เปลี่ยนทิศทางไปมาตามความถี่ เช่น ไฟบ้าน 220V 50Hz ส่วน DC ไหลทิศเดียวตลอด'},
+    {q:'ตัวนำไฟฟ้าดีมีอิเล็กตรอนในวงนอกสุดกี่ตัว?',opts:['1-3 ตัว','4 ตัว','5-7 ตัว','8 ตัว'],ans:0,exp:'ตัวนำไฟฟ้าดี เช่น ทองแดง มีอิเล็กตรอนในวงนอกสุด 1-3 ตัว ทำให้หลุดออกได้ง่ายเมื่อมีแรงดัน กลายเป็นกระแสไฟฟ้า'},
+  ]},
+  { id:'ohm', icon:'🔢', name:'กฎของโอห์ม', questions:[
+    {q:'วงจรมีแรงดัน E = 12V และความต้านทาน R = 4Ω กระแส I มีค่าเท่าไร?',opts:['2 A','3 A','4 A','48 A'],ans:1,exp:'I = E/R = 12/4 = 3 A ตามกฎของโอห์ม'},
+    {q:'วงจรมีกระแส I = 2A และความต้านทาน R = 5Ω แรงดัน E มีค่าเท่าไร?',opts:['2.5 V','7 V','10 V','0.4 V'],ans:2,exp:'E = I × R = 2 × 5 = 10 V'},
+    {q:'วงจรมีแรงดัน E = 24V และกระแส I = 3A ความต้านทาน R มีค่าเท่าไร?',opts:['72 Ω','0.125 Ω','8 Ω','27 Ω'],ans:2,exp:'R = E/I = 24/3 = 8 Ω'},
+    {q:'กำลังไฟฟ้า P = EI ถ้า E = 10V และ I = 2A กำลังไฟฟ้ามีค่าเท่าไร?',opts:['5 W','12 W','20 W','0.2 W'],ans:2,exp:'P = E × I = 10 × 2 = 20 W'},
+    {q:'หลอดไฟ 100W เปิดใช้งาน 5 ชั่วโมง ใช้พลังงานกี่หน่วย (kWh)?',opts:['500 หน่วย','50 หน่วย','0.5 หน่วย','5 หน่วย'],ans:2,exp:'W = P × t = 100W × 5h = 500 Wh = 0.5 kWh = 0.5 หน่วย'},
+    {q:'1 kΩ มีค่าเท่ากับกี่ Ω?',opts:['10 Ω','100 Ω','1,000 Ω','10,000 Ω'],ans:2,exp:'k = กิโล = 1,000 ดังนั้น 1 kΩ = 1,000 Ω'},
+    {q:'ถ้า P = 50W และ R = 2Ω แรงดัน E มีค่าเท่าไร?',opts:['10 V','100 V','25 V','5 V'],ans:0,exp:'E = √(P×R) = √(50×2) = √100 = 10 V'},
+    {q:'1 mA เท่ากับกี่ A?',opts:['0.1 A','0.01 A','0.001 A','0.0001 A'],ans:2,exp:'m = มิลลิ = 10⁻³ ดังนั้น 1 mA = 0.001 A'},
+  ]},
+  { id:'resistor', icon:'🎨', name:'ตัวต้านทาน', questions:[
+    {q:'ตัวต้านทานสี น้ำตาล-ดำ-แดง-ทอง มีค่าเท่าไร?',opts:['102 Ω','1,000 Ω ±5%','120 Ω','10,200 Ω'],ans:1,exp:'น้ำตาล=1, ดำ=0 → 10; แดง=×100; ทอง=±5% → 10×100 = 1,000 Ω = 1kΩ ±5%'},
+    {q:'แถบสี Gold ในตำแหน่งที่ 4 หมายถึงอะไร?',opts:['ตัวคูณ ×0.1','ค่าผิดพลาด ±5%','เลขหน้า 0','ค่าผิดพลาด ±10%'],ans:1,exp:'แถบที่ 4 คือค่าผิดพลาด (Tolerance) ทอง = ±5%'},
+    {q:'R1 = 100Ω และ R2 = 200Ω ต่ออนุกรมกัน RT มีค่าเท่าไร?',opts:['66.7 Ω','150 Ω','300 Ω','20,000 Ω'],ans:2,exp:'วงจรอนุกรม RT = R1 + R2 = 100 + 200 = 300 Ω'},
+    {q:'R1 = 100Ω และ R2 = 100Ω ต่อขนานกัน RT มีค่าเท่าไร?',opts:['200 Ω','100 Ω','50 Ω','25 Ω'],ans:2,exp:'วงจรขนาน 2 ตัวเท่ากัน: RT = R/2 = 100/2 = 50 Ω'},
+    {q:'แถบสีแดงในรหัสสีตัวต้านทานมีค่าตัวเลขเท่าไร?',opts:['1','2','3','4'],ans:1,exp:'ดำ=0, น้ำตาล=1, แดง=2, ส้ม=3, เหลือง=4, เขียว=5, น้ำเงิน=6, ม่วง=7, เทา=8, ขาว=9'},
+    {q:'ตัวต้านทาน 5 แถบ แตกต่างจาก 4 แถบอย่างไร?',opts:['มีตัวเลข 3 หลัก ทำให้แม่นยำกว่า','ใช้สีต่างกันทั้งหมด','ค่าสูงกว่าเสมอ','ใช้ใน AC เท่านั้น'],ans:0,exp:'5 แถบมีตัวเลข 3 หลัก (แถบ 1-3) + ตัวคูณ + tolerance ทำให้ระบุค่าได้แม่นยำกว่า'},
+    {q:'ในวงจรอนุกรม กระแสที่ไหลผ่านตัวต้านทานแต่ละตัวเป็นอย่างไร?',opts:['ต่างกันทุกตัว','เท่ากันทุกตัว','ขึ้นกับขนาด','รวมกันเท่ากับกระแสรวม'],ans:1,exp:'วงจรอนุกรม: กระแสเท่ากันทุกตัว (IT = I1 = I2 = I3)'},
+    {q:'LDR คืออะไร?',opts:['เปลี่ยนค่าตามแสง','เปลี่ยนค่าตามอุณหภูมิ','เปลี่ยนค่าตามแรงดัน','ค่าคงที่'],ans:0,exp:'LDR (Light Dependent Resistor) เปลี่ยนค่าความต้านทานตามความเข้มแสง แสงมาก → ความต้านทานน้อย'},
+  ]},
+  { id:'capacitor', icon:'🔋', name:'ตัวเก็บประจุ', questions:[
+    {q:'ตัวเก็บประจุรหัส "104" มีค่าเท่าไร?',opts:['104 pF','10,400 pF','100,000 pF = 0.1 μF','1,040 pF'],ans:2,exp:'104 = 10 × 10⁴ = 100,000 pF = 100 nF = 0.1 μF (ตัวที่ 3 = จำนวน 0 ต่อท้าย, หน่วย pF)'},
+    {q:'C1 = 10μF และ C2 = 10μF ต่อขนานกัน CT มีค่าเท่าไร?',opts:['5 μF','10 μF','20 μF','100 μF'],ans:2,exp:'วงจรขนาน CT = C1 + C2 = 10 + 10 = 20 μF'},
+    {q:'1 μF เท่ากับกี่ pF?',opts:['1,000 pF','10,000 pF','100,000 pF','1,000,000 pF'],ans:3,exp:'1 μF = 10⁻⁶ F และ 1 pF = 10⁻¹² F ดังนั้น 1 μF = 10⁶ pF = 1,000,000 pF'},
+    {q:'ตัวเก็บประจุแบบ Electrolytic มีลักษณะอะไร?',opts:['ไม่มีขั้ว','มีขั้ว ต้องต่อถูกขั้ว','ใช้ได้เฉพาะ AC','ค่าความจุน้อยที่สุด'],ans:1,exp:'Electrolytic Capacitor มีขั้ว (+/-) ต้องต่อถูกขั้วเสมอ มิฉะนั้นจะระเบิดได้'},
+    {q:'วงจรอนุกรมตัวเก็บประจุ ค่าความจุรวมเป็นอย่างไร?',opts:['เท่ากับผลรวมทุกตัว','น้อยกว่าตัวที่น้อยที่สุด','เท่ากับตัวที่มากที่สุด','เท่ากับค่าเฉลี่ย'],ans:1,exp:'1/CT = 1/C1 + 1/C2 + ... ทำให้ CT น้อยกว่าทุกตัว'},
+    {q:'หน้าที่ของตัวเก็บประจุในวงจร Filter คืออะไร?',opts:['เพิ่มกระแส','ลดแรงดัน','กรองความถี่ที่ไม่ต้องการออก','เพิ่มความต้านทาน'],ans:2,exp:'ตัวเก็บประจุกรองสัญญาณรบกวน (Ripple) ในวงจรเรียงกระแส ยอมให้ AC ผ่านแต่บล็อก DC'},
+  ]},
+  { id:'multimeter', icon:'📏', name:'เครื่องมือวัด', questions:[
+    {q:'ต้องการวัดไฟบ้าน 220V AC ควรตั้งย่าน ACV ที่เท่าไร?',opts:['10V','50V','250V','1000V'],ans:2,exp:'เลือกย่านที่สูงกว่าแรงดันที่จะวัดเล็กน้อย ไฟบ้าน 220V → ใช้ย่าน 250V'},
+    {q:'ก่อนวัดความต้านทาน (Ω) ด้วยมัลติมิเตอร์อนาล็อก ต้องทำอะไรก่อน?',opts:['ตั้งย่านให้ถูก','ตัดไฟวงจรก่อน แล้วปรับ Zero Ω','ต่อสายวัดก่อน','เปิดสวิตช์วงจรก่อน'],ans:1,exp:'ต้องตัดไฟวงจรออกก่อน (ห้ามวัดขณะมีไฟ) แล้วปรับ Zero Ω'},
+    {q:'DMM ย่อมาจากอะไร?',opts:['Direct Measurement Meter','Digital Multimeter','Dual Mode Meter','Dynamic Measuring Module'],ans:1,exp:'DMM = Digital Multimeter หรือมัลติมิเตอร์แบบดิจิตัล'},
+    {q:'สัญลักษณ์ V~ บนมัลติมิเตอร์หมายถึงอะไร?',opts:['DCV แรงดันตรง','ACV แรงดันสลับ','กระแสตรง','กระแสสลับ'],ans:1,exp:'V~ = Voltage AC (แรงดันสลับ) เครื่องหมาย ~ แสดงถึงคลื่นสลับ'},
+    {q:'การวัดกระแสไฟฟ้า (mA) ต้องต่อสายวัดอย่างไร?',opts:['ต่อขนานกับวงจร','ต่ออนุกรมกับวงจร','ต่อที่ขั้วบวกเท่านั้น','ไม่ต้องต่อในวงจร'],ans:1,exp:'การวัดกระแสต้องต่ออนุกรม (Series) กับวงจร เพื่อให้กระแสไหลผ่านมิเตอร์'},
+    {q:'สัญลักษณ์ ))) บนมัลติมิเตอร์หมายถึงอะไร?',opts:['วัดความถี่','ทดสอบ Continuity (มีเสียง)','วัดอุณหภูมิ','ทดสอบแบตเตอรี่'],ans:1,exp:'))) = Continuity Test จะมีเสียงบี๊บเมื่อวงจรต่อถึงกัน ใช้ตรวจสอบสายที่ขาดหรือไม่'},
+  ]},
+  { id:'soldering', icon:'🔥', name:'การบัดกรี', questions:[
+    {q:'ขั้นตอนแรกของการบัดกรีที่ถูกต้องคืออะไร?',opts:['ป้อนตะกั่วก่อน','ให้ความร้อนที่ขาอุปกรณ์และ Pad พร้อมกัน','ทาน้ำยาประสานก่อน','เปิดพัดลม'],ans:1,exp:'ขั้นที่ 1: ให้ความร้อนที่ขาอุปกรณ์และ Pad พร้อมกัน 2-3 วินาที เพื่อให้ทั้งสองส่วนร้อนเท่ากัน'},
+    {q:'Cold Joint หมายถึงอะไร?',opts:['ตะกั่วไม่ละลาย','รอยบัดกรีผิวขรุขระขุ่นมัว','ตะกั่วมากเกินไป','รอยบัดกรีที่ดี'],ans:1,exp:'Cold Joint คือรอยบัดกรีที่ผิวขรุขระดูขุ่นมัว เกิดจากการเป่า สั่น หรือขยับชิ้นงานขณะตะกั่วยังไม่แข็ง'},
+    {q:'หลังบัดกรีเสร็จและถอดหัวแร้งออกแล้ว ควรทำอย่างไร?',opts:['เป่าลมเย็น','รอให้เย็นตามธรรมชาติ ห้ามเป่า','จุ่มน้ำ','ใช้ฟองน้ำเช็ด'],ans:1,exp:'ต้องรอให้เย็นตามธรรมชาติ การเป่าจะทำให้เกิด Cold Joint'},
+    {q:'ควรป้อนตะกั่วบัดกรีที่จุดใด?',opts:['ที่หัวแร้งโดยตรง','ที่จุดต่อระหว่างขาอุปกรณ์กับ Pad','ที่ขาอุปกรณ์เท่านั้น','ที่ Pad เท่านั้น'],ans:1,exp:'ต้องป้อนตะกั่วที่จุดต่อ ไม่ใช่ที่หัวแร้ง เพื่อให้ตะกั่วไหลเข้าจุดต่อเอง'},
+    {q:'ฟองน้ำ (Sponge) ที่ใช้กับหัวแร้งมีไว้เพื่ออะไร?',opts:['วางหัวแร้งระหว่างพัก','เช็ดทำความสะอาดหัวแร้ง','ทำให้หัวแร้งเย็น','ดูดตะกั่วส่วนเกิน'],ans:1,exp:'ฟองน้ำเปียกใช้เช็ดทำความสะอาดหัวแร้ง ขจัดตะกั่วเก่าและฟลักซ์ที่ไหม้'},
+    {q:'หัวแร้งบัดกรี 25-40W เหมาะกับงานใด?',opts:['งาน SMD ละเอียดมาก','งานบัดกรีทั่วไปบน PCB','งานเชื่อมสายไฟใหญ่','งานบัดกรีชิปไอซี'],ans:1,exp:'หัวแร้ง 25-40W เหมาะกับงานบัดกรีทั่วไปบน PCB'},
+  ]},
+  { id:'components', icon:'🔌', name:'อุปกรณ์อิเล็กทรอนิกส์', questions:[
+    {q:'ไดโอด (Diode) มีหน้าที่หลักคืออะไร?',opts:['ขยายสัญญาณ','ยอมให้กระแสไหลทางเดียว','เก็บประจุ','แปลงแรงดัน'],ans:1,exp:'ไดโอดยอมให้กระแสไหลผ่านได้ทางเดียว (จาก Anode ไป Cathode) ใช้ในวงจรเรียงกระแส AC→DC'},
+    {q:'ซีเนอร์ไดโอด (Zener Diode) แตกต่างจากไดโอดทั่วไปอย่างไร?',opts:['กระแสไหลได้สองทิศ','ควบคุมแรงดันให้คงที่ใน Reverse Bias','ขยายกำลัง','แทนตัวต้านทานได้'],ans:1,exp:'Zener Diode รักษาแรงดันให้คงที่ที่ค่า Zener Voltage ใช้ทำวงจร Voltage Regulator'},
+    {q:'ทรานซิสเตอร์ (Transistor) ใช้งานหลักในด้านใด?',opts:['เก็บและปล่อยประจุ','ขยายสัญญาณและเป็นสวิตช์','แปลง AC เป็น DC','วัดกระแส'],ans:1,exp:'ทรานซิสเตอร์ใช้เป็นตัวขยายสัญญาณและสวิตช์ โดยกระแสที่ Base ควบคุมกระแส Collector-Emitter'},
+    {q:'รีเลย์ (Relay) คืออะไร?',opts:['ตัวเก็บประจุขนาดใหญ่','สวิตช์ควบคุมด้วยแม่เหล็กไฟฟ้า','ตัวต้านทานปรับค่าได้','ไดโอดพิเศษ'],ans:1,exp:'Relay คือสวิตช์ที่ทำงานด้วยแม่เหล็กไฟฟ้า ใช้ควบคุมวงจรกำลังสูงด้วยสัญญาณเล็ก'},
+    {q:'ไทรแอก (Triac) นิยมใช้ในงานใด?',opts:['วงจรขยายเสียง','ควบคุมกำลังไฟ AC เช่น หรี่ไฟ','วงจรดิจิตัล','วงจรชาร์จแบตเตอรี่'],ans:1,exp:'Triac ควบคุมกำลังไฟ AC ได้ทั้งสองทิศทาง นิยมใช้ใน Dimmer หรี่ไฟ ควบคุมความเร็วมอเตอร์ AC'},
+    {q:'ขาของทรานซิสเตอร์ BJT มีกี่ขา?',opts:['2 ขา: Anode-Cathode','3 ขา: Base-Collector-Emitter','3 ขา: Gate-Source-Drain','4 ขา'],ans:1,exp:'BJT มี 3 ขา: Base (B) = อินพุตควบคุม, Collector (C) = ขาหลัก, Emitter (E) = ขาออก'},
+  ]},
+];
+
+let quizState = { selectedCats:[], questions:[], current:0, correct:0, wrong:0, answered:[] };
+
+function initQuizCats() {
+  const grid = document.getElementById('quiz-cat-grid');
+  grid.innerHTML = '';
+  QUIZ_CATEGORIES.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-cat-btn active';
+    btn.dataset.catId = cat.id;
+    btn.innerHTML = `<span class="cat-icon">${cat.icon}</span><div class="cat-name">${cat.name}</div><div class="cat-count">${cat.questions.length} ข้อ</div>`;
+    btn.onclick = () => { btn.classList.toggle('active'); quizState.selectedCats = [...document.querySelectorAll('.quiz-cat-btn.active')].map(b=>b.dataset.catId); updateInfo(); };
+    grid.appendChild(btn);
+  });
+  quizState.selectedCats = QUIZ_CATEGORIES.map(c=>c.id);
+  updateInfo();
+}
+function selectAllCats() {
+  document.querySelectorAll('.quiz-cat-btn').forEach(b=>b.classList.add('active'));
+  quizState.selectedCats = QUIZ_CATEGORIES.map(c=>c.id);
+  updateInfo();
+}
+function updateInfo() {
+  const total = QUIZ_CATEGORIES.filter(c=>quizState.selectedCats.includes(c.id)).reduce((s,c)=>s+c.questions.length,0);
+  document.getElementById('quiz-selected-info').textContent = `เลือก ${quizState.selectedCats.length} หมวด รวม ${total} ข้อ`;
+}
+function startQuiz() {
+  if (!quizState.selectedCats.length) { alert('กรุณาเลือกหมวดอย่างน้อย 1 หมวด'); return; }
+  let pool = [];
+  QUIZ_CATEGORIES.forEach(cat => { if (quizState.selectedCats.includes(cat.id)) cat.questions.forEach(q=>pool.push({...q,catIcon:cat.icon,catName:cat.name})); });
+  for (let i=pool.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]]; }
+  quizState = { selectedCats:quizState.selectedCats, questions:pool, current:0, correct:0, wrong:0, answered:[] };
+  document.getElementById('quiz-cat-selector').style.display='none';
+  document.getElementById('quiz-score-bar').style.display='flex';
+  document.getElementById('quiz-box').style.display='block';
+  document.getElementById('quiz-finish').style.display='none';
+  document.getElementById('sq-total').textContent=pool.length;
+  loadBest();
+  renderQ();
+}
+function loadBest() {
+  const key='quiz_best_'+[...quizState.selectedCats].sort().join('_');
+  const best=localStorage.getItem(key);
+  const el=document.getElementById('sq-best');
+  if(best){el.style.display='';el.textContent='🏆 สูงสุด: '+best;}else el.style.display='none';
+}
+function renderQ() {
+  const q=quizState.questions[quizState.current], total=quizState.questions.length, idx=quizState.current;
+  document.getElementById('sq-current').textContent=idx+1;
+  document.getElementById('sq-correct').textContent=quizState.correct;
+  document.getElementById('sq-wrong').textContent=quizState.wrong;
+  document.getElementById('quiz-prog-fill').style.width=((idx/total)*100)+'%';
+  document.getElementById('quiz-qnum').textContent=`${q.catIcon} ${q.catName}  •  ข้อที่ ${idx+1} / ${total}`;
+  document.getElementById('quiz-question').textContent=q.q;
+  const opts=document.getElementById('quiz-options');
+  opts.innerHTML='';
+  ['ก','ข','ค','ง'].forEach((l,i)=>{
+    const btn=document.createElement('button');
+    btn.className='quiz-opt';
+    btn.innerHTML=`<span class="quiz-opt-letter">${l}</span> ${q.opts[i]}`;
+    btn.onclick=()=>answerQ(i);
+    opts.appendChild(btn);
+  });
+  document.getElementById('quiz-explain').style.display='none';
+  document.getElementById('quiz-nav').innerHTML='';
+}
+function answerQ(chosen) {
+  const q=quizState.questions[quizState.current];
+  const opts=document.querySelectorAll('.quiz-opt');
+  const ok=chosen===q.ans;
+  opts.forEach((b,i)=>{ b.disabled=true; if(i===q.ans)b.classList.add('reveal'); if(i===chosen&&!ok)b.classList.add('wrong'); if(i===chosen&&ok){b.classList.remove('reveal');b.classList.add('correct');} });
+  if(ok)quizState.correct++;else quizState.wrong++;
+  quizState.answered.push({q:q.q,correct:ok,chosen:q.opts[chosen],answer:q.opts[q.ans]});
+  document.getElementById('sq-correct').textContent=quizState.correct;
+  document.getElementById('sq-wrong').textContent=quizState.wrong;
+  const exp=document.getElementById('quiz-explain');
+  exp.style.display='block';
+  exp.className='quiz-explain '+(ok?'correct':'wrong');
+  exp.innerHTML=(ok?'✅ <strong>ถูกต้อง!</strong> ':'❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ: <strong>'+q.opts[q.ans]+'</strong><br>')+q.exp;
+  const isLast=quizState.current>=quizState.questions.length-1;
+  document.getElementById('quiz-nav').innerHTML=isLast
+    ?`<button class="btn btn-green" onclick="showFinish()">ดูผลคะแนน 🎉</button>`
+    :`<button class="btn" onclick="nextQ()">ข้อถัดไป →</button>`;
+}
+function nextQ() { quizState.current++; renderQ(); }
+function showFinish() {
+  document.getElementById('quiz-box').style.display='none';
+  document.getElementById('quiz-finish').style.display='block';
+  const total=quizState.questions.length, score=quizState.correct, pct=Math.round((score/total)*100);
+  document.getElementById('qf-score').textContent=`${score}/${total}`;
+  document.getElementById('qf-label').textContent=`คะแนน ${pct}%`;
+  let msg='',color='';
+  if(pct>=90){msg='🏆 ยอดเยี่ยม! เข้าใจเนื้อหาอย่างดีเยี่ยม';color='#065f46';}
+  else if(pct>=70){msg='👍 ดีมาก! เข้าใจเนื้อหาเป็นอย่างดี';color='#1e429f';}
+  else if(pct>=50){msg='📚 พอใช้ได้ ควรทบทวนเพิ่มเติม';color='#92400e';}
+  else{msg='📖 ควรกลับไปอ่านเนื้อหาใหม่อีกครั้ง';color='#991b1b';}
+  const msgEl=document.getElementById('qf-msg'); msgEl.textContent=msg; msgEl.style.color=color;
+  const key='quiz_best_'+[...quizState.selectedCats].sort().join('_');
+  const prev=parseInt(localStorage.getItem(key)||'0');
+  if(pct>prev)localStorage.setItem(key,pct+'% ('+score+'/'+total+')');
+  const review=document.getElementById('qf-review');
+  review.innerHTML='<div style="font-weight:700;margin-bottom:0.75rem;">สรุปคำตอบ</div>';
+  quizState.answered.forEach((a,i)=>{ const d=document.createElement('div'); d.className='quiz-review-item '+(a.correct?'ok':'ng'); d.innerHTML=`<strong>ข้อ ${i+1}:</strong> ${a.correct?'✅':'❌'} ${a.q}<br><span style="font-size:0.85rem;">${a.correct?'คำตอบ: '+a.answer:'คุณตอบ: '+a.chosen+' | เฉลย: '+a.answer}</span>`; review.appendChild(d); });
+}
+function retryQuiz() {
+  document.getElementById('quiz-finish').style.display='none';
+  document.getElementById('quiz-box').style.display='block';
+  quizState.current=0; quizState.correct=0; quizState.wrong=0; quizState.answered=[];
+  const pool=quizState.questions;
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+  document.getElementById('sq-current').textContent=1;
+  document.getElementById('sq-correct').textContent=0;
+  document.getElementById('sq-wrong').textContent=0;
+  renderQ();
+}
+function backToMenu() {
+  document.getElementById('quiz-cat-selector').style.display='block';
+  document.getElementById('quiz-score-bar').style.display='none';
+  document.getElementById('quiz-box').style.display='none';
+  document.getElementById('quiz-finish').style.display='none';
+}
+initQuizCats();
+</script>
+</body>
+</html>

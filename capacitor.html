@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ตัวเก็บประจุ | สื่อการเรียนการสอน</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="nav-placeholder"></div>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🔋</div>
+    <div>
+      <h1>ตัวเก็บประจุ (Capacitor)</h1>
+      <p>ชนิด • การอ่านรหัส • F/μF/nF/pF • วงจรอนุกรม/ขนาน</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section">
+    <div class="section-title">คุณสมบัติและชนิด</div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list">
+            <li>เก็บและปล่อยประจุไฟฟ้า</li>
+            <li>กรองความถี่ (Filter)</li>
+            <li>ต่อต้านการเปลี่ยนแปลงแรงดัน</li>
+            <li>ใช้ในวงจร Timing, Coupling, Bypass</li>
+          </ul>
+        </div>
+        <div class="info-box">
+          <strong>ชนิดของตัวเก็บประจุ</strong><br>
+          • Electrolytic — มีขั้ว, ค่า μF<br>
+          • Ceramic (Disc) — ไม่มีขั้ว, ค่า pF–nF<br>
+          • Polyester (MKT) — ไม่มีขั้ว, ค่า nF–μF<br>
+          • Tantalum — มีขั้ว, ขนาดเล็ก<br>
+          • Variable Capacitor — ปรับค่าได้
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">การแปลงหน่วยความจุ</div>
+    <div class="card">
+      <table>
+        <tr><th>หน่วย</th><th>สัญลักษณ์</th><th>เทียบกับ Farad</th></tr>
+        <tr><td>ฟารัด</td><td>F</td><td>1 F</td></tr>
+        <tr><td>ไมโครฟารัด</td><td>μF</td><td>10⁻⁶ F</td></tr>
+        <tr><td>นาโนฟารัด</td><td>nF</td><td>10⁻⁹ F</td></tr>
+        <tr><td>พิโคฟารัด</td><td>pF</td><td>10⁻¹² F</td></tr>
+      </table>
+      <div class="info-box" style="margin-top:0.75rem;">
+        1 μF = 1,000 nF = 1,000,000 pF<br>
+        1 nF = 0.001 μF = 1,000 pF<br>
+        1 pF = 0.001 nF = 0.000001 μF
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">การอ่านรหัสตัวเก็บประจุ (Ceramic/Polyester)</div>
+    <div class="card">
+      <ul class="content-list">
+        <li>รหัส 3 หลัก: หลักที่ 1-2 คือค่า, หลักที่ 3 คือตัวคูณ → หน่วย pF</li>
+        <li><strong>104</strong> = 10 × 10⁴ = 100,000 pF = 100 nF = 0.1 μF</li>
+        <li><strong>473</strong> = 47 × 10³ = 47,000 pF = 47 nF</li>
+        <li><strong>221</strong> = 22 × 10¹ = 220 pF</li>
+        <li><strong>100</strong> = 10 × 10⁰ = 10 pF</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">วงจรตัวเก็บประจุ</div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>วงจรอนุกรม (Series)</h3>
+        <div class="formula-box"><div class="formula">1/C<sub>T</sub> = 1/C₁ + 1/C₂ + 1/C₃ + ...</div></div>
+        <div class="info-box" style="margin-top:0.75rem;">ค่าความจุรวม <strong>น้อยกว่า</strong>ทุกตัว</div>
+      </div>
+      <div class="card">
+        <h3>วงจรขนาน (Parallel)</h3>
+        <div class="formula-box"><div class="formula">C<sub>T</sub> = C₁ + C₂ + C₃ + ...</div></div>
+        <div class="info-box" style="margin-top:0.75rem;">ค่าความจุรวม <strong>มากกว่า</strong>ทุกตัว</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="resistor.html">← ตัวต้านทาน</a>
+    <a class="next" href="inductor.html">ตัวเหนี่ยวนำ →</a>
+  </div>
+</div>
+
+<footer><strong>สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong></footer>
+<script>const CURRENT_PAGE='capacitor';</script>
+<script src="nav.js"></script>
+</body>
+</html>
