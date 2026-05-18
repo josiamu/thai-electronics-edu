@@ -119,6 +119,15 @@
   footer { background: var(--primary-dark); color: #94a3b8; text-align: center; padding: 1.5rem; font-size: 0.9rem; }
   footer strong { color: #fff; }
 
+  /* PDF DOWNLOAD CARDS */
+  .pdf-card { display:flex; align-items:center; gap:1rem; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1rem 1.25rem; text-decoration:none; color:var(--text); box-shadow:var(--shadow); transition:box-shadow 0.2s, transform 0.15s, border-color 0.2s; }
+  .pdf-card:hover { box-shadow:0 6px 24px rgba(26,86,219,0.15); transform:translateY(-2px); border-color:var(--primary); }
+  .pdf-icon { font-size:1.75rem; min-width:2rem; text-align:center; }
+  .pdf-info { flex:1; }
+  .pdf-title { font-weight:700; font-size:0.97rem; color:var(--primary-dark); margin-bottom:0.2rem; }
+  .pdf-sub { font-size:0.82rem; color:var(--text-light); }
+  .pdf-dl { font-size:1.3rem; color:var(--primary); min-width:1.5rem; text-align:center; }
+
   @media (max-width: 640px) {
     .hero h1 { font-size: 1.4rem; }
     .nav-links a { font-size: 0.78rem; padding: 0.3rem 0.5rem; }
@@ -139,6 +148,7 @@
       <a href="#multimeter">เครื่องมือวัด</a>
       <a href="#soldering">การบัดกรี</a>
       <a href="#tools">เครื่องคิดเลข</a>
+      <a href="#downloads">ดาวน์โหลด PDF</a>
     </div>
   </div>
 </nav>
@@ -1068,6 +1078,200 @@
         </div>
       </div>
       <div class="result-box" id="uc_result"></div>
+    </div>
+  </div>
+
+  <!-- ======== SECTION: DOWNLOADS ======== -->
+  <div class="section" id="downloads">
+    <div class="section-title">📥 ดาวน์โหลดเอกสาร PDF</div>
+    <div class="info-box" style="margin-bottom:1.25rem;">เอกสารประกอบการเรียนทั้งหมด 21 ไฟล์ — คลิกที่ชื่อเรื่องเพื่อดาวน์โหลด</div>
+
+    <div class="section-subtitle">🔌 ไฟฟ้าเบื้องต้น</div>
+    <div class="grid-2">
+      <a class="pdf-card" href="pdf/ใบเนื้อหา เรื่อง แหล่งกำเนิดและประเภทไฟฟ้.pdf" download>
+        <div class="pdf-icon">📄</div>
+        <div class="pdf-info">
+          <div class="pdf-title">แหล่งกำเนิดและประเภทไฟฟ้า</div>
+          <div class="pdf-sub">6 แหล่งกำเนิด • ไฟฟ้าสถิต • DC/AC</div>
+        </div>
+        <div class="pdf-dl">⬇</div>
+      </a>
+      <a class="pdf-card" href="pdf/ใบเนื้อหา เรื่อง กฎของโอห์ม กำลังไฟฟ้า และ.pdf" download>
+        <div class="pdf-icon">📄</div>
+        <div class="pdf-info">
+          <div class="pdf-title">กฎของโอห์ม กำลังไฟฟ้า และพลังงาน</div>
+          <div class="pdf-sub">I=E/R • P=EI • W=Pt • การแปลงหน่วย</div>
+        </div>
+        <div class="pdf-dl">⬇</div>
+      </a>
+      <a class="pdf-card" href="pdf/ใบเนื้อหา เรื่อง วงจรไฟฟ้าและเซลล์ไฟฟ้า.pdf" download>
+        <div class="pdf-icon">📄</div>
+        <div class="pdf-info">
+          <div class="pdf-title">วงจรไฟฟ้าและเซลล์ไฟฟ้า</div>
+          <div class="pdf-sub">วงจรไฟฟ้าพื้นฐาน • เซลล์ไฟฟ้า</div>
+        </div>
+        <div class="pdf-dl">⬇</div>
+      </a>
+      <a class="pdf-card" href="pdf/บทที่ 2 วงจรความต้านทาน.pdf" download>
+        <div class="pdf-icon">📄</div>
+        <div class="pdf-info">
+          <div class="pdf-title">วงจรความต้านทาน</div>
+          <div class="pdf-sub">อนุกรม • ขนาน • ผสม</div>
+        </div>
+        <div class="pdf-dl">⬇</div>
+      </a>
+    </div>
+
+    <div class="section-subtitle">🔧 อุปกรณ์อิเล็กทรอนิกส์</div>
+    <div class="grid-2">
+      <a class="pdf-card" href="pdf/ใบเนื้อหา เรื่อง ตัวต้านทาน.pdf" download>
+        <div class="pdf-icon">📄</div>
+        <div class="pdf-info">
+          <div class="pdf-title">ตัวต้านทาน (Resistor)</div>
+          <div class="pdf-sub">รหัสสี 4-5 แถบ • EIA96 • อนุกรม/ขนาน</div>
+        </div>
+        <div class="pdf-dl">⬇</div>
+      </a>
+      <a class="pdf-card" href="pdf/ใบเนื้อหา เรื่อง ตัวเก็บประจุ.pdf" download>
+        <div class="pdf-icon">📄</div>
+        <div class="pdf-info">
+          <div class="pdf-title">ตัวเก็บประจุ (Capacitor)</div>
+          <div class="pdf-sub">ชนิด • รหัส • F/μF/nF/pF • อนุกรม/ขนาน</div>
+        </div>
+        <div class="pdf-dl">⬇</div>
+      </a>
+      <a class="pdf-card" href="pdf/ใบเนื้อหา เรื่อง ตัวเหนี่ยวนำและหม้อแปลงไ.pdf" download>
+        <div class="pdf-icon">📄</div>
+        <div class="pdf-info">
+          <div class="pdf-title">ตัวเหนี่ยวนำและหม้อแปลงไฟฟ้า</div>
+          <div class="pdf-sub">Inductor • Transformer • H/mH/μH</div>
+        </div>
+        <div class="pdf-dl">⬇</div>
+      </a>
+      <a class="pdf-card" href="pdf/บทที่ 2 ไดโอด (1).pdf" download>
+        <div class="pdf-icon">📄</div>
+        <div class="pdf-info">
+          <div class="pdf-title">ไดโอด (Diode)</div>
+          <div class="pdf-sub">หลักการทำงาน • วงจรเรียงกระแส</div>
+        </div>
+        <div class="pdf-dl">⬇</div>
+      </a>
+      <a class="pdf-card" href="pdf/บทที่ 3 ซีเนอร์ไดโอด (4).pdf" download>
+        <div class="pdf-icon">📄</div>
+        <div class="pdf-info">
+          <div class="pdf-title">ซีเนอร์ไดโอด (Zener Diode)</div>
+          <div class="pdf-sub">วงจรควบคุมแรงดัน • Zener Regulator</div>
+        </div>
+        <div class="pdf-dl">⬇</div>
+      </a>
+      <a class="pdf-card" href="pdf/ทรานวิสเตอรื.pdf" download>
+        <div class="pdf-icon">📄</div>
+        <div class="pdf-info">
+          <div class="pdf-title">ทรานซิสเตอร์ (Transistor)</div>
+          <div class="pdf-sub">BJT • NPN/PNP • วงจรขยาย/สวิตช์</div>
+        </div>
+        <div class="pdf-dl">⬇</div>
+      </a>
+      <a class="pdf-card" href="pdf/ไตแอด.pdf" download>
+        <div class="pdf-icon">📄</div>
+        <div class="pdf-info">
+          <div class="pdf-title">ไทรแอก (Triac)</div>
+          <div class="pdf-sub">SCR • Triac • การควบคุมกำลัง</div>
+        </div>
+        <div class="pdf-dl">⬇</div>
+      </a>
+      <a class="pdf-card" href="pdf/รีเลย์.pdf" download>
+        <div class="pdf-icon">📄</div>
+        <div class="pdf-info">
+          <div class="pdf-title">รีเลย์ (Relay)</div>
+          <div class="pdf-sub">หลักการทำงาน • ชนิด • วงจรควบคุม</div>
+        </div>
+        <div class="pdf-dl">⬇</div>
+      </a>
+    </div>
+
+    <div class="section-subtitle">⚙️ มอเตอร์และวงจร</div>
+    <div class="grid-2">
+      <a class="pdf-card" href="pdf/บทที่ 2 หลักการของมมอเตอร์.pdf" download>
+        <div class="pdf-icon">📄</div>
+        <div class="pdf-info">
+          <div class="pdf-title">หลักการของมอเตอร์</div>
+          <div class="pdf-sub">หลักการ Electromagnetic • ชนิดมอเตอร์</div>
+        </div>
+        <div class="pdf-dl">⬇</div>
+      </a>
+      <a class="pdf-card" href="pdf/บทที่ 4 มอเตอร์ไฟฟ้ากระแสตรง.pdf" download>
+        <div class="pdf-icon">📄</div>
+        <div class="pdf-info">
+          <div class="pdf-title">มอเตอร์ไฟฟ้ากระแสตรง (DC Motor)</div>
+          <div class="pdf-sub">โครงสร้าง • การควบคุมความเร็ว</div>
+        </div>
+        <div class="pdf-dl">⬇</div>
+      </a>
+      <a class="pdf-card" href="pdf/ใบเนื้อหา เรื่อง มอเตอร์และการควบคุมเบื้อ.pdf" download>
+        <div class="pdf-icon">📄</div>
+        <div class="pdf-info">
+          <div class="pdf-title">มอเตอร์และการควบคุมเบื้องต้น</div>
+          <div class="pdf-sub">การสตาร์ท • การหยุด • การกลับทิศ</div>
+        </div>
+        <div class="pdf-dl">⬇</div>
+      </a>
+      <a class="pdf-card" href="pdf/ใบเนื้อหา เรื่อง วงจรอิเล็กทรอนิกส์เบื้อง.pdf" download>
+        <div class="pdf-icon">📄</div>
+        <div class="pdf-info">
+          <div class="pdf-title">วงจรอิเล็กทรอนิกส์เบื้องต้น</div>
+          <div class="pdf-sub">วงจรพื้นฐาน • การวิเคราะห์วงจร</div>
+        </div>
+        <div class="pdf-dl">⬇</div>
+      </a>
+    </div>
+
+    <div class="section-subtitle">🛡️ ความปลอดภัยและเครื่องมือ</div>
+    <div class="grid-2">
+      <a class="pdf-card" href="pdf/ใบเนื้อหาเรื่อง ระบบความปลอดภัยในงานไฟฟ้.pdf" download>
+        <div class="pdf-icon">📄</div>
+        <div class="pdf-info">
+          <div class="pdf-title">ระบบความปลอดภัยในงานไฟฟ้า</div>
+          <div class="pdf-sub">กฎความปลอดภัย • การป้องกันอันตราย</div>
+        </div>
+        <div class="pdf-dl">⬇</div>
+      </a>
+      <a class="pdf-card" href="pdf/ใบเนื้อหาเรื่อง อุปกรณ์ป้องกันอันตรายจาก.pdf" download>
+        <div class="pdf-icon">📄</div>
+        <div class="pdf-info">
+          <div class="pdf-title">อุปกรณ์ป้องกันอันตรายจากไฟฟ้า</div>
+          <div class="pdf-sub">PPE • Fuse • Circuit Breaker • สายดิน</div>
+        </div>
+        <div class="pdf-dl">⬇</div>
+      </a>
+      <a class="pdf-card" href="pdf/ใบเนื้อหา เรื่อง เครื่องมือวัดไฟฟ้าเบื้อง.pdf" download>
+        <div class="pdf-icon">📄</div>
+        <div class="pdf-info">
+          <div class="pdf-title">เครื่องมือวัดไฟฟ้าเบื้องต้น</div>
+          <div class="pdf-sub">Multimeter อนาล็อก/ดิจิตัล • DCV/ACV/Ω</div>
+        </div>
+        <div class="pdf-dl">⬇</div>
+      </a>
+      <a class="pdf-card" href="pdf/ใบเนื้อหา เรื่อง อุปกรณ์เกี่ยวข้องในงานไฟ.pdf" download>
+        <div class="pdf-icon">📄</div>
+        <div class="pdf-info">
+          <div class="pdf-title">อุปกรณ์เกี่ยวข้องในงานไฟฟ้า</div>
+          <div class="pdf-sub">เครื่องมือช่าง • อุปกรณ์ประกอบ</div>
+        </div>
+        <div class="pdf-dl">⬇</div>
+      </a>
+      <a class="pdf-card" href="pdf/การบัดกรี.pdf" download>
+        <div class="pdf-icon">📄</div>
+        <div class="pdf-info">
+          <div class="pdf-title">การบัดกรี (Soldering)</div>
+          <div class="pdf-sub">เครื่องมือ • 4 ขั้นตอน • รอยบัดกรีที่ดี</div>
+        </div>
+        <div class="pdf-dl">⬇</div>
+      </a>
+    </div>
+
+    <div style="margin-top:1.5rem;text-align:center;">
+      <a href="pdf/" class="btn" style="text-decoration:none;" download>⬇ ดาวน์โหลดทั้งหมด (Browse folder)</a>
     </div>
   </div>
 
