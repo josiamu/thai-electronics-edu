@@ -222,6 +222,70 @@ input[type=number]:focus, input[type=text]:focus, select:focus { outline: none; 
 .quiz-review-item.ok { background:#d1fae5; }
 .quiz-review-item.ng { background:#fee2e2; }
 
+/* FORMULA SHEET */
+.formula-sheet-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 2rem; }
+.fs-card { border-radius: 14px; padding: 1.25rem; border: 2px solid transparent; }
+.fs-card-title { font-weight: 700; font-size: 0.92rem; margin-bottom: 0.85rem; display: flex; align-items: center; gap: 0.4rem; }
+.fs-main { font-size: 1.9rem; font-weight: 800; text-align: center; padding: 0.4rem 0 0.6rem; letter-spacing: -0.02em; }
+.fs-variants { display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; margin-top: 0.4rem; }
+.fs-variants span { background: rgba(0,0,0,0.07); padding: 0.2rem 0.8rem; border-radius: 20px; font-size: 0.9rem; font-weight: 600; }
+.fs-sub { text-align: center; font-size: 1.05rem; font-weight: 700; margin-top: 0.65rem; padding: 0.35rem 0.5rem; background: rgba(0,0,0,0.06); border-radius: 8px; }
+.fs-legend { font-size: 0.76rem; color: var(--text-light); margin-top: 0.55rem; text-align: center; line-height: 1.6; }
+.fs-tbl { width: 100%; border-collapse: collapse; margin-top: 0.5rem; font-size: 0.84rem; }
+.fs-tbl th { padding: 0.3rem 0.5rem; background: rgba(0,0,0,0.09); font-size: 0.78rem; text-align: center; }
+.fs-tbl td { padding: 0.35rem 0.5rem; text-align: center; border-top: 1px solid rgba(0,0,0,0.06); }
+/* Card color themes */
+.fs-blue  { background:#eff6ff; border-color:#3b82f6; } .fs-blue .fs-card-title { color:#1d4ed8; } .fs-blue .fs-main { color:#1e40af; }
+.fs-green { background:#f0fdf4; border-color:#22c55e; } .fs-green .fs-card-title { color:#15803d; } .fs-green .fs-main { color:#166534; }
+.fs-orange{ background:#fff7ed; border-color:#f97316; } .fs-orange .fs-card-title { color:#c2410c; }
+.fs-purple{ background:#faf5ff; border-color:#a855f7; } .fs-purple .fs-card-title { color:#7e22ce; }
+.fs-teal  { background:#f0fdfa; border-color:#14b8a6; } .fs-teal .fs-card-title { color:#0f766e; }
+.fs-red   { background:#fef2f2; border-color:#ef4444; } .fs-red .fs-card-title { color:#b91c1c; } .fs-red .fs-main { color:#991b1b; font-size:1.35rem; }
+[data-theme="dark"] .fs-blue   { background:#1e3a5f; } [data-theme="dark"] .fs-blue .fs-main { color:#93c5fd; }
+[data-theme="dark"] .fs-green  { background:#0d2e20; } [data-theme="dark"] .fs-green .fs-main { color:#6ee7b7; }
+[data-theme="dark"] .fs-orange { background:#2d1a0a; } [data-theme="dark"] .fs-orange .fs-card-title { color:#fb923c; }
+[data-theme="dark"] .fs-purple { background:#2e1a47; } [data-theme="dark"] .fs-purple .fs-card-title { color:#c084fc; }
+[data-theme="dark"] .fs-teal   { background:#0d2e2a; } [data-theme="dark"] .fs-teal .fs-card-title { color:#5eead4; }
+[data-theme="dark"] .fs-red    { background:#2d0f0f; } [data-theme="dark"] .fs-red .fs-main { color:#fca5a5; }
+[data-theme="dark"] .fs-variants span { background: rgba(255,255,255,0.1); }
+[data-theme="dark"] .fs-sub { background: rgba(255,255,255,0.08); }
+[data-theme="dark"] .fs-tbl th { background: rgba(255,255,255,0.1); color: var(--text); }
+[data-theme="dark"] .fs-tbl td { border-color: rgba(255,255,255,0.06); }
+/* Reference tables */
+.fs-ref-section { margin-bottom: 2rem; }
+.fs-ref-title { font-size: 1.05rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.4rem; }
+.fs-ref-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; border-radius: 10px; overflow: hidden; }
+.fs-ref-table th { background: var(--primary-dark); color: #fff; padding: 0.5rem 0.75rem; text-align: left; font-weight: 600; }
+.fs-ref-table td { padding: 0.4rem 0.75rem; border-bottom: 1px solid var(--border); }
+.fs-ref-table tr:last-child td { border-bottom: none; }
+.fs-ref-table tr:nth-child(even) td { background: var(--bg); }
+.rc-dot { display: inline-block; width: 14px; height: 14px; border-radius: 3px; vertical-align: middle; margin-right: 0.4rem; border: 1px solid rgba(0,0,0,0.15); }
+/* Print-only header */
+.print-sheet-header { display: none; text-align: center; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 2px solid #000; }
+.print-sheet-header h2 { font-size: 1.1rem; font-weight: 800; }
+.print-sheet-header p { font-size: 0.85rem; margin-top: 0.4rem; }
+/* Print */
+@media print {
+  nav, .page-header, .print-hide, footer, .page-nav { display: none !important; }
+  .print-sheet-header { display: block !important; }
+  body { background: #fff !important; color: #000 !important; font-size: 10.5pt; }
+  .container { padding: 0; max-width: 100%; }
+  .formula-sheet-grid { grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+  .fs-card { background: #fff !important; border: 1.5px solid #999 !important; padding: 0.7rem; break-inside: avoid; }
+  .fs-card-title { color: #000 !important; font-size: 0.82rem; }
+  .fs-main { color: #000 !important; font-size: 1.5rem; }
+  .fs-variants span { background: #eee !important; }
+  .fs-sub { background: #f2f2f2 !important; color: #000; }
+  .fs-legend { color: #555; }
+  .fs-tbl th { background: #ddd !important; color: #000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .fs-ref-table th { background: #333 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .rc-dot { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .fs-ref-section { break-inside: avoid; }
+}
+@media (max-width: 640px) {
+  .formula-sheet-grid { grid-template-columns: 1fr; }
+}
+
 /* PAGE NAV (prev/next) */
 .page-nav { display:flex; justify-content:space-between; gap:1rem; margin-top:2rem; padding-top:1.5rem; border-top:2px solid var(--border); flex-wrap:wrap; }
 .page-nav a { display:flex; align-items:center; gap:0.5rem; padding:0.75rem 1.25rem; border-radius:10px; border:2px solid var(--border); text-decoration:none; color:var(--text); font-weight:700; font-size:0.92rem; background:#fff; transition:all 0.2s; }

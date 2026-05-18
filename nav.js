@@ -9,6 +9,7 @@ const NAV_CONTENT = [
 ];
 
 const NAV_UTILS = [
+  { id: 'formulas',  href: 'formulas.html',  label: '📐 สูตรสรุป' },
   { id: 'tools',     href: 'tools.html',     label: '🧮 เครื่องคิดเลข' },
   { id: 'quiz',      href: 'quiz.html',      label: '📝 แบบทดสอบ' },
   { id: 'downloads', href: 'downloads.html', label: '📥 ดาวน์โหลด' },

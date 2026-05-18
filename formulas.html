@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สูตรสรุป | สื่อการเรียนการสอน</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="nav-placeholder"></div>
+
+<div class="page-header print-hide">
+  <div class="page-header-inner">
+    <div class="page-header-icon">📐</div>
+    <div>
+      <h1>สูตรสรุป</h1>
+      <p>รวมสูตรและรหัสสีทั้งหมด — คลิก "พิมพ์" เพื่อบันทึกเป็น PDF ใส่กระดาษ</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Print-only header (hidden on screen) -->
+  <div class="print-sheet-header">
+    <h2>สูตรสรุป วิชาไฟฟ้าและอิเล็กทรอนิกส์</h2>
+    <p>ชื่อ _____________________________ ชั้น _____________ วันที่ _________________</p>
+  </div>
+
+  <!-- Print button -->
+  <div class="print-hide" style="display:flex; justify-content:flex-end; margin-bottom:1.5rem;">
+    <button onclick="window.print()" class="btn btn-primary" style="font-size:1rem; padding:0.6rem 1.5rem;">🖨️ พิมพ์ / บันทึก PDF</button>
+  </div>
+
+  <!-- Formula Cards Grid -->
+  <div class="formula-sheet-grid">
+
+    <!-- 1: Ohm's Law -->
+    <div class="fs-card fs-blue">
+      <div class="fs-card-title">🔌 กฎของโอห์ม (Ohm's Law)</div>
+      <div class="fs-main">V = I × R</div>
+      <div class="fs-variants">
+        <span>I = V ÷ R</span>
+        <span>R = V ÷ I</span>
+      </div>
+      <div class="fs-legend">V = แรงดันไฟฟ้า (Volt, V)<br>I = กระแสไฟฟ้า (Ampere, A)<br>R = ความต้านทาน (Ohm, Ω)</div>
+    </div>
+
+    <!-- 2: Power & Energy -->
+    <div class="fs-card fs-green">
+      <div class="fs-card-title">⚡ กำลังและพลังงานไฟฟ้า</div>
+      <div class="fs-main">P = V × I</div>
+      <div class="fs-variants">
+        <span>P = I²R</span>
+        <span>P = V²/R</span>
+      </div>
+      <div class="fs-sub">W = P × t</div>
+      <div class="fs-legend">P = กำลังไฟฟ้า (Watt, W)<br>W = พลังงาน (Joule, J) &nbsp;|&nbsp; t = เวลา (วินาที, s)</div>
+    </div>
+
+    <!-- 3: Resistor Circuits -->
+    <div class="fs-card fs-orange">
+      <div class="fs-card-title">🎨 วงจรความต้านทาน (R)</div>
+      <table class="fs-tbl">
+        <thead><tr><th>อนุกรม (Series)</th><th>ขนาน (Parallel)</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>R<sub>T</sub> = R<sub>1</sub> + R<sub>2</sub> + …</td>
+            <td style="font-size:0.8rem;">1/R<sub>T</sub> = 1/R<sub>1</sub> + 1/R<sub>2</sub> + …</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="fs-sub" style="font-size:0.92rem;">ขนาน 2 ตัว: R<sub>T</sub> = (R<sub>1</sub> × R<sub>2</sub>) ÷ (R<sub>1</sub> + R<sub>2</sub>)</div>
+      <div class="fs-legend">อนุกรม: I เท่ากัน, V แบ่ง &nbsp;|&nbsp; ขนาน: V เท่ากัน, I แบ่ง</div>
+    </div>
+
+    <!-- 4: Capacitor Circuits -->
+    <div class="fs-card fs-purple">
+      <div class="fs-card-title">🔋 วงจรตัวเก็บประจุ (C)</div>
+      <table class="fs-tbl">
+        <thead><tr><th>อนุกรม</th><th>ขนาน</th></tr></thead>
+        <tbody>
+          <tr>
+            <td style="font-size:0.8rem;">1/C<sub>T</sub> = 1/C<sub>1</sub> + 1/C<sub>2</sub> + …</td>
+            <td>C<sub>T</sub> = C<sub>1</sub> + C<sub>2</sub> + …</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="fs-sub" style="font-size:0.95rem;">Q = C × V &nbsp;&nbsp;&nbsp; X<sub>C</sub> = 1 ÷ (2πfC)</div>
+      <div class="fs-legend">Q = ประจุ (Coulomb, C) &nbsp;|&nbsp; X<sub>C</sub> = รีแอกแตนซ์ (Ω)<br>หน่วย C: F &gt; mF &gt; μF &gt; nF &gt; pF</div>
+    </div>
+
+    <!-- 5: Inductor Circuits -->
+    <div class="fs-card fs-teal">
+      <div class="fs-card-title">🌀 วงจรตัวเหนี่ยวนำ (L)</div>
+      <table class="fs-tbl">
+        <thead><tr><th>อนุกรม</th><th>ขนาน</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>L<sub>T</sub> = L<sub>1</sub> + L<sub>2</sub> + …</td>
+            <td style="font-size:0.8rem;">1/L<sub>T</sub> = 1/L<sub>1</sub> + 1/L<sub>2</sub> + …</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="fs-sub" style="font-size:0.95rem;">X<sub>L</sub> = 2πfL</div>
+      <div class="fs-legend">X<sub>L</sub> = อินดักทีฟรีแอกแตนซ์ (Ω)<br>f = ความถี่ (Hz) &nbsp;|&nbsp; หน่วย L: H &gt; mH &gt; μH</div>
+    </div>
+
+    <!-- 6: Transformer -->
+    <div class="fs-card fs-red">
+      <div class="fs-card-title">🔁 หม้อแปลงไฟฟ้า (Transformer)</div>
+      <div class="fs-main">V₁/V₂ = N₁/N₂ = I₂/I₁</div>
+      <div class="fs-sub" style="font-size:0.9rem;">Step-up: N₁ &lt; N₂ → V₂ &gt; V₁<br>Step-down: N₁ &gt; N₂ → V₂ &lt; V₁</div>
+      <div class="fs-legend">V = แรงดัน &nbsp;|&nbsp; N = จำนวนรอบขดลวด &nbsp;|&nbsp; I = กระแส</div>
+    </div>
+
+  </div>
+
+  <!-- Resistor Color Code Table -->
+  <div class="fs-ref-section">
+    <div class="fs-ref-title">🎨 รหัสสีตัวต้านทาน (Resistor Color Code)</div>
+    <div style="overflow-x:auto;">
+      <table class="fs-ref-table">
+        <thead>
+          <tr>
+            <th>สี</th>
+            <th>ตัวเลข (แถบ 1–3)</th>
+            <th>ตัวคูณ (Multiplier)</th>
+            <th>ค่าผิดพลาด (Tolerance)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="rc-dot" style="background:#1a1a1a;"></span>ดำ (Black)</td>    <td>0</td><td>× 1 Ω</td><td>—</td></tr>
+          <tr><td><span class="rc-dot" style="background:#8B4513;"></span>น้ำตาล (Brown)</td><td>1</td><td>× 10 Ω</td><td>±1%</td></tr>
+          <tr><td><span class="rc-dot" style="background:#cc2200;"></span>แดง (Red)</td>     <td>2</td><td>× 100 Ω</td><td>±2%</td></tr>
+          <tr><td><span class="rc-dot" style="background:#ff6600;"></span>ส้ม (Orange)</td>  <td>3</td><td>× 1 kΩ</td><td>—</td></tr>
+          <tr><td><span class="rc-dot" style="background:#cccc00;"></span>เหลือง (Yellow)</td><td>4</td><td>× 10 kΩ</td><td>—</td></tr>
+          <tr><td><span class="rc-dot" style="background:#007700;"></span>เขียว (Green)</td> <td>5</td><td>× 100 kΩ</td><td>±0.5%</td></tr>
+          <tr><td><span class="rc-dot" style="background:#0000cc;"></span>น้ำเงิน (Blue)</td><td>6</td><td>× 1 MΩ</td><td>±0.25%</td></tr>
+          <tr><td><span class="rc-dot" style="background:#9900cc;"></span>ม่วง (Violet)</td> <td>7</td><td>× 10 MΩ</td><td>±0.1%</td></tr>
+          <tr><td><span class="rc-dot" style="background:#888888;"></span>เทา (Gray)</td>    <td>8</td><td>—</td><td>±0.05%</td></tr>
+          <tr><td><span class="rc-dot" style="background:#f5f5f5; border:1px solid #bbb;"></span>ขาว (White)</td><td>9</td><td>—</td><td>—</td></tr>
+          <tr><td><span class="rc-dot" style="background:#cfaa00;"></span>ทอง (Gold)</td>    <td>—</td><td>× 0.1</td><td>±5%</td></tr>
+          <tr><td><span class="rc-dot" style="background:#aaaaaa;"></span>เงิน (Silver)</td> <td>—</td><td>× 0.01</td><td>±10%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:0.8rem; color:var(--text-light); margin-top:0.5rem;">
+      💡 จำสี: <strong>ดำ น้ำตาล แดง ส้ม เหลือง เขียว น้ำเงิน ม่วง เทา ขาว</strong> = 0–9
+    </p>
+  </div>
+
+  <!-- Unit Prefixes Table -->
+  <div class="fs-ref-section">
+    <div class="fs-ref-title">📏 ตัวคูณหน่วย (SI Prefixes)</div>
+    <div style="overflow-x:auto;">
+      <table class="fs-ref-table">
+        <thead>
+          <tr><th>ตัวย่อ</th><th>ชื่อ</th><th>ค่า</th><th>ตัวอย่าง</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>M</strong></td><td>เมกะ (Mega)</td>  <td>× 1,000,000 (10⁶)</td>  <td>1 MΩ = 1,000,000 Ω</td></tr>
+          <tr><td><strong>k</strong></td><td>กิโล (Kilo)</td>  <td>× 1,000 (10³)</td>       <td>4.7 kΩ = 4,700 Ω</td></tr>
+          <tr><td><strong>m</strong></td><td>มิลลิ (Milli)</td><td>× 0.001 (10⁻³)</td>      <td>100 mA = 0.1 A</td></tr>
+          <tr><td><strong>μ</strong></td><td>ไมโคร (Micro)</td><td>× 0.000001 (10⁻⁶)</td>  <td>100 μF = 0.0001 F</td></tr>
+          <tr><td><strong>n</strong></td><td>นาโน (Nano)</td>  <td>× 10⁻⁹</td>              <td>10 nF = 0.01 μF</td></tr>
+          <tr><td><strong>p</strong></td><td>พิโก (Pico)</td>  <td>× 10⁻¹²</td>             <td>100 pF = 0.1 nF</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="page-nav print-hide">
+    <a href="tools.html">← เครื่องคิดเลข</a>
+    <a class="next" href="quiz.html">แบบทดสอบ →</a>
+  </div>
+</div>
+
+<footer class="print-hide"><strong>สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong></footer>
+<script>const CURRENT_PAGE='formulas';</script>
+<script src="nav.js"></script>
+</body>
+</html>
