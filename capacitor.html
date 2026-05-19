@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" data-title-th="ตัวเก็บประจุ | สื่อการเรียนการสอน" data-title-en="Capacitor | Teaching Materials">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ตัวเก็บประจุ | สื่อการเรียนการสอน</title>
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
@@ -15,8 +16,10 @@
   <div class="page-header-inner">
     <div class="page-header-icon">🔋</div>
     <div>
-      <h1>ตัวเก็บประจุ (Capacitor)</h1>
-      <p>ชนิด • การอ่านรหัส • F/μF/nF/pF • วงจรอนุกรม/ขนาน</p>
+      <h1 class="th-only">ตัวเก็บประจุ (Capacitor)</h1>
+      <h1 class="en-only">Capacitor</h1>
+      <p class="th-only">ชนิด • การอ่านรหัส • F/μF/nF/pF • วงจรอนุกรม/ขนาน</p>
+      <p class="en-only">Types • Reading codes • F/μF/nF/pF • Series/Parallel circuits</p>
     </div>
   </div>
 </div>
@@ -24,38 +27,54 @@
 <div class="container">
 
   <div class="section">
-    <div class="section-title">คุณสมบัติและชนิด</div>
+    <div class="section-title"><span class="th-only">คุณสมบัติและชนิด</span><span class="en-only">Properties &amp; Types</span></div>
     <div class="card">
       <div class="grid-2">
         <div>
-          <ul class="content-list">
+          <ul class="content-list th-only">
             <li>เก็บและปล่อยประจุไฟฟ้า</li>
             <li>กรองความถี่ (Filter)</li>
             <li>ต่อต้านการเปลี่ยนแปลงแรงดัน</li>
             <li>ใช้ในวงจร Timing, Coupling, Bypass</li>
           </ul>
+          <ul class="content-list en-only">
+            <li>Store and release electric charge</li>
+            <li>Filter frequencies</li>
+            <li>Oppose changes in voltage</li>
+            <li>Used in Timing, Coupling, and Bypass circuits</li>
+          </ul>
         </div>
         <div class="info-box">
-          <strong>ชนิดของตัวเก็บประจุ</strong><br>
+          <span class="th-only"><strong>ชนิดของตัวเก็บประจุ</strong><br>
           • Electrolytic — มีขั้ว, ค่า μF<br>
           • Ceramic (Disc) — ไม่มีขั้ว, ค่า pF–nF<br>
           • Polyester (MKT) — ไม่มีขั้ว, ค่า nF–μF<br>
           • Tantalum — มีขั้ว, ขนาดเล็ก<br>
-          • Variable Capacitor — ปรับค่าได้
+          • Variable Capacitor — ปรับค่าได้</span>
+          <span class="en-only"><strong>Types of Capacitors</strong><br>
+          • Electrolytic — polarized, value in μF<br>
+          • Ceramic (Disc) — non-polarized, value in pF–nF<br>
+          • Polyester (MKT) — non-polarized, value in nF–μF<br>
+          • Tantalum — polarized, compact size<br>
+          • Variable Capacitor — adjustable value</span>
         </div>
       </div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">การแปลงหน่วยความจุ</div>
+    <div class="section-title"><span class="th-only">การแปลงหน่วยความจุ</span><span class="en-only">Capacitance Unit Conversion</span></div>
     <div class="card">
       <table>
-        <tr><th>หน่วย</th><th>สัญลักษณ์</th><th>เทียบกับ Farad</th></tr>
-        <tr><td>ฟารัด</td><td>F</td><td>1 F</td></tr>
-        <tr><td>ไมโครฟารัด</td><td>μF</td><td>10⁻⁶ F</td></tr>
-        <tr><td>นาโนฟารัด</td><td>nF</td><td>10⁻⁹ F</td></tr>
-        <tr><td>พิโคฟารัด</td><td>pF</td><td>10⁻¹² F</td></tr>
+        <tr>
+          <th><span class="th-only">หน่วย</span><span class="en-only">Unit</span></th>
+          <th><span class="th-only">สัญลักษณ์</span><span class="en-only">Symbol</span></th>
+          <th><span class="th-only">เทียบกับ Farad</span><span class="en-only">Equivalent in Farads</span></th>
+        </tr>
+        <tr><td><span class="th-only">ฟารัด</span><span class="en-only">Farad</span></td><td>F</td><td>1 F</td></tr>
+        <tr><td><span class="th-only">ไมโครฟารัด</span><span class="en-only">Microfarad</span></td><td>μF</td><td>10⁻⁶ F</td></tr>
+        <tr><td><span class="th-only">นาโนฟารัด</span><span class="en-only">Nanofarad</span></td><td>nF</td><td>10⁻⁹ F</td></tr>
+        <tr><td><span class="th-only">พิโคฟารัด</span><span class="en-only">Picofarad</span></td><td>pF</td><td>10⁻¹² F</td></tr>
       </table>
       <div class="info-box" style="margin-top:0.75rem;">
         1 μF = 1,000 nF = 1,000,000 pF<br>
@@ -66,10 +85,17 @@
   </div>
 
   <div class="section">
-    <div class="section-title">การอ่านรหัสตัวเก็บประจุ (Ceramic/Polyester)</div>
+    <div class="section-title"><span class="th-only">การอ่านรหัสตัวเก็บประจุ (Ceramic/Polyester)</span><span class="en-only">Reading Capacitor Codes (Ceramic/Polyester)</span></div>
     <div class="card">
-      <ul class="content-list">
+      <ul class="content-list th-only">
         <li>รหัส 3 หลัก: หลักที่ 1-2 คือค่า, หลักที่ 3 คือตัวคูณ → หน่วย pF</li>
+        <li><strong>104</strong> = 10 × 10⁴ = 100,000 pF = 100 nF = 0.1 μF</li>
+        <li><strong>473</strong> = 47 × 10³ = 47,000 pF = 47 nF</li>
+        <li><strong>221</strong> = 22 × 10¹ = 220 pF</li>
+        <li><strong>100</strong> = 10 × 10⁰ = 10 pF</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>3-digit code: digits 1–2 are the value, digit 3 is the multiplier → unit is pF</li>
         <li><strong>104</strong> = 10 × 10⁴ = 100,000 pF = 100 nF = 0.1 μF</li>
         <li><strong>473</strong> = 47 × 10³ = 47,000 pF = 47 nF</li>
         <li><strong>221</strong> = 22 × 10¹ = 220 pF</li>
@@ -79,28 +105,36 @@
   </div>
 
   <div class="section">
-    <div class="section-title">วงจรตัวเก็บประจุ</div>
+    <div class="section-title"><span class="th-only">วงจรตัวเก็บประจุ</span><span class="en-only">Capacitor Circuits</span></div>
     <div class="grid-2">
       <div class="card">
-        <h3>วงจรอนุกรม (Series)</h3>
+        <h3 class="th-only">วงจรอนุกรม (Series)</h3>
+        <h3 class="en-only">Series Circuit</h3>
         <div class="formula-box"><div class="formula">1/C<sub>T</sub> = 1/C₁ + 1/C₂ + 1/C₃ + ...</div></div>
-        <div class="info-box" style="margin-top:0.75rem;">ค่าความจุรวม <strong>น้อยกว่า</strong>ทุกตัว</div>
+        <div class="info-box" style="margin-top:0.75rem;">
+          <span class="th-only">ค่าความจุรวม <strong>น้อยกว่า</strong>ทุกตัว</span>
+          <span class="en-only">Total capacitance is <strong>less than</strong> the smallest individual capacitor</span>
+        </div>
       </div>
       <div class="card">
-        <h3>วงจรขนาน (Parallel)</h3>
+        <h3 class="th-only">วงจรขนาน (Parallel)</h3>
+        <h3 class="en-only">Parallel Circuit</h3>
         <div class="formula-box"><div class="formula">C<sub>T</sub> = C₁ + C₂ + C₃ + ...</div></div>
-        <div class="info-box" style="margin-top:0.75rem;">ค่าความจุรวม <strong>มากกว่า</strong>ทุกตัว</div>
+        <div class="info-box" style="margin-top:0.75rem;">
+          <span class="th-only">ค่าความจุรวม <strong>มากกว่า</strong>ทุกตัว</span>
+          <span class="en-only">Total capacitance is <strong>greater than</strong> any individual capacitor</span>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="page-nav">
-    <a href="resistor.html">← ตัวต้านทาน</a>
-    <a class="next" href="inductor.html">ตัวเหนี่ยวนำ →</a>
+    <a href="resistor.html">← <span class="th-only">ตัวต้านทาน</span><span class="en-only">Resistor</span></a>
+    <a class="next" href="inductor.html"><span class="th-only">ตัวเหนี่ยวนำ</span><span class="en-only">Inductor</span> →</a>
   </div>
 </div>
 
-<footer><strong>สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong></footer>
+<footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
 <script>const CURRENT_PAGE='capacitor';</script>
 <script src="nav.js"></script>
 </body>

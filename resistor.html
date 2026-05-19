@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" data-title-th="ตัวต้านทาน | สื่อการเรียนการสอน" data-title-en="Resistor | Teaching Materials">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ตัวต้านทาน | สื่อการเรียนการสอน</title>
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
@@ -15,8 +16,10 @@
   <div class="page-header-inner">
     <div class="page-header-icon">🎨</div>
     <div>
-      <h1>ตัวต้านทาน (Resistor)</h1>
-      <p>รหัสสี 4 แถบ / 5 แถบ • EIA96 • วงจรอนุกรม/ขนาน</p>
+      <h1 class="th-only">ตัวต้านทาน (Resistor)</h1>
+      <h1 class="en-only">Resistor</h1>
+      <p class="th-only">รหัสสี 4 แถบ / 5 แถบ • EIA96 • วงจรอนุกรม/ขนาน</p>
+      <p class="en-only">4-band / 5-band color code • EIA96 • Series/Parallel circuits</p>
     </div>
   </div>
 </div>
@@ -24,97 +27,135 @@
 <div class="container">
 
   <div class="section">
-    <div class="section-title">หน้าที่และชนิดของตัวต้านทาน</div>
+    <div class="section-title"><span class="th-only">หน้าที่และชนิดของตัวต้านทาน</span><span class="en-only">Function &amp; Types of Resistors</span></div>
     <div class="card">
       <div class="grid-2">
         <div>
-          <ul class="content-list">
+          <ul class="content-list th-only">
             <li>จำกัดปริมาณกระแสไฟฟ้าในวงจร</li>
             <li>แบ่งแรงดันไฟฟ้า (Voltage Divider)</li>
             <li>ปรับค่าสัญญาณในวงจร</li>
             <li>หน่วย: โอห์ม (Ω)</li>
           </ul>
+          <ul class="content-list en-only">
+            <li>Limit the amount of current in a circuit</li>
+            <li>Divide voltage (Voltage Divider)</li>
+            <li>Adjust signal levels in a circuit</li>
+            <li>Unit: Ohm (Ω)</li>
+          </ul>
         </div>
         <div class="info-box">
-          <strong>ชนิดของตัวต้านทาน</strong><br>
+          <span class="th-only"><strong>ชนิดของตัวต้านทาน</strong><br>
           • Fixed Resistor — ค่าคงที่<br>
           • Variable Resistor (VR) — ปรับค่าได้<br>
           • Thermistor (NTC/PTC) — เปลี่ยนตามอุณหภูมิ<br>
           • LDR — เปลี่ยนตามแสง<br>
-          • Varistor (VDR) — เปลี่ยนตามแรงดัน
+          • Varistor (VDR) — เปลี่ยนตามแรงดัน</span>
+          <span class="en-only"><strong>Types of Resistors</strong><br>
+          • Fixed Resistor — constant value<br>
+          • Variable Resistor (VR) — adjustable<br>
+          • Thermistor (NTC/PTC) — changes with temperature<br>
+          • LDR — changes with light<br>
+          • Varistor (VDR) — changes with voltage</span>
         </div>
       </div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">รหัสสี 4 แถบ (4-Band Color Code)</div>
+    <div class="section-title"><span class="th-only">รหัสสี 4 แถบ (4-Band Color Code)</span><span class="en-only">4-Band Color Code</span></div>
     <div class="card">
       <table>
-        <tr><th>สี</th><th>แถบ 1 (เลขหน้า)</th><th>แถบ 2 (เลขหลัง)</th><th>แถบ 3 (ตัวคูณ)</th><th>แถบ 4 (ค่าผิดพลาด)</th></tr>
-        <tr><td><span class="color-strip" style="background:#111;"></span>ดำ</td><td>0</td><td>0</td><td>×1</td><td>—</td></tr>
-        <tr><td><span class="color-strip" style="background:#8B4513;"></span>น้ำตาล</td><td>1</td><td>1</td><td>×10</td><td>±1%</td></tr>
-        <tr><td><span class="color-strip" style="background:#f00;"></span>แดง</td><td>2</td><td>2</td><td>×100</td><td>±2%</td></tr>
-        <tr><td><span class="color-strip" style="background:#ff7700;"></span>ส้ม</td><td>3</td><td>3</td><td>×1,000</td><td>—</td></tr>
-        <tr><td><span class="color-strip" style="background:#ff0;border:1px solid #ccc;"></span>เหลือง</td><td>4</td><td>4</td><td>×10,000</td><td>—</td></tr>
-        <tr><td><span class="color-strip" style="background:#0a0;"></span>เขียว</td><td>5</td><td>5</td><td>×100,000</td><td>±0.5%</td></tr>
-        <tr><td><span class="color-strip" style="background:#00f;"></span>น้ำเงิน</td><td>6</td><td>6</td><td>×1,000,000</td><td>±0.25%</td></tr>
-        <tr><td><span class="color-strip" style="background:#8b008b;"></span>ม่วง</td><td>7</td><td>7</td><td>—</td><td>±0.1%</td></tr>
-        <tr><td><span class="color-strip" style="background:#888;"></span>เทา</td><td>8</td><td>8</td><td>—</td><td>—</td></tr>
-        <tr><td><span class="color-strip" style="background:#fff;border:1px solid #999;"></span>ขาว</td><td>9</td><td>9</td><td>—</td><td>—</td></tr>
-        <tr><td><span class="color-strip" style="background:#d4af37;"></span>ทอง</td><td>—</td><td>—</td><td>×0.1</td><td>±5%</td></tr>
-        <tr><td><span class="color-strip" style="background:#aaa;"></span>เงิน</td><td>—</td><td>—</td><td>×0.01</td><td>±10%</td></tr>
+        <tr>
+          <th><span class="th-only">สี</span><span class="en-only">Color</span></th>
+          <th><span class="th-only">แถบ 1 (เลขหน้า)</span><span class="en-only">Band 1 (1st digit)</span></th>
+          <th><span class="th-only">แถบ 2 (เลขหลัง)</span><span class="en-only">Band 2 (2nd digit)</span></th>
+          <th><span class="th-only">แถบ 3 (ตัวคูณ)</span><span class="en-only">Band 3 (Multiplier)</span></th>
+          <th><span class="th-only">แถบ 4 (ค่าผิดพลาด)</span><span class="en-only">Band 4 (Tolerance)</span></th>
+        </tr>
+        <tr><td><span class="color-strip" style="background:#111;"></span><span class="th-only">ดำ</span><span class="en-only">Black</span></td><td>0</td><td>0</td><td>×1</td><td>—</td></tr>
+        <tr><td><span class="color-strip" style="background:#8B4513;"></span><span class="th-only">น้ำตาล</span><span class="en-only">Brown</span></td><td>1</td><td>1</td><td>×10</td><td>±1%</td></tr>
+        <tr><td><span class="color-strip" style="background:#f00;"></span><span class="th-only">แดง</span><span class="en-only">Red</span></td><td>2</td><td>2</td><td>×100</td><td>±2%</td></tr>
+        <tr><td><span class="color-strip" style="background:#ff7700;"></span><span class="th-only">ส้ม</span><span class="en-only">Orange</span></td><td>3</td><td>3</td><td>×1,000</td><td>—</td></tr>
+        <tr><td><span class="color-strip" style="background:#ff0;border:1px solid #ccc;"></span><span class="th-only">เหลือง</span><span class="en-only">Yellow</span></td><td>4</td><td>4</td><td>×10,000</td><td>—</td></tr>
+        <tr><td><span class="color-strip" style="background:#0a0;"></span><span class="th-only">เขียว</span><span class="en-only">Green</span></td><td>5</td><td>5</td><td>×100,000</td><td>±0.5%</td></tr>
+        <tr><td><span class="color-strip" style="background:#00f;"></span><span class="th-only">น้ำเงิน</span><span class="en-only">Blue</span></td><td>6</td><td>6</td><td>×1,000,000</td><td>±0.25%</td></tr>
+        <tr><td><span class="color-strip" style="background:#8b008b;"></span><span class="th-only">ม่วง</span><span class="en-only">Violet</span></td><td>7</td><td>7</td><td>—</td><td>±0.1%</td></tr>
+        <tr><td><span class="color-strip" style="background:#888;"></span><span class="th-only">เทา</span><span class="en-only">Gray</span></td><td>8</td><td>8</td><td>—</td><td>—</td></tr>
+        <tr><td><span class="color-strip" style="background:#fff;border:1px solid #999;"></span><span class="th-only">ขาว</span><span class="en-only">White</span></td><td>9</td><td>9</td><td>—</td><td>—</td></tr>
+        <tr><td><span class="color-strip" style="background:#d4af37;"></span><span class="th-only">ทอง</span><span class="en-only">Gold</span></td><td>—</td><td>—</td><td>×0.1</td><td>±5%</td></tr>
+        <tr><td><span class="color-strip" style="background:#aaa;"></span><span class="th-only">เงิน</span><span class="en-only">Silver</span></td><td>—</td><td>—</td><td>×0.01</td><td>±10%</td></tr>
       </table>
       <div class="info-box" style="margin-top:1rem;">
-        <strong>วิธีอ่าน 4 แถบ:</strong> ค่า = (แถบ1 × 10 + แถบ2) × ตัวคูณ ± ค่าผิดพลาด<br>
-        ตัวอย่าง: น้ำตาล-ดำ-แดง-ทอง = (1×10+0)×100 = 1,000 Ω = 1 kΩ ±5%
+        <span class="th-only"><strong>วิธีอ่าน 4 แถบ:</strong> ค่า = (แถบ1 × 10 + แถบ2) × ตัวคูณ ± ค่าผิดพลาด<br>
+        ตัวอย่าง: น้ำตาล-ดำ-แดง-ทอง = (1×10+0)×100 = 1,000 Ω = 1 kΩ ±5%</span>
+        <span class="en-only"><strong>How to read 4-band:</strong> Value = (Band1 × 10 + Band2) × Multiplier ± Tolerance<br>
+        Example: Brown-Black-Red-Gold = (1×10+0)×100 = 1,000 Ω = 1 kΩ ±5%</span>
       </div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">รหัสสี 5 แถบ (5-Band Color Code)</div>
+    <div class="section-title"><span class="th-only">รหัสสี 5 แถบ (5-Band Color Code)</span><span class="en-only">5-Band Color Code</span></div>
     <div class="card">
-      <p>แถบที่ 1-3 = ตัวเลข 3 หลัก, แถบที่ 4 = ตัวคูณ, แถบที่ 5 = ค่าผิดพลาด</p>
+      <p class="th-only">แถบที่ 1-3 = ตัวเลข 3 หลัก, แถบที่ 4 = ตัวคูณ, แถบที่ 5 = ค่าผิดพลาด</p>
+      <p class="en-only">Bands 1–3 = 3 significant digits, Band 4 = multiplier, Band 5 = tolerance</p>
       <div class="info-box" style="margin-top:0.75rem;">
-        <strong>วิธีอ่าน 5 แถบ:</strong> ค่า = (แถบ1×100 + แถบ2×10 + แถบ3) × ตัวคูณ ± ค่าผิดพลาด<br>
-        ตัวอย่าง: แดง-แดง-แดง-น้ำตาล-น้ำตาล = (222)×10 = 2,220 Ω = 2.22 kΩ ±1%
+        <span class="th-only"><strong>วิธีอ่าน 5 แถบ:</strong> ค่า = (แถบ1×100 + แถบ2×10 + แถบ3) × ตัวคูณ ± ค่าผิดพลาด<br>
+        ตัวอย่าง: แดง-แดง-แดง-น้ำตาล-น้ำตาล = (222)×10 = 2,220 Ω = 2.22 kΩ ±1%</span>
+        <span class="en-only"><strong>How to read 5-band:</strong> Value = (Band1×100 + Band2×10 + Band3) × Multiplier ± Tolerance<br>
+        Example: Red-Red-Red-Brown-Brown = (222)×10 = 2,220 Ω = 2.22 kΩ ±1%</span>
       </div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">วงจรตัวต้านทาน</div>
+    <div class="section-title"><span class="th-only">วงจรตัวต้านทาน</span><span class="en-only">Resistor Circuits</span></div>
     <div class="grid-2">
       <div class="card">
-        <h3>วงจรอนุกรม (Series)</h3>
+        <h3 class="th-only">วงจรอนุกรม (Series)</h3>
+        <h3 class="en-only">Series Circuit</h3>
         <div class="formula-box"><div class="formula">R<sub>T</sub> = R₁ + R₂ + R₃ + ...</div></div>
-        <ul class="content-list" style="margin-top:0.75rem;">
+        <ul class="content-list th-only" style="margin-top:0.75rem;">
           <li>กระแสเท่ากันทุกตัว: I<sub>T</sub> = I₁ = I₂ = I₃</li>
           <li>แรงดันรวม: E<sub>T</sub> = E₁ + E₂ + E₃</li>
           <li>ความต้านทานรวมมากกว่าทุกตัว</li>
         </ul>
+        <ul class="content-list en-only" style="margin-top:0.75rem;">
+          <li>Current is equal in all: I<sub>T</sub> = I₁ = I₂ = I₃</li>
+          <li>Total voltage: E<sub>T</sub> = E₁ + E₂ + E₃</li>
+          <li>Total resistance is greater than any single resistor</li>
+        </ul>
       </div>
       <div class="card">
-        <h3>วงจรขนาน (Parallel)</h3>
+        <h3 class="th-only">วงจรขนาน (Parallel)</h3>
+        <h3 class="en-only">Parallel Circuit</h3>
         <div class="formula-box"><div class="formula">1/R<sub>T</sub> = 1/R₁ + 1/R₂ + 1/R₃ + ...</div></div>
-        <ul class="content-list" style="margin-top:0.75rem;">
+        <ul class="content-list th-only" style="margin-top:0.75rem;">
           <li>แรงดันเท่ากันทุกตัว: E<sub>T</sub> = E₁ = E₂ = E₃</li>
           <li>กระแสรวม: I<sub>T</sub> = I₁ + I₂ + I₃</li>
           <li>ความต้านทานรวมน้อยกว่าทุกตัว</li>
         </ul>
-        <div class="info-box" style="margin-top:0.75rem;">สูตรพิเศษ 2 ตัว: R<sub>T</sub> = (R₁ × R₂) / (R₁ + R₂)</div>
+        <ul class="content-list en-only" style="margin-top:0.75rem;">
+          <li>Voltage is equal across all: E<sub>T</sub> = E₁ = E₂ = E₃</li>
+          <li>Total current: I<sub>T</sub> = I₁ + I₂ + I₃</li>
+          <li>Total resistance is less than any single resistor</li>
+        </ul>
+        <div class="info-box" style="margin-top:0.75rem;">
+          <span class="th-only">สูตรพิเศษ 2 ตัว: R<sub>T</sub> = (R₁ × R₂) / (R₁ + R₂)</span>
+          <span class="en-only">2-resistor shortcut: R<sub>T</sub> = (R₁ × R₂) / (R₁ + R₂)</span>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="page-nav">
-    <a href="ohm.html">← กฎของโอห์ม</a>
-    <a class="next" href="capacitor.html">ตัวเก็บประจุ →</a>
+    <a href="ohm.html">← <span class="th-only">กฎของโอห์ม</span><span class="en-only">Ohm's Law</span></a>
+    <a class="next" href="capacitor.html"><span class="th-only">ตัวเก็บประจุ</span><span class="en-only">Capacitor</span> →</a>
   </div>
 </div>
 
-<footer><strong>สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong></footer>
+<footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
 <script>const CURRENT_PAGE='resistor';</script>
 <script src="nav.js"></script>
 </body>
