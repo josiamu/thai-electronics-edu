@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" data-title-th="การบัดกรี | สื่อการเรียนการสอน" data-title-en="Soldering | Teaching Materials">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>การบัดกรี | สื่อการเรียนการสอน</title>
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
@@ -15,8 +16,10 @@
   <div class="page-header-inner">
     <div class="page-header-icon">🔥</div>
     <div>
-      <h1>การบัดกรี (Soldering)</h1>
-      <p>อุปกรณ์ • 4 ขั้นตอน • รอยบัดกรีที่ดีและไม่ดี</p>
+      <h1 class="th-only">การบัดกรี (Soldering)</h1>
+      <h1 class="en-only">Soldering</h1>
+      <p class="th-only">อุปกรณ์ • 4 ขั้นตอน • รอยบัดกรีที่ดีและไม่ดี</p>
+      <p class="en-only">Equipment • 4 Steps • Good and Bad Solder Joints</p>
     </div>
   </div>
 </div>
@@ -24,55 +27,89 @@
 <div class="container">
 
   <div class="section">
-    <div class="section-title">อุปกรณ์ที่ใช้ในการบัดกรี</div>
+    <div class="section-title">
+      <span class="th-only">อุปกรณ์ที่ใช้ในการบัดกรี</span>
+      <span class="en-only">Soldering Equipment</span>
+    </div>
     <div class="card">
       <div class="grid-2">
-        <ul class="content-list">
+        <ul class="content-list th-only">
           <li><strong>หัวแร้งบัดกรี (Soldering Iron)</strong> — ให้ความร้อน ขนาด 25–40W</li>
           <li><strong>ตะกั่วบัดกรี (Solder Wire)</strong> — ผสม Sn/Pb + Flux ในตัว</li>
           <li><strong>น้ำยาประสาน (Flux)</strong> — ช่วยให้ตะกั่วติดดีขึ้น</li>
           <li><strong>ฟองน้ำ (Sponge)</strong> — เช็ดทำความสะอาดหัวแร้ง</li>
         </ul>
-        <ul class="content-list">
+        <ul class="content-list en-only">
+          <li><strong>Soldering Iron</strong> — Heat source, 25–40W</li>
+          <li><strong>Solder Wire</strong> — Sn/Pb alloy with built-in flux</li>
+          <li><strong>Flux</strong> — Improves solder adhesion</li>
+          <li><strong>Sponge</strong> — Cleans the soldering iron tip</li>
+        </ul>
+        <ul class="content-list th-only">
           <li><strong>แท่นวางหัวแร้ง (Iron Stand)</strong> — วางหัวแร้งขณะพัก</li>
           <li><strong>ดีบุกดูด (Desoldering Pump)</strong> — ดูดตะกั่วส่วนเกินออก</li>
           <li><strong>สายดูดตะกั่ว (Desoldering Braid)</strong> — ดูดตะกั่วออกด้วยไส้ทองแดง</li>
           <li><strong>ที่จับชิ้นงาน (PCB Holder)</strong> — ยึดแผ่นวงจรขณะบัดกรี</li>
+        </ul>
+        <ul class="content-list en-only">
+          <li><strong>Iron Stand</strong> — Holds the soldering iron when not in use</li>
+          <li><strong>Desoldering Pump</strong> — Removes excess solder</li>
+          <li><strong>Desoldering Braid</strong> — Wicks away solder with copper mesh</li>
+          <li><strong>PCB Holder</strong> — Holds the circuit board during soldering</li>
         </ul>
       </div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">ขั้นตอนการบัดกรี 4 ขั้นตอน</div>
+    <div class="section-title">
+      <span class="th-only">ขั้นตอนการบัดกรี 4 ขั้นตอน</span>
+      <span class="en-only">4-Step Soldering Process</span>
+    </div>
     <div class="card">
       <div class="steps">
         <div class="step">
           <div class="step-num">1</div>
-          <div class="step-content">
+          <div class="step-content th-only">
             <strong>ให้ความร้อน (Heat)</strong><br>
             นำหัวแร้งแตะที่ขาอุปกรณ์และ Pad พร้อมกัน ประมาณ <strong>2–3 วินาที</strong> ให้ทั้งสองส่วนร้อนเท่ากัน
+          </div>
+          <div class="step-content en-only">
+            <strong>Heat</strong><br>
+            Touch the iron to both the component lead and the pad simultaneously for about <strong>2–3 seconds</strong> until both are evenly heated.
           </div>
         </div>
         <div class="step">
           <div class="step-num">2</div>
-          <div class="step-content">
+          <div class="step-content th-only">
             <strong>ป้อนตะกั่ว (Add Solder)</strong><br>
             ป้อนตะกั่วบัดกรีที่ <strong>จุดต่อ</strong> (ไม่ใช่ที่หัวแร้ง) ให้ตะกั่วไหลเข้าจุดต่อเอง
+          </div>
+          <div class="step-content en-only">
+            <strong>Add Solder</strong><br>
+            Feed solder wire at the <strong>joint</strong> (not at the iron tip). The solder should flow into the joint on its own.
           </div>
         </div>
         <div class="step">
           <div class="step-num">3</div>
-          <div class="step-content">
+          <div class="step-content th-only">
             <strong>ให้ความร้อนต่อ (Continue Heating)</strong><br>
             ยังคงให้ความร้อนต่ออีก <strong>1–2 วินาที</strong> เพื่อให้ตะกั่วไหลทั่วจุดต่อ
+          </div>
+          <div class="step-content en-only">
+            <strong>Continue Heating</strong><br>
+            Keep heating for another <strong>1–2 seconds</strong> so the solder flows completely around the joint.
           </div>
         </div>
         <div class="step">
           <div class="step-num">4</div>
-          <div class="step-content">
+          <div class="step-content th-only">
             <strong>ถอดหัวแร้ง (Remove Iron)</strong><br>
             ถอดหัวแร้งออก รอให้เย็นตามธรรมชาติ <strong>ห้ามเป่า</strong> เพราะจะเกิด Cold Joint
+          </div>
+          <div class="step-content en-only">
+            <strong>Remove Iron</strong><br>
+            Remove the iron and let the joint cool naturally. <strong>Never blow on it</strong> — this causes a Cold Joint.
           </div>
         </div>
       </div>
@@ -80,36 +117,56 @@
   </div>
 
   <div class="section">
-    <div class="section-title">ลักษณะรอยบัดกรี</div>
+    <div class="section-title">
+      <span class="th-only">ลักษณะรอยบัดกรี</span>
+      <span class="en-only">Solder Joint Quality</span>
+    </div>
     <div class="grid-2">
       <div class="card">
-        <div class="info-box">
+        <div class="info-box th-only">
           <strong>✓ รอยบัดกรีที่ดี (Good Joint)</strong><br>
           • ผิวเรียบมันวาว<br>
           • รูปกรวยปลายแหลม<br>
           • ตะกั่วกระจายทั่วจุดต่อ<br>
           • ติดแน่นไม่หลุดง่าย
         </div>
+        <div class="info-box en-only">
+          <strong>✓ Good Solder Joint</strong><br>
+          • Smooth, shiny surface<br>
+          • Cone-shaped with a pointed tip<br>
+          • Solder spread evenly across the joint<br>
+          • Firm, does not detach easily
+        </div>
       </div>
       <div class="card">
-        <div class="warn-box">
+        <div class="warn-box th-only">
           <strong>✗ รอยบัดกรีที่ไม่ดี</strong><br>
           • <strong>Cold Joint</strong> — ผิวขรุขระ ขุ่นมัว (เป่า/สั่น)<br>
           • <strong>Solder Bridge</strong> — ตะกั่วล้นเชื่อม Pad อื่น<br>
           • <strong>ตะกั่วน้อยเกิน</strong> — ติดไม่แน่น นำไฟฟ้าไม่ดี<br>
           • <strong>Dry Joint</strong> — ตะกั่วไม่ละลายเข้าจุดต่อ
         </div>
+        <div class="warn-box en-only">
+          <strong>✗ Bad Solder Joints</strong><br>
+          • <strong>Cold Joint</strong> — Rough, dull surface (from blowing or movement)<br>
+          • <strong>Solder Bridge</strong> — Solder overflow connecting adjacent pads<br>
+          • <strong>Insufficient Solder</strong> — Weak bond, poor conductivity<br>
+          • <strong>Dry Joint</strong> — Solder did not flow into the joint
+        </div>
       </div>
     </div>
   </div>
 
   <div class="page-nav">
-    <a href="multimeter.html">← เครื่องมือวัด</a>
-    <a class="next" href="tools.html">เครื่องคิดเลข →</a>
+    <a href="multimeter.html"><span class="th-only">← เครื่องมือวัด</span><span class="en-only">← Measuring Tools</span></a>
+    <a class="next" href="tools.html"><span class="th-only">เครื่องคิดเลข →</span><span class="en-only">Calculators →</span></a>
   </div>
 </div>
 
-<footer><strong>สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong></footer>
+<footer>
+  <strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong>
+  <strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong>
+</footer>
 <script>const CURRENT_PAGE='soldering';</script>
 <script src="nav.js"></script>
 </body>

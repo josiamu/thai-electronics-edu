@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" data-title-th="แบบทดสอบ | สื่อการเรียนการสอน" data-title-en="Quiz | Teaching Materials">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>แบบทดสอบ | สื่อการเรียนการสอน</title>
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
@@ -15,8 +16,10 @@
   <div class="page-header-inner">
     <div class="page-header-icon">📝</div>
     <div>
-      <h1>แบบทดสอบ</h1>
-      <p>50 ข้อ • 7 หมวด • เลือกหมวด • บันทึกคะแนนสูงสุด</p>
+      <h1 class="th-only">แบบทดสอบ</h1>
+      <h1 class="en-only">Quiz</h1>
+      <p class="th-only">50 ข้อ • 7 หมวด • เลือกหมวด • บันทึกคะแนนสูงสุด</p>
+      <p class="en-only">50 questions • 7 categories • Choose category • Best score saved</p>
     </div>
   </div>
 </div>
@@ -24,23 +27,24 @@
 <div class="container">
 
   <div id="quiz-cat-selector">
-    <p style="color:var(--text-light);margin-bottom:1rem;">เลือกหมวดที่ต้องการทดสอบ แล้วกด "เริ่มทำแบบทดสอบ"</p>
+    <p style="color:var(--text-light);margin-bottom:1rem;" class="th-only">เลือกหมวดที่ต้องการทดสอบ แล้วกด "เริ่มทำแบบทดสอบ"</p>
+    <p style="color:var(--text-light);margin-bottom:1rem;" class="en-only">Select categories, then press "Start Quiz"</p>
     <div class="quiz-cat-grid" id="quiz-cat-grid"></div>
     <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center;">
-      <button class="btn" onclick="startQuiz()">▶ เริ่มทำแบบทดสอบ</button>
-      <button class="btn" style="background:#6b7280;" onclick="selectAllCats()">เลือกทุกหมวด</button>
+      <button class="btn" onclick="startQuiz()">▶ <span class="th-only">เริ่มทำแบบทดสอบ</span><span class="en-only">Start Quiz</span></button>
+      <button class="btn" style="background:#6b7280;" onclick="selectAllCats()"><span class="th-only">เลือกทุกหมวด</span><span class="en-only">Select All</span></button>
       <span id="quiz-selected-info" style="color:var(--text-light);font-size:0.9rem;"></span>
     </div>
   </div>
 
   <div class="quiz-score-bar" id="quiz-score-bar" style="display:none;">
-    <div class="quiz-score-item"><div class="sq-num" id="sq-current">0</div><div class="sq-label">ข้อปัจจุบัน</div></div>
+    <div class="quiz-score-item"><div class="sq-num" id="sq-current">0</div><div class="sq-label"><span class="th-only">ข้อปัจจุบัน</span><span class="en-only">Current</span></div></div>
     <div style="width:1px;background:var(--border);height:36px;"></div>
-    <div class="quiz-score-item"><div class="sq-num" id="sq-correct" style="color:#10b981;">0</div><div class="sq-label">ถูก</div></div>
-    <div class="quiz-score-item"><div class="sq-num" id="sq-wrong" style="color:#ef4444;">0</div><div class="sq-label">ผิด</div></div>
-    <div class="quiz-score-item"><div class="sq-num" id="sq-total">0</div><div class="sq-label">ทั้งหมด</div></div>
+    <div class="quiz-score-item"><div class="sq-num" id="sq-correct" style="color:#10b981;">0</div><div class="sq-label"><span class="th-only">ถูก</span><span class="en-only">Correct</span></div></div>
+    <div class="quiz-score-item"><div class="sq-num" id="sq-wrong" style="color:#ef4444;">0</div><div class="sq-label"><span class="th-only">ผิด</span><span class="en-only">Wrong</span></div></div>
+    <div class="quiz-score-item"><div class="sq-num" id="sq-total">0</div><div class="sq-label"><span class="th-only">ทั้งหมด</span><span class="en-only">Total</span></div></div>
     <div class="quiz-score-best" id="sq-best" style="display:none;"></div>
-    <button class="btn" style="background:#6b7280;margin-left:auto;" onclick="backToMenu()">← เมนู</button>
+    <button class="btn" style="background:#6b7280;margin-left:auto;" onclick="backToMenu()">← <span class="th-only">เมนู</span><span class="en-only">Menu</span></button>
   </div>
 
   <div class="quiz-box" id="quiz-box" style="display:none;">
@@ -57,23 +61,26 @@
     <div class="score-label" id="qf-label"></div>
     <div class="score-msg" id="qf-msg"></div>
     <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;">
-      <button class="btn" onclick="retryQuiz()">🔄 ทำซ้ำ</button>
-      <button class="btn btn-green" onclick="backToMenu()">📋 เลือกหมวดใหม่</button>
+      <button class="btn" onclick="retryQuiz()">🔄 <span class="th-only">ทำซ้ำ</span><span class="en-only">Retry</span></button>
+      <button class="btn btn-green" onclick="backToMenu()">📋 <span class="th-only">เลือกหมวดใหม่</span><span class="en-only">Change Category</span></button>
     </div>
     <div class="quiz-review" id="qf-review"></div>
   </div>
 
   <div class="page-nav" style="margin-top:2rem;">
-    <a href="tools.html">← เครื่องคิดเลข</a>
-    <a class="next" href="downloads.html">ดาวน์โหลด PDF →</a>
+    <a href="tools.html"><span class="th-only">← เครื่องคิดเลข</span><span class="en-only">← Calculators</span></a>
+    <a class="next" href="downloads.html"><span class="th-only">ดาวน์โหลด PDF →</span><span class="en-only">Download PDF →</span></a>
   </div>
 </div>
 
-<footer><strong>สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong></footer>
+<footer>
+  <strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong>
+  <strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong>
+</footer>
 <script>const CURRENT_PAGE='quiz';</script>
 <script src="nav.js"></script>
 <script>
-const QUIZ_CATEGORIES = [
+const QUIZ_CATEGORIES_TH = [
   { id:'electricity', icon:'⚡', name:'แหล่งกำเนิดไฟฟ้า', questions:[
     {q:'ไฟฟ้าที่เกิดจากการกดหรือบิดผลึกควอตซ์ เรียกว่าอะไร?',opts:['Thermoelectric Effect','Piezoelectric Effect','Photoelectric Effect','Electromagnetic Induction'],ans:1,exp:'Piezoelectric Effect คือการเกิดไฟฟ้าจากแรงกดดันบนผลึกบางชนิด เช่น ควอตซ์ ใช้ในไฟแช็คและลำโพง'},
     {q:'Thermocouple ผลิตไฟฟ้าจากแหล่งกำเนิดใด?',opts:['แสงสว่าง','การเสียดสี','ความร้อน','สนามแม่เหล็ก'],ans:2,exp:'Thermocouple เกิดจากการต่อโลหะต่างชนิดสองเส้นแล้วให้ความร้อนที่รอยต่อ จะเกิดแรงดันไฟฟ้า ใช้วัดอุณหภูมิสูง'},
@@ -138,35 +145,115 @@ const QUIZ_CATEGORIES = [
   ]},
 ];
 
+const QUIZ_CATEGORIES_EN = [
+  { id:'electricity', icon:'⚡', name:'Electricity Sources', questions:[
+    {q:'What is the electricity generated by pressing or twisting quartz crystals called?',opts:['Thermoelectric Effect','Piezoelectric Effect','Photoelectric Effect','Electromagnetic Induction'],ans:1,exp:'Piezoelectric Effect is electricity generated by pressure on certain crystals like quartz. Used in lighters and speakers.'},
+    {q:'What energy source does a Thermocouple use to generate electricity?',opts:['Light','Friction','Heat','Magnetic field'],ans:2,exp:'A Thermocouple joins two different metals; heating the junction creates a voltage. Used for measuring high temperatures.'},
+    {q:'What type of energy does a Solar Cell convert to electrical energy?',opts:['Heat','Friction','Magnetic field','Light'],ans:3,exp:'Solar cells use the Photoelectric Effect — light strikes a semiconductor (Silicon), releasing electrons to create current.'},
+    {q:'What principle does a Generator use to produce electricity?',opts:['Piezoelectric Effect','Chemical Reaction','Photoelectric Effect','Electromagnetic Induction'],ans:3,exp:'A Generator uses Electromagnetic Induction — a conductor cuts through a magnetic field, inducing EMF (Faraday\'s law).'},
+    {q:'What energy source does a Battery use to produce electricity?',opts:['Heat','Chemical reaction','Light','Friction'],ans:1,exp:'Batteries use chemical reactions between internal substances (Voltaic Cell), converting chemical energy to electrical energy.'},
+    {q:'How does Static Electricity differ from current electricity?',opts:['Has higher voltage','Charge does not flow or move','It is AC','More dangerous'],ans:1,exp:'Static electricity is charge that accumulates and stays still — it does not flow in a circuit. Current electricity is electrons continuously moving through a conductor.'},
+    {q:'How does AC differ from DC?',opts:['AC always has higher voltage','AC current flows in one direction','AC current changes direction with frequency','AC is used in batteries'],ans:2,exp:'AC (Alternating Current) reverses direction periodically with frequency, e.g. household 220V 50Hz. DC flows in one direction only.'},
+    {q:'How many electrons in the outermost shell does a good electrical conductor have?',opts:['1–3 electrons','4 electrons','5–7 electrons','8 electrons'],ans:0,exp:'Good conductors like copper have 1–3 electrons in the outermost shell, which can be easily freed under voltage to become current.'},
+  ]},
+  { id:'ohm', icon:'🔢', name:"Ohm's Law", questions:[
+    {q:'A circuit has E = 12V and R = 4Ω. What is the current I?',opts:['2 A','3 A','4 A','48 A'],ans:1,exp:"I = E/R = 12/4 = 3 A (Ohm's Law)"},
+    {q:'A circuit has I = 2A and R = 5Ω. What is the voltage E?',opts:['2.5 V','7 V','10 V','0.4 V'],ans:2,exp:'E = I × R = 2 × 5 = 10 V'},
+    {q:'A circuit has E = 24V and I = 3A. What is the resistance R?',opts:['72 Ω','0.125 Ω','8 Ω','27 Ω'],ans:2,exp:'R = E/I = 24/3 = 8 Ω'},
+    {q:'Power P = EI. If E = 10V and I = 2A, what is the power?',opts:['5 W','12 W','20 W','0.2 W'],ans:2,exp:'P = E × I = 10 × 2 = 20 W'},
+    {q:'A 100W bulb runs for 5 hours. How many kWh of energy is used?',opts:['500 kWh','50 kWh','0.5 kWh','5 kWh'],ans:2,exp:'W = P × t = 100W × 5h = 500 Wh = 0.5 kWh'},
+    {q:'How many Ω is 1 kΩ?',opts:['10 Ω','100 Ω','1,000 Ω','10,000 Ω'],ans:2,exp:'k = kilo = 1,000 — so 1 kΩ = 1,000 Ω'},
+    {q:'If P = 50W and R = 2Ω, what is the voltage E?',opts:['10 V','100 V','25 V','5 V'],ans:0,exp:'E = √(P×R) = √(50×2) = √100 = 10 V'},
+    {q:'How many amperes is 1 mA?',opts:['0.1 A','0.01 A','0.001 A','0.0001 A'],ans:2,exp:'m = milli = 10⁻³ — so 1 mA = 0.001 A'},
+  ]},
+  { id:'resistor', icon:'🎨', name:'Resistor', questions:[
+    {q:'A resistor with bands Brown-Black-Red-Gold has what value?',opts:['102 Ω','1,000 Ω ±5%','120 Ω','10,200 Ω'],ans:1,exp:'Brown=1, Black=0 → 10; Red=×100; Gold=±5% → 10×100 = 1,000 Ω = 1kΩ ±5%'},
+    {q:'What does a Gold band in the 4th position mean?',opts:['Multiplier ×0.1','Tolerance ±5%','First digit 0','Tolerance ±10%'],ans:1,exp:'Band 4 is the Tolerance band — Gold = ±5%'},
+    {q:'R1 = 100Ω and R2 = 200Ω connected in series. What is RT?',opts:['66.7 Ω','150 Ω','300 Ω','20,000 Ω'],ans:2,exp:'Series circuit: RT = R1 + R2 = 100 + 200 = 300 Ω'},
+    {q:'R1 = 100Ω and R2 = 100Ω connected in parallel. What is RT?',opts:['200 Ω','100 Ω','50 Ω','25 Ω'],ans:2,exp:'Two equal parallel resistors: RT = R/2 = 100/2 = 50 Ω'},
+    {q:'What digit does a Red band represent in the resistor color code?',opts:['1','2','3','4'],ans:1,exp:'Black=0, Brown=1, Red=2, Orange=3, Yellow=4, Green=5, Blue=6, Violet=7, Gray=8, White=9'},
+    {q:'How does a 5-band resistor differ from a 4-band?',opts:['Has 3 significant digits — more precise','Uses completely different colors','Always has a higher value','Only used in AC circuits'],ans:0,exp:'5-band has 3 significant digits (bands 1–3) + multiplier + tolerance, giving higher precision than 4-band.'},
+    {q:'In a series circuit, how does the current through each resistor compare?',opts:['Different in each','Equal in all','Depends on size','Sum equals total current'],ans:1,exp:'Series circuit: current is the same through every component (IT = I1 = I2 = I3)'},
+    {q:'What is an LDR?',opts:['Changes value with light','Changes value with temperature','Changes value with voltage','Has a fixed value'],ans:0,exp:'LDR (Light Dependent Resistor) changes resistance based on light intensity — more light → lower resistance.'},
+  ]},
+  { id:'capacitor', icon:'🔋', name:'Capacitor', questions:[
+    {q:'A capacitor marked "104" has what value?',opts:['104 pF','10,400 pF','100,000 pF = 0.1 μF','1,040 pF'],ans:2,exp:'104 = 10 × 10⁴ = 100,000 pF = 100 nF = 0.1 μF (3rd digit = number of zeros to append, unit is pF)'},
+    {q:'C1 = 10μF and C2 = 10μF connected in parallel. What is CT?',opts:['5 μF','10 μF','20 μF','100 μF'],ans:2,exp:'Parallel: CT = C1 + C2 = 10 + 10 = 20 μF'},
+    {q:'How many pF is 1 μF?',opts:['1,000 pF','10,000 pF','100,000 pF','1,000,000 pF'],ans:3,exp:'1 μF = 10⁻⁶ F and 1 pF = 10⁻¹² F — so 1 μF = 10⁶ pF = 1,000,000 pF'},
+    {q:'What is a key characteristic of an Electrolytic Capacitor?',opts:['No polarity','Has polarity — must be connected correctly','Only works with AC','Smallest capacitance values'],ans:1,exp:'Electrolytic Capacitors have polarity (+/-) and must always be connected correctly. Reverse connection can cause an explosion.'},
+    {q:'In a series capacitor circuit, what is the total capacitance?',opts:['Equal to the sum of all','Less than the smallest','Equal to the largest','Equal to the average'],ans:1,exp:'1/CT = 1/C1 + 1/C2 + ... — the result CT is less than any individual capacitor.'},
+    {q:'What is the role of a capacitor in a Filter circuit?',opts:['Increase current','Reduce voltage','Filter out unwanted frequencies','Increase resistance'],ans:2,exp:'Capacitors filter out ripple in rectifier circuits — they pass AC but block DC, smoothing the output.'},
+  ]},
+  { id:'multimeter', icon:'📏', name:'Measuring Tools', questions:[
+    {q:'To measure household 220V AC, which ACV range should you select?',opts:['10V','50V','250V','1000V'],ans:2,exp:'Select a range slightly higher than the expected voltage — for 220V use the 250V range.'},
+    {q:'Before measuring resistance (Ω) with an analog multimeter, what must you do first?',opts:['Set the correct range','Disconnect circuit power, then perform Zero Ω adjustment','Connect the probes first','Turn on the circuit switch first'],ans:1,exp:'You must disconnect circuit power first (never measure live circuits) then perform Zero Ω adjustment.'},
+    {q:'What does DMM stand for?',opts:['Direct Measurement Meter','Digital Multimeter','Dual Mode Meter','Dynamic Measuring Module'],ans:1,exp:'DMM = Digital Multimeter'},
+    {q:'What does the symbol V~ on a multimeter mean?',opts:['DCV — DC voltage','ACV — AC voltage','DC current','AC current'],ans:1,exp:'V~ = AC Voltage. The ~ symbol represents alternating current waveform.'},
+    {q:'How must probes be connected to measure current (mA)?',opts:['In parallel with the circuit','In series with the circuit','Only at the positive terminal','Not connected in the circuit'],ans:1,exp:'Current measurement requires series connection — current must flow through the meter.'},
+    {q:'What does the symbol ))) on a multimeter mean?',opts:['Measure frequency','Continuity test (beeps)','Measure temperature','Battery test'],ans:1,exp:'))) = Continuity Test — beeps when the circuit is connected. Used to check for broken wires.'},
+  ]},
+  { id:'soldering', icon:'🔥', name:'Soldering', questions:[
+    {q:'What is the correct first step in soldering?',opts:['Feed solder first','Heat both the component lead and the pad simultaneously','Apply flux first','Turn on a fan'],ans:1,exp:'Step 1: Heat both the component lead and the pad at the same time for 2–3 seconds until both are evenly heated.'},
+    {q:'What is a Cold Joint?',opts:['Solder did not melt','Rough, dull-looking solder joint','Too much solder','A good solder joint'],ans:1,exp:'A Cold Joint is a rough, dull solder joint caused by blowing, vibrating, or moving the work while solder is still cooling.'},
+    {q:'After soldering and removing the iron, what should you do?',opts:['Blow cool air on it','Let it cool naturally — never blow','Dip it in water','Wipe it with a sponge'],ans:1,exp:'Let the joint cool naturally. Blowing on it will cause a Cold Joint.'},
+    {q:'Where should solder wire be fed during soldering?',opts:['Directly onto the iron tip','At the junction between the component lead and pad','Only at the component lead','Only at the pad'],ans:1,exp:'Feed solder at the joint — not the iron tip — so it flows into the joint by itself.'},
+    {q:'What is the sponge used with a soldering iron for?',opts:['To rest the iron while not in use','To clean the soldering iron tip','To cool the iron down','To absorb excess solder'],ans:1,exp:'A damp sponge is used to clean the iron tip, removing old solder and burnt flux.'},
+    {q:'A 25–40W soldering iron is best suited for which type of work?',opts:['Very fine SMD work','General PCB soldering','Large wire splicing','Soldering IC chips'],ans:1,exp:'A 25–40W iron is ideal for general through-hole PCB soldering.'},
+  ]},
+  { id:'components', icon:'🔌', name:'Electronic Components', questions:[
+    {q:'What is the primary function of a Diode?',opts:['Amplify signals','Allow current to flow in one direction only','Store charge','Convert voltage'],ans:1,exp:'A diode allows current to flow in one direction only (Anode to Cathode). Used in rectifier circuits to convert AC→DC.'},
+    {q:'How does a Zener Diode differ from a regular diode?',opts:['Current flows both ways','Maintains a stable voltage in reverse bias','Amplifies power','Can replace a resistor'],ans:1,exp:'A Zener Diode maintains a constant voltage at its Zener Voltage in reverse bias. Used in Voltage Regulator circuits.'},
+    {q:'What are the primary uses of a Transistor (BJT)?',opts:['Store and release charge','Signal amplification and switching','Convert AC to DC','Measure current'],ans:1,exp:'Transistors are used as amplifiers and switches. The base current controls the collector-emitter current.'},
+    {q:'What is a Relay?',opts:['A large capacitor','An electromagnetically controlled switch','An adjustable resistor','A special diode'],ans:1,exp:'A Relay is a switch operated by an electromagnet — it controls a high-power circuit using a small signal.'},
+    {q:'What is a Triac commonly used for?',opts:['Audio amplifier circuits','AC power control such as light dimming','Digital circuits','Battery charging circuits'],ans:1,exp:'A Triac controls AC power in both directions. Commonly used in light dimmers and AC motor speed controllers.'},
+    {q:'How many terminals does a BJT transistor have?',opts:['2: Anode-Cathode','3: Base-Collector-Emitter','3: Gate-Source-Drain','4 terminals'],ans:1,exp:'BJT has 3 terminals: Base (B) = control input, Collector (C) = main terminal, Emitter (E) = output terminal.'},
+  ]},
+];
+
+function getCurLang() { return document.documentElement.lang === 'en' ? 'en' : 'th'; }
+function getQuizData() { return getCurLang() === 'en' ? QUIZ_CATEGORIES_EN : QUIZ_CATEGORIES_TH; }
+
 let quizState = { selectedCats:[], questions:[], current:0, correct:0, wrong:0, answered:[] };
 
 function initQuizCats() {
   const grid = document.getElementById('quiz-cat-grid');
   grid.innerHTML = '';
-  QUIZ_CATEGORIES.forEach(cat => {
+  const data = getQuizData();
+  data.forEach(cat => {
     const btn = document.createElement('button');
     btn.className = 'quiz-cat-btn active';
     btn.dataset.catId = cat.id;
-    btn.innerHTML = `<span class="cat-icon">${cat.icon}</span><div class="cat-name">${cat.name}</div><div class="cat-count">${cat.questions.length} ข้อ</div>`;
+    btn.innerHTML = `<span class="cat-icon">${cat.icon}</span><div class="cat-name">${cat.name}</div><div class="cat-count">${cat.questions.length} ${getCurLang()==='en'?'questions':'ข้อ'}</div>`;
     btn.onclick = () => { btn.classList.toggle('active'); quizState.selectedCats = [...document.querySelectorAll('.quiz-cat-btn.active')].map(b=>b.dataset.catId); updateInfo(); };
     grid.appendChild(btn);
   });
-  quizState.selectedCats = QUIZ_CATEGORIES.map(c=>c.id);
+  quizState.selectedCats = data.map(c=>c.id);
   updateInfo();
 }
 function selectAllCats() {
   document.querySelectorAll('.quiz-cat-btn').forEach(b=>b.classList.add('active'));
-  quizState.selectedCats = QUIZ_CATEGORIES.map(c=>c.id);
+  quizState.selectedCats = getQuizData().map(c=>c.id);
   updateInfo();
 }
 function updateInfo() {
-  const total = QUIZ_CATEGORIES.filter(c=>quizState.selectedCats.includes(c.id)).reduce((s,c)=>s+c.questions.length,0);
-  document.getElementById('quiz-selected-info').textContent = `เลือก ${quizState.selectedCats.length} หมวด รวม ${total} ข้อ`;
+  const data = getQuizData();
+  const lang = getCurLang();
+  const total = data.filter(c=>quizState.selectedCats.includes(c.id)).reduce((s,c)=>s+c.questions.length,0);
+  if (lang === 'en') {
+    document.getElementById('quiz-selected-info').textContent = `${quizState.selectedCats.length} categories, ${total} questions`;
+  } else {
+    document.getElementById('quiz-selected-info').textContent = `เลือก ${quizState.selectedCats.length} หมวด รวม ${total} ข้อ`;
+  }
 }
 function startQuiz() {
-  if (!quizState.selectedCats.length) { alert('กรุณาเลือกหมวดอย่างน้อย 1 หมวด'); return; }
+  const lang = getCurLang();
+  if (!quizState.selectedCats.length) {
+    alert(lang==='en' ? 'Please select at least 1 category' : 'กรุณาเลือกหมวดอย่างน้อย 1 หมวด');
+    return;
+  }
+  const data = getQuizData();
   let pool = [];
-  QUIZ_CATEGORIES.forEach(cat => { if (quizState.selectedCats.includes(cat.id)) cat.questions.forEach(q=>pool.push({...q,catIcon:cat.icon,catName:cat.name})); });
+  data.forEach(cat => { if (quizState.selectedCats.includes(cat.id)) cat.questions.forEach(q=>pool.push({...q,catIcon:cat.icon,catName:cat.name})); });
   for (let i=pool.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]]; }
   quizState = { selectedCats:quizState.selectedCats, questions:pool, current:0, correct:0, wrong:0, answered:[] };
   document.getElementById('quiz-cat-selector').style.display='none';
@@ -181,19 +268,21 @@ function loadBest() {
   const key='quiz_best_'+[...quizState.selectedCats].sort().join('_');
   const best=localStorage.getItem(key);
   const el=document.getElementById('sq-best');
-  if(best){el.style.display='';el.textContent='🏆 สูงสุด: '+best;}else el.style.display='none';
+  if(best){el.style.display='';el.textContent='🏆 '+(getCurLang()==='en'?'Best: ':'สูงสุด: ')+best;}else el.style.display='none';
 }
 function renderQ() {
+  const lang = getCurLang();
   const q=quizState.questions[quizState.current], total=quizState.questions.length, idx=quizState.current;
   document.getElementById('sq-current').textContent=idx+1;
   document.getElementById('sq-correct').textContent=quizState.correct;
   document.getElementById('sq-wrong').textContent=quizState.wrong;
   document.getElementById('quiz-prog-fill').style.width=((idx/total)*100)+'%';
-  document.getElementById('quiz-qnum').textContent=`${q.catIcon} ${q.catName}  •  ข้อที่ ${idx+1} / ${total}`;
+  document.getElementById('quiz-qnum').textContent=`${q.catIcon} ${q.catName}  •  ${lang==='en'?'Question':'ข้อที่'} ${idx+1} / ${total}`;
   document.getElementById('quiz-question').textContent=q.q;
   const opts=document.getElementById('quiz-options');
   opts.innerHTML='';
-  ['ก','ข','ค','ง'].forEach((l,i)=>{
+  const letters = lang==='en' ? ['A','B','C','D'] : ['ก','ข','ค','ง'];
+  letters.forEach((l,i)=>{
     const btn=document.createElement('button');
     btn.className='quiz-opt';
     btn.innerHTML=`<span class="quiz-opt-letter">${l}</span> ${q.opts[i]}`;
@@ -204,6 +293,7 @@ function renderQ() {
   document.getElementById('quiz-nav').innerHTML='';
 }
 function answerQ(chosen) {
+  const lang = getCurLang();
   const q=quizState.questions[quizState.current];
   const opts=document.querySelectorAll('.quiz-opt');
   const ok=chosen===q.ans;
@@ -215,31 +305,58 @@ function answerQ(chosen) {
   const exp=document.getElementById('quiz-explain');
   exp.style.display='block';
   exp.className='quiz-explain '+(ok?'correct':'wrong');
-  exp.innerHTML=(ok?'✅ <strong>ถูกต้อง!</strong> ':'❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ: <strong>'+q.opts[q.ans]+'</strong><br>')+q.exp;
+  if (lang==='en') {
+    exp.innerHTML=(ok?'✅ <strong>Correct!</strong> ':'❌ <strong>Incorrect.</strong> Answer: <strong>'+q.opts[q.ans]+'</strong><br>')+q.exp;
+  } else {
+    exp.innerHTML=(ok?'✅ <strong>ถูกต้อง!</strong> ':'❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ: <strong>'+q.opts[q.ans]+'</strong><br>')+q.exp;
+  }
   const isLast=quizState.current>=quizState.questions.length-1;
-  document.getElementById('quiz-nav').innerHTML=isLast
-    ?`<button class="btn btn-green" onclick="showFinish()">ดูผลคะแนน 🎉</button>`
-    :`<button class="btn" onclick="nextQ()">ข้อถัดไป →</button>`;
+  if (lang==='en') {
+    document.getElementById('quiz-nav').innerHTML=isLast
+      ?`<button class="btn btn-green" onclick="showFinish()">View Score 🎉</button>`
+      :`<button class="btn" onclick="nextQ()">Next →</button>`;
+  } else {
+    document.getElementById('quiz-nav').innerHTML=isLast
+      ?`<button class="btn btn-green" onclick="showFinish()">ดูผลคะแนน 🎉</button>`
+      :`<button class="btn" onclick="nextQ()">ข้อถัดไป →</button>`;
+  }
 }
 function nextQ() { quizState.current++; renderQ(); }
 function showFinish() {
+  const lang = getCurLang();
   document.getElementById('quiz-box').style.display='none';
   document.getElementById('quiz-finish').style.display='block';
   const total=quizState.questions.length, score=quizState.correct, pct=Math.round((score/total)*100);
   document.getElementById('qf-score').textContent=`${score}/${total}`;
-  document.getElementById('qf-label').textContent=`คะแนน ${pct}%`;
+  document.getElementById('qf-label').textContent=lang==='en'?`Score ${pct}%`:`คะแนน ${pct}%`;
   let msg='',color='';
-  if(pct>=90){msg='🏆 ยอดเยี่ยม! เข้าใจเนื้อหาอย่างดีเยี่ยม';color='#065f46';}
-  else if(pct>=70){msg='👍 ดีมาก! เข้าใจเนื้อหาเป็นอย่างดี';color='#1e429f';}
-  else if(pct>=50){msg='📚 พอใช้ได้ ควรทบทวนเพิ่มเติม';color='#92400e';}
-  else{msg='📖 ควรกลับไปอ่านเนื้อหาใหม่อีกครั้ง';color='#991b1b';}
+  if (lang==='en') {
+    if(pct>=90){msg='🏆 Excellent! You have an outstanding understanding.';color='#065f46';}
+    else if(pct>=70){msg='👍 Great job! You have a good understanding.';color='#1e429f';}
+    else if(pct>=50){msg='📚 Fair. You should review some more.';color='#92400e';}
+    else{msg='📖 Please go back and review the material again.';color='#991b1b';}
+  } else {
+    if(pct>=90){msg='🏆 ยอดเยี่ยม! เข้าใจเนื้อหาอย่างดีเยี่ยม';color='#065f46';}
+    else if(pct>=70){msg='👍 ดีมาก! เข้าใจเนื้อหาเป็นอย่างดี';color='#1e429f';}
+    else if(pct>=50){msg='📚 พอใช้ได้ ควรทบทวนเพิ่มเติม';color='#92400e';}
+    else{msg='📖 ควรกลับไปอ่านเนื้อหาใหม่อีกครั้ง';color='#991b1b';}
+  }
   const msgEl=document.getElementById('qf-msg'); msgEl.textContent=msg; msgEl.style.color=color;
   const key='quiz_best_'+[...quizState.selectedCats].sort().join('_');
   const prev=parseInt(localStorage.getItem(key)||'0');
   if(pct>prev)localStorage.setItem(key,pct+'% ('+score+'/'+total+')');
   const review=document.getElementById('qf-review');
-  review.innerHTML='<div style="font-weight:700;margin-bottom:0.75rem;">สรุปคำตอบ</div>';
-  quizState.answered.forEach((a,i)=>{ const d=document.createElement('div'); d.className='quiz-review-item '+(a.correct?'ok':'ng'); d.innerHTML=`<strong>ข้อ ${i+1}:</strong> ${a.correct?'✅':'❌'} ${a.q}<br><span style="font-size:0.85rem;">${a.correct?'คำตอบ: '+a.answer:'คุณตอบ: '+a.chosen+' | เฉลย: '+a.answer}</span>`; review.appendChild(d); });
+  review.innerHTML=`<div style="font-weight:700;margin-bottom:0.75rem;">${lang==='en'?'Answer Summary':'สรุปคำตอบ'}</div>`;
+  quizState.answered.forEach((a,i)=>{
+    const d=document.createElement('div');
+    d.className='quiz-review-item '+(a.correct?'ok':'ng');
+    if (lang==='en') {
+      d.innerHTML=`<strong>Q${i+1}:</strong> ${a.correct?'✅':'❌'} ${a.q}<br><span style="font-size:0.85rem;">${a.correct?'Answer: '+a.answer:'Your answer: '+a.chosen+' | Correct: '+a.answer}</span>`;
+    } else {
+      d.innerHTML=`<strong>ข้อ ${i+1}:</strong> ${a.correct?'✅':'❌'} ${a.q}<br><span style="font-size:0.85rem;">${a.correct?'คำตอบ: '+a.answer:'คุณตอบ: '+a.chosen+' | เฉลย: '+a.answer}</span>`;
+    }
+    review.appendChild(d);
+  });
 }
 function retryQuiz() {
   document.getElementById('quiz-finish').style.display='none';
@@ -257,8 +374,18 @@ function backToMenu() {
   document.getElementById('quiz-score-bar').style.display='none';
   document.getElementById('quiz-box').style.display='none';
   document.getElementById('quiz-finish').style.display='none';
+  initQuizCats();
 }
 initQuizCats();
+
+document.addEventListener('langchange', function() {
+  const inProgress = document.getElementById('quiz-box').style.display !== 'none';
+  const inFinish = document.getElementById('quiz-finish').style.display !== 'none';
+  if (!inProgress && !inFinish) {
+    initQuizCats();
+  }
+  updateInfo();
+});
 </script>
 </body>
 </html>

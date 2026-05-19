@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" data-title-th="เครื่องมือวัดไฟฟ้า | สื่อการเรียนการสอน" data-title-en="Measuring Instruments | Teaching Materials">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>เครื่องมือวัดไฟฟ้า | สื่อการเรียนการสอน</title>
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
@@ -15,8 +16,10 @@
   <div class="page-header-inner">
     <div class="page-header-icon">📏</div>
     <div>
-      <h1>เครื่องมือวัดไฟฟ้าเบื้องต้น</h1>
-      <p>Multimeter อนาล็อก • Multimeter ดิจิตัล (DMM) • DCV/ACV/Ω/mA</p>
+      <h1 class="th-only">เครื่องมือวัดไฟฟ้าเบื้องต้น</h1>
+      <h1 class="en-only">Electrical Measuring Instruments</h1>
+      <p class="th-only">Multimeter อนาล็อก • Multimeter ดิจิตัล (DMM) • DCV/ACV/Ω/mA</p>
+      <p class="en-only">Analog Multimeter • Digital Multimeter (DMM) • DCV/ACV/Ω/mA</p>
     </div>
   </div>
 </div>
@@ -24,50 +27,95 @@
 <div class="container">
 
   <div class="section">
-    <div class="section-title">มัลติมิเตอร์แบบอนาล็อก (Analog Multimeter)</div>
+    <div class="section-title">
+      <span class="th-only">มัลติมิเตอร์แบบอนาล็อก (Analog Multimeter)</span>
+      <span class="en-only">Analog Multimeter</span>
+    </div>
     <div class="card">
       <div class="grid-2">
         <div>
-          <ul class="content-list">
+          <ul class="content-list th-only">
             <li>ใช้เข็มชี้ค่าบนสเกล</li>
             <li>ต้องตั้งศูนย์ (Zero Adjust) ก่อนใช้งาน</li>
             <li>วัดได้ทั้ง DCV, ACV, DCmA, Ω</li>
             <li>ต้องเลือกย่านวัดให้ถูกต้อง</li>
           </ul>
+          <ul class="content-list en-only">
+            <li>Uses a needle pointer on a scale</li>
+            <li>Must perform Zero Adjust before use</li>
+            <li>Measures DCV, ACV, DCmA, Ω</li>
+            <li>Must select the correct measurement range</li>
+          </ul>
         </div>
-        <div class="warn-box">
+        <div class="warn-box th-only">
           <strong>ข้อควรระวัง:</strong><br>
           • ห้ามวัดแรงดัน/กระแสเกินย่านที่ตั้ง<br>
           • วัด DC ต้องต่อขั้วให้ถูก (+ ไป + / − ไป −)<br>
           • วัด Ω ต้องตัดไฟวงจรก่อน<br>
           • ห้ามวัด ACV ในย่าน DCmA
         </div>
+        <div class="warn-box en-only">
+          <strong>Cautions:</strong><br>
+          • Never exceed the selected voltage/current range<br>
+          • For DC: connect polarity correctly (+ to + / − to −)<br>
+          • For Ω: disconnect circuit power first<br>
+          • Never measure ACV in DCmA range
+        </div>
       </div>
       <div style="margin-top:1rem;">
         <table>
-          <tr><th>การวัด</th><th>ย่านที่มี</th><th>หมายเหตุ</th></tr>
-          <tr><td>DCV (แรงดันตรง)</td><td>0.1V, 0.5V, 2.5V, 10V, 50V, 250V, 1000V</td><td>เลือกย่านสูงกว่าแรงดันที่จะวัด</td></tr>
-          <tr><td>ACV (แรงดันสลับ)</td><td>10V, 50V, 250V, 1000V</td><td>ไฟบ้าน 220V → ใช้ย่าน 250V</td></tr>
-          <tr><td>DCmA (กระแสตรง)</td><td>50μA, 2.5mA, 25mA, 250mA</td><td>ต่ออนุกรมกับวงจร</td></tr>
-          <tr><td>Ω (ความต้านทาน)</td><td>×1, ×10, ×100, ×1k, ×10k</td><td>ตั้ง Zero Ω ก่อนวัด</td></tr>
+          <tr>
+            <th><span class="th-only">การวัด</span><span class="en-only">Measurement</span></th>
+            <th><span class="th-only">ย่านที่มี</span><span class="en-only">Available Ranges</span></th>
+            <th><span class="th-only">หมายเหตุ</span><span class="en-only">Notes</span></th>
+          </tr>
+          <tr>
+            <td><span class="th-only">DCV (แรงดันตรง)</span><span class="en-only">DCV (DC Voltage)</span></td>
+            <td>0.1V, 0.5V, 2.5V, 10V, 50V, 250V, 1000V</td>
+            <td><span class="th-only">เลือกย่านสูงกว่าแรงดันที่จะวัด</span><span class="en-only">Select range higher than expected voltage</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">ACV (แรงดันสลับ)</span><span class="en-only">ACV (AC Voltage)</span></td>
+            <td>10V, 50V, 250V, 1000V</td>
+            <td><span class="th-only">ไฟบ้าน 220V → ใช้ย่าน 250V</span><span class="en-only">Household 220V → use 250V range</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">DCmA (กระแสตรง)</span><span class="en-only">DCmA (DC Current)</span></td>
+            <td>50μA, 2.5mA, 25mA, 250mA</td>
+            <td><span class="th-only">ต่ออนุกรมกับวงจร</span><span class="en-only">Connect in series with the circuit</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">Ω (ความต้านทาน)</span><span class="en-only">Ω (Resistance)</span></td>
+            <td>×1, ×10, ×100, ×1k, ×10k</td>
+            <td><span class="th-only">ตั้ง Zero Ω ก่อนวัด</span><span class="en-only">Perform Zero Ω adjustment before measuring</span></td>
+          </tr>
         </table>
       </div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">มัลติมิเตอร์แบบดิจิตัล (Digital Multimeter — DMM)</div>
+    <div class="section-title">
+      <span class="th-only">มัลติมิเตอร์แบบดิจิตัล (Digital Multimeter — DMM)</span>
+      <span class="en-only">Digital Multimeter (DMM)</span>
+    </div>
     <div class="card">
       <div class="grid-2">
         <div>
-          <ul class="content-list">
+          <ul class="content-list th-only">
             <li>แสดงค่าเป็นตัวเลขบน LCD</li>
             <li>ความแม่นยำสูงกว่าแบบอนาล็อก</li>
             <li>บางรุ่นมี Auto-Range (เลือกย่านอัตโนมัติ)</li>
             <li>วัดได้ทั้ง DCV, ACV, DCA, ACA, Ω, Diode, hFE</li>
           </ul>
+          <ul class="content-list en-only">
+            <li>Displays readings as numbers on LCD</li>
+            <li>Higher accuracy than analog type</li>
+            <li>Some models have Auto-Range</li>
+            <li>Measures DCV, ACV, DCA, ACA, Ω, Diode, hFE</li>
+          </ul>
         </div>
-        <div class="info-box">
+        <div class="info-box th-only">
           <strong>สัญลักษณ์ที่ควรรู้</strong><br>
           • V~ = ACV (แรงดันสลับ)<br>
           • V⎓ = DCV (แรงดันตรง)<br>
@@ -77,43 +125,63 @@
           • ))) = Continuity (มีเสียง)<br>
           • ⊣▷ = ทดสอบ Diode
         </div>
+        <div class="info-box en-only">
+          <strong>Important Symbols</strong><br>
+          • V~ = ACV (AC Voltage)<br>
+          • V⎓ = DCV (DC Voltage)<br>
+          • A~ = ACA (AC Current)<br>
+          • A⎓ = DCA (DC Current)<br>
+          • Ω = Resistance<br>
+          • ))) = Continuity (beeps)<br>
+          • ⊣▷ = Diode Test
+        </div>
       </div>
-      <div class="warn-box" style="margin-top:0.75rem;">
+      <div class="warn-box th-only" style="margin-top:0.75rem;">
         <strong>ข้อควรระวัง DMM:</strong> ดูตำแหน่งสายวัด (COM, VΩ, mA, 10A) ให้ถูกต้องก่อนวัดทุกครั้ง
         ผิดตำแหน่งอาจทำให้มิเตอร์เสียหายได้
+      </div>
+      <div class="warn-box en-only" style="margin-top:0.75rem;">
+        <strong>DMM Caution:</strong> Always verify probe positions (COM, VΩ, mA, 10A) before each measurement.
+        Wrong probe position can damage the meter.
       </div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">วิธีการวัดที่ถูกต้อง</div>
+    <div class="section-title">
+      <span class="th-only">วิธีการวัดที่ถูกต้อง</span>
+      <span class="en-only">Correct Measurement Procedures</span>
+    </div>
     <div class="grid-2">
       <div class="card">
-        <h3>การวัดแรงดัน (Voltage)</h3>
+        <h3><span class="th-only">การวัดแรงดัน (Voltage)</span><span class="en-only">Measuring Voltage</span></h3>
         <div class="steps">
-          <div class="step"><div class="step-num">1</div><div class="step-content">ตั้งย่านวัดให้สูงกว่าแรงดันที่คาดไว้</div></div>
-          <div class="step"><div class="step-num">2</div><div class="step-content">ต่อสายวัด <strong>ขนาน</strong> กับส่วนที่ต้องการวัด</div></div>
-          <div class="step"><div class="step-num">3</div><div class="step-content">สายแดง (+) ที่ขั้วบวก, สายดำ (−) ที่ขั้วลบ (สำหรับ DC)</div></div>
+          <div class="step"><div class="step-num">1</div><div class="step-content th-only">ตั้งย่านวัดให้สูงกว่าแรงดันที่คาดไว้</div><div class="step-content en-only">Set range higher than expected voltage</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content th-only">ต่อสายวัด <strong>ขนาน</strong> กับส่วนที่ต้องการวัด</div><div class="step-content en-only">Connect probes <strong>in parallel</strong> with the component</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content th-only">สายแดง (+) ที่ขั้วบวก, สายดำ (−) ที่ขั้วลบ (สำหรับ DC)</div><div class="step-content en-only">Red (+) to positive terminal, Black (−) to negative (for DC)</div></div>
         </div>
       </div>
       <div class="card">
-        <h3>การวัดกระแส (Current)</h3>
+        <h3><span class="th-only">การวัดกระแส (Current)</span><span class="en-only">Measuring Current</span></h3>
         <div class="steps">
-          <div class="step"><div class="step-num">1</div><div class="step-content">ตัดวงจรที่จะวัดออก</div></div>
-          <div class="step"><div class="step-num">2</div><div class="step-content">ต่อสายวัด <strong>อนุกรม</strong> กับวงจร (ให้กระแสไหลผ่านมิเตอร์)</div></div>
-          <div class="step"><div class="step-num">3</div><div class="step-content">เปิดวงจรและอ่านค่า</div></div>
+          <div class="step"><div class="step-num">1</div><div class="step-content th-only">ตัดวงจรที่จะวัดออก</div><div class="step-content en-only">Break the circuit at the measurement point</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content th-only">ต่อสายวัด <strong>อนุกรม</strong> กับวงจร (ให้กระแสไหลผ่านมิเตอร์)</div><div class="step-content en-only">Connect probes <strong>in series</strong> with the circuit (current flows through the meter)</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content th-only">เปิดวงจรและอ่านค่า</div><div class="step-content en-only">Close the circuit and read the value</div></div>
         </div>
       </div>
     </div>
   </div>
 
   <div class="page-nav">
-    <a href="inductor.html">← ตัวเหนี่ยวนำ</a>
-    <a class="next" href="soldering.html">การบัดกรี →</a>
+    <a href="inductor.html"><span class="th-only">← ตัวเหนี่ยวนำ</span><span class="en-only">← Inductor</span></a>
+    <a class="next" href="soldering.html"><span class="th-only">การบัดกรี →</span><span class="en-only">Soldering →</span></a>
   </div>
 </div>
 
-<footer><strong>สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong></footer>
+<footer>
+  <strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong>
+  <strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong>
+</footer>
 <script>const CURRENT_PAGE='multimeter';</script>
 <script src="nav.js"></script>
 </body>
