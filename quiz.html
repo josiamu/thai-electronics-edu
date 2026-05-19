@@ -32,7 +32,7 @@
     <div class="quiz-cat-grid" id="quiz-cat-grid"></div>
     <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center;">
       <button class="btn" onclick="startQuiz()">▶ <span class="th-only">เริ่มทำแบบทดสอบ</span><span class="en-only">Start Quiz</span></button>
-      <button class="btn" style="background:#6b7280;" onclick="selectAllCats()"><span class="th-only">เลือกทุกหมวด</span><span class="en-only">Select All</span></button>
+      <button class="btn" id="toggle-all-btn" style="background:#6b7280;" onclick="toggleAllCats()"><span class="th-only">เลือกทุกหมวด</span><span class="en-only">Select All</span></button>
       <span id="quiz-selected-info" style="color:var(--text-light);font-size:0.9rem;"></span>
     </div>
   </div>
@@ -224,16 +224,32 @@ function initQuizCats() {
     btn.className = 'quiz-cat-btn active';
     btn.dataset.catId = cat.id;
     btn.innerHTML = `<span class="cat-icon">${cat.icon}</span><div class="cat-name">${cat.name}</div><div class="cat-count">${cat.questions.length} ${getCurLang()==='en'?'questions':'ข้อ'}</div>`;
-    btn.onclick = () => { btn.classList.toggle('active'); quizState.selectedCats = [...document.querySelectorAll('.quiz-cat-btn.active')].map(b=>b.dataset.catId); updateInfo(); };
+    btn.onclick = () => { btn.classList.toggle('active'); quizState.selectedCats = [...document.querySelectorAll('.quiz-cat-btn.active')].map(b=>b.dataset.catId); updateToggleBtn(); updateInfo(); };
     grid.appendChild(btn);
   });
   quizState.selectedCats = data.map(c=>c.id);
+  updateToggleBtn();
   updateInfo();
 }
-function selectAllCats() {
-  document.querySelectorAll('.quiz-cat-btn').forEach(b=>b.classList.add('active'));
-  quizState.selectedCats = getQuizData().map(c=>c.id);
+function toggleAllCats() {
+  const all = document.querySelectorAll('.quiz-cat-btn');
+  const allSelected = [...all].every(b => b.classList.contains('active'));
+  all.forEach(b => allSelected ? b.classList.remove('active') : b.classList.add('active'));
+  quizState.selectedCats = allSelected ? [] : getQuizData().map(c=>c.id);
+  updateToggleBtn();
   updateInfo();
+}
+function updateToggleBtn() {
+  const all = document.querySelectorAll('.quiz-cat-btn');
+  const allSelected = [...all].every(b => b.classList.contains('active'));
+  const lang = getCurLang();
+  const btn = document.getElementById('toggle-all-btn');
+  if (!btn) return;
+  if (allSelected) {
+    btn.innerHTML = `<span class="th-only">ยกเลิกทุกหมวด</span><span class="en-only">Deselect All</span>`;
+  } else {
+    btn.innerHTML = `<span class="th-only">เลือกทุกหมวด</span><span class="en-only">Select All</span>`;
+  }
 }
 function updateInfo() {
   const data = getQuizData();
