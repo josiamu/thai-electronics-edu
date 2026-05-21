@@ -8,6 +8,97 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+.pdf-card { cursor: pointer; }
+.pdf-dl { font-size: 1.3rem; color: var(--primary); min-width: 1.5rem; text-align: center; text-decoration: none; transition: transform 0.15s; display: flex; align-items: center; }
+.pdf-dl:hover { transform: scale(1.25); }
+
+/* PDF Modal */
+.pdf-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.72);
+  z-index: 300;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.pdf-modal.open { display: flex; }
+.pdf-modal-box {
+  background: var(--card);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 920px;
+  height: 88vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.45);
+}
+.pdf-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.pdf-modal-title {
+  flex: 1;
+  font-weight: 700;
+  font-size: 0.97rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pdf-modal-actions { display: flex; gap: 0.5rem; align-items: center; flex-shrink: 0; }
+.pdf-modal-dl-btn {
+  background: var(--primary);
+  color: #fff;
+  text-decoration: none;
+  border: none;
+  border-radius: 8px;
+  padding: 0.38rem 0.9rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.pdf-modal-dl-btn:hover { background: var(--primary-dark); color: #fff; }
+.pdf-modal-close {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.38rem 0.65rem;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--text);
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.pdf-modal-close:hover { background: var(--bg); }
+.pdf-modal-iframe {
+  flex: 1;
+  width: 100%;
+  border: none;
+  background: #525659;
+  min-height: 0;
+}
+.pdf-modal-note {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.8rem;
+  color: var(--text-light);
+  text-align: center;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+@media (max-width: 640px) {
+  .pdf-modal-box { height: 92vh; border-radius: 12px; }
+  .pdf-modal-title { font-size: 0.88rem; }
+}
+</style>
 </head>
 <body>
 <div id="nav-placeholder"></div>
@@ -18,8 +109,8 @@
     <div>
       <h1 class="th-only">ดาวน์โหลดเอกสาร PDF</h1>
       <h1 class="en-only">Download PDF Documents</h1>
-      <p class="th-only">เอกสารประกอบการเรียนทั้งหมด 21 ไฟล์ — คลิกที่การ์ดเพื่อดาวน์โหลด</p>
-      <p class="en-only">21 learning resource files — click a card to download</p>
+      <p class="th-only">เอกสารประกอบการเรียนทั้งหมด 21 ไฟล์ — คลิกการ์ดเพื่อดูตัวอย่าง • ⬇ เพื่อดาวน์โหลด</p>
+      <p class="en-only">21 learning resource files — click a card to preview • ⬇ to download</p>
     </div>
   </div>
 </div>
@@ -29,192 +120,192 @@
   <div class="section">
     <div class="section-subtitle">🔌 <span class="th-only">ไฟฟ้าเบื้องต้น</span><span class="en-only">Electricity Basics</span></div>
     <div class="grid-2">
-      <a class="pdf-card" href="pdf/ใบเนื้อหา เรื่อง แหล่งกำเนิดและประเภทไฟฟ้.pdf" download>
+      <div class="pdf-card" data-pdf="pdf/ใบเนื้อหา เรื่อง แหล่งกำเนิดและประเภทไฟฟ้.pdf">
         <div class="pdf-icon">📄</div>
         <div class="pdf-info">
           <div class="pdf-title"><span class="th-only">แหล่งกำเนิดและประเภทไฟฟ้า</span><span class="en-only">Electricity Sources &amp; Types</span></div>
           <div class="pdf-sub"><span class="th-only">6 แหล่งกำเนิด • ไฟฟ้าสถิต • DC/AC</span><span class="en-only">6 sources • Static electricity • DC/AC</span></div>
         </div>
-        <div class="pdf-dl">⬇</div>
-      </a>
-      <a class="pdf-card" href="pdf/ใบเนื้อหา เรื่อง กฎของโอห์ม กำลังไฟฟ้า และ.pdf" download>
+        <a class="pdf-dl" href="pdf/ใบเนื้อหา เรื่อง แหล่งกำเนิดและประเภทไฟฟ้.pdf" download title="ดาวน์โหลด" onclick="event.stopPropagation()">⬇</a>
+      </div>
+      <div class="pdf-card" data-pdf="pdf/ใบเนื้อหา เรื่อง กฎของโอห์ม กำลังไฟฟ้า และ.pdf">
         <div class="pdf-icon">📄</div>
         <div class="pdf-info">
           <div class="pdf-title"><span class="th-only">กฎของโอห์ม กำลังไฟฟ้า และพลังงาน</span><span class="en-only">Ohm's Law, Power &amp; Energy</span></div>
           <div class="pdf-sub">I=E/R • P=EI • W=Pt • <span class="th-only">การแปลงหน่วย</span><span class="en-only">Unit conversion</span></div>
         </div>
-        <div class="pdf-dl">⬇</div>
-      </a>
-      <a class="pdf-card" href="pdf/ใบเนื้อหา เรื่อง วงจรไฟฟ้าและเซลล์ไฟฟ้า.pdf" download>
+        <a class="pdf-dl" href="pdf/ใบเนื้อหา เรื่อง กฎของโอห์ม กำลังไฟฟ้า และ.pdf" download title="ดาวน์โหลด" onclick="event.stopPropagation()">⬇</a>
+      </div>
+      <div class="pdf-card" data-pdf="pdf/ใบเนื้อหา เรื่อง วงจรไฟฟ้าและเซลล์ไฟฟ้า.pdf">
         <div class="pdf-icon">📄</div>
         <div class="pdf-info">
           <div class="pdf-title"><span class="th-only">วงจรไฟฟ้าและเซลล์ไฟฟ้า</span><span class="en-only">Electric Circuits &amp; Cells</span></div>
           <div class="pdf-sub"><span class="th-only">วงจรไฟฟ้าพื้นฐาน • เซลล์ไฟฟ้า</span><span class="en-only">Basic circuits • Electric cells</span></div>
         </div>
-        <div class="pdf-dl">⬇</div>
-      </a>
-      <a class="pdf-card" href="pdf/บทที่ 2 วงจรความต้านทาน.pdf" download>
+        <a class="pdf-dl" href="pdf/ใบเนื้อหา เรื่อง วงจรไฟฟ้าและเซลล์ไฟฟ้า.pdf" download title="ดาวน์โหลด" onclick="event.stopPropagation()">⬇</a>
+      </div>
+      <div class="pdf-card" data-pdf="pdf/บทที่ 2 วงจรความต้านทาน.pdf">
         <div class="pdf-icon">📄</div>
         <div class="pdf-info">
           <div class="pdf-title"><span class="th-only">วงจรความต้านทาน</span><span class="en-only">Resistance Circuits</span></div>
           <div class="pdf-sub"><span class="th-only">อนุกรม • ขนาน • ผสม</span><span class="en-only">Series • Parallel • Mixed</span></div>
         </div>
-        <div class="pdf-dl">⬇</div>
-      </a>
+        <a class="pdf-dl" href="pdf/บทที่ 2 วงจรความต้านทาน.pdf" download title="ดาวน์โหลด" onclick="event.stopPropagation()">⬇</a>
+      </div>
     </div>
   </div>
 
   <div class="section">
     <div class="section-subtitle">🔧 <span class="th-only">อุปกรณ์อิเล็กทรอนิกส์</span><span class="en-only">Electronic Components</span></div>
     <div class="grid-2">
-      <a class="pdf-card" href="pdf/ใบเนื้อหา เรื่อง ตัวต้านทาน.pdf" download>
+      <div class="pdf-card" data-pdf="pdf/ใบเนื้อหา เรื่อง ตัวต้านทาน.pdf">
         <div class="pdf-icon">📄</div>
         <div class="pdf-info">
           <div class="pdf-title"><span class="th-only">ตัวต้านทาน (Resistor)</span><span class="en-only">Resistor</span></div>
           <div class="pdf-sub"><span class="th-only">รหัสสี 4-5 แถบ • EIA96 • อนุกรม/ขนาน</span><span class="en-only">4-5 band color code • EIA96 • Series/Parallel</span></div>
         </div>
-        <div class="pdf-dl">⬇</div>
-      </a>
-      <a class="pdf-card" href="pdf/ใบเนื้อหา เรื่อง ตัวเก็บประจุ.pdf" download>
+        <a class="pdf-dl" href="pdf/ใบเนื้อหา เรื่อง ตัวต้านทาน.pdf" download title="ดาวน์โหลด" onclick="event.stopPropagation()">⬇</a>
+      </div>
+      <div class="pdf-card" data-pdf="pdf/ใบเนื้อหา เรื่อง ตัวเก็บประจุ.pdf">
         <div class="pdf-icon">📄</div>
         <div class="pdf-info">
           <div class="pdf-title"><span class="th-only">ตัวเก็บประจุ (Capacitor)</span><span class="en-only">Capacitor</span></div>
           <div class="pdf-sub"><span class="th-only">ชนิด • รหัส • F/μF/nF/pF • อนุกรม/ขนาน</span><span class="en-only">Types • Code • F/μF/nF/pF • Series/Parallel</span></div>
         </div>
-        <div class="pdf-dl">⬇</div>
-      </a>
-      <a class="pdf-card" href="pdf/ใบเนื้อหา เรื่อง ตัวเหนี่ยวนำและหม้อแปลงไ.pdf" download>
+        <a class="pdf-dl" href="pdf/ใบเนื้อหา เรื่อง ตัวเก็บประจุ.pdf" download title="ดาวน์โหลด" onclick="event.stopPropagation()">⬇</a>
+      </div>
+      <div class="pdf-card" data-pdf="pdf/ใบเนื้อหา เรื่อง ตัวเหนี่ยวนำและหม้อแปลงไ.pdf">
         <div class="pdf-icon">📄</div>
         <div class="pdf-info">
           <div class="pdf-title"><span class="th-only">ตัวเหนี่ยวนำและหม้อแปลงไฟฟ้า</span><span class="en-only">Inductor &amp; Transformer</span></div>
           <div class="pdf-sub">Inductor • Transformer • H/mH/μH</div>
         </div>
-        <div class="pdf-dl">⬇</div>
-      </a>
-      <a class="pdf-card" href="pdf/บทที่ 2 ไดโอด (1).pdf" download>
+        <a class="pdf-dl" href="pdf/ใบเนื้อหา เรื่อง ตัวเหนี่ยวนำและหม้อแปลงไ.pdf" download title="ดาวน์โหลด" onclick="event.stopPropagation()">⬇</a>
+      </div>
+      <div class="pdf-card" data-pdf="pdf/บทที่ 2 ไดโอด (1).pdf">
         <div class="pdf-icon">📄</div>
         <div class="pdf-info">
           <div class="pdf-title"><span class="th-only">ไดโอด (Diode)</span><span class="en-only">Diode</span></div>
           <div class="pdf-sub"><span class="th-only">หลักการทำงาน • วงจรเรียงกระแส</span><span class="en-only">Working principle • Rectifier circuits</span></div>
         </div>
-        <div class="pdf-dl">⬇</div>
-      </a>
-      <a class="pdf-card" href="pdf/บทที่ 3 ซีเนอร์ไดโอด (4).pdf" download>
+        <a class="pdf-dl" href="pdf/บทที่ 2 ไดโอด (1).pdf" download title="ดาวน์โหลด" onclick="event.stopPropagation()">⬇</a>
+      </div>
+      <div class="pdf-card" data-pdf="pdf/บทที่ 3 ซีเนอร์ไดโอด (4).pdf">
         <div class="pdf-icon">📄</div>
         <div class="pdf-info">
           <div class="pdf-title"><span class="th-only">ซีเนอร์ไดโอด (Zener Diode)</span><span class="en-only">Zener Diode</span></div>
           <div class="pdf-sub"><span class="th-only">วงจรควบคุมแรงดัน • Zener Regulator</span><span class="en-only">Voltage control circuit • Zener Regulator</span></div>
         </div>
-        <div class="pdf-dl">⬇</div>
-      </a>
-      <a class="pdf-card" href="pdf/ทรานวิสเตอรื.pdf" download>
+        <a class="pdf-dl" href="pdf/บทที่ 3 ซีเนอร์ไดโอด (4).pdf" download title="ดาวน์โหลด" onclick="event.stopPropagation()">⬇</a>
+      </div>
+      <div class="pdf-card" data-pdf="pdf/ทรานวิสเตอรื.pdf">
         <div class="pdf-icon">📄</div>
         <div class="pdf-info">
           <div class="pdf-title"><span class="th-only">ทรานซิสเตอร์ (Transistor)</span><span class="en-only">Transistor</span></div>
           <div class="pdf-sub">BJT • NPN/PNP • <span class="th-only">วงจรขยาย/สวิตช์</span><span class="en-only">Amplifier/Switch circuits</span></div>
         </div>
-        <div class="pdf-dl">⬇</div>
-      </a>
-      <a class="pdf-card" href="pdf/ไตแอด.pdf" download>
+        <a class="pdf-dl" href="pdf/ทรานวิสเตอรื.pdf" download title="ดาวน์โหลด" onclick="event.stopPropagation()">⬇</a>
+      </div>
+      <div class="pdf-card" data-pdf="pdf/ไตแอด.pdf">
         <div class="pdf-icon">📄</div>
         <div class="pdf-info">
           <div class="pdf-title"><span class="th-only">ไทรแอก (Triac)</span><span class="en-only">Triac</span></div>
           <div class="pdf-sub">SCR • Triac • <span class="th-only">การควบคุมกำลัง</span><span class="en-only">Power control</span></div>
         </div>
-        <div class="pdf-dl">⬇</div>
-      </a>
-      <a class="pdf-card" href="pdf/รีเลย์.pdf" download>
+        <a class="pdf-dl" href="pdf/ไตแอด.pdf" download title="ดาวน์โหลด" onclick="event.stopPropagation()">⬇</a>
+      </div>
+      <div class="pdf-card" data-pdf="pdf/รีเลย์.pdf">
         <div class="pdf-icon">📄</div>
         <div class="pdf-info">
           <div class="pdf-title"><span class="th-only">รีเลย์ (Relay)</span><span class="en-only">Relay</span></div>
           <div class="pdf-sub"><span class="th-only">หลักการทำงาน • ชนิด • วงจรควบคุม</span><span class="en-only">Working principle • Types • Control circuits</span></div>
         </div>
-        <div class="pdf-dl">⬇</div>
-      </a>
+        <a class="pdf-dl" href="pdf/รีเลย์.pdf" download title="ดาวน์โหลด" onclick="event.stopPropagation()">⬇</a>
+      </div>
     </div>
   </div>
 
   <div class="section">
     <div class="section-subtitle">⚙️ <span class="th-only">มอเตอร์และวงจร</span><span class="en-only">Motors &amp; Circuits</span></div>
     <div class="grid-2">
-      <a class="pdf-card" href="pdf/บทที่ 2 หลักการของมมอเตอร์.pdf" download>
+      <div class="pdf-card" data-pdf="pdf/บทที่ 2 หลักการของมมอเตอร์.pdf">
         <div class="pdf-icon">📄</div>
         <div class="pdf-info">
           <div class="pdf-title"><span class="th-only">หลักการของมอเตอร์</span><span class="en-only">Motor Principles</span></div>
           <div class="pdf-sub"><span class="th-only">หลักการ Electromagnetic • ชนิดมอเตอร์</span><span class="en-only">Electromagnetic principle • Motor types</span></div>
         </div>
-        <div class="pdf-dl">⬇</div>
-      </a>
-      <a class="pdf-card" href="pdf/บทที่ 4 มอเตอร์ไฟฟ้ากระแสตรง.pdf" download>
+        <a class="pdf-dl" href="pdf/บทที่ 2 หลักการของมมอเตอร์.pdf" download title="ดาวน์โหลด" onclick="event.stopPropagation()">⬇</a>
+      </div>
+      <div class="pdf-card" data-pdf="pdf/บทที่ 4 มอเตอร์ไฟฟ้ากระแสตรง.pdf">
         <div class="pdf-icon">📄</div>
         <div class="pdf-info">
           <div class="pdf-title"><span class="th-only">มอเตอร์ไฟฟ้ากระแสตรง (DC Motor)</span><span class="en-only">DC Motor</span></div>
           <div class="pdf-sub"><span class="th-only">โครงสร้าง • การควบคุมความเร็ว</span><span class="en-only">Structure • Speed control</span></div>
         </div>
-        <div class="pdf-dl">⬇</div>
-      </a>
-      <a class="pdf-card" href="pdf/ใบเนื้อหา เรื่อง มอเตอร์และการควบคุมเบื้อ.pdf" download>
+        <a class="pdf-dl" href="pdf/บทที่ 4 มอเตอร์ไฟฟ้ากระแสตรง.pdf" download title="ดาวน์โหลด" onclick="event.stopPropagation()">⬇</a>
+      </div>
+      <div class="pdf-card" data-pdf="pdf/ใบเนื้อหา เรื่อง มอเตอร์และการควบคุมเบื้อ.pdf">
         <div class="pdf-icon">📄</div>
         <div class="pdf-info">
           <div class="pdf-title"><span class="th-only">มอเตอร์และการควบคุมเบื้องต้น</span><span class="en-only">Motor &amp; Basic Control</span></div>
           <div class="pdf-sub"><span class="th-only">การสตาร์ท • การหยุด • การกลับทิศ</span><span class="en-only">Starting • Stopping • Reversing</span></div>
         </div>
-        <div class="pdf-dl">⬇</div>
-      </a>
-      <a class="pdf-card" href="pdf/ใบเนื้อหา เรื่อง วงจรอิเล็กทรอนิกส์เบื้อง.pdf" download>
+        <a class="pdf-dl" href="pdf/ใบเนื้อหา เรื่อง มอเตอร์และการควบคุมเบื้อ.pdf" download title="ดาวน์โหลด" onclick="event.stopPropagation()">⬇</a>
+      </div>
+      <div class="pdf-card" data-pdf="pdf/ใบเนื้อหา เรื่อง วงจรอิเล็กทรอนิกส์เบื้อง.pdf">
         <div class="pdf-icon">📄</div>
         <div class="pdf-info">
           <div class="pdf-title"><span class="th-only">วงจรอิเล็กทรอนิกส์เบื้องต้น</span><span class="en-only">Basic Electronic Circuits</span></div>
           <div class="pdf-sub"><span class="th-only">วงจรพื้นฐาน • การวิเคราะห์วงจร</span><span class="en-only">Basic circuits • Circuit analysis</span></div>
         </div>
-        <div class="pdf-dl">⬇</div>
-      </a>
+        <a class="pdf-dl" href="pdf/ใบเนื้อหา เรื่อง วงจรอิเล็กทรอนิกส์เบื้อง.pdf" download title="ดาวน์โหลด" onclick="event.stopPropagation()">⬇</a>
+      </div>
     </div>
   </div>
 
   <div class="section">
     <div class="section-subtitle">🛡️ <span class="th-only">ความปลอดภัยและเครื่องมือ</span><span class="en-only">Safety &amp; Tools</span></div>
     <div class="grid-2">
-      <a class="pdf-card" href="pdf/ใบเนื้อหาเรื่อง ระบบความปลอดภัยในงานไฟฟ้.pdf" download>
+      <div class="pdf-card" data-pdf="pdf/ใบเนื้อหาเรื่อง ระบบความปลอดภัยในงานไฟฟ้.pdf">
         <div class="pdf-icon">📄</div>
         <div class="pdf-info">
           <div class="pdf-title"><span class="th-only">ระบบความปลอดภัยในงานไฟฟ้า</span><span class="en-only">Electrical Safety Systems</span></div>
           <div class="pdf-sub"><span class="th-only">กฎความปลอดภัย • การป้องกันอันตราย</span><span class="en-only">Safety rules • Hazard prevention</span></div>
         </div>
-        <div class="pdf-dl">⬇</div>
-      </a>
-      <a class="pdf-card" href="pdf/ใบเนื้อหาเรื่อง อุปกรณ์ป้องกันอันตรายจาก.pdf" download>
+        <a class="pdf-dl" href="pdf/ใบเนื้อหาเรื่อง ระบบความปลอดภัยในงานไฟฟ้.pdf" download title="ดาวน์โหลด" onclick="event.stopPropagation()">⬇</a>
+      </div>
+      <div class="pdf-card" data-pdf="pdf/ใบเนื้อหาเรื่อง อุปกรณ์ป้องกันอันตรายจาก.pdf">
         <div class="pdf-icon">📄</div>
         <div class="pdf-info">
           <div class="pdf-title"><span class="th-only">อุปกรณ์ป้องกันอันตรายจากไฟฟ้า</span><span class="en-only">Electrical Protection Devices</span></div>
           <div class="pdf-sub">PPE • Fuse • Circuit Breaker • <span class="th-only">สายดิน</span><span class="en-only">Ground wire</span></div>
         </div>
-        <div class="pdf-dl">⬇</div>
-      </a>
-      <a class="pdf-card" href="pdf/ใบเนื้อหา เรื่อง เครื่องมือวัดไฟฟ้าเบื้อง.pdf" download>
+        <a class="pdf-dl" href="pdf/ใบเนื้อหาเรื่อง อุปกรณ์ป้องกันอันตรายจาก.pdf" download title="ดาวน์โหลด" onclick="event.stopPropagation()">⬇</a>
+      </div>
+      <div class="pdf-card" data-pdf="pdf/ใบเนื้อหา เรื่อง เครื่องมือวัดไฟฟ้าเบื้อง.pdf">
         <div class="pdf-icon">📄</div>
         <div class="pdf-info">
           <div class="pdf-title"><span class="th-only">เครื่องมือวัดไฟฟ้าเบื้องต้น</span><span class="en-only">Basic Electrical Measuring Instruments</span></div>
           <div class="pdf-sub"><span class="th-only">Multimeter อนาล็อก/ดิจิตัล • DCV/ACV/Ω</span><span class="en-only">Analog/Digital Multimeter • DCV/ACV/Ω</span></div>
         </div>
-        <div class="pdf-dl">⬇</div>
-      </a>
-      <a class="pdf-card" href="pdf/ใบเนื้อหา เรื่อง อุปกรณ์เกี่ยวข้องในงานไฟ.pdf" download>
+        <a class="pdf-dl" href="pdf/ใบเนื้อหา เรื่อง เครื่องมือวัดไฟฟ้าเบื้อง.pdf" download title="ดาวน์โหลด" onclick="event.stopPropagation()">⬇</a>
+      </div>
+      <div class="pdf-card" data-pdf="pdf/ใบเนื้อหา เรื่อง อุปกรณ์เกี่ยวข้องในงานไฟ.pdf">
         <div class="pdf-icon">📄</div>
         <div class="pdf-info">
           <div class="pdf-title"><span class="th-only">อุปกรณ์เกี่ยวข้องในงานไฟฟ้า</span><span class="en-only">Electrical Work Equipment</span></div>
           <div class="pdf-sub"><span class="th-only">เครื่องมือช่าง • อุปกรณ์ประกอบ</span><span class="en-only">Hand tools • Accessories</span></div>
         </div>
-        <div class="pdf-dl">⬇</div>
-      </a>
-      <a class="pdf-card" href="pdf/การบัดกรี.pdf" download>
+        <a class="pdf-dl" href="pdf/ใบเนื้อหา เรื่อง อุปกรณ์เกี่ยวข้องในงานไฟ.pdf" download title="ดาวน์โหลด" onclick="event.stopPropagation()">⬇</a>
+      </div>
+      <div class="pdf-card" data-pdf="pdf/การบัดกรี.pdf">
         <div class="pdf-icon">📄</div>
         <div class="pdf-info">
           <div class="pdf-title"><span class="th-only">การบัดกรี (Soldering)</span><span class="en-only">Soldering</span></div>
           <div class="pdf-sub"><span class="th-only">เครื่องมือ • 4 ขั้นตอน • รอยบัดกรีที่ดี</span><span class="en-only">Equipment • 4 steps • Good solder joints</span></div>
         </div>
-        <div class="pdf-dl">⬇</div>
-      </a>
+        <a class="pdf-dl" href="pdf/การบัดกรี.pdf" download title="ดาวน์โหลด" onclick="event.stopPropagation()">⬇</a>
+      </div>
     </div>
   </div>
 
@@ -224,11 +315,75 @@
   </div>
 </div>
 
+<!-- PDF Viewer Modal -->
+<div class="pdf-modal" id="pdf-modal" role="dialog" aria-modal="true">
+  <div class="pdf-modal-box">
+    <div class="pdf-modal-header">
+      <span class="pdf-modal-title" id="pdf-modal-title"></span>
+      <div class="pdf-modal-actions">
+        <a class="pdf-modal-dl-btn" id="pdf-modal-dl" href="#" download>
+          <span class="th-only">⬇ ดาวน์โหลด</span>
+          <span class="en-only">⬇ Download</span>
+        </a>
+        <button class="pdf-modal-close" id="pdf-modal-close" aria-label="Close">✕</button>
+      </div>
+    </div>
+    <iframe class="pdf-modal-iframe" id="pdf-modal-iframe" src="" title="PDF Preview"></iframe>
+    <div class="pdf-modal-note">
+      <span class="th-only">หากไฟล์ไม่แสดง ให้กดปุ่ม ⬇ ดาวน์โหลด เพื่อเปิดในโปรแกรมอ่าน PDF</span>
+      <span class="en-only">If the PDF does not display, click ⬇ Download to open in your PDF reader.</span>
+    </div>
+  </div>
+</div>
+
 <footer>
   <strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong>
   <strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong>
 </footer>
 <script>const CURRENT_PAGE='downloads';</script>
 <script src="nav.js"></script>
+<script>
+(function () {
+  const modal    = document.getElementById('pdf-modal');
+  const iframe   = document.getElementById('pdf-modal-iframe');
+  const titleEl  = document.getElementById('pdf-modal-title');
+  const dlBtn    = document.getElementById('pdf-modal-dl');
+  const closeBtn = document.getElementById('pdf-modal-close');
+
+  function openModal(pdfPath, title) {
+    titleEl.textContent = title;
+    dlBtn.href = pdfPath;
+    dlBtn.download = pdfPath.split('/').pop();
+    iframe.src = encodeURI(pdfPath);
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.classList.remove('open');
+    iframe.src = '';
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.pdf-card[data-pdf]').forEach(function (card) {
+    card.addEventListener('click', function () {
+      const lang = document.documentElement.lang === 'en' ? 'en' : 'th';
+      const sel  = lang === 'en' ? '.en-only' : '.th-only';
+      const t    = card.querySelector('.pdf-title ' + sel) || card.querySelector('.pdf-title');
+      openModal(this.dataset.pdf, t ? t.textContent.trim() : '');
+    });
+  });
+
+  closeBtn.addEventListener('click', closeModal);
+
+  modal.addEventListener('click', function (e) {
+    if (e.target === modal) closeModal();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeModal();
+  });
+})();
+</script>
 </body>
 </html>

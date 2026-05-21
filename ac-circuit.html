@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="วงจรไฟฟ้ากระแสสลับ | สื่อการเรียนการสอน" data-title-en="AC Circuit | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>วงจรไฟฟ้ากระแสสลับ | สื่อการเรียนการสอน</title>
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="nav-placeholder"></div>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">〜</div>
+    <div>
+      <h1 class="th-only">วงจรไฟฟ้ากระแสสลับ (AC Circuit)</h1>
+      <h1 class="en-only">AC Circuit</h1>
+      <p>XL • XC • Impedance • <span class="th-only">เรโซแนนซ์</span><span class="en-only">Resonance</span> • Power Factor</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ============ SECTION 1: AC Basics ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">ไฟฟ้ากระแสสลับเบื้องต้น</span>
+      <span class="en-only">AC Fundamentals</span>
+    </div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li>กระแสและแรงดันเปลี่ยนทิศทางสลับกันตามเวลา</li>
+            <li>รูปคลื่นมาตรฐานคือ <strong>คลื่นไซน์ (Sine Wave)</strong></li>
+            <li>ความถี่ไฟบ้านในไทย = <strong>50 Hz</strong></li>
+            <li>แรงดันไฟบ้านในไทย = <strong>220 V (RMS)</strong></li>
+          </ul>
+          <ul class="content-list en-only">
+            <li>Current and voltage alternate direction over time</li>
+            <li>Standard waveform is a <strong>Sine Wave</strong></li>
+            <li>Mains frequency in Thailand = <strong>50 Hz</strong></li>
+            <li>Mains voltage in Thailand = <strong>220 V (RMS)</strong></li>
+          </ul>
+        </div>
+        <div>
+          <div class="card" style="box-shadow:none;border:1px solid var(--border);">
+            <h3 class="th-only">ค่าแรงดัน AC</h3>
+            <h3 class="en-only">AC Voltage Values</h3>
+            <div class="formula-box" style="margin-top:0.5rem;">
+              <div class="formula">V<sub>peak</sub> = V<sub>rms</sub> × √2</div>
+            </div>
+            <div class="formula-box" style="margin-top:0.5rem;">
+              <div class="formula">V<sub>rms</sub> = V<sub>peak</sub> / √2 ≈ 0.707 × V<sub>peak</sub></div>
+            </div>
+            <div class="formula-box" style="margin-top:0.5rem;">
+              <div class="formula">V<sub>pp</sub> = 2 × V<sub>peak</sub></div>
+            </div>
+            <div class="info-box" style="margin-top:0.75rem;font-size:0.9rem;">
+              <span class="th-only"><strong>ตัวอย่าง:</strong> ไฟบ้าน 220 V (rms)<br>
+              V<sub>peak</sub> = 220 × 1.414 = <strong>311 V</strong><br>
+              V<sub>pp</sub> = 311 × 2 = <strong>622 V</strong></span>
+              <span class="en-only"><strong>Example:</strong> Mains 220 V (rms)<br>
+              V<sub>peak</sub> = 220 × 1.414 = <strong>311 V</strong><br>
+              V<sub>pp</sub> = 311 × 2 = <strong>622 V</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 2: XL ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">รีแอคแตนซ์เหนี่ยวนำ (Inductive Reactance, X<sub>L</sub>)</span>
+      <span class="en-only">Inductive Reactance (X<sub>L</sub>)</span>
+    </div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li>ความต้านทานของตัวเหนี่ยวนำต่อกระแส AC</li>
+            <li>X<sub>L</sub> แปรผันตรงกับความถี่และค่าอินดักแตนซ์</li>
+            <li>กระแสล้าหลังแรงดัน <strong>90°</strong> (ELI)</li>
+            <li>หน่วย: โอห์ม (Ω)</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li>Opposition of an inductor to AC current</li>
+            <li>X<sub>L</sub> is proportional to frequency and inductance</li>
+            <li>Current lags voltage by <strong>90°</strong> (ELI)</li>
+            <li>Unit: Ohm (Ω)</li>
+          </ul>
+          <div class="info-box" style="margin-top:0.75rem;">
+            <span class="th-only"><strong>ช่วยจำ — ELI</strong><br>
+            <strong>E</strong>MI → <strong>L</strong>ag → <strong>I</strong>nductor<br>
+            แรงดัน (E) นำหน้ากระแส (I) ในตัวเหนี่ยวนำ (L)</span>
+            <span class="en-only"><strong>Mnemonic — ELI</strong><br>
+            <strong>E</strong>MI → <strong>L</strong>ag → <strong>I</strong>nductor<br>
+            Voltage (E) leads Current (I) in an Inductor (L)</span>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="box-shadow:none;border:1px solid var(--border);">
+            <h3 class="th-only">สูตร X<sub>L</sub></h3>
+            <h3 class="en-only">X<sub>L</sub> Formula</h3>
+            <div class="formula-box" style="margin-top:0.5rem;">
+              <div class="formula">X<sub>L</sub> = 2πfL</div>
+            </div>
+            <p style="margin-top:0.75rem;font-size:0.9rem;color:var(--text-light);">
+              <span class="th-only">f = ความถี่ (Hz), L = อินดักแตนซ์ (H)</span>
+              <span class="en-only">f = frequency (Hz), L = inductance (H)</span>
+            </p>
+            <div class="info-box" style="margin-top:0.75rem;font-size:0.9rem;">
+              <span class="th-only"><strong>ตัวอย่าง:</strong><br>
+              L = 10 mH, f = 1 kHz<br>
+              X<sub>L</sub> = 2π × 1000 × 0.01 = <strong>62.8 Ω</strong></span>
+              <span class="en-only"><strong>Example:</strong><br>
+              L = 10 mH, f = 1 kHz<br>
+              X<sub>L</sub> = 2π × 1000 × 0.01 = <strong>62.8 Ω</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 3: XC ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">รีแอคแตนซ์ตัวเก็บประจุ (Capacitive Reactance, X<sub>C</sub>)</span>
+      <span class="en-only">Capacitive Reactance (X<sub>C</sub>)</span>
+    </div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li>ความต้านทานของตัวเก็บประจุต่อกระแส AC</li>
+            <li>X<sub>C</sub> แปรผกผันกับความถี่และค่าคาปาซิแตนซ์</li>
+            <li>กระแสนำหน้าแรงดัน <strong>90°</strong> (ICE)</li>
+            <li>หน่วย: โอห์ม (Ω)</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li>Opposition of a capacitor to AC current</li>
+            <li>X<sub>C</sub> is inversely proportional to frequency and capacitance</li>
+            <li>Current leads voltage by <strong>90°</strong> (ICE)</li>
+            <li>Unit: Ohm (Ω)</li>
+          </ul>
+          <div class="info-box" style="margin-top:0.75rem;">
+            <span class="th-only"><strong>ช่วยจำ — ICE</strong><br>
+            <strong>I</strong>nductor → <strong>C</strong>apacitor → <strong>E</strong>MI<br>
+            กระแส (I) นำหน้าแรงดัน (E) ในตัวเก็บประจุ (C)</span>
+            <span class="en-only"><strong>Mnemonic — ICE</strong><br>
+            <strong>I</strong>nductor → <strong>C</strong>apacitor → <strong>E</strong>MI<br>
+            Current (I) leads Voltage (E) in a Capacitor (C)</span>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="box-shadow:none;border:1px solid var(--border);">
+            <h3 class="th-only">สูตร X<sub>C</sub></h3>
+            <h3 class="en-only">X<sub>C</sub> Formula</h3>
+            <div class="formula-box" style="margin-top:0.5rem;">
+              <div class="formula">X<sub>C</sub> = 1 / (2πfC)</div>
+            </div>
+            <p style="margin-top:0.75rem;font-size:0.9rem;color:var(--text-light);">
+              <span class="th-only">f = ความถี่ (Hz), C = คาปาซิแตนซ์ (F)</span>
+              <span class="en-only">f = frequency (Hz), C = capacitance (F)</span>
+            </p>
+            <div class="info-box" style="margin-top:0.75rem;font-size:0.9rem;">
+              <span class="th-only"><strong>ตัวอย่าง:</strong><br>
+              C = 100 μF, f = 50 Hz<br>
+              X<sub>C</sub> = 1 / (2π × 50 × 0.0001) = <strong>31.8 Ω</strong></span>
+              <span class="en-only"><strong>Example:</strong><br>
+              C = 100 μF, f = 50 Hz<br>
+              X<sub>C</sub> = 1 / (2π × 50 × 0.0001) = <strong>31.8 Ω</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 4: Impedance ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">อิมพีแดนซ์ (Impedance, Z)</span>
+      <span class="en-only">Impedance (Z)</span>
+    </div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li>ความต้านทานรวมในวงจร AC (R + X)</li>
+            <li>รวม R, X<sub>L</sub>, X<sub>C</sub> แบบเวกเตอร์</li>
+            <li>หน่วย: โอห์ม (Ω)</li>
+            <li>ใช้กฎของโอห์ม: V = I × Z</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li>Total opposition in an AC circuit (R + X)</li>
+            <li>Combines R, X<sub>L</sub>, X<sub>C</sub> as vectors</li>
+            <li>Unit: Ohm (Ω)</li>
+            <li>Ohm's Law applies: V = I × Z</li>
+          </ul>
+        </div>
+        <div>
+          <div class="card" style="box-shadow:none;border:1px solid var(--border);">
+            <h3 class="th-only">สูตร Impedance (วงจร RLC อนุกรม)</h3>
+            <h3 class="en-only">Impedance Formula (Series RLC)</h3>
+            <div class="formula-box" style="margin-top:0.5rem;">
+              <div class="formula">Z = √[ R² + (X<sub>L</sub> − X<sub>C</sub>)² ]</div>
+            </div>
+            <div class="formula-box" style="margin-top:0.5rem;">
+              <div class="formula">φ = arctan[ (X<sub>L</sub> − X<sub>C</sub>) / R ]</div>
+            </div>
+            <p style="margin-top:0.5rem;font-size:0.88rem;color:var(--text-light);">
+              <span class="th-only">φ = มุมเฟส (Phase Angle)</span>
+              <span class="en-only">φ = Phase Angle</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:1.25rem;">
+        <h3 class="th-only" style="margin-bottom:0.75rem;">ตัวอย่างการคำนวณ</h3>
+        <h3 class="en-only" style="margin-bottom:0.75rem;">Calculation Example</h3>
+        <div class="info-box">
+          <span class="th-only">
+            วงจร RLC อนุกรม: R = 30 Ω, X<sub>L</sub> = 60 Ω, X<sub>C</sub> = 20 Ω<br>
+            Z = √[ 30² + (60 − 20)² ] = √[ 900 + 1600 ] = √2500 = <strong>50 Ω</strong><br>
+            φ = arctan(40/30) = arctan(1.33) ≈ <strong>53.1°</strong> (กระแสล้าหลัง เพราะ X<sub>L</sub> &gt; X<sub>C</sub>)
+          </span>
+          <span class="en-only">
+            Series RLC: R = 30 Ω, X<sub>L</sub> = 60 Ω, X<sub>C</sub> = 20 Ω<br>
+            Z = √[ 30² + (60 − 20)² ] = √[ 900 + 1600 ] = √2500 = <strong>50 Ω</strong><br>
+            φ = arctan(40/30) = arctan(1.33) ≈ <strong>53.1°</strong> (current lags — X<sub>L</sub> &gt; X<sub>C</sub>)
+          </span>
+        </div>
+      </div>
+
+      <div style="margin-top:1rem;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+          <thead>
+            <tr>
+              <th class="th-only">เงื่อนไข</th>
+              <th class="en-only">Condition</th>
+              <th class="th-only">ลักษณะ</th>
+              <th class="en-only">Behavior</th>
+              <th class="th-only">มุมเฟส φ</th>
+              <th class="en-only">Phase Angle φ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="th-only">X<sub>L</sub> &gt; X<sub>C</sub></td>
+              <td class="en-only">X<sub>L</sub> &gt; X<sub>C</sub></td>
+              <td class="th-only">Inductive (กระแสล้าหลัง)</td>
+              <td class="en-only">Inductive (current lags)</td>
+              <td>φ &gt; 0°</td>
+            </tr>
+            <tr>
+              <td class="th-only">X<sub>C</sub> &gt; X<sub>L</sub></td>
+              <td class="en-only">X<sub>C</sub> &gt; X<sub>L</sub></td>
+              <td class="th-only">Capacitive (กระแสนำหน้า)</td>
+              <td class="en-only">Capacitive (current leads)</td>
+              <td>φ &lt; 0°</td>
+            </tr>
+            <tr>
+              <td class="th-only">X<sub>L</sub> = X<sub>C</sub></td>
+              <td class="en-only">X<sub>L</sub> = X<sub>C</sub></td>
+              <td class="th-only">Resonance (Z = R)</td>
+              <td class="en-only">Resonance (Z = R)</td>
+              <td>φ = 0°</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 5: Resonance ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">เรโซแนนซ์ (Resonance)</span>
+      <span class="en-only">Resonance</span>
+    </div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li>เกิดเมื่อ X<sub>L</sub> = X<sub>C</sub> ที่ความถี่เรโซแนนซ์ f<sub>0</sub></li>
+            <li>Z มีค่าน้อยที่สุด (อนุกรม) → กระแสสูงสุด</li>
+            <li>Z มีค่ามากที่สุด (ขนาน) → กระแสน้อยที่สุด</li>
+            <li>ใช้ใน วิทยุ, Filter, Oscillator</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li>Occurs when X<sub>L</sub> = X<sub>C</sub> at resonant frequency f<sub>0</sub></li>
+            <li>Z is minimum (series) → maximum current</li>
+            <li>Z is maximum (parallel) → minimum current</li>
+            <li>Used in radios, filters, oscillators</li>
+          </ul>
+        </div>
+        <div>
+          <div class="card" style="box-shadow:none;border:1px solid var(--border);">
+            <h3 class="th-only">ความถี่เรโซแนนซ์</h3>
+            <h3 class="en-only">Resonant Frequency</h3>
+            <div class="formula-box" style="margin-top:0.5rem;">
+              <div class="formula">f<sub>0</sub> = 1 / (2π√LC)</div>
+            </div>
+            <p style="margin-top:0.75rem;font-size:0.9rem;color:var(--text-light);">
+              <span class="th-only">L = อินดักแตนซ์ (H), C = คาปาซิแตนซ์ (F)</span>
+              <span class="en-only">L = inductance (H), C = capacitance (F)</span>
+            </p>
+            <div class="info-box" style="margin-top:0.75rem;font-size:0.9rem;">
+              <span class="th-only"><strong>ตัวอย่าง:</strong><br>
+              L = 10 mH, C = 100 μF<br>
+              f<sub>0</sub> = 1/(2π√(0.01 × 0.0001))<br>
+              = 1/(2π × 0.001) = <strong>159 Hz</strong></span>
+              <span class="en-only"><strong>Example:</strong><br>
+              L = 10 mH, C = 100 μF<br>
+              f<sub>0</sub> = 1/(2π√(0.01 × 0.0001))<br>
+              = 1/(2π × 0.001) = <strong>159 Hz</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:1.25rem;">
+        <div class="grid-2">
+          <div class="info-box">
+            <span class="th-only"><strong>วงจร RLC อนุกรม (Series)</strong><br>
+            • ที่ f<sub>0</sub>: Z = R (ต่ำสุด)<br>
+            • กระแสสูงสุด<br>
+            • แรงดันที่ L และ C อาจสูงกว่าแหล่งจ่ายมาก<br>
+            • เรียกว่า <strong>Voltage Resonance</strong></span>
+            <span class="en-only"><strong>Series RLC Circuit</strong><br>
+            • At f<sub>0</sub>: Z = R (minimum)<br>
+            • Maximum current<br>
+            • Voltage across L and C can far exceed source<br>
+            • Called <strong>Voltage Resonance</strong></span>
+          </div>
+          <div class="info-box">
+            <span class="th-only"><strong>วงจร RLC ขนาน (Parallel)</strong><br>
+            • ที่ f<sub>0</sub>: Z สูงสุด<br>
+            • กระแสจากแหล่งจ่ายน้อยที่สุด<br>
+            • กระแสที่ L และ C หมุนเวียนในวงจร<br>
+            • เรียกว่า <strong>Current Resonance</strong></span>
+            <span class="en-only"><strong>Parallel RLC Circuit</strong><br>
+            • At f<sub>0</sub>: Z is maximum<br>
+            • Minimum current from source<br>
+            • Current circulates between L and C<br>
+            • Called <strong>Current Resonance</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 6: AC Power ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">กำลังไฟฟ้า AC (AC Power)</span>
+      <span class="en-only">AC Power</span>
+    </div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>กำลังจริง P</strong> — พลังงานที่ใช้งานจริง (W)</li>
+            <li><strong>กำลังรีแอคทีฟ Q</strong> — พลังงานที่เก็บ/คืน (VAR)</li>
+            <li><strong>กำลังปรากฏ S</strong> — กำลังรวมทั้งหมด (VA)</li>
+            <li><strong>Power Factor (PF)</strong> — อัตราส่วน P/S</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li><strong>Real Power P</strong> — Actual power consumed (W)</li>
+            <li><strong>Reactive Power Q</strong> — Power stored/returned (VAR)</li>
+            <li><strong>Apparent Power S</strong> — Total power (VA)</li>
+            <li><strong>Power Factor (PF)</strong> — Ratio P/S</li>
+          </ul>
+        </div>
+        <div>
+          <div class="card" style="box-shadow:none;border:1px solid var(--border);">
+            <h3 class="th-only">สูตรกำลังไฟฟ้า AC</h3>
+            <h3 class="en-only">AC Power Formulas</h3>
+            <div class="formula-box" style="margin-top:0.5rem;">
+              <div class="formula">P = V × I × cos φ &nbsp;(W)</div>
+            </div>
+            <div class="formula-box" style="margin-top:0.5rem;">
+              <div class="formula">Q = V × I × sin φ &nbsp;(VAR)</div>
+            </div>
+            <div class="formula-box" style="margin-top:0.5rem;">
+              <div class="formula">S = V × I &nbsp;(VA)</div>
+            </div>
+            <div class="formula-box" style="margin-top:0.5rem;">
+              <div class="formula">S² = P² + Q²</div>
+            </div>
+            <div class="formula-box" style="margin-top:0.5rem;">
+              <div class="formula">PF = cos φ = P / S</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:1.25rem;">
+        <div class="info-box">
+          <span class="th-only"><strong>Power Factor (PF) คืออะไร?</strong><br>
+          PF = 1 (Unity) — โหลดความต้านทานล้วน ใช้ไฟฟ้าได้เต็มประสิทธิภาพ<br>
+          PF &lt; 1 — มีส่วนประกอบรีแอคทีฟ (มอเตอร์, หม้อแปลง) สูญเสียพลังงานเพิ่ม<br>
+          PF = 0 — โหลดรีแอคทีฟล้วน ไม่มีการใช้พลังงานจริง<br><br>
+          ในระบบอุตสาหกรรม ต้องการ PF ≥ 0.85 เพื่อประหยัดพลังงาน</span>
+          <span class="en-only"><strong>What is Power Factor (PF)?</strong><br>
+          PF = 1 (Unity) — Pure resistive load, maximum efficiency<br>
+          PF &lt; 1 — Reactive component present (motors, transformers), extra energy loss<br>
+          PF = 0 — Pure reactive load, no real power consumed<br><br>
+          Industrial systems require PF ≥ 0.85 for energy efficiency</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 7: Summary Table ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">ตารางสรุปสูตร AC</span>
+      <span class="en-only">AC Formula Summary</span>
+    </div>
+    <div class="card">
+      <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+        <thead>
+          <tr>
+            <th class="th-only">ปริมาณ</th>
+            <th class="en-only">Quantity</th>
+            <th class="th-only">สูตร</th>
+            <th class="en-only">Formula</th>
+            <th class="th-only">หน่วย</th>
+            <th class="en-only">Unit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>V<sub>peak</sub></td>
+            <td>V<sub>rms</sub> × √2</td>
+            <td>V</td>
+          </tr>
+          <tr>
+            <td>X<sub>L</sub></td>
+            <td>2πfL</td>
+            <td>Ω</td>
+          </tr>
+          <tr>
+            <td>X<sub>C</sub></td>
+            <td>1 / (2πfC)</td>
+            <td>Ω</td>
+          </tr>
+          <tr>
+            <td>Z (series)</td>
+            <td>√[ R² + (X<sub>L</sub> − X<sub>C</sub>)² ]</td>
+            <td>Ω</td>
+          </tr>
+          <tr>
+            <td>f<sub>0</sub></td>
+            <td>1 / (2π√LC)</td>
+            <td>Hz</td>
+          </tr>
+          <tr>
+            <td>P</td>
+            <td>V × I × cos φ</td>
+            <td>W</td>
+          </tr>
+          <tr>
+            <td>S</td>
+            <td>V × I</td>
+            <td>VA</td>
+          </tr>
+          <tr>
+            <td>PF</td>
+            <td>cos φ = P / S</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="soldering.html">← <span class="th-only">การบัดกรี</span><span class="en-only">Soldering</span></a>
+    <a class="next" href="tools.html"><span class="th-only">เครื่องคิดเลข</span><span class="en-only">Calculators</span> →</a>
+  </div>
+</div>
+
+<footer>
+  <strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong>
+  <strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong>
+</footer>
+<script>const CURRENT_PAGE='ac-circuit';</script>
+<script src="nav.js"></script>
+</body>
+</html>

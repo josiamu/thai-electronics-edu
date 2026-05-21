@@ -6,6 +6,7 @@ const NAV_CONTENT = [
   { id: 'inductor',    href: 'inductor.html',     label_th: '🌀 ตัวเหนี่ยวนำ',   label_en: '🌀 Inductor' },
   { id: 'multimeter',  href: 'multimeter.html',   label_th: '📏 เครื่องมือวัด',   label_en: '📏 Measuring Tools' },
   { id: 'soldering',   href: 'soldering.html',    label_th: '🔥 การบัดกรี',       label_en: '🔥 Soldering' },
+  { id: 'ac-circuit',  href: 'ac-circuit.html',  label_th: '〜 วงจร AC',          label_en: '〜 AC Circuit' },
 ];
 
 const NAV_UTILS = [
