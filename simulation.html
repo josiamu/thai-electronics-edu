@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="จำลองวงจรไฟฟ้า | สื่อการเรียนการสอน" data-title-en="Circuit Simulator | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>จำลองวงจรไฟฟ้า | สื่อการเรียนการสอน</title>
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* ── Simulator Layout ── */
+.sim-wrap {
+  display: grid;
+  grid-template-columns: 1fr 290px;
+  gap: 1.25rem;
+  align-items: start;
+}
+@media (max-width: 860px) { .sim-wrap { grid-template-columns: 1fr; } }
+
+/* ── Circuit SVG ── */
+#circuit-svg { width: 100%; height: auto; display: block; border-radius: 10px; background: var(--bg); }
+.wire { stroke: #64748b; stroke-width: 3; stroke-linecap: round; fill: none; }
+[data-theme="dark"] .wire { stroke: #94a3b8; }
+.r-body { stroke-width: 1.5; transition: fill 0.45s ease; }
+.r-body-r1 { stroke: #fca5a5; }
+.r-body-r2 { stroke: #fdba74; }
+.r-body-r3 { stroke: #c4b5fd; }
+.r-zigzag { fill: none; stroke: rgba(255,255,255,0.82); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.batt-long  { stroke: #6ee7b7; stroke-width: 2.5; stroke-linecap: round; fill: none; }
+.batt-short { stroke: #6ee7b7; stroke-width: 5; stroke-linecap: round; fill: none; }
+.batt-wire  { stroke: #64748b; stroke-width: 3; stroke-linecap: round; fill: none; }
+[data-theme="dark"] .batt-wire { stroke: #94a3b8; }
+.ammeter-ring { fill: var(--card); stroke: #64748b; stroke-width: 2.5; }
+[data-theme="dark"] .ammeter-ring { stroke: #94a3b8; }
+.svg-text   { font-family: 'Anuphan', sans-serif; fill: var(--text); }
+.svg-label  { font-size: 11px; fill: var(--text-light); text-anchor: middle; }
+.svg-val    { font-size: 12px; font-weight: 700; fill: var(--primary); text-anchor: middle; }
+.svg-rname  { font-size: 13px; font-weight: 700; fill: #fff; text-anchor: middle; dominant-baseline: middle; }
+.svg-plus   { font-size: 16px; font-weight: 700; fill: #10b981; text-anchor: middle; }
+.svg-minus  { font-size: 20px; font-weight: 900; fill: #f87171; text-anchor: middle; }
+.svg-ammA   { font-size: 12px; font-weight: 700; fill: var(--text); text-anchor: middle; dominant-baseline: middle; }
+.svg-amval  { font-size: 11px; font-weight: 700; fill: var(--primary); text-anchor: middle; }
+.arrow      { fill: #64748b; }
+[data-theme="dark"] .arrow { fill: #94a3b8; }
+
+/* ── Controls ── */
+.ctrl-group { margin-bottom: 0.9rem; }
+.ctrl-row   { display: flex; justify-content: space-between; align-items: center; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.3rem; }
+.ctrl-row span { font-size: 0.95rem; min-width: 68px; text-align: right; }
+input[type="range"] { width: 100%; cursor: pointer; accent-color: var(--primary); }
+input[type="range"].r1-sl { accent-color: #ef4444; }
+input[type="range"].r2-sl { accent-color: #f97316; }
+input[type="range"].r3-sl { accent-color: #8b5cf6; }
+
+/* ── Results ── */
+.result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; margin-top: 0.75rem; }
+.rbox { background: var(--bg); border: 1px solid var(--border); border-radius: 9px; padding: 0.45rem 0.6rem; text-align: center; }
+.rbox.span2 { grid-column: 1/-1; }
+.rbox-lbl { font-size: 0.75rem; color: var(--text-light); margin-bottom: 0.1rem; }
+.rbox-val { font-size: 1rem; font-weight: 700; }
+.rv-rt  .rbox-val { color: var(--text); }
+.rv-I   .rbox-val { color: #10b981; font-size: 1.1rem; }
+.rv-v1  .rbox-val, .rv-p1 .rbox-val { color: #ef4444; }
+.rv-v2  .rbox-val, .rv-p2 .rbox-val { color: #f97316; }
+.rv-v3  .rbox-val, .rv-p3 .rbox-val { color: #8b5cf6; }
+.rv-pt  .rbox-val { color: #10b981; }
+.result-divider { grid-column: 1/-1; height: 1px; background: var(--border); }
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🔬</div>
+    <div>
+      <h1 class="th-only">จำลองวงจรไฟฟ้า — กฎของโอห์ม &amp; วงจรอนุกรม</h1>
+      <h1 class="en-only">Circuit Simulator — Ohm's Law &amp; Series Circuit</h1>
+      <p class="th-only">ปรับค่า V • R1 • R2 • R3 แล้วดูกระแสไฟฟ้าไหลแบบ Animation เรียลไทม์</p>
+      <p class="en-only">Adjust V, R1, R2, R3 and watch current flow animate in real time</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ── SIMULATOR ── -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">⚡ วงจรจำลอง (โต้ตอบได้)</span>
+      <span class="en-only">⚡ Interactive Simulation</span>
+    </div>
+    <div class="card" style="padding:1.25rem;">
+      <div class="sim-wrap">
+
+        <!-- SVG Circuit -->
+        <div>
+          <svg id="circuit-svg" viewBox="0 0 660 310" xmlns="http://www.w3.org/2000/svg">
+
+            <!-- ── Invisible path for electron animation (clockwise = conventional current) ── -->
+            <path id="circuit-path" d="M 45,55 L 615,55 L 615,275 L 45,275 Z" fill="none" stroke="none"/>
+
+            <!-- ── Wires ── -->
+            <line class="wire" x1="45"  y1="55"  x2="120" y2="55"/>  <!-- before R1 -->
+            <line class="wire" x1="230" y1="55"  x2="270" y2="55"/>  <!-- R1→R2 -->
+            <line class="wire" x1="380" y1="55"  x2="420" y2="55"/>  <!-- R2→R3 -->
+            <line class="wire" x1="530" y1="55"  x2="615" y2="55"/>  <!-- after R3 -->
+            <line class="wire" x1="615" y1="55"  x2="615" y2="275"/> <!-- right side -->
+            <line class="wire" x1="615" y1="275" x2="348" y2="275"/> <!-- bottom right -->
+            <line class="wire" x1="312" y1="275" x2="45"  y2="275"/> <!-- bottom left -->
+            <line class="wire" x1="45"  y1="55"  x2="45"  y2="118"/> <!-- left-top (above battery) -->
+            <line class="wire" x1="45"  y1="196" x2="45"  y2="275"/> <!-- left-bottom (below battery) -->
+
+            <!-- ── Battery (3-cell, left side, centered ~y=157) ── -->
+            <!-- cell 1 -->
+            <line class="batt-wire"  x1="45" y1="118" x2="45" y2="122"/>
+            <line class="batt-long"  x1="26" y1="122" x2="64" y2="122"/>
+            <line class="batt-short" x1="33" y1="136" x2="57" y2="136"/>
+            <!-- cell 2 -->
+            <line class="batt-wire"  x1="45" y1="136" x2="45" y2="148"/>
+            <line class="batt-long"  x1="26" y1="148" x2="64" y2="148"/>
+            <line class="batt-short" x1="33" y1="162" x2="57" y2="162"/>
+            <!-- cell 3 -->
+            <line class="batt-wire"  x1="45" y1="162" x2="45" y2="174"/>
+            <line class="batt-long"  x1="26" y1="174" x2="64" y2="174"/>
+            <line class="batt-short" x1="33" y1="188" x2="57" y2="188"/>
+            <line class="batt-wire"  x1="45" y1="188" x2="45" y2="196"/>
+            <!-- +/− labels -->
+            <text class="svg-plus"  x="45" y="112">+</text>
+            <text class="svg-minus" x="45" y="209">−</text>
+            <!-- Vs label (inside circuit, right of battery) -->
+            <text class="svg-text svg-label" x="78" y="153">Vs</text>
+            <text class="svg-text svg-val"   x="78" y="167" id="svg-vs">12 V</text>
+
+            <!-- ── Current direction arrows (conventional current: clockwise) ── -->
+            <polygon class="arrow" points="87,50 87,60 97,55"/>         <!-- top → right -->
+            <polygon class="arrow" points="610,160 620,160 615,170"/>   <!-- right ↓ -->
+            <polygon class="arrow" points="455,280 455,270 445,275"/>   <!-- bottom ← -->
+
+            <!-- ── Resistors ── -->
+            <!-- R1: x=120-230, rect spans y=39-71, centered at y=55 -->
+            <rect id="r1-body" class="r-body r-body-r1" x="120" y="39" width="110" height="32" rx="7" fill="#3b82f6"/>
+            <path class="r-zigzag" d="M128,55 L138,43 L148,67 L158,43 L168,67 L178,43 L188,67 L198,43 L212,55"/>
+            <text class="svg-text svg-rname" x="175" y="55">R1</text>
+            <text class="svg-text svg-label" x="175" y="80"  id="svg-r1-ohm">100 Ω</text>
+            <text class="svg-text svg-val"   x="175" y="28"  id="svg-v1">V₁ = 2.00 V</text>
+
+            <!-- R2: x=270-380 -->
+            <rect id="r2-body" class="r-body r-body-r2" x="270" y="39" width="110" height="32" rx="7" fill="#f97316"/>
+            <path class="r-zigzag" d="M278,55 L288,43 L298,67 L308,43 L318,67 L328,43 L338,67 L348,43 L362,55"/>
+            <text class="svg-text svg-rname" x="325" y="55">R2</text>
+            <text class="svg-text svg-label" x="325" y="80"  id="svg-r2-ohm">200 Ω</text>
+            <text class="svg-text svg-val"   x="325" y="28"  id="svg-v2">V₂ = 4.00 V</text>
+
+            <!-- R3: x=420-530 -->
+            <rect id="r3-body" class="r-body r-body-r3" x="420" y="39" width="110" height="32" rx="7" fill="#8b5cf6"/>
+            <path class="r-zigzag" d="M428,55 L438,43 L448,67 L458,43 L468,67 L478,43 L488,67 L498,43 L512,55"/>
+            <text class="svg-text svg-rname" x="475" y="55">R3</text>
+            <text class="svg-text svg-label" x="475" y="80"  id="svg-r3-ohm">300 Ω</text>
+            <text class="svg-text svg-val"   x="475" y="28"  id="svg-v3">V₃ = 6.00 V</text>
+
+            <!-- ── Ammeter ── -->
+            <circle class="ammeter-ring" cx="330" cy="275" r="18"/>
+            <text class="svg-text svg-ammA" x="330" y="276">A</text>
+            <text class="svg-text svg-amval" x="330" y="301" id="svg-I">20 mA</text>
+
+          </svg>
+        </div>
+
+        <!-- Controls + Results -->
+        <div>
+          <!-- Sliders -->
+          <div class="card" style="padding:0.9rem 1rem;box-shadow:none;border:1px solid var(--border);">
+            <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.6rem;color:var(--primary);">
+              <span class="th-only">⚙ ปรับค่า</span>
+              <span class="en-only">⚙ Adjust Values</span>
+            </div>
+
+            <div class="ctrl-group">
+              <div class="ctrl-row">
+                <label for="sl-v">
+                  <span class="th-only">แรงดัน (V)</span>
+                  <span class="en-only">Voltage (V)</span>
+                </label>
+                <span id="lbl-v" style="color:var(--primary);">12 V</span>
+              </div>
+              <input type="range" id="sl-v" min="1" max="30" step="1" value="12">
+            </div>
+
+            <div class="ctrl-group">
+              <div class="ctrl-row">
+                <label for="sl-r1" style="color:#ef4444;">R1 (Ω)</label>
+                <span id="lbl-r1" style="color:#ef4444;">100 Ω</span>
+              </div>
+              <input type="range" id="sl-r1" class="r1-sl" min="10" max="1000" step="10" value="100">
+            </div>
+
+            <div class="ctrl-group">
+              <div class="ctrl-row">
+                <label for="sl-r2" style="color:#f97316;">R2 (Ω)</label>
+                <span id="lbl-r2" style="color:#f97316;">200 Ω</span>
+              </div>
+              <input type="range" id="sl-r2" class="r2-sl" min="10" max="1000" step="10" value="200">
+            </div>
+
+            <div class="ctrl-group" style="margin-bottom:0;">
+              <div class="ctrl-row">
+                <label for="sl-r3" style="color:#8b5cf6;">R3 (Ω)</label>
+                <span id="lbl-r3" style="color:#8b5cf6;">300 Ω</span>
+              </div>
+              <input type="range" id="sl-r3" class="r3-sl" min="10" max="1000" step="10" value="300">
+            </div>
+          </div>
+
+          <!-- Results -->
+          <div class="result-grid">
+            <div class="rbox span2 rv-rt">
+              <div class="rbox-lbl"><span class="th-only">ความต้านทานรวม R<sub>T</sub></span><span class="en-only">Total Resistance R<sub>T</sub></span></div>
+              <div class="rbox-val" id="res-rt">600 Ω</div>
+            </div>
+            <div class="rbox span2 rv-I">
+              <div class="rbox-lbl"><span class="th-only">กระแสไฟฟ้า I</span><span class="en-only">Current I</span></div>
+              <div class="rbox-val" id="res-I">20.0 mA</div>
+            </div>
+            <div class="result-divider"></div>
+            <div class="rbox rv-v1"><div class="rbox-lbl">V₁</div><div class="rbox-val" id="res-v1">2.00 V</div></div>
+            <div class="rbox rv-p1"><div class="rbox-lbl">P₁</div><div class="rbox-val" id="res-p1">40.0 mW</div></div>
+            <div class="rbox rv-v2"><div class="rbox-lbl">V₂</div><div class="rbox-val" id="res-v2">4.00 V</div></div>
+            <div class="rbox rv-p2"><div class="rbox-lbl">P₂</div><div class="rbox-val" id="res-p2">80.0 mW</div></div>
+            <div class="rbox rv-v3"><div class="rbox-lbl">V₃</div><div class="rbox-val" id="res-v3">6.00 V</div></div>
+            <div class="rbox rv-p3"><div class="rbox-lbl">P₃</div><div class="rbox-val" id="res-p3">120 mW</div></div>
+            <div class="result-divider"></div>
+            <div class="rbox span2 rv-pt">
+              <div class="rbox-lbl"><span class="th-only">กำลังไฟฟ้ารวม P<sub>total</sub></span><span class="en-only">Total Power P<sub>total</sub></span></div>
+              <div class="rbox-val" id="res-pt">240 mW</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- .sim-wrap -->
+    </div>
+  </div>
+
+  <!-- ── FORMULA REFERENCE ── -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">สูตรที่ใช้ในการจำลอง</span>
+      <span class="en-only">Formulas in This Simulation</span>
+    </div>
+    <div class="card">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0.75rem;">
+        <div class="formula-box" style="margin:0;padding:0.75rem 1rem;">
+          <div class="formula" style="font-size:1rem;">V = I × R<sub>T</sub></div>
+        </div>
+        <div class="formula-box" style="margin:0;padding:0.75rem 1rem;">
+          <div class="formula" style="font-size:1rem;">R<sub>T</sub> = R₁ + R₂ + R₃</div>
+        </div>
+        <div class="formula-box" style="margin:0;padding:0.75rem 1rem;">
+          <div class="formula" style="font-size:1rem;">I = V / R<sub>T</sub></div>
+        </div>
+        <div class="formula-box" style="margin:0;padding:0.75rem 1rem;">
+          <div class="formula" style="font-size:1rem;">P = I² × R</div>
+        </div>
+        <div class="formula-box" style="margin:0;padding:0.75rem 1rem;">
+          <div class="formula" style="font-size:1rem;">V₁+V₂+V₃ = V<sub>s</sub></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── HOW TO USE ── -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">คำแนะนำการสังเกต</span>
+      <span class="en-only">Observation Guide</span>
+    </div>
+    <div class="card">
+      <div class="grid-2">
+        <ul class="content-list th-only">
+          <li>จุดสีฟ้าเคลื่อนที่แทนกระแสไฟฟ้า (conventional current)</li>
+          <li><strong>ความเร็วจุด</strong> = ขนาดกระแส — เร็ว = I มาก</li>
+          <li><strong>สีตัวต้านทาน</strong> — ฟ้า (เย็น) ถึง แดง (ร้อน) ตามกำลังไฟฟ้า</li>
+          <li>เพิ่ม V → I เพิ่ม (Ohm's Law ✓)</li>
+          <li>เพิ่ม R ใดก็ตาม → R<sub>T</sub> เพิ่ม → I ลด</li>
+          <li>V₁ + V₂ + V₃ = V<sub>s</sub> เสมอ (KVL ✓)</li>
+          <li>ตัวต้านทานที่มี R มากกว่าจะตก V มากกว่าและร้อนกว่า</li>
+        </ul>
+        <ul class="content-list en-only">
+          <li>Blue dots represent conventional current flow</li>
+          <li><strong>Dot speed</strong> = current magnitude — faster = more I</li>
+          <li><strong>Resistor color</strong> — blue (cool) to red (hot) by power dissipated</li>
+          <li>Increase V → I increases (Ohm's Law ✓)</li>
+          <li>Increase any R → R<sub>T</sub> increases → I decreases</li>
+          <li>V₁ + V₂ + V₃ = V<sub>s</sub> always (KVL ✓)</li>
+          <li>Resistor with higher R drops more voltage and runs hotter</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="ohm.html"><span class="th-only">← กฎของโอห์ม</span><span class="en-only">← Ohm's Law</span></a>
+    <a class="next" href="tools.html"><span class="th-only">เครื่องคิดเลข →</span><span class="en-only">Calculators →</span></a>
+  </div>
+</div>
+
+<footer>
+  <strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong>
+  <strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong>
+</footer>
+<script>const CURRENT_PAGE='simulation';</script>
+<script src="nav.js"></script>
+<script>
+(function () {
+  // ── State ──
+  const state = { V: 12, R1: 100, R2: 200, R3: 300 };
+
+  // ── Calculations ──
+  function calc() {
+    const Rt = state.R1 + state.R2 + state.R3;
+    const I  = state.V / Rt;
+    const v1 = I * state.R1, v2 = I * state.R2, v3 = I * state.R3;
+    const p1 = I * I * state.R1, p2 = I * I * state.R2, p3 = I * I * state.R3;
+    return { Rt, I, v1, v2, v3, p1, p2, p3, pt: I * state.V };
+  }
+
+  // ── Format helpers ──
+  function fmtV(v) { return v.toFixed(2) + ' V'; }
+  function fmtA(i) {
+    if (i >= 1)      return i.toFixed(3) + ' A';
+    if (i >= 0.001)  return (i * 1e3).toFixed(1) + ' mA';
+    return (i * 1e6).toFixed(1) + ' μA';
+  }
+  function fmtW(p) {
+    if (p >= 1)    return p.toFixed(3) + ' W';
+    return (p * 1e3).toFixed(1) + ' mW';
+  }
+
+  // ── Heat color (blue → red based on power ratio) ──
+  function heatColor(p, pRef) {
+    const t = Math.min(p / Math.max(pRef, 1e-9), 1);
+    const h = Math.round(220 * (1 - t)); // 220=blue, 0=red
+    return `hsl(${h},82%,52%)`;
+  }
+
+  // ── Update all display elements ──
+  function update() {
+    const { Rt, I, v1, v2, v3, p1, p2, p3, pt } = calc();
+    const pRef = Math.max(p1, p2, p3, 0.001);
+
+    // Slider labels
+    document.getElementById('lbl-v').textContent  = state.V  + ' V';
+    document.getElementById('lbl-r1').textContent = state.R1 + ' Ω';
+    document.getElementById('lbl-r2').textContent = state.R2 + ' Ω';
+    document.getElementById('lbl-r3').textContent = state.R3 + ' Ω';
+
+    // Result boxes
+    document.getElementById('res-rt').textContent = Rt + ' Ω';
+    document.getElementById('res-I').textContent  = fmtA(I);
+    document.getElementById('res-v1').textContent = fmtV(v1);
+    document.getElementById('res-v2').textContent = fmtV(v2);
+    document.getElementById('res-v3').textContent = fmtV(v3);
+    document.getElementById('res-p1').textContent = fmtW(p1);
+    document.getElementById('res-p2').textContent = fmtW(p2);
+    document.getElementById('res-p3').textContent = fmtW(p3);
+    document.getElementById('res-pt').textContent = fmtW(pt);
+
+    // SVG labels
+    document.getElementById('svg-vs').textContent    = state.V + ' V';
+    document.getElementById('svg-r1-ohm').textContent = state.R1 + ' Ω';
+    document.getElementById('svg-r2-ohm').textContent = state.R2 + ' Ω';
+    document.getElementById('svg-r3-ohm').textContent = state.R3 + ' Ω';
+    document.getElementById('svg-v1').textContent = 'V₁ = ' + v1.toFixed(1) + ' V';
+    document.getElementById('svg-v2').textContent = 'V₂ = ' + v2.toFixed(1) + ' V';
+    document.getElementById('svg-v3').textContent = 'V₃ = ' + v3.toFixed(1) + ' V';
+    document.getElementById('svg-I').textContent  = fmtA(I);
+
+    // Resistor heat colors
+    document.getElementById('r1-body').setAttribute('fill', heatColor(p1, pRef));
+    document.getElementById('r2-body').setAttribute('fill', heatColor(p2, pRef));
+    document.getElementById('r3-body').setAttribute('fill', heatColor(p3, pRef));
+  }
+
+  // ── Electron animation ──
+  var circuitPath = document.getElementById('circuit-path');
+  var svgEl       = document.getElementById('circuit-svg');
+  var NS = 'http://www.w3.org/2000/svg';
+  var N  = 14;
+  var eDots = [];
+
+  // Glow filter
+  var defs = document.createElementNS(NS, 'defs');
+  defs.innerHTML =
+    '<filter id="eglow" x="-80%" y="-80%" width="260%" height="260%">' +
+    '<feGaussianBlur in="SourceGraphic" stdDeviation="2.8" result="b"/>' +
+    '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>' +
+    '</filter>';
+  svgEl.insertBefore(defs, svgEl.firstChild);
+
+  for (var i = 0; i < N; i++) {
+    var c = document.createElementNS(NS, 'circle');
+    c.setAttribute('r', '5');
+    c.setAttribute('fill', '#93c5fd');
+    c.setAttribute('opacity', '0.93');
+    c.setAttribute('filter', 'url(#eglow)');
+    svgEl.appendChild(c);
+    eDots.push({ el: c, frac: i / N });
+  }
+
+  var lastTs = null;
+  function tick(ts) {
+    if (lastTs === null) lastTs = ts;
+    var dt = Math.min((ts - lastTs) / 1000, 0.05);
+    lastTs = ts;
+
+    var I = calc().I;
+    // Fraction of full path length per second
+    // I ≈ 0A → 0.02 (slow crawl),  I ≈ 0.8A → 0.36 (fast)
+    var speed = Math.max(0.018, Math.min(0.38, I * 0.62));
+    var L = circuitPath.getTotalLength();
+
+    for (var j = 0; j < N; j++) {
+      eDots[j].frac = (eDots[j].frac + speed * dt) % 1;
+      var pt = circuitPath.getPointAtLength(eDots[j].frac * L);
+      eDots[j].el.setAttribute('cx', pt.x.toFixed(1));
+      eDots[j].el.setAttribute('cy', pt.y.toFixed(1));
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  // ── Slider listeners ──
+  document.getElementById('sl-v').addEventListener('input',  function () { state.V  = +this.value; update(); });
+  document.getElementById('sl-r1').addEventListener('input', function () { state.R1 = +this.value; update(); });
+  document.getElementById('sl-r2').addEventListener('input', function () { state.R2 = +this.value; update(); });
+  document.getElementById('sl-r3').addEventListener('input', function () { state.R3 = +this.value; update(); });
+
+  update();
+})();
+</script>
+</body>
+</html>

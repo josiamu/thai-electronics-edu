@@ -26,6 +26,8 @@ website/
 ├── inductor.html    — บทที่ 5
 ├── multimeter.html  — บทที่ 6
 ├── soldering.html   — บทที่ 7
+├── ac-circuit.html  — บทที่ 8
+├── simulation.html  — จำลองวงจร (Ohm's Law + Series, interactive animation)
 ├── formulas.html    — สูตรสรุป + print-friendly
 ├── tools.html       — เครื่องคิดเลข 7 ตัว
 ├── quiz.html        — แบบทดสอบ 50 ข้อ 7 หมวด — มีข้อสอบ EN ครบทุกข้อ
@@ -51,7 +53,7 @@ website/
   <script src="nav.js"></script>
 </body>
 ```
-CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `capacitor`, `inductor`, `multimeter`, `soldering`, `formulas`, `tools`, `quiz`, `downloads`
+CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `capacitor`, `inductor`, `multimeter`, `soldering`, `ac-circuit`, `simulation`, `formulas`, `tools`, `quiz`, `downloads`
 
 ### ระบบ 2 ภาษา (Bilingual System)
 - CSS ใน style.css:

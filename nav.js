@@ -10,10 +10,11 @@ const NAV_CONTENT = [
 ];
 
 const NAV_UTILS = [
-  { id: 'formulas',  href: 'formulas.html',  label_th: '📐 สูตรสรุป',       label_en: '📐 Formulas' },
-  { id: 'tools',     href: 'tools.html',     label_th: '🧮 เครื่องคิดเลข',  label_en: '🧮 Calculators' },
-  { id: 'quiz',      href: 'quiz.html',      label_th: '📝 แบบทดสอบ',       label_en: '📝 Quiz' },
-  { id: 'downloads', href: 'downloads.html', label_th: '📥 ดาวน์โหลด',      label_en: '📥 Downloads' },
+  { id: 'simulation', href: 'simulation.html', label_th: '🔬 จำลองวงจร',     label_en: '🔬 Circuit Sim' },
+  { id: 'formulas',   href: 'formulas.html',   label_th: '📐 สูตรสรุป',       label_en: '📐 Formulas' },
+  { id: 'tools',      href: 'tools.html',      label_th: '🧮 เครื่องคิดเลข',  label_en: '🧮 Calculators' },
+  { id: 'quiz',       href: 'quiz.html',       label_th: '📝 แบบทดสอบ',       label_en: '📝 Quiz' },
+  { id: 'downloads',  href: 'downloads.html',  label_th: '📥 ดาวน์โหลด',      label_en: '📥 Downloads' },
 ];
 
 (function () {
