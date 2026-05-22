@@ -155,9 +155,9 @@ input[type="range"].r3c { accent-color:#8b5cf6; }
           <span class="th-only">⚙ ปรับค่า</span><span class="en-only">⚙ Adjust</span>
         </div>
         <div class="ctrl-group"><div class="ctrl-row"><label><span class="th-only">แรงดัน V</span><span class="en-only">Voltage V</span></label><span id="sl-v" style="color:var(--primary);">12 V</span></div><input type="range" id="s-v" min="1" max="30" step="1" value="12"></div>
-        <div class="ctrl-group"><div class="ctrl-row"><label style="color:#ef4444;">R1 (Ω)</label><span id="sl-r1" style="color:#ef4444;">100 Ω</span></div><input type="range" id="s-r1" class="r1c" min="10" max="1000" step="10" value="100"></div>
-        <div class="ctrl-group"><div class="ctrl-row"><label style="color:#f97316;">R2 (Ω)</label><span id="sl-r2" style="color:#f97316;">200 Ω</span></div><input type="range" id="s-r2" class="r2c" min="10" max="1000" step="10" value="200"></div>
-        <div class="ctrl-group" style="margin-bottom:0;"><div class="ctrl-row"><label style="color:#8b5cf6;">R3 (Ω)</label><span id="sl-r3" style="color:#8b5cf6;">300 Ω</span></div><input type="range" id="s-r3" class="r3c" min="10" max="1000" step="10" value="300"></div>
+        <div class="ctrl-group"><div class="ctrl-row"><label style="color:#ef4444;">R1 (Ω)</label><span id="sl-r1" style="color:#ef4444;">100 Ω</span></div><input type="range" id="s-r1-sl" class="r1c" min="10" max="1000" step="10" value="100"></div>
+        <div class="ctrl-group"><div class="ctrl-row"><label style="color:#f97316;">R2 (Ω)</label><span id="sl-r2" style="color:#f97316;">200 Ω</span></div><input type="range" id="s-r2-sl" class="r2c" min="10" max="1000" step="10" value="200"></div>
+        <div class="ctrl-group" style="margin-bottom:0;"><div class="ctrl-row"><label style="color:#8b5cf6;">R3 (Ω)</label><span id="sl-r3" style="color:#8b5cf6;">300 Ω</span></div><input type="range" id="s-r3-sl" class="r3c" min="10" max="1000" step="10" value="300"></div>
       </div>
       <div class="rg">
         <div class="rb s2 crt"><div class="rl"><span class="th-only">ความต้านทานรวม R<sub>T</sub></span><span class="en-only">Total Resistance R<sub>T</sub></span></div><div class="rv" id="sr-rt">600 Ω</div></div>
@@ -249,9 +249,9 @@ input[type="range"].r3c { accent-color:#8b5cf6; }
           <span class="th-only">⚙ ปรับค่า</span><span class="en-only">⚙ Adjust</span>
         </div>
         <div class="ctrl-group"><div class="ctrl-row"><label><span class="th-only">แรงดัน V</span><span class="en-only">Voltage V</span></label><span id="pl-v" style="color:var(--primary);">12 V</span></div><input type="range" id="p-v" min="1" max="30" step="1" value="12"></div>
-        <div class="ctrl-group"><div class="ctrl-row"><label style="color:#ef4444;">R1 (Ω)</label><span id="pl-r1" style="color:#ef4444;">100 Ω</span></div><input type="range" id="p-r1" class="r1c" min="10" max="1000" step="10" value="100"></div>
-        <div class="ctrl-group"><div class="ctrl-row"><label style="color:#f97316;">R2 (Ω)</label><span id="pl-r2" style="color:#f97316;">200 Ω</span></div><input type="range" id="p-r2" class="r2c" min="10" max="1000" step="10" value="200"></div>
-        <div class="ctrl-group" style="margin-bottom:0;"><div class="ctrl-row"><label style="color:#8b5cf6;">R3 (Ω)</label><span id="pl-r3" style="color:#8b5cf6;">400 Ω</span></div><input type="range" id="p-r3" class="r3c" min="10" max="1000" step="10" value="400"></div>
+        <div class="ctrl-group"><div class="ctrl-row"><label style="color:#ef4444;">R1 (Ω)</label><span id="pl-r1" style="color:#ef4444;">100 Ω</span></div><input type="range" id="p-r1-sl" class="r1c" min="10" max="1000" step="10" value="100"></div>
+        <div class="ctrl-group"><div class="ctrl-row"><label style="color:#f97316;">R2 (Ω)</label><span id="pl-r2" style="color:#f97316;">200 Ω</span></div><input type="range" id="p-r2-sl" class="r2c" min="10" max="1000" step="10" value="200"></div>
+        <div class="ctrl-group" style="margin-bottom:0;"><div class="ctrl-row"><label style="color:#8b5cf6;">R3 (Ω)</label><span id="pl-r3" style="color:#8b5cf6;">400 Ω</span></div><input type="range" id="p-r3-sl" class="r3c" min="10" max="1000" step="10" value="400"></div>
       </div>
       <div class="rg">
         <div class="rb s2 crt"><div class="rl"><span class="th-only">ความต้านทานสมมูล R<sub>T</sub></span><span class="en-only">Equivalent R<sub>T</sub></span></div><div class="rv" id="pr-rt">57.1 Ω</div></div>
@@ -349,9 +349,9 @@ input[type="range"].r3c { accent-color:#8b5cf6; }
           <span class="th-only">⚙ ปรับค่า</span><span class="en-only">⚙ Adjust</span>
         </div>
         <div class="ctrl-group"><div class="ctrl-row"><label><span class="th-only">แรงดัน V</span><span class="en-only">Voltage V</span></label><span id="ml-v" style="color:var(--primary);">12 V</span></div><input type="range" id="m-v" min="1" max="30" step="1" value="12"></div>
-        <div class="ctrl-group"><div class="ctrl-row"><label style="color:#ef4444;">R1 — <span class="th-only">อนุกรม</span><span class="en-only">Series</span> (Ω)</label><span id="ml-r1" style="color:#ef4444;">100 Ω</span></div><input type="range" id="m-r1" class="r1c" min="10" max="1000" step="10" value="100"></div>
-        <div class="ctrl-group"><div class="ctrl-row"><label style="color:#f97316;">R2 — <span class="th-only">ขนาน</span><span class="en-only">Parallel</span> (Ω)</label><span id="ml-r2" style="color:#f97316;">200 Ω</span></div><input type="range" id="m-r2" class="r2c" min="10" max="1000" step="10" value="200"></div>
-        <div class="ctrl-group" style="margin-bottom:0;"><div class="ctrl-row"><label style="color:#8b5cf6;">R3 — <span class="th-only">ขนาน</span><span class="en-only">Parallel</span> (Ω)</label><span id="ml-r3" style="color:#8b5cf6;">400 Ω</span></div><input type="range" id="m-r3" class="r3c" min="10" max="1000" step="10" value="400"></div>
+        <div class="ctrl-group"><div class="ctrl-row"><label style="color:#ef4444;">R1 — <span class="th-only">อนุกรม</span><span class="en-only">Series</span> (Ω)</label><span id="ml-r1" style="color:#ef4444;">100 Ω</span></div><input type="range" id="m-r1-sl" class="r1c" min="10" max="1000" step="10" value="100"></div>
+        <div class="ctrl-group"><div class="ctrl-row"><label style="color:#f97316;">R2 — <span class="th-only">ขนาน</span><span class="en-only">Parallel</span> (Ω)</label><span id="ml-r2" style="color:#f97316;">200 Ω</span></div><input type="range" id="m-r2-sl" class="r2c" min="10" max="1000" step="10" value="200"></div>
+        <div class="ctrl-group" style="margin-bottom:0;"><div class="ctrl-row"><label style="color:#8b5cf6;">R3 — <span class="th-only">ขนาน</span><span class="en-only">Parallel</span> (Ω)</label><span id="ml-r3" style="color:#8b5cf6;">400 Ω</span></div><input type="range" id="m-r3-sl" class="r3c" min="10" max="1000" step="10" value="400"></div>
       </div>
       <div class="rg">
         <div class="rb s2 crt"><div class="rl"><span class="th-only">ความต้านทานรวม R<sub>T</sub></span><span class="en-only">Total R<sub>T</sub></span></div><div class="rv" id="mr-rt">233 Ω</div></div>
@@ -518,9 +518,9 @@ function updS(){
 addGlow($$('svg-s'),'sg');
 var sE=mkElectrons($$('svg-s'),14,'sg');
 $$('s-v').addEventListener('input',function(){sState.V=+this.value;updS();});
-$$('s-r1').addEventListener('input',function(){sState.R1=+this.value;updS();});
-$$('s-r2').addEventListener('input',function(){sState.R2=+this.value;updS();});
-$$('s-r3').addEventListener('input',function(){sState.R3=+this.value;updS();});
+$$('s-r1-sl').addEventListener('input',function(){sState.R1=+this.value;updS();});
+$$('s-r2-sl').addEventListener('input',function(){sState.R2=+this.value;updS();});
+$$('s-r3-sl').addEventListener('input',function(){sState.R3=+this.value;updS();});
 updS();
 
 // ════════════════════════════ PARALLEL ════════════════════════════
@@ -556,9 +556,9 @@ var pE1=mkElectrons($$('svg-p'),8,'pg','#6ee7b7');
 var pE2=mkElectrons($$('svg-p'),8,'pg','#fb923c');
 var pE3=mkElectrons($$('svg-p'),8,'pg','#c4b5fd');
 $$('p-v').addEventListener('input',function(){pState.V=+this.value;updP();});
-$$('p-r1').addEventListener('input',function(){pState.R1=+this.value;updP();});
-$$('p-r2').addEventListener('input',function(){pState.R2=+this.value;updP();});
-$$('p-r3').addEventListener('input',function(){pState.R3=+this.value;updP();});
+$$('p-r1-sl').addEventListener('input',function(){pState.R1=+this.value;updP();});
+$$('p-r2-sl').addEventListener('input',function(){pState.R2=+this.value;updP();});
+$$('p-r3-sl').addEventListener('input',function(){pState.R3=+this.value;updP();});
 updP();
 
 // ════════════════════════════ MIXED ════════════════════════════
@@ -601,9 +601,9 @@ var mEout=mkElectrons($$('svg-m'),12,'mg');
 var mE2=mkElectrons($$('svg-m'),8,'mg','#fb923c');
 var mE3=mkElectrons($$('svg-m'),8,'mg','#c4b5fd');
 $$('m-v').addEventListener('input',function(){mState.V=+this.value;updM();});
-$$('m-r1').addEventListener('input',function(){mState.R1=+this.value;updM();});
-$$('m-r2').addEventListener('input',function(){mState.R2=+this.value;updM();});
-$$('m-r3').addEventListener('input',function(){mState.R3=+this.value;updM();});
+$$('m-r1-sl').addEventListener('input',function(){mState.R1=+this.value;updM();});
+$$('m-r2-sl').addEventListener('input',function(){mState.R2=+this.value;updM();});
+$$('m-r3-sl').addEventListener('input',function(){mState.R3=+this.value;updM();});
 updM();
 
 // ════════════════════════════ ANIMATION LOOP ════════════════════════════
