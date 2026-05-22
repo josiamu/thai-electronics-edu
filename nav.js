@@ -9,12 +9,15 @@ const NAV_CONTENT = [
   { id: 'ac-circuit',  href: 'ac-circuit.html',  label_th: '〜 วงจร AC',          label_en: '〜 AC Circuit' },
 ];
 
-const NAV_UTILS = [
+const NAV_TOOLS = [
   { id: 'simulation', href: 'simulation.html', label_th: '🔬 จำลองวงจร',     label_en: '🔬 Circuit Sim' },
   { id: 'formulas',   href: 'formulas.html',   label_th: '📐 สูตรสรุป',       label_en: '📐 Formulas' },
   { id: 'tools',      href: 'tools.html',      label_th: '🧮 เครื่องคิดเลข',  label_en: '🧮 Calculators' },
-  { id: 'quiz',       href: 'quiz.html',       label_th: '📝 แบบทดสอบ',       label_en: '📝 Quiz' },
-  { id: 'downloads',  href: 'downloads.html',  label_th: '📥 ดาวน์โหลด',      label_en: '📥 Downloads' },
+];
+
+const NAV_DIRECT = [
+  { id: 'quiz',      href: 'quiz.html',      label_th: '📝 แบบทดสอบ', label_en: '📝 Quiz' },
+  { id: 'downloads', href: 'downloads.html', label_th: '📥 ดาวน์โหลด', label_en: '📥 Downloads' },
 ];
 
 (function () {
@@ -26,12 +29,17 @@ const NAV_UTILS = [
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   const curLang = document.documentElement.lang || 'th';
   const contentActive = NAV_CONTENT.some(p => p.id === cur);
+  const toolsActive   = NAV_TOOLS.some(p => p.id === cur);
 
-  const dropdownItems = NAV_CONTENT.map(p =>
+  const lessonItems = NAV_CONTENT.map(p =>
     `<a href="${p.href}"${p.id === cur ? ' class="active"' : ''}><span class="th-only">${p.label_th}</span><span class="en-only">${p.label_en}</span></a>`
   ).join('');
 
-  const utilLinks = NAV_UTILS.map(p =>
+  const toolItems = NAV_TOOLS.map(p =>
+    `<a href="${p.href}"${p.id === cur ? ' class="active"' : ''}><span class="th-only">${p.label_th}</span><span class="en-only">${p.label_en}</span></a>`
+  ).join('');
+
+  const directLinks = NAV_DIRECT.map(p =>
     `<a class="nav-link${p.id === cur ? ' active' : ''}" href="${p.href}"><span class="th-only">${p.label_th}</span><span class="en-only">${p.label_en}</span></a>`
   ).join('');
 
@@ -41,14 +49,20 @@ const NAV_UTILS = [
         <a class="nav-brand" href="index.html">⚡ <span class="th-only">ไฟฟ้า &amp; อิเล็กทรอนิกส์</span><span class="en-only">Electricity &amp; Electronics</span></a>
         <button class="nav-hamburger" id="nav-hamburger" aria-label="เมนู">☰</button>
         <div class="nav-menu" id="nav-menu">
-          <div class="nav-dropdown" id="nav-dropdown">
-            <button class="nav-dropdown-toggle${contentActive ? ' active' : ''}" id="nav-dropdown-btn">
+          <div class="nav-dropdown" id="nav-dropdown-lessons">
+            <button class="nav-dropdown-toggle${contentActive ? ' active' : ''}" id="nav-dropdown-lessons-btn">
               <span class="th-only">บทเรียน</span><span class="en-only">Lessons</span> <span class="nav-chevron">▼</span>
             </button>
-            <div class="nav-dropdown-menu" id="nav-dropdown-menu">${dropdownItems}</div>
+            <div class="nav-dropdown-menu" id="nav-dropdown-lessons-menu">${lessonItems}</div>
+          </div>
+          <div class="nav-dropdown" id="nav-dropdown-tools">
+            <button class="nav-dropdown-toggle${toolsActive ? ' active' : ''}" id="nav-dropdown-tools-btn">
+              <span class="th-only">เครื่องมือ</span><span class="en-only">Tools</span> <span class="nav-chevron">▼</span>
+            </button>
+            <div class="nav-dropdown-menu" id="nav-dropdown-tools-menu">${toolItems}</div>
           </div>
           <div class="nav-sep"></div>
-          ${utilLinks}
+          ${directLinks}
           <div class="nav-sep"></div>
           <div class="lang-toggle">
             <button class="lang-btn${curLang !== 'en' ? ' active' : ''}" id="lang-th-btn">TH</button>
@@ -76,29 +90,37 @@ const NAV_UTILS = [
   document.getElementById('lang-th-btn').addEventListener('click', () => setLang('th'));
   document.getElementById('lang-en-btn').addEventListener('click', () => setLang('en'));
 
-  // Dropdown
-  const dropdown = document.getElementById('nav-dropdown');
-  document.getElementById('nav-dropdown-btn').addEventListener('click', function (e) {
-    e.stopPropagation();
-    dropdown.classList.toggle('open');
+  // Dropdowns
+  const allDropdowns = [
+    document.getElementById('nav-dropdown-lessons'),
+    document.getElementById('nav-dropdown-tools'),
+  ];
+
+  allDropdowns.forEach(function(dd) {
+    dd.querySelector('.nav-dropdown-toggle').addEventListener('click', function(e) {
+      e.stopPropagation();
+      const isOpen = dd.classList.contains('open');
+      allDropdowns.forEach(function(d) { d.classList.remove('open'); });
+      if (!isOpen) dd.classList.add('open');
+    });
   });
 
   // Hamburger
   const navMenu = document.getElementById('nav-menu');
-  document.getElementById('nav-hamburger').addEventListener('click', function (e) {
+  document.getElementById('nav-hamburger').addEventListener('click', function(e) {
     e.stopPropagation();
     navMenu.classList.toggle('open');
-    dropdown.classList.remove('open');
+    allDropdowns.forEach(function(d) { d.classList.remove('open'); });
   });
 
-  document.addEventListener('click', function () {
-    dropdown.classList.remove('open');
+  document.addEventListener('click', function() {
+    allDropdowns.forEach(function(d) { d.classList.remove('open'); });
     navMenu.classList.remove('open');
   });
-  navMenu.addEventListener('click', function (e) { e.stopPropagation(); });
+  navMenu.addEventListener('click', function(e) { e.stopPropagation(); });
 
   // Dark mode
-  document.getElementById('dark-toggle-btn').addEventListener('click', function () {
+  document.getElementById('dark-toggle-btn').addEventListener('click', function() {
     const root = document.documentElement;
     const dark = root.getAttribute('data-theme') === 'dark';
     if (dark) {
