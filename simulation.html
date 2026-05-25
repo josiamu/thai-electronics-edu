@@ -59,6 +59,16 @@ input[type="range"].r3c { accent-color:#8b5cf6; }
 .c3  .rv { color:#8b5cf6; }
 .cpt .rv { color:#10b981; }
 .rdv { grid-column:1/-1; height:1px; background:var(--border); }
+
+.calc-steps{margin-top:1rem;background:var(--bg);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.calc-steps-hd{font-weight:700;font-size:.85rem;color:var(--primary);padding:.5rem .9rem;background:var(--card);border-bottom:1px solid var(--border);}
+.calc-tbl{width:100%;border-collapse:collapse;font-size:.8rem;}
+.calc-tbl td{padding:.28rem .9rem;border-bottom:1px solid var(--border);vertical-align:baseline;}
+.calc-tbl tr:last-child td{border-bottom:none;}
+.calc-tbl .ck{font-weight:700;color:var(--primary);white-space:nowrap;width:1%;padding-right:.3rem;}
+.calc-tbl .cf{color:var(--text-light);}
+.calc-tbl .cv{font-weight:700;text-align:right;white-space:nowrap;color:var(--text);}
+.calc-tbl .csep td{border-top:2px solid var(--border);border-bottom:none;height:0;padding:0;}
 </style>
 </head>
 <body>
@@ -174,6 +184,13 @@ input[type="range"].r3c { accent-color:#8b5cf6; }
       </div>
      </div>
     </div>
+    <div class="calc-steps">
+      <div class="calc-steps-hd">
+        <span class="th-only">📐 วิธีคำนวณ (อนุกรม)</span>
+        <span class="en-only">📐 Calculation Steps — Series</span>
+      </div>
+      <div id="s-calc"></div>
+    </div>
    </div>
   </div><!-- /tab-series -->
 
@@ -267,6 +284,13 @@ input[type="range"].r3c { accent-color:#8b5cf6; }
         <div class="rb s2 cpt"><div class="rl"><span class="th-only">กำลังรวม P<sub>T</sub></span><span class="en-only">Total Power P<sub>T</sub></span></div><div class="rv" id="pr-pt">2.52 W</div></div>
       </div>
      </div>
+    </div>
+    <div class="calc-steps">
+      <div class="calc-steps-hd">
+        <span class="th-only">📐 วิธีคำนวณ (ขนาน)</span>
+        <span class="en-only">📐 Calculation Steps — Parallel</span>
+      </div>
+      <div id="p-calc"></div>
     </div>
    </div>
   </div><!-- /tab-parallel -->
@@ -371,6 +395,13 @@ input[type="range"].r3c { accent-color:#8b5cf6; }
       </div>
      </div>
     </div>
+    <div class="calc-steps">
+      <div class="calc-steps-hd">
+        <span class="th-only">📐 วิธีคำนวณ (ผสม)</span>
+        <span class="en-only">📐 Calculation Steps — Mixed</span>
+      </div>
+      <div id="m-calc"></div>
+    </div>
    </div>
   </div><!-- /tab-mixed -->
 
@@ -455,6 +486,70 @@ function heat(p,ref){var t=Math.min(p/Math.max(ref,1e-9),1);return'hsl('+Math.ro
 function spd(I){return Math.max(0.015,Math.min(0.38,I*0.62));}
 function $$(id){return document.getElementById(id);}
 
+// ── calc-steps helpers ──
+function n3(x){return parseFloat(x.toPrecision(3));}
+function cRow(sym,formula,result){return'<tr><td class="ck">'+sym+'</td><td class="cf">= '+formula+'</td><td class="cv">'+result+'</td></tr>';}
+function cSep(){return'<tr class="csep"><td colspan="3"></td></tr>';}
+
+function genCalcS(s,c){
+  var I=fmtA(c.I);
+  var rows='<table class="calc-tbl">';
+  rows+=cRow('R<sub>T</sub>','R₁+R₂+R₃ = '+s.R1+' + '+s.R2+' + '+s.R3+' Ω', c.Rt+' Ω');
+  rows+=cRow('I','V ÷ R<sub>T</sub> = '+s.V+' ÷ '+c.Rt,I);
+  rows+=cSep();
+  rows+=cRow('V₁','I × R₁ = '+I+' × '+s.R1+' Ω',fmtV(c.v1));
+  rows+=cRow('V₂','I × R₂ = '+I+' × '+s.R2+' Ω',fmtV(c.v2));
+  rows+=cRow('V₃','I × R₃ = '+I+' × '+s.R3+' Ω',fmtV(c.v3));
+  rows+=cSep();
+  rows+=cRow('P₁','I² × R₁ = ('+I+')² × '+s.R1+' Ω',fmtW(c.p1));
+  rows+=cRow('P₂','I² × R₂ = ('+I+')² × '+s.R2+' Ω',fmtW(c.p2));
+  rows+=cRow('P₃','I² × R₃ = ('+I+')² × '+s.R3+' Ω',fmtW(c.p3));
+  rows+=cSep();
+  rows+=cRow('P<sub>T</sub>','V × I = '+s.V+' V × '+I,fmtW(c.pt));
+  rows+='</table>';
+  return rows;
+}
+
+function genCalcP(s,c){
+  var rows='<table class="calc-tbl">';
+  rows+=cRow('I₁','V ÷ R₁ = '+s.V+' ÷ '+s.R1+' Ω',fmtA(c.I1));
+  rows+=cRow('I₂','V ÷ R₂ = '+s.V+' ÷ '+s.R2+' Ω',fmtA(c.I2));
+  rows+=cRow('I₃','V ÷ R₃ = '+s.V+' ÷ '+s.R3+' Ω',fmtA(c.I3));
+  rows+=cSep();
+  rows+=cRow('I<sub>T</sub>','I₁+I₂+I₃ = '+fmtA(c.I1)+'+'+fmtA(c.I2)+'+'+fmtA(c.I3),fmtA(c.It));
+  rows+=cRow('R<sub>T</sub>','V ÷ I<sub>T</sub> = '+s.V+' ÷ '+fmtA(c.It),c.Rt.toFixed(1)+' Ω');
+  rows+=cSep();
+  rows+=cRow('P₁','V × I₁ = '+s.V+' V × '+fmtA(c.I1),fmtW(c.p1));
+  rows+=cRow('P₂','V × I₂ = '+s.V+' V × '+fmtA(c.I2),fmtW(c.p2));
+  rows+=cRow('P₃','V × I₃ = '+s.V+' V × '+fmtA(c.I3),fmtW(c.p3));
+  rows+=cSep();
+  rows+=cRow('P<sub>T</sub>','V × I<sub>T</sub> = '+s.V+' V × '+fmtA(c.It),fmtW(c.pt));
+  rows+='</table>';
+  return rows;
+}
+
+function genCalcM(s,c){
+  var IT=fmtA(c.It);
+  var rows='<table class="calc-tbl">';
+  rows+=cRow('R<sub>p</sub>','R₂×R₃÷(R₂+R₃) = '+s.R2+'×'+s.R3+'÷('+s.R2+'+'+s.R3+')',c.Rp.toFixed(1)+' Ω');
+  rows+=cRow('R<sub>T</sub>','R₁ + R<sub>p</sub> = '+s.R1+' + '+c.Rp.toFixed(1)+' Ω',c.Rt.toFixed(1)+' Ω');
+  rows+=cRow('I<sub>T</sub>','V ÷ R<sub>T</sub> = '+s.V+' ÷ '+c.Rt.toFixed(1),IT);
+  rows+=cSep();
+  rows+=cRow('V₁','I<sub>T</sub> × R₁ = '+IT+' × '+s.R1+' Ω',fmtV(c.v1));
+  rows+=cRow('V<sub>p</sub>','I<sub>T</sub> × R<sub>p</sub> = '+IT+' × '+c.Rp.toFixed(1)+' Ω',fmtV(c.vp));
+  rows+=cSep();
+  rows+=cRow('I₂','V<sub>p</sub> ÷ R₂ = '+fmtV(c.vp)+' ÷ '+s.R2+' Ω',fmtA(c.I2));
+  rows+=cRow('I₃','V<sub>p</sub> ÷ R₃ = '+fmtV(c.vp)+' ÷ '+s.R3+' Ω',fmtA(c.I3));
+  rows+=cSep();
+  rows+=cRow('P₁','I<sub>T</sub>² × R₁ = ('+IT+')² × '+s.R1+' Ω',fmtW(c.p1));
+  rows+=cRow('P₂','I₂² × R₂ = ('+fmtA(c.I2)+')² × '+s.R2+' Ω',fmtW(c.p2));
+  rows+=cRow('P₃','I₃² × R₃ = ('+fmtA(c.I3)+')² × '+s.R3+' Ω',fmtW(c.p3));
+  rows+=cSep();
+  rows+=cRow('P<sub>T</sub>','V × I<sub>T</sub> = '+s.V+' V × '+IT,fmtW(c.pt));
+  rows+='</table>';
+  return rows;
+}
+
 // ── glow filter ──
 function addGlow(svgEl,id){
   var d=document.createElementNS(NS,'defs');
@@ -514,6 +609,7 @@ function updS(){
   $$('s-r1').setAttribute('fill',heat(c.p1,ref));
   $$('s-r2').setAttribute('fill',heat(c.p2,ref));
   $$('s-r3').setAttribute('fill',heat(c.p3,ref));
+  $$('s-calc').innerHTML=genCalcS(sState,c);
 }
 addGlow($$('svg-s'),'sg');
 var sE=mkElectrons($$('svg-s'),14,'sg');
@@ -549,6 +645,7 @@ function updP(){
   $$('p-r1').setAttribute('fill',heat(c.p1,ref));
   $$('p-r2').setAttribute('fill',heat(c.p2,ref));
   $$('p-r3').setAttribute('fill',heat(c.p3,ref));
+  $$('p-calc').innerHTML=genCalcP(pState,c);
 }
 addGlow($$('svg-p'),'pg');
 var pEout=mkElectrons($$('svg-p'),10,'pg');
@@ -595,6 +692,7 @@ function updM(){
   $$('m-r1').setAttribute('fill',heat(c.p1,ref));
   $$('m-r2').setAttribute('fill',heat(c.p2,ref));
   $$('m-r3').setAttribute('fill',heat(c.p3,ref));
+  $$('m-calc').innerHTML=genCalcM(mState,c);
 }
 addGlow($$('svg-m'),'mg');
 var mEout=mkElectrons($$('svg-m'),12,'mg');
