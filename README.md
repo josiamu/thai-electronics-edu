@@ -45,6 +45,16 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 
 ---
 
+## 🗺️ Roadmap / แผนพัฒนาต่อ
+
+| # | ฟีเจอร์ | รายละเอียด |
+|---|---|---|
+| 1 | ⚡ **RC Charging Simulator** | จำลองการชาร์จ/คายประจุของตัวเก็บประจุแบบ real-time — แสดงกราฟเส้นโค้ง exponential, ค่า τ = RC และจุด 63.2% บนกราฟ ต่อยอดจาก `capacitor.html` |
+| 2 | 🔁 **AC Circuit Simulator** | จำลองวงจร AC แบบ interactive — Phasor Diagram หมุนได้, คำนวณ Z, φ, cos φ ต่อยอดจาก `ac-circuit.html` |
+| 3 | 🎮 **Resistor Color Code Game** | เกม drill แบบเร็ว — สุ่มแถบสีให้ทายค่าความต้านทาน มีคะแนนและจับเวลา เล่นซ้ำได้ |
+
+---
+
 ## 🛠️ Tech Stack
 
 - **HTML / CSS / JavaScript** — Vanilla, ไม่ใช้ framework
