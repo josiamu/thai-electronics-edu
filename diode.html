@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="ไดโอด | สื่อการเรียนการสอน" data-title-en="Diode | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ไดโอด | สื่อการเรียนการสอน</title>
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="nav-placeholder"></div>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">💡</div>
+    <div>
+      <h1 class="th-only">ไดโอด (Diode)</h1>
+      <h1 class="en-only">Diode</h1>
+      <p class="th-only">PN Junction • LED • Zener Diode • การอ่านขั้ว Anode/Cathode</p>
+      <p class="en-only">PN Junction • LED • Zener Diode • Anode/Cathode polarity</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">ไดโอดคืออะไร</span><span class="en-only">What is a Diode?</span></div>
+    <div class="card">
+      <p class="th-only">ไดโอดเป็นอุปกรณ์สารกึ่งตัวนำที่ยอมให้กระแสไฟฟ้าไหลผ่านได้ทางเดียว ประกอบด้วยสารกึ่งตัวนำชนิด P และชนิด N ต่อกัน เรียกว่า <strong>PN Junction</strong></p>
+      <p class="en-only">A diode is a semiconductor device that allows current to flow in only one direction. It is made by joining P-type and N-type semiconductors, forming a <strong>PN Junction</strong>.</p>
+      <div class="table-wrap" style="margin-top:1rem">
+        <table>
+          <thead>
+            <tr>
+              <th><span class="th-only">ขั้ว</span><span class="en-only">Terminal</span></th>
+              <th><span class="th-only">สัญลักษณ์</span><span class="en-only">Symbol</span></th>
+              <th><span class="th-only">คำอธิบาย</span><span class="en-only">Description</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Anode (A)</strong></td>
+              <td>+</td>
+              <td><span class="th-only">ขั้วบวก — กระแสไหลเข้า</span><span class="en-only">Positive terminal — current flows in</span></td>
+            </tr>
+            <tr>
+              <td><strong>Cathode (K)</strong></td>
+              <td>−</td>
+              <td><span class="th-only">ขั้วลบ — กระแสไหลออก</span><span class="en-only">Negative terminal — current flows out</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">สัญลักษณ์และการต่อวงจร</span><span class="en-only">Symbol &amp; Circuit Connection</span></div>
+    <div class="card" style="text-align:center">
+      <svg viewBox="0 0 300 120" width="300" height="120" style="max-width:100%">
+        <!-- Anode wire -->
+        <line x1="30" y1="60" x2="100" y2="60" stroke="var(--text)" stroke-width="2.5"/>
+        <!-- Triangle (diode body) -->
+        <polygon points="100,30 100,90 160,60" fill="var(--primary)" stroke="var(--primary)" stroke-width="1.5"/>
+        <!-- Cathode bar -->
+        <line x1="160" y1="30" x2="160" y2="90" stroke="var(--text)" stroke-width="3"/>
+        <!-- Cathode wire -->
+        <line x1="160" y1="60" x2="240" y2="60" stroke="var(--text)" stroke-width="2.5"/>
+        <!-- Labels -->
+        <text x="55" y="50" text-anchor="middle" font-size="13" fill="var(--text-light)">A</text>
+        <text x="210" y="50" text-anchor="middle" font-size="13" fill="var(--text-light)">K</text>
+        <text x="55" y="80" text-anchor="middle" font-size="11" fill="var(--text-light)">Anode</text>
+        <text x="210" y="80" text-anchor="middle" font-size="11" fill="var(--text-light)">Cathode</text>
+        <!-- Current direction arrow -->
+        <text x="150" y="110" text-anchor="middle" font-size="11" fill="var(--primary)">
+          <tspan class="th-only">← กระแสไหล →</tspan>
+        </text>
+        <text x="150" y="110" text-anchor="middle" font-size="11" fill="var(--primary)">
+          <tspan class="en-only">← current flows →</tspan>
+        </text>
+      </svg>
+      <p style="margin-top:.5rem;font-size:.85rem;color:var(--text-light)">
+        <span class="th-only">กระแสไหลจาก Anode → Cathode (Forward Bias)</span>
+        <span class="en-only">Current flows from Anode → Cathode (Forward Bias)</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">การไบแอส (Biasing)</span><span class="en-only">Biasing</span></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="color:var(--primary)"><span class="th-only">Forward Bias (ไบแอสตรง)</span><span class="en-only">Forward Bias</span></h3>
+        <p class="th-only">ต่อ Anode กับขั้วบวก, Cathode กับขั้วลบ → ไดโอดนำไฟฟ้า กระแสไหลผ่านได้ แรงดันตก (V<sub>f</sub>) ประมาณ 0.6–0.7 V สำหรับไดโอดซิลิกอน</p>
+        <p class="en-only">Connect Anode to +, Cathode to − → diode conducts. Forward voltage drop (V<sub>f</sub>) ≈ 0.6–0.7 V for silicon diodes.</p>
+      </div>
+      <div class="card">
+        <h3 style="color:#ef4444"><span class="th-only">Reverse Bias (ไบแอสกลับ)</span><span class="en-only">Reverse Bias</span></h3>
+        <p class="th-only">ต่อ Anode กับขั้วลบ, Cathode กับขั้วบวก → ไดโอดไม่นำไฟฟ้า กระแสไม่ไหล (ยกเว้นกระแสรั่วเล็กน้อย)</p>
+        <p class="en-only">Connect Anode to −, Cathode to + → diode blocks current (only a tiny leakage current flows).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">ประเภทของไดโอด</span><span class="en-only">Types of Diodes</span></div>
+    <div class="grid-3">
+      <div class="card">
+        <h3>Rectifier Diode</h3>
+        <p class="th-only">ไดโอดเรียงกระแส ใช้แปลงไฟ AC เป็น DC เช่น 1N4001–1N4007</p>
+        <p class="en-only">Used to convert AC to DC. Common types: 1N4001–1N4007.</p>
+      </div>
+      <div class="card">
+        <h3>LED</h3>
+        <p class="th-only">Light Emitting Diode — เปล่งแสงเมื่อมีกระแสไหล ใช้เป็นไฟแสดงสถานะ แรงดันตก 1.8–3.3 V</p>
+        <p class="en-only">Light Emitting Diode — emits light when current flows. Used as indicators. V<sub>f</sub> ≈ 1.8–3.3 V.</p>
+      </div>
+      <div class="card">
+        <h3>Zener Diode</h3>
+        <p class="th-only">ไดโอดซีเนอร์ — ทำงานใน Reverse Bias ได้ ใช้ควบคุมแรงดัน (Voltage Regulator)</p>
+        <p class="en-only">Works in reverse bias — used as a voltage regulator to maintain a stable output voltage.</p>
+      </div>
+      <div class="card">
+        <h3>Schottky Diode</h3>
+        <p class="th-only">แรงดันตกต่ำ (~0.2–0.3 V) ความเร็วสูง ใช้ในวงจรความถี่สูง</p>
+        <p class="en-only">Low forward voltage (~0.2–0.3 V), high speed — used in high-frequency circuits.</p>
+      </div>
+      <div class="card">
+        <h3>Photodiode</h3>
+        <p class="th-only">แปลงแสงเป็นกระแสไฟฟ้า ทำงานใน Reverse Bias ใช้ในเซ็นเซอร์แสง</p>
+        <p class="en-only">Converts light into electric current. Operates in reverse bias — used in light sensors.</p>
+      </div>
+      <div class="card">
+        <h3>Bridge Rectifier</h3>
+        <p class="th-only">ไดโอด 4 ตัวต่อเป็นบริดจ์ เรียงกระแสแบบเต็มคลื่น (Full-Wave)</p>
+        <p class="en-only">4 diodes in bridge configuration for full-wave rectification.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">การอ่านขั้วไดโอด</span><span class="en-only">Identifying Diode Polarity</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <h3 class="th-only">จากตัวถัง</h3>
+          <h3 class="en-only">From the Package</h3>
+          <ul class="th-only">
+            <li>แถบสีขาว/เงิน บนตัวถัง = ขั้ว <strong>Cathode (K)</strong></li>
+            <li>ด้านที่ไม่มีแถบ = ขั้ว <strong>Anode (A)</strong></li>
+            <li>LED: ขา <strong>ยาว</strong> = Anode, ขา <strong>สั้น</strong> = Cathode</li>
+            <li>LED: ขอบแบน (Flat) ของตัวถัง = Cathode</li>
+          </ul>
+          <ul class="en-only">
+            <li>White/silver band on body = <strong>Cathode (K)</strong></li>
+            <li>Side without band = <strong>Anode (A)</strong></li>
+            <li>LED: <strong>Long</strong> leg = Anode, <strong>Short</strong> leg = Cathode</li>
+            <li>LED: Flat edge on body = Cathode</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="th-only">วัดด้วย Multimeter</h3>
+          <h3 class="en-only">Measuring with Multimeter</h3>
+          <ul class="th-only">
+            <li>ตั้งมัลติมิเตอร์ที่ Diode Test (สัญลักษณ์ ▶|)</li>
+            <li>สาย <strong>แดง (+)</strong> แตะ Anode, <strong>ดำ (−)</strong> แตะ Cathode → มิเตอร์แสดงค่า ~0.5–0.7 V (Forward Bias)</li>
+            <li>สลับสาย → มิเตอร์แสดง OL หรือ 1 (Reverse Bias)</li>
+          </ul>
+          <ul class="en-only">
+            <li>Set multimeter to Diode Test mode (▶| symbol)</li>
+            <li><strong>Red (+)</strong> probe on Anode, <strong>Black (−)</strong> on Cathode → meter shows ~0.5–0.7 V (Forward Bias)</li>
+            <li>Swap probes → meter shows OL or 1 (Reverse Bias)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">การต่อ LED ในวงจร</span><span class="en-only">Connecting LED in a Circuit</span></div>
+    <div class="card">
+      <p class="th-only">LED ต้องต่อ <strong>ตัวต้านทานอนุกรม</strong> เสมอ เพื่อจำกัดกระแสไม่ให้ LED ไหม้</p>
+      <p class="en-only">An LED always requires a <strong>series resistor</strong> to limit current and prevent damage.</p>
+      <div style="background:var(--bg);border-radius:.5rem;padding:1rem;margin-top:1rem;font-family:monospace;font-size:.95rem">
+        <span class="th-only">สูตรคำนวณ R:</span>
+        <span class="en-only">Formula for R:</span><br><br>
+        R = (V<sub>supply</sub> − V<sub>f</sub>) / I<sub>f</sub>
+        <br><br>
+        <span class="th-only" style="font-size:.85rem;color:var(--text-light)">
+          V<sub>supply</sub> = แรงดันไฟเลี้ยง (V) &nbsp;|&nbsp;
+          V<sub>f</sub> = แรงดันตกของ LED (~2 V) &nbsp;|&nbsp;
+          I<sub>f</sub> = กระแส LED (~10–20 mA)
+        </span>
+        <span class="en-only" style="font-size:.85rem;color:var(--text-light)">
+          V<sub>supply</sub> = supply voltage &nbsp;|&nbsp;
+          V<sub>f</sub> = LED forward voltage (~2 V) &nbsp;|&nbsp;
+          I<sub>f</sub> = LED current (~10–20 mA)
+        </span>
+      </div>
+      <div style="margin-top:1rem">
+        <p class="th-only"><strong>ตัวอย่าง:</strong> ไฟ 5 V, LED สีแดง V<sub>f</sub> = 2 V, I<sub>f</sub> = 10 mA</p>
+        <p class="en-only"><strong>Example:</strong> 5 V supply, red LED V<sub>f</sub> = 2 V, I<sub>f</sub> = 10 mA</p>
+        <p style="font-family:monospace">R = (5 − 2) / 0.01 = <strong>300 Ω</strong></p>
+        <p class="th-only" style="font-size:.9rem;color:var(--text-light)">ใช้ตัวต้านทาน 330 Ω (ค่ามาตรฐานที่ใกล้ที่สุด)</p>
+        <p class="en-only" style="font-size:.9rem;color:var(--text-light)">Use 330 Ω (nearest standard value)</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">สรุปเปรียบเทียบไดโอด</span><span class="en-only">Diode Comparison Summary</span></div>
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th><span class="th-only">ประเภท</span><span class="en-only">Type</span></th>
+              <th>V<sub>f</sub></th>
+              <th><span class="th-only">การใช้งาน</span><span class="en-only">Application</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Rectifier (1N4007)</td>
+              <td>~0.7 V</td>
+              <td><span class="th-only">เรียงกระแส AC→DC</span><span class="en-only">AC→DC rectification</span></td>
+            </tr>
+            <tr>
+              <td>LED (Red)</td>
+              <td>~1.8–2.2 V</td>
+              <td><span class="th-only">แสดงสถานะ, ไฟตกแต่ง</span><span class="en-only">Status indicator, lighting</span></td>
+            </tr>
+            <tr>
+              <td>LED (Blue/White)</td>
+              <td>~3.0–3.4 V</td>
+              <td><span class="th-only">แสดงสถานะ, ไฟตกแต่ง</span><span class="en-only">Status indicator, lighting</span></td>
+            </tr>
+            <tr>
+              <td>Zener (5.1 V)</td>
+              <td>~0.7 V (fwd)</td>
+              <td><span class="th-only">ควบคุมแรงดัน 5.1 V</span><span class="en-only">5.1 V voltage regulation</span></td>
+            </tr>
+            <tr>
+              <td>Schottky (1N5819)</td>
+              <td>~0.2–0.3 V</td>
+              <td><span class="th-only">วงจรความเร็วสูง</span><span class="en-only">High-speed circuits</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong>
+  <strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong><br>
+  <span class="th-only">ครอบคลุมเนื้อหาจาก 21 หัวข้อ</span>
+  <span class="en-only">Covering 21 topics</span>
+</footer>
+<script>const CURRENT_PAGE='diode';</script>
+<script src="nav.js"></script>
+</body>
+</html>
