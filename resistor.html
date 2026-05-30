@@ -149,6 +149,193 @@
     </div>
   </div>
 
+  <div class="section">
+    <div class="section-title"><span class="th-only">วงจรแบ่งแรงดัน (Voltage Divider)</span><span class="en-only">Voltage Divider</span></div>
+    <div class="card">
+      <div class="grid-2" style="align-items:center;gap:2rem">
+        <div style="text-align:center">
+          <svg viewBox="0 0 160 220" width="160" height="220" style="max-width:100%">
+            <!-- Vin label -->
+            <text x="80" y="18" text-anchor="middle" font-size="13" fill="var(--primary)" font-weight="bold">V<tspan font-size="10" dy="2">in</tspan></text>
+            <!-- Top wire -->
+            <line x1="80" y1="22" x2="80" y2="40" stroke="var(--text)" stroke-width="2"/>
+            <!-- R1 box -->
+            <rect x="55" y="40" width="50" height="36" rx="4" fill="none" stroke="var(--text)" stroke-width="2"/>
+            <text x="80" y="63" text-anchor="middle" font-size="13" fill="var(--text)">R₁</text>
+            <!-- Middle wire + Vout tap -->
+            <line x1="80" y1="76" x2="80" y2="104" stroke="var(--text)" stroke-width="2"/>
+            <circle cx="80" cy="104" r="4" fill="var(--primary)"/>
+            <line x1="80" y1="104" x2="130" y2="104" stroke="var(--primary)" stroke-width="1.5" stroke-dasharray="4,2"/>
+            <text x="135" y="108" font-size="12" fill="var(--primary)" font-weight="bold">V<tspan font-size="9" dy="2">out</tspan></text>
+            <!-- R2 box -->
+            <line x1="80" y1="104" x2="80" y2="120" stroke="var(--text)" stroke-width="2"/>
+            <rect x="55" y="120" width="50" height="36" rx="4" fill="none" stroke="var(--text)" stroke-width="2"/>
+            <text x="80" y="143" text-anchor="middle" font-size="13" fill="var(--text)">R₂</text>
+            <!-- Bottom wire to GND -->
+            <line x1="80" y1="156" x2="80" y2="178" stroke="var(--text)" stroke-width="2"/>
+            <!-- GND symbol -->
+            <line x1="58" y1="178" x2="102" y2="178" stroke="var(--text)" stroke-width="2.5"/>
+            <line x1="65" y1="185" x2="95" y2="185" stroke="var(--text)" stroke-width="2"/>
+            <line x1="72" y1="192" x2="88" y2="192" stroke="var(--text)" stroke-width="1.5"/>
+            <text x="80" y="210" text-anchor="middle" font-size="11" fill="var(--text-light)">GND</text>
+          </svg>
+        </div>
+        <div>
+          <div class="formula-box">
+            <div class="formula" style="font-size:1.1rem">
+              V<sub>out</sub> = V<sub>in</sub> × R₂ / (R₁ + R₂)
+            </div>
+          </div>
+          <ul class="content-list th-only" style="margin-top:1rem">
+            <li>R₁ และ R₂ ต่ออนุกรมกัน กระแสเดียวกันไหลผ่านทั้งคู่</li>
+            <li>V<sub>out</sub> วัดคร่อม R₂ เท่านั้น</li>
+            <li>ยิ่ง R₂ มาก → V<sub>out</sub> ยิ่งสูง</li>
+          </ul>
+          <ul class="content-list en-only" style="margin-top:1rem">
+            <li>R₁ and R₂ are in series — same current flows through both</li>
+            <li>V<sub>out</sub> is measured across R₂ only</li>
+            <li>Larger R₂ → higher V<sub>out</sub></li>
+          </ul>
+          <div class="info-box" style="margin-top:1rem">
+            <span class="th-only">
+              <strong>ตัวอย่าง:</strong> V<sub>in</sub> = 5 V, R₁ = 10 kΩ, R₂ = 10 kΩ<br>
+              V<sub>out</sub> = 5 × 10/(10+10) = <strong>2.5 V</strong>
+            </span>
+            <span class="en-only">
+              <strong>Example:</strong> V<sub>in</sub> = 5 V, R₁ = 10 kΩ, R₂ = 10 kΩ<br>
+              V<sub>out</sub> = 5 × 10/(10+10) = <strong>2.5 V</strong>
+            </span>
+          </div>
+          <p class="th-only" style="margin-top:.75rem;font-size:.85rem;color:var(--text-light)">* ใช้กับโหลดกระแสต่ำเท่านั้น (เช่น input ไมโครคอนโทรลเลอร์) ถ้าโหลดดูดกระแสมาก V<sub>out</sub> จะต่ำกว่าที่คำนวณ</p>
+          <p class="en-only" style="margin-top:.75rem;font-size:.85rem;color:var(--text-light)">* Works best with high-impedance loads (e.g. microcontroller inputs). A low-resistance load will pull V<sub>out</sub> below the calculated value.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">กำลังไฟฟ้าสูงสุด (Power Rating)</span><span class="en-only">Power Rating</span></div>
+    <div class="card">
+      <p class="th-only">ตัวต้านทานแต่ละตัวมีกำลังสูงสุดที่รับได้ ถ้ากำลังที่เกิดขึ้นจริงเกินค่านี้ ตัวต้านทานจะร้อนและไหม้</p>
+      <p class="en-only">Each resistor has a maximum power rating. Exceeding it causes overheating and burnout.</p>
+      <div class="formula-box" style="margin-top:1rem">
+        <div class="formula">P = I² × R &nbsp;=&nbsp; V² / R &nbsp;=&nbsp; V × I</div>
+      </div>
+      <div class="table-wrap" style="margin-top:1rem">
+        <table>
+          <thead>
+            <tr>
+              <th><span class="th-only">กำลังสูงสุด</span><span class="en-only">Rating</span></th>
+              <th><span class="th-only">ขนาดตัวถัง</span><span class="en-only">Package Size</span></th>
+              <th><span class="th-only">การใช้งานทั่วไป</span><span class="en-only">Typical Use</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1/8 W</strong></td>
+              <td><span class="th-only">เล็กมาก</span><span class="en-only">Very small</span></td>
+              <td><span class="th-only">วงจรสัญญาณ, logic level</span><span class="en-only">Signal circuits, logic level</span></td>
+            </tr>
+            <tr>
+              <td><strong>1/4 W</strong></td>
+              <td><span class="th-only">เล็ก (พบบ่อยที่สุด)</span><span class="en-only">Small (most common)</span></td>
+              <td><span class="th-only">ทั่วไป, Arduino, breadboard</span><span class="en-only">General use, Arduino, breadboard</span></td>
+            </tr>
+            <tr>
+              <td><strong>1/2 W</strong></td>
+              <td><span class="th-only">กลาง</span><span class="en-only">Medium</span></td>
+              <td><span class="th-only">วงจรกระแสปานกลาง</span><span class="en-only">Medium-current circuits</span></td>
+            </tr>
+            <tr>
+              <td><strong>1 W</strong></td>
+              <td><span class="th-only">ใหญ่</span><span class="en-only">Large</span></td>
+              <td><span class="th-only">วงจรกำลัง, LED driver</span><span class="en-only">Power circuits, LED driver</span></td>
+            </tr>
+            <tr>
+              <td><strong>2 W+</strong></td>
+              <td><span class="th-only">ใหญ่มาก / Wirewound</span><span class="en-only">Very large / Wirewound</span></td>
+              <td><span class="th-only">วงจรกำลังสูง, power supply</span><span class="en-only">High-power circuits, power supply</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info-box" style="margin-top:1rem">
+        <span class="th-only">
+          <strong>กฎปลอดภัย:</strong> เลือก Rating ≥ 2 × P<sub>คำนวณ</sub> เสมอ<br>
+          ตัวอย่าง: I = 20 mA, R = 330 Ω → P = (0.02)² × 330 = <strong>0.132 W</strong> → ใช้ 1/2 W ขึ้นไป
+        </span>
+        <span class="en-only">
+          <strong>Safety rule:</strong> Always choose Rating ≥ 2 × P<sub>calculated</sub><br>
+          Example: I = 20 mA, R = 330 Ω → P = (0.02)² × 330 = <strong>0.132 W</strong> → use ½ W or higher
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">ค่ามาตรฐาน E12 / E24</span><span class="en-only">E12 / E24 Standard Values</span></div>
+    <div class="card">
+      <p class="th-only">ตัวต้านทานที่ขายในท้องตลาดไม่ได้มีค่าเลขกลมๆ เพราะถูกกำหนดโดยมาตรฐาน <strong>EIA E-series</strong> ที่แบ่งค่าในแต่ละทศวรรษ (decade) ให้มีระยะห่างใกล้เคียงกันในสเกล log</p>
+      <p class="en-only">Resistors don't come in round numbers — they follow the <strong>EIA E-series</strong> standard, which spaces values evenly on a logarithmic scale within each decade.</p>
+      <div class="grid-2" style="margin-top:1rem;gap:1rem">
+        <div>
+          <h3 style="color:var(--primary);margin-bottom:.75rem">E12 <span style="font-size:.85rem;font-weight:400;color:var(--text-light)"><span class="th-only">(12 ค่าต่อทศวรรษ, ±10%)</span><span class="en-only">(12 values/decade, ±10%)</span></span></h3>
+          <div style="display:flex;flex-wrap:wrap;gap:.4rem">
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">1.0</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">1.2</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">1.5</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">1.8</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">2.2</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">2.7</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">3.3</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">3.9</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">4.7</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">5.6</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">6.8</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">8.2</span>
+          </div>
+          <p class="th-only" style="font-size:.82rem;color:var(--text-light);margin-top:.6rem">คูณด้วย 10<sup>n</sup> ได้ทุกช่วง เช่น 1.0 Ω, 10 Ω, 100 Ω, 1 kΩ, 10 kΩ ...</p>
+          <p class="en-only" style="font-size:.82rem;color:var(--text-light);margin-top:.6rem">Multiply by 10<sup>n</sup> for every decade: 1.0 Ω, 10 Ω, 100 Ω, 1 kΩ, 10 kΩ ...</p>
+        </div>
+        <div>
+          <h3 style="color:var(--primary);margin-bottom:.75rem">E24 <span style="font-size:.85rem;font-weight:400;color:var(--text-light)"><span class="th-only">(24 ค่าต่อทศวรรษ, ±5%)</span><span class="en-only">(24 values/decade, ±5%)</span></span></h3>
+          <div style="display:flex;flex-wrap:wrap;gap:.4rem">
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">1.0</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">1.1</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">1.2</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">1.3</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">1.5</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">1.6</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">1.8</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">2.0</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">2.2</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">2.4</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">2.7</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">3.0</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">3.3</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">3.6</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">3.9</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">4.3</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">4.7</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">5.1</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">5.6</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">6.2</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">6.8</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">7.5</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">8.2</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:.35rem;padding:.2rem .55rem;font-family:monospace;font-size:.9rem">9.1</span>
+          </div>
+          <p class="th-only" style="font-size:.82rem;color:var(--text-light);margin-top:.6rem">ค่าละเอียดกว่า E12 เหมาะกับงานที่ต้องการความแม่นยำสูงขึ้น</p>
+          <p class="en-only" style="font-size:.82rem;color:var(--text-light);margin-top:.6rem">Finer steps than E12 — used when greater precision is needed.</p>
+        </div>
+      </div>
+      <div class="info-box" style="margin-top:1rem">
+        <span class="th-only"><strong>ทำไมไม่มี 300 Ω?</strong> เพราะ 300 ไม่อยู่ในชุด E series — ค่าที่ใกล้ที่สุดคือ <strong>330 Ω</strong> (E12/E24) ซึ่งเป็นเหตุผลที่ใช้ 330 Ω ต่อ LED แทน 300 Ω</span>
+        <span class="en-only"><strong>Why no 300 Ω?</strong> Because 300 is not in the E-series — the nearest standard value is <strong>330 Ω</strong> (E12/E24), which is why 330 Ω is used for LED current limiting instead of 300 Ω.</span>
+      </div>
+    </div>
+  </div>
+
   <div class="page-nav">
     <a href="ohm.html">← <span class="th-only">กฎของโอห์ม</span><span class="en-only">Ohm's Law</span></a>
     <a class="next" href="capacitor.html"><span class="th-only">ตัวเก็บประจุ</span><span class="en-only">Capacitor</span> →</a>
