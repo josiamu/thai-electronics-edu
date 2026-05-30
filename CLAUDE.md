@@ -27,6 +27,7 @@ website/
 ├── multimeter.html  — บทที่ 6
 ├── soldering.html   — บทที่ 7
 ├── ac-circuit.html  — บทที่ 8
+├── diode.html       — บทที่ 9: PN Junction, I-V Curve, LED Vf by color, Rectifier Circuit
 ├── simulation.html  — จำลองวงจร 3 แบบ (Series/Parallel/Mixed) + วิธีคำนวณ real-time
 ├── formulas.html    — สูตรสรุป + print-friendly
 ├── tools.html       — เครื่องคิดเลข 7 ตัว
@@ -53,7 +54,7 @@ website/
   <script src="nav.js"></script>
 </body>
 ```
-CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `capacitor`, `inductor`, `multimeter`, `soldering`, `ac-circuit`, `simulation`, `formulas`, `tools`, `quiz`, `downloads`
+CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `capacitor`, `inductor`, `multimeter`, `soldering`, `ac-circuit`, `diode`, `simulation`, `formulas`, `tools`, `quiz`, `downloads`
 
 ### ระบบ 2 ภาษา (Bilingual System)
 - CSS ใน style.css:

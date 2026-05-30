@@ -106,6 +106,78 @@
   </div>
 
   <div class="section">
+    <div class="section-title"><span class="th-only">กราฟคุณลักษณะ I-V (I-V Characteristic)</span><span class="en-only">I-V Characteristic Curve</span></div>
+    <div class="card" style="text-align:center">
+      <p class="th-only" style="text-align:left;margin-bottom:1rem">กราฟแสดงความสัมพันธ์ระหว่างแรงดัน (V) และกระแส (I) ของไดโอด แบ่งเป็น 3 ช่วงหลัก</p>
+      <p class="en-only" style="text-align:left;margin-bottom:1rem">The I-V curve shows the relationship between voltage (V) and current (I) across three key regions.</p>
+      <svg viewBox="0 0 420 300" width="420" height="300" style="max-width:100%;overflow:visible">
+        <!-- Grid lines -->
+        <line x1="160" y1="20" x2="160" y2="260" stroke="var(--border)" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="60" y1="160" x2="400" y2="160" stroke="var(--border)" stroke-width="1" stroke-dasharray="4,3"/>
+        <!-- Axes -->
+        <line x1="160" y1="260" x2="160" y2="15" stroke="var(--text)" stroke-width="2"/>
+        <line x1="55" y1="160" x2="405" y2="160" stroke="var(--text)" stroke-width="2"/>
+        <!-- Axis arrows -->
+        <polygon points="160,10 155,22 165,22" fill="var(--text)"/>
+        <polygon points="410,160 398,155 398,165" fill="var(--text)"/>
+        <!-- Axis labels -->
+        <text x="415" y="165" font-size="13" fill="var(--text)" font-weight="bold">V</text>
+        <text x="165" y="10" font-size="13" fill="var(--text)" font-weight="bold">I</text>
+        <!-- Origin label -->
+        <text x="148" y="174" font-size="11" fill="var(--text-light)">0</text>
+        <!-- Forward region: exponential curve from (160,160) rising steeply -->
+        <path d="M160,160 C185,158 215,150 230,130 C245,110 255,80 265,50 C270,35 274,24 276,20"
+              fill="none" stroke="var(--primary)" stroke-width="2.5"/>
+        <!-- Knee point marker -->
+        <circle cx="230" cy="130" r="4" fill="var(--primary)"/>
+        <!-- Reverse leakage: nearly flat small negative current -->
+        <path d="M160,160 C140,161 100,162 70,163"
+              fill="none" stroke="#f97316" stroke-width="2.5"/>
+        <!-- Breakdown region: steep drop at breakdown voltage -->
+        <path d="M70,163 C68,163 66,170 65,185 C64,200 63,230 62,255"
+              fill="none" stroke="#ef4444" stroke-width="2.5"/>
+        <!-- Breakdown voltage marker -->
+        <circle cx="65" cy="185" r="4" fill="#ef4444"/>
+        <!-- V_f label -->
+        <line x1="230" y1="130" x2="230" y2="160" stroke="var(--primary)" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="218" y="175" font-size="11" fill="var(--primary)">V<tspan font-size="9" dy="2">f</tspan></text>
+        <!-- V_BR label -->
+        <line x1="65" y1="163" x2="65" y2="160" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="30" y="175" font-size="11" fill="#ef4444">V<tspan font-size="9" dy="2">BR</tspan></text>
+        <!-- Region labels TH -->
+        <text x="282" y="60" font-size="11" fill="var(--primary)" class="th-only">Forward</text>
+        <text x="282" y="73" font-size="11" fill="var(--primary)" class="th-only">Region</text>
+        <text x="90" y="148" font-size="11" fill="#f97316" class="th-only">กระแสรั่ว</text>
+        <text x="15" y="240" font-size="11" fill="#ef4444" class="th-only">Breakdown</text>
+        <!-- Region labels EN -->
+        <text x="282" y="60" font-size="11" fill="var(--primary)" class="en-only">Forward</text>
+        <text x="282" y="73" font-size="11" fill="var(--primary)" class="en-only">Region</text>
+        <text x="82" y="148" font-size="11" fill="#f97316" class="en-only">Leakage</text>
+        <text x="15" y="240" font-size="11" fill="#ef4444" class="en-only">Breakdown</text>
+      </svg>
+      <div class="grid-3" style="margin-top:1.25rem;text-align:left;gap:.75rem">
+        <div style="background:var(--bg);border-radius:.5rem;padding:.75rem;border-left:3px solid var(--primary)">
+          <strong style="color:var(--primary)" class="th-only">Forward Region</strong>
+          <strong style="color:var(--primary)" class="en-only">Forward Region</strong>
+          <p class="th-only" style="font-size:.85rem;margin-top:.35rem">เมื่อ V &gt; V<sub>f</sub> (~0.7 V) กระแสไหลพุ่งขึ้นอย่างรวดเร็ว ไดโอดนำไฟฟ้า</p>
+          <p class="en-only" style="font-size:.85rem;margin-top:.35rem">When V &gt; V<sub>f</sub> (~0.7 V), current rises sharply — diode conducts.</p>
+        </div>
+        <div style="background:var(--bg);border-radius:.5rem;padding:.75rem;border-left:3px solid #f97316">
+          <strong style="color:#f97316" class="th-only">Reverse Region</strong>
+          <strong style="color:#f97316" class="en-only">Reverse Region</strong>
+          <p class="th-only" style="font-size:.85rem;margin-top:.35rem">กระแสรั่ว (I<sub>R</sub>) น้อยมาก ระดับ µA ไดโอดแทบไม่นำไฟฟ้า</p>
+          <p class="en-only" style="font-size:.85rem;margin-top:.35rem">Very small leakage current (µA level) — diode barely conducts.</p>
+        </div>
+        <div style="background:var(--bg);border-radius:.5rem;padding:.75rem;border-left:3px solid #ef4444">
+          <strong style="color:#ef4444">Breakdown</strong>
+          <p class="th-only" style="font-size:.85rem;margin-top:.35rem">เมื่อ Reverse Voltage เกิน V<sub>BR</sub> กระแสทะลักกลับ (ทำลายไดโอดทั่วไป แต่ Zener ออกแบบมาใช้ตรงนี้)</p>
+          <p class="en-only" style="font-size:.85rem;margin-top:.35rem">When reverse voltage exceeds V<sub>BR</sub>, current surges back. Destroys normal diodes — but Zener diodes are designed for this region.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
     <div class="section-title"><span class="th-only">ประเภทของไดโอด</span><span class="en-only">Types of Diodes</span></div>
     <div class="grid-3">
       <div class="card">
@@ -138,6 +210,87 @@
         <p class="th-only">ไดโอด 4 ตัวต่อเป็นบริดจ์ เรียงกระแสแบบเต็มคลื่น (Full-Wave)</p>
         <p class="en-only">4 diodes in bridge configuration for full-wave rectification.</p>
       </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">แรงดันตกคร่อมของ LED แต่ละสี</span><span class="en-only">LED Forward Voltage by Color</span></div>
+    <div class="card">
+      <p class="th-only">แรงดันตกคร่อม (V<sub>f</sub>) ของ LED จะต่างกันตามสีและวัสดุสารกึ่งตัวนำที่ใช้ผลิต โดยทั่วไปยิ่งสีมีความยาวคลื่นสั้น แรงดันตกจะยิ่งสูง</p>
+      <p class="en-only">LED forward voltage (V<sub>f</sub>) varies by color depending on the semiconductor material used. Shorter wavelength colors generally have higher V<sub>f</sub>.</p>
+      <div class="table-wrap" style="margin-top:1rem">
+        <table>
+          <thead>
+            <tr>
+              <th><span class="th-only">สี</span><span class="en-only">Color</span></th>
+              <th><span class="th-only">ตัวอย่าง</span><span class="en-only">Sample</span></th>
+              <th>V<sub>f</sub> (V)</th>
+              <th><span class="th-only">ความยาวคลื่น</span><span class="en-only">Wavelength</span></th>
+              <th><span class="th-only">วัสดุ</span><span class="en-only">Material</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="th-only">อินฟราเรด (IR)</span><span class="en-only">Infrared (IR)</span></td>
+              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#6b0000;border:2px solid #aaa;vertical-align:middle"></span></td>
+              <td>1.2 – 1.6</td>
+              <td>&gt; 700 nm</td>
+              <td>GaAs</td>
+            </tr>
+            <tr>
+              <td><span class="th-only">แดง (Red)</span><span class="en-only">Red</span></td>
+              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#ef4444;border:2px solid #aaa;vertical-align:middle"></span></td>
+              <td>1.8 – 2.2</td>
+              <td>620 – 750 nm</td>
+              <td>GaAsP / AlGaAs</td>
+            </tr>
+            <tr>
+              <td><span class="th-only">ส้ม (Orange)</span><span class="en-only">Orange</span></td>
+              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#f97316;border:2px solid #aaa;vertical-align:middle"></span></td>
+              <td>2.0 – 2.2</td>
+              <td>590 – 625 nm</td>
+              <td>GaAsP</td>
+            </tr>
+            <tr>
+              <td><span class="th-only">เหลือง (Yellow)</span><span class="en-only">Yellow</span></td>
+              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#eab308;border:2px solid #aaa;vertical-align:middle"></span></td>
+              <td>2.0 – 2.4</td>
+              <td>570 – 590 nm</td>
+              <td>GaAsP</td>
+            </tr>
+            <tr>
+              <td><span class="th-only">เขียว (Green)</span><span class="en-only">Green</span></td>
+              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#22c55e;border:2px solid #aaa;vertical-align:middle"></span></td>
+              <td>2.0 – 3.5</td>
+              <td>495 – 570 nm</td>
+              <td>GaP / InGaN</td>
+            </tr>
+            <tr>
+              <td><span class="th-only">น้ำเงิน (Blue)</span><span class="en-only">Blue</span></td>
+              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#3b82f6;border:2px solid #aaa;vertical-align:middle"></span></td>
+              <td>3.0 – 3.5</td>
+              <td>450 – 495 nm</td>
+              <td>InGaN</td>
+            </tr>
+            <tr>
+              <td><span class="th-only">ขาว (White)</span><span class="en-only">White</span></td>
+              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#f1f5f9;border:2px solid #aaa;vertical-align:middle"></span></td>
+              <td>3.0 – 3.4</td>
+              <td><span class="th-only">กว้าง (phosphor)</span><span class="en-only">broadband (phosphor)</span></td>
+              <td>InGaN + phosphor</td>
+            </tr>
+            <tr>
+              <td><span class="th-only">ม่วง / UV</span><span class="en-only">Violet / UV</span></td>
+              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#a855f7;border:2px solid #aaa;vertical-align:middle"></span></td>
+              <td>3.0 – 4.0</td>
+              <td>380 – 450 nm</td>
+              <td>InGaN</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="th-only" style="margin-top:.75rem;font-size:.85rem;color:var(--text-light)">* ค่า V<sub>f</sub> เป็นค่าอ้างอิงทั่วไป อาจแตกต่างกันตามยี่ห้อและกระแส I<sub>f</sub> ที่ใช้งาน</p>
+      <p class="en-only" style="margin-top:.75rem;font-size:.85rem;color:var(--text-light)">* V<sub>f</sub> values are typical references and may vary by manufacturer and operating current I<sub>f</sub>.</p>
     </div>
   </div>
 
@@ -251,6 +404,160 @@
           </tbody>
         </table>
       </div>
+    </div>
+  </div>
+
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">วงจรเรียงกระแส (Rectifier Circuit)</span><span class="en-only">Rectifier Circuit</span></div>
+    <div class="grid-2" style="align-items:start">
+
+      <!-- Half-wave -->
+      <div class="card">
+        <h3 class="th-only" style="color:var(--primary)">Half-Wave Rectifier (เรียงกระแสครึ่งคลื่น)</h3>
+        <h3 class="en-only" style="color:var(--primary)">Half-Wave Rectifier</h3>
+        <p class="th-only" style="font-size:.9rem">ใช้ไดโอด <strong>1 ตัว</strong> — ยอมให้ผ่านเฉพาะครึ่งคลื่นบวก (positive half-cycle) เท่านั้น</p>
+        <p class="en-only" style="font-size:.9rem">Uses <strong>1 diode</strong> — passes only the positive half-cycle of AC.</p>
+        <!-- Circuit SVG -->
+        <svg viewBox="0 0 280 80" width="280" height="80" style="max-width:100%;display:block;margin:.75rem auto 0">
+          <!-- AC source -->
+          <circle cx="30" cy="40" r="18" fill="none" stroke="var(--text)" stroke-width="2"/>
+          <text x="30" y="44" text-anchor="middle" font-size="13" fill="var(--text)">~</text>
+          <!-- Wire left -->
+          <line x1="48" y1="40" x2="80" y2="40" stroke="var(--text)" stroke-width="2"/>
+          <!-- Diode -->
+          <polygon points="80,25 80,55 110,40" fill="var(--primary)" stroke="var(--primary)" stroke-width="1"/>
+          <line x1="110" y1="25" x2="110" y2="55" stroke="var(--text)" stroke-width="2.5"/>
+          <!-- Wire right -->
+          <line x1="110" y1="40" x2="180" y2="40" stroke="var(--text)" stroke-width="2"/>
+          <!-- Load resistor -->
+          <rect x="180" y="28" width="50" height="24" fill="none" stroke="var(--text)" stroke-width="2" rx="3"/>
+          <text x="205" y="44" text-anchor="middle" font-size="11" fill="var(--text)">R<tspan font-size="8" dy="2">L</tspan></text>
+          <!-- Return wire bottom -->
+          <line x1="230" y1="40" x2="255" y2="40" stroke="var(--text)" stroke-width="2"/>
+          <line x1="255" y1="40" x2="255" y2="68" stroke="var(--text)" stroke-width="2"/>
+          <line x1="12" y1="68" x2="255" y2="68" stroke="var(--text)" stroke-width="2"/>
+          <line x1="12" y1="40" x2="12" y2="68" stroke="var(--text)" stroke-width="2"/>
+          <!-- Labels -->
+          <text x="93" y="72" text-anchor="middle" font-size="10" fill="var(--primary)">D1</text>
+        </svg>
+        <!-- Waveform -->
+        <svg viewBox="0 0 280 80" width="280" height="80" style="max-width:100%;display:block;margin:.5rem auto 0">
+          <text x="5" y="14" font-size="10" fill="var(--text-light)" class="th-only">AC เข้า</text>
+          <text x="5" y="14" font-size="10" fill="var(--text-light)" class="en-only">AC in</text>
+          <!-- AC sine input -->
+          <path d="M50,40 C62,10 75,10 87,40 C99,70 112,70 124,40 C136,10 149,10 161,40 C173,70 186,70 198,40 C210,10 223,10 235,40"
+                fill="none" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="4,2"/>
+          <!-- Half-wave output -->
+          <path d="M50,40 C62,10 75,10 87,40 L124,40 C136,10 149,10 161,40 L198,40 C210,10 223,10 235,40"
+                fill="none" stroke="var(--primary)" stroke-width="2"/>
+          <!-- Zero line -->
+          <line x1="45" y1="40" x2="240" y2="40" stroke="var(--text)" stroke-width="1"/>
+          <text x="5" y="44" font-size="10" fill="var(--text-light)">0</text>
+          <text x="5" y="60" font-size="10" fill="var(--primary)" class="th-only">DC ออก</text>
+          <text x="5" y="60" font-size="10" fill="var(--primary)" class="en-only">DC out</text>
+        </svg>
+        <p class="th-only" style="font-size:.82rem;color:var(--text-light);margin-top:.5rem">ประสิทธิภาพต่ำ — ใช้งานเพียง 50% ของคลื่น AC</p>
+        <p class="en-only" style="font-size:.82rem;color:var(--text-light);margin-top:.5rem">Low efficiency — uses only 50% of the AC waveform.</p>
+      </div>
+
+      <!-- Full-wave bridge -->
+      <div class="card">
+        <h3 class="th-only" style="color:var(--primary)">Full-Wave Bridge Rectifier (เรียงกระแสเต็มคลื่น)</h3>
+        <h3 class="en-only" style="color:var(--primary)">Full-Wave Bridge Rectifier</h3>
+        <p class="th-only" style="font-size:.9rem">ใช้ไดโอด <strong>4 ตัว</strong> ต่อเป็นบริดจ์ — เรียงได้ทั้งครึ่งคลื่นบวกและลบ</p>
+        <p class="en-only" style="font-size:.9rem">Uses <strong>4 diodes</strong> in a bridge — rectifies both positive and negative half-cycles.</p>
+        <!-- Bridge circuit SVG -->
+        <svg viewBox="0 0 280 110" width="280" height="110" style="max-width:100%;display:block;margin:.75rem auto 0">
+          <!-- Center diamond bridge -->
+          <line x1="100" y1="55" x2="140" y2="20" stroke="var(--text)" stroke-width="1.5"/>
+          <line x1="100" y1="55" x2="140" y2="90" stroke="var(--text)" stroke-width="1.5"/>
+          <line x1="180" y1="55" x2="140" y2="20" stroke="var(--text)" stroke-width="1.5"/>
+          <line x1="180" y1="55" x2="140" y2="90" stroke="var(--text)" stroke-width="1.5"/>
+          <!-- D1 top-left -->
+          <polygon points="108,44 122,30 122,58" fill="var(--primary)" stroke="var(--primary)" stroke-width="1"/>
+          <line x1="122" y1="30" x2="122" y2="58" stroke="var(--text)" stroke-width="2"/>
+          <text x="108" y="27" font-size="9" fill="var(--primary)">D1</text>
+          <!-- D2 bottom-left -->
+          <polygon points="122,80 108,66 122,66" fill="var(--primary)" stroke="var(--primary)" stroke-width="1"/>
+          <line x1="108" y1="66" x2="122" y2="66" stroke="var(--text)" stroke-width="2"/>
+          <text x="103" y="90" font-size="9" fill="var(--primary)">D2</text>
+          <!-- D3 top-right -->
+          <polygon points="172,44 158,30 158,58" fill="var(--primary)" stroke="var(--primary)" stroke-width="1"/>
+          <line x1="158" y1="30" x2="158" y2="58" stroke="var(--text)" stroke-width="2"/>
+          <text x="163" y="27" font-size="9" fill="var(--primary)">D3</text>
+          <!-- D4 bottom-right -->
+          <polygon points="158,80 172,66 158,66" fill="var(--primary)" stroke="var(--primary)" stroke-width="1"/>
+          <line x1="158" y1="66" x2="172" y2="66" stroke="var(--text)" stroke-width="2"/>
+          <text x="163" y="90" font-size="9" fill="var(--primary)">D4</text>
+          <!-- AC source -->
+          <circle cx="30" cy="55" r="18" fill="none" stroke="var(--text)" stroke-width="2"/>
+          <text x="30" y="59" text-anchor="middle" font-size="13" fill="var(--text)">~</text>
+          <line x1="48" y1="48" x2="100" y2="48" stroke="var(--text)" stroke-width="1.5"/>
+          <line x1="48" y1="62" x2="100" y2="62" stroke="var(--text)" stroke-width="1.5"/>
+          <!-- Load -->
+          <line x1="180" y1="55" x2="215" y2="55" stroke="var(--text)" stroke-width="1.5"/>
+          <rect x="215" y="43" width="36" height="24" fill="none" stroke="var(--text)" stroke-width="2" rx="3"/>
+          <text x="233" y="59" text-anchor="middle" font-size="10" fill="var(--text)">R<tspan font-size="7" dy="2">L</tspan></text>
+          <!-- +/- labels -->
+          <text x="183" y="52" font-size="11" fill="#22c55e">+</text>
+          <text x="183" y="68" font-size="11" fill="#ef4444">−</text>
+        </svg>
+        <!-- Waveform full-wave -->
+        <svg viewBox="0 0 280 80" width="280" height="80" style="max-width:100%;display:block;margin:.5rem auto 0">
+          <text x="5" y="14" font-size="10" fill="var(--text-light)" class="th-only">AC เข้า</text>
+          <text x="5" y="14" font-size="10" fill="var(--text-light)" class="en-only">AC in</text>
+          <!-- AC sine input -->
+          <path d="M50,40 C62,10 75,10 87,40 C99,70 112,70 124,40 C136,10 149,10 161,40 C173,70 186,70 198,40 C210,10 223,10 235,40"
+                fill="none" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="4,2"/>
+          <!-- Full-wave output (both halves rectified) -->
+          <path d="M50,40 C62,10 75,10 87,40 C99,10 112,10 124,40 C136,10 149,10 161,40 C173,10 186,10 198,40 C210,10 223,10 235,40"
+                fill="none" stroke="var(--primary)" stroke-width="2"/>
+          <!-- Zero line -->
+          <line x1="45" y1="40" x2="240" y2="40" stroke="var(--text)" stroke-width="1"/>
+          <text x="5" y="44" font-size="10" fill="var(--text-light)">0</text>
+          <text x="5" y="60" font-size="10" fill="var(--primary)" class="th-only">DC ออก</text>
+          <text x="5" y="60" font-size="10" fill="var(--primary)" class="en-only">DC out</text>
+        </svg>
+        <p class="th-only" style="font-size:.82rem;color:var(--text-light);margin-top:.5rem">ประสิทธิภาพสูง — ใช้งานทั้ง 100% ของคลื่น AC ระลอกแรงดัน (ripple) น้อยกว่า Half-Wave</p>
+        <p class="en-only" style="font-size:.82rem;color:var(--text-light);margin-top:.5rem">High efficiency — uses 100% of the AC waveform with lower voltage ripple than half-wave.</p>
+      </div>
+
+    </div>
+
+    <!-- Comparison note -->
+    <div class="card" style="margin-top:.75rem">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th><span class="th-only">ประเภท</span><span class="en-only">Type</span></th>
+              <th><span class="th-only">จำนวนไดโอด</span><span class="en-only">Diodes</span></th>
+              <th><span class="th-only">ประสิทธิภาพ</span><span class="en-only">Efficiency</span></th>
+              <th>V<sub>out(avg)</sub></th>
+              <th>Ripple</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Half-Wave</td>
+              <td>1</td>
+              <td>40.6%</td>
+              <td>0.318 × V<sub>peak</sub></td>
+              <td>1.21 × f</td>
+            </tr>
+            <tr>
+              <td>Full-Wave Bridge</td>
+              <td>4</td>
+              <td>81.2%</td>
+              <td>0.637 × V<sub>peak</sub></td>
+              <td>2 × f</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="th-only" style="font-size:.82rem;color:var(--text-light);margin-top:.75rem">f = ความถี่ไฟ AC (50 Hz ในประเทศไทย) | ต่อ Capacitor คร่อม R<sub>L</sub> เพื่อลด ripple</p>
+      <p class="en-only" style="font-size:.82rem;color:var(--text-light);margin-top:.75rem">f = AC frequency (50 Hz in Thailand) | Add a capacitor across R<sub>L</sub> to smooth ripple.</p>
     </div>
   </div>
 
