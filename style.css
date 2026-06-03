@@ -72,6 +72,7 @@
 
 /* ── RESET ─────────────────────────────────────────────────── */
 * { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 body { font-family: 'Anuphan', sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.75; }
 
 /* ── NAV ───────────────────────────────────────────────────── */
@@ -257,6 +258,10 @@ input[type=number]:focus, input[type=text]:focus, select:focus { outline: none; 
 .topic-card .icon { font-size: 2.5rem; margin-bottom: 0.75rem; display: block; }
 .topic-card h3 { font-size: 0.97rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 0.35rem; }
 .topic-card p { font-size: 0.82rem; color: var(--text-light); }
+.topic-card-blue   { border-top: 4px solid var(--primary); }
+.topic-card-teal   { border-top: 4px solid var(--accent); }
+.topic-card-orange { border-top: 4px solid #f59e0b; }
+.topic-card-green  { border-top: 4px solid var(--secondary); }
 
 /* ── PDF CARDS ─────────────────────────────────────────────── */
 .pdf-card { display:flex; align-items:center; gap:1rem; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:1.1rem 1.4rem; text-decoration:none; color:var(--text); box-shadow:var(--shadow); transition:box-shadow 0.2s, transform 0.18s, border-color 0.2s; }
@@ -350,6 +355,11 @@ input[type=number]:focus, input[type=text]:focus, select:focus { outline: none; 
 .print-sheet-header { display: none; text-align: center; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 2px solid #000; }
 .print-sheet-header h2 { font-size: 1.1rem; font-weight: 800; }
 .print-sheet-header p { font-size: 0.85rem; margin-top: 0.4rem; }
+
+/* ── BACK TO TOP ───────────────────────────────────────────── */
+#back-to-top { position:fixed; bottom:2rem; right:2rem; width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg,var(--primary),var(--accent)); color:#fff; border:none; cursor:pointer; font-size:1.3rem; box-shadow:0 4px 16px rgba(37,99,235,0.35); opacity:0; transform:translateY(12px); transition:opacity 0.3s,transform 0.3s; z-index:998; display:flex; align-items:center; justify-content:center; line-height:1; }
+#back-to-top.visible { opacity:1; transform:translateY(0); }
+#back-to-top:hover { box-shadow:0 6px 24px rgba(37,99,235,0.5); transform:translateY(-3px); }
 
 /* ── PRINT ─────────────────────────────────────────────────── */
 @media print {
