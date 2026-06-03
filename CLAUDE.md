@@ -16,12 +16,12 @@
 ```
 website/
 ├── style.css        — shared CSS ทุกหน้า (CSS custom properties, dark mode, bilingual)
-├── nav.js           — inject nav bar + dark mode toggle + hamburger + language toggle
+├── nav.js           — inject nav bar + dark mode toggle + hamburger + language toggle + back-to-top button
 ├── tools.js         — logic เครื่องคิดเลขทุกตัว (calcR4, calcR5, calcOhm, ...)
-├── index.html       — หน้าหลัก (CURRENT_PAGE='home')
+├── index.html       — หน้าหลัก (CURRENT_PAGE='home') — แบ่ง 3 กลุ่ม: บทเรียน / เครื่องมือ / ทดสอบ
 ├── electricity.html — บทที่ 1
 ├── ohm.html         — บทที่ 2
-├── resistor.html    — บทที่ 3
+├── resistor.html    — บทที่ 3: รหัสสี 4 แถบ + 5 แถบ (ตารางครบทั้งคู่)
 ├── capacitor.html   — บทที่ 4
 ├── inductor.html    — บทที่ 5
 ├── multimeter.html  — บทที่ 6
@@ -30,7 +30,7 @@ website/
 ├── diode.html       — บทที่ 9: PN Junction, I-V Curve, LED Vf by color, Rectifier Circuit
 ├── simulation.html  — จำลองวงจร 3 แบบ (Series/Parallel/Mixed) + วิธีคำนวณ real-time
 ├── formulas.html    — สูตรสรุป + print-friendly
-├── tools.html       — เครื่องคิดเลข 7 ตัว
+├── tools.html       — เครื่องคิดเลข 7 ตัว (4-band + 5-band มีชื่อไทย-อังกฤษครบ)
 ├── quiz.html        — แบบทดสอบ 50 ข้อ 7 หมวด — มีข้อสอบ EN ครบทุกข้อ
 ├── downloads.html   — ดาวน์โหลด PDF 21 ไฟล์
 └── pdf/             — ไฟล์ PDF ภาษาไทย (~24 MB)
@@ -43,6 +43,8 @@ website/
 <html lang="th" data-title-th="ชื่อหน้า TH" data-title-en="Page Title EN">
 <head>
   ...
+  <title>...</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   <!-- lang detect: ต้องอยู่ก่อน CSS ใดๆ -->
   <script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
   ...
@@ -68,18 +70,31 @@ CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `capacitor`, `induct
 - nav.js dispatch `CustomEvent('langchange')` ทุกครั้งที่เปลี่ยนภาษา
 - **quiz.html** ใช้ `QUIZ_CATEGORIES_TH` / `QUIZ_CATEGORIES_EN` แยกกัน, `getCurLang()` เลือก dataset ที่ถูกต้อง และ listen `langchange` event เพื่อ re-init category menu
 - title ของแต่ละหน้าเปลี่ยนตามภาษาผ่าน `data-title-th` / `data-title-en` บน `<html>`
+- **หมายเหตุ:** `<span>` ใน `<option>` ของ `<select>` ไม่ถูก CSS hide — browser แสดงข้อความทั้งหมด ดังนั้น option ควรเขียนเป็น `0 — <span class="th-only">ดำ</span> Black` เพื่อให้แสดงทั้งไทย-อังกฤษเสมอ
 
 ### Navigation (nav.js)
-- NAV_CONTENT (7 บทเรียน) → รวมในปุ่ม dropdown "บทเรียน ▼" / "Lessons ▼"
-- NAV_UTILS (formulas, tools, quiz, downloads) → แสดงตรงๆ ใน nav bar
+- NAV_CONTENT (9 บทเรียน) → รวมในปุ่ม dropdown "บทเรียน ▼" / "Lessons ▼"
+- NAV_TOOLS (simulation, formulas, tools) → dropdown "เครื่องมือ ▼" / "Tools ▼"
+- NAV_DIRECT (quiz, downloads) → แสดงตรงๆ ใน nav bar
 - Dark mode: `[data-theme="dark"]` บน `<html>`, บันทึกใน localStorage key `theme`
 - Lang toggle: ปุ่ม TH / EN ใน nav bar ทุกหน้า
+- **Back-to-top button:** inject `<button id="back-to-top">` เข้า body อัตโนมัติ — ปรากฏเมื่อ scroll > 320px
 
 ### CSS (style.css)
-- ใช้ CSS custom properties: `--primary`, `--bg`, `--card`, `--text`, `--border`, `--shadow`
+- Color palette: `--primary: #2563eb`, `--accent: #06b6d4`, `--secondary: #10b981`, `--bg: #f8fafc`
+- ใช้ CSS custom properties: `--primary`, `--primary-dark`, `--accent`, `--bg`, `--card`, `--text`, `--border`, `--shadow`, `--shadow-hover`, `--radius`
 - Dark mode override ด้วย `[data-theme="dark"] { ... }`
 - Print styles อยู่ใน `@media print` — ซ่อน `.print-hide`, แสดง `.print-sheet-header`
 - Responsive breakpoints: 768px (hamburger), 640px (font size)
+- Smooth scroll: `html { scroll-behavior: smooth; }`
+- **Topic card color accents:** `.topic-card-blue` (บทเรียน), `.topic-card-teal` (เครื่องมือ), `.topic-card-orange` (quiz), `.topic-card-green` (downloads) — border-top 4px
+
+### หน้าหลัก index.html — โครงสร้าง 3 กลุ่ม
+| กลุ่ม | หน้า | สี card |
+|---|---|---|
+| 📚 บทเรียน | electricity → diode (8 หน้า) | `topic-card-blue` |
+| 🛠 เครื่องมือช่วยเรียน | simulation, formulas, tools | `topic-card-teal` |
+| 📋 ทดสอบ & ดาวน์โหลด | quiz, downloads | `topic-card-orange` / `topic-card-green` |
 
 ### Deploy
 ```bash
