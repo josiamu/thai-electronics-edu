@@ -120,6 +120,19 @@ const NAV_DIRECT = [
   });
   navMenu.addEventListener('click', function(e) { e.stopPropagation(); });
 
+  // Back-to-top button
+  const btt = document.createElement('button');
+  btt.id = 'back-to-top';
+  btt.setAttribute('aria-label', 'กลับด้านบน');
+  btt.innerHTML = '↑';
+  document.body.appendChild(btt);
+  window.addEventListener('scroll', function() {
+    btt.classList.toggle('visible', window.scrollY > 320);
+  });
+  btt.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
   // Dark mode
   document.getElementById('dark-toggle-btn').addEventListener('click', function() {
     const root = document.documentElement;
