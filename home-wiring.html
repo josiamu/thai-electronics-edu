@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="ระบบไฟฟ้าในบ้านและความปลอดภัย | สื่อการเรียนการสอน" data-title-en="Home Wiring & Electrical Safety | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ระบบไฟฟ้าในบ้านและความปลอดภัย | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.lng-diagram {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  font-family: monospace;
+  font-size: 0.92rem;
+  line-height: 1.9;
+  overflow-x: auto;
+  color: var(--text);
+}
+.lng-L  { color: #dc2626; font-weight: 700; }
+.lng-N  { color: #2563eb; font-weight: 700; }
+.lng-G  { color: #16a34a; font-weight: 700; }
+.lng-float { color: #f97316; font-weight: 700; }
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 640px) { .compare-grid { grid-template-columns: 1fr; } }
+.verdict-ok   { background: #f0fdf4; border-left: 4px solid #22c55e; padding: 0.75rem 1rem; border-radius: 0 var(--radius) var(--radius) 0; }
+.verdict-warn { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 0.75rem 1rem; border-radius: 0 var(--radius) var(--radius) 0; }
+.verdict-bad  { background: #fef2f2; border-left: 4px solid #ef4444; padding: 0.75rem 1rem; border-radius: 0 var(--radius) var(--radius) 0; }
+[data-theme="dark"] .verdict-ok   { background: #052e16; }
+[data-theme="dark"] .verdict-warn { background: #2d1f00; }
+[data-theme="dark"] .verdict-bad  { background: #2d0000; }
+.meas-table td:first-child { font-weight: 600; white-space: nowrap; }
+.badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 0.8rem; font-weight: 600; margin-left: 0.25rem; }
+.badge-ok   { background: #dcfce7; color: #15803d; }
+.badge-warn { background: #fef9c3; color: #92400e; }
+.badge-bad  { background: #fee2e2; color: #b91c1c; }
+[data-theme="dark"] .badge-ok   { background: #14532d; color: #86efac; }
+[data-theme="dark"] .badge-warn { background: #451a03; color: #fcd34d; }
+[data-theme="dark"] .badge-bad  { background: #450a0a; color: #fca5a5; }
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🔌</div>
+    <div>
+      <h1 class="th-only">ระบบไฟฟ้าในบ้านและความปลอดภัย</h1>
+      <h1 class="en-only">Home Wiring &amp; Electrical Safety</h1>
+      <p class="th-only">L / N / G • แรงดันลอย (Ghost Voltage) • ไฟรั่วจริง • การทดสอบด้วยมิเตอร์</p>
+      <p class="en-only">L / N / G • Ghost Voltage • Real Leakage • Testing with a Multimeter</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ===== หัวข้อ 1: L N G ===== -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">ระบบสาย L / N / G ในบ้าน</span>
+      <span class="en-only">L / N / G in a Home Electrical System</span>
+    </div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <table class="meas-table">
+            <tr>
+              <th><span class="th-only">สาย</span><span class="en-only">Wire</span></th>
+              <th><span class="th-only">ชื่อ</span><span class="en-only">Name</span></th>
+              <th><span class="th-only">ลักษณะ</span><span class="en-only">Description</span></th>
+            </tr>
+            <tr>
+              <td><span class="lng-L">L</span></td>
+              <td><span class="th-only">Line (สายไฟร้อน)</span><span class="en-only">Line (Hot Wire)</span></td>
+              <td><span class="th-only">มีแรงดัน 220V เทียบกับ N และ G</span><span class="en-only">220V relative to N and G</span></td>
+            </tr>
+            <tr>
+              <td><span class="lng-N">N</span></td>
+              <td><span class="th-only">Neutral (สายนิวทรัล)</span><span class="en-only">Neutral</span></td>
+              <td><span class="th-only">อ้างอิงศูนย์โวลต์ ต่อลงดินที่สถานีไฟฟ้า</span><span class="en-only">Reference zero-volt, grounded at substation</span></td>
+            </tr>
+            <tr>
+              <td><span class="lng-G">G</span></td>
+              <td><span class="th-only">Ground / Earth (สายดิน)</span><span class="en-only">Ground / Earth</span></td>
+              <td><span class="th-only">ป้องกันไฟดูด — ต่อตัวถังอุปกรณ์ไฟฟ้า</span><span class="en-only">Shock protection — connects to equipment chassis</span></td>
+            </tr>
+          </table>
+        </div>
+        <div>
+          <p class="th-only" style="margin-bottom:0.75rem;font-weight:600;">ค่าแรงดันที่ถูกต้อง (ระบบปกติ)</p>
+          <p class="en-only" style="margin-bottom:0.75rem;font-weight:600;">Correct Voltage Readings (Normal System)</p>
+          <div class="verdict-ok" style="margin-bottom:0.5rem;">
+            <span class="lng-L">L</span> – <span class="lng-N">N</span> = <strong>220V</strong>
+            <span class="badge badge-ok">✓ ปกติ / Normal</span>
+          </div>
+          <div class="verdict-ok" style="margin-bottom:0.5rem;">
+            <span class="lng-L">L</span> – <span class="lng-G">G</span> = <strong>220V</strong>
+            <span class="badge badge-ok">✓ ปกติ / Normal</span>
+          </div>
+          <div class="verdict-ok">
+            <span class="lng-N">N</span> – <span class="lng-G">G</span> = <strong>0 – 2V</strong>
+            <span class="badge badge-ok">✓ ปกติ / Normal</span>
+          </div>
+        </div>
+      </div>
+      <div class="info-box th-only" style="margin-top:1rem;">
+        <strong>หมายเหตุ:</strong> ระบบไฟบ้านในประเทศไทยเป็นระบบ Single-Phase 220V 50Hz
+        สาย G จะต่อแยกจาก N และฝังลงดินที่ตัวบ้านหรือสถานีย่อย
+        ปลั๊กสามตา (Type B/C) มีขา G อยู่ที่ขาที่ 3
+      </div>
+      <div class="info-box en-only" style="margin-top:1rem;">
+        <strong>Note:</strong> Thai household power is Single-Phase 220V 50Hz.
+        The G wire is separate from N and is driven into earth at the building or substation.
+        3-pin plugs (Type B/C) have G on the third pin.
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== หัวข้อ 2: Ghost Voltage ===== -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">แรงดันลอย — Ghost Voltage / Phantom Voltage</span>
+      <span class="en-only">Ghost Voltage / Phantom Voltage — Floating Voltage</span>
+    </div>
+
+    <!-- ตารางชื่อเรียก -->
+    <div class="card" style="margin-bottom:0.75rem;">
+      <p class="th-only" style="font-weight:600;margin-bottom:0.75rem;">ชื่อที่ใช้เรียกปรากฏการณ์นี้</p>
+      <p class="en-only" style="font-weight:600;margin-bottom:0.75rem;">Names for this phenomenon</p>
+      <table>
+        <tr>
+          <th><span class="th-only">ชื่อ</span><span class="en-only">Name</span></th>
+          <th><span class="th-only">ใช้ที่ไหน</span><span class="en-only">Used by</span></th>
+          <th><span class="th-only">หมายเหตุ</span><span class="en-only">Notes</span></th>
+        </tr>
+        <tr>
+          <td><strong>Ghost Voltage</strong></td>
+          <td><span class="th-only">ช่างไฟ / ช่างอิเล็กทรอนิกส์ทั่วไป</span><span class="en-only">Electricians &amp; technicians (general)</span></td>
+          <td><span class="th-only">พบบ่อยที่สุด</span><span class="en-only">Most common term</span></td>
+        </tr>
+        <tr>
+          <td><strong>Phantom Voltage</strong></td>
+          <td><span class="th-only">ช่างไฟอเมริกา, Fluke</span><span class="en-only">US electricians, Fluke</span></td>
+          <td><span class="th-only">ความหมายเดียวกับ Ghost Voltage</span><span class="en-only">Identical meaning to Ghost Voltage</span></td>
+        </tr>
+        <tr>
+          <td><strong>Floating Voltage</strong></td>
+          <td><span class="th-only">วิศวกรรม</span><span class="en-only">Engineering</span></td>
+          <td><span class="th-only">เน้นว่าสายลอย ไม่มีจุดอ้างอิง</span><span class="en-only">Emphasises the wire has no reference point</span></td>
+        </tr>
+        <tr>
+          <td><span class="th-only"><strong>แรงดันผี / แรงดันลอย</strong></span><span class="en-only"><strong>แรงดันผี / แรงดันลอย</strong></span></td>
+          <td><span class="th-only">ภาษาไทย</span><span class="en-only">Thai</span></td>
+          <td><span class="th-only">ใช้ทั้งสองคำสลับกันได้</span><span class="en-only">Both terms used interchangeably</span></td>
+        </tr>
+      </table>
+      <div class="info-box th-only" style="margin-top:0.75rem;">
+        <strong>สรุป:</strong> Ghost Voltage = Phantom Voltage = แรงดันผี — ชื่อต่างกันแต่หมายถึงสิ่งเดียวกัน
+        คือแรงดันที่มิเตอร์ high-impedance อ่านได้จากสายที่ลอย โดยไม่มีกระแสจริงรองรับ
+      </div>
+      <div class="info-box en-only" style="margin-top:0.75rem;">
+        <strong>Summary:</strong> Ghost Voltage = Phantom Voltage = แรงดันผี — different names, same phenomenon:
+        voltage a high-impedance meter reads on a floating wire with no real current behind it.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <p class="th-only">เกิดขึ้นเมื่อ <strong>สาย G ไม่ได้ต่อกราวด์จริง</strong> (ลอยอยู่)
+            มัลติมิเตอร์ดิจิตัลมีความต้านทานภายในสูงมาก (~10 MΩ) จึงตรวจจับแรงดันที่เกิดจาก
+            <strong>ความจุแฝง (Capacitive Coupling)</strong> ระหว่างสายไฟ AC กับสาย G ที่ลอย</p>
+          <p class="en-only">Occurs when <strong>the G wire has no real earth connection</strong> (floating).
+            A digital multimeter has very high internal resistance (~10 MΩ) and picks up voltage induced by
+            <strong>capacitive coupling</strong> between the AC wires and the floating G wire.</p>
+          <p class="th-only" style="margin-top:0.75rem;">ผลที่วัดได้จาก DMM:</p>
+          <p class="en-only" style="margin-top:0.75rem;">Readings from the DMM:</p>
+          <div class="verdict-ok" style="margin-bottom:0.5rem;">
+            <span class="lng-L">L</span> – <span class="lng-N">N</span> = <strong>220V</strong>
+            <span class="badge badge-ok">✓ จริง / Real</span>
+          </div>
+          <div class="verdict-warn" style="margin-bottom:0.5rem;">
+            <span class="lng-L">L</span> – <span class="lng-float">G (ลอย)</span> ≈ <strong>80–120V</strong>
+            <span class="badge badge-warn">⚠ แรงดันผี / Ghost</span>
+          </div>
+          <div class="verdict-warn">
+            <span class="lng-N">N</span> – <span class="lng-float">G (ลอย)</span> ≈ <strong>80–120V</strong>
+            <span class="badge badge-warn">⚠ แรงดันผี / Ghost</span>
+          </div>
+        </div>
+        <div>
+          <p class="th-only" style="font-weight:600;margin-bottom:0.5rem;">ทำไม L-G และ N-G จึงได้ ≈ 110V</p>
+          <p class="en-only" style="font-weight:600;margin-bottom:0.5rem;">Why L-G and N-G show ≈ 110V</p>
+          <svg viewBox="0 0 260 220" width="100%" style="max-width:300px;display:block;margin:0 auto;" aria-label="Capacitive coupling diagram">
+            <!-- L wire -->
+            <line x1="20" y1="36" x2="180" y2="36" stroke="#dc2626" stroke-width="3" stroke-linecap="round"/>
+            <text x="20" y="26" fill="#dc2626" font-size="13" font-weight="700" font-family="monospace">L</text>
+            <text x="188" y="40" fill="#dc2626" font-size="11" font-weight="700" font-family="monospace">220V AC</text>
+
+            <!-- capacitor symbol top (L to G) -->
+            <line x1="100" y1="36" x2="100" y2="82" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <line x1="82" y1="84" x2="118" y2="84" stroke="#64748b" stroke-width="2.5"/>
+            <line x1="82" y1="90" x2="118" y2="90" stroke="#64748b" stroke-width="2.5"/>
+            <line x1="100" y1="90" x2="100" y2="108" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <text x="122" y="86" fill="#64748b" font-size="10" font-family="sans-serif" class="th-only">ความจุแฝง</text>
+            <text x="122" y="96" fill="#64748b" font-size="10" font-family="sans-serif" class="en-only">Capacitive</text>
+            <text x="122" y="98" fill="#64748b" font-size="10" font-family="sans-serif" class="th-only">Capacitive Coupling</text>
+            <text x="122" y="106" fill="#64748b" font-size="10" font-family="sans-serif" class="en-only">Coupling</text>
+
+            <!-- G wire (floating) -->
+            <line x1="40" y1="110" x2="160" y2="110" stroke="#f97316" stroke-width="2.5" stroke-dasharray="7,4" stroke-linecap="round"/>
+            <text x="20" y="114" fill="#f97316" font-size="13" font-weight="700" font-family="monospace">G</text>
+            <text x="168" y="114" fill="#f97316" font-size="10" font-weight="600" font-family="sans-serif">?V</text>
+            <text x="44" y="125" fill="#f97316" font-size="9.5" font-family="sans-serif" class="th-only">ลอย (Floating)</text>
+            <text x="44" y="125" fill="#f97316" font-size="9.5" font-family="sans-serif" class="en-only">Floating — no earth</text>
+
+            <!-- capacitor symbol bottom (G to N) -->
+            <line x1="100" y1="130" x2="100" y2="146" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <line x1="82" y1="148" x2="118" y2="148" stroke="#64748b" stroke-width="2.5"/>
+            <line x1="82" y1="154" x2="118" y2="154" stroke="#64748b" stroke-width="2.5"/>
+            <line x1="100" y1="154" x2="100" y2="178" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <text x="122" y="150" fill="#64748b" font-size="10" font-family="sans-serif" class="th-only">ความจุแฝง</text>
+            <text x="122" y="160" fill="#64748b" font-size="10" font-family="sans-serif" class="en-only">Capacitive</text>
+            <text x="122" y="162" fill="#64748b" font-size="10" font-family="sans-serif" class="th-only">Capacitive Coupling</text>
+            <text x="122" y="170" fill="#64748b" font-size="10" font-family="sans-serif" class="en-only">Coupling</text>
+
+            <!-- N wire -->
+            <line x1="20" y1="180" x2="180" y2="180" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>
+            <text x="20" y="196" fill="#2563eb" font-size="13" font-weight="700" font-family="monospace">N</text>
+            <text x="188" y="184" fill="#2563eb" font-size="11" font-weight="700" font-family="monospace">0V</text>
+
+            <!-- voltage label L-G -->
+            <rect x="2" y="58" width="36" height="16" rx="3" fill="#fef3c7"/>
+            <text x="20" y="70" text-anchor="middle" fill="#92400e" font-size="9.5" font-weight="700" font-family="sans-serif">≈110V</text>
+
+            <!-- voltage label N-G -->
+            <rect x="2" y="140" width="36" height="16" rx="3" fill="#fef3c7"/>
+            <text x="20" y="152" text-anchor="middle" fill="#92400e" font-size="9.5" font-weight="700" font-family="sans-serif">≈110V</text>
+          </svg>
+          <p class="th-only" style="margin-top:0.75rem;font-size:0.9rem;">
+            G ลอยอยู่ "กลาง" ระหว่าง L และ N จาก capacitive coupling
+            มิเตอร์จึงเห็นประมาณ <strong>110V</strong> ทั้งสองด้าน
+            ซึ่งเมื่อรวมกันได้ 110 + 110 ≈ 220V พอดี
+          </p>
+          <p class="en-only" style="margin-top:0.75rem;font-size:0.9rem;">
+            The floating G sits "in between" L and N via capacitive coupling.
+            The meter reads ≈ <strong>110V</strong> on both sides.
+            110 + 110 ≈ 220V — consistent with the real L-N voltage.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== หัวข้อ 2b: Y Capacitor / EMI Filter ===== -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">Y Capacitor และ EMI Filter — สาเหตุที่ซ่อนอยู่</span>
+      <span class="en-only">Y Capacitors &amp; EMI Filters — The Hidden Cause</span>
+    </div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <p class="th-only">อุปกรณ์สมัยใหม่เกือบทุกชนิดมีวงจรกรองสัญญาณรบกวน (EMI Filter)
+            ซึ่งมักมี <strong>Y Capacitor</strong> ต่ออยู่ระหว่าง L↔G และ N↔G
+            เพื่อกรองสัญญาณ High-frequency ออก</p>
+          <p class="en-only">Almost all modern electronics contain an EMI filter circuit
+            with <strong>Y Capacitors</strong> bridging L↔G and N↔G
+            to suppress high-frequency interference.</p>
+          <ul class="content-list th-only" style="margin-top:0.75rem;">
+            <li>คอมพิวเตอร์ / แล็ปท็อป</li>
+            <li>จอมอนิเตอร์ / ทีวี</li>
+            <li>UPS และ Switching Power Supply</li>
+            <li>ปลั๊กพ่วงระดับ Surge Protector</li>
+          </ul>
+          <ul class="content-list en-only" style="margin-top:0.75rem;">
+            <li>Desktop &amp; Laptop Computers</li>
+            <li>Monitors / TVs</li>
+            <li>UPS and Switching Power Supplies</li>
+            <li>Surge-protected power strips</li>
+          </ul>
+          <div class="warn-box th-only" style="margin-top:0.75rem;">
+            <strong>เมื่อสาย G ลอย (ไม่ต่อดิน):</strong><br>
+            Y Cap ทั้งสองตัวแบ่งแรงดัน L-N ออกครึ่งหนึ่ง
+            ทำให้ G ลอยขึ้นมาที่ประมาณ 110V เทียบกับทั้ง L และ N
+          </div>
+          <div class="warn-box en-only" style="margin-top:0.75rem;">
+            <strong>When G is floating (no earth):</strong><br>
+            Both Y-Caps form a voltage divider across L-N,
+            pulling the floating G up to ≈110V relative to both L and N.
+          </div>
+        </div>
+        <div>
+          <p class="th-only" style="font-weight:600;margin-bottom:0.5rem;text-align:center;">วงจร Y Capacitor ภายในอุปกรณ์</p>
+          <p class="en-only" style="font-weight:600;margin-bottom:0.5rem;text-align:center;">Y Capacitor circuit inside the device</p>
+          <svg viewBox="0 0 280 230" width="100%" style="max-width:320px;display:block;margin:0 auto;" aria-label="Y Capacitor EMI Filter diagram">
+            <!-- L bus -->
+            <line x1="30" y1="40" x2="200" y2="40" stroke="#dc2626" stroke-width="3" stroke-linecap="round"/>
+            <text x="10" y="45" fill="#dc2626" font-size="13" font-weight="700" font-family="monospace">L</text>
+            <text x="208" y="44" fill="#dc2626" font-size="11" font-weight="700" font-family="monospace">220V</text>
+
+            <!-- N bus -->
+            <line x1="30" y1="190" x2="200" y2="190" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>
+            <text x="10" y="195" fill="#2563eb" font-size="13" font-weight="700" font-family="monospace">N</text>
+            <text x="208" y="194" fill="#2563eb" font-size="11" font-weight="700" font-family="monospace">0V</text>
+
+            <!-- G bus (floating, dashed) -->
+            <line x1="60" y1="115" x2="200" y2="115" stroke="#f97316" stroke-width="2.5" stroke-dasharray="7,4" stroke-linecap="round"/>
+            <text x="10" y="119" fill="#f97316" font-size="13" font-weight="700" font-family="monospace">G</text>
+            <text x="208" y="119" fill="#f97316" font-size="10" font-weight="600" font-family="sans-serif">?V</text>
+
+            <!-- Y-Cap top (L to G): wire L down, cap plates, wire to G -->
+            <line x1="100" y1="40" x2="100" y2="88" stroke="#dc2626" stroke-width="1.5"/>
+            <rect x="84" y="88" width="32" height="5" rx="1" fill="#64748b"/>
+            <rect x="84" y="97" width="32" height="5" rx="1" fill="#64748b"/>
+            <line x1="100" y1="102" x2="100" y2="115" stroke="#f97316" stroke-width="1.5"/>
+            <!-- Cy label top -->
+            <text x="138" y="98" fill="#475569" font-size="11" font-weight="700" font-family="sans-serif">Cy</text>
+            <text x="134" y="110" fill="#475569" font-size="9" font-family="sans-serif" class="th-only">(Y Cap บน)</text>
+            <text x="134" y="110" fill="#475569" font-size="9" font-family="sans-serif" class="en-only">(Y-Cap top)</text>
+
+            <!-- Y-Cap bottom (G to N): wire G down, cap plates, wire to N -->
+            <line x1="100" y1="115" x2="100" y2="128" stroke="#f97316" stroke-width="1.5"/>
+            <rect x="84" y="128" width="32" height="5" rx="1" fill="#64748b"/>
+            <rect x="84" y="137" width="32" height="5" rx="1" fill="#64748b"/>
+            <line x1="100" y1="142" x2="100" y2="190" stroke="#2563eb" stroke-width="1.5"/>
+            <!-- Cy label bottom -->
+            <text x="138" y="138" fill="#475569" font-size="11" font-weight="700" font-family="sans-serif">Cy</text>
+            <text x="134" y="150" fill="#475569" font-size="9" font-family="sans-serif" class="th-only">(Y Cap ล่าง)</text>
+            <text x="134" y="150" fill="#475569" font-size="9" font-family="sans-serif" class="en-only">(Y-Cap bot)</text>
+
+            <!-- voltage divider labels -->
+            <rect x="2" y="68" width="40" height="16" rx="3" fill="#fef3c7"/>
+            <text x="22" y="80" text-anchor="middle" fill="#92400e" font-size="9.5" font-weight="700" font-family="sans-serif">≈110V</text>
+            <rect x="2" y="148" width="40" height="16" rx="3" fill="#fef3c7"/>
+            <text x="22" y="160" text-anchor="middle" fill="#92400e" font-size="9.5" font-weight="700" font-family="sans-serif">≈110V</text>
+
+            <!-- G floating label -->
+            <text x="62" y="130" fill="#f97316" font-size="9" font-family="sans-serif" class="th-only">ลอย — ไม่ต่อดิน</text>
+            <text x="62" y="130" fill="#f97316" font-size="9" font-family="sans-serif" class="en-only">floating — no earth</text>
+          </svg>
+          <p class="th-only" style="font-size:0.85rem;margin-top:0.5rem;text-align:center;color:var(--text);opacity:0.7;">
+            Cy สองตัวแบ่งแรงดัน 220V ออกเป็น 110V+110V บน G ที่ลอย
+          </p>
+          <p class="en-only" style="font-size:0.85rem;margin-top:0.5rem;text-align:center;color:var(--text);opacity:0.7;">
+            Two Cy caps split 220V into 110V+110V across the floating G
+          </p>
+        </div>
+      </div>
+
+      <!-- กระแสและการถอดสายพ่วง -->
+      <div style="margin-top:1rem;" class="grid-2">
+        <div class="info-box th-only">
+          <strong>กระแสที่ไหลผ่าน Y Cap — Touch Current</strong><br>
+          • ชื่อทางเทคนิคอย่างเป็นทางการ: <strong>Touch Current</strong> หรือ
+            <strong>Protective Conductor Current</strong> (IEC 60990 / IEC 62368)<br>
+          • อยู่ระดับ <strong>μA ถึงไม่กี่ mA</strong> เท่านั้น<br>
+          • ไม่เพียงพอทำให้ได้รับอันตรายโดยตรง<br>
+          • ไม่ตัดเบรกเกอร์ RCD (ต่ำกว่า threshold 30mA)<br>
+          • มาตรฐาน IEC กำหนดค่าสูงสุด <strong>&lt; 3.5 mA</strong> สำหรับอุปกรณ์ Class I<br>
+          • <strong>ไม่ถือว่าเป็นไฟรั่ว</strong> เป็นการออกแบบปกติของ EMI Filter
+        </div>
+        <div class="info-box en-only">
+          <strong>Current through Y Caps — Touch Current</strong><br>
+          • Official technical name: <strong>Touch Current</strong> or
+            <strong>Protective Conductor Current</strong> (IEC 60990 / IEC 62368)<br>
+          • Only <strong>μA to a few mA</strong><br>
+          • Not enough to cause direct harm<br>
+          • Does not trip RCD breaker (below 30mA threshold)<br>
+          • IEC standard limits: <strong>&lt; 3.5 mA</strong> for Class I equipment<br>
+          • <strong>Not classified as leakage</strong> — normal EMI filter design
+        </div>
+        <div class="verdict-ok th-only">
+          <strong>ทำไมถอดสายพ่วงแล้วค่ากลับปกติ</strong><br>
+          เมื่อถอดอุปกรณ์ที่มี Y Cap ออก แหล่งที่ดึง G ให้ลอยกลางทางหายไป
+          มิเตอร์จึงวัดได้ L-G ≈ 220V, N-G ≈ 0V ตามปกติ
+        </div>
+        <div class="verdict-ok en-only">
+          <strong>Why unplugging restores normal readings</strong><br>
+          Removing devices with Y-Caps eliminates the source pulling G to mid-rail.
+          The meter then reads L-G ≈ 220V, N-G ≈ 0V as expected.
+        </div>
+      </div>
+
+      <!-- ตารางเปรียบเทียบก่อน-หลังถอด -->
+      <div style="margin-top:1rem;">
+        <table>
+          <tr>
+            <th><span class="th-only">สถานการณ์</span><span class="en-only">Situation</span></th>
+            <th>L – N</th>
+            <th>L – G</th>
+            <th>N – G</th>
+            <th><span class="th-only">สาเหตุ</span><span class="en-only">Cause</span></th>
+          </tr>
+          <tr>
+            <td><span class="th-only">เสียบสายพ่วงคอมพ์ / UPS</span><span class="en-only">PC strip / UPS plugged in</span></td>
+            <td>220V</td>
+            <td>≈110V</td>
+            <td>≈110V</td>
+            <td><span class="badge badge-warn"><span class="th-only">Y Cap ดึง G กลางทาง</span><span class="en-only">Y-Cap pulls G to mid-rail</span></span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">ถอดสายพ่วงออกหมด</span><span class="en-only">All devices unplugged</span></td>
+            <td>220V</td>
+            <td>220V</td>
+            <td>0–2V</td>
+            <td><span class="badge badge-ok"><span class="th-only">G ต่อดินจริง ปกติ</span><span class="en-only">G properly earthed</span></span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">G ลอยจริง (ไม่ต่อดิน)</span><span class="en-only">G truly floating (no earth)</span></td>
+            <td>220V</td>
+            <td>≈110V</td>
+            <td>≈110V</td>
+            <td><span class="badge badge-bad"><span class="th-only">Capacitive coupling เท่านั้น</span><span class="en-only">Pure capacitive coupling</span></span></td>
+          </tr>
+        </table>
+        <p class="th-only" style="margin-top:0.5rem;font-size:0.88rem;opacity:0.8;">
+          แถวที่ 1 และ 3 วัดได้เหมือนกัน แต่สาเหตุต่างกัน — ทดสอบโดยถอดอุปกรณ์ออกทีละตัว
+        </p>
+        <p class="en-only" style="margin-top:0.5rem;font-size:0.88rem;opacity:0.8;">
+          Rows 1 and 3 look identical on the meter — unplug devices one by one to distinguish the cause.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== หัวข้อ 3: Ghost vs Real Leakage ===== -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">แรงดันผี vs ไฟรั่วจริง — แยกอย่างไร</span>
+      <span class="en-only">Ghost Voltage vs Real Leakage — How to Tell</span>
+    </div>
+    <div class="compare-grid">
+      <div class="card">
+        <h3 style="color:#f97316;">
+          <span class="th-only">⚠ แรงดันผี (Ghost Voltage)</span>
+          <span class="en-only">⚠ Ghost Voltage</span>
+        </h3>
+        <ul class="content-list th-only">
+          <li>วัดได้ 80–120V บนสาย G ที่ลอย</li>
+          <li>เกิดจาก Capacitive / Inductive Coupling</li>
+          <li>ไม่มีกระแสจริงไหล — ไม่อันตรายโดยตรง</li>
+          <li>ต่อโหลด (หลอดเล็ก/ตัวต้านทาน) → แรงดัน <strong>ยุบลงเหลือใกล้ 0V</strong></li>
+          <li>DMM แบบ high-impedance เห็นได้ชัด</li>
+        </ul>
+        <ul class="content-list en-only">
+          <li>Reads 80–120V on a floating G wire</li>
+          <li>Caused by Capacitive / Inductive Coupling</li>
+          <li>No real current — not directly dangerous</li>
+          <li>Add load (small bulb/resistor) → voltage <strong>drops to near 0V</strong></li>
+          <li>High-impedance DMM picks it up clearly</li>
+        </ul>
+        <div class="verdict-warn">
+          <strong class="th-only">ปัญหาที่แท้จริง:</strong>
+          <strong class="en-only">Root cause:</strong>
+          <span class="th-only"> สาย G ไม่ได้ต่อกราวด์ — ควรแก้ไขสายไฟ</span>
+          <span class="en-only"> G wire not grounded — wiring must be corrected</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="color:#dc2626;">
+          <span class="th-only">⛔ ไฟรั่วจริง (Real Leakage)</span>
+          <span class="en-only">⛔ Real Electrical Leakage</span>
+        </h3>
+        <ul class="content-list th-only">
+          <li>เกิดจาก สาย L ฉนวนชำรุด แตะตัวถังโลหะ</li>
+          <li>มอเตอร์ / ฮีตเตอร์ เสื่อมสภาพ</li>
+          <li><strong>มีกระแสไหลจริง</strong> — อันตราย ดูดได้</li>
+          <li>ต่อโหลด → แรงดัน <strong>ยังอยู่</strong> มีกระแสจ่ายได้</li>
+          <li>RCD / RCBO จะตัดวงจรอัตโนมัติ</li>
+        </ul>
+        <ul class="content-list en-only">
+          <li>Caused by damaged insulation on L wire touching metal chassis</li>
+          <li>Deteriorated motor / heater</li>
+          <li><strong>Real current flows</strong> — dangerous, can cause electrocution</li>
+          <li>Add load → voltage <strong>remains</strong>, current can flow</li>
+          <li>RCD / RCBO trips automatically</li>
+        </ul>
+        <div class="verdict-bad">
+          <strong class="th-only">อาการ:</strong>
+          <strong class="en-only">Symptoms:</strong>
+          <span class="th-only"> จับตัวถังแล้วรู้สึกเสียว / ดูด — หยุดใช้ทันที</span>
+          <span class="en-only"> Tingling or shock when touching chassis — stop using immediately</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== หัวข้อ 4: วิธีทดสอบ ===== -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">วิธีทดสอบด้วยมิเตอร์และโหลด</span>
+      <span class="en-only">Testing with a Multimeter and Load</span>
+    </div>
+    <div class="card">
+      <h3 class="th-only">ขั้นตอนทดสอบ: Ghost Voltage หรือ ไฟรั่วจริง?</h3>
+      <h3 class="en-only">Test Procedure: Ghost Voltage or Real Leakage?</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <strong class="th-only">วัดแรงดันเบื้องต้น</strong>
+            <strong class="en-only">Initial voltage reading</strong><br>
+            <span class="th-only">ตั้ง DMM ที่ ACV 250V — วัด L-N, L-G, N-G บันทึกค่า</span>
+            <span class="en-only">Set DMM to ACV 250V — measure L-N, L-G, N-G and record values</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <strong class="th-only">ต่อ "โหลดทดสอบ" ระหว่าง G กับ N</strong>
+            <strong class="en-only">Connect a "test load" between G and N</strong><br>
+            <span class="th-only">ใช้หลอดไฟขนาดเล็ก (5–25W) หรือตัวต้านทาน 10kΩ–100kΩ 2W
+              ต่อระหว่าง G กับ N</span>
+            <span class="en-only">Use a small bulb (5–25W) or a 10kΩ–100kΩ 2W resistor
+              connected between G and N</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <strong class="th-only">วัดซ้ำ N-G และ L-G</strong>
+            <strong class="en-only">Re-measure N-G and L-G</strong><br>
+            <span class="th-only">สังเกตว่าแรงดันเปลี่ยนแปลงอย่างไร</span>
+            <span class="en-only">Observe how the voltage changes</span>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:1rem;">
+        <table>
+          <tr>
+            <th><span class="th-only">ผลที่ได้</span><span class="en-only">Result</span></th>
+            <th><span class="th-only">ความหมาย</span><span class="en-only">Meaning</span></th>
+            <th><span class="th-only">สิ่งที่ควรทำ</span><span class="en-only">Action</span></th>
+          </tr>
+          <tr>
+            <td><span class="th-only">N-G ยุบเหลือ 0–3V</span><span class="en-only">N-G drops to 0–3V</span></td>
+            <td><span class="badge badge-warn">Ghost Voltage</span></td>
+            <td><span class="th-only">แก้ไขสายกราวด์ให้ต่อจริง</span><span class="en-only">Fix the ground wire connection</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">N-G ยังอยู่ใกล้เดิม</span><span class="en-only">N-G stays near the same</span></td>
+            <td><span class="badge badge-bad"><span class="th-only">ไฟรั่วจริง</span><span class="en-only">Real Leakage</span></span></td>
+            <td><span class="th-only">หยุดใช้ — เรียกช่างตรวจสอบ</span><span class="en-only">Stop using — call a licensed electrician</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">L-N = 220V, N-G = 0V (ไม่ต่อโหลด)</span><span class="en-only">L-N = 220V, N-G = 0V (no load)</span></td>
+            <td><span class="badge badge-ok"><span class="th-only">ปกติ</span><span class="en-only">Normal</span></span></td>
+            <td><span class="th-only">ระบบไฟบ้านถูกต้อง</span><span class="en-only">Home wiring is correct</span></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== หัวข้อ 5: Socket Tester ===== -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">Socket Tester (เครื่องทดสอบปลั๊ก)</span>
+      <span class="en-only">Socket Tester</span>
+    </div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <p class="th-only">อุปกรณ์ตรวจสอบปลั๊กไฟแบบรวดเร็ว ดูผ่านไฟ LED 3 ดวง
+            บอกสถานะของสาย L / N / G ได้ทันที ราคาถูก หาซื้อได้ทั่วไป</p>
+          <p class="en-only">A quick outlet tester with 3 LEDs that instantly shows
+            the status of L / N / G wires. Inexpensive and widely available.</p>
+          <table style="margin-top:0.75rem;">
+            <tr>
+              <th><span class="th-only">ไฟ LED</span><span class="en-only">LED Pattern</span></th>
+              <th><span class="th-only">ความหมาย</span><span class="en-only">Meaning</span></th>
+            </tr>
+            <tr>
+              <td>🟡🟡⚫</td>
+              <td><span class="th-only">ปกติ (Correct)</span><span class="en-only">Correct wiring</span></td>
+            </tr>
+            <tr>
+              <td>🟡⚫⚫</td>
+              <td><span class="th-only">ไม่มีกราวด์ (No Ground)</span><span class="en-only">No Ground</span></td>
+            </tr>
+            <tr>
+              <td>⚫🟡⚫</td>
+              <td><span class="th-only">ต่อ L กับ N สลับกัน</span><span class="en-only">L and N reversed</span></td>
+            </tr>
+            <tr>
+              <td>⚫⚫⚫</td>
+              <td><span class="th-only">ไม่มีไฟ (No Power)</span><span class="en-only">No Power</span></td>
+            </tr>
+          </table>
+        </div>
+        <div class="info-box th-only">
+          <strong>ข้อดีของ Socket Tester</strong><br>
+          • ใช้ง่าย — เสียบปลั๊กแล้วอ่านค่าได้เลย<br>
+          • ตรวจสอบ L/N/G ครั้งเดียวพร้อมกัน<br>
+          • ไม่ต้องใช้มิเตอร์หลายครั้ง<br>
+          • ราคา 50–300 บาท<br><br>
+          <strong>ข้อจำกัด:</strong><br>
+          • บอกได้แค่ว่า G ต่อหรือไม่ต่อ<br>
+          • ไม่สามารถวัดแรงดันได้ละเอียด<br>
+          • ไม่ตรวจจับ ไฟรั่วผ่านตัวถัง
+        </div>
+        <div class="info-box en-only">
+          <strong>Socket Tester Advantages</strong><br>
+          • Easy to use — plug in and read instantly<br>
+          • Checks L/N/G all at once<br>
+          • No need for multiple multimeter measurements<br>
+          • Costs 50–300 THB<br><br>
+          <strong>Limitations:</strong><br>
+          • Only tells if G is connected or not<br>
+          • Cannot measure precise voltage<br>
+          • Cannot detect chassis leakage current
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== หัวข้อ 6: ความปลอดภัย ===== -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">ข้อควรระวังและความปลอดภัย</span>
+      <span class="en-only">Safety Precautions</span>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 class="th-only">⚠ ข้อห้ามและข้อควรระวัง</h3>
+        <h3 class="en-only">⚠ Do Not / Be Careful</h3>
+        <ul class="content-list th-only">
+          <li>อย่าแตะสาย L โดยตรงขณะมีไฟ</li>
+          <li>อย่าวัดกระแสผ่านขั้ว VΩ — มิเตอร์พัง</li>
+          <li>อย่าตัดสายกราวด์ออกเพื่อแก้ปัญหาชั่วคราว</li>
+          <li>ห้ามต่อปลั๊กสองตา (2-pin) ทดแทนสามตาบนอุปกรณ์ที่ต้องการ G</li>
+          <li>อย่าใช้เครื่องใช้ไฟฟ้าขณะตัวเปียกหรือยืนบนพื้นเปียก</li>
+        </ul>
+        <ul class="content-list en-only">
+          <li>Never touch the L wire directly while energized</li>
+          <li>Never measure current through the VΩ terminal — it will damage the meter</li>
+          <li>Never cut the ground wire as a quick fix</li>
+          <li>Do not use a 2-pin adapter on equipment requiring G</li>
+          <li>Never use electrical appliances while wet or standing on wet floors</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="th-only">✅ เมื่อไหรควรโทรช่าง</h3>
+        <h3 class="en-only">✅ When to Call an Electrician</h3>
+        <ul class="content-list th-only">
+          <li>จับตัวถังเครื่องใช้ไฟฟ้าแล้วรู้สึกเสียว</li>
+          <li>เบรกเกอร์ตัดบ่อยโดยไม่มีสาเหตุชัดเจน</li>
+          <li>ได้กลิ่นไหม้จากเต้ารับหรือสายไฟ</li>
+          <li>ต่อโหลดแล้ว N-G ยังมีแรงดันสูงอยู่ (ไฟรั่วจริง)</li>
+          <li>ต้องการเดินสายกราวด์ใหม่ทั้งบ้าน</li>
+        </ul>
+        <ul class="content-list en-only">
+          <li>Feel tingling when touching an appliance chassis</li>
+          <li>Circuit breaker trips frequently without clear cause</li>
+          <li>Burning smell from outlets or wiring</li>
+          <li>N-G voltage stays high after adding load (real leakage)</li>
+          <li>Need to re-run ground wiring throughout the building</li>
+        </ul>
+        <div class="warn-box th-only" style="margin-top:0.75rem;">
+          <strong>สำคัญ:</strong> งานไฟฟ้าหลัก (เมนสวิตช์, สายเมน, แผงเบรกเกอร์)
+          ต้องทำโดยช่างไฟที่ได้รับใบอนุญาตตามกฎหมายเท่านั้น
+        </div>
+        <div class="warn-box en-only" style="margin-top:0.75rem;">
+          <strong>Important:</strong> Main electrical work (main switch, main cable, breaker panel)
+          must only be performed by a licensed electrician as required by law.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== สรุป ===== -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">สรุปการวินิจฉัย</span>
+      <span class="en-only">Diagnostic Summary</span>
+    </div>
+    <div class="card">
+      <table>
+        <tr>
+          <th><span class="th-only">ผลที่วัดได้</span><span class="en-only">Measured Result</span></th>
+          <th><span class="th-only">L-N</span><span class="en-only">L-N</span></th>
+          <th><span class="th-only">L-G</span><span class="en-only">L-G</span></th>
+          <th><span class="th-only">N-G</span><span class="en-only">N-G</span></th>
+          <th><span class="th-only">สถานะ</span><span class="en-only">Status</span></th>
+        </tr>
+        <tr>
+          <td><span class="th-only">ระบบปกติ สาย G ต่อครบ</span><span class="en-only">Normal system, G connected</span></td>
+          <td>220V</td>
+          <td>220V</td>
+          <td>0–2V</td>
+          <td><span class="badge badge-ok">✓ ปกติ / OK</span></td>
+        </tr>
+        <tr>
+          <td><span class="th-only">G ลอย — แรงดันผี</span><span class="en-only">G floating — Ghost voltage</span></td>
+          <td>220V</td>
+          <td>80–120V</td>
+          <td>80–120V</td>
+          <td><span class="badge badge-warn">⚠ แก้สาย G / Fix G</span></td>
+        </tr>
+        <tr>
+          <td><span class="th-only">ไฟรั่วผ่านตัวถัง</span><span class="en-only">Chassis leakage</span></td>
+          <td>220V</td>
+          <td>220V</td>
+          <td>0–2V</td>
+          <td><span class="badge badge-bad">⛔ เรียกช่าง / Call electrician</span></td>
+        </tr>
+        <tr>
+          <td><span class="th-only">สลับ L กับ N</span><span class="en-only">L and N reversed</span></td>
+          <td>220V</td>
+          <td>0–2V</td>
+          <td>220V</td>
+          <td><span class="badge badge-bad">⛔ ต่อผิด / Wrong polarity</span></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="ac-circuit.html"><span class="th-only">← วงจร AC</span><span class="en-only">← AC Circuit</span></a>
+    <a class="next" href="tools.html"><span class="th-only">เครื่องคิดเลข →</span><span class="en-only">Calculators →</span></a>
+  </div>
+
+</div>
+
+<footer>
+  <strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong>
+  <strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong>
+</footer>
+<script>const CURRENT_PAGE='home-wiring';</script>
+<script src="nav.js"></script>
+</body>
+</html>

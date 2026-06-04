@@ -28,6 +28,7 @@ website/
 ├── soldering.html   — บทที่ 7
 ├── ac-circuit.html  — บทที่ 8
 ├── diode.html       — บทที่ 9: PN Junction, I-V Curve, LED Vf by color, Rectifier Circuit
+├── home-wiring.html — บทที่ 10: ระบบ L/N/G, แรงดันลอย (Ghost Voltage), ไฟรั่วจริง, Socket Tester, ความปลอดภัย
 ├── simulation.html  — จำลองวงจร 3 แบบ (Series/Parallel/Mixed) + วิธีคำนวณ real-time
 ├── formulas.html    — สูตรสรุป + print-friendly
 ├── tools.html       — เครื่องคิดเลข 7 ตัว (4-band + 5-band มีชื่อไทย-อังกฤษครบ)
@@ -56,7 +57,7 @@ website/
   <script src="nav.js"></script>
 </body>
 ```
-CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `capacitor`, `inductor`, `multimeter`, `soldering`, `ac-circuit`, `diode`, `simulation`, `formulas`, `tools`, `quiz`, `downloads`
+CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `capacitor`, `inductor`, `multimeter`, `soldering`, `ac-circuit`, `diode`, `home-wiring`, `simulation`, `formulas`, `tools`, `quiz`, `downloads`
 
 ### ระบบ 2 ภาษา (Bilingual System)
 - CSS ใน style.css:
@@ -75,6 +76,7 @@ CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `capacitor`, `induct
 ### Navigation (nav.js)
 - NAV_CONTENT (9 บทเรียน) → รวมในปุ่ม dropdown "บทเรียน ▼" / "Lessons ▼"
 - NAV_TOOLS (simulation, formulas, tools) → dropdown "เครื่องมือ ▼" / "Tools ▼"
+- NAV_EXTRA (home-wiring) → dropdown "บทเสริม ▼" / "Extra ▼"
 - NAV_DIRECT (quiz, downloads) → แสดงตรงๆ ใน nav bar
 - Dark mode: `[data-theme="dark"]` บน `<html>`, บันทึกใน localStorage key `theme`
 - Lang toggle: ปุ่ม TH / EN ใน nav bar ทุกหน้า

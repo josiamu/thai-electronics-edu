@@ -7,7 +7,11 @@ const NAV_CONTENT = [
   { id: 'capacitor',   href: 'capacitor.html',    label_th: '🔋 ตัวเก็บประจุ',    label_en: '🔋 Capacitor' },
   { id: 'inductor',    href: 'inductor.html',     label_th: '🌀 ตัวเหนี่ยวนำ',   label_en: '🌀 Inductor' },
   { id: 'soldering',   href: 'soldering.html',    label_th: '🔥 การบัดกรี',       label_en: '🔥 Soldering' },
-  { id: 'ac-circuit',  href: 'ac-circuit.html',  label_th: '〜 วงจร AC',          label_en: '〜 AC Circuit' },
+  { id: 'ac-circuit',  href: 'ac-circuit.html',   label_th: '〜 วงจร AC',               label_en: '〜 AC Circuit' },
+];
+
+const NAV_EXTRA = [
+  { id: 'home-wiring', href: 'home-wiring.html', label_th: '🔌 ไฟบ้านและความปลอดภัย', label_en: '🔌 Home Wiring & Safety' },
 ];
 
 const NAV_TOOLS = [
@@ -31,12 +35,17 @@ const NAV_DIRECT = [
   const curLang = document.documentElement.lang || 'th';
   const contentActive = NAV_CONTENT.some(p => p.id === cur);
   const toolsActive   = NAV_TOOLS.some(p => p.id === cur);
+  const extraActive   = NAV_EXTRA.some(p => p.id === cur);
 
   const lessonItems = NAV_CONTENT.map(p =>
     `<a href="${p.href}"${p.id === cur ? ' class="active"' : ''}><span class="th-only">${p.label_th}</span><span class="en-only">${p.label_en}</span></a>`
   ).join('');
 
   const toolItems = NAV_TOOLS.map(p =>
+    `<a href="${p.href}"${p.id === cur ? ' class="active"' : ''}><span class="th-only">${p.label_th}</span><span class="en-only">${p.label_en}</span></a>`
+  ).join('');
+
+  const extraItems = NAV_EXTRA.map(p =>
     `<a href="${p.href}"${p.id === cur ? ' class="active"' : ''}><span class="th-only">${p.label_th}</span><span class="en-only">${p.label_en}</span></a>`
   ).join('');
 
@@ -61,6 +70,12 @@ const NAV_DIRECT = [
               <span class="th-only">เครื่องมือ</span><span class="en-only">Tools</span> <span class="nav-chevron">▼</span>
             </button>
             <div class="nav-dropdown-menu" id="nav-dropdown-tools-menu">${toolItems}</div>
+          </div>
+          <div class="nav-dropdown" id="nav-dropdown-extra">
+            <button class="nav-dropdown-toggle${extraActive ? ' active' : ''}" id="nav-dropdown-extra-btn">
+              <span class="th-only">บทเสริม</span><span class="en-only">Extra</span> <span class="nav-chevron">▼</span>
+            </button>
+            <div class="nav-dropdown-menu" id="nav-dropdown-extra-menu">${extraItems}</div>
           </div>
           <div class="nav-sep"></div>
           ${directLinks}
@@ -95,6 +110,7 @@ const NAV_DIRECT = [
   const allDropdowns = [
     document.getElementById('nav-dropdown-lessons'),
     document.getElementById('nav-dropdown-tools'),
+    document.getElementById('nav-dropdown-extra'),
   ];
 
   allDropdowns.forEach(function(dd) {

@@ -9,6 +9,18 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+.power-group { padding: 0.6rem 0; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 90px 1fr; gap: 0.75rem; align-items: center; }
+.power-group:last-child { border-bottom: none; padding-bottom: 0; }
+.power-target { text-align: center; }
+.power-target-label { font-size: 0.75rem; color: var(--text-light); }
+.power-target-var { font-size: 1.6rem; font-weight: 700; font-family: monospace; color: var(--primary); line-height: 1.2; }
+.power-formulas { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.power-box { flex: 1; min-width: 120px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.45rem 0.6rem; text-align: center; }
+.power-hint { font-size: 0.75rem; color: var(--text-light); margin-bottom: 0.2rem; }
+.power-formula { font-size: 1rem; font-weight: 700; font-family: monospace; color: var(--primary); }
+@media (max-width: 640px) { .power-group { grid-template-columns: 70px 1fr; } }
+</style>
 </head>
 <body>
 <div id="nav-placeholder"></div>
@@ -89,17 +101,98 @@
   <div class="section">
     <div class="section-title"><span class="th-only">กำลังไฟฟ้า (Electric Power)</span><span class="en-only">Electric Power</span></div>
     <div class="card">
-      <div class="grid-3">
-        <div class="formula-box"><div class="formula">P = E × I</div></div>
-        <div class="formula-box"><div class="formula">P = E² / R</div></div>
-        <div class="formula-box"><div class="formula">P = I² × R</div></div>
-        <div class="formula-box"><div class="formula">E = P / I</div></div>
-        <div class="formula-box"><div class="formula">E = √(P × R)</div></div>
-        <div class="formula-box"><div class="formula">I = P / E</div></div>
-        <div class="formula-box"><div class="formula">I = √(P / R)</div></div>
-        <div class="formula-box"><div class="formula">R = E² / P</div></div>
-        <div class="formula-box"><div class="formula">R = P / I²</div></div>
+      <p class="th-only" style="margin-bottom:0.75rem;color:var(--text-light);font-size:0.9rem;">เลือกแถวตามค่าที่ต้องการหา แล้วดูสูตรที่ตรงกับค่าที่รู้อยู่</p>
+      <p class="en-only" style="margin-bottom:0.75rem;color:var(--text-light);font-size:0.9rem;">Pick the row for the value you want, then use the formula matching what you already know.</p>
+
+      <!-- หาค่า P -->
+      <div class="power-group">
+        <div class="power-target">
+          <div class="power-target-label th-only">หาค่า</div>
+          <div class="power-target-label en-only">Solve for</div>
+          <div class="power-target-var">P</div>
+        </div>
+        <div class="power-formulas">
+          <div class="power-box">
+            <div class="power-hint th-only">รู้ E, I</div>
+            <div class="power-hint en-only">know E, I</div>
+            <div class="power-formula">P = E × I</div>
+          </div>
+          <div class="power-box">
+            <div class="power-hint th-only">รู้ E, R</div>
+            <div class="power-hint en-only">know E, R</div>
+            <div class="power-formula">P = E² / R</div>
+          </div>
+          <div class="power-box">
+            <div class="power-hint th-only">รู้ I, R</div>
+            <div class="power-hint en-only">know I, R</div>
+            <div class="power-formula">P = I² × R</div>
+          </div>
+        </div>
       </div>
+
+      <!-- หาค่า E -->
+      <div class="power-group">
+        <div class="power-target">
+          <div class="power-target-label th-only">หาค่า</div>
+          <div class="power-target-label en-only">Solve for</div>
+          <div class="power-target-var">E</div>
+        </div>
+        <div class="power-formulas">
+          <div class="power-box">
+            <div class="power-hint th-only">รู้ P, I</div>
+            <div class="power-hint en-only">know P, I</div>
+            <div class="power-formula">E = P / I</div>
+          </div>
+          <div class="power-box">
+            <div class="power-hint th-only">รู้ P, R</div>
+            <div class="power-hint en-only">know P, R</div>
+            <div class="power-formula">E = √(P × R)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- หาค่า I -->
+      <div class="power-group">
+        <div class="power-target">
+          <div class="power-target-label th-only">หาค่า</div>
+          <div class="power-target-label en-only">Solve for</div>
+          <div class="power-target-var">I</div>
+        </div>
+        <div class="power-formulas">
+          <div class="power-box">
+            <div class="power-hint th-only">รู้ P, E</div>
+            <div class="power-hint en-only">know P, E</div>
+            <div class="power-formula">I = P / E</div>
+          </div>
+          <div class="power-box">
+            <div class="power-hint th-only">รู้ P, R</div>
+            <div class="power-hint en-only">know P, R</div>
+            <div class="power-formula">I = √(P / R)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- หาค่า R -->
+      <div class="power-group">
+        <div class="power-target">
+          <div class="power-target-label th-only">หาค่า</div>
+          <div class="power-target-label en-only">Solve for</div>
+          <div class="power-target-var">R</div>
+        </div>
+        <div class="power-formulas">
+          <div class="power-box">
+            <div class="power-hint th-only">รู้ P, E</div>
+            <div class="power-hint en-only">know P, E</div>
+            <div class="power-formula">R = E² / P</div>
+          </div>
+          <div class="power-box">
+            <div class="power-hint th-only">รู้ P, I</div>
+            <div class="power-hint en-only">know P, I</div>
+            <div class="power-formula">R = P / I²</div>
+          </div>
+        </div>
+      </div>
+
       <div class="info-box" style="margin-top:1rem;">
         <span class="th-only">หน่วยกำลังไฟฟ้า: <strong>วัตต์ (Watt, W)</strong> — 1 W = 1 V × 1 A</span>
         <span class="en-only">Power unit: <strong>Watt (W)</strong> — 1 W = 1 V × 1 A</span>
