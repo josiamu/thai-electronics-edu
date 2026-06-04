@@ -173,6 +173,197 @@
     </div>
   </div>
 
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">การวัดความต้านทาน (Resistance)</span>
+      <span class="en-only">Measuring Resistance</span>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3><span class="th-only">ขั้นตอนการวัด Ω</span><span class="en-only">Resistance Measurement Steps</span></h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content th-only"><strong>ตัดไฟวงจรก่อนเสมอ</strong> — ห้ามวัด Ω ขณะมีแรงดันอยู่ในวงจร</div>
+            <div class="step-content en-only"><strong>Always de-energise the circuit first</strong> — never measure Ω with voltage present</div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content th-only">ถอดตัวต้านทานออกจากวงจร (หรืออย่างน้อยถอดขาหนึ่งข้าง) เพื่อป้องกันการวัดผิดจากวงจรขนาน</div>
+            <div class="step-content en-only">Disconnect at least one lead of the component to avoid parallel paths skewing the reading</div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content th-only">ตั้งย่านวัด Ω ให้สูงกว่าค่าที่คาดไว้ แล้วค่อยลดลง</div>
+            <div class="step-content en-only">Start at a high Ω range, then step down until you get a readable value</div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-content th-only">แตะสายวัดทั้งสองข้างตัวต้านทาน (ไม่ต้องสนขั้ว) แล้วอ่านค่า</div>
+            <div class="step-content en-only">Touch both probes across the component (polarity doesn't matter) and read</div>
+          </div>
+        </div>
+        <div class="warn-box th-only" style="margin-top:0.75rem;">
+          <strong>อนาล็อก:</strong> ต้อง Zero Ω ก่อนวัดทุกครั้งที่เปลี่ยนย่าน และอ่านค่าจากขวาไปซ้าย (สเกล Ω กลับด้านกับสเกลอื่น)
+        </div>
+        <div class="warn-box en-only" style="margin-top:0.75rem;">
+          <strong>Analog:</strong> Perform Zero Ω adjustment every time you change range. Read right-to-left (the Ω scale is reversed compared to other scales).
+        </div>
+      </div>
+      <div class="card">
+        <h3><span class="th-only">ผลที่อาจพบและความหมาย</span><span class="en-only">Possible Readings &amp; Meaning</span></h3>
+        <table>
+          <tr>
+            <th><span class="th-only">ค่าที่อ่านได้</span><span class="en-only">Reading</span></th>
+            <th><span class="th-only">ความหมาย</span><span class="en-only">Meaning</span></th>
+          </tr>
+          <tr>
+            <td><span class="th-only">ตัวเลขปกติ</span><span class="en-only">Normal number</span></td>
+            <td><span class="th-only">ค่าความต้านทานของชิ้นส่วน</span><span class="en-only">Component resistance value</span></td>
+          </tr>
+          <tr>
+            <td><strong>0 Ω</strong></td>
+            <td><span class="th-only">ลัดวงจร (Short circuit)</span><span class="en-only">Short circuit</span></td>
+          </tr>
+          <tr>
+            <td><strong>OL / ∞</strong></td>
+            <td><span class="th-only">วงจรเปิด (Open circuit) — ชิ้นส่วนขาด</span><span class="en-only">Open circuit — component is broken</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">ค่าผิดปกติ ต่ำกว่าจริง</span><span class="en-only">Unexpectedly low</span></td>
+            <td><span class="th-only">อาจมีวงจรขนานอยู่ — ถอดขาออกก่อน</span><span class="en-only">Parallel path present — disconnect one lead</span></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">Continuity Test — ทดสอบความต่อเนื่อง</span>
+      <span class="en-only">Continuity Test</span>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3><span class="th-only">))) คืออะไร</span><span class="en-only">What is )))?</span></h3>
+        <p class="th-only">โหมด Continuity วัดว่าสองจุดมีการต่อถึงกันหรือไม่ โดย <strong>มิเตอร์จะส่งเสียง "บี๊ป"</strong> เมื่อความต้านทานต่ำกว่าค่า threshold (ปกติ &lt;30–50 Ω) — ใช้ตรวจสายขาด, ฟิวส์ขาด, หน้าสัมผัสสวิตช์</p>
+        <p class="en-only">Continuity mode checks whether two points are electrically connected. The meter <strong>beeps</strong> when resistance is below the threshold (typically &lt;30–50 Ω) — use it to check broken wires, blown fuses, and switch contacts.</p>
+        <div class="steps" style="margin-top:0.75rem;">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content th-only">ตั้งมิเตอร์ที่โหมด <strong>)))</strong> (หรือ Continuity)</div>
+            <div class="step-content en-only">Set the meter to <strong>)))</strong> (Continuity) mode</div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content th-only"><strong>ตัดไฟวงจรก่อน</strong> — ห้ามทดสอบขณะมีแรงดัน</div>
+            <div class="step-content en-only"><strong>De-energise first</strong> — never test live circuits</div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content th-only">แตะสายวัดสองปลายที่จุดที่ต้องการทดสอบ</div>
+            <div class="step-content en-only">Touch both probes to the two points under test</div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-content th-only">ได้ยินเสียงบี๊ป = ต่อถึงกัน / เงียบ = ขาดหรือไม่ต่อ</div>
+            <div class="step-content en-only">Beep = connected / Silence = open or broken</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3><span class="th-only">ใช้ทำอะไรได้บ้าง</span><span class="en-only">Common Use Cases</span></h3>
+        <table>
+          <tr>
+            <th><span class="th-only">งาน</span><span class="en-only">Task</span></th>
+            <th><span class="th-only">ผลที่ต้องการ</span><span class="en-only">Expected result</span></th>
+          </tr>
+          <tr>
+            <td><span class="th-only">ตรวจสายไฟขาด</span><span class="en-only">Check broken wire</span></td>
+            <td><span class="th-only">บี๊ป = สายดี</span><span class="en-only">Beep = wire OK</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">ตรวจฟิวส์</span><span class="en-only">Check fuse</span></td>
+            <td><span class="th-only">บี๊ป = ฟิวส์ดี / เงียบ = ฟิวส์ขาด</span><span class="en-only">Beep = good / Silence = blown</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">ตรวจหน้าสัมผัสสวิตช์</span><span class="en-only">Check switch contact</span></td>
+            <td><span class="th-only">กดสวิตช์แล้วบี๊ป = สวิตช์ทำงาน</span><span class="en-only">Press switch, beep = switch works</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">ตรวจ PCB track ขาด</span><span class="en-only">Check PCB trace</span></td>
+            <td><span class="th-only">บี๊ป = track ต่อ</span><span class="en-only">Beep = trace intact</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">ตรวจ Diode (คร่าวๆ)</span><span class="en-only">Quick diode check</span></td>
+            <td><span class="th-only">บี๊ปทิศทางเดียว = Diode ปกติ</span><span class="en-only">One-way beep = diode OK</span></td>
+          </tr>
+        </table>
+        <div class="info-box th-only" style="margin-top:0.75rem;">
+          <strong>เคล็ดลับ:</strong> แตะสายวัดเข้าหากันก่อนเสมอ — ถ้ามิเตอร์บี๊ปแสดงว่าโหมดทำงานปกติ
+        </div>
+        <div class="info-box en-only" style="margin-top:0.75rem;">
+          <strong>Tip:</strong> Always touch the probes together first — if the meter beeps, the continuity mode is working correctly.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">การอ่านค่า OL / OVER บน DMM</span>
+      <span class="en-only">Reading OL / OVER on a DMM</span>
+    </div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <p class="th-only"><strong>OL</strong> (Over Limit) หรือ <strong>OVER</strong> หมายความว่าค่าที่วัดได้ <strong>เกินย่านที่ตั้งไว้</strong> มิเตอร์ไม่ได้พัง — แค่ต้องเปลี่ยนย่านวัด</p>
+          <p class="en-only"><strong>OL</strong> (Over Limit) or <strong>OVER</strong> means the measured value <strong>exceeds the selected range</strong>. The meter is not broken — you just need to switch to a higher range.</p>
+          <table style="margin-top:0.75rem;">
+            <tr>
+              <th><span class="th-only">กำลังวัด</span><span class="en-only">Measuring</span></th>
+              <th><span class="th-only">เห็น OL</span><span class="en-only">Sees OL</span></th>
+              <th><span class="th-only">สิ่งที่ควรทำ</span><span class="en-only">Action</span></th>
+            </tr>
+            <tr>
+              <td>Voltage</td>
+              <td><span class="th-only">แรงดันสูงกว่าย่านที่ตั้ง</span><span class="en-only">Voltage exceeds range</span></td>
+              <td><span class="th-only">เปลี่ยนไปย่านที่สูงกว่า</span><span class="en-only">Switch to higher range</span></td>
+            </tr>
+            <tr>
+              <td>Ω</td>
+              <td><span class="th-only">ความต้านทานสูงมาก หรือวงจรเปิด</span><span class="en-only">Very high resistance or open circuit</span></td>
+              <td><span class="th-only">ลองย่านสูงกว่า หรือ ชิ้นส่วนขาด</span><span class="en-only">Try higher range, or component is open</span></td>
+            </tr>
+            <tr>
+              <td>Continuity</td>
+              <td><span class="th-only">ไม่ต่อถึงกัน (เงียบ ไม่มีบี๊ป)</span><span class="en-only">No connection (no beep)</span></td>
+              <td><span class="th-only">ตรวจสอบการต่อสายวัดและจุดสัมผัส</span><span class="en-only">Check probe placement and contact</span></td>
+            </tr>
+          </table>
+        </div>
+        <div>
+          <div class="warn-box th-only">
+            <strong>กรณีที่ OL อันตราย:</strong><br>
+            ถ้าตั้งย่านวัด <strong>DCmA</strong> แต่ต่อสายกับแหล่งแรงดัน (Voltage source) มิเตอร์จะแสดง OL พร้อมกับ <strong>ฟิวส์ภายในขาด</strong> หรือมิเตอร์เสียหายได้ทันที<br><br>
+            ดูตำแหน่งสายวัดให้ถูกต้องก่อนวัดทุกครั้ง
+          </div>
+          <div class="warn-box en-only">
+            <strong>When OL is dangerous:</strong><br>
+            If set to <strong>DCmA</strong> but probes are connected to a voltage source, the meter shows OL while simultaneously <strong>blowing the internal fuse</strong> or damaging the meter instantly.<br><br>
+            Always verify probe positions before measuring.
+          </div>
+          <div class="info-box th-only" style="margin-top:0.75rem;">
+            <strong>Auto-Range DMM:</strong> รุ่นที่มี Auto-Range จะปรับย่านให้เองอัตโนมัติ ไม่แสดง OL จาก range ผิด — แต่ยังแสดง OL ได้ถ้าค่าเกินขีดสูงสุดของมิเตอร์
+          </div>
+          <div class="info-box en-only" style="margin-top:0.75rem;">
+            <strong>Auto-Range DMM:</strong> Auto-range meters adjust automatically and won't show OL from a wrong range — but will still show OL if the value exceeds the meter's maximum.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="page-nav">
     <a href="inductor.html"><span class="th-only">← ตัวเหนี่ยวนำ</span><span class="en-only">← Inductor</span></a>
     <a class="next" href="soldering.html"><span class="th-only">การบัดกรี →</span><span class="en-only">Soldering →</span></a>
