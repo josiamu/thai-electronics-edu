@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="th" data-title-th="ตัวเก็บประจุ | สื่อการเรียนการสอน" data-title-en="Capacitor | Teaching Materials">
 <head>
 <meta charset="UTF-8">
@@ -19,50 +19,250 @@
     <div>
       <h1 class="th-only">ตัวเก็บประจุ (Capacitor)</h1>
       <h1 class="en-only">Capacitor</h1>
-      <p class="th-only">ชนิด • การอ่านรหัส • F/μF/nF/pF • วงจรอนุกรม/ขนาน</p>
-      <p class="en-only">Types • Reading codes • F/μF/nF/pF • Series/Parallel circuits</p>
+      <p class="th-only">ชนิด • Q = CV • RC Time Constant • อ่านรหัส • Tolerance • วงจรอนุกรม/ขนาน</p>
+      <p class="en-only">Types • Q = CV • RC Time Constant • Reading codes • Tolerance • Series/Parallel</p>
     </div>
   </div>
 </div>
 
 <div class="container">
 
+  <!-- 1. คุณสมบัติและชนิด -->
   <div class="section">
     <div class="section-title"><span class="th-only">คุณสมบัติและชนิด</span><span class="en-only">Properties &amp; Types</span></div>
     <div class="card">
       <div class="grid-2">
         <div>
           <ul class="content-list th-only">
-            <li>เก็บและปล่อยประจุไฟฟ้า</li>
-            <li>กรองความถี่ (Filter)</li>
-            <li>ต่อต้านการเปลี่ยนแปลงแรงดัน</li>
-            <li>ใช้ในวงจร Timing, Coupling, Bypass</li>
+            <li>เก็บและปล่อยพลังงานในรูปสนามไฟฟ้า</li>
+            <li>ต่อต้านการเปลี่ยนแปลงแรงดัน (oppose ΔV)</li>
+            <li>กรองความถี่ (Filter) และ Block DC</li>
+            <li>ใช้ใน Timing, Coupling, Bypass, Power supply</li>
           </ul>
           <ul class="content-list en-only">
-            <li>Store and release electric charge</li>
-            <li>Filter frequencies</li>
-            <li>Oppose changes in voltage</li>
-            <li>Used in Timing, Coupling, and Bypass circuits</li>
+            <li>Store and release energy as an electric field</li>
+            <li>Oppose changes in voltage (oppose ΔV)</li>
+            <li>Filter frequencies and block DC</li>
+            <li>Used in Timing, Coupling, Bypass, Power supply circuits</li>
           </ul>
         </div>
         <div class="info-box">
           <span class="th-only"><strong>ชนิดของตัวเก็บประจุ</strong><br>
-          • Electrolytic — มีขั้ว, ค่า μF<br>
-          • Ceramic (Disc) — ไม่มีขั้ว, ค่า pF–nF<br>
-          • Polyester (MKT) — ไม่มีขั้ว, ค่า nF–μF<br>
-          • Tantalum — มีขั้ว, ขนาดเล็ก<br>
-          • Variable Capacitor — ปรับค่าได้</span>
+          • <strong>Electrolytic</strong> — มีขั้ว (+/−), ค่า μF, ทนแรงดันสูง<br>
+          • <strong>Ceramic (Disc)</strong> — ไม่มีขั้ว, ค่า pF–nF, ราคาถูก<br>
+          • <strong>Polyester (MKT)</strong> — ไม่มีขั้ว, ค่า nF–μF, เสถียร<br>
+          • <strong>Tantalum</strong> — มีขั้ว, ขนาดเล็ก, ค่าเสถียรกว่า Electrolytic<br>
+          • <strong>Variable</strong> — ปรับค่าได้ (ใช้ใน Radio tuner)</span>
           <span class="en-only"><strong>Types of Capacitors</strong><br>
-          • Electrolytic — polarized, value in μF<br>
-          • Ceramic (Disc) — non-polarized, value in pF–nF<br>
-          • Polyester (MKT) — non-polarized, value in nF–μF<br>
-          • Tantalum — polarized, compact size<br>
-          • Variable Capacitor — adjustable value</span>
+          • <strong>Electrolytic</strong> — polarized (+/−), value in μF, high voltage<br>
+          • <strong>Ceramic (Disc)</strong> — non-polarized, value in pF–nF, low cost<br>
+          • <strong>Polyester (MKT)</strong> — non-polarized, value in nF–μF, stable<br>
+          • <strong>Tantalum</strong> — polarized, compact, more stable than Electrolytic<br>
+          • <strong>Variable</strong> — adjustable value (used in radio tuners)</span>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- 2. สูตรพื้นฐาน Q = CV -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">สูตรพื้นฐาน</span><span class="en-only">Basic Formula</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <div class="formula-box">
+            <div class="formula">Q = C × V</div>
+          </div>
+          <table style="margin-top:0.5rem;">
+            <tr>
+              <th><span class="th-only">สัญลักษณ์</span><span class="en-only">Symbol</span></th>
+              <th><span class="th-only">ความหมาย</span><span class="en-only">Meaning</span></th>
+              <th><span class="th-only">หน่วย</span><span class="en-only">Unit</span></th>
+            </tr>
+            <tr>
+              <td><strong>Q</strong></td>
+              <td><span class="th-only">ประจุที่เก็บได้</span><span class="en-only">Charge stored</span></td>
+              <td>Coulomb (C)</td>
+            </tr>
+            <tr>
+              <td><strong>C</strong></td>
+              <td><span class="th-only">ค่าความจุ</span><span class="en-only">Capacitance</span></td>
+              <td>Farad (F)</td>
+            </tr>
+            <tr>
+              <td><strong>V</strong></td>
+              <td><span class="th-only">แรงดันที่คร่อม</span><span class="en-only">Voltage across</span></td>
+              <td>Volt (V)</td>
+            </tr>
+          </table>
+        </div>
+        <div>
+          <div class="info-box th-only">
+            <strong>ตัวอย่าง</strong><br>
+            Cap 100 μF ถูกชาร์จด้วย 12 V<br>
+            Q = 100×10⁻⁶ × 12 = <strong>0.0012 C = 1.2 mC</strong><br><br>
+            <strong>พลังงานที่เก็บได้ (Energy stored)</strong><br>
+            E = ½ × C × V²<br>
+            E = ½ × 100×10⁻⁶ × 12² = <strong>7.2 mJ</strong>
+          </div>
+          <div class="info-box en-only">
+            <strong>Example</strong><br>
+            100 μF cap charged to 12 V<br>
+            Q = 100×10⁻⁶ × 12 = <strong>0.0012 C = 1.2 mC</strong><br><br>
+            <strong>Energy stored</strong><br>
+            E = ½ × C × V²<br>
+            E = ½ × 100×10⁻⁶ × 12² = <strong>7.2 mJ</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. RC Time Constant -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">RC Time Constant (τ)</span><span class="en-only">RC Time Constant (τ)</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <div class="formula-box">
+            <div class="formula">τ = R × C</div>
+          </div>
+          <ul class="content-list th-only" style="margin-top:0.75rem;">
+            <li>τ (tau) = เวลาที่ Cap ชาร์จถึง <strong>63.2%</strong> ของ Vmax</li>
+            <li>ชาร์จเต็ม (99%) ≈ <strong>5τ</strong></li>
+            <li>ดิสชาร์จเหลือ 37% ≈ <strong>1τ</strong></li>
+            <li>ใช้คำนวณ Timing circuit, RC filter, RC oscillator</li>
+          </ul>
+          <ul class="content-list en-only" style="margin-top:0.75rem;">
+            <li>τ (tau) = time to charge to <strong>63.2%</strong> of Vmax</li>
+            <li>Fully charged (99%) ≈ <strong>5τ</strong></li>
+            <li>Discharged to 37% ≈ <strong>1τ</strong></li>
+            <li>Used in timing circuits, RC filters, RC oscillators</li>
+          </ul>
+        </div>
+        <div>
+          <div class="info-box th-only">
+            <strong>ตัวอย่าง</strong><br>
+            R = 10 kΩ, C = 100 μF<br>
+            τ = 10,000 × 100×10⁻⁶ = <strong>1 วินาที</strong><br><br>
+            ชาร์จเต็มใน 5τ = <strong>5 วินาที</strong><br><br>
+            <strong>ตาราง % แรงดันตามเวลา</strong><br>
+            1τ → 63.2% | 2τ → 86.5%<br>
+            3τ → 95.0% | 4τ → 98.2%<br>
+            5τ → 99.3% (ถือว่าเต็ม)
+          </div>
+          <div class="info-box en-only">
+            <strong>Example</strong><br>
+            R = 10 kΩ, C = 100 μF<br>
+            τ = 10,000 × 100×10⁻⁶ = <strong>1 second</strong><br><br>
+            Fully charged in 5τ = <strong>5 seconds</strong><br><br>
+            <strong>Voltage vs. time</strong><br>
+            1τ → 63.2% | 2τ → 86.5%<br>
+            3τ → 95.0% | 4τ → 98.2%<br>
+            5τ → 99.3% (considered full)
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. การอ่านรหัส + ตาราง -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">การอ่านรหัสตัวเก็บประจุ (Ceramic / Polyester)</span><span class="en-only">Reading Capacitor Codes (Ceramic / Polyester)</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li>รหัส 3 หลัก: หลักที่ 1–2 = ค่า, หลักที่ 3 = ตัวคูณ (×10ⁿ pF)</li>
+            <li>ตัวอักษรต่อท้าย = Tolerance (J/K/M)</li>
+            <li>ตัวเลขเพิ่มเติม = Voltage rating (เช่น 50V, 100V)</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li>3-digit code: digits 1–2 = value, digit 3 = multiplier (×10ⁿ pF)</li>
+            <li>Trailing letter = Tolerance (J/K/M)</li>
+            <li>Extra number = Voltage rating (e.g. 50V, 100V)</li>
+          </ul>
+          <table style="margin-top:0.75rem;">
+            <tr>
+              <th><span class="th-only">รหัส</span><span class="en-only">Code</span></th>
+              <th>pF</th>
+              <th>nF</th>
+              <th>μF</th>
+            </tr>
+            <tr><td><strong>101</strong></td><td>100</td><td>0.1</td><td>—</td></tr>
+            <tr><td><strong>102</strong></td><td>1,000</td><td>1</td><td>0.001</td></tr>
+            <tr><td><strong>103</strong></td><td>10,000</td><td>10</td><td>0.01</td></tr>
+            <tr><td><strong>104</strong></td><td>100,000</td><td>100</td><td>0.1</td></tr>
+            <tr><td><strong>105</strong></td><td>1,000,000</td><td>1,000</td><td>1</td></tr>
+            <tr><td><strong>221</strong></td><td>220</td><td>0.22</td><td>—</td></tr>
+            <tr><td><strong>473</strong></td><td>47,000</td><td>47</td><td>0.047</td></tr>
+          </table>
+        </div>
+        <div>
+          <div class="info-box th-only">
+            <strong>วิธีอ่าน Electrolytic</strong><br>
+            Cap อิเล็กโทรไลติกพิมพ์ค่าตรงๆ เช่น <strong>100μF 25V</strong><br>
+            ขาที่ยาวกว่า = ขั้วบวก (+)<br>
+            แถบสีขาว/เงินข้าง = ขั้วลบ (−)<br><br>
+            ⚠️ <strong>ต่อขั้วผิดจะระเบิดได้!</strong><br>
+            ต้องให้แรงดันวงจร &lt; Voltage rating เสมอ
+          </div>
+          <div class="info-box en-only">
+            <strong>Reading Electrolytic Caps</strong><br>
+            Electrolytic caps print value directly, e.g. <strong>100μF 25V</strong><br>
+            Longer lead = positive (+)<br>
+            White/silver stripe side = negative (−)<br><br>
+            ⚠️ <strong>Reversed polarity can cause explosion!</strong><br>
+            Circuit voltage must always be &lt; voltage rating
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Tolerance & Voltage Rating -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">Tolerance และ Voltage Rating</span><span class="en-only">Tolerance &amp; Voltage Rating</span></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 class="th-only">รหัส Tolerance</h3>
+        <h3 class="en-only">Tolerance Codes</h3>
+        <table>
+          <tr>
+            <th><span class="th-only">ตัวอักษร</span><span class="en-only">Letter</span></th>
+            <th>Tolerance</th>
+            <th><span class="th-only">ใช้งาน</span><span class="en-only">Use case</span></th>
+          </tr>
+          <tr><td><strong>B</strong></td><td>±0.1 pF</td><td><span class="th-only">งานความแม่นยำสูง</span><span class="en-only">High precision</span></td></tr>
+          <tr><td><strong>C</strong></td><td>±0.25 pF</td><td><span class="th-only">RF วงจร</span><span class="en-only">RF circuits</span></td></tr>
+          <tr><td><strong>J</strong></td><td>±5%</td><td><span class="th-only">งานทั่วไป</span><span class="en-only">General use</span></td></tr>
+          <tr><td><strong>K</strong></td><td>±10%</td><td><span class="th-only">ใช้บ่อยที่สุด</span><span class="en-only">Most common</span></td></tr>
+          <tr><td><strong>M</strong></td><td>±20%</td><td><span class="th-only">Bypass, Decoupling</span><span class="en-only">Bypass, Decoupling</span></td></tr>
+          <tr><td><strong>Z</strong></td><td>+80%/−20%</td><td><span class="th-only">Electrolytic</span><span class="en-only">Electrolytic</span></td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3 class="th-only">Voltage Rating (แรงดันทนได้)</h3>
+        <h3 class="en-only">Voltage Rating</h3>
+        <ul class="content-list th-only">
+          <li>แรงดันวงจรต้องต่ำกว่า Voltage rating อย่างน้อย <strong>20–50%</strong></li>
+          <li>วงจร 12 V → เลือก Cap <strong>≥ 16 V</strong> (นิยม 25 V)</li>
+          <li>วงจร 5 V → เลือก Cap <strong>≥ 10 V</strong></li>
+          <li>Electrolytic มัก rated 6.3 / 10 / 16 / 25 / 35 / 50 / 63 / 100 V</li>
+          <li>ใช้เกิน Voltage rating → Cap ร้อน, รั่ว, หรือระเบิด</li>
+        </ul>
+        <ul class="content-list en-only">
+          <li>Circuit voltage must be at least <strong>20–50% below</strong> the voltage rating</li>
+          <li>12 V circuit → choose Cap <strong>≥ 16 V</strong> (25 V is common)</li>
+          <li>5 V circuit → choose Cap <strong>≥ 10 V</strong></li>
+          <li>Electrolytic ratings: 6.3 / 10 / 16 / 25 / 35 / 50 / 63 / 100 V</li>
+          <li>Exceeding the rating → overheating, leakage, or explosion</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. การแปลงหน่วย -->
   <div class="section">
     <div class="section-title"><span class="th-only">การแปลงหน่วยความจุ</span><span class="en-only">Capacitance Unit Conversion</span></div>
     <div class="card">
@@ -71,59 +271,73 @@
           <th><span class="th-only">หน่วย</span><span class="en-only">Unit</span></th>
           <th><span class="th-only">สัญลักษณ์</span><span class="en-only">Symbol</span></th>
           <th><span class="th-only">เทียบกับ Farad</span><span class="en-only">Equivalent in Farads</span></th>
+          <th><span class="th-only">ใช้กับ Cap ชนิด</span><span class="en-only">Typical capacitor type</span></th>
         </tr>
-        <tr><td><span class="th-only">ฟารัด</span><span class="en-only">Farad</span></td><td>F</td><td>1 F</td></tr>
-        <tr><td><span class="th-only">ไมโครฟารัด</span><span class="en-only">Microfarad</span></td><td>μF</td><td>10⁻⁶ F</td></tr>
-        <tr><td><span class="th-only">นาโนฟารัด</span><span class="en-only">Nanofarad</span></td><td>nF</td><td>10⁻⁹ F</td></tr>
-        <tr><td><span class="th-only">พิโคฟารัด</span><span class="en-only">Picofarad</span></td><td>pF</td><td>10⁻¹² F</td></tr>
+        <tr>
+          <td><span class="th-only">ฟารัด</span><span class="en-only">Farad</span></td>
+          <td>F</td><td>1 F</td>
+          <td><span class="th-only">Super capacitor</span><span class="en-only">Supercapacitor</span></td>
+        </tr>
+        <tr>
+          <td><span class="th-only">ไมโครฟารัด</span><span class="en-only">Microfarad</span></td>
+          <td>μF</td><td>10⁻⁶ F</td>
+          <td>Electrolytic, Tantalum</td>
+        </tr>
+        <tr>
+          <td><span class="th-only">นาโนฟารัด</span><span class="en-only">Nanofarad</span></td>
+          <td>nF</td><td>10⁻⁹ F</td>
+          <td>Polyester (MKT)</td>
+        </tr>
+        <tr>
+          <td><span class="th-only">พิโคฟารัด</span><span class="en-only">Picofarad</span></td>
+          <td>pF</td><td>10⁻¹² F</td>
+          <td>Ceramic, Variable</td>
+        </tr>
       </table>
       <div class="info-box" style="margin-top:0.75rem;">
-        1 μF = 1,000 nF = 1,000,000 pF<br>
-        1 nF = 0.001 μF = 1,000 pF<br>
+        1 μF = 1,000 nF = 1,000,000 pF &nbsp;|&nbsp;
+        1 nF = 0.001 μF = 1,000 pF &nbsp;|&nbsp;
         1 pF = 0.001 nF = 0.000001 μF
       </div>
     </div>
   </div>
 
-  <div class="section">
-    <div class="section-title"><span class="th-only">การอ่านรหัสตัวเก็บประจุ (Ceramic/Polyester)</span><span class="en-only">Reading Capacitor Codes (Ceramic/Polyester)</span></div>
-    <div class="card">
-      <ul class="content-list th-only">
-        <li>รหัส 3 หลัก: หลักที่ 1-2 คือค่า, หลักที่ 3 คือตัวคูณ → หน่วย pF</li>
-        <li><strong>104</strong> = 10 × 10⁴ = 100,000 pF = 100 nF = 0.1 μF</li>
-        <li><strong>473</strong> = 47 × 10³ = 47,000 pF = 47 nF</li>
-        <li><strong>221</strong> = 22 × 10¹ = 220 pF</li>
-        <li><strong>100</strong> = 10 × 10⁰ = 10 pF</li>
-      </ul>
-      <ul class="content-list en-only">
-        <li>3-digit code: digits 1–2 are the value, digit 3 is the multiplier → unit is pF</li>
-        <li><strong>104</strong> = 10 × 10⁴ = 100,000 pF = 100 nF = 0.1 μF</li>
-        <li><strong>473</strong> = 47 × 10³ = 47,000 pF = 47 nF</li>
-        <li><strong>221</strong> = 22 × 10¹ = 220 pF</li>
-        <li><strong>100</strong> = 10 × 10⁰ = 10 pF</li>
-      </ul>
-    </div>
-  </div>
-
+  <!-- 7. วงจรอนุกรม/ขนาน -->
   <div class="section">
     <div class="section-title"><span class="th-only">วงจรตัวเก็บประจุ</span><span class="en-only">Capacitor Circuits</span></div>
     <div class="grid-2">
       <div class="card">
         <h3 class="th-only">วงจรอนุกรม (Series)</h3>
         <h3 class="en-only">Series Circuit</h3>
-        <div class="formula-box"><div class="formula">1/C<sub>T</sub> = 1/C₁ + 1/C₂ + 1/C₃ + ...</div></div>
+        <div class="formula-box"><div class="formula">1/C<sub>T</sub> = 1/C₁ + 1/C₂ + ...</div></div>
         <div class="info-box" style="margin-top:0.75rem;">
-          <span class="th-only">ค่าความจุรวม <strong>น้อยกว่า</strong>ทุกตัว</span>
-          <span class="en-only">Total capacitance is <strong>less than</strong> the smallest individual capacitor</span>
+          <span class="th-only">
+            ค่าความจุรวม <strong>น้อยกว่า</strong>ทุกตัว<br>
+            แรงดันแบ่งกันตามสัดส่วน 1/C<br>
+            <strong>ตัวอย่าง:</strong> C₁=10μF, C₂=10μF → C<sub>T</sub>=5μF
+          </span>
+          <span class="en-only">
+            Total capacitance is <strong>less than</strong> the smallest<br>
+            Voltage divides inversely with capacitance<br>
+            <strong>Example:</strong> C₁=10μF, C₂=10μF → C<sub>T</sub>=5μF
+          </span>
         </div>
       </div>
       <div class="card">
         <h3 class="th-only">วงจรขนาน (Parallel)</h3>
         <h3 class="en-only">Parallel Circuit</h3>
-        <div class="formula-box"><div class="formula">C<sub>T</sub> = C₁ + C₂ + C₃ + ...</div></div>
+        <div class="formula-box"><div class="formula">C<sub>T</sub> = C₁ + C₂ + ...</div></div>
         <div class="info-box" style="margin-top:0.75rem;">
-          <span class="th-only">ค่าความจุรวม <strong>มากกว่า</strong>ทุกตัว</span>
-          <span class="en-only">Total capacitance is <strong>greater than</strong> any individual capacitor</span>
+          <span class="th-only">
+            ค่าความจุรวม <strong>มากกว่า</strong>ทุกตัว<br>
+            แรงดันเท่ากันทุกตัว<br>
+            <strong>ตัวอย่าง:</strong> C₁=10μF, C₂=10μF → C<sub>T</sub>=20μF
+          </span>
+          <span class="en-only">
+            Total capacitance is <strong>greater than</strong> any individual<br>
+            Same voltage across all capacitors<br>
+            <strong>Example:</strong> C₁=10μF, C₂=10μF → C<sub>T</sub>=20μF
+          </span>
         </div>
       </div>
     </div>

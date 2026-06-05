@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="th" data-title-th="ตัวเหนี่ยวนำและหม้อแปลง | สื่อการเรียนการสอน" data-title-en="Inductor & Transformer | Teaching Materials">
 <head>
 <meta charset="UTF-8">
@@ -19,13 +19,15 @@
     <div>
       <h1 class="th-only">ตัวเหนี่ยวนำและหม้อแปลงไฟฟ้า</h1>
       <h1 class="en-only">Inductor &amp; Transformer</h1>
-      <p>Inductor • Transformer • H/mH/μH • <span class="th-only">วงจรอนุกรม/ขนาน</span><span class="en-only">Series/Parallel</span></p>
+      <p class="th-only">V=L·dI/dt • RL Time Constant • X<sub>L</sub> • วงจรอนุกรม/ขนาน • Transformer η</p>
+      <p class="en-only">V=L·dI/dt • RL Time Constant • X<sub>L</sub> • Series/Parallel • Transformer η</p>
     </div>
   </div>
 </div>
 
 <div class="container">
 
+  <!-- 1. คุณสมบัติ + หน่วย -->
   <div class="section">
     <div class="section-title"><span class="th-only">ตัวเหนี่ยวนำ (Inductor / Coil)</span><span class="en-only">Inductor / Coil</span></div>
     <div class="card">
@@ -33,14 +35,14 @@
         <div>
           <ul class="content-list th-only">
             <li>เก็บพลังงานในรูปสนามแม่เหล็ก</li>
-            <li>ต่อต้านการเปลี่ยนแปลงกระแส</li>
-            <li>ใช้ใน Filter, Oscillator, Power Supply</li>
+            <li>ต่อต้านการเปลี่ยนแปลงกระแส (oppose ΔI)</li>
+            <li>ใช้ใน Filter, Oscillator, Power Supply, Motor</li>
             <li>หน่วย: เฮนรี (Henry, H)</li>
           </ul>
           <ul class="content-list en-only">
             <li>Stores energy in a magnetic field</li>
-            <li>Opposes changes in current</li>
-            <li>Used in Filters, Oscillators, Power Supplies</li>
+            <li>Opposes changes in current (oppose ΔI)</li>
+            <li>Used in Filters, Oscillators, Power Supplies, Motors</li>
             <li>Unit: Henry (H)</li>
           </ul>
           <div class="info-box" style="margin-top:0.75rem;">
@@ -54,20 +56,227 @@
             1 μH = 0.001 mH = 0.000001 H</span>
           </div>
         </div>
+        <div class="info-box">
+          <span class="th-only"><strong>ชนิดของ Inductor</strong><br>
+          • <strong>Air-core</strong> — ไม่มีแกน, สูญเสียต่ำ, ใช้ความถี่สูง (RF)<br>
+          • <strong>Iron-core</strong> — แกนเหล็ก, ค่า L สูง, ใช้ความถี่ต่ำ<br>
+          • <strong>Ferrite-core</strong> — แกนเฟอร์ไรต์, ใช้กันแพร่หลาย<br>
+          • <strong>Toroid</strong> — แกนวงแหวน, สนามแม่เหล็กรั่วน้อย<br>
+          • <strong>SMD Inductor</strong> — ขนาดเล็ก ใช้ใน PCB สมัยใหม่</span>
+          <span class="en-only"><strong>Types of Inductors</strong><br>
+          • <strong>Air-core</strong> — no core, low loss, high-frequency (RF) use<br>
+          • <strong>Iron-core</strong> — high L value, low-frequency use<br>
+          • <strong>Ferrite-core</strong> — most common general-purpose type<br>
+          • <strong>Toroid</strong> — ring core, minimal magnetic field leakage<br>
+          • <strong>SMD Inductor</strong> — compact, used on modern PCBs</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. สูตรพื้นฐาน V = L·dI/dt และ E = ½LI² -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">สูตรพื้นฐาน</span><span class="en-only">Basic Formulas</span></div>
+    <div class="card">
+      <div class="grid-2">
         <div>
-          <div class="card" style="box-shadow:none;border:1px solid var(--border);">
-            <h3 class="th-only">วงจรอนุกรม</h3>
-            <h3 class="en-only">Series Circuit</h3>
-            <div class="formula-box"><div class="formula">L<sub>T</sub> = L₁ + L₂ + L₃</div></div>
-            <h3 style="margin-top:0.75rem;" class="th-only">วงจรขนาน</h3>
-            <h3 style="margin-top:0.75rem;" class="en-only">Parallel Circuit</h3>
-            <div class="formula-box"><div class="formula">1/L<sub>T</sub> = 1/L₁ + 1/L₂ + 1/L₃</div></div>
+          <div class="formula-box">
+            <div class="formula">V = L × (dI/dt)</div>
+          </div>
+          <table style="margin-top:0.5rem;">
+            <tr>
+              <th><span class="th-only">สัญลักษณ์</span><span class="en-only">Symbol</span></th>
+              <th><span class="th-only">ความหมาย</span><span class="en-only">Meaning</span></th>
+              <th><span class="th-only">หน่วย</span><span class="en-only">Unit</span></th>
+            </tr>
+            <tr>
+              <td><strong>V</strong></td>
+              <td><span class="th-only">แรงดันเหนี่ยวนำ</span><span class="en-only">Induced voltage</span></td>
+              <td>Volt (V)</td>
+            </tr>
+            <tr>
+              <td><strong>L</strong></td>
+              <td><span class="th-only">ค่าความเหนี่ยวนำ</span><span class="en-only">Inductance</span></td>
+              <td>Henry (H)</td>
+            </tr>
+            <tr>
+              <td><strong>dI/dt</strong></td>
+              <td><span class="th-only">อัตราเปลี่ยนแปลงกระแส</span><span class="en-only">Rate of current change</span></td>
+              <td>A/s</td>
+            </tr>
+          </table>
+        </div>
+        <div>
+          <div class="formula-box">
+            <div class="formula">E = ½ × L × I²</div>
+          </div>
+          <div class="info-box th-only" style="margin-top:0.5rem;">
+            <strong>ตัวอย่าง</strong><br>
+            L = 50 mH, กระแส I = 2 A<br>
+            E = ½ × 0.05 × 2² = <strong>0.1 J = 100 mJ</strong><br><br>
+            <span style="font-size:0.9rem;">เหมือนกับ Cap ที่ E = ½CV² แต่เก็บพลังงานเป็นสนามแม่เหล็กแทน</span>
+          </div>
+          <div class="info-box en-only" style="margin-top:0.5rem;">
+            <strong>Example</strong><br>
+            L = 50 mH, current I = 2 A<br>
+            E = ½ × 0.05 × 2² = <strong>0.1 J = 100 mJ</strong><br><br>
+            <span style="font-size:0.9rem;">Like a capacitor's E = ½CV², but energy is stored in a magnetic field</span>
           </div>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- 3. RL Time Constant -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">RL Time Constant (τ)</span><span class="en-only">RL Time Constant (τ)</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <div class="formula-box">
+            <div class="formula">τ = L / R</div>
+          </div>
+          <ul class="content-list th-only" style="margin-top:0.75rem;">
+            <li>τ = เวลาที่กระแสเพิ่มถึง <strong>63.2%</strong> ของค่าสูงสุด (I_max = V/R)</li>
+            <li>กระแสถึง 99% ≈ <strong>5τ</strong></li>
+            <li>ลดกระแสเหลือ 37% เมื่อ Source ถูกตัด ≈ <strong>1τ</strong></li>
+            <li>L ใหญ่ขึ้น หรือ R เล็กลง → ตอบสนองช้าลง</li>
+          </ul>
+          <ul class="content-list en-only" style="margin-top:0.75rem;">
+            <li>τ = time for current to rise to <strong>63.2%</strong> of maximum (I_max = V/R)</li>
+            <li>Current reaches 99% ≈ <strong>5τ</strong></li>
+            <li>Current falls to 37% after source is removed ≈ <strong>1τ</strong></li>
+            <li>Larger L or smaller R → slower response</li>
+          </ul>
+        </div>
+        <div>
+          <div class="info-box th-only">
+            <strong>ตัวอย่าง</strong><br>
+            L = 100 mH, R = 10 Ω<br>
+            τ = 0.1 / 10 = <strong>10 ms</strong><br>
+            กระแสเต็มที่ใน 5τ = <strong>50 ms</strong><br><br>
+            <strong>ตาราง % กระแสตามเวลา</strong><br>
+            1τ → 63.2% | 2τ → 86.5%<br>
+            3τ → 95.0% | 4τ → 98.2%<br>
+            5τ → 99.3% (ถือว่าเสถียร)<br><br>
+            <span style="font-size:0.9rem;">⚠️ เมื่อตัด Switch Inductor จะดัน Back-EMF สูงมาก ต้องต่อ Flyback diode ป้องกัน</span>
+          </div>
+          <div class="info-box en-only">
+            <strong>Example</strong><br>
+            L = 100 mH, R = 10 Ω<br>
+            τ = 0.1 / 10 = <strong>10 ms</strong><br>
+            Current reaches steady state in 5τ = <strong>50 ms</strong><br><br>
+            <strong>Current vs. time</strong><br>
+            1τ → 63.2% | 2τ → 86.5%<br>
+            3τ → 95.0% | 4τ → 98.2%<br>
+            5τ → 99.3% (considered stable)<br><br>
+            <span style="font-size:0.9rem;">⚠️ When switching off, the inductor generates a high Back-EMF spike — always add a flyback diode for protection</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Inductive Reactance -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">Inductive Reactance (X<sub>L</sub>) — วงจร AC</span><span class="en-only">Inductive Reactance (X<sub>L</sub>) — AC Circuits</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <div class="formula-box">
+            <div class="formula">X<sub>L</sub> = 2π × f × L</div>
+          </div>
+          <table style="margin-top:0.5rem;">
+            <tr>
+              <th><span class="th-only">สัญลักษณ์</span><span class="en-only">Symbol</span></th>
+              <th><span class="th-only">ความหมาย</span><span class="en-only">Meaning</span></th>
+              <th><span class="th-only">หน่วย</span><span class="en-only">Unit</span></th>
+            </tr>
+            <tr>
+              <td><strong>X<sub>L</sub></strong></td>
+              <td><span class="th-only">ความต้านทานเชิงเหนี่ยวนำ</span><span class="en-only">Inductive reactance</span></td>
+              <td>Ω</td>
+            </tr>
+            <tr>
+              <td><strong>f</strong></td>
+              <td><span class="th-only">ความถี่</span><span class="en-only">Frequency</span></td>
+              <td>Hz</td>
+            </tr>
+            <tr>
+              <td><strong>L</strong></td>
+              <td><span class="th-only">ค่าความเหนี่ยวนำ</span><span class="en-only">Inductance</span></td>
+              <td>H</td>
+            </tr>
+          </table>
+        </div>
+        <div>
+          <div class="info-box th-only">
+            <strong>ตัวอย่าง</strong><br>
+            L = 10 mH, f = 1 kHz<br>
+            X<sub>L</sub> = 2π × 1,000 × 0.01 = <strong>62.8 Ω</strong><br><br>
+            <strong>หลักการ</strong><br>
+            • ความถี่สูงขึ้น → X<sub>L</sub> สูงขึ้น (ต้านกระแสมากขึ้น)<br>
+            • ความถี่ต่ำลง → X<sub>L</sub> ต่ำลง<br>
+            • ที่ DC (f=0) → X<sub>L</sub> = 0 (Inductor เหมือนสายไฟ)<br><br>
+            <span style="font-size:0.9rem;">ใช้ทำ Low-pass filter: ความถี่สูงผ่านไม่ได้, ความถี่ต่ำผ่านได้</span>
+          </div>
+          <div class="info-box en-only">
+            <strong>Example</strong><br>
+            L = 10 mH, f = 1 kHz<br>
+            X<sub>L</sub> = 2π × 1,000 × 0.01 = <strong>62.8 Ω</strong><br><br>
+            <strong>Key points</strong><br>
+            • Higher frequency → higher X<sub>L</sub> (more opposition)<br>
+            • Lower frequency → lower X<sub>L</sub><br>
+            • At DC (f=0) → X<sub>L</sub> = 0 (acts like a wire)<br><br>
+            <span style="font-size:0.9rem;">Used for low-pass filtering: blocks high frequencies, passes low frequencies</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. วงจรอนุกรม/ขนาน -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">วงจร Inductor อนุกรม / ขนาน</span><span class="en-only">Inductor Series / Parallel Circuits</span></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 class="th-only">วงจรอนุกรม (Series)</h3>
+        <h3 class="en-only">Series Circuit</h3>
+        <div class="formula-box"><div class="formula">L<sub>T</sub> = L₁ + L₂ + L₃ + ...</div></div>
+        <div class="info-box" style="margin-top:0.75rem;">
+          <span class="th-only">
+            ค่า L รวม <strong>มากกว่า</strong>ทุกตัว<br>
+            กระแสเท่ากันทุกตัว<br>
+            <strong>ตัวอย่าง:</strong> L₁=10mH, L₂=10mH → L<sub>T</sub>=20mH
+          </span>
+          <span class="en-only">
+            Total L is <strong>greater than</strong> any individual<br>
+            Same current through all inductors<br>
+            <strong>Example:</strong> L₁=10mH, L₂=10mH → L<sub>T</sub>=20mH
+          </span>
+        </div>
+      </div>
+      <div class="card">
+        <h3 class="th-only">วงจรขนาน (Parallel)</h3>
+        <h3 class="en-only">Parallel Circuit</h3>
+        <div class="formula-box"><div class="formula">1/L<sub>T</sub> = 1/L₁ + 1/L₂ + 1/L₃ + ...</div></div>
+        <div class="info-box" style="margin-top:0.75rem;">
+          <span class="th-only">
+            ค่า L รวม <strong>น้อยกว่า</strong>ทุกตัว<br>
+            แรงดันเท่ากันทุกตัว<br>
+            <strong>ตัวอย่าง:</strong> L₁=10mH, L₂=10mH → L<sub>T</sub>=5mH
+          </span>
+          <span class="en-only">
+            Total L is <strong>less than</strong> the smallest individual<br>
+            Same voltage across all inductors<br>
+            <strong>Example:</strong> L₁=10mH, L₂=10mH → L<sub>T</sub>=5mH
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. หม้อแปลงไฟฟ้า -->
   <div class="section">
     <div class="section-title"><span class="th-only">หม้อแปลงไฟฟ้า (Transformer)</span><span class="en-only">Transformer</span></div>
     <div class="card">
@@ -77,14 +286,14 @@
             <li>แปลงแรงดัน AC ขึ้นหรือลงตามอัตราส่วนรอบขด</li>
             <li>ขดปฐมภูมิ (Primary) รับแรงดันเข้า</li>
             <li>ขดทุติยภูมิ (Secondary) ส่งแรงดันออก</li>
-            <li>ไม่เปลี่ยนความถี่</li>
+            <li>ไม่เปลี่ยนความถี่ — ทำงานกับ AC เท่านั้น</li>
             <li>กำลังไฟฟ้าเข้า ≈ กำลังไฟฟ้าออก (ไม่คิดสูญเสีย)</li>
           </ul>
           <ul class="content-list en-only">
-            <li>Steps AC voltage up or down according to the turns ratio</li>
+            <li>Steps AC voltage up or down by the turns ratio</li>
             <li>Primary winding receives input voltage</li>
             <li>Secondary winding delivers output voltage</li>
-            <li>Does not change frequency</li>
+            <li>Does not change frequency — AC only</li>
             <li>Input power ≈ output power (ignoring losses)</li>
           </ul>
           <div class="formula-box" style="margin-top:0.75rem;">
@@ -98,17 +307,68 @@
           • <strong>Isolation</strong>: แรงดันเท่ากัน แยก Ground<br>
           • <strong>Auto Transformer</strong>: ขดเดียว มี Tap<br><br>
           <strong>ตัวอย่าง:</strong><br>
-          หม้อแปลง 220V/12V มีรอบขด N₁:N₂ = 220:12<br>
-          ถ้า I₂ = 1A → I₁ = 12/220 = 0.055 A</span>
+          หม้อแปลง 220V/12V → N₁:N₂ = 220:12<br>
+          ถ้า I₂ = 1 A → I₁ = (12/220) × 1 = <strong>0.055 A</strong><br>
+          P = V₁ × I₁ = 220 × 0.055 = <strong>12.1 W</strong></span>
           <span class="en-only"><strong>Types of Transformers</strong><br>
           • <strong>Step-Up</strong>: Output &gt; Input voltage (N₂ &gt; N₁)<br>
           • <strong>Step-Down</strong>: Output &lt; Input voltage (N₂ &lt; N₁)<br>
-          • <strong>Isolation</strong>: Same voltage, separate ground<br>
+          • <strong>Isolation</strong>: Same voltage, separated ground<br>
           • <strong>Auto Transformer</strong>: Single winding with tap<br><br>
           <strong>Example:</strong><br>
-          Transformer 220V/12V has turns ratio N₁:N₂ = 220:12<br>
-          If I₂ = 1A → I₁ = 12/220 = 0.055 A</span>
+          Transformer 220V/12V → N₁:N₂ = 220:12<br>
+          If I₂ = 1 A → I₁ = (12/220) × 1 = <strong>0.055 A</strong><br>
+          P = V₁ × I₁ = 220 × 0.055 = <strong>12.1 W</strong></span>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. ประสิทธิภาพ + VA Rating -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ประสิทธิภาพและการเลือกขนาด</span><span class="en-only">Efficiency &amp; VA Rating Selection</span></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 class="th-only">ประสิทธิภาพ (η)</h3>
+        <h3 class="en-only">Efficiency (η)</h3>
+        <div class="formula-box">
+          <div class="formula">η = (P<sub>out</sub> / P<sub>in</sub>) × 100%</div>
+        </div>
+        <ul class="content-list th-only" style="margin-top:0.75rem;">
+          <li>หม้อแปลงทั่วไป η ≈ <strong>85–98%</strong></li>
+          <li>สูญเสียจาก Copper loss (ความต้านทานขดลวด)</li>
+          <li>สูญเสียจาก Core loss (Hysteresis + Eddy current)</li>
+          <li><strong>ตัวอย่าง:</strong> P_out=10W, η=90% → P_in = 10/0.9 = <strong>11.1 W</strong></li>
+        </ul>
+        <ul class="content-list en-only" style="margin-top:0.75rem;">
+          <li>Typical transformer η ≈ <strong>85–98%</strong></li>
+          <li>Copper loss: resistance of windings</li>
+          <li>Core loss: Hysteresis + Eddy current losses</li>
+          <li><strong>Example:</strong> P_out=10W, η=90% → P_in = 10/0.9 = <strong>11.1 W</strong></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="th-only">การเลือก VA Rating</h3>
+        <h3 class="en-only">Choosing VA Rating</h3>
+        <ul class="content-list th-only">
+          <li>VA = Volt × Ampere = กำลังไฟฟ้าสูงสุดที่รับได้</li>
+          <li>ควรเลือก VA ≥ กำลังโหลด × <strong>1.25</strong> (Safety margin 25%)</li>
+        </ul>
+        <ul class="content-list en-only">
+          <li>VA = Volt × Ampere = maximum power capacity</li>
+          <li>Choose VA ≥ load power × <strong>1.25</strong> (25% safety margin)</li>
+        </ul>
+        <table style="margin-top:0.5rem;">
+          <tr>
+            <th><span class="th-only">โหลด</span><span class="en-only">Load</span></th>
+            <th><span class="th-only">VA ที่เลือก</span><span class="en-only">Choose VA</span></th>
+          </tr>
+          <tr><td>5 W</td><td>≥ 10 VA</td></tr>
+          <tr><td>10 W</td><td>≥ 15 VA</td></tr>
+          <tr><td>20 W</td><td>≥ 30 VA</td></tr>
+          <tr><td>50 W</td><td>≥ 60 VA</td></tr>
+          <tr><td>100 W</td><td>≥ 120 VA</td></tr>
+        </table>
       </div>
     </div>
   </div>
