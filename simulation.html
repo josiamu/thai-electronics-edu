@@ -584,6 +584,7 @@ function moveElectrons(dots,path,sp,dt){
 
 // ════════════════════════════ SERIES ════════════════════════════
 var sState={V:12,R1:100,R2:200,R3:300};
+var sSpeed=0;
 function calcS(){
   var Rt=sState.R1+sState.R2+sState.R3,I=sState.V/Rt;
   var v1=I*sState.R1,v2=I*sState.R2,v3=I*sState.R3;
@@ -592,6 +593,7 @@ function calcS(){
 }
 function updS(){
   var c=calcS(),ref=Math.max(c.p1,c.p2,c.p3,1e-4);
+  sSpeed=spd(c.I);
   $$('sl-v').textContent=sState.V+' V';
   $$('sl-r1').textContent=sState.R1+' Ω';
   $$('sl-r2').textContent=sState.R2+' Ω';
@@ -614,6 +616,7 @@ function updS(){
 }
 addGlow($$('svg-s'),'sg');
 var sE=mkElectrons($$('svg-s'),14,'sg');
+var psPath=$$('ps');
 $$('s-v').addEventListener('input',function(){sState.V=+this.value;updS();});
 $$('s-r1-sl').addEventListener('input',function(){sState.R1=+this.value;updS();});
 $$('s-r2-sl').addEventListener('input',function(){sState.R2=+this.value;updS();});
@@ -622,6 +625,7 @@ updS();
 
 // ════════════════════════════ PARALLEL ════════════════════════════
 var pState={V:12,R1:100,R2:200,R3:400};
+var pSpeedOut=0,pSpeed1=0,pSpeed2=0,pSpeed3=0;
 function calcP(){
   var I1=pState.V/pState.R1,I2=pState.V/pState.R2,I3=pState.V/pState.R3;
   var It=I1+I2+I3,Rt=pState.V/It;
@@ -630,6 +634,7 @@ function calcP(){
 }
 function updP(){
   var c=calcP(),ref=Math.max(c.p1,c.p2,c.p3,1e-4);
+  pSpeedOut=spd(c.It);pSpeed1=spd(c.I1);pSpeed2=spd(c.I2);pSpeed3=spd(c.I3);
   $$('pl-v').textContent=pState.V+' V';
   $$('pl-r1').textContent=pState.R1+' Ω';
   $$('pl-r2').textContent=pState.R2+' Ω';
@@ -653,6 +658,7 @@ var pEout=mkElectrons($$('svg-p'),10,'pg');
 var pE1=mkElectrons($$('svg-p'),8,'pg','#6ee7b7');
 var pE2=mkElectrons($$('svg-p'),8,'pg','#fb923c');
 var pE3=mkElectrons($$('svg-p'),8,'pg','#c4b5fd');
+var ppOutPath=$$('pp-out'),pp1Path=$$('pp1'),pp2Path=$$('pp2'),pp3Path=$$('pp3');
 $$('p-v').addEventListener('input',function(){pState.V=+this.value;updP();});
 $$('p-r1-sl').addEventListener('input',function(){pState.R1=+this.value;updP();});
 $$('p-r2-sl').addEventListener('input',function(){pState.R2=+this.value;updP();});
@@ -661,6 +667,7 @@ updP();
 
 // ════════════════════════════ MIXED ════════════════════════════
 var mState={V:12,R1:100,R2:200,R3:400};
+var mSpeedOut=0,mSpeed2=0,mSpeed3=0;
 function calcM(){
   var Rp=mState.R2*mState.R3/(mState.R2+mState.R3);
   var Rt=mState.R1+Rp,It=mState.V/Rt;
@@ -671,6 +678,7 @@ function calcM(){
 }
 function updM(){
   var c=calcM(),ref=Math.max(c.p1,c.p2,c.p3,1e-4);
+  mSpeedOut=spd(c.It);mSpeed2=spd(c.I2);mSpeed3=spd(c.I3);
   $$('ml-v').textContent=mState.V+' V';
   $$('ml-r1').textContent=mState.R1+' Ω';
   $$('ml-r2').textContent=mState.R2+' Ω';
@@ -699,6 +707,7 @@ addGlow($$('svg-m'),'mg');
 var mEout=mkElectrons($$('svg-m'),12,'mg');
 var mE2=mkElectrons($$('svg-m'),8,'mg','#fb923c');
 var mE3=mkElectrons($$('svg-m'),8,'mg','#c4b5fd');
+var pmOutPath=$$('pm-out'),pm2Path=$$('pm2'),pm3Path=$$('pm3');
 $$('m-v').addEventListener('input',function(){mState.V=+this.value;updM();});
 $$('m-r1-sl').addEventListener('input',function(){mState.R1=+this.value;updM();});
 $$('m-r2-sl').addEventListener('input',function(){mState.R2=+this.value;updM();});
@@ -706,31 +715,33 @@ $$('m-r3-sl').addEventListener('input',function(){mState.R3=+this.value;updM();}
 updM();
 
 // ════════════════════════════ ANIMATION LOOP ════════════════════════════
-var lastTs=null;
+var lastTs=null,rafId=null;
 function tick(ts){
   if(lastTs===null)lastTs=ts;
   var dt=Math.min((ts-lastTs)/1000,0.05);lastTs=ts;
 
-  // series
-  var cs=calcS();
-  moveElectrons(sE,$$('ps'),spd(cs.I),dt);
+  moveElectrons(sE,psPath,sSpeed,dt);
 
-  // parallel
-  var cp=calcP();
-  moveElectrons(pEout,$$('pp-out'),spd(cp.It),dt);
-  moveElectrons(pE1,$$('pp1'),spd(cp.I1),dt);
-  moveElectrons(pE2,$$('pp2'),spd(cp.I2),dt);
-  moveElectrons(pE3,$$('pp3'),spd(cp.I3),dt);
+  moveElectrons(pEout,ppOutPath,pSpeedOut,dt);
+  moveElectrons(pE1,pp1Path,pSpeed1,dt);
+  moveElectrons(pE2,pp2Path,pSpeed2,dt);
+  moveElectrons(pE3,pp3Path,pSpeed3,dt);
 
-  // mixed
-  var cm=calcM();
-  moveElectrons(mEout,$$('pm-out'),spd(cm.It),dt);
-  moveElectrons(mE2,$$('pm2'),spd(cm.I2),dt);
-  moveElectrons(mE3,$$('pm3'),spd(cm.I3),dt);
+  moveElectrons(mEout,pmOutPath,mSpeedOut,dt);
+  moveElectrons(mE2,pm2Path,mSpeed2,dt);
+  moveElectrons(mE3,pm3Path,mSpeed3,dt);
 
-  requestAnimationFrame(tick);
+  rafId=requestAnimationFrame(tick);
 }
-requestAnimationFrame(tick);
+document.addEventListener('visibilitychange',function(){
+  if(document.hidden){
+    if(rafId!==null){cancelAnimationFrame(rafId);rafId=null;}
+    lastTs=null;
+  } else {
+    if(rafId===null)rafId=requestAnimationFrame(tick);
+  }
+});
+rafId=requestAnimationFrame(tick);
 
 // ════════════════════════════ TAB SWITCHING ════════════════════════════
 document.querySelectorAll('.tab-btn[data-tab]').forEach(function(btn){

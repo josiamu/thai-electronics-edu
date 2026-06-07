@@ -5,10 +5,10 @@ function formatOhm(val) {
   return val.toPrecision(4) + ' Ω';
 }
 
-function showTab(tabs, contents, activeId) {
+function showTab(e, tabs, contents, activeId) {
   document.querySelectorAll(tabs).forEach(b => b.classList.remove('active'));
   document.querySelectorAll(contents).forEach(c => c.classList.remove('active'));
-  event.target.classList.add('active');
+  e.target.classList.add('active');
   document.getElementById(activeId).classList.add('active');
 }
 
@@ -256,17 +256,6 @@ function calcReverse() {
 
   // Render resistor visual
   const bandW = bands === 4 ? 26 : 22;
-  const gaps  = [14, ...Array(sigFigs - 1).fill(8), 8, 18, 14]; // gaps before each band + end
-  let bodyHTML = '';
-  bandObjs.forEach((b, i) => {
-    bodyHTML += `<div style="background:${b.bg};width:${gaps[i]}px;opacity:0.6;background:#d4a96a;"></div>`;
-    // override the gap divs to be base color
-    bodyHTML = bodyHTML.replace(/background:#d4a96a;opacity:0\.6;background:#d4a96a;/, 'background:#d4a96a;');
-    bodyHTML += `<div style="background:${b.bg};width:${bandW}px;" title="${b.n}"></div>`;
-  });
-  bodyHTML += `<div style="background:#d4a96a;width:14px;"></div>`;
-
-  // Rebuild cleaner
   let inner = '';
   inner += `<div style="background:#d4a96a;width:14px;"></div>`;
   dArr.forEach((d, i) => {

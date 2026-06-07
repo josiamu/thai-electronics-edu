@@ -144,7 +144,7 @@ const NAV_DIRECT = [
   document.body.appendChild(btt);
   window.addEventListener('scroll', function() {
     btt.classList.toggle('visible', window.scrollY > 320);
-  });
+  }, { passive: true });
   btt.addEventListener('click', function() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });

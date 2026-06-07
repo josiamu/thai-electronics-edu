@@ -199,9 +199,9 @@ nav {
 /* ── TABLE ─────────────────────────────────────────────────── */
 table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
 th { background: var(--primary); color: #fff; padding: 0.7rem 0.9rem; text-align: left; font-weight: 600; }
-td { padding: 0.6rem 0.9rem; border-bottom: 1px solid var(--border); }
+td { padding: 0.6rem 0.9rem; border-bottom: 1px solid var(--border); transition: background 0.12s; }
 tr:nth-child(even) td { background: #f8fafc; }
-tr:hover td { background: #eff6ff; transition: background 0.12s; }
+tr:hover td { background: #eff6ff; }
 
 /* ── FORMULA ───────────────────────────────────────────────── */
 .formula-box { background: linear-gradient(135deg, #eff6ff, #ecfeff); border: 2px solid var(--primary); border-radius: 14px; padding: 1.25rem 1.5rem; margin: 1rem 0; }
