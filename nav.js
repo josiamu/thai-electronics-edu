@@ -7,13 +7,13 @@ const NAV_CONTENT = [
   { id: 'capacitor',   href: 'capacitor.html',    label_th: '🔋 ตัวเก็บประจุ',    label_en: '🔋 Capacitor' },
   { id: 'inductor',    href: 'inductor.html',     label_th: '🌀 ตัวเหนี่ยวนำ',   label_en: '🌀 Inductor' },
   { id: 'soldering',   href: 'soldering.html',    label_th: '🔥 การบัดกรี',       label_en: '🔥 Soldering' },
-  { id: 'ac-circuit',  href: 'ac-circuit.html',   label_th: '〜 วงจร AC',               label_en: '〜 AC Circuit' },
+  { id: 'ac-circuit',       href: 'ac-circuit.html',       label_th: '〜 วงจร AC',               label_en: '〜 AC Circuit' },
+  { id: 'oscilloscope',     href: 'oscilloscope.html',     label_th: '📡 ออสซิลโลสโคป',         label_en: '📡 Oscilloscope' },
+  { id: 'signal-generator', href: 'signal-generator.html', label_th: '📶 เครื่องกำเนิดสัญญาณ',   label_en: '📶 Signal Generator' },
 ];
 
 const NAV_EXTRA = [
-  { id: 'home-wiring',      href: 'home-wiring.html',      label_th: '🔌 ไฟบ้านและความปลอดภัย', label_en: '🔌 Home Wiring & Safety' },
-  { id: 'oscilloscope',     href: 'oscilloscope.html',     label_th: '📡 ออสซิลโลสโคป',         label_en: '📡 Oscilloscope' },
-  { id: 'signal-generator', href: 'signal-generator.html', label_th: '📶 เครื่องกำเนิดสัญญาณ',   label_en: '📶 Signal Generator' },
+  { id: 'home-wiring', href: 'home-wiring.html', label_th: '🔌 ไฟบ้านและความปลอดภัย', label_en: '🔌 Home Wiring & Safety' },
 ];
 
 const NAV_TOOLS = [
