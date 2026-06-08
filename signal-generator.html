@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="เครื่องกำเนิดสัญญาณ | สื่อการเรียนการสอน" data-title-en="Signal Generator | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เครื่องกำเนิดสัญญาณ | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.wave-svg-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 1.25rem 0 0.5rem;
+  overflow-x: auto;
+}
+.wave-svg-wrap svg {
+  max-width: 100%;
+  border-radius: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+.step-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  border-left: 4px solid var(--primary);
+}
+.step-card h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  color: var(--primary);
+}
+.step-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: steps;
+}
+.step-list li {
+  counter-increment: steps;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.93rem;
+}
+.step-list li:last-child { border-bottom: none; }
+.step-list li::before {
+  content: counter(steps);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.6rem;
+  height: 1.6rem;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 0.05rem;
+}
+.example-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+@media (max-width: 640px) { .example-pair { grid-template-columns: 1fr; } }
+.wave-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-anchor: middle;
+  font-family: 'Anuphan', sans-serif;
+}
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">📶</div>
+    <div>
+      <h1 class="th-only">เครื่องกำเนิดสัญญาณ (Signal Generator)</h1>
+      <h1 class="en-only">Signal Generator</h1>
+      <p class="th-only">Function Generator • รูปคลื่น • Amplitude • ความถี่</p>
+      <p class="en-only">Function Generator • Waveforms • Amplitude • Frequency</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ============ SECTION 1: วัตถุประสงค์ ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">วัตถุประสงค์การเรียนรู้</span>
+      <span class="en-only">Learning Objectives</span>
+    </div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li>บอกชนิดของเครื่องกำเนิดสัญญาณได้</li>
+        <li>อธิบายคุณลักษณะของ Function Generator ที่ดีได้</li>
+        <li>ตั้งค่าแรงดันและความถี่ของสัญญาณที่กำเนิดจาก Function Generator ได้</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>Identify types of signal generators</li>
+        <li>Describe the characteristics of a good function generator</li>
+        <li>Set the voltage amplitude and frequency output of a function generator</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 2: ชนิดของเครื่องกำเนิดสัญญาณ ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">7-1 เครื่องกำเนิดสัญญาณ 5 ชนิด</span>
+      <span class="en-only">7-1 Five Types of Signal Generators</span>
+    </div>
+    <div class="card">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th><span class="th-only">ชนิด</span><span class="en-only">Type</span></th>
+            <th><span class="th-only">ย่านความถี่</span><span class="en-only">Frequency Range</span></th>
+            <th><span class="th-only">การใช้งาน</span><span class="en-only">Application</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><span class="th-only"><strong>AF Generator</strong><br>(เครื่องกำเนิดสัญญาณความถี่เสียง)</span><span class="en-only"><strong>AF Generator</strong><br>(Audio Frequency Generator)</span></td>
+            <td>20 Hz – 20 kHz</td>
+            <td><span class="th-only">ทดสอบเครื่องเสียง วงจรเสียง</span><span class="en-only">Audio equipment and audio circuit testing</span></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><span class="th-only"><strong>RF Generator</strong><br>(เครื่องกำเนิดสัญญาณความถี่วิทยุ)</span><span class="en-only"><strong>RF Generator</strong><br>(Radio Frequency Generator)</span></td>
+            <td>100 kHz – 3 GHz+</td>
+            <td><span class="th-only">ทดสอบวิทยุ, เสาอากาศ, สื่อสาร</span><span class="en-only">Radio, antenna, and communications testing</span></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><span class="th-only"><strong>Function Generator</strong><br>(ฟังก์ชันเจเนอเรเตอร์)</span><span class="en-only"><strong>Function Generator</strong></span></td>
+            <td>0.01 Hz – 10 MHz+</td>
+            <td><span class="th-only">ห้องปฏิบัติการ กำเนิดรูปคลื่นหลายแบบ</span><span class="en-only">Lab use; generates multiple waveform types</span></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><span class="th-only"><strong>Pulse Generator</strong><br>(พัลส์เจเนอเรเตอร์)</span><span class="en-only"><strong>Pulse Generator</strong></span></td>
+            <td><span class="th-only">ขึ้นอยู่กับรุ่น</span><span class="en-only">Model-dependent</span></td>
+            <td><span class="th-only">ทดสอบวงจรดิจิตัล, ไมโครคอนโทรลเลอร์</span><span class="en-only">Digital circuit and microcontroller testing</span></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td><span class="th-only"><strong>Sweep Generator</strong><br>(สวีปเจเนอเรเตอร์)</span><span class="en-only"><strong>Sweep Generator</strong></span></td>
+            <td><span class="th-only">สแกนช่วงความถี่</span><span class="en-only">Frequency sweep range</span></td>
+            <td><span class="th-only">ทดสอบตัวกรองความถี่ (Filter)</span><span class="en-only">Filter and frequency response testing</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 3: รูปคลื่นสัญญาณ ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">รูปคลื่นสัญญาณที่กำเนิดได้</span>
+      <span class="en-only">Generated Waveform Types</span>
+    </div>
+    <div class="card">
+      <p class="th-only" style="margin-bottom:0.75rem;">Function Generator สามารถกำเนิดรูปคลื่นสัญญาณได้หลายแบบ ดังนี้</p>
+      <p class="en-only" style="margin-bottom:0.75rem;">A Function Generator can produce several waveform types as shown below:</p>
+
+      <!-- Waveform SVG: 4 panels in a row -->
+      <div class="wave-svg-wrap">
+        <svg viewBox="0 0 620 170" width="620" height="170" xmlns="http://www.w3.org/2000/svg" aria-label="Four waveform types: Sine, Square, Triangle, Sawtooth">
+
+          <!-- Panel backgrounds -->
+          <rect x="5"   y="5"  width="140" height="130" rx="6" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5"/>
+          <rect x="155" y="5"  width="140" height="130" rx="6" fill="#fff7ed" stroke="#fed7aa" stroke-width="1.5"/>
+          <rect x="305" y="5"  width="140" height="130" rx="6" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.5"/>
+          <rect x="455" y="5"  width="140" height="130" rx="6" fill="#faf5ff" stroke="#e9d5ff" stroke-width="1.5"/>
+
+          <!-- Grid center lines -->
+          <line x1="15"  y1="65" x2="135" y2="65" stroke="#bfdbfe" stroke-width="0.7" stroke-dasharray="3,3"/>
+          <line x1="165" y1="65" x2="285" y2="65" stroke="#fed7aa" stroke-width="0.7" stroke-dasharray="3,3"/>
+          <line x1="315" y1="65" x2="435" y2="65" stroke="#bbf7d0" stroke-width="0.7" stroke-dasharray="3,3"/>
+          <line x1="465" y1="65" x2="585" y2="65" stroke="#e9d5ff" stroke-width="0.7" stroke-dasharray="3,3"/>
+
+          <!-- SINE WAVE (blue, panel 1) -->
+          <!-- Center y=65, amplitude=40px, full 2 cycles over 120px -->
+          <polyline fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linejoin="round"
+            points="
+              15,65 18.75,52 22.5,33 26.25,17 30,10 33.75,10 37.5,17 41.25,33 45,52 48.75,65
+              52.5,78 56.25,97 60,113 63.75,120 67.5,120 71.25,113 75,97 78.75,78 82.5,65
+              86.25,52 90,33 93.75,17 97.5,10 101.25,10 105,17 108.75,33 112.5,52 116.25,65
+              120,78 123.75,97 127.5,113 131.25,120 135,120
+            "
+          />
+
+          <!-- SQUARE WAVE (orange, panel 2) -->
+          <polyline fill="none" stroke="#f97316" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="square"
+            points="
+              165,65 165,15 195,15 195,115 225,115 225,15 255,15 255,115 285,115 285,65
+            "
+          />
+
+          <!-- TRIANGLE WAVE (green, panel 3) -->
+          <polyline fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"
+            points="
+              315,65 330,15 345,65 360,115 375,65 390,15 405,65 420,115 435,65
+            "
+          />
+
+          <!-- SAWTOOTH WAVE (purple, panel 4) -->
+          <!-- Ramp up then vertical drop, repeat -->
+          <polyline fill="none" stroke="#8b5cf6" stroke-width="2.5" stroke-linejoin="round"
+            points="
+              465,115 495,15 495,115 525,15 525,115 555,15 555,115 585,15
+            "
+          />
+
+          <!-- Labels below each panel -->
+          <text x="75"  y="150" text-anchor="middle" fill="#1d4ed8" font-size="12" font-weight="600" font-family="'Anuphan',sans-serif">Sine Wave</text>
+          <text x="225" y="150" text-anchor="middle" fill="#c2410c" font-size="12" font-weight="600" font-family="'Anuphan',sans-serif">Square Wave</text>
+          <text x="375" y="150" text-anchor="middle" fill="#047857" font-size="12" font-weight="600" font-family="'Anuphan',sans-serif">Triangle Wave</text>
+          <text x="525" y="150" text-anchor="middle" fill="#6d28d9" font-size="12" font-weight="600" font-family="'Anuphan',sans-serif">Sawtooth Wave</text>
+
+          <!-- TH sub-labels -->
+          <text x="75"  y="163" text-anchor="middle" fill="#1d4ed8" font-size="10" font-family="'Anuphan',sans-serif" class="th-only">คลื่นไซน์</text>
+          <text x="225" y="163" text-anchor="middle" fill="#c2410c" font-size="10" font-family="'Anuphan',sans-serif" class="th-only">คลื่นสี่เหลี่ยม</text>
+          <text x="375" y="163" text-anchor="middle" fill="#047857" font-size="10" font-family="'Anuphan',sans-serif" class="th-only">คลื่นสามเหลี่ยม</text>
+          <text x="525" y="163" text-anchor="middle" fill="#6d28d9" font-size="10" font-family="'Anuphan',sans-serif" class="th-only">คลื่นฟันเลื่อย</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 4: โครงสร้าง Function Generator ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">7-2 โครงสร้างภายในของ Function Generator</span>
+      <span class="en-only">7-2 Internal Structure of a Function Generator</span>
+    </div>
+    <div class="card">
+      <p class="th-only" style="margin-bottom:1rem;">Function Generator มี <strong>7 ส่วนสำคัญ</strong> ในวงจรภายใน</p>
+      <p class="en-only" style="margin-bottom:1rem;">A Function Generator has <strong>7 key internal circuit sections</strong></p>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th><span class="th-only">ชื่อส่วนประกอบ</span><span class="en-only">Component Name</span></th>
+            <th><span class="th-only">หน้าที่</span><span class="en-only">Function</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><span class="th-only">วงจรปรับความถี่</span><span class="en-only">Frequency Control Network</span></td>
+            <td><span class="th-only">กำหนดความถี่ของสัญญาณที่ต้องการ</span><span class="en-only">Sets the desired output frequency</span></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><span class="th-only">แหล่งจ่ายกระแสคงที่ (Constant Current Source)</span><span class="en-only">Constant Current Source (×2)</span></td>
+            <td><span class="th-only">จ่ายกระแสคงที่ให้วงจรอินติเกรเตอร์ทำงานได้</span><span class="en-only">Provides stable current for integrator operation</span></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><span class="th-only">วงจรอินติเกรเตอร์ (Integrator)</span><span class="en-only">Integrator Circuit</span></td>
+            <td><span class="th-only">กำเนิดคลื่นสามเหลี่ยม (Triangle wave)</span><span class="en-only">Generates triangle wave</span></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><span class="th-only">วงจรมัลติไวเบรเตอร์ (Multi-vibrator)</span><span class="en-only">Multi-vibrator Circuit</span></td>
+            <td><span class="th-only">กำเนิดคลื่นสี่เหลี่ยม (Square wave)</span><span class="en-only">Generates square wave</span></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td><span class="th-only">วงจรขยายเอาต์พุต (Output Amplifier)</span><span class="en-only">Output Amplifier (×2)</span></td>
+            <td><span class="th-only">ปรับขนาดแอมพลิจูด 0.1V<sub>P-P</sub> ถึง 10V<sub>P-P</sub></span><span class="en-only">Adjusts amplitude from 0.1V<sub>P-P</sub> to 10V<sub>P-P</sub></span></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td><span class="th-only">สวิตช์เลือกสัญญาณ (Selector Switch)</span><span class="en-only">Selector Switch</span></td>
+            <td><span class="th-only">เลือกชนิดรูปคลื่นที่ต้องการส่งออก</span><span class="en-only">Selects the desired output waveform type</span></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td><span class="th-only">วงจรเปลี่ยนรูปคลื่น (Shaping Circuit)</span><span class="en-only">Shaping Circuit</span></td>
+            <td><span class="th-only">แปลงคลื่นสามเหลี่ยมเป็นคลื่นไซน์ โดยใช้ R + Diode</span><span class="en-only">Converts triangle to sine wave using R + Diode network</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 5: คุณสมบัติที่ดี ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">คุณสมบัติที่ดีของ Function Generator</span>
+      <span class="en-only">Characteristics of a Good Function Generator</span>
+    </div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li>ปรับความถี่ได้กว้าง <strong>1 Hz – 1 MHz</strong> ค่าความถี่คงที่และแม่นยำ อ่านค่าได้ชัดเจน</li>
+        <li>สัญญาณ <strong>ไม่ผิดเพี้ยน (low distortion)</strong> ไม่มีสัญญาณรบกวน (low noise)</li>
+        <li>ปรับ <strong>Amplitude</strong> ได้ต่อเนื่องตั้งแต่ต่ำสุดถึงสูงสุด</li>
+        <li>เลือกรูปคลื่นได้หลายแบบ: <strong>Sine, Triangle, Sawtooth, Square, Pulse</strong></li>
+        <li>มีความต้านทานเอาต์พุต <strong>50 Ω</strong> มาตรฐาน ลดการสูญเสียกำลัง</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>Wide frequency range <strong>1 Hz – 1 MHz</strong> with stable, accurate, readable frequency</li>
+        <li>Signal has <strong>low distortion</strong> and <strong>low noise</strong></li>
+        <li>Continuously adjustable <strong>Amplitude</strong> from minimum to maximum</li>
+        <li>Multiple waveform selections: <strong>Sine, Triangle, Sawtooth, Square, Pulse</strong></li>
+        <li>Standard <strong>50 Ω</strong> output impedance to minimize power loss</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 6: การใช้งาน Agilent 33120A ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">การใช้งาน Agilent 33120A Function Generator</span>
+      <span class="en-only">Using the Agilent 33120A Function Generator</span>
+    </div>
+    <div class="card">
+      <p class="th-only" style="margin-bottom:1rem;">
+        Agilent 33120A เป็น Function Generator ยอดนิยมในห้องปฏิบัติการ
+        มีปุ่มและส่วนควบคุมสำคัญ <strong>12 ส่วน</strong> ดังนี้
+      </p>
+      <p class="en-only" style="margin-bottom:1rem;">
+        The Agilent 33120A is a popular laboratory Function Generator
+        with <strong>12 key controls</strong> as follows:
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th><span class="th-only">ปุ่ม/ส่วนควบคุม</span><span class="en-only">Button / Control</span></th>
+            <th><span class="th-only">หน้าที่</span><span class="en-only">Function</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><strong>Power</strong></td>
+            <td><span class="th-only">เปิด/ปิดเครื่อง</span><span class="en-only">Power on/off</span></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><span class="th-only"><strong>ปุ่มหมุน (Knob)</strong></span><span class="en-only"><strong>Rotary Knob</strong></span></td>
+            <td><span class="th-only">หมุนเพื่อปรับเพิ่ม/ลด ความถี่และขนาดสัญญาณ</span><span class="en-only">Rotate to increase/decrease frequency and amplitude values</span></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><strong>Sine</strong></td>
+            <td><span class="th-only">เลือกกำเนิดคลื่นไซน์</span><span class="en-only">Select sine wave output</span></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><strong>Square</strong></td>
+            <td><span class="th-only">เลือกกำเนิดคลื่นสี่เหลี่ยม</span><span class="en-only">Select square wave output</span></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td><strong>Triangle</strong></td>
+            <td><span class="th-only">เลือกกำเนิดคลื่นสามเหลี่ยม</span><span class="en-only">Select triangle wave output</span></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td><strong>Sawtooth</strong></td>
+            <td><span class="th-only">เลือกกำเนิดคลื่นฟันเลื่อย</span><span class="en-only">Select sawtooth wave output</span></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td><strong>Freq</strong></td>
+            <td><span class="th-only">เลือกโหมดปรับความถี่ของสัญญาณ</span><span class="en-only">Enter frequency adjustment mode</span></td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td><strong>Ampl</strong></td>
+            <td><span class="th-only">เลือกโหมดปรับขนาด (Amplitude) ของสัญญาณ</span><span class="en-only">Enter amplitude adjustment mode</span></td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td><strong>Menu</strong></td>
+            <td><span class="th-only">เปิดเมนูตั้งค่าความถี่และขนาดโดยละเอียด</span><span class="en-only">Opens detailed frequency and amplitude settings menu</span></td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td><strong>Up / Down</strong></td>
+            <td><span class="th-only">ปุ่มเพิ่ม/ลด ค่าความถี่และขนาดทีละขั้น</span><span class="en-only">Step up/down frequency and amplitude values</span></td>
+          </tr>
+          <tr>
+            <td>11</td>
+            <td><strong>Output</strong></td>
+            <td><span class="th-only">ขั้วต่อสัญญาณเอาต์พุต (BNC connector)</span><span class="en-only">Signal output terminal (BNC connector)</span></td>
+          </tr>
+          <tr>
+            <td>12</td>
+            <td><strong>Display</strong></td>
+            <td><span class="th-only">จอแสดงชนิดรูปคลื่น ความถี่ และขนาดสัญญาณ</span><span class="en-only">Shows waveform type, frequency, and amplitude</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 7: ตัวอย่าง ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">ตัวอย่างการตั้งค่า</span>
+      <span class="en-only">Setup Examples</span>
+    </div>
+    <div class="example-pair">
+
+      <!-- Example 7-1 -->
+      <div class="step-card">
+        <h3 class="th-only">ตัวอย่างที่ 7-1 — Sine Wave 20V<sub>P-P</sub>, 1 kHz</h3>
+        <h3 class="en-only">Example 7-1 — Sine Wave 20V<sub>P-P</sub>, 1 kHz</h3>
+        <div class="info-box th-only" style="margin-bottom:0.75rem;">
+          <strong>โจทย์:</strong> ตั้งค่า Sine wave, 20V<sub>P-P</sub>, f = 1 kHz
+        </div>
+        <div class="info-box en-only" style="margin-bottom:0.75rem;">
+          <strong>Task:</strong> Set Sine wave, 20V<sub>P-P</sub>, f = 1 kHz
+        </div>
+        <ol class="step-list th-only">
+          <li>กดสวิตช์เปิดเครื่อง (ปุ่ม 1)</li>
+          <li>กดปุ่มเลือกคลื่นไซน์ <strong>Sine</strong> (ปุ่ม 3)</li>
+          <li>กด <strong>Ampl</strong> (ปุ่ม 8) แล้วหมุนปุ่ม Knob จนจอแสดง <strong>20.00 VP-P</strong></li>
+          <li>กด <strong>Freq</strong> (ปุ่ม 7) แล้วหมุนปุ่ม Knob จนจอแสดง <strong>1.00 kHz</strong></li>
+          <li>ตรวจสอบด้วย Oscilloscope ที่ขั้ว <strong>Output</strong> (ปุ่ม 11)</li>
+        </ol>
+        <ol class="step-list en-only">
+          <li>Press Power switch (Button 1)</li>
+          <li>Press <strong>Sine</strong> wave button (Button 3)</li>
+          <li>Press <strong>Ampl</strong> (Button 8) and turn Knob until display shows <strong>20.00 VP-P</strong></li>
+          <li>Press <strong>Freq</strong> (Button 7) and turn Knob until display shows <strong>1.00 kHz</strong></li>
+          <li>Verify with Oscilloscope at <strong>Output</strong> terminal (Button 11)</li>
+        </ol>
+      </div>
+
+      <!-- Example 7-2 -->
+      <div class="step-card" style="border-left-color:var(--secondary);">
+        <h3 class="th-only" style="color:var(--secondary);">ตัวอย่างที่ 7-2 — Square Wave 2V<sub>P-P</sub>, 100 Hz</h3>
+        <h3 class="en-only" style="color:var(--secondary);">Example 7-2 — Square Wave 2V<sub>P-P</sub>, 100 Hz</h3>
+        <div class="info-box th-only" style="margin-bottom:0.75rem;">
+          <strong>โจทย์:</strong> ตั้งค่า Square wave, 2V<sub>P-P</sub>, f = 100 Hz
+        </div>
+        <div class="info-box en-only" style="margin-bottom:0.75rem;">
+          <strong>Task:</strong> Set Square wave, 2V<sub>P-P</sub>, f = 100 Hz
+        </div>
+        <ol class="step-list th-only">
+          <li>กดสวิตช์เปิดเครื่อง (ปุ่ม 1)</li>
+          <li>กดปุ่มเลือกคลื่นสี่เหลี่ยม <strong>Square</strong> (ปุ่ม 4)</li>
+          <li>กด <strong>Ampl</strong> (ปุ่ม 8) แล้วหมุนปุ่ม Knob จนจอแสดง <strong>2.00 VP-P</strong></li>
+          <li>กด <strong>Freq</strong> (ปุ่ม 7) แล้วหมุนปุ่ม Knob จนจอแสดง <strong>100 Hz</strong></li>
+          <li>ตรวจสอบด้วย Oscilloscope ที่ขั้ว <strong>Output</strong> (ปุ่ม 11)</li>
+        </ol>
+        <ol class="step-list en-only">
+          <li>Press Power switch (Button 1)</li>
+          <li>Press <strong>Square</strong> wave button (Button 4)</li>
+          <li>Press <strong>Ampl</strong> (Button 8) and turn Knob until display shows <strong>2.00 VP-P</strong></li>
+          <li>Press <strong>Freq</strong> (Button 7) and turn Knob until display shows <strong>100 Hz</strong></li>
+          <li>Verify with Oscilloscope at <strong>Output</strong> terminal (Button 11)</li>
+        </ol>
+      </div>
+
+    </div>
+
+    <!-- Tips box -->
+    <div class="warn-box th-only" style="margin-top:1rem;">
+      <strong>ข้อควรระวัง:</strong><br>
+      • ตรวจสอบให้แน่ใจว่าแรงดัน Output ที่ตั้งไม่เกินค่าทนทานของวงจรที่ทดสอบ<br>
+      • เชื่อมต่อสายดิน (GND) ก่อนต่อสัญญาณ Output เสมอ<br>
+      • ใช้สายโคแอกเชียล (Coaxial Cable) ต่อระหว่าง Function Generator กับ Oscilloscope
+    </div>
+    <div class="warn-box en-only" style="margin-top:1rem;">
+      <strong>Cautions:</strong><br>
+      • Ensure the set output voltage does not exceed the test circuit's tolerance<br>
+      • Always connect GND before connecting the output signal<br>
+      • Use coaxial cable between Function Generator and Oscilloscope
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="oscilloscope.html">← <span class="th-only">ออสซิลโลสโคป</span><span class="en-only">Oscilloscope</span></a>
+    <a class="next" href="quiz.html"><span class="th-only">แบบทดสอบ</span><span class="en-only">Quiz</span> →</a>
+  </div>
+
+</div>
+
+<footer>
+  <strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong>
+  <strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong>
+</footer>
+<script>const CURRENT_PAGE='signal-generator';</script>
+<script src="nav.js"></script>
+</body>
+</html>

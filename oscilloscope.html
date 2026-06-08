@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="ออสซิลโลสโคป | สื่อการเรียนการสอน" data-title-en="Oscilloscope | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ออสซิลโลสโคป | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.osc-svg-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0 0.5rem;
+}
+.osc-svg-wrap svg {
+  max-width: 100%;
+  border-radius: 8px;
+  border: 2px solid #1a4a2e;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+.example-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.example-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  border-top: 4px solid var(--primary);
+}
+.example-card h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  color: var(--primary);
+}
+.example-card .formula-box {
+  margin: 0.4rem 0;
+}
+.cmp-table th { background: var(--primary); color: #fff; }
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">📡</div>
+    <div>
+      <h1 class="th-only">ออสซิลโลสโคป (Oscilloscope)</h1>
+      <h1 class="en-only">Oscilloscope</h1>
+      <p class="th-only">วัดรูปคลื่น • อ่านแรงดัน • อ่านความถี่ • Analog vs Digital</p>
+      <p class="en-only">Waveform Measurement • Voltage Reading • Frequency Reading • Analog vs Digital</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ============ SECTION 1: วัตถุประสงค์ ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">วัตถุประสงค์การเรียนรู้</span>
+      <span class="en-only">Learning Objectives</span>
+    </div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li>บอกโครงสร้างและส่วนประกอบสำคัญของออสซิลโลสโคปได้</li>
+        <li>อธิบายการใช้งานแผงหน้าปัดของออสซิลโลสโคปได้</li>
+        <li>อ่านค่าแรงดัน เวลา และความถี่ของสัญญาณที่วัดจากออสซิลโลสโคปได้</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>Identify the structure and key components of an oscilloscope</li>
+        <li>Explain the function of the oscilloscope front panel controls</li>
+        <li>Read voltage, time, and frequency values from an oscilloscope display</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 2: ออสซิลโลสโคปคืออะไร ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">6-1 ออสซิลโลสโคปคืออะไร</span>
+      <span class="en-only">6-1 What Is an Oscilloscope?</span>
+    </div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <p class="th-only">
+            ออสซิลโลสโคป คือ <strong>เครื่องมือวัดทางไฟฟ้า</strong> ที่สามารถวัดรูปคลื่นสัญญาณไฟฟ้าชนิดต่างๆ
+            และแสดงผลในรูปกราฟ <strong>Amplitude</strong> เทียบกับ <strong>Time</strong> บนหน้าจอ
+            วัดได้ตั้งแต่ <strong>1 ถึง 16 ช่องสัญญาณ (Channel)</strong>
+          </p>
+          <p class="en-only">
+            An oscilloscope is an <strong>electrical measuring instrument</strong> that can measure various
+            types of electrical signal waveforms and display them as a graph of <strong>Amplitude</strong>
+            vs <strong>Time</strong> on screen. It can measure from <strong>1 to 16 channels</strong> simultaneously.
+          </p>
+        </div>
+        <div>
+          <div class="info-box th-only">
+            <strong>ชนิดของออสซิลโลสโคป:</strong><br>
+            • <strong>ชนิดตั้งโต๊ะ</strong> — ใช้ในห้องปฏิบัติการ ความแม่นยำสูง<br>
+            • <strong>ชนิดมือถือ (Portable)</strong> — ใช้ในภาคสนาม พกพาสะดวก<br>
+            • <strong>ชนิด USB</strong> — เชื่อมต่อกับคอมพิวเตอร์
+          </div>
+          <div class="info-box en-only">
+            <strong>Types of Oscilloscopes:</strong><br>
+            • <strong>Bench-top</strong> — Lab use, high accuracy<br>
+            • <strong>Handheld (Portable)</strong> — Field use, portable<br>
+            • <strong>USB-based</strong> — Connects to a computer
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 3: โครงสร้างและส่วนประกอบ ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">6-2 โครงสร้างและส่วนประกอบ</span>
+      <span class="en-only">6-2 Structure and Components</span>
+    </div>
+    <div class="card">
+      <p class="th-only" style="margin-bottom:1rem;">ออสซิลโลสโคปมี <strong>4 ส่วนสำคัญ</strong> ดังนี้</p>
+      <p class="en-only" style="margin-bottom:1rem;">An oscilloscope has <strong>4 major sections</strong> as follows:</p>
+      <table>
+        <thead>
+          <tr>
+            <th><span class="th-only">ส่วน</span><span class="en-only">Part</span></th>
+            <th><span class="th-only">ชื่อ</span><span class="en-only">Name</span></th>
+            <th><span class="th-only">หน้าที่</span><span class="en-only">Function</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>A</strong></td>
+            <td><span class="th-only">วงจรขยายสัญญาณแกน Y</span><span class="en-only">Y-axis Amplifier Circuit</span></td>
+            <td><span class="th-only">ขยายสัญญาณที่วัด ปรับ Volts/Division และ Y-Position</span><span class="en-only">Amplifies measured signal; adjusts Volts/Division and Y-Position</span></td>
+          </tr>
+          <tr>
+            <td><strong>B</strong></td>
+            <td><span class="th-only">วงจรแกน X / Time Base</span><span class="en-only">X-axis / Time Base Circuit</span></td>
+            <td><span class="th-only">ปรับ Time/Division และ X-Position ควบคุมแกนเวลา</span><span class="en-only">Adjusts Time/Division and X-Position; controls the time axis</span></td>
+          </tr>
+          <tr>
+            <td><strong>C</strong></td>
+            <td><span class="th-only">ปืนยิงอิเล็กตรอน (Electron Gun)</span><span class="en-only">Electron Gun</span></td>
+            <td><span class="th-only">สร้างและยิงลำอิเล็กตรอนให้หลอด CRT ทำงาน</span><span class="en-only">Generates and fires electron beam to operate the CRT tube</span></td>
+          </tr>
+          <tr>
+            <td><strong>D</strong></td>
+            <td><span class="th-only">หลอดยิงรังสีแคโทด (CRT)</span><span class="en-only">Cathode Ray Tube (CRT)</span></td>
+            <td><span class="th-only">รับลำอิเล็กตรอนและแสดงผลบนจอเคลือบสารฟอสเฟอร์</span><span class="en-only">Receives electron beam and displays output on phosphor-coated screen</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 4: การใช้งาน Tektronix TDS2024 ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">6-3 การใช้งาน Tektronix TDS2024</span>
+      <span class="en-only">6-3 Using the Tektronix TDS2024</span>
+    </div>
+    <div class="card">
+      <p class="th-only" style="margin-bottom:1rem;">
+        Tektronix TDS2024 เป็น <strong>Digital Storage Oscilloscope (DSO) 4 ช่องสัญญาณ</strong>
+        มีปุ่มและส่วนควบคุมสำคัญดังนี้
+      </p>
+      <p class="en-only" style="margin-bottom:1rem;">
+        The Tektronix TDS2024 is a <strong>4-channel Digital Storage Oscilloscope (DSO)</strong>
+        with the following key controls:
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th><span class="th-only">ปุ่ม/ส่วนควบคุม</span><span class="en-only">Button / Control</span></th>
+            <th><span class="th-only">หน้าที่</span><span class="en-only">Function</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><strong>POWER</strong></td>
+            <td><span class="th-only">เปิด/ปิดเครื่อง แสดง Grid และค่าเริ่มต้น Volts/Div = 1V, Time/Div = 2mS</span><span class="en-only">Power on/off; displays grid with default Volts/Div = 1V, Time/Div = 2mS</span></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><strong>VOLT/DIV</strong></td>
+            <td><span class="th-only">ปรับสเกลแรงดัน ย่าน 2mV – 100V/Div</span><span class="en-only">Adjusts voltage scale, range 2mV – 100V/Div</span></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><strong>POSITION (Y)</strong></td>
+            <td><span class="th-only">ปรับเส้นอ้างอิง GND ขึ้น/ลง</span><span class="en-only">Adjusts GND reference line up/down</span></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><strong>CH1 MENU</strong></td>
+            <td><span class="th-only">ปุ่มเลือกเมนูช่องสัญญาณ 1 (DSO 4 ช่อง มี 4 ปุ่มลักษณะนี้)</span><span class="en-only">Opens channel 1 menu (4-channel DSO has 4 such buttons)</span></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td><strong>TIME/DIV</strong></td>
+            <td><span class="th-only">ปรับสเกลเวลา ย่าน 2.5nS – 50S/Div</span><span class="en-only">Adjusts time scale, range 2.5nS – 50S/Div</span></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td><strong>POSITION (X)</strong></td>
+            <td><span class="th-only">ปรับเส้นอ้างอิงแกนเวลา ซ้าย/ขวา</span><span class="en-only">Adjusts time-axis reference line left/right</span></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td><strong>RUN / STOP</strong></td>
+            <td><span class="th-only">กดให้สัญญาณหยุดแสดง หรือวิ่งต่อเนื่อง</span><span class="en-only">Toggles between continuous capture and frozen display</span></td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td><strong>SINGLE</strong></td>
+            <td><span class="th-only">จับภาพสัญญาณเพียงหนึ่งจอแล้วหยุด (Single-shot)</span><span class="en-only">Captures a single screen of signal then stops (Single-shot mode)</span></td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td><strong>AUTOSET</strong></td>
+            <td><span class="th-only">ปรับ Volt/Div และ Time/Div อัตโนมัติให้เห็นสัญญาณชัดเจน</span><span class="en-only">Automatically adjusts Volt/Div and Time/Div for clear signal display</span></td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td><strong>Probe Check / Cal</strong></td>
+            <td><span class="th-only">สอบเทียบสายโปรบ ต่อ BNC ที่ CH1 แล้วคีบปลายโปรบที่จุดอ้างอิง</span><span class="en-only">Calibrates probe compensation; connect BNC to CH1 and clip probe tip to reference point</span></td>
+          </tr>
+          <tr>
+            <td>11</td>
+            <td><strong>TRIGGER</strong></td>
+            <td><span class="th-only">ตั้งจุดกระตุ้นเพื่อทำให้ภาพสัญญาณนิ่ง</span><span class="en-only">Sets trigger level to stabilize the waveform display</span></td>
+          </tr>
+          <tr>
+            <td>12</td>
+            <td><span class="th-only"><strong>Probe (สายวัด)</strong></span><span class="en-only"><strong>Probe (Test Lead)</strong></span></td>
+            <td><span class="th-only">BNC plug เชื่อมต่อที่ CH1–CH4 วัดได้พร้อมกัน 4 ช่อง</span><span class="en-only">BNC plug connects to CH1–CH4; measures up to 4 channels simultaneously</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 5: สูตรและการอ่านค่า ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">สูตรและการอ่านค่าจากออสซิลโลสโคป</span>
+      <span class="en-only">Formulas and Reading Values from the Oscilloscope</span>
+    </div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <h3 class="th-only" style="margin-top:0;">สูตรคำนวณแรงดัน</h3>
+          <h3 class="en-only" style="margin-top:0;">Voltage Formulas</h3>
+          <div class="formula-box">
+            <div class="formula">V<sub>P</sub> = A × Volts/div</div>
+          </div>
+          <p class="th-only" style="font-size:0.88rem;color:var(--text);opacity:0.75;">A = จำนวน Division จากศูนย์ถึงยอดคลื่น</p>
+          <p class="en-only" style="font-size:0.88rem;color:var(--text);opacity:0.75;">A = number of divisions from center to peak</p>
+          <div class="formula-box">
+            <div class="formula">V<sub>P-P</sub> = 2 × V<sub>P</sub></div>
+          </div>
+          <div class="formula-box">
+            <div class="formula">V<sub>rms</sub> = V<sub>P</sub> / √2 ≈ V<sub>P</sub> × 0.707</div>
+          </div>
+
+          <h3 class="th-only">สูตรคำนวณเวลาและความถี่</h3>
+          <h3 class="en-only">Time and Frequency Formulas</h3>
+          <div class="formula-box">
+            <div class="formula">T = จำนวน Division × Time/div</div>
+          </div>
+          <p class="th-only" style="font-size:0.88rem;color:var(--text);opacity:0.75;">T = คาบเวลา 1 ไซเกิล (Period)</p>
+          <p class="en-only" style="font-size:0.88rem;color:var(--text);opacity:0.75;">T = period of one complete cycle</p>
+          <div class="formula-box">
+            <div class="formula">f = 1 / T</div>
+          </div>
+        </div>
+        <div>
+          <!-- SVG Oscilloscope Screen -->
+          <div class="osc-svg-wrap">
+            <svg viewBox="0 0 420 300" width="420" height="300" xmlns="http://www.w3.org/2000/svg" aria-label="Oscilloscope screen showing sine wave with annotations">
+              <!-- Background -->
+              <rect width="420" height="300" fill="#0d1f0f" rx="6"/>
+
+              <!-- Grid lines vertical (10 divisions) -->
+              <g stroke="#1a4a2e" stroke-width="0.8">
+                <line x1="42" y1="10" x2="42" y2="270"/>
+                <line x1="84" y1="10" x2="84" y2="270"/>
+                <line x1="126" y1="10" x2="126" y2="270"/>
+                <line x1="168" y1="10" x2="168" y2="270"/>
+                <line x1="210" y1="10" x2="210" y2="270"/>
+                <line x1="252" y1="10" x2="252" y2="270"/>
+                <line x1="294" y1="10" x2="294" y2="270"/>
+                <line x1="336" y1="10" x2="336" y2="270"/>
+                <line x1="378" y1="10" x2="378" y2="270"/>
+              </g>
+              <!-- Grid lines horizontal (8 divisions) -->
+              <g stroke="#1a4a2e" stroke-width="0.8">
+                <line x1="0" y1="43" x2="420" y2="43"/>
+                <line x1="0" y1="86" x2="420" y2="86"/>
+                <line x1="0" y1="129" x2="420" y2="129"/>
+                <!-- center line brighter -->
+                <line x1="0" y1="172" x2="420" y2="172" stroke="#2a6a3e" stroke-width="1.2"/>
+                <line x1="0" y1="215" x2="420" y2="215"/>
+                <line x1="0" y1="258" x2="420" y2="258"/>
+              </g>
+              <!-- Center cross tick marks -->
+              <g stroke="#2a6a3e" stroke-width="1">
+                <line x1="208" y1="10" x2="212" y2="10"/>
+                <line x1="208" y1="43" x2="212" y2="43"/>
+                <line x1="208" y1="86" x2="212" y2="86"/>
+                <line x1="208" y1="129" x2="212" y2="129"/>
+                <line x1="208" y1="215" x2="212" y2="215"/>
+                <line x1="208" y1="258" x2="212" y2="258"/>
+              </g>
+
+              <!-- Sine wave: center=172, amplitude=86px (2 div=86), period=168px (4 div) -->
+              <!-- 2 full cycles across 420px wide screen -->
+              <polyline
+                fill="none"
+                stroke="#00e676"
+                stroke-width="2.2"
+                stroke-linejoin="round"
+                points="
+                  0,172
+                  5.25,153 10.5,117 15.75,86 21,67 26.25,57 31.5,57 36.75,67 42,86 47.25,117 52.5,153 57.75,172
+                  63,191 68.25,227 73.5,258 78.75,277 84,287 89.25,287 94.5,277 99.75,258 105,227 110.25,191 115.5,172
+                  120.75,153 126,117 131.25,86 136.5,67 141.75,57 147,57 152.25,67 157.5,86 162.75,117 168,153 173.25,172
+                  178.5,191 183.75,227 189,258 194.25,277 199.5,287 204.75,287 210,277 215.25,258 220.5,227 225.75,191 231,172
+                  236.25,153 241.5,117 246.75,86 252,67 257.25,57 262.5,57 267.75,67 273,86 278.25,117 283.5,153 288.75,172
+                  294,191 299.25,227 304.5,258 309.75,277 315,287 320.25,287 325.5,277 330.75,258 336,227 341.25,191 346.5,172
+                  351.75,153 357,117 362.25,86 367.5,67 372.75,57 378,57 383.25,67 388.5,86 393.75,117 399,153 404.25,172 420,172
+                "
+              />
+
+              <!-- VP annotation: peak at ~y=57, center at y=172 -->
+              <!-- Dashed vertical line from peak to center at x=84 (2nd div) -->
+              <line x1="84" y1="57" x2="84" y2="172" stroke="#ffeb3b" stroke-width="1.2" stroke-dasharray="4,3"/>
+              <!-- VP arrow -->
+              <line x1="90" y1="57" x2="90" y2="172" stroke="#ffeb3b" stroke-width="1.5" marker-end="url(#arr-y)" marker-start="url(#arr-y2)"/>
+              <text x="93" y="110" fill="#ffeb3b" font-size="11" font-family="monospace">VP</text>
+
+              <!-- VP-P: double arrow from y=57 to y=287 at x=330 -->
+              <line x1="330" y1="57" x2="330" y2="287" stroke="#ff7043" stroke-width="1.5" stroke-dasharray="3,2"/>
+              <text x="334" y="180" fill="#ff7043" font-size="10" font-family="monospace">VP-P</text>
+
+              <!-- T period: from x=31.5 (peak1) to x=147 (peak2) = 1 cycle, marked at top -->
+              <!-- Horizontal bracket at y=45 -->
+              <line x1="31" y1="45" x2="147" y2="45" stroke="#80cbc4" stroke-width="1.5"/>
+              <line x1="31" y1="40" x2="31" y2="50" stroke="#80cbc4" stroke-width="1.5"/>
+              <line x1="147" y1="40" x2="147" y2="50" stroke="#80cbc4" stroke-width="1.5"/>
+              <text x="65" y="38" fill="#80cbc4" font-size="11" font-family="monospace">T (1 cycle)</text>
+
+              <!-- GND label -->
+              <text x="4" y="176" fill="#2a6a3e" font-size="10" font-family="monospace">GND</text>
+
+              <!-- Labels: Volts/div, Time/div -->
+              <rect x="0" y="272" width="420" height="28" fill="#061208"/>
+              <text x="8" y="289" fill="#00c853" font-size="10" font-family="monospace">Volts/div: 10V</text>
+              <text x="150" y="289" fill="#00c853" font-size="10" font-family="monospace">Time/div: 2mS</text>
+              <text x="320" y="289" fill="#69f0ae" font-size="10" font-family="monospace">CH1 ~</text>
+
+              <!-- Arrow markers -->
+              <defs>
+                <marker id="arr-y" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+                  <path d="M0,0 L6,3 L0,6 Z" fill="#ffeb3b"/>
+                </marker>
+                <marker id="arr-y2" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto-start-reverse">
+                  <path d="M0,0 L6,3 L0,6 Z" fill="#ffeb3b"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+          <p style="text-align:center;font-size:0.82rem;opacity:0.7;margin:0.25rem 0 0;">
+            <span class="th-only">ภาพจำลองหน้าจอออสซิลโลสโคป: คลื่นไซน์ Volts/div=10V, Time/div=2mS</span>
+            <span class="en-only">Simulated oscilloscope screen: sine wave, Volts/div=10V, Time/div=2mS</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 6: ตัวอย่าง ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">ตัวอย่างการคำนวณ</span>
+      <span class="en-only">Worked Examples</span>
+    </div>
+    <div class="example-cards">
+
+      <!-- Example 6-1 -->
+      <div class="example-card">
+        <h3 class="th-only">ตัวอย่างที่ 6-1 — แรงดัน AC</h3>
+        <h3 class="en-only">Example 6-1 — AC Voltage</h3>
+        <p class="th-only" style="font-size:0.9rem;">
+          Volts/div = 10V, Time/div = 2mS, Peak = 3.4 div
+        </p>
+        <p class="en-only" style="font-size:0.9rem;">
+          Volts/div = 10V, Time/div = 2mS, Peak = 3.4 div
+        </p>
+        <div class="formula-box">
+          <div class="formula">V<sub>P</sub> = 3.4 × 10 = <strong>34 V</strong></div>
+        </div>
+        <div class="formula-box">
+          <div class="formula">V<sub>P-P</sub> = 2 × 34 = <strong>68 V</strong></div>
+        </div>
+        <div class="formula-box">
+          <div class="formula">V<sub>rms</sub> = 34 / √2 ≈ <strong>24.04 V</strong></div>
+        </div>
+      </div>
+
+      <!-- Example 6-2 -->
+      <div class="example-card">
+        <h3 class="th-only">ตัวอย่างที่ 6-2 — ความถี่</h3>
+        <h3 class="en-only">Example 6-2 — Frequency</h3>
+        <p class="th-only" style="font-size:0.9rem;">
+          Time/div = 2mS, คลื่น 1 ไซเกิล = 10 div
+        </p>
+        <p class="en-only" style="font-size:0.9rem;">
+          Time/div = 2mS, 1 cycle spans 10 divisions
+        </p>
+        <div class="formula-box">
+          <div class="formula">T = 10 × 2mS = <strong>20 mS</strong></div>
+        </div>
+        <div class="formula-box">
+          <div class="formula">f = 1 / 20mS = <strong>50 Hz</strong></div>
+        </div>
+        <div class="info-box th-only" style="margin-top:0.75rem;">
+          ความถี่ 50 Hz ตรงกับความถี่ไฟบ้านในประเทศไทย
+        </div>
+        <div class="info-box en-only" style="margin-top:0.75rem;">
+          50 Hz matches Thailand's mains frequency
+        </div>
+      </div>
+
+      <!-- Example 6-3 -->
+      <div class="example-card">
+        <h3 class="th-only">ตัวอย่างที่ 6-3 — แรงดัน DC</h3>
+        <h3 class="en-only">Example 6-3 — DC Voltage</h3>
+        <p class="th-only" style="font-size:0.9rem;">
+          Volts/div = 5V, เส้นสัญญาณอยู่สูงกว่า GND 2.15 div (DC)
+        </p>
+        <p class="en-only" style="font-size:0.9rem;">
+          Volts/div = 5V, signal line is 2.15 div above GND (DC)
+        </p>
+        <div class="formula-box">
+          <div class="formula">V<sub>DC</sub> = 2.15 × 5 = <strong>13 V (DC)</strong></div>
+        </div>
+        <div class="info-box th-only" style="margin-top:0.75rem;">
+          สัญญาณ DC แสดงเป็นเส้นตรงขนานแกน X ห่างจาก GND
+        </div>
+        <div class="info-box en-only" style="margin-top:0.75rem;">
+          DC signal appears as a horizontal line offset from GND
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ SECTION 7: Analog vs Digital ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">Analog vs Digital Storage Oscilloscope (DSO)</span>
+      <span class="en-only">Analog vs Digital Storage Oscilloscope (DSO)</span>
+    </div>
+    <div class="card">
+      <table class="cmp-table">
+        <thead>
+          <tr>
+            <th><span class="th-only">คุณสมบัติ</span><span class="en-only">Feature</span></th>
+            <th><span class="th-only">Analog (CRT)</span><span class="en-only">Analog (CRT)</span></th>
+            <th><span class="th-only">Digital Storage (DSO)</span><span class="en-only">Digital Storage (DSO)</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="th-only">จอแสดงผล</span><span class="en-only">Display</span></td>
+            <td><span class="th-only">หลอด CRT ฟอสเฟอร์</span><span class="en-only">Phosphor CRT tube</span></td>
+            <td><span class="th-only">LCD / LED</span><span class="en-only">LCD / LED</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">การแสดงผล</span><span class="en-only">Output</span></td>
+            <td><span class="th-only">แสดงผลทันที (Real-time)</span><span class="en-only">Immediate real-time display</span></td>
+            <td><span class="th-only">บันทึกดิจิตัลก่อนแสดง</span><span class="en-only">Records digitally then displays</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">สัญญาณความถี่สูง</span><span class="en-only">High-freq signals</span></td>
+            <td><span class="th-only">อ่านยาก สัญญาณสลัว</span><span class="en-only">Hard to read, dim display</span></td>
+            <td><span class="th-only">วิเคราะห์ง่ายและแม่นยำ</span><span class="en-only">Easy to analyze, accurate</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">การบันทึก</span><span class="en-only">Data storage</span></td>
+            <td><span class="th-only">ไม่สามารถบันทึกได้</span><span class="en-only">Cannot store waveforms</span></td>
+            <td><span class="th-only">บันทึกและเรียกคืนได้</span><span class="en-only">Can store and recall waveforms</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">ฟังก์ชันอัตโนมัติ</span><span class="en-only">Auto functions</span></td>
+            <td><span class="th-only">ไม่มี</span><span class="en-only">None</span></td>
+            <td><span class="th-only">วัดค่า Vpp, Freq, RMS อัตโนมัติ</span><span class="en-only">Auto-measures Vpp, Freq, RMS</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">ราคา</span><span class="en-only">Price</span></td>
+            <td><span class="th-only">ต่ำกว่า</span><span class="en-only">Lower</span></td>
+            <td><span class="th-only">สูงกว่า แต่คุ้มค่า</span><span class="en-only">Higher, but more capable</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="ac-circuit.html">← <span class="th-only">วงจร AC</span><span class="en-only">AC Circuit</span></a>
+    <a class="next" href="signal-generator.html"><span class="th-only">เครื่องกำเนิดสัญญาณ</span><span class="en-only">Signal Generator</span> →</a>
+  </div>
+
+</div>
+
+<footer>
+  <strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong>
+  <strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong>
+</footer>
+<script>const CURRENT_PAGE='oscilloscope';</script>
+<script src="nav.js"></script>
+</body>
+</html>

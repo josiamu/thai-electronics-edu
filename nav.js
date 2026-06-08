@@ -11,7 +11,9 @@ const NAV_CONTENT = [
 ];
 
 const NAV_EXTRA = [
-  { id: 'home-wiring', href: 'home-wiring.html', label_th: '🔌 ไฟบ้านและความปลอดภัย', label_en: '🔌 Home Wiring & Safety' },
+  { id: 'home-wiring',      href: 'home-wiring.html',      label_th: '🔌 ไฟบ้านและความปลอดภัย', label_en: '🔌 Home Wiring & Safety' },
+  { id: 'oscilloscope',     href: 'oscilloscope.html',     label_th: '📡 ออสซิลโลสโคป',         label_en: '📡 Oscilloscope' },
+  { id: 'signal-generator', href: 'signal-generator.html', label_th: '📶 เครื่องกำเนิดสัญญาณ',   label_en: '📶 Signal Generator' },
 ];
 
 const NAV_TOOLS = [
