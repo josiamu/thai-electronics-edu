@@ -113,11 +113,15 @@ const NAV_DIRECT = [
     document.getElementById('nav-dropdown-extra'),
   ];
 
+  function closeAllDropdowns() {
+    allDropdowns.forEach(function(d) { d.classList.remove('open'); });
+  }
+
   allDropdowns.forEach(function(dd) {
     dd.querySelector('.nav-dropdown-toggle').addEventListener('click', function(e) {
       e.stopPropagation();
       const isOpen = dd.classList.contains('open');
-      allDropdowns.forEach(function(d) { d.classList.remove('open'); });
+      closeAllDropdowns();
       if (!isOpen) dd.classList.add('open');
     });
   });
@@ -127,11 +131,11 @@ const NAV_DIRECT = [
   document.getElementById('nav-hamburger').addEventListener('click', function(e) {
     e.stopPropagation();
     navMenu.classList.toggle('open');
-    allDropdowns.forEach(function(d) { d.classList.remove('open'); });
+    closeAllDropdowns();
   });
 
   document.addEventListener('click', function() {
-    allDropdowns.forEach(function(d) { d.classList.remove('open'); });
+    closeAllDropdowns();
     navMenu.classList.remove('open');
   });
   navMenu.addEventListener('click', function(e) { e.stopPropagation(); });

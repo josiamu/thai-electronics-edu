@@ -146,25 +146,34 @@ function calcEnergy() {
 function parseList(id) {
   return document.getElementById(id).value.split(',').map(s=>parseFloat(s.trim())).filter(v=>!isNaN(v)&&v>0);
 }
+function checkMinVals(vals, res) {
+  if (vals.length < 2) {
+    res.textContent = 'กรุณากรอกอย่างน้อย 2 ค่า';
+    res.className = 'result-box result-error';
+    return false;
+  }
+  res.className = 'result-box';
+  return true;
+}
 function calcRS() {
   const vals = parseList('rs_vals'), res = document.getElementById('rs_result');
-  if (vals.length<2) { res.textContent='กรุณากรอกอย่างน้อย 2 ค่า'; res.className='result-box result-error'; return; }
-  res.className='result-box'; res.textContent = 'R_T = ' + vals.join(' + ') + ' = ' + formatOhm(vals.reduce((a,b)=>a+b,0));
+  if (!checkMinVals(vals, res)) return;
+  res.textContent = 'R_T = ' + vals.join(' + ') + ' = ' + formatOhm(vals.reduce((a,b)=>a+b,0));
 }
 function calcRP() {
   const vals = parseList('rp_vals'), res = document.getElementById('rp_result');
-  if (vals.length<2) { res.textContent='กรุณากรอกอย่างน้อย 2 ค่า'; res.className='result-box result-error'; return; }
-  res.className='result-box'; res.textContent = '1/R_T = ' + vals.map(v=>'1/'+v).join('+') + ' → R_T = ' + formatOhm(1/vals.reduce((a,b)=>a+1/b,0));
+  if (!checkMinVals(vals, res)) return;
+  res.textContent = '1/R_T = ' + vals.map(v=>'1/'+v).join('+') + ' → R_T = ' + formatOhm(1/vals.reduce((a,b)=>a+1/b,0));
 }
 function calcCS() {
   const vals = parseList('cs_vals'), res = document.getElementById('cs_result');
-  if (vals.length<2) { res.textContent='กรุณากรอกอย่างน้อย 2 ค่า'; res.className='result-box result-error'; return; }
-  res.className='result-box'; res.textContent = '1/C_T = ' + vals.map(v=>'1/'+v).join('+') + ' → C_T = ' + (1/vals.reduce((a,b)=>a+1/b,0)).toPrecision(4) + ' μF';
+  if (!checkMinVals(vals, res)) return;
+  res.textContent = '1/C_T = ' + vals.map(v=>'1/'+v).join('+') + ' → C_T = ' + (1/vals.reduce((a,b)=>a+1/b,0)).toPrecision(4) + ' μF';
 }
 function calcCP() {
   const vals = parseList('cp_vals'), res = document.getElementById('cp_result');
-  if (vals.length<2) { res.textContent='กรุณากรอกอย่างน้อย 2 ค่า'; res.className='result-box result-error'; return; }
-  res.className='result-box'; res.textContent = 'C_T = ' + vals.join(' + ') + ' = ' + vals.reduce((a,b)=>a+b,0).toPrecision(4) + ' μF';
+  if (!checkMinVals(vals, res)) return;
+  res.textContent = 'C_T = ' + vals.join(' + ') + ' = ' + vals.reduce((a,b)=>a+b,0).toPrecision(4) + ' μF';
 }
 
 // ===== REVERSE RESISTOR =====
@@ -210,10 +219,9 @@ function calcReverse() {
   const res  = document.getElementById('rev_result');
 
   if (isNaN(raw) || raw <= 0) {
-    vis.style.display = 'none';
     res.textContent = 'กรุณากรอกค่าความต้านทานที่ถูกต้อง';
     res.className = 'result-box result-error';
-    vis.style.display = 'block';
+    vis.style.display = 'none';
     return;
   }
 
@@ -245,7 +253,7 @@ function calcReverse() {
   for (let i = sigFigs - 1; i >= 0; i--) {
     const p = Math.pow(10, i);
     dArr.push(Math.floor(tmp / p));
-    tmp = Math.round(tmp % p);
+    tmp = Math.floor(tmp % p);
   }
 
   const tol     = REV_TOLS[tolK] || REV_TOLS['5'];
@@ -316,6 +324,7 @@ function calcUnit() {
   const res = document.getElementById('uc_result');
   if (isNaN(val)) { res.textContent='กรุณากรอกค่าตัวเลข'; res.className='result-box result-error'; return; }
   if (from.split('_')[0] !== to.split('_')[0]) { res.textContent='ไม่สามารถแปลงหน่วยต่างประเภทกันได้'; res.className='result-box result-error'; return; }
+  if (!toBase[from] || !toBase[to] || !unitNames[from] || !unitNames[to]) { res.textContent='หน่วยไม่รองรับ'; res.className='result-box result-error'; return; }
   res.className='result-box';
   res.textContent = val + ' ' + unitNames[from] + ' = ' + (val * toBase[from] / toBase[to]).toPrecision(6) + ' ' + unitNames[to];
 }
