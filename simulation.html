@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="th" data-title-th="จำลองวงจรไฟฟ้า | สื่อการเรียนการสอน" data-title-en="Circuit Simulator | Teaching Materials">
 <head>
 <meta charset="UTF-8">
@@ -70,6 +70,16 @@ input[type="range"].r3c { accent-color:#8b5cf6; }
 .calc-tbl .cf{color:var(--text-light);}
 .calc-tbl .cv{font-weight:700;text-align:right;white-space:nowrap;color:var(--text);}
 .calc-tbl .csep td{border-top:2px solid var(--border);border-bottom:none;height:0;padding:0;}
+.calc-tbl .cled td{background:rgba(245,158,11,.08);color:#b45309;}
+.calc-tbl .cwarn td{background:rgba(239,68,68,.07);font-size:.78rem;color:#dc2626;font-style:italic;}
+
+/* LED controls */
+.led-divider{height:1px;background:var(--border);margin:.65rem 0 .6rem;}
+.led-cb{width:15px;height:15px;cursor:pointer;accent-color:#f59e0b;flex-shrink:0;}
+.led-lbl{display:flex;align-items:center;gap:.45rem;cursor:pointer;font-weight:700;font-size:.875rem;flex:1;}
+.led-status{font-size:.8rem;font-weight:700;}
+.led-sel{width:100%;margin-top:.35rem;padding:.28rem .5rem;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text);font-family:inherit;font-size:.82rem;cursor:pointer;}
+.rb.cled .rv{color:#f59e0b;}
 </style>
 </head>
 <body>
@@ -81,8 +91,8 @@ input[type="range"].r3c { accent-color:#8b5cf6; }
     <div>
       <h1 class="th-only">จำลองวงจรไฟฟ้า — อนุกรม • ขนาน • ผสม</h1>
       <h1 class="en-only">Circuit Simulator — Series • Parallel • Mixed</h1>
-      <p class="th-only">ปรับค่า V และ R แล้วดูกระแสไหลแบบ Animation เรียลไทม์</p>
-      <p class="en-only">Adjust V and R values — watch current flow animate in real time</p>
+      <p class="th-only">ปรับค่า V และ R แล้วดูกระแสไหลแบบ Animation เรียลไทม์ • เพิ่ม LED เพื่อดูแรงดันตกคร่อม</p>
+      <p class="en-only">Adjust V and R — watch current animate in real time • Add an LED to see its forward voltage drop</p>
     </div>
   </div>
 </div>
@@ -112,14 +122,29 @@ input[type="range"].r3c { accent-color:#8b5cf6; }
    <div class="card" style="padding:1.25rem;">
     <div class="sim-wrap">
      <div>
-      <svg class="sim-svg" id="svg-s" viewBox="0 0 660 310" xmlns="http://www.w3.org/2000/svg">
+      <svg class="sim-svg" id="svg-s" viewBox="0 0 660 315" xmlns="http://www.w3.org/2000/svg">
         <path id="ps" d="M45,55 L615,55 L615,275 L45,275 Z" fill="none" stroke="none"/>
         <line class="wire" x1="45"  y1="55"  x2="120" y2="55"/>
         <line class="wire" x1="230" y1="55"  x2="270" y2="55"/>
         <line class="wire" x1="380" y1="55"  x2="420" y2="55"/>
         <line class="wire" x1="530" y1="55"  x2="615" y2="55"/>
         <line class="wire" x1="615" y1="55"  x2="615" y2="275"/>
-        <line class="wire" x1="615" y1="275" x2="348" y2="275"/>
+        <!-- bottom wire split for LED -->
+        <line class="wire" x1="615" y1="275" x2="548" y2="275"/>
+        <line class="wire" id="s-led-bypass" x1="548" y1="275" x2="512" y2="275"/>
+        <!-- LED group -->
+        <g id="s-led-g" style="display:none">
+          <circle id="s-led-glow" cx="530" cy="275" r="17" fill="#fde68a" opacity="0" filter="url(#sg)"/>
+          <polygon id="s-led-tri" points="548,264 548,286 512,275" fill="#94a3b8" stroke="#64748b" stroke-width="1.5"/>
+          <line id="s-led-bar" x1="512" y1="264" x2="512" y2="286" stroke="#64748b" stroke-width="2.5" stroke-linecap="round"/>
+          <line id="s-led-r1" x1="526" y1="262" x2="516" y2="248" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" opacity="0.25"/>
+          <polygon id="s-led-ra1" points="516,248 521,251 518,255" fill="#94a3b8" opacity="0.25"/>
+          <line id="s-led-r2" x1="534" y1="260" x2="527" y2="246" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" opacity="0.25"/>
+          <polygon id="s-led-ra2" points="527,246 532,249 529,253" fill="#94a3b8" opacity="0.25"/>
+          <text class="st" style="font-size:10px;fill:var(--text-light);text-anchor:middle;" x="530" y="299">LED</text>
+          <text class="st" style="font-size:11px;font-weight:700;fill:#f59e0b;text-anchor:middle;" x="530" y="310" id="s-led-vf-txt">Vf=2.0V</text>
+        </g>
+        <line class="wire" x1="512" y1="275" x2="348" y2="275"/>
         <line class="wire" x1="312" y1="275" x2="45"  y2="275"/>
         <line class="wire" x1="45"  y1="55"  x2="45"  y2="118"/>
         <line class="wire" x1="45"  y1="196" x2="45"  y2="275"/>
@@ -175,7 +200,21 @@ input[type="range"].r3c { accent-color:#8b5cf6; }
         <div class="ctrl-group"><div class="ctrl-row"><label><span class="th-only">แรงดัน V</span><span class="en-only">Voltage V</span></label><span id="sl-v" style="color:var(--primary);">12 V</span></div><input type="range" id="s-v" min="1" max="30" step="1" value="12"></div>
         <div class="ctrl-group"><div class="ctrl-row"><label style="color:#ef4444;">R1 (Ω)</label><span id="sl-r1" style="color:#ef4444;">100 Ω</span></div><input type="range" id="s-r1-sl" class="r1c" min="10" max="1000" step="10" value="100"></div>
         <div class="ctrl-group"><div class="ctrl-row"><label style="color:#f97316;">R2 (Ω)</label><span id="sl-r2" style="color:#f97316;">200 Ω</span></div><input type="range" id="s-r2-sl" class="r2c" min="10" max="1000" step="10" value="200"></div>
-        <div class="ctrl-group" style="margin-bottom:0;"><div class="ctrl-row"><label style="color:#8b5cf6;">R3 (Ω)</label><span id="sl-r3" style="color:#8b5cf6;">300 Ω</span></div><input type="range" id="s-r3-sl" class="r3c" min="10" max="1000" step="10" value="300"></div>
+        <div class="ctrl-group"><div class="ctrl-row"><label style="color:#8b5cf6;">R3 (Ω)</label><span id="sl-r3" style="color:#8b5cf6;">300 Ω</span></div><input type="range" id="s-r3-sl" class="r3c" min="10" max="1000" step="10" value="300"></div>
+        <!-- LED -->
+        <div class="led-divider"></div>
+        <div class="ctrl-group" style="margin-bottom:0;">
+          <div class="ctrl-row" style="margin-bottom:.3rem;">
+            <label class="led-lbl"><input type="checkbox" id="s-led-cb" class="led-cb"><span class="th-only">💡 เพิ่ม LED</span><span class="en-only">💡 Add LED</span></label>
+            <span id="s-led-status" class="led-status" style="display:none;color:#94a3b8;">○ ดับ</span>
+          </div>
+          <select id="s-led-vf-sel" class="led-sel" style="display:none;">
+            <option value="2.0">🔴 Red — Vf = 2.0 V</option>
+            <option value="2.1">🟡 Yellow — Vf = 2.1 V</option>
+            <option value="2.2">🟢 Green — Vf = 2.2 V</option>
+            <option value="3.0">🔵 Blue / White — Vf = 3.0 V</option>
+          </select>
+        </div>
       </div>
       <div class="rg">
         <div class="rb s2 crt"><div class="rl"><span class="th-only">ความต้านทานรวม R<sub>T</sub></span><span class="en-only">Total Resistance R<sub>T</sub></span></div><div class="rv" id="sr-rt">600 Ω</div></div>
@@ -188,6 +227,10 @@ input[type="range"].r3c { accent-color:#8b5cf6; }
         <div class="rb c3"><div class="rl">V₃</div><div class="rv" id="sr-v3">6.00 V</div></div>
         <div class="rb c3"><div class="rl">P₃</div><div class="rv" id="sr-p3">120 mW</div></div>
         <div class="rdv"></div>
+        <!-- LED result rows -->
+        <div class="rb cled" id="s-led-rb" style="display:none;"><div class="rl">V<sub>f</sub> (LED)</div><div class="rv" id="s-led-vf-val">2.00 V</div></div>
+        <div class="rb cled" id="s-led-prb" style="display:none;"><div class="rl">P<sub>LED</sub></div><div class="rv" id="s-led-p-val">0 mW</div></div>
+        <div class="rdv" id="s-led-div" style="display:none;"></div>
         <div class="rb s2 cpt"><div class="rl"><span class="th-only">กำลังรวม P<sub>T</sub></span><span class="en-only">Total Power P<sub>T</sub></span></div><div class="rv" id="sr-pt">240 mW</div></div>
       </div>
      </div>
@@ -200,20 +243,31 @@ input[type="range"].r3c { accent-color:#8b5cf6; }
    <div class="card" style="padding:1.25rem;">
     <div class="sim-wrap">
      <div>
-      <svg class="sim-svg" id="svg-p" viewBox="0 0 660 310" xmlns="http://www.w3.org/2000/svg">
-        <!-- electron paths -->
+      <svg class="sim-svg" id="svg-p" viewBox="0 0 660 315" xmlns="http://www.w3.org/2000/svg">
         <path id="pp-out" d="M45,55 L615,55 L615,270 L45,270 Z" fill="none" stroke="none"/>
         <path id="pp1"    d="M190,55 L190,270" fill="none" stroke="none"/>
         <path id="pp2"    d="M330,55 L330,270" fill="none" stroke="none"/>
         <path id="pp3"    d="M470,55 L470,270" fill="none" stroke="none"/>
-        <!-- outer wires -->
         <line class="wire" x1="45"  y1="55"  x2="615" y2="55"/>
         <line class="wire" x1="615" y1="55"  x2="615" y2="270"/>
-        <line class="wire" x1="615" y1="270" x2="133" y2="270"/>
+        <!-- bottom wire split for LED -->
+        <line class="wire" x1="615" y1="270" x2="548" y2="270"/>
+        <line class="wire" id="p-led-bypass" x1="548" y1="270" x2="512" y2="270"/>
+        <g id="p-led-g" style="display:none">
+          <circle id="p-led-glow" cx="530" cy="270" r="17" fill="#fde68a" opacity="0" filter="url(#pg)"/>
+          <polygon id="p-led-tri" points="548,259 548,281 512,270" fill="#94a3b8" stroke="#64748b" stroke-width="1.5"/>
+          <line id="p-led-bar" x1="512" y1="259" x2="512" y2="281" stroke="#64748b" stroke-width="2.5" stroke-linecap="round"/>
+          <line id="p-led-r1" x1="526" y1="257" x2="516" y2="243" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" opacity="0.25"/>
+          <polygon id="p-led-ra1" points="516,243 521,246 518,250" fill="#94a3b8" opacity="0.25"/>
+          <line id="p-led-r2" x1="534" y1="255" x2="527" y2="241" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" opacity="0.25"/>
+          <polygon id="p-led-ra2" points="527,241 532,244 529,248" fill="#94a3b8" opacity="0.25"/>
+          <text class="st" style="font-size:10px;fill:var(--text-light);text-anchor:middle;" x="530" y="294">LED</text>
+          <text class="st" style="font-size:11px;font-weight:700;fill:#f59e0b;text-anchor:middle;" x="530" y="305" id="p-led-vf-txt">Vf=2.0V</text>
+        </g>
+        <line class="wire" x1="512" y1="270" x2="133" y2="270"/>
         <line class="wire" x1="97"  y1="270" x2="45"  y2="270"/>
         <line class="wire" x1="45"  y1="55"  x2="45"  y2="118"/>
         <line class="wire" x1="45"  y1="196" x2="45"  y2="270"/>
-        <!-- battery -->
         <line class="bw" x1="45" y1="118" x2="45" y2="122"/><line class="bl" x1="26" y1="122" x2="64" y2="122"/>
         <line class="bs" x1="33" y1="136" x2="57" y2="136"/><line class="bw" x1="45" y1="136" x2="45" y2="148"/>
         <line class="bl" x1="26" y1="148" x2="64" y2="148"/><line class="bs" x1="33" y1="162" x2="57" y2="162"/>
@@ -223,39 +277,33 @@ input[type="range"].r3c { accent-color:#8b5cf6; }
         <text class="st smi" x="45" y="209">−</text>
         <text class="st slb" x="78" y="153">Vs</text>
         <text class="st svl" x="78" y="167" id="p-vs">12 V</text>
-        <!-- current arrows -->
         <polygon class="arw" points="87,50 87,60 97,55"/>
         <polygon class="arw" points="610,160 620,160 615,170"/>
         <polygon class="arw" points="530,275 530,265 520,270"/>
         <polygon class="arw" points="185,82 195,82 190,92"/>
         <polygon class="arw" points="325,82 335,82 330,92"/>
         <polygon class="arw" points="465,82 475,82 470,92"/>
-        <!-- branch wires -->
         <line class="wire" x1="190" y1="55" x2="190" y2="88"/>
         <line class="wire" x1="190" y1="198" x2="190" y2="270"/>
         <line class="wire" x1="330" y1="55" x2="330" y2="88"/>
         <line class="wire" x1="330" y1="198" x2="330" y2="270"/>
         <line class="wire" x1="470" y1="55" x2="470" y2="88"/>
         <line class="wire" x1="470" y1="198" x2="470" y2="270"/>
-        <!-- R1 vertical -->
         <rect id="p-r1" class="r-body" x="172" y="88" width="36" height="110" rx="7" fill="#3b82f6" stroke="#bfdbfe" stroke-width="1.5"/>
         <path class="r-zz" d="M190,95 L180,106 L200,118 L180,130 L200,142 L180,154 L200,166 L180,178 L190,188"/>
         <text class="st srn" x="190" y="143">R1</text>
         <text class="st slb" x="225" y="140" id="p-r1o">100 Ω</text>
         <text class="st svl" x="225" y="154" id="p-I1">I₁=120 mA</text>
-        <!-- R2 vertical -->
         <rect id="p-r2" class="r-body" x="312" y="88" width="36" height="110" rx="7" fill="#f97316" stroke="#fed7aa" stroke-width="1.5"/>
         <path class="r-zz" d="M330,95 L320,106 L340,118 L320,130 L340,142 L320,154 L340,166 L320,178 L330,188"/>
         <text class="st srn" x="330" y="143">R2</text>
         <text class="st slb" x="365" y="140" id="p-r2o">200 Ω</text>
         <text class="st svl" x="365" y="154" id="p-I2">I₂=60 mA</text>
-        <!-- R3 vertical -->
         <rect id="p-r3" class="r-body" x="452" y="88" width="36" height="110" rx="7" fill="#8b5cf6" stroke="#ddd6fe" stroke-width="1.5"/>
         <path class="r-zz" d="M470,95 L460,106 L480,118 L460,130 L480,142 L460,154 L480,166 L460,178 L470,188"/>
         <text class="st srn" x="470" y="143">R3</text>
         <text class="st slb" x="505" y="140" id="p-r3o">400 Ω</text>
         <text class="st svl" x="505" y="154" id="p-I3">I₃=30 mA</text>
-        <!-- ammeter -->
         <circle class="amring" cx="115" cy="270" r="18"/>
         <text class="st sam" x="115" y="271">A</text>
         <text class="st sav" x="115" y="296" id="p-IT">210 mA</text>
@@ -276,7 +324,21 @@ input[type="range"].r3c { accent-color:#8b5cf6; }
         <div class="ctrl-group"><div class="ctrl-row"><label><span class="th-only">แรงดัน V</span><span class="en-only">Voltage V</span></label><span id="pl-v" style="color:var(--primary);">12 V</span></div><input type="range" id="p-v" min="1" max="30" step="1" value="12"></div>
         <div class="ctrl-group"><div class="ctrl-row"><label style="color:#ef4444;">R1 (Ω)</label><span id="pl-r1" style="color:#ef4444;">100 Ω</span></div><input type="range" id="p-r1-sl" class="r1c" min="10" max="1000" step="10" value="100"></div>
         <div class="ctrl-group"><div class="ctrl-row"><label style="color:#f97316;">R2 (Ω)</label><span id="pl-r2" style="color:#f97316;">200 Ω</span></div><input type="range" id="p-r2-sl" class="r2c" min="10" max="1000" step="10" value="200"></div>
-        <div class="ctrl-group" style="margin-bottom:0;"><div class="ctrl-row"><label style="color:#8b5cf6;">R3 (Ω)</label><span id="pl-r3" style="color:#8b5cf6;">400 Ω</span></div><input type="range" id="p-r3-sl" class="r3c" min="10" max="1000" step="10" value="400"></div>
+        <div class="ctrl-group"><div class="ctrl-row"><label style="color:#8b5cf6;">R3 (Ω)</label><span id="pl-r3" style="color:#8b5cf6;">400 Ω</span></div><input type="range" id="p-r3-sl" class="r3c" min="10" max="1000" step="10" value="400"></div>
+        <!-- LED -->
+        <div class="led-divider"></div>
+        <div class="ctrl-group" style="margin-bottom:0;">
+          <div class="ctrl-row" style="margin-bottom:.3rem;">
+            <label class="led-lbl"><input type="checkbox" id="p-led-cb" class="led-cb"><span class="th-only">💡 เพิ่ม LED</span><span class="en-only">💡 Add LED</span></label>
+            <span id="p-led-status" class="led-status" style="display:none;color:#94a3b8;">○ ดับ</span>
+          </div>
+          <select id="p-led-vf-sel" class="led-sel" style="display:none;">
+            <option value="2.0">🔴 Red — Vf = 2.0 V</option>
+            <option value="2.1">🟡 Yellow — Vf = 2.1 V</option>
+            <option value="2.2">🟢 Green — Vf = 2.2 V</option>
+            <option value="3.0">🔵 Blue / White — Vf = 3.0 V</option>
+          </select>
+        </div>
       </div>
       <div class="rg">
         <div class="rb s2 crt"><div class="rl"><span class="th-only">ความต้านทานสมมูล R<sub>T</sub></span><span class="en-only">Equivalent R<sub>T</sub></span></div><div class="rv" id="pr-rt">57.1 Ω</div></div>
@@ -289,6 +351,10 @@ input[type="range"].r3c { accent-color:#8b5cf6; }
         <div class="rb c3"><div class="rl">I₃</div><div class="rv" id="pr-I3">30 mA</div></div>
         <div class="rb c3"><div class="rl">P₃</div><div class="rv" id="pr-p3">360 mW</div></div>
         <div class="rdv"></div>
+        <!-- LED result rows -->
+        <div class="rb cled" id="p-led-rb" style="display:none;"><div class="rl">V<sub>f</sub> (LED)</div><div class="rv" id="p-led-vf-val">2.00 V</div></div>
+        <div class="rb cled" id="p-led-prb" style="display:none;"><div class="rl">P<sub>LED</sub></div><div class="rv" id="p-led-p-val">0 mW</div></div>
+        <div class="rdv" id="p-led-div" style="display:none;"></div>
         <div class="rb s2 cpt"><div class="rl"><span class="th-only">กำลังรวม P<sub>T</sub></span><span class="en-only">Total Power P<sub>T</sub></span></div><div class="rv" id="pr-pt">2.52 W</div></div>
       </div>
      </div>
@@ -301,20 +367,31 @@ input[type="range"].r3c { accent-color:#8b5cf6; }
    <div class="card" style="padding:1.25rem;">
     <div class="sim-wrap">
      <div>
-      <svg class="sim-svg" id="svg-m" viewBox="0 0 660 310" xmlns="http://www.w3.org/2000/svg">
-        <!-- electron paths -->
+      <svg class="sim-svg" id="svg-m" viewBox="0 0 660 315" xmlns="http://www.w3.org/2000/svg">
         <path id="pm-out" d="M45,55 L615,55 L615,275 L45,275 Z" fill="none" stroke="none"/>
         <path id="pm2"    d="M300,130 L500,130" fill="none" stroke="none"/>
         <path id="pm3"    d="M300,210 L500,210" fill="none" stroke="none"/>
-        <!-- outer wires -->
         <line class="wire" x1="45"  y1="55"  x2="80"  y2="55"/>
         <line class="wire" x1="230" y1="55"  x2="300" y2="55"/>
         <line class="wire" x1="500" y1="55"  x2="615" y2="55"/>
         <line class="wire" x1="615" y1="55"  x2="615" y2="275"/>
-        <line class="wire" x1="615" y1="275" x2="45"  y2="275"/>
+        <!-- bottom wire split for LED -->
+        <line class="wire" x1="615" y1="275" x2="548" y2="275"/>
+        <line class="wire" id="m-led-bypass" x1="548" y1="275" x2="512" y2="275"/>
+        <g id="m-led-g" style="display:none">
+          <circle id="m-led-glow" cx="530" cy="275" r="17" fill="#fde68a" opacity="0" filter="url(#mg)"/>
+          <polygon id="m-led-tri" points="548,264 548,286 512,275" fill="#94a3b8" stroke="#64748b" stroke-width="1.5"/>
+          <line id="m-led-bar" x1="512" y1="264" x2="512" y2="286" stroke="#64748b" stroke-width="2.5" stroke-linecap="round"/>
+          <line id="m-led-r1" x1="526" y1="262" x2="516" y2="248" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" opacity="0.25"/>
+          <polygon id="m-led-ra1" points="516,248 521,251 518,255" fill="#94a3b8" opacity="0.25"/>
+          <line id="m-led-r2" x1="534" y1="260" x2="527" y2="246" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" opacity="0.25"/>
+          <polygon id="m-led-ra2" points="527,246 532,249 529,253" fill="#94a3b8" opacity="0.25"/>
+          <text class="st" style="font-size:10px;fill:var(--text-light);text-anchor:middle;" x="530" y="299">LED</text>
+          <text class="st" style="font-size:11px;font-weight:700;fill:#f59e0b;text-anchor:middle;" x="530" y="310" id="m-led-vf-txt">Vf=2.0V</text>
+        </g>
+        <line class="wire" x1="512" y1="275" x2="45"  y2="275"/>
         <line class="wire" x1="45"  y1="55"  x2="45"  y2="118"/>
         <line class="wire" x1="45"  y1="196" x2="45"  y2="275"/>
-        <!-- battery -->
         <line class="bw" x1="45" y1="118" x2="45" y2="122"/><line class="bl" x1="26" y1="122" x2="64" y2="122"/>
         <line class="bs" x1="33" y1="136" x2="57" y2="136"/><line class="bw" x1="45" y1="136" x2="45" y2="148"/>
         <line class="bl" x1="26" y1="148" x2="64" y2="148"/><line class="bs" x1="33" y1="162" x2="57" y2="162"/>
@@ -324,45 +401,35 @@ input[type="range"].r3c { accent-color:#8b5cf6; }
         <text class="st smi" x="45" y="209">−</text>
         <text class="st slb" x="78" y="230">Vs</text>
         <text class="st svl" x="78" y="244" id="m-vs">12 V</text>
-        <!-- node buses -->
         <line class="wire" x1="300" y1="55" x2="300" y2="228"/>
         <line class="wire" x1="500" y1="55" x2="500" y2="228"/>
-        <!-- node labels -->
         <text class="st snd" x="300" y="48">A</text>
         <text class="st snd" x="500" y="48">B</text>
-        <!-- branch wires R2 -->
         <line class="wire" x1="300" y1="130" x2="318" y2="130"/>
         <line class="wire" x1="472" y1="130" x2="500" y2="130"/>
-        <!-- branch wires R3 -->
         <line class="wire" x1="300" y1="210" x2="318" y2="210"/>
         <line class="wire" x1="472" y1="210" x2="500" y2="210"/>
-        <!-- arrows -->
         <polygon class="arw" points="255,50 255,60 265,55"/>
         <polygon class="arw" points="610,165 620,165 615,175"/>
         <polygon class="arw" points="455,280 455,270 445,275"/>
         <polygon class="arw" points="388,125 388,135 398,130"/>
         <polygon class="arw" points="388,205 388,215 398,210"/>
-        <!-- R1 horizontal -->
         <rect id="m-r1" class="r-body" x="80" y="39" width="150" height="32" rx="7" fill="#3b82f6" stroke="#bfdbfe" stroke-width="1.5"/>
         <path class="r-zz" d="M88,55 L99,43 L111,67 L123,43 L135,67 L147,43 L159,67 L171,43 L183,55 L222,55"/>
         <text class="st srn" x="155" y="55">R1</text>
         <text class="st slb" x="155" y="80" id="m-r1o">100 Ω</text>
         <text class="st svl" x="155" y="28" id="m-v1">V₁=5.1 V</text>
-        <!-- R2 horizontal -->
         <rect id="m-r2" class="r-body" x="318" y="114" width="154" height="32" rx="7" fill="#f97316" stroke="#fed7aa" stroke-width="1.5"/>
         <path class="r-zz" d="M326,130 L337,118 L349,142 L361,118 L373,142 L385,118 L397,142 L409,118 L421,130 L464,130"/>
         <text class="st srn" x="395" y="130">R2</text>
         <text class="st slb" x="395" y="158" id="m-r2o">200 Ω</text>
         <text class="st svl" x="395" y="105" id="m-I2">I₂=34 mA</text>
-        <!-- R3 horizontal -->
         <rect id="m-r3" class="r-body" x="318" y="194" width="154" height="32" rx="7" fill="#8b5cf6" stroke="#ddd6fe" stroke-width="1.5"/>
         <path class="r-zz" d="M326,210 L337,198 L349,222 L361,198 L373,222 L385,198 L397,222 L409,198 L421,210 L464,210"/>
         <text class="st srn" x="395" y="210">R3</text>
         <text class="st slb" x="395" y="238" id="m-r3o">400 Ω</text>
         <text class="st svl" x="395" y="185" id="m-I3">I₃=17 mA</text>
-        <!-- Vp label between nodes -->
         <text class="st svl" x="400" y="28" id="m-vp">Vp=6.9 V</text>
-        <!-- ammeter -->
         <circle class="amring" cx="330" cy="275" r="18"/>
         <text class="st sam" x="330" y="276">A</text>
         <text class="st sav" x="330" y="301" id="m-IT">51 mA</text>
@@ -383,7 +450,21 @@ input[type="range"].r3c { accent-color:#8b5cf6; }
         <div class="ctrl-group"><div class="ctrl-row"><label><span class="th-only">แรงดัน V</span><span class="en-only">Voltage V</span></label><span id="ml-v" style="color:var(--primary);">12 V</span></div><input type="range" id="m-v" min="1" max="30" step="1" value="12"></div>
         <div class="ctrl-group"><div class="ctrl-row"><label style="color:#ef4444;">R1 — <span class="th-only">อนุกรม</span><span class="en-only">Series</span> (Ω)</label><span id="ml-r1" style="color:#ef4444;">100 Ω</span></div><input type="range" id="m-r1-sl" class="r1c" min="10" max="1000" step="10" value="100"></div>
         <div class="ctrl-group"><div class="ctrl-row"><label style="color:#f97316;">R2 — <span class="th-only">ขนาน</span><span class="en-only">Parallel</span> (Ω)</label><span id="ml-r2" style="color:#f97316;">200 Ω</span></div><input type="range" id="m-r2-sl" class="r2c" min="10" max="1000" step="10" value="200"></div>
-        <div class="ctrl-group" style="margin-bottom:0;"><div class="ctrl-row"><label style="color:#8b5cf6;">R3 — <span class="th-only">ขนาน</span><span class="en-only">Parallel</span> (Ω)</label><span id="ml-r3" style="color:#8b5cf6;">400 Ω</span></div><input type="range" id="m-r3-sl" class="r3c" min="10" max="1000" step="10" value="400"></div>
+        <div class="ctrl-group"><div class="ctrl-row"><label style="color:#8b5cf6;">R3 — <span class="th-only">ขนาน</span><span class="en-only">Parallel</span> (Ω)</label><span id="ml-r3" style="color:#8b5cf6;">400 Ω</span></div><input type="range" id="m-r3-sl" class="r3c" min="10" max="1000" step="10" value="400"></div>
+        <!-- LED -->
+        <div class="led-divider"></div>
+        <div class="ctrl-group" style="margin-bottom:0;">
+          <div class="ctrl-row" style="margin-bottom:.3rem;">
+            <label class="led-lbl"><input type="checkbox" id="m-led-cb" class="led-cb"><span class="th-only">💡 เพิ่ม LED</span><span class="en-only">💡 Add LED</span></label>
+            <span id="m-led-status" class="led-status" style="display:none;color:#94a3b8;">○ ดับ</span>
+          </div>
+          <select id="m-led-vf-sel" class="led-sel" style="display:none;">
+            <option value="2.0">🔴 Red — Vf = 2.0 V</option>
+            <option value="2.1">🟡 Yellow — Vf = 2.1 V</option>
+            <option value="2.2">🟢 Green — Vf = 2.2 V</option>
+            <option value="3.0">🔵 Blue / White — Vf = 3.0 V</option>
+          </select>
+        </div>
       </div>
       <div class="rg">
         <div class="rb s2 crt"><div class="rl"><span class="th-only">ความต้านทานรวม R<sub>T</sub></span><span class="en-only">Total R<sub>T</sub></span></div><div class="rv" id="mr-rt">233 Ω</div></div>
@@ -399,6 +480,10 @@ input[type="range"].r3c { accent-color:#8b5cf6; }
         <div class="rb c3"><div class="rl">I₃</div><div class="rv" id="mr-I3">17.1 mA</div></div>
         <div class="rb c3"><div class="rl">P₃</div><div class="rv" id="mr-p3">118 mW</div></div>
         <div class="rdv"></div>
+        <!-- LED result rows -->
+        <div class="rb cled" id="m-led-rb" style="display:none;"><div class="rl">V<sub>f</sub> (LED)</div><div class="rv" id="m-led-vf-val">2.00 V</div></div>
+        <div class="rb cled" id="m-led-prb" style="display:none;"><div class="rl">P<sub>LED</sub></div><div class="rv" id="m-led-p-val">0 mW</div></div>
+        <div class="rdv" id="m-led-div" style="display:none;"></div>
         <div class="rb s2 cpt"><div class="rl"><span class="th-only">กำลังรวม P<sub>T</sub></span><span class="en-only">Total Power P<sub>T</sub></span></div><div class="rv" id="mr-pt">617 mW</div></div>
       </div>
      </div>
@@ -450,6 +535,7 @@ input[type="range"].r3c { accent-color:#8b5cf6; }
         <li><strong>ขนาน:</strong> V เท่ากัน, I แยกตาม R — R น้อย = I มาก (จุดเร็วกว่า)</li>
         <li><strong>ผสม:</strong> R1 ตก V ส่วนหนึ่ง, ที่เหลือแบ่งใน R2‖R3</li>
         <li>เพิ่ม R ใดก็ตาม → R<sub>T</sub> เพิ่ม → I<sub>T</sub> ลด</li>
+        <li><strong>LED:</strong> ต้องใช้แรงดัน ≥ Vf จึงจะนำไฟ — ลอง V=2V กับ LED สีแดง (Vf=2V) เพื่อดูจุดเปลี่ยน</li>
       </ul>
       <ul class="content-list en-only">
         <li><strong>Dot speed</strong> ∝ current magnitude in that path</li>
@@ -458,6 +544,7 @@ input[type="range"].r3c { accent-color:#8b5cf6; }
         <li><strong>Parallel:</strong> same V, current splits by R — lower R = more I (faster dots)</li>
         <li><strong>Mixed:</strong> R1 drops some voltage; remainder shared across R2‖R3</li>
         <li>Increase any R → R<sub>T</sub> increases → I<sub>T</sub> decreases</li>
+        <li><strong>LED:</strong> needs V ≥ Vf to conduct — try V=2V with Red LED (Vf=2V) to see the threshold</li>
       </ul>
     </div>
   </div>
@@ -488,68 +575,280 @@ function spd(I){return Math.max(0.015,Math.min(0.38,I*0.62));}
 function $$(id){return document.getElementById(id);}
 
 // ── calc-steps helpers ──
-function n3(x){return parseFloat(x.toPrecision(3));}
 function cRow(sym,formula,result){return'<tr><td class="ck">'+sym+'</td><td class="cf">= '+formula+'</td><td class="cv">'+result+'</td></tr>';}
+function cRowLed(sym,formula,result){return'<tr class="cled"><td class="ck">'+sym+'</td><td class="cf">= '+formula+'</td><td class="cv">'+result+'</td></tr>';}
 function cSep(){return'<tr class="csep"><td colspan="3"></td></tr>';}
+function cWarn(msg){return'<tr class="cwarn"><td colspan="3">⚠ '+msg+'</td></tr>';}
 
+// ── LED SVG + UI update (shared helper) ──
+function updLed(pre, state, c){
+  var show=state.led, lit=c.ledLit;
+  // SVG bypass wire vs LED group
+  $$(pre+'-led-bypass').style.display=show?'none':'';
+  $$(pre+'-led-g').style.display=show?'':'none';
+  if(show){
+    var fc=lit?'#fbbf24':'#94a3b8';
+    var sc=lit?'#f59e0b':'#64748b';
+    var op=lit?'1':'0.22';
+    $$(pre+'-led-tri').setAttribute('fill',fc);
+    $$(pre+'-led-tri').setAttribute('stroke',sc);
+    $$(pre+'-led-bar').setAttribute('stroke',sc);
+    $$(pre+'-led-r1').setAttribute('stroke',sc);$$(pre+'-led-r1').setAttribute('opacity',op);
+    $$(pre+'-led-r2').setAttribute('stroke',sc);$$(pre+'-led-r2').setAttribute('opacity',op);
+    $$(pre+'-led-ra1').setAttribute('fill',fc);$$(pre+'-led-ra1').setAttribute('opacity',op);
+    $$(pre+'-led-ra2').setAttribute('fill',fc);$$(pre+'-led-ra2').setAttribute('opacity',op);
+    $$(pre+'-led-glow').setAttribute('opacity',lit?'0.5':'0');
+    $$(pre+'-led-vf-txt').textContent='Vf='+state.Vf.toFixed(1)+'V';
+  }
+  // control panel
+  $$(pre+'-led-vf-sel').style.display=show?'':'none';
+  var sta=$$(pre+'-led-status');
+  if(show){sta.style.display='';sta.textContent=lit?'● ติด':'○ ดับ';sta.style.color=lit?'#f59e0b':'#94a3b8';}
+  else{sta.style.display='none';}
+  // result rows
+  $$(pre+'-led-rb').style.display=show?'':'none';
+  $$(pre+'-led-prb').style.display=show?'':'none';
+  $$(pre+'-led-div').style.display=show?'':'none';
+  if(show){
+    $$(pre+'-led-vf-val').textContent=fmtV(state.Vf);
+    $$(pre+'-led-p-val').textContent=fmtW(c.pLed);
+  }
+}
+
+// ════════════════════════════ SERIES ════════════════════════════
+var sState={V:12,R1:100,R2:200,R3:300,led:false,Vf:2.0};
+var sSpeed=0;
+function calcS(){
+  var Rt=sState.R1+sState.R2+sState.R3;
+  var ledLit=sState.led&&(sState.V>sState.Vf);
+  var vAvail=sState.led?(ledLit?sState.V-sState.Vf:0):sState.V;
+  var I=ledLit||!sState.led?vAvail/Rt:0;
+  var v1=I*sState.R1,v2=I*sState.R2,v3=I*sState.R3;
+  var p1=I*I*sState.R1,p2=I*I*sState.R2,p3=I*I*sState.R3;
+  var pLed=sState.led&&ledLit?sState.Vf*I:0;
+  return{Rt:Rt,I:I,v1:v1,v2:v2,v3:v3,p1:p1,p2:p2,p3:p3,pt:I*sState.V,
+         ledLit:ledLit,vAvail:vAvail,pLed:pLed};
+}
 function genCalcS(s,c){
   var I=fmtA(c.I);
   var rows='<table class="calc-tbl">';
-  rows+=cRow('R<sub>T</sub>','R₁+R₂+R₃ = '+s.R1+' + '+s.R2+' + '+s.R3+' Ω', c.Rt+' Ω');
-  rows+=cRow('I','V ÷ R<sub>T</sub> = '+s.V+' ÷ '+c.Rt,I);
+  if(s.led){
+    if(c.ledLit){rows+=cRowLed('V<sub>avail</sub>','V − Vf = '+s.V+' − '+s.Vf.toFixed(1)+' V',fmtV(c.vAvail));}
+    else{rows+=cWarn('V ≤ Vf — LED ไม่นำไฟ / not conducting → I = 0');}
+    rows+=cSep();
+  }
+  rows+=cRow('R<sub>T</sub>','R₁+R₂+R₃ = '+s.R1+'+'+s.R2+'+'+s.R3+' Ω',c.Rt+' Ω');
+  var vStr=s.led&&c.ledLit?fmtV(c.vAvail):s.V+' V';
+  rows+=cRow('I',vStr+' ÷ R<sub>T</sub>',I);
   rows+=cSep();
-  rows+=cRow('V₁','I × R₁ = '+I+' × '+s.R1+' Ω',fmtV(c.v1));
-  rows+=cRow('V₂','I × R₂ = '+I+' × '+s.R2+' Ω',fmtV(c.v2));
-  rows+=cRow('V₃','I × R₃ = '+I+' × '+s.R3+' Ω',fmtV(c.v3));
+  if(s.led&&c.ledLit){rows+=cRowLed('V<sub>LED</sub>','Vf (fixed)',fmtV(s.Vf));}
+  rows+=cRow('V₁','I × R₁',fmtV(c.v1));
+  rows+=cRow('V₂','I × R₂',fmtV(c.v2));
+  rows+=cRow('V₃','I × R₃',fmtV(c.v3));
   rows+=cSep();
-  rows+=cRow('P₁','I² × R₁ = ('+I+')² × '+s.R1+' Ω',fmtW(c.p1));
-  rows+=cRow('P₂','I² × R₂ = ('+I+')² × '+s.R2+' Ω',fmtW(c.p2));
-  rows+=cRow('P₃','I² × R₃ = ('+I+')² × '+s.R3+' Ω',fmtW(c.p3));
+  if(s.led&&c.ledLit){rows+=cRowLed('P<sub>LED</sub>','Vf × I',fmtW(c.pLed));}
+  rows+=cRow('P₁','I² × R₁',fmtW(c.p1));
+  rows+=cRow('P₂','I² × R₂',fmtW(c.p2));
+  rows+=cRow('P₃','I² × R₃',fmtW(c.p3));
   rows+=cSep();
   rows+=cRow('P<sub>T</sub>','V × I = '+s.V+' V × '+I,fmtW(c.pt));
   rows+='</table>';
   return rows;
 }
+function updS(){
+  var c=calcS(),ref=Math.max(c.p1,c.p2,c.p3,1e-4);
+  sSpeed=spd(c.I);
+  $$('sl-v').textContent=sState.V+' V';
+  $$('sl-r1').textContent=sState.R1+' Ω';
+  $$('sl-r2').textContent=sState.R2+' Ω';
+  $$('sl-r3').textContent=sState.R3+' Ω';
+  $$('sr-rt').textContent=c.Rt+' Ω';
+  $$('sr-I').textContent=fmtA(c.I);
+  $$('sr-v1').textContent=fmtV(c.v1);$$('sr-v2').textContent=fmtV(c.v2);$$('sr-v3').textContent=fmtV(c.v3);
+  $$('sr-p1').textContent=fmtW(c.p1);$$('sr-p2').textContent=fmtW(c.p2);$$('sr-p3').textContent=fmtW(c.p3);
+  $$('sr-pt').textContent=fmtW(c.pt);
+  $$('s-vs').textContent=sState.V+' V';
+  $$('s-r1o').textContent=sState.R1+' Ω';$$('s-r2o').textContent=sState.R2+' Ω';$$('s-r3o').textContent=sState.R3+' Ω';
+  $$('s-v1').textContent='V₁='+c.v1.toFixed(1)+' V';
+  $$('s-v2').textContent='V₂='+c.v2.toFixed(1)+' V';
+  $$('s-v3').textContent='V₃='+c.v3.toFixed(1)+' V';
+  $$('s-I').textContent=fmtA(c.I);
+  $$('s-r1').setAttribute('fill',heat(c.p1,ref));
+  $$('s-r2').setAttribute('fill',heat(c.p2,ref));
+  $$('s-r3').setAttribute('fill',heat(c.p3,ref));
+  $$('s-calc').innerHTML=genCalcS(sState,c);
+  updLed('s',sState,c);
+}
+addGlow($$('svg-s'),'sg');
+var sE=mkElectrons($$('svg-s'),14,'sg');
+var psPath=$$('ps');
+$$('s-v').addEventListener('input',function(){sState.V=+this.value;updS();});
+$$('s-r1-sl').addEventListener('input',function(){sState.R1=+this.value;updS();});
+$$('s-r2-sl').addEventListener('input',function(){sState.R2=+this.value;updS();});
+$$('s-r3-sl').addEventListener('input',function(){sState.R3=+this.value;updS();});
+$$('s-led-cb').addEventListener('change',function(){sState.led=this.checked;updS();});
+$$('s-led-vf-sel').addEventListener('change',function(){sState.Vf=parseFloat(this.value);updS();});
+updS();
 
+// ════════════════════════════ PARALLEL ════════════════════════════
+var pState={V:12,R1:100,R2:200,R3:400,led:false,Vf:2.0};
+var pSpeedOut=0,pSpeed1=0,pSpeed2=0,pSpeed3=0;
+function calcP(){
+  var ledLit=pState.led&&(pState.V>pState.Vf);
+  var vAvail=pState.led?(ledLit?pState.V-pState.Vf:0):pState.V;
+  var I1=vAvail/pState.R1,I2=vAvail/pState.R2,I3=vAvail/pState.R3;
+  if(pState.led&&!ledLit){I1=I2=I3=0;}
+  var It=I1+I2+I3;
+  var Rt=It>0?vAvail/It:1/(1/pState.R1+1/pState.R2+1/pState.R3);
+  var pLed=pState.led&&ledLit?pState.Vf*It:0;
+  return{Rt:Rt,It:It,I1:I1,I2:I2,I3:I3,
+    p1:I1*I1*pState.R1,p2:I2*I2*pState.R2,p3:I3*I3*pState.R3,
+    pt:It*pState.V,ledLit:ledLit,vAvail:vAvail,pLed:pLed};
+}
 function genCalcP(s,c){
   var rows='<table class="calc-tbl">';
-  rows+=cRow('I₁','V ÷ R₁ = '+s.V+' ÷ '+s.R1+' Ω',fmtA(c.I1));
-  rows+=cRow('I₂','V ÷ R₂ = '+s.V+' ÷ '+s.R2+' Ω',fmtA(c.I2));
-  rows+=cRow('I₃','V ÷ R₃ = '+s.V+' ÷ '+s.R3+' Ω',fmtA(c.I3));
+  if(s.led){
+    if(c.ledLit){rows+=cRowLed('V<sub>avail</sub>','V − Vf = '+s.V+' − '+s.Vf.toFixed(1)+' V',fmtV(c.vAvail));}
+    else{rows+=cWarn('V ≤ Vf — LED ไม่นำไฟ / not conducting → I = 0');}
+    rows+=cSep();
+  }
+  var vStr=s.led&&c.ledLit?fmtV(c.vAvail):s.V+' V';
+  rows+=cRow('I₁',vStr+' ÷ R₁',fmtA(c.I1));
+  rows+=cRow('I₂',vStr+' ÷ R₂',fmtA(c.I2));
+  rows+=cRow('I₃',vStr+' ÷ R₃',fmtA(c.I3));
   rows+=cSep();
-  rows+=cRow('I<sub>T</sub>','I₁+I₂+I₃ = '+fmtA(c.I1)+'+'+fmtA(c.I2)+'+'+fmtA(c.I3),fmtA(c.It));
-  rows+=cRow('R<sub>T</sub>','V ÷ I<sub>T</sub> = '+s.V+' ÷ '+fmtA(c.It),c.Rt.toFixed(1)+' Ω');
+  rows+=cRow('I<sub>T</sub>','I₁+I₂+I₃',fmtA(c.It));
+  rows+=cRow('R<sub>T</sub>',vStr+' ÷ I<sub>T</sub>',c.Rt.toFixed(1)+' Ω');
   rows+=cSep();
-  rows+=cRow('P₁','V × I₁ = '+s.V+' V × '+fmtA(c.I1),fmtW(c.p1));
-  rows+=cRow('P₂','V × I₂ = '+s.V+' V × '+fmtA(c.I2),fmtW(c.p2));
-  rows+=cRow('P₃','V × I₃ = '+s.V+' V × '+fmtA(c.I3),fmtW(c.p3));
+  if(s.led&&c.ledLit){rows+=cRowLed('P<sub>LED</sub>','Vf × I<sub>T</sub>',fmtW(c.pLed));}
+  rows+=cRow('P₁',vStr+' × I₁',fmtW(c.p1));
+  rows+=cRow('P₂',vStr+' × I₂',fmtW(c.p2));
+  rows+=cRow('P₃',vStr+' × I₃',fmtW(c.p3));
   rows+=cSep();
   rows+=cRow('P<sub>T</sub>','V × I<sub>T</sub> = '+s.V+' V × '+fmtA(c.It),fmtW(c.pt));
   rows+='</table>';
   return rows;
 }
+function updP(){
+  var c=calcP(),ref=Math.max(c.p1,c.p2,c.p3,1e-4);
+  pSpeedOut=spd(c.It);pSpeed1=spd(c.I1);pSpeed2=spd(c.I2);pSpeed3=spd(c.I3);
+  $$('pl-v').textContent=pState.V+' V';
+  $$('pl-r1').textContent=pState.R1+' Ω';
+  $$('pl-r2').textContent=pState.R2+' Ω';
+  $$('pl-r3').textContent=pState.R3+' Ω';
+  $$('pr-rt').textContent=c.Rt.toFixed(1)+' Ω';
+  $$('pr-IT').textContent=fmtA(c.It);
+  $$('pr-I1').textContent=fmtA(c.I1);$$('pr-I2').textContent=fmtA(c.I2);$$('pr-I3').textContent=fmtA(c.I3);
+  $$('pr-p1').textContent=fmtW(c.p1);$$('pr-p2').textContent=fmtW(c.p2);$$('pr-p3').textContent=fmtW(c.p3);
+  $$('pr-pt').textContent=fmtW(c.pt);
+  $$('p-vs').textContent=pState.V+' V';
+  $$('p-r1o').textContent=pState.R1+' Ω';$$('p-r2o').textContent=pState.R2+' Ω';$$('p-r3o').textContent=pState.R3+' Ω';
+  $$('p-I1').textContent='I₁='+fmtA(c.I1);$$('p-I2').textContent='I₂='+fmtA(c.I2);$$('p-I3').textContent='I₃='+fmtA(c.I3);
+  $$('p-IT').textContent=fmtA(c.It);
+  $$('p-r1').setAttribute('fill',heat(c.p1,ref));
+  $$('p-r2').setAttribute('fill',heat(c.p2,ref));
+  $$('p-r3').setAttribute('fill',heat(c.p3,ref));
+  $$('p-calc').innerHTML=genCalcP(pState,c);
+  updLed('p',pState,c);
+}
+addGlow($$('svg-p'),'pg');
+var pEout=mkElectrons($$('svg-p'),10,'pg');
+var pE1=mkElectrons($$('svg-p'),8,'pg','#6ee7b7');
+var pE2=mkElectrons($$('svg-p'),8,'pg','#fb923c');
+var pE3=mkElectrons($$('svg-p'),8,'pg','#c4b5fd');
+var ppOutPath=$$('pp-out'),pp1Path=$$('pp1'),pp2Path=$$('pp2'),pp3Path=$$('pp3');
+$$('p-v').addEventListener('input',function(){pState.V=+this.value;updP();});
+$$('p-r1-sl').addEventListener('input',function(){pState.R1=+this.value;updP();});
+$$('p-r2-sl').addEventListener('input',function(){pState.R2=+this.value;updP();});
+$$('p-r3-sl').addEventListener('input',function(){pState.R3=+this.value;updP();});
+$$('p-led-cb').addEventListener('change',function(){pState.led=this.checked;updP();});
+$$('p-led-vf-sel').addEventListener('change',function(){pState.Vf=parseFloat(this.value);updP();});
+updP();
 
+// ════════════════════════════ MIXED ════════════════════════════
+var mState={V:12,R1:100,R2:200,R3:400,led:false,Vf:2.0};
+var mSpeedOut=0,mSpeed2=0,mSpeed3=0;
+function calcM(){
+  var Rp=mState.R2*mState.R3/(mState.R2+mState.R3);
+  var Rt=mState.R1+Rp;
+  var ledLit=mState.led&&(mState.V>mState.Vf);
+  var vAvail=mState.led?(ledLit?mState.V-mState.Vf:0):mState.V;
+  var It=ledLit||!mState.led?vAvail/Rt:0;
+  var v1=It*mState.R1,vp=It*Rp;
+  var I2=vp/mState.R2,I3=vp/mState.R3;
+  var p1=It*It*mState.R1,p2=I2*I2*mState.R2,p3=I3*I3*mState.R3;
+  var pLed=mState.led&&ledLit?mState.Vf*It:0;
+  return{Rt:Rt,Rp:Rp,It:It,v1:v1,vp:vp,I2:I2,I3:I3,
+    p1:p1,p2:p2,p3:p3,pt:It*mState.V,ledLit:ledLit,vAvail:vAvail,pLed:pLed};
+}
 function genCalcM(s,c){
   var IT=fmtA(c.It);
   var rows='<table class="calc-tbl">';
-  rows+=cRow('R<sub>p</sub>','R₂×R₃÷(R₂+R₃) = '+s.R2+'×'+s.R3+'÷('+s.R2+'+'+s.R3+')',c.Rp.toFixed(1)+' Ω');
-  rows+=cRow('R<sub>T</sub>','R₁ + R<sub>p</sub> = '+s.R1+' + '+c.Rp.toFixed(1)+' Ω',c.Rt.toFixed(1)+' Ω');
-  rows+=cRow('I<sub>T</sub>','V ÷ R<sub>T</sub> = '+s.V+' ÷ '+c.Rt.toFixed(1),IT);
+  if(s.led){
+    if(c.ledLit){rows+=cRowLed('V<sub>avail</sub>','V − Vf = '+s.V+' − '+s.Vf.toFixed(1)+' V',fmtV(c.vAvail));}
+    else{rows+=cWarn('V ≤ Vf — LED ไม่นำไฟ / not conducting → I = 0');}
+    rows+=cSep();
+  }
+  rows+=cRow('R<sub>p</sub>','R₂×R₃÷(R₂+R₃)',c.Rp.toFixed(1)+' Ω');
+  rows+=cRow('R<sub>T</sub>','R₁ + R<sub>p</sub>',c.Rt.toFixed(1)+' Ω');
+  var vStr=s.led&&c.ledLit?fmtV(c.vAvail):s.V+' V';
+  rows+=cRow('I<sub>T</sub>',vStr+' ÷ R<sub>T</sub>',IT);
   rows+=cSep();
-  rows+=cRow('V₁','I<sub>T</sub> × R₁ = '+IT+' × '+s.R1+' Ω',fmtV(c.v1));
-  rows+=cRow('V<sub>p</sub>','I<sub>T</sub> × R<sub>p</sub> = '+IT+' × '+c.Rp.toFixed(1)+' Ω',fmtV(c.vp));
+  rows+=cRow('V₁','I<sub>T</sub> × R₁',fmtV(c.v1));
+  rows+=cRow('V<sub>p</sub>','I<sub>T</sub> × R<sub>p</sub>',fmtV(c.vp));
   rows+=cSep();
-  rows+=cRow('I₂','V<sub>p</sub> ÷ R₂ = '+fmtV(c.vp)+' ÷ '+s.R2+' Ω',fmtA(c.I2));
-  rows+=cRow('I₃','V<sub>p</sub> ÷ R₃ = '+fmtV(c.vp)+' ÷ '+s.R3+' Ω',fmtA(c.I3));
+  rows+=cRow('I₂','V<sub>p</sub> ÷ R₂',fmtA(c.I2));
+  rows+=cRow('I₃','V<sub>p</sub> ÷ R₃',fmtA(c.I3));
   rows+=cSep();
-  rows+=cRow('P₁','I<sub>T</sub>² × R₁ = ('+IT+')² × '+s.R1+' Ω',fmtW(c.p1));
-  rows+=cRow('P₂','I₂² × R₂ = ('+fmtA(c.I2)+')² × '+s.R2+' Ω',fmtW(c.p2));
-  rows+=cRow('P₃','I₃² × R₃ = ('+fmtA(c.I3)+')² × '+s.R3+' Ω',fmtW(c.p3));
+  if(s.led&&c.ledLit){rows+=cRowLed('P<sub>LED</sub>','Vf × I<sub>T</sub>',fmtW(c.pLed));}
+  rows+=cRow('P₁','I<sub>T</sub>² × R₁',fmtW(c.p1));
+  rows+=cRow('P₂','I₂² × R₂',fmtW(c.p2));
+  rows+=cRow('P₃','I₃² × R₃',fmtW(c.p3));
   rows+=cSep();
   rows+=cRow('P<sub>T</sub>','V × I<sub>T</sub> = '+s.V+' V × '+IT,fmtW(c.pt));
   rows+='</table>';
   return rows;
 }
+function updM(){
+  var c=calcM(),ref=Math.max(c.p1,c.p2,c.p3,1e-4);
+  mSpeedOut=spd(c.It);mSpeed2=spd(c.I2);mSpeed3=spd(c.I3);
+  $$('ml-v').textContent=mState.V+' V';
+  $$('ml-r1').textContent=mState.R1+' Ω';
+  $$('ml-r2').textContent=mState.R2+' Ω';
+  $$('ml-r3').textContent=mState.R3+' Ω';
+  $$('mr-rt').textContent=c.Rt.toFixed(1)+' Ω';
+  $$('mr-IT').textContent=fmtA(c.It);
+  $$('mr-rp').textContent=c.Rp.toFixed(1)+' Ω';
+  $$('mr-v1').textContent=fmtV(c.v1);
+  $$('mr-vp').textContent=fmtV(c.vp);
+  $$('mr-I2').textContent=fmtA(c.I2);$$('mr-I3').textContent=fmtA(c.I3);
+  $$('mr-p1').textContent=fmtW(c.p1);$$('mr-p2').textContent=fmtW(c.p2);$$('mr-p3').textContent=fmtW(c.p3);
+  $$('mr-pt').textContent=fmtW(c.pt);
+  $$('m-vs').textContent=mState.V+' V';
+  $$('m-r1o').textContent=mState.R1+' Ω';$$('m-r2o').textContent=mState.R2+' Ω';$$('m-r3o').textContent=mState.R3+' Ω';
+  $$('m-v1').textContent='V₁='+c.v1.toFixed(1)+' V';
+  $$('m-vp').textContent='Vp='+c.vp.toFixed(1)+' V';
+  $$('m-I2').textContent='I₂='+fmtA(c.I2);
+  $$('m-I3').textContent='I₃='+fmtA(c.I3);
+  $$('m-IT').textContent=fmtA(c.It);
+  $$('m-r1').setAttribute('fill',heat(c.p1,ref));
+  $$('m-r2').setAttribute('fill',heat(c.p2,ref));
+  $$('m-r3').setAttribute('fill',heat(c.p3,ref));
+  $$('m-calc').innerHTML=genCalcM(mState,c);
+  updLed('m',mState,c);
+}
+addGlow($$('svg-m'),'mg');
+var mEout=mkElectrons($$('svg-m'),12,'mg');
+var mE2=mkElectrons($$('svg-m'),8,'mg','#fb923c');
+var mE3=mkElectrons($$('svg-m'),8,'mg','#c4b5fd');
+var pmOutPath=$$('pm-out'),pm2Path=$$('pm2'),pm3Path=$$('pm3');
+$$('m-v').addEventListener('input',function(){mState.V=+this.value;updM();});
+$$('m-r1-sl').addEventListener('input',function(){mState.R1=+this.value;updM();});
+$$('m-r2-sl').addEventListener('input',function(){mState.R2=+this.value;updM();});
+$$('m-r3-sl').addEventListener('input',function(){mState.R3=+this.value;updM();});
+$$('m-led-cb').addEventListener('change',function(){mState.led=this.checked;updM();});
+$$('m-led-vf-sel').addEventListener('change',function(){mState.Vf=parseFloat(this.value);updM();});
+updM();
 
 // ── glow filter ──
 function addGlow(svgEl,id){
@@ -581,138 +880,6 @@ function moveElectrons(dots,path,sp,dt){
     dots[j].el.setAttribute('cy',pt.y.toFixed(1));
   }
 }
-
-// ════════════════════════════ SERIES ════════════════════════════
-var sState={V:12,R1:100,R2:200,R3:300};
-var sSpeed=0;
-function calcS(){
-  var Rt=sState.R1+sState.R2+sState.R3,I=sState.V/Rt;
-  var v1=I*sState.R1,v2=I*sState.R2,v3=I*sState.R3;
-  var p1=I*I*sState.R1,p2=I*I*sState.R2,p3=I*I*sState.R3;
-  return{Rt:Rt,I:I,v1:v1,v2:v2,v3:v3,p1:p1,p2:p2,p3:p3,pt:I*sState.V};
-}
-function updS(){
-  var c=calcS(),ref=Math.max(c.p1,c.p2,c.p3,1e-4);
-  sSpeed=spd(c.I);
-  $$('sl-v').textContent=sState.V+' V';
-  $$('sl-r1').textContent=sState.R1+' Ω';
-  $$('sl-r2').textContent=sState.R2+' Ω';
-  $$('sl-r3').textContent=sState.R3+' Ω';
-  $$('sr-rt').textContent=c.Rt+' Ω';
-  $$('sr-I').textContent=fmtA(c.I);
-  $$('sr-v1').textContent=fmtV(c.v1);$$('sr-v2').textContent=fmtV(c.v2);$$('sr-v3').textContent=fmtV(c.v3);
-  $$('sr-p1').textContent=fmtW(c.p1);$$('sr-p2').textContent=fmtW(c.p2);$$('sr-p3').textContent=fmtW(c.p3);
-  $$('sr-pt').textContent=fmtW(c.pt);
-  $$('s-vs').textContent=sState.V+' V';
-  $$('s-r1o').textContent=sState.R1+' Ω';$$('s-r2o').textContent=sState.R2+' Ω';$$('s-r3o').textContent=sState.R3+' Ω';
-  $$('s-v1').textContent='V₁='+c.v1.toFixed(1)+' V';
-  $$('s-v2').textContent='V₂='+c.v2.toFixed(1)+' V';
-  $$('s-v3').textContent='V₃='+c.v3.toFixed(1)+' V';
-  $$('s-I').textContent=fmtA(c.I);
-  $$('s-r1').setAttribute('fill',heat(c.p1,ref));
-  $$('s-r2').setAttribute('fill',heat(c.p2,ref));
-  $$('s-r3').setAttribute('fill',heat(c.p3,ref));
-  $$('s-calc').innerHTML=genCalcS(sState,c);
-}
-addGlow($$('svg-s'),'sg');
-var sE=mkElectrons($$('svg-s'),14,'sg');
-var psPath=$$('ps');
-$$('s-v').addEventListener('input',function(){sState.V=+this.value;updS();});
-$$('s-r1-sl').addEventListener('input',function(){sState.R1=+this.value;updS();});
-$$('s-r2-sl').addEventListener('input',function(){sState.R2=+this.value;updS();});
-$$('s-r3-sl').addEventListener('input',function(){sState.R3=+this.value;updS();});
-updS();
-
-// ════════════════════════════ PARALLEL ════════════════════════════
-var pState={V:12,R1:100,R2:200,R3:400};
-var pSpeedOut=0,pSpeed1=0,pSpeed2=0,pSpeed3=0;
-function calcP(){
-  var I1=pState.V/pState.R1,I2=pState.V/pState.R2,I3=pState.V/pState.R3;
-  var It=I1+I2+I3,Rt=pState.V/It;
-  return{Rt:Rt,It:It,I1:I1,I2:I2,I3:I3,
-    p1:I1*I1*pState.R1,p2:I2*I2*pState.R2,p3:I3*I3*pState.R3,pt:It*pState.V};
-}
-function updP(){
-  var c=calcP(),ref=Math.max(c.p1,c.p2,c.p3,1e-4);
-  pSpeedOut=spd(c.It);pSpeed1=spd(c.I1);pSpeed2=spd(c.I2);pSpeed3=spd(c.I3);
-  $$('pl-v').textContent=pState.V+' V';
-  $$('pl-r1').textContent=pState.R1+' Ω';
-  $$('pl-r2').textContent=pState.R2+' Ω';
-  $$('pl-r3').textContent=pState.R3+' Ω';
-  $$('pr-rt').textContent=c.Rt.toFixed(1)+' Ω';
-  $$('pr-IT').textContent=fmtA(c.It);
-  $$('pr-I1').textContent=fmtA(c.I1);$$('pr-I2').textContent=fmtA(c.I2);$$('pr-I3').textContent=fmtA(c.I3);
-  $$('pr-p1').textContent=fmtW(c.p1);$$('pr-p2').textContent=fmtW(c.p2);$$('pr-p3').textContent=fmtW(c.p3);
-  $$('pr-pt').textContent=fmtW(c.pt);
-  $$('p-vs').textContent=pState.V+' V';
-  $$('p-r1o').textContent=pState.R1+' Ω';$$('p-r2o').textContent=pState.R2+' Ω';$$('p-r3o').textContent=pState.R3+' Ω';
-  $$('p-I1').textContent='I₁='+fmtA(c.I1);$$('p-I2').textContent='I₂='+fmtA(c.I2);$$('p-I3').textContent='I₃='+fmtA(c.I3);
-  $$('p-IT').textContent=fmtA(c.It);
-  $$('p-r1').setAttribute('fill',heat(c.p1,ref));
-  $$('p-r2').setAttribute('fill',heat(c.p2,ref));
-  $$('p-r3').setAttribute('fill',heat(c.p3,ref));
-  $$('p-calc').innerHTML=genCalcP(pState,c);
-}
-addGlow($$('svg-p'),'pg');
-var pEout=mkElectrons($$('svg-p'),10,'pg');
-var pE1=mkElectrons($$('svg-p'),8,'pg','#6ee7b7');
-var pE2=mkElectrons($$('svg-p'),8,'pg','#fb923c');
-var pE3=mkElectrons($$('svg-p'),8,'pg','#c4b5fd');
-var ppOutPath=$$('pp-out'),pp1Path=$$('pp1'),pp2Path=$$('pp2'),pp3Path=$$('pp3');
-$$('p-v').addEventListener('input',function(){pState.V=+this.value;updP();});
-$$('p-r1-sl').addEventListener('input',function(){pState.R1=+this.value;updP();});
-$$('p-r2-sl').addEventListener('input',function(){pState.R2=+this.value;updP();});
-$$('p-r3-sl').addEventListener('input',function(){pState.R3=+this.value;updP();});
-updP();
-
-// ════════════════════════════ MIXED ════════════════════════════
-var mState={V:12,R1:100,R2:200,R3:400};
-var mSpeedOut=0,mSpeed2=0,mSpeed3=0;
-function calcM(){
-  var Rp=mState.R2*mState.R3/(mState.R2+mState.R3);
-  var Rt=mState.R1+Rp,It=mState.V/Rt;
-  var v1=It*mState.R1,vp=It*Rp;
-  var I2=vp/mState.R2,I3=vp/mState.R3;
-  var p1=It*It*mState.R1,p2=I2*I2*mState.R2,p3=I3*I3*mState.R3;
-  return{Rt:Rt,Rp:Rp,It:It,v1:v1,vp:vp,I2:I2,I3:I3,p1:p1,p2:p2,p3:p3,pt:It*mState.V};
-}
-function updM(){
-  var c=calcM(),ref=Math.max(c.p1,c.p2,c.p3,1e-4);
-  mSpeedOut=spd(c.It);mSpeed2=spd(c.I2);mSpeed3=spd(c.I3);
-  $$('ml-v').textContent=mState.V+' V';
-  $$('ml-r1').textContent=mState.R1+' Ω';
-  $$('ml-r2').textContent=mState.R2+' Ω';
-  $$('ml-r3').textContent=mState.R3+' Ω';
-  $$('mr-rt').textContent=c.Rt.toFixed(1)+' Ω';
-  $$('mr-IT').textContent=fmtA(c.It);
-  $$('mr-rp').textContent=c.Rp.toFixed(1)+' Ω';
-  $$('mr-v1').textContent=fmtV(c.v1);
-  $$('mr-vp').textContent=fmtV(c.vp);
-  $$('mr-I2').textContent=fmtA(c.I2);$$('mr-I3').textContent=fmtA(c.I3);
-  $$('mr-p1').textContent=fmtW(c.p1);$$('mr-p2').textContent=fmtW(c.p2);$$('mr-p3').textContent=fmtW(c.p3);
-  $$('mr-pt').textContent=fmtW(c.pt);
-  $$('m-vs').textContent=mState.V+' V';
-  $$('m-r1o').textContent=mState.R1+' Ω';$$('m-r2o').textContent=mState.R2+' Ω';$$('m-r3o').textContent=mState.R3+' Ω';
-  $$('m-v1').textContent='V₁='+c.v1.toFixed(1)+' V';
-  $$('m-vp').textContent='Vp='+c.vp.toFixed(1)+' V';
-  $$('m-I2').textContent='I₂='+fmtA(c.I2);
-  $$('m-I3').textContent='I₃='+fmtA(c.I3);
-  $$('m-IT').textContent=fmtA(c.It);
-  $$('m-r1').setAttribute('fill',heat(c.p1,ref));
-  $$('m-r2').setAttribute('fill',heat(c.p2,ref));
-  $$('m-r3').setAttribute('fill',heat(c.p3,ref));
-  $$('m-calc').innerHTML=genCalcM(mState,c);
-}
-addGlow($$('svg-m'),'mg');
-var mEout=mkElectrons($$('svg-m'),12,'mg');
-var mE2=mkElectrons($$('svg-m'),8,'mg','#fb923c');
-var mE3=mkElectrons($$('svg-m'),8,'mg','#c4b5fd');
-var pmOutPath=$$('pm-out'),pm2Path=$$('pm2'),pm3Path=$$('pm3');
-$$('m-v').addEventListener('input',function(){mState.V=+this.value;updM();});
-$$('m-r1-sl').addEventListener('input',function(){mState.R1=+this.value;updM();});
-$$('m-r2-sl').addEventListener('input',function(){mState.R2=+this.value;updM();});
-$$('m-r3-sl').addEventListener('input',function(){mState.R3=+this.value;updM();});
-updM();
 
 // ════════════════════════════ ANIMATION LOOP ════════════════════════════
 var lastTs=null,rafId=null;
