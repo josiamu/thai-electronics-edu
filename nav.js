@@ -1,15 +1,15 @@
 const NAV_CONTENT = [
-  { id: 'electricity', href: 'electricity.html', label_th: '⚡ ไฟฟ้าเบื้องต้น',  label_en: '⚡ Electricity Basics' },
-  { id: 'ohm',         href: 'ohm.html',          label_th: '🔢 กฎของโอห์ม',      label_en: "🔢 Ohm's Law" },
-  { id: 'resistor',    href: 'resistor.html',     label_th: '🎨 ตัวต้านทาน',      label_en: '🎨 Resistor' },
-  { id: 'multimeter',  href: 'multimeter.html',   label_th: '📏 เครื่องมือวัด',   label_en: '📏 Measuring Tools' },
-  { id: 'diode',       href: 'diode.html',        label_th: '💡 ไดโอด',           label_en: '💡 Diode' },
-  { id: 'capacitor',   href: 'capacitor.html',    label_th: '🔋 ตัวเก็บประจุ',    label_en: '🔋 Capacitor' },
-  { id: 'inductor',    href: 'inductor.html',     label_th: '🌀 ตัวเหนี่ยวนำ',   label_en: '🌀 Inductor' },
-  { id: 'soldering',   href: 'soldering.html',    label_th: '🔥 การบัดกรี',       label_en: '🔥 Soldering' },
-  { id: 'ac-circuit',       href: 'ac-circuit.html',       label_th: '〜 วงจร AC',               label_en: '〜 AC Circuit' },
+  { id: 'electricity',      href: 'electricity.html',      label_th: '⚡ ไฟฟ้าเบื้องต้น',        label_en: '⚡ Electricity Basics' },
+  { id: 'ohm',              href: 'ohm.html',              label_th: '🔢 กฎของโอห์ม',            label_en: "🔢 Ohm's Law" },
+  { id: 'resistor',         href: 'resistor.html',         label_th: '🎨 ตัวต้านทาน',            label_en: '🎨 Resistor' },
+  { id: 'multimeter',       href: 'multimeter.html',       label_th: '📏 เครื่องมือวัด',         label_en: '📏 Measuring Tools' },
+  { id: 'diode',            href: 'diode.html',            label_th: '💡 ไดโอด',                 label_en: '💡 Diode' },
+  { id: 'signal-generator', href: 'signal-generator.html', label_th: '📶 เครื่องกำเนิดสัญญาณ',  label_en: '📶 Signal Generator' },
   { id: 'oscilloscope',     href: 'oscilloscope.html',     label_th: '📡 ออสซิลโลสโคป',         label_en: '📡 Oscilloscope' },
-  { id: 'signal-generator', href: 'signal-generator.html', label_th: '📶 เครื่องกำเนิดสัญญาณ',   label_en: '📶 Signal Generator' },
+  { id: 'capacitor',        href: 'capacitor.html',        label_th: '🔋 ตัวเก็บประจุ',          label_en: '🔋 Capacitor' },
+  { id: 'inductor',         href: 'inductor.html',         label_th: '🌀 ตัวเหนี่ยวนำ',         label_en: '🌀 Inductor' },
+  { id: 'soldering',        href: 'soldering.html',        label_th: '🔥 การบัดกรี',             label_en: '🔥 Soldering' },
+  { id: 'ac-circuit',       href: 'ac-circuit.html',       label_th: '〜 วงจร AC',               label_en: '〜 AC Circuit' },
 ];
 
 const NAV_EXTRA = [
