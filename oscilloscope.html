@@ -877,47 +877,71 @@
       <span class="en-only">Analog vs Digital Storage Oscilloscope (DSO)</span>
     </div>
     <div class="card">
+      <div class="grid-2" style="margin-bottom:1.25rem;">
+        <div class="info-box" style="margin:0;">
+          <strong class="th-only">📺 Analog (CRT) = "วาดสด"</strong>
+          <strong class="en-only">📺 Analog (CRT) = "live drawing"</strong><br>
+          <span class="th-only">
+            ลำอิเล็กตรอนวาดสัญญาณลงจอ<strong>ทันที</strong> เหมือนปากกาเขียนบนกระดาษ —
+            เห็นสัญญาณสดๆ แต่<strong>หยุดภาพไว้ดูไม่ได้</strong> สัญญาณผ่านแล้วผ่านเลย
+          </span>
+          <span class="en-only">
+            The electron beam draws the signal on screen <strong>instantly</strong>, like a pen on paper —
+            you see it live, but <strong>you cannot freeze the picture</strong>; once it passes, it is gone.
+          </span>
+        </div>
+        <div class="info-box" style="margin:0;">
+          <strong class="th-only">💾 Digital (DSO) = "ถ่ายวิดีโอไว้ก่อน"</strong>
+          <strong class="en-only">💾 Digital (DSO) = "record first"</strong><br>
+          <span class="th-only">
+            แปลงสัญญาณเป็น<strong>ตัวเลข</strong>เก็บไว้ก่อน แล้วค่อยแสดงบนจอ เหมือนถ่ายวิดีโอ —
+            จึง<strong>หยุดดู ย้อนดู และให้เครื่องวัดค่าให้อัตโนมัติ</strong>ได้
+          </span>
+          <span class="en-only">
+            Converts the signal into <strong>numbers</strong> and stores it before displaying, like recording a video —
+            so you can <strong>pause, replay, and let the scope measure values automatically</strong>.
+          </span>
+        </div>
+      </div>
       <table class="cmp-table">
         <thead>
           <tr>
-            <th><span class="th-only">คุณสมบัติ</span><span class="en-only">Feature</span></th>
-            <th><span class="th-only">Analog (CRT)</span><span class="en-only">Analog (CRT)</span></th>
-            <th><span class="th-only">Digital Storage (DSO)</span><span class="en-only">Digital Storage (DSO)</span></th>
+            <th><span class="th-only">เปรียบเทียบ</span><span class="en-only">Compare</span></th>
+            <th>Analog (CRT)</th>
+            <th>Digital (DSO)</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><span class="th-only">จอแสดงผล</span><span class="en-only">Display</span></td>
-            <td><span class="th-only">หลอด CRT ฟอสเฟอร์</span><span class="en-only">Phosphor CRT tube</span></td>
-            <td><span class="th-only">LCD / LED</span><span class="en-only">LCD / LED</span></td>
+            <td><span class="th-only">จอภาพ</span><span class="en-only">Screen</span></td>
+            <td><span class="th-only">หลอดภาพ CRT</span><span class="en-only">CRT tube</span></td>
+            <td><span class="th-only">จอ LCD</span><span class="en-only">LCD display</span></td>
           </tr>
           <tr>
-            <td><span class="th-only">การแสดงผล</span><span class="en-only">Output</span></td>
-            <td><span class="th-only">แสดงผลทันที (Real-time)</span><span class="en-only">Immediate real-time display</span></td>
-            <td><span class="th-only">บันทึกดิจิตัลก่อนแสดง</span><span class="en-only">Records digitally then displays</span></td>
+            <td><span class="th-only">หยุดภาพ / บันทึก</span><span class="en-only">Freeze / Save</span></td>
+            <td><span class="th-only">❌ ไม่ได้</span><span class="en-only">❌ No</span></td>
+            <td><span class="th-only">✅ ได้ — กด RUN/STOP (หัวข้อ 6-3) และเก็บเป็นไฟล์ได้</span><span class="en-only">✅ Yes — press RUN/STOP (Section 6-3) and save to file</span></td>
           </tr>
           <tr>
-            <td><span class="th-only">สัญญาณความถี่สูง</span><span class="en-only">High-freq signals</span></td>
-            <td><span class="th-only">อ่านยาก สัญญาณสลัว</span><span class="en-only">Hard to read, dim display</span></td>
-            <td><span class="th-only">วิเคราะห์ง่ายและแม่นยำ</span><span class="en-only">Easy to analyze, accurate</span></td>
-          </tr>
-          <tr>
-            <td><span class="th-only">การบันทึก</span><span class="en-only">Data storage</span></td>
-            <td><span class="th-only">ไม่สามารถบันทึกได้</span><span class="en-only">Cannot store waveforms</span></td>
-            <td><span class="th-only">บันทึกและเรียกคืนได้</span><span class="en-only">Can store and recall waveforms</span></td>
-          </tr>
-          <tr>
-            <td><span class="th-only">ฟังก์ชันอัตโนมัติ</span><span class="en-only">Auto functions</span></td>
-            <td><span class="th-only">ไม่มี</span><span class="en-only">None</span></td>
-            <td><span class="th-only">วัดค่า Vpp, Freq, RMS อัตโนมัติ</span><span class="en-only">Auto-measures Vpp, Freq, RMS</span></td>
+            <td><span class="th-only">วัดค่าอัตโนมัติ (Vpp, f, RMS)</span><span class="en-only">Auto measure (Vpp, f, RMS)</span></td>
+            <td><span class="th-only">❌ ต้องนับช่องคำนวณเอง</span><span class="en-only">❌ Count divisions manually</span></td>
+            <td><span class="th-only">✅ กดปุ่มเดียว เครื่องคำนวณให้</span><span class="en-only">✅ One button, scope calculates</span></td>
           </tr>
           <tr>
             <td><span class="th-only">ราคา</span><span class="en-only">Price</span></td>
-            <td><span class="th-only">ต่ำกว่า</span><span class="en-only">Lower</span></td>
-            <td><span class="th-only">สูงกว่า แต่คุ้มค่า</span><span class="en-only">Higher, but more capable</span></td>
+            <td><span class="th-only">ถูกกว่า</span><span class="en-only">Cheaper</span></td>
+            <td><span class="th-only">แพงกว่า แต่คุ้มค่ากว่า</span><span class="en-only">More expensive but more capable</span></td>
           </tr>
         </tbody>
       </table>
+      <p class="th-only" style="font-size:0.92rem;margin-bottom:0;">
+        <strong>สรุป:</strong> ปัจจุบันห้องปฏิบัติการใช้ <strong>DSO เป็นหลัก</strong> (เช่น Tektronix TDS2024 ในหัวข้อ 6-3)
+        ส่วนแบบ Analog/CRT เรียนไว้เพื่อเข้าใจหลักการกำเนิดภาพบนจอ (หัวข้อ 6-2)
+      </p>
+      <p class="en-only" style="font-size:0.92rem;margin-bottom:0;">
+        <strong>Summary:</strong> Modern labs mainly use <strong>DSOs</strong> (such as the Tektronix TDS2024 in Section 6-3),
+        while the Analog/CRT type is studied to understand how the image is formed on screen (Section 6-2).
+      </p>
     </div>
   </div>
 
