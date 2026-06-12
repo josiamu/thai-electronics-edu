@@ -468,6 +468,408 @@
     </div>
   </div>
 
+  <!-- ============ SECTION 6-4: วงจร Octopus (Curve Tracer) ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">6-4 การประยุกต์ใช้งาน: วงจร Octopus (Curve Tracer)</span>
+      <span class="en-only">6-4 Application: The Octopus Circuit (Curve Tracer)</span>
+    </div>
+    <div class="card">
+      <p class="th-only">
+        นอกจากการวัดรูปคลื่นเทียบกับเวลาแล้ว ออสซิลโลสโคปยังใช้งานใน <strong>โหมด X-Y</strong> ได้
+        คือให้แกนนอนแสดงสัญญาณจาก Channel X และแกนตั้งแสดงสัญญาณจาก Channel Y แทนแกนเวลา
+        วงจร <strong>Octopus (Curve Tracer)</strong> อาศัยโหมดนี้วาด
+        <strong>กราฟคุณลักษณะ I-V</strong> ของอุปกรณ์อิเล็กทรอนิกส์ เพื่อตรวจสอบว่าอุปกรณ์ดีหรือเสีย
+      </p>
+      <p class="en-only">
+        Besides plotting waveforms against time, an oscilloscope can also operate in <strong>X-Y mode</strong>,
+        where the horizontal axis shows the Channel X signal and the vertical axis shows the Channel Y signal
+        instead of time. The <strong>Octopus circuit (Curve Tracer)</strong> uses this mode to draw the
+        <strong>I-V characteristic curve</strong> of an electronic component, making it easy to check whether
+        the component is good or faulty.
+      </p>
+
+      <div style="display:flex;justify-content:center;margin:1.5rem 0 0.5rem;">
+        <svg viewBox="0 0 780 440" width="780" style="max-width:100%;height:auto;background:#fff;border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);" xmlns="http://www.w3.org/2000/svg" aria-label="Octopus curve tracer circuit diagram">
+          <defs>
+            <pattern id="oct-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M20,0 L0,0 0,20" fill="none" stroke="#f1f5f9" stroke-width="1"/>
+            </pattern>
+            <marker id="oct-arr" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto">
+              <path d="M0,0 L7,3.5 L0,7 Z" fill="#94a3b8"/>
+            </marker>
+          </defs>
+          <rect width="780" height="440" fill="url(#oct-grid)" rx="10"/>
+
+          <!-- Title -->
+          <text x="390" y="36" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a" class="th-only">วงจร Octopus — วาดกราฟ I-V ด้วยออสซิลโลสโคปโหมด X-Y</text>
+          <text x="390" y="36" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a" class="en-only">Octopus Circuit — Drawing I-V Curves in X-Y Mode</text>
+
+          <!-- AC source -->
+          <circle cx="80" cy="230" r="26" fill="none" stroke="#1e293b" stroke-width="2"/>
+          <path d="M62,230 Q71,212 80,230 Q89,248 98,230" fill="none" stroke="#1e293b" stroke-width="2"/>
+          <text x="80" y="322" text-anchor="middle" font-size="12" font-weight="600" fill="#1e293b">220Vac</text>
+          <text x="80" y="336" text-anchor="middle" font-size="10" fill="#64748b">50/60Hz</text>
+          <text x="80" y="350" text-anchor="middle" font-size="10" fill="#64748b" class="th-only">ไฟบ้าน</text>
+          <text x="80" y="350" text-anchor="middle" font-size="10" fill="#64748b" class="en-only">Mains</text>
+
+          <!-- Wires: source to primary -->
+          <path d="M80,204 L80,160 L170,160 M80,256 L80,290 L170,290" fill="none" stroke="#1e293b" stroke-width="2"/>
+
+          <!-- Transformer -->
+          <path d="M170,160 A13,13 0 0 0 170,186 A13,13 0 0 0 170,212 A13,13 0 0 0 170,238 A13,13 0 0 0 170,264 A13,13 0 0 0 170,290" fill="none" stroke="#1e293b" stroke-width="2"/>
+          <path d="M206,160 A13,13 0 0 1 206,186 A13,13 0 0 1 206,212 A13,13 0 0 1 206,238 A13,13 0 0 1 206,264 A13,13 0 0 1 206,290" fill="none" stroke="#1e293b" stroke-width="2"/>
+          <line x1="185" y1="150" x2="185" y2="300" stroke="#1e293b" stroke-width="1.5"/>
+          <line x1="191" y1="150" x2="191" y2="300" stroke="#1e293b" stroke-width="1.5"/>
+          <text x="188" y="330" text-anchor="middle" font-size="10" fill="#64748b" class="th-only">หม้อแปลงแยกขดลวด</text>
+          <text x="188" y="330" text-anchor="middle" font-size="10" fill="#64748b" class="en-only">Isolation transformer</text>
+          <text x="240" y="152" font-size="11" font-weight="600" fill="#1e293b">12Vac</text>
+
+          <!-- Top rail: secondary to node A -->
+          <line x1="206" y1="160" x2="470" y2="160" stroke="#1e293b" stroke-width="2"/>
+          <!-- Bottom rail with R1 -->
+          <line x1="206" y1="290" x2="270" y2="290" stroke="#1e293b" stroke-width="2"/>
+          <polyline points="270,290 277,290 283,277 295,303 307,277 319,303 331,277 343,303 355,277 363,290 374,290" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linejoin="round"/>
+          <line x1="374" y1="290" x2="470" y2="290" stroke="#1e293b" stroke-width="2"/>
+          <text x="322" y="256" text-anchor="middle" font-size="11" font-weight="600" fill="#b45309">R1 = 1kΩ</text>
+          <text x="322" y="269" text-anchor="middle" font-size="9" fill="#b45309" class="th-only">(ตัวต้านทานจำกัดกระแส)</text>
+          <text x="322" y="269" text-anchor="middle" font-size="9" fill="#b45309" class="en-only">(current-limiting resistor)</text>
+
+          <!-- DUT: diode -->
+          <line x1="470" y1="160" x2="470" y2="203" stroke="#1e293b" stroke-width="2"/>
+          <polygon points="459,203 481,203 470,224" fill="#dc2626"/>
+          <line x1="459" y1="224" x2="481" y2="224" stroke="#dc2626" stroke-width="2.5"/>
+          <line x1="470" y1="224" x2="470" y2="290" stroke="#1e293b" stroke-width="2"/>
+          <text x="486" y="200" font-size="12" font-weight="700" fill="#dc2626">DUT</text>
+          <text x="486" y="216" font-size="10" fill="#64748b" class="th-only">อุปกรณ์ที่ทดสอบ</text>
+          <text x="486" y="230" font-size="10" fill="#64748b" class="th-only">(เช่น ไดโอด, LED ฯลฯ)</text>
+          <text x="486" y="216" font-size="10" fill="#64748b" class="en-only">Device Under Test</text>
+          <text x="486" y="230" font-size="10" fill="#64748b" class="en-only">(e.g., diode, LED)</text>
+
+          <!-- Ground at node G -->
+          <line x1="470" y1="290" x2="470" y2="308" stroke="#1e293b" stroke-width="2"/>
+          <line x1="458" y1="308" x2="482" y2="308" stroke="#1e293b" stroke-width="2.5"/>
+          <line x1="463" y1="314" x2="477" y2="314" stroke="#1e293b" stroke-width="2"/>
+          <line x1="468" y1="320" x2="472" y2="320" stroke="#1e293b" stroke-width="2"/>
+          <text x="488" y="312" font-size="10" fill="#64748b" class="th-only">GND (จุดร่วม)</text>
+          <text x="488" y="325" font-size="9" fill="#64748b" class="th-only">ร่วมกับ GND ของสโคป</text>
+          <text x="488" y="312" font-size="10" fill="#64748b" class="en-only">GND (common)</text>
+          <text x="488" y="325" font-size="9" fill="#64748b" class="en-only">shared with scope GND</text>
+
+          <!-- Probe Channel X (blue): node A to box -->
+          <line x1="470" y1="160" x2="640" y2="160" stroke="#2563eb" stroke-width="2"/>
+          <text x="600" y="152" font-size="13" font-weight="700" fill="#2563eb">+</text>
+          <!-- Probe Channel Y (green): node B to box -->
+          <polyline points="252,290 252,385 640,385" fill="none" stroke="#10b981" stroke-width="2"/>
+          <text x="236" y="284" font-size="13" font-weight="700" fill="#059669">+</text>
+          <text x="420" y="284" font-size="13" font-weight="700" fill="#059669">−</text>
+
+          <!-- Node dots -->
+          <circle cx="470" cy="160" r="4" fill="#1e293b"/>
+          <circle cx="252" cy="290" r="4" fill="#1e293b"/>
+          <circle cx="470" cy="290" r="4" fill="#1e293b"/>
+
+          <!-- Channel X box -->
+          <rect x="640" y="126" width="130" height="62" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+          <text x="705" y="144" text-anchor="middle" font-size="12" font-weight="700" fill="#2563eb">Channel X</text>
+          <text x="705" y="159" text-anchor="middle" font-size="9.5" fill="#1e40af" class="th-only">วัดแรงดันคร่อม DUT</text>
+          <text x="705" y="159" text-anchor="middle" font-size="9.5" fill="#1e40af" class="en-only">Measures V across DUT</text>
+          <text x="705" y="177" text-anchor="middle" font-size="10" fill="#1e40af" font-family="monospace">Vx = V<tspan baseline-shift="sub" font-size="7">DUT</tspan></text>
+
+          <!-- Channel Y box -->
+          <rect x="640" y="358" width="130" height="62" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+          <text x="705" y="376" text-anchor="middle" font-size="12" font-weight="700" fill="#059669">Channel Y</text>
+          <text x="705" y="391" text-anchor="middle" font-size="9.5" fill="#047857" class="th-only">วัดแรงดันคร่อม R1</text>
+          <text x="705" y="391" text-anchor="middle" font-size="9.5" fill="#047857" class="en-only">Measures V across R1</text>
+          <text x="705" y="409" text-anchor="middle" font-size="10" fill="#047857" font-family="monospace">I = V<tspan baseline-shift="sub" font-size="7">R1</tspan> / R1</text>
+
+          <!-- Arrows from boxes to screen -->
+          <line x1="705" y1="191" x2="705" y2="199" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#oct-arr)"/>
+          <line x1="705" y1="355" x2="705" y2="347" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#oct-arr)"/>
+
+          <!-- Mini X-Y screen: diode I-V curve -->
+          <rect x="614" y="202" width="156" height="140" rx="6" fill="#0d1f0f" stroke="#1a4a2e" stroke-width="2"/>
+          <text x="620" y="216" font-size="9" fill="#69f0ae" class="th-only">โหมด X-Y</text>
+          <text x="620" y="216" font-size="9" fill="#69f0ae" class="en-only">X-Y mode</text>
+          <g stroke="#1a4a2e" stroke-width="0.7">
+            <line x1="640" y1="206" x2="640" y2="338"/>
+            <line x1="666" y1="206" x2="666" y2="338"/>
+            <line x1="718" y1="206" x2="718" y2="338"/>
+            <line x1="744" y1="206" x2="744" y2="338"/>
+            <line x1="618" y1="230" x2="766" y2="230"/>
+            <line x1="618" y1="244" x2="766" y2="244"/>
+            <line x1="618" y1="300" x2="766" y2="300"/>
+            <line x1="618" y1="314" x2="766" y2="314"/>
+          </g>
+          <line x1="618" y1="272" x2="766" y2="272" stroke="#2a6a3e" stroke-width="1.2"/>
+          <line x1="692" y1="206" x2="692" y2="338" stroke="#2a6a3e" stroke-width="1.2"/>
+          <path d="M622,272 L704,272 C712,272 714,262 717,248 C720,232 722,218 724,212" fill="none" stroke="#00e676" stroke-width="2.2"/>
+          <text x="758" y="266" font-size="9" fill="#69f0ae" font-family="monospace">+V</text>
+          <text x="697" y="216" font-size="9" fill="#69f0ae" font-family="monospace">+I</text>
+          <text x="692" y="334" text-anchor="middle" font-size="9" fill="#69f0ae" class="th-only">กราฟ I-V ของไดโอด</text>
+          <text x="692" y="334" text-anchor="middle" font-size="9" fill="#69f0ae" class="en-only">Diode I-V curve</text>
+        </svg>
+      </div>
+      <p style="text-align:center;font-size:0.82rem;opacity:0.7;margin:0.25rem 0 1.25rem;">
+        <span class="th-only">แผนผังวงจร Octopus: หม้อแปลงลดแรงดันเป็น 12Vac — Channel X (น้ำเงิน) วัดแรงดันคร่อม DUT, Channel Y (เขียว) วัดแรงดันคร่อม R₁ ซึ่งแทนกระแส → จอแสดงกราฟ I-V</span>
+        <span class="en-only">Octopus circuit diagram: transformer steps down to 12Vac — Channel X (blue) measures voltage across the DUT, Channel Y (green) measures voltage across R₁ representing current → the screen plots the I-V curve</span>
+      </p>
+
+      <div class="grid-2" style="margin-bottom:1.25rem;">
+        <div>
+          <h3 class="th-only" style="margin-top:0;">หลักการทำงาน</h3>
+          <h3 class="en-only" style="margin-top:0;">How It Works</h3>
+          <p class="th-only" style="font-size:0.92rem;">
+            <strong>แนวคิดหลัก:</strong> ให้จุดแสงบนจอ "วิ่งตาม" อุปกรณ์ที่ทดสอบ —
+            เลื่อน<strong>ซ้าย-ขวาตามแรงดัน</strong> และ<strong>ขึ้น-ลงตามกระแส</strong>
+            พร้อมกัน จุดแสงจึงวาดกราฟ I-V ออกมาให้เอง
+          </p>
+          <p class="en-only" style="font-size:0.92rem;">
+            <strong>Key idea:</strong> make the dot on screen "follow" the component under test —
+            moving <strong>left-right with voltage</strong> and <strong>up-down with current</strong>
+            at the same time, so the dot draws the I-V curve by itself.
+          </p>
+          <ul class="content-list th-only">
+            <li><span><strong>ลองหลายแรงดันอัตโนมัติ:</strong> ไฟ 12Vac แกว่งจากบวกไปลบสลับกัน 50 ครั้งต่อวินาที เท่ากับ "ทดลองจ่ายแรงดันหลายๆ ค่า" ให้อุปกรณ์โดยไม่ต้องหมุนปรับเอง</span></li>
+            <li><span><strong>ซ้าย-ขวา = แรงดัน:</strong> Channel X วัดแรงดันคร่อมอุปกรณ์โดยตรง — แรงดันยิ่งมาก จุดยิ่งเลื่อนไปทางขวา</span></li>
+            <li><span><strong>ขึ้น-ลง = กระแส:</strong> สโคปวัดกระแสตรงๆ ไม่ได้ จึงใช้เคล็ดลับ ให้กระแสไหลผ่าน R₁ = 1kΩ แล้ววัดแรงดันคร่อม R₁ แทน — กระแสยิ่งมาก แรงดันคร่อม R₁ ยิ่งมาก จุดยิ่งเลื่อนขึ้นสูง (I = V<sub>R1</sub> ÷ 1kΩ)</span></li>
+            <li><span><strong>เห็นเป็นเส้นนิ่ง:</strong> จุดแสงวิ่งวาดซ้ำเร็วมาก (50 รอบ/วินาที) ตาเราจึงเห็นเป็นเส้นโค้งนิ่งๆ — รูปร่างของเส้นบอกได้ทันทีว่าอุปกรณ์เป็นชนิดไหน ดีหรือเสีย</span></li>
+          </ul>
+          <ul class="content-list en-only">
+            <li><span><strong>Try many voltages automatically:</strong> the 12Vac swings from positive to negative 50 times per second — like testing the component at many different voltages without turning any knob</span></li>
+            <li><span><strong>Left-right = voltage:</strong> Channel X measures the voltage across the component directly — higher voltage pushes the dot further right</span></li>
+            <li><span><strong>Up-down = current:</strong> a scope cannot measure current directly, so we use a trick: let the current flow through R₁ = 1kΩ and measure the voltage across R₁ instead — more current means more voltage across R₁, pushing the dot higher (I = V<sub>R1</sub> ÷ 1kΩ)</span></li>
+            <li><span><strong>A steady curve appears:</strong> the dot retraces the path very fast (50 times per second), so your eye sees a steady curve — its shape instantly tells you what the component is and whether it is good or faulty</span></li>
+          </ul>
+        </div>
+        <div>
+          <div class="info-box th-only" style="margin-top:0;">
+            <strong>วิธีอ่านกราฟ I-V:</strong><br>
+            แกน X (นอน) = แรงดัน (V) — ขวาคือบวก ซ้ายคือลบ<br>
+            แกน Y (ตั้ง) = กระแส (I) — บนคือบวก ล่างคือลบ<br>
+            รูปร่างของเส้นกราฟบอกชนิดและสภาพของอุปกรณ์ได้ทันที
+          </div>
+          <div class="info-box en-only" style="margin-top:0;">
+            <strong>How to read the I-V curve:</strong><br>
+            X-axis (horizontal) = Voltage (V) — right is positive, left is negative<br>
+            Y-axis (vertical) = Current (I) — up is positive, down is negative<br>
+            The curve shape immediately reveals the component type and condition
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Interactive I-V Curve Simulator ===== -->
+      <h3 class="th-only" style="margin:1.75rem 0 0.5rem;">🔬 ทดลองเสมือน: I-V Curve Simulator</h3>
+      <h3 class="en-only" style="margin:1.75rem 0 0.5rem;">🔬 Virtual Lab: I-V Curve Simulator</h3>
+      <p class="th-only" style="font-size:0.92rem;margin-top:0;">
+        เลือกอุปกรณ์ที่นำมาทดสอบ แล้วดูลำแสงวาดกราฟ I-V สดบนจอ เหมือนต่อวงจร Octopus กับออสซิลโลสโคปจริง
+        (คำนวณจากแหล่งจ่าย 12Vac อนุกรมกับ R₁ = 1kΩ ตามวงจรด้านบน)
+      </p>
+      <p class="en-only" style="font-size:0.92rem;margin-top:0;">
+        Select a component and watch the beam trace its I-V curve live, just like a real Octopus circuit
+        (computed from a 12Vac source in series with R₁ = 1kΩ, per the circuit above).
+      </p>
+      <div style="max-width:500px;margin:0 auto;">
+        <label for="iv-select" style="font-weight:600;font-size:0.9rem;display:block;margin-bottom:0.4rem;">
+          <span class="th-only">อุปกรณ์ที่ทดสอบ (DUT):</span>
+          <span class="en-only">Device Under Test (DUT):</span>
+        </label>
+        <select id="iv-select" style="width:100%;margin-bottom:0.9rem;">
+          <option value="open">วงจรเปิด (Open Circuit)</option>
+          <option value="short">ลัดวงจร (Short Circuit)</option>
+          <option value="r1k">ตัวต้านทาน 1kΩ (Resistor — Linear)</option>
+          <option value="r100k">ตัวต้านทาน 100kΩ (High Resistance)</option>
+          <option value="cap">ตัวเก็บประจุดี (Capacitor — Phase Shift 90°)</option>
+          <option value="capbad">ตัวเก็บประจุเสื่อม (High ESR/Leakage)</option>
+          <option value="ind">ขดลวดเหนี่ยวนำ (Inductor — Phase Shift)</option>
+          <option value="diode" selected>ไดโอดปกติ (Diode — Rectification)</option>
+          <option value="dleak">ไดโอดรั่ว (Diode — Reverse Leakage)</option>
+          <option value="zener">ซีเนอร์ไดโอด (Zener — Breakdown 5V)</option>
+          <option value="bjt">ขา B-E ทรานซิสเตอร์ (Transistor B-E Junction)</option>
+        </select>
+        <div style="border:2px solid #1a4a2e;border-radius:8px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.4);">
+          <div style="position:relative;">
+            <svg viewBox="0 0 440 352" style="display:block;width:100%;" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect width="440" height="352" fill="#0d1f0f"/>
+              <g stroke="#1a4a2e" stroke-width="0.8">
+                <line x1="44" y1="0" x2="44" y2="352"/><line x1="88" y1="0" x2="88" y2="352"/>
+                <line x1="132" y1="0" x2="132" y2="352"/><line x1="176" y1="0" x2="176" y2="352"/>
+                <line x1="264" y1="0" x2="264" y2="352"/><line x1="308" y1="0" x2="308" y2="352"/>
+                <line x1="352" y1="0" x2="352" y2="352"/><line x1="396" y1="0" x2="396" y2="352"/>
+                <line x1="0" y1="44" x2="440" y2="44"/><line x1="0" y1="88" x2="440" y2="88"/>
+                <line x1="0" y1="132" x2="440" y2="132"/><line x1="0" y1="220" x2="440" y2="220"/>
+                <line x1="0" y1="264" x2="440" y2="264"/><line x1="0" y1="308" x2="440" y2="308"/>
+              </g>
+              <line x1="220" y1="0" x2="220" y2="352" stroke="#2a6a3e" stroke-width="1.2"/>
+              <line x1="0" y1="176" x2="440" y2="176" stroke="#2a6a3e" stroke-width="1.2"/>
+              <text x="408" y="170" font-size="10" fill="#4a9a5a" font-family="monospace">CH1: V</text>
+              <text x="6" y="344" font-size="10" fill="#4a9a5a" font-family="monospace">CH2: I</text>
+            </svg>
+            <canvas id="iv-canvas" width="880" height="704" style="position:absolute;top:0;left:0;width:100%;height:100%;"></canvas>
+          </div>
+          <div style="background:#061208;color:#00c853;font-family:monospace;font-size:0.76rem;padding:0.4rem 0.75rem;display:flex;gap:1.25rem;flex-wrap:wrap;">
+            <span id="iv-ch1">CH1 (X): — V/div</span>
+            <span id="iv-ch2">CH2 (Y): — mA/div</span>
+            <span style="margin-left:auto;color:#69f0ae;">MODE: X-Y</span>
+          </div>
+        </div>
+        <div class="info-box" style="margin-top:0.9rem;">
+          <strong><span class="th-only">สถานะอุปกรณ์:</span><span class="en-only">Component status:</span></strong>
+          <span id="iv-name" style="font-weight:600;"></span><br>
+          <span id="iv-desc" style="font-size:0.9rem;"></span>
+        </div>
+      </div>
+
+      <script>
+      (function(){
+        var VPK = 17;            // 12Vac × √2 ≈ 17V peak
+        var R1 = 1000;           // current-limiting resistor
+        var W50 = 2*Math.PI*50;  // mains angular frequency
+
+        // Linear AC component: Z = R + jX → parametric (V_dut, I) over phase t
+        function lin(R, X){
+          var Tr = R1 + R, Ti = X;
+          var dz = Math.sqrt(Tr*Tr + Ti*Ti);
+          var pI = -Math.atan2(Ti, Tr);
+          var mI = VPK/dz;
+          var mV = mI*Math.sqrt(R*R + X*X);
+          var pV = pI + Math.atan2(X, R);
+          return function(t){ return [mV*Math.sin(t+pV), mI*Math.sin(t+pI)]; };
+        }
+        // Diode-family: forward knee vf with dynamic resistance rd; optional reverse fn(vs)→I
+        function dio(vf, rd, rev){
+          return function(t){
+            var vs = VPK*Math.sin(t), i = 0;
+            if (vs > vf) i = (vs-vf)/(R1+rd);
+            else if (rev) i = rev(vs);
+            return [vs - i*R1, i];
+          };
+        }
+
+        // xV = volts at full half-width (5 div), ymA = mA at full half-height (4 div)
+        var DUTS = {
+          open:  { xV:20, ymA:20, f:function(t){ return [VPK*Math.sin(t), 0]; },
+                   th:'วงจรเปิด (Open Circuit)', en:'Open Circuit',
+                   thd:'ไม่มีกระแสไหลทุกช่วงแรงดัน — อุปกรณ์ขาด สายหลุด หรือยังไม่ได้ต่อ',
+                   end:'No current at any voltage — broken component, loose lead, or nothing connected' },
+          short: { xV:20, ymA:20, f:function(t){ return [0, VPK*Math.sin(t)/R1]; },
+                   th:'ลัดวงจร (Short Circuit)', en:'Short Circuit',
+                   thd:'กระแสไหลเต็มที่โดยไม่มีแรงดันตกคร่อม — อุปกรณ์ช็อต',
+                   end:'Full current with zero voltage drop — the component is shorted' },
+          r1k:   { xV:12, ymA:12, f:lin(1000, 0),
+                   th:'ตัวต้านทาน 1kΩ (เชิงเส้น)', en:'Resistor 1kΩ (Linear)',
+                   thd:'เส้นตรงเอียงผ่านจุดกำเนิดตามกฎของโอห์ม — ความชันมาก = ความต้านทานน้อย',
+                   end:'Straight line through the origin per Ohm’s Law — steeper slope means lower resistance' },
+          r100k: { xV:20, ymA:0.8, f:lin(100000, 0),
+                   th:'ตัวต้านทาน 100kΩ (ความต้านทานสูง)', en:'Resistor 100kΩ (High Resistance)',
+                   thd:'ความต้านทานสูง กระแสไหลน้อยมาก เส้นจึงเกือบราบ',
+                   end:'High resistance passes very little current, so the line is nearly flat' },
+          cap:   { xV:18, ymA:18, f:lin(0, -1/(W50*1.5e-6)),
+                   th:'ตัวเก็บประจุ (Phase Shift 90°)', en:'Capacitor (Phase Shift 90°)',
+                   thd:'V กับ I ต่างเฟสกัน 90° จึงเป็นวงรีสมมาตร — ตัวเก็บประจุสภาพดี',
+                   end:'V and I are 90° out of phase, giving a symmetric ellipse — capacitor is good' },
+          capbad:{ xV:18, ymA:18, f:lin(900, -1/(W50*1.5e-6)),
+                   th:'ตัวเก็บประจุเสื่อม (High ESR/Leakage)', en:'Capacitor — High ESR/Leakage',
+                   thd:'วงรีเอียงและแบนลง แสดงว่ามี ESR สูงหรือรั่ว — ควรเปลี่ยน',
+                   end:'Tilted, flattened ellipse indicates high ESR or leakage — replace it' },
+          ind:   { xV:16, ymA:16, f:lin(300, W50*4),
+                   th:'ขดลวดเหนี่ยวนำ (Phase Shift)', en:'Inductor (Phase Shift)',
+                   thd:'กระแสล้าหลังแรงดัน เกิดวงรีตามค่าความเหนี่ยวนำ',
+                   end:'Current lags voltage, producing an ellipse set by the inductance' },
+          diode: { xV:6, ymA:20, f:dio(0.7, 80, null),
+                   th:'ไดโอดปกติ (Rectification)', en:'Diode — Normal (Rectification)',
+                   thd:'นำกระแสด้านเดียว หักงอที่ ~0.7V — ไดโอดซิลิคอนสภาพดี',
+                   end:'Conducts one way with a knee at ~0.7V — healthy silicon diode' },
+          dleak: { xV:6, ymA:20, f:dio(0.7, 80, function(vs){ return vs < 0 ? vs/(R1+4000) : 0; }),
+                   th:'ไดโอดรั่ว (Reverse Leakage)', en:'Diode — Reverse Leakage',
+                   thd:'ด้านย้อนกลับมีกระแสรั่ว (เส้นเอียงลงทางซ้าย) — ไดโอดเสื่อม ควรเปลี่ยน',
+                   end:'Reverse side leaks current (line slopes down to the left) — degraded diode, replace it' },
+          zener: { xV:8, ymA:20, f:dio(0.7, 80, function(vs){ return vs < -5 ? (vs+5)/(R1+80) : 0; }),
+                   th:'ซีเนอร์ไดโอด (Breakdown 5V)', en:'Zener Diode (Breakdown 5V)',
+                   thd:'หักงอ 2 ด้าน: ~0.7V ด้านหน้า และพังทลายที่ −5V ด้านกลับ — ใช้ควบคุมแรงดัน',
+                   end:'Two knees: ~0.7V forward and −5V reverse breakdown — used for voltage regulation' },
+          bjt:   { xV:6, ymA:20, f:dio(0.65, 80, null),
+                   th:'ขา B-E ทรานซิสเตอร์ (Diode Junction)', en:'Transistor B-E Junction',
+                   thd:'รอยต่อ B-E ทำตัวเหมือนไดโอด — ใช้เช็คทรานซิสเตอร์ดี/เสียได้',
+                   end:'The B-E junction behaves like a diode — a quick transistor health check' }
+        };
+
+        var canvas = document.getElementById('iv-canvas');
+        var ctx = canvas.getContext('2d');
+        ctx.scale(2, 2);
+        ctx.lineCap = 'round';
+        var sel = document.getElementById('iv-select');
+        var nameEl = document.getElementById('iv-name');
+        var descEl = document.getElementById('iv-desc');
+        var ch1El = document.getElementById('iv-ch1');
+        var ch2El = document.getElementById('iv-ch2');
+        var CX = 220, CY = 176, HW = 220, HH = 176;
+        var cur, phase = 0, px = null, py = null;
+
+        function fmt(n){ return (Math.round(n*100)/100).toString(); }
+        function setDut(id){
+          cur = DUTS[id];
+          ctx.clearRect(0, 0, 440, 352);
+          px = py = null;
+          nameEl.innerHTML = '<span class="th-only"></span><span class="en-only"></span>';
+          nameEl.children[0].textContent = cur.th;
+          nameEl.children[1].textContent = cur.en;
+          descEl.innerHTML = '<span class="th-only"></span><span class="en-only"></span>';
+          descEl.children[0].textContent = cur.thd;
+          descEl.children[1].textContent = cur.end;
+          ch1El.textContent = 'CH1 (X): ' + fmt(cur.xV/5) + ' V/div';
+          ch2El.textContent = 'CH2 (Y): ' + fmt(cur.ymA/4) + ' mA/div';
+        }
+
+        function frame(){
+          // phosphor persistence: fade old trace toward transparent
+          ctx.globalCompositeOperation = 'destination-out';
+          ctx.fillStyle = 'rgba(0,0,0,0.01)';
+          ctx.fillRect(0, 0, 440, 352);
+          ctx.globalCompositeOperation = 'source-over';
+
+          ctx.strokeStyle = '#00ff84';
+          ctx.lineWidth = 2;
+          ctx.shadowColor = '#00e676';
+          ctx.shadowBlur = 6;
+          var x = px, y = py;
+          for (var k = 0; k < 6; k++){
+            phase += 0.03;
+            var vi = cur.f(phase);
+            var nx = CX + (vi[0]/cur.xV)*HW;
+            var ny = CY - (vi[1]*1000/cur.ymA)*HH;
+            if (x !== null){
+              ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(nx, ny); ctx.stroke();
+            }
+            x = nx; y = ny;
+          }
+          px = x; py = y;
+          // bright beam head
+          ctx.fillStyle = '#d4ffe6';
+          ctx.beginPath(); ctx.arc(px, py, 2, 0, 6.3); ctx.fill();
+          ctx.shadowBlur = 0;
+          requestAnimationFrame(frame);
+        }
+
+        sel.addEventListener('change', function(){ setDut(sel.value); });
+        setDut(sel.value);
+        requestAnimationFrame(frame);
+      })();
+      </script>
+
+      <div class="warn-box th-only">
+        <strong>⚠️ ความปลอดภัย:</strong> วงจรนี้ต่อกับไฟบ้าน 220V โดยตรงทางด้าน Primary ของหม้อแปลง
+        ต้องใช้หม้อแปลงแบบแยกขดลวด (Isolation) ตรวจสอบฉนวนสายไฟให้เรียบร้อย
+        และให้ครูผู้สอนควบคุมดูแลทุกครั้งที่ทดลอง
+      </div>
+      <div class="warn-box en-only">
+        <strong>⚠️ Safety:</strong> The primary side of this circuit connects directly to 220V mains.
+        Always use a transformer with isolated windings, check that all wiring insulation is intact,
+        and perform this experiment only under instructor supervision.
+      </div>
+    </div>
+  </div>
+
   <!-- ============ SECTION 7: Analog vs Digital ============ -->
   <div class="section">
     <div class="section-title">

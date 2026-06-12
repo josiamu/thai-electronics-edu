@@ -29,7 +29,7 @@ website/
 ├── ac-circuit.html     — บทที่ 8
 ├── diode.html          — บทที่ 9: PN Junction, I-V Curve, LED Vf by color, Rectifier Circuit
 ├── home-wiring.html    — บทเสริม: ระบบ L/N/G, แรงดันลอย (Ghost Voltage), ไฟรั่วจริง, Socket Tester, ความปลอดภัย
-├── oscilloscope.html   — บทที่ 10: โครงสร้าง CRT, การอ่านค่า, สูตร T/f/Vpp, ตัวอย่าง 3 โจทย์
+├── oscilloscope.html   — บทที่ 10: โครงสร้าง CRT, การอ่านค่า, สูตร T/f/Vpp, ตัวอย่าง 3 โจทย์, บท 6-4 วงจร Octopus (Curve Tracer) + Interactive I-V Curve Simulator (canvas, 11 อุปกรณ์)
 ├── signal-generator.html — บทที่ 11: คลื่น 4 แบบ, โครงสร้าง 7 ส่วน, ตัวอย่างการใช้งาน
 ├── simulation.html     — จำลองวงจร 3 แบบ (Series/Parallel/Mixed) + วิธีคำนวณ real-time + LED toggle
 ├── formulas.html       — สูตรสรุป + print-friendly
