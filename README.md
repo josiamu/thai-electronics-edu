@@ -16,7 +16,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | 🌙 **Dark Mode** | ธีมสว่าง/มืด — จำการตั้งค่าไว้ |
 | 📱 **Responsive** | ใช้งานได้ทั้ง Desktop, Tablet, Mobile |
 | 🧮 **7 เครื่องคิดเลข** | รหัสสี, โอห์ม, กำลัง, พลังงาน, อนุกรม/ขนาน, แปลงหน่วย |
-| 📝 **แบบทดสอบ 50 ข้อ** | 7 หมวด, สุ่มข้อ, บันทึกคะแนนสูงสุด — มีทั้ง TH และ EN |
+| 📝 **แบบทดสอบ 77 ข้อ** | 12 หมวด, สุ่มข้อ, บันทึกคะแนนสูงสุด — มีทั้ง TH และ EN |
 | 📥 **PDF 21 ไฟล์** | ดาวน์โหลดใบเนื้อหาประกอบการเรียน |
 | 🖨️ **Print-friendly** | หน้าสูตรสรุปพิมพ์ออกกระดาษ A4 ได้เลย |
 
@@ -40,7 +40,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 |---|---|---|
 | `formulas.html` | สูตรสรุป + พิมพ์ PDF | Formula summary + print |
 | `tools.html` | เครื่องคิดเลขเชิงโต้ตอบ 7 ตัว | 7 interactive calculators |
-| `quiz.html` | แบบทดสอบ 50 ข้อ 7 หมวด | 50-question quiz, 7 categories |
+| `quiz.html` | แบบทดสอบ 77 ข้อ 12 หมวด | 77-question quiz, 12 categories |
 | `downloads.html` | ดาวน์โหลด PDF 21 ไฟล์ | Download 21 PDF files |
 
 ---
@@ -131,7 +131,7 @@ website/
 ├── soldering.html   — Lesson 7: Soldering
 ├── formulas.html    — Formula summary (print-friendly)
 ├── tools.html       — Interactive calculators
-├── quiz.html        — Quiz (50 questions, bilingual)
+├── quiz.html        — Quiz (77 questions, 12 categories, bilingual)
 ├── downloads.html   — PDF downloads
 ├── CLAUDE.md        — Developer notes for Claude Code
 └── pdf/             — Thai PDF learning materials (~24 MB)
