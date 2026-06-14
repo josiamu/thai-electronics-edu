@@ -22,7 +22,7 @@ website/
 ├── downloads.js     — PDF preview modal + download interactions
 ├── oscilloscope.js  — Interactive I-V Curve Simulator
 ├── simulation.js    — logic จำลองวงจรและ animation
-├── index.html          — หน้าหลัก (CURRENT_PAGE='home') — แบ่ง 4 กลุ่ม: บทเรียน / เครื่องมือ / บทเสริม / ทดสอบ
+├── index.html          — หน้าหลัก (CURRENT_PAGE='home') — กลุ่มตรงกับ navbar: บทเรียน / งานปฏิบัติ / เครื่องมือ / คลังการเรียนรู้
 ├── electricity.html    — บทที่ 1
 ├── ohm.html            — บทที่ 2
 ├── resistor.html       — บทที่ 3: รหัสสี 4 แถบ + 5 แถบ (ตารางครบทั้งคู่)
@@ -80,15 +80,16 @@ CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `capacitor`, `induct
 - **หมายเหตุ:** `<span>` ใน `<option>` ของ `<select>` ไม่ถูก CSS hide — browser แสดงข้อความทั้งหมด ดังนั้น option ควรเขียนเป็น `0 — <span class="th-only">ดำ</span> Black` เพื่อให้แสดงทั้งไทย-อังกฤษเสมอ
 
 ### Navigation (nav.js)
-- NAV_CONTENT (11 บทเรียน: electricity → signal-generator) → รวมในปุ่ม dropdown "บทเรียน ▼" / "Lessons ▼"
+- NAV_LESSON_GROUPS → mega menu "บทเรียน / Lessons" แบ่ง 3 กลุ่ม: พื้นฐานไฟฟ้า, อุปกรณ์อิเล็กทรอนิกส์, เครื่องมือวัดและทดสอบ
+- บน desktop แสดง mega menu 3 คอลัมน์; บน mobile กลุ่มบทเรียนเป็น accordion เปิดทีละกลุ่ม
+- NAV_PRACTICE (soldering, home-wiring) → dropdown "งานปฏิบัติ / Practical"
 - NAV_TOOLS (simulation, formulas, tools) → dropdown "เครื่องมือ ▼" / "Tools ▼"
-- NAV_EXTRA (home-wiring เท่านั้น) → dropdown "บทเสริม ▼" / "Extra ▼"
-- NAV_DIRECT (quiz, downloads) → แสดงตรงๆ ใน nav bar
+- NAV_RESOURCES (quiz, downloads) → dropdown "คลังการเรียนรู้ / Resources"
 - Dark mode: `[data-theme="dark"]` บน `<html>`, บันทึกใน localStorage key `theme`
 - Lang toggle: ปุ่ม TH / EN ใน nav bar ทุกหน้า
 - **Back-to-top button:** inject `<button id="back-to-top">` เข้า body อัตโนมัติ — ปรากฏเมื่อ scroll > 320px
 
-> **กฎ:** เมื่อเพิ่มหน้าใหม่ใน nav.js (NAV_CONTENT / NAV_EXTRA / NAV_TOOLS) ต้องอัปเดต **index.html** ด้วยเสมอ — เพิ่ม card ในกลุ่มที่ตรงกัน และแก้จำนวนไฟล์/หัวข้อใน footer กับ card ดาวน์โหลด
+> **กฎ:** เมื่อเพิ่มหน้าใหม่ใน nav.js (NAV_LESSON_GROUPS / NAV_PRACTICE / NAV_TOOLS) ต้องอัปเดต **index.html** ด้วยเสมอ — เพิ่ม card ในกลุ่มที่ตรงกัน และแก้จำนวนไฟล์/หัวข้อใน footer กับ card ดาวน์โหลด
 
 ### CSS (style.css)
 - Color palette: `--primary: #2563eb`, `--accent: #06b6d4`, `--secondary: #10b981`, `--bg: #f8fafc`
@@ -99,13 +100,15 @@ CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `capacitor`, `induct
 - Smooth scroll: `html { scroll-behavior: smooth; }`
 - **Topic card color accents:** `.topic-card-blue` (บทเรียน), `.topic-card-teal` (เครื่องมือ), `.topic-card-orange` (quiz), `.topic-card-green` (downloads) — border-top 4px
 
-### หน้าหลัก index.html — โครงสร้าง 4 กลุ่ม
+### หน้าหลัก index.html — โครงสร้างตาม navbar
 | กลุ่ม | หน้า | สี card |
 |---|---|---|
-| 📚 บทเรียน | electricity → signal-generator (11 หน้า) | `topic-card-blue` |
-| 🛠 เครื่องมือช่วยเรียน | simulation, formulas, tools | `topic-card-teal` |
-| 📖 บทเสริม | home-wiring | `topic-card-teal` |
-| 📋 ทดสอบ & ดาวน์โหลด | quiz, downloads | `topic-card-orange` / `topic-card-green` |
+| 📚 พื้นฐานไฟฟ้า | electricity, ohm, ac-circuit | `topic-card-blue` |
+| 📚 อุปกรณ์อิเล็กทรอนิกส์ | resistor, capacitor, inductor, diode | `topic-card-blue` |
+| 📚 เครื่องมือวัดและทดสอบ | multimeter, signal-generator, oscilloscope | `topic-card-blue` |
+| 🧰 งานปฏิบัติ | soldering, home-wiring | `topic-card-teal` |
+| 🛠 เครื่องมือ | simulation, formulas, tools | `topic-card-teal` |
+| 📚 คลังการเรียนรู้ | quiz, downloads | `topic-card-orange` / `topic-card-green` |
 
 ### Deploy
 ```bash
