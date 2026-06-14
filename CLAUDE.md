@@ -18,6 +18,10 @@ website/
 ├── style.css        — shared CSS ทุกหน้า (CSS custom properties, dark mode, bilingual)
 ├── nav.js           — inject nav bar + dark mode toggle + hamburger + language toggle + back-to-top button
 ├── tools.js         — logic เครื่องคิดเลขทุกตัว (calcR4, calcR5, calcOhm, ...)
+├── quiz.js          — ข้อมูลข้อสอบ + logic แบบทดสอบ
+├── downloads.js     — PDF preview modal + download interactions
+├── oscilloscope.js  — Interactive I-V Curve Simulator
+├── simulation.js    — logic จำลองวงจรและ animation
 ├── index.html          — หน้าหลัก (CURRENT_PAGE='home') — แบ่ง 4 กลุ่ม: บทเรียน / เครื่องมือ / บทเสริม / ทดสอบ
 ├── electricity.html    — บทที่ 1
 ├── ohm.html            — บทที่ 2

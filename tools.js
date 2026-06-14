@@ -328,3 +328,34 @@ function calcUnit() {
   res.className='result-box';
   res.textContent = val + ' ' + unitNames[from] + ' = ' + (val * toBase[from] / toBase[to]).toPrecision(6) + ' ' + unitNames[to];
 }
+
+// ===== PAGE EVENT BINDINGS =====
+const toolActions = {
+  calcOhm, clearOhm, calcPower, clearPower, calcEnergy,
+  calcRS, calcRP, calcCS, calcCP, calcUnit, calcReverse,
+};
+
+document.querySelectorAll('[data-action]').forEach(button => {
+  const action = toolActions[button.dataset.action];
+  if (action) button.addEventListener('click', action);
+});
+
+document.querySelectorAll('[data-tab-show]').forEach(button => {
+  button.addEventListener('click', function () {
+    const panelIds = [this.dataset.tabShow, ...this.dataset.tabHide.split(' ')];
+    panelIds.forEach(id => document.getElementById(id)?.classList.remove('active'));
+    document.getElementById(this.dataset.tabShow).classList.add('active');
+    this.closest('.tool-box').querySelectorAll('.tab-btn').forEach(tab => tab.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+document.querySelectorAll('#r4b1, #r4b2, #r4b3, #r4b4').forEach(select => {
+  select.addEventListener('change', calcR4);
+});
+document.querySelectorAll('#r5b1, #r5b2, #r5b3, #r5b4, #r5b5').forEach(select => {
+  select.addEventListener('change', calcR5);
+});
+
+calcR4();
+calcR5();

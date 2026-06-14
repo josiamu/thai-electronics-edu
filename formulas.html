@@ -12,6 +12,7 @@
 </head>
 <body>
 <div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
 
 <div class="page-header print-hide">
   <div class="page-header-inner">
@@ -37,7 +38,7 @@
 
   <!-- Print button -->
   <div class="print-hide" style="display:flex; justify-content:flex-end; margin-bottom:1.5rem;">
-    <button onclick="window.print()" class="btn btn-primary" style="font-size:1rem; padding:0.6rem 1.5rem;">
+    <button id="print-formulas-btn" class="btn btn-primary" style="font-size:1rem; padding:0.6rem 1.5rem;">
       <span class="th-only">🖨️ พิมพ์ / บันทึก PDF</span>
       <span class="en-only">🖨️ Print / Save PDF</span>
     </button>
@@ -209,6 +210,8 @@
     <a class="next" href="quiz.html"><span class="th-only">แบบทดสอบ →</span><span class="en-only">Quiz →</span></a>
   </div>
 </div>
+
+</main>
 
 <footer class="print-hide">
   <strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong>
