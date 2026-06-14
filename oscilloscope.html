@@ -290,97 +290,113 @@
         <div>
           <!-- SVG Oscilloscope Screen -->
           <div class="osc-svg-wrap">
-            <svg viewBox="0 0 420 300" width="420" height="300" xmlns="http://www.w3.org/2000/svg" aria-label="Oscilloscope screen showing sine wave with annotations">
-              <!-- Background -->
-              <rect width="420" height="300" fill="#0d1f0f" rx="6"/>
-
-              <!-- Grid lines vertical (10 divisions) -->
-              <g stroke="#1a4a2e" stroke-width="0.8">
-                <line x1="42" y1="10" x2="42" y2="270"/>
-                <line x1="84" y1="10" x2="84" y2="270"/>
-                <line x1="126" y1="10" x2="126" y2="270"/>
-                <line x1="168" y1="10" x2="168" y2="270"/>
-                <line x1="210" y1="10" x2="210" y2="270"/>
-                <line x1="252" y1="10" x2="252" y2="270"/>
-                <line x1="294" y1="10" x2="294" y2="270"/>
-                <line x1="336" y1="10" x2="336" y2="270"/>
-                <line x1="378" y1="10" x2="378" y2="270"/>
-              </g>
-              <!-- Grid lines horizontal (8 divisions) -->
-              <g stroke="#1a4a2e" stroke-width="0.8">
-                <line x1="0" y1="43" x2="420" y2="43"/>
-                <line x1="0" y1="86" x2="420" y2="86"/>
-                <line x1="0" y1="129" x2="420" y2="129"/>
-                <!-- center line brighter -->
-                <line x1="0" y1="172" x2="420" y2="172" stroke="#2a6a3e" stroke-width="1.2"/>
-                <line x1="0" y1="215" x2="420" y2="215"/>
-                <line x1="0" y1="258" x2="420" y2="258"/>
-              </g>
-              <!-- Center cross tick marks -->
-              <g stroke="#2a6a3e" stroke-width="1">
-                <line x1="208" y1="10" x2="212" y2="10"/>
-                <line x1="208" y1="43" x2="212" y2="43"/>
-                <line x1="208" y1="86" x2="212" y2="86"/>
-                <line x1="208" y1="129" x2="212" y2="129"/>
-                <line x1="208" y1="215" x2="212" y2="215"/>
-                <line x1="208" y1="258" x2="212" y2="258"/>
-              </g>
-
-              <!-- Sine wave: center=172, amplitude=86px (2 div=86), period=168px (4 div) -->
-              <!-- 2 full cycles across 420px wide screen -->
-              <polyline
-                fill="none"
-                stroke="#00e676"
-                stroke-width="2.2"
-                stroke-linejoin="round"
-                points="
-                  0,172
-                  5.25,153 10.5,117 15.75,86 21,67 26.25,57 31.5,57 36.75,67 42,86 47.25,117 52.5,153 57.75,172
-                  63,191 68.25,227 73.5,258 78.75,277 84,287 89.25,287 94.5,277 99.75,258 105,227 110.25,191 115.5,172
-                  120.75,153 126,117 131.25,86 136.5,67 141.75,57 147,57 152.25,67 157.5,86 162.75,117 168,153 173.25,172
-                  178.5,191 183.75,227 189,258 194.25,277 199.5,287 204.75,287 210,277 215.25,258 220.5,227 225.75,191 231,172
-                  236.25,153 241.5,117 246.75,86 252,67 257.25,57 262.5,57 267.75,67 273,86 278.25,117 283.5,153 288.75,172
-                  294,191 299.25,227 304.5,258 309.75,277 315,287 320.25,287 325.5,277 330.75,258 336,227 341.25,191 346.5,172
-                  351.75,153 357,117 362.25,86 367.5,67 372.75,57 378,57 383.25,67 388.5,86 393.75,117 399,153 404.25,172 420,172
-                "
-              />
-
-              <!-- VP annotation: peak at ~y=57, center at y=172 -->
-              <!-- Dashed vertical line from peak to center at x=84 (2nd div) -->
-              <line x1="84" y1="57" x2="84" y2="172" stroke="#ffeb3b" stroke-width="1.2" stroke-dasharray="4,3"/>
-              <!-- VP arrow -->
-              <line x1="90" y1="57" x2="90" y2="172" stroke="#ffeb3b" stroke-width="1.5" marker-end="url(#arr-y)" marker-start="url(#arr-y2)"/>
-              <text x="93" y="110" fill="#ffeb3b" font-size="11" font-family="monospace">VP</text>
-
-              <!-- VP-P: double arrow from y=57 to y=287 at x=330 -->
-              <line x1="330" y1="57" x2="330" y2="287" stroke="#ff7043" stroke-width="1.5" stroke-dasharray="3,2"/>
-              <text x="334" y="180" fill="#ff7043" font-size="10" font-family="monospace">VP-P</text>
-
-              <!-- T period: from x=31.5 (peak1) to x=147 (peak2) = 1 cycle, marked at top -->
-              <!-- Horizontal bracket at y=45 -->
-              <line x1="31" y1="45" x2="147" y2="45" stroke="#80cbc4" stroke-width="1.5"/>
-              <line x1="31" y1="40" x2="31" y2="50" stroke="#80cbc4" stroke-width="1.5"/>
-              <line x1="147" y1="40" x2="147" y2="50" stroke="#80cbc4" stroke-width="1.5"/>
-              <text x="65" y="38" fill="#80cbc4" font-size="11" font-family="monospace">T (1 cycle)</text>
-
-              <!-- GND label -->
-              <text x="4" y="176" fill="#2a6a3e" font-size="10" font-family="monospace">GND</text>
-
-              <!-- Labels: Volts/div, Time/div -->
-              <rect x="0" y="272" width="420" height="28" fill="#061208"/>
-              <text x="8" y="289" fill="#00c853" font-size="10" font-family="monospace">Volts/div: 10V</text>
-              <text x="150" y="289" fill="#00c853" font-size="10" font-family="monospace">Time/div: 2mS</text>
-              <text x="320" y="289" fill="#69f0ae" font-size="10" font-family="monospace">CH1 ~</text>
-
-              <!-- Arrow markers -->
+            <svg viewBox="0 0 440 300" width="440" height="300" xmlns="http://www.w3.org/2000/svg" aria-label="Oscilloscope screen showing sine wave with VP, VPP and period annotations">
               <defs>
-                <marker id="arr-y" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
-                  <path d="M0,0 L6,3 L0,6 Z" fill="#ffeb3b"/>
+                <!-- CRT phosphor glow for the trace -->
+                <filter id="osc-glow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="2.4" result="blur"/>
+                  <feMerge>
+                    <feMergeNode in="blur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+                <!-- Screen glass vignette: darker toward the edges -->
+                <radialGradient id="osc-vign" cx="50%" cy="48%" r="72%">
+                  <stop offset="55%" stop-color="#000" stop-opacity="0"/>
+                  <stop offset="100%" stop-color="#000" stop-opacity="0.45"/>
+                </radialGradient>
+                <!-- Double-headed measurement arrows -->
+                <marker id="osc-mY" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse">
+                  <path d="M1,1 L8,4.5 L1,8 Z" fill="#ffd54f"/>
                 </marker>
-                <marker id="arr-y2" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto-start-reverse">
-                  <path d="M0,0 L6,3 L0,6 Z" fill="#ffeb3b"/>
+                <marker id="osc-mO" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse">
+                  <path d="M1,1 L8,4.5 L1,8 Z" fill="#ff8a65"/>
                 </marker>
               </defs>
+
+              <!-- Bezel + screen -->
+              <rect x="0" y="0" width="440" height="300" rx="12" fill="#0c0c0e"/>
+              <rect x="8" y="8" width="424" height="284" rx="6" fill="#06160c"/>
+
+              <!-- Graticule: 10 x 6 divisions, plot area x:20-420 y:30-270 -->
+              <g stroke="#15532f" stroke-width="0.8">
+                <line x1="60"  y1="30" x2="60"  y2="270"/>
+                <line x1="100" y1="30" x2="100" y2="270"/>
+                <line x1="140" y1="30" x2="140" y2="270"/>
+                <line x1="180" y1="30" x2="180" y2="270"/>
+                <line x1="260" y1="30" x2="260" y2="270"/>
+                <line x1="300" y1="30" x2="300" y2="270"/>
+                <line x1="340" y1="30" x2="340" y2="270"/>
+                <line x1="380" y1="30" x2="380" y2="270"/>
+                <line x1="20" y1="70"  x2="420" y2="70"/>
+                <line x1="20" y1="110" x2="420" y2="110"/>
+                <line x1="20" y1="190" x2="420" y2="190"/>
+                <line x1="20" y1="230" x2="420" y2="230"/>
+              </g>
+              <!-- Outer frame + brighter center cross -->
+              <rect x="20" y="30" width="400" height="240" fill="none" stroke="#2e7d50" stroke-width="1.2"/>
+              <line x1="220" y1="30"  x2="220" y2="270" stroke="#2e7d50" stroke-width="1.2"/>
+              <line x1="20"  y1="150" x2="420" y2="150" stroke="#2e7d50" stroke-width="1.2"/>
+              <!-- Minor tick marks on the two center axes -->
+              <g stroke="#3a9463" stroke-width="1">
+                <line x1="28"  y1="146" x2="28"  y2="154"/><line x1="36"  y1="146" x2="36"  y2="154"/><line x1="44"  y1="146" x2="44"  y2="154"/><line x1="52"  y1="146" x2="52"  y2="154"/>
+                <line x1="68"  y1="146" x2="68"  y2="154"/><line x1="76"  y1="146" x2="76"  y2="154"/><line x1="84"  y1="146" x2="84"  y2="154"/><line x1="92"  y1="146" x2="92"  y2="154"/>
+                <line x1="108" y1="146" x2="108" y2="154"/><line x1="116" y1="146" x2="116" y2="154"/><line x1="124" y1="146" x2="124" y2="154"/><line x1="132" y1="146" x2="132" y2="154"/>
+                <line x1="148" y1="146" x2="148" y2="154"/><line x1="156" y1="146" x2="156" y2="154"/><line x1="164" y1="146" x2="164" y2="154"/><line x1="172" y1="146" x2="172" y2="154"/>
+                <line x1="188" y1="146" x2="188" y2="154"/><line x1="196" y1="146" x2="196" y2="154"/><line x1="204" y1="146" x2="204" y2="154"/><line x1="212" y1="146" x2="212" y2="154"/>
+                <line x1="228" y1="146" x2="228" y2="154"/><line x1="236" y1="146" x2="236" y2="154"/><line x1="244" y1="146" x2="244" y2="154"/><line x1="252" y1="146" x2="252" y2="154"/>
+                <line x1="268" y1="146" x2="268" y2="154"/><line x1="276" y1="146" x2="276" y2="154"/><line x1="284" y1="146" x2="284" y2="154"/><line x1="292" y1="146" x2="292" y2="154"/>
+                <line x1="308" y1="146" x2="308" y2="154"/><line x1="316" y1="146" x2="316" y2="154"/><line x1="324" y1="146" x2="324" y2="154"/><line x1="332" y1="146" x2="332" y2="154"/>
+                <line x1="348" y1="146" x2="348" y2="154"/><line x1="356" y1="146" x2="356" y2="154"/><line x1="364" y1="146" x2="364" y2="154"/><line x1="372" y1="146" x2="372" y2="154"/>
+                <line x1="388" y1="146" x2="388" y2="154"/><line x1="396" y1="146" x2="396" y2="154"/><line x1="404" y1="146" x2="404" y2="154"/><line x1="412" y1="146" x2="412" y2="154"/>
+                <line x1="216" y1="38"  x2="224" y2="38"/><line x1="216" y1="46"  x2="224" y2="46"/><line x1="216" y1="54"  x2="224" y2="54"/><line x1="216" y1="62"  x2="224" y2="62"/>
+                <line x1="216" y1="78"  x2="224" y2="78"/><line x1="216" y1="86"  x2="224" y2="86"/><line x1="216" y1="94"  x2="224" y2="94"/><line x1="216" y1="102" x2="224" y2="102"/>
+                <line x1="216" y1="118" x2="224" y2="118"/><line x1="216" y1="126" x2="224" y2="126"/><line x1="216" y1="134" x2="224" y2="134"/><line x1="216" y1="142" x2="224" y2="142"/>
+                <line x1="216" y1="158" x2="224" y2="158"/><line x1="216" y1="166" x2="224" y2="166"/><line x1="216" y1="174" x2="224" y2="174"/><line x1="216" y1="182" x2="224" y2="182"/>
+                <line x1="216" y1="198" x2="224" y2="198"/><line x1="216" y1="206" x2="224" y2="206"/><line x1="216" y1="214" x2="224" y2="214"/><line x1="216" y1="222" x2="224" y2="222"/>
+                <line x1="216" y1="238" x2="224" y2="238"/><line x1="216" y1="246" x2="224" y2="246"/><line x1="216" y1="254" x2="224" y2="254"/><line x1="216" y1="262" x2="224" y2="262"/>
+              </g>
+
+              <!-- Ground reference marker (left edge, center line) -->
+              <path d="M10,150 L20,145 L20,155 Z" fill="#69f0ae"/>
+              <text x="11" y="143" fill="#69f0ae" font-size="9" font-family="monospace">1</text>
+
+              <!-- Sine wave: 2 cycles, period 200px (5 div), amplitude 80px (2 div), center y=150 -->
+              <polyline fill="none" stroke="#00e676" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"
+                opacity="0.55" filter="url(#osc-glow)"
+                points="20,150 30,125.3 40,103 50,85.3 60,73.9 70,70 80,73.9 90,85.3 100,103 110,125.3 120,150 130,174.7 140,197 150,214.7 160,226.1 170,230 180,226.1 190,214.7 200,197 210,174.7 220,150 230,125.3 240,103 250,85.3 260,73.9 270,70 280,73.9 290,85.3 300,103 310,125.3 320,150 330,174.7 340,197 350,214.7 360,226.1 370,230 380,226.1 390,214.7 400,197 410,174.7 420,150"/>
+              <polyline fill="none" stroke="#b9ffd5" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"
+                points="20,150 30,125.3 40,103 50,85.3 60,73.9 70,70 80,73.9 90,85.3 100,103 110,125.3 120,150 130,174.7 140,197 150,214.7 160,226.1 170,230 180,226.1 190,214.7 200,197 210,174.7 220,150 230,125.3 240,103 250,85.3 260,73.9 270,70 280,73.9 290,85.3 300,103 310,125.3 320,150 330,174.7 340,197 350,214.7 360,226.1 370,230 380,226.1 390,214.7 400,197 410,174.7 420,150"/>
+
+              <!-- T (period): top bracket between two peaks (x=70 and x=270) -->
+              <g stroke="#4dd0e1">
+                <line x1="70" y1="68" x2="70" y2="24" stroke-width="1" stroke-dasharray="3,3" opacity="0.6"/>
+                <line x1="270" y1="68" x2="270" y2="24" stroke-width="1" stroke-dasharray="3,3" opacity="0.6"/>
+                <line x1="70" y1="24" x2="270" y2="24" stroke-width="1.4"/>
+                <line x1="70" y1="20" x2="70" y2="28" stroke-width="1.4"/>
+                <line x1="270" y1="20" x2="270" y2="28" stroke-width="1.4"/>
+              </g>
+              <text x="156" y="19" fill="#4dd0e1" font-size="12" font-weight="700" font-family="monospace">T</text>
+
+              <!-- VP (amplitude): center axis to peak level -->
+              <line x1="70" y1="70" x2="224" y2="70" stroke="#ffd54f" stroke-width="1" stroke-dasharray="3,3" opacity="0.6"/>
+              <line x1="220" y1="150" x2="220" y2="70" stroke="#ffd54f" stroke-width="1.6" marker-start="url(#osc-mY)" marker-end="url(#osc-mY)"/>
+              <text x="226" y="114" fill="#ffd54f" font-size="12" font-weight="700" font-family="monospace">VP</text>
+
+              <!-- VPP (peak-to-peak): right side, peak level to trough level -->
+              <line x1="270" y1="70" x2="408" y2="70" stroke="#ff8a65" stroke-width="1" stroke-dasharray="3,3" opacity="0.55"/>
+              <line x1="370" y1="230" x2="408" y2="230" stroke="#ff8a65" stroke-width="1" stroke-dasharray="3,3" opacity="0.55"/>
+              <line x1="404" y1="70" x2="404" y2="230" stroke="#ff8a65" stroke-width="1.6" marker-start="url(#osc-mO)" marker-end="url(#osc-mO)"/>
+              <text x="372" y="64" fill="#ff8a65" font-size="11" font-weight="700" font-family="monospace">VPP</text>
+
+              <!-- Glass vignette overlay (above grid, below text bar) -->
+              <rect x="20" y="30" width="400" height="240" fill="url(#osc-vign)"/>
+
+              <!-- Bottom info bar -->
+              <rect x="20" y="270" width="400" height="22" fill="#000" fill-opacity="0.5"/>
+              <text x="28"  y="285" fill="#00c853" font-size="11" font-family="monospace">Volts/div 10 V</text>
+              <text x="180" y="285" fill="#00c853" font-size="11" font-family="monospace">Time/div 2 ms</text>
+              <text x="330" y="285" fill="#69f0ae" font-size="11" font-family="monospace">CH1 &#8767;</text>
             </svg>
           </div>
           <p style="text-align:center;font-size:0.82rem;opacity:0.7;margin:0.25rem 0 0;">
