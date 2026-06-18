@@ -43,6 +43,39 @@
   margin: 0.4rem 0;
 }
 .cmp-table th { background: var(--primary); color: #fff; }
+
+/* Key technique cards */
+.tech-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:1rem; }
+.tech-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:1.2rem 1.4rem; border-top:4px solid var(--accent); }
+.tech-card h3 { margin:0 0 .6rem; font-size:1rem; color:var(--accent); display:flex; align-items:center; gap:.4rem; }
+/* let list items flow as normal text (override .content-list flex layout) */
+.tech-card .content-list li { display:block; padding:.4rem 0; }
+.tech-card .content-list li::before { margin-right:.5rem; }
+
+/* Interactive scope reading trainer */
+.or-wrap { display:grid; grid-template-columns:1fr 285px; gap:1.25rem; align-items:start; }
+@media (max-width:860px){ .or-wrap{ grid-template-columns:1fr; } }
+.or-screen { width:100%; height:auto; display:block; border-radius:10px; border:2px solid #1a4a2e; box-shadow:0 4px 24px rgba(0,0,0,.4); background:#06160c; }
+.or-panel { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:.9rem 1rem; }
+.or-waves { display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:.9rem; }
+.or-wave-btn { flex:1; min-width:56px; padding:.45rem .3rem; border:2px solid var(--border); background:var(--bg); border-radius:10px; cursor:pointer; font-family:inherit; font-size:.8rem; font-weight:600; color:var(--text-light); transition:all .18s; }
+.or-wave-btn:hover { border-color:var(--primary); color:var(--primary); }
+.or-wave-btn.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+.or-ctrl { margin-bottom:.8rem; }
+.or-ctrl-row { display:flex; justify-content:space-between; align-items:center; font-size:.84rem; font-weight:600; margin-bottom:.25rem; }
+.or-ctrl-row span { color:var(--primary); font-size:.9rem; }
+.or-ctrl input[type=range] { width:100%; cursor:pointer; accent-color:var(--primary); }
+.or-btns { display:flex; gap:.5rem; margin-top:.4rem; }
+.or-btn { flex:1; padding:.5rem; border:2px solid var(--primary); background:var(--primary); color:#fff; border-radius:9px; cursor:pointer; font-family:inherit; font-size:.82rem; font-weight:700; transition:all .15s; }
+.or-btn.ghost { background:var(--card); color:var(--primary); }
+.or-btn:hover { box-shadow:0 4px 12px rgba(37,99,235,.25); }
+.or-readout { display:grid; grid-template-columns:1fr 1fr; gap:.45rem; margin-top:1rem; }
+.or-rb { background:var(--bg); border:1px solid var(--border); border-radius:9px; padding:.45rem .6rem; text-align:center; }
+.or-rb.s2 { grid-column:1/-1; text-align:left; }
+.or-rl { font-size:.72rem; color:var(--text-light); margin-bottom:.12rem; }
+.or-rv { font-size:1.02rem; font-weight:700; color:var(--text); }
+.or-rb.hl .or-rv { color:var(--primary); }
+.or-rb .calc { font-size:.78rem; font-weight:600; color:var(--text); }
 </style>
 </head>
 <body>
@@ -86,8 +119,8 @@
   <!-- ============ SECTION 2: ออสซิลโลสโคปคืออะไร ============ -->
   <div class="section">
     <div class="section-title">
-      <span class="th-only">6-1 ออสซิลโลสโคปคืออะไร</span>
-      <span class="en-only">6-1 What Is an Oscilloscope?</span>
+      <span class="th-only">ออสซิลโลสโคปคืออะไร</span>
+      <span class="en-only">What Is an Oscilloscope?</span>
     </div>
     <div class="card">
       <div class="grid-2">
@@ -124,8 +157,8 @@
   <!-- ============ SECTION 3: โครงสร้างและส่วนประกอบ ============ -->
   <div class="section">
     <div class="section-title">
-      <span class="th-only">6-2 โครงสร้างและส่วนประกอบ</span>
-      <span class="en-only">6-2 Structure and Components</span>
+      <span class="th-only">โครงสร้างและส่วนประกอบ</span>
+      <span class="en-only">Structure and Components</span>
     </div>
     <div class="card">
       <p class="th-only" style="margin-bottom:1rem;">ออสซิลโลสโคปมี <strong>4 ส่วนสำคัญ</strong> ดังนี้</p>
@@ -167,8 +200,8 @@
   <!-- ============ SECTION 4: การใช้งาน Tektronix TDS2024 ============ -->
   <div class="section">
     <div class="section-title">
-      <span class="th-only">6-3 การใช้งาน Tektronix TDS2024</span>
-      <span class="en-only">6-3 Using the Tektronix TDS2024</span>
+      <span class="th-only">การใช้งาน Tektronix TDS2024</span>
+      <span class="en-only">Using the Tektronix TDS2024</span>
     </div>
     <div class="card">
       <p class="th-only" style="margin-bottom:1rem;">
@@ -253,6 +286,82 @@
     </div>
   </div>
 
+  <!-- ============ SECTION: เทคนิคการใช้งานสำคัญ ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">เทคนิคการใช้งานสำคัญ</span>
+      <span class="en-only">Key Usage Techniques</span>
+    </div>
+    <div class="tech-grid">
+
+      <!-- Trigger -->
+      <div class="tech-card">
+        <h3>🎯 <span class="th-only">การทริก (Trigger)</span><span class="en-only">Trigger</span></h3>
+        <p class="th-only" style="font-size:.9rem;margin:0 0 .6rem;">
+          กำหนด "จุดเริ่มวาดภาพ" ของแต่ละรอบให้ตรงกัน ทำให้คลื่นซ้อนทับกันจนภาพ <strong>นิ่ง</strong> ไม่เลื่อนไปมา
+        </p>
+        <p class="en-only" style="font-size:.9rem;margin:0 0 .6rem;">
+          Defines the "start point" of each sweep so cycles overlap and the waveform appears <strong>stable</strong> instead of drifting.
+        </p>
+        <ul class="content-list th-only" style="font-size:.86rem;">
+          <li><strong>Edge Trigger:</strong> เริ่มวาดเมื่อสัญญาณตัดผ่านระดับ <strong>Level</strong> ที่ตั้ง — ขาขึ้น (Rising ↗) หรือขาลง (Falling ↘)</li>
+          <li>ตั้ง Level <strong>ผิด</strong> (สูง/ต่ำกว่ายอดคลื่น) → ภาพวิ่งไม่นิ่ง</li>
+          <li>โหมด: <strong>Auto</strong> (วาดตลอด) • <strong>Normal</strong> (วาดเมื่อมีทริกเท่านั้น) • <strong>Single</strong> (จับครั้งเดียว)</li>
+        </ul>
+        <ul class="content-list en-only" style="font-size:.86rem;">
+          <li><strong>Edge Trigger:</strong> starts when the signal crosses the set <strong>Level</strong> — Rising ↗ or Falling ↘</li>
+          <li>Wrong Level (above/below the peak) → the trace keeps drifting</li>
+          <li>Modes: <strong>Auto</strong> (always draws) • <strong>Normal</strong> (only on trigger) • <strong>Single</strong> (one capture)</li>
+        </ul>
+      </div>
+
+      <!-- Probe x1/x10 -->
+      <div class="tech-card">
+        <h3>🔌 <span class="th-only">สายโปรบ ×1 / ×10</span><span class="en-only">Probe ×1 / ×10</span></h3>
+        <p class="th-only" style="font-size:.9rem;margin:0 0 .6rem;">
+          สาย Probe มีสวิตช์เลือกอัตราลดทอนสัญญาณ
+        </p>
+        <p class="en-only" style="font-size:.9rem;margin:0 0 .6rem;">
+          The probe has a switch to select its attenuation ratio.
+        </p>
+        <ul class="content-list th-only" style="font-size:.86rem;">
+          <li><strong>×1:</strong> ส่งสัญญาณตรงๆ ใช้กับสัญญาณเล็ก แต่ bandwidth ต่ำ และโหลดวงจรมาก</li>
+          <li><strong>×10:</strong> ลดทอน 10 เท่า → วัดแรงดันสูงได้ bandwidth สูง โหลดวงจรน้อย (แนะนำ)</li>
+          <li>⚠ <strong>กับดัก:</strong> ใช้ ×10 ต้องตั้งสโคปเป็น ×10 ด้วย ไม่งั้น<strong>อ่านค่าผิด 10 เท่า</strong></li>
+          <li>ปรับ <strong>Probe Comp</strong> (trimmer) ให้คลื่นสี่เหลี่ยมขอบตรง ไม่โค้ง</li>
+        </ul>
+        <ul class="content-list en-only" style="font-size:.86rem;">
+          <li><strong>×1:</strong> passes the signal directly; for small signals but low bandwidth and heavy circuit loading</li>
+          <li><strong>×10:</strong> attenuates ×10 → measure higher voltage, higher bandwidth, light loading (recommended)</li>
+          <li>⚠ <strong>Trap:</strong> using ×10 requires setting the scope to ×10 too, or readings are <strong>off by 10×</strong></li>
+          <li>Adjust <strong>Probe Comp</strong> (trimmer) so square waves have flat, square edges</li>
+        </ul>
+      </div>
+
+      <!-- Coupling -->
+      <div class="tech-card">
+        <h3>🔀 <span class="th-only">Coupling: AC / DC / GND</span><span class="en-only">Coupling: AC / DC / GND</span></h3>
+        <p class="th-only" style="font-size:.9rem;margin:0 0 .6rem;">
+          เลือกวิธีต่อสัญญาณเข้าวงจรขยายแกน Y
+        </p>
+        <p class="en-only" style="font-size:.9rem;margin:0 0 .6rem;">
+          Selects how the signal is coupled into the Y-axis amplifier.
+        </p>
+        <ul class="content-list th-only" style="font-size:.86rem;">
+          <li><strong>DC:</strong> แสดงทั้งส่วน DC + AC — เห็น offset จริงของสัญญาณ</li>
+          <li><strong>AC:</strong> ตัดส่วน DC ออก เหลือเฉพาะ AC — เหมาะดู <strong>ripple</strong> เล็กๆ บนไฟ DC</li>
+          <li><strong>GND:</strong> ตัดสัญญาณ แสดงเส้น 0V เพื่อหาตำแหน่งอ้างอิงก่อนวัด</li>
+        </ul>
+        <ul class="content-list en-only" style="font-size:.86rem;">
+          <li><strong>DC:</strong> shows DC + AC together — reveals the signal's true offset</li>
+          <li><strong>AC:</strong> blocks DC, shows only AC — ideal for small <strong>ripple</strong> on a DC supply</li>
+          <li><strong>GND:</strong> disconnects input, shows the 0V line to set a reference before measuring</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
   <!-- ============ SECTION 5: สูตรและการอ่านค่า ============ -->
   <div class="section">
     <div class="section-title">
@@ -286,6 +395,14 @@
           <div class="formula-box">
             <div class="formula">f = 1 / T</div>
           </div>
+
+          <h3 class="th-only">สูตร Duty Cycle</h3>
+          <h3 class="en-only">Duty Cycle Formula</h3>
+          <div class="formula-box">
+            <div class="formula">D = (t<sub>on</sub> / T) × 100%</div>
+          </div>
+          <p class="th-only" style="font-size:0.88rem;color:var(--text);opacity:0.75;">t<sub>on</sub> = ช่วงเวลาที่สัญญาณอยู่ระดับสูง (สำคัญกับคลื่นสี่เหลี่ยม/พัลส์)</p>
+          <p class="en-only" style="font-size:0.88rem;color:var(--text);opacity:0.75;">t<sub>on</sub> = time the signal stays high (key for square/pulse waves)</p>
         </div>
         <div>
           <!-- SVG Oscilloscope Screen -->
@@ -418,8 +535,8 @@
 
       <!-- Example 6-1 -->
       <div class="example-card">
-        <h3 class="th-only">ตัวอย่างที่ 6-1 — แรงดัน AC</h3>
-        <h3 class="en-only">Example 6-1 — AC Voltage</h3>
+        <h3 class="th-only">ตัวอย่างที่ 1 — แรงดัน AC</h3>
+        <h3 class="en-only">Example 1 — AC Voltage</h3>
         <p class="th-only" style="font-size:0.9rem;">
           Volts/div = 10V, Time/div = 2mS, Peak = 3.4 div
         </p>
@@ -439,8 +556,8 @@
 
       <!-- Example 6-2 -->
       <div class="example-card">
-        <h3 class="th-only">ตัวอย่างที่ 6-2 — ความถี่</h3>
-        <h3 class="en-only">Example 6-2 — Frequency</h3>
+        <h3 class="th-only">ตัวอย่างที่ 2 — ความถี่</h3>
+        <h3 class="en-only">Example 2 — Frequency</h3>
         <p class="th-only" style="font-size:0.9rem;">
           Time/div = 2mS, คลื่น 1 ไซเกิล = 10 div
         </p>
@@ -463,8 +580,8 @@
 
       <!-- Example 6-3 -->
       <div class="example-card">
-        <h3 class="th-only">ตัวอย่างที่ 6-3 — แรงดัน DC</h3>
-        <h3 class="en-only">Example 6-3 — DC Voltage</h3>
+        <h3 class="th-only">ตัวอย่างที่ 3 — แรงดัน DC</h3>
+        <h3 class="en-only">Example 3 — DC Voltage</h3>
         <p class="th-only" style="font-size:0.9rem;">
           Volts/div = 5V, เส้นสัญญาณอยู่สูงกว่า GND 2.15 div (DC)
         </p>
@@ -482,14 +599,95 @@
         </div>
       </div>
 
+      <!-- Example 4: Duty Cycle / Pulse Width -->
+      <div class="example-card">
+        <h3 class="th-only">ตัวอย่างที่ 4 — Duty Cycle / ความกว้างพัลส์</h3>
+        <h3 class="en-only">Example 4 — Duty Cycle / Pulse Width</h3>
+        <p class="th-only" style="font-size:0.9rem;">
+          Time/div = 0.5mS, คลื่นสี่เหลี่ยม: ช่วง High = 3 div, คาบเต็ม = 8 div
+        </p>
+        <p class="en-only" style="font-size:0.9rem;">
+          Time/div = 0.5mS, square wave: High = 3 div, full period = 8 div
+        </p>
+        <div class="formula-box">
+          <div class="formula">T = 8 × 0.5mS = <strong>4 mS</strong></div>
+        </div>
+        <div class="formula-box">
+          <div class="formula">t<sub>on</sub> = 3 × 0.5mS = <strong>1.5 mS</strong></div>
+        </div>
+        <div class="formula-box">
+          <div class="formula">D = (1.5 / 4) × 100 = <strong>37.5%</strong></div>
+        </div>
+        <div class="info-box th-only" style="margin-top:0.75rem;">
+          Duty 50% = คลื่นสมมาตร • PWM ใช้ปรับความสว่าง LED และความเร็วมอเตอร์
+        </div>
+        <div class="info-box en-only" style="margin-top:0.75rem;">
+          50% duty = symmetric wave • PWM controls LED brightness and motor speed
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ SECTION: Interactive Scope Reading Trainer ============ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="th-only">⚡ ฝึกอ่านค่าจากจอ (โต้ตอบได้)</span>
+      <span class="en-only">⚡ Interactive Reading Trainer</span>
+    </div>
+    <div class="card" style="padding:1.25rem;">
+      <p class="th-only" style="margin:0 0 1rem;font-size:.92rem;color:var(--text-light);">
+        ปรับ <strong>Volts/div</strong> และ <strong>Time/div</strong> เพื่อจัดคลื่นให้พอดีจอ แล้วสังเกตว่า — แม้สเกลเปลี่ยน
+        แต่ค่าจริง (V<sub>p</sub>, f) <strong>ไม่เปลี่ยน</strong> เพราะ ค่าจริง = จำนวนช่อง × สเกล • กด 🎲 เพื่อสุ่มสัญญาณใหม่
+      </p>
+      <p class="en-only" style="margin:0 0 1rem;font-size:.92rem;color:var(--text-light);">
+        Adjust <strong>Volts/div</strong> and <strong>Time/div</strong> to frame the wave, then notice — even as the scale
+        changes, the real values (V<sub>p</sub>, f) <strong>stay the same</strong>, because value = divisions × scale • press 🎲 for a new signal.
+      </p>
+      <div class="or-wrap">
+        <div>
+          <canvas id="or-canvas" class="or-screen"></canvas>
+        </div>
+        <div>
+          <div class="or-panel">
+            <div style="font-weight:700;font-size:.9rem;margin-bottom:.7rem;color:var(--primary);">
+              <span class="th-only">⚙ ตั้งค่าสโคป</span><span class="en-only">⚙ Scope Settings</span>
+            </div>
+            <div class="or-waves">
+              <button class="or-wave-btn active" data-wave="sine">∿<br><span class="th-only">ไซน์</span><span class="en-only">Sine</span></button>
+              <button class="or-wave-btn" data-wave="square">⊓<br><span class="th-only">สี่เหลี่ยม</span><span class="en-only">Square</span></button>
+              <button class="or-wave-btn" data-wave="triangle">△<br><span class="th-only">สามเหลี่ยม</span><span class="en-only">Triangle</span></button>
+            </div>
+            <div class="or-ctrl">
+              <div class="or-ctrl-row"><label>Volts/div</label><span id="or-vdiv-val">5 V</span></div>
+              <input type="range" id="or-vdiv" min="0" max="7" step="1" value="3">
+            </div>
+            <div class="or-ctrl">
+              <div class="or-ctrl-row"><label>Time/div</label><span id="or-tdiv-val">2 ms</span></div>
+              <input type="range" id="or-tdiv" min="0" max="7" step="1" value="5">
+            </div>
+            <div class="or-btns">
+              <button class="or-btn" id="or-auto">AUTOSET</button>
+              <button class="or-btn ghost" id="or-rand">🎲 <span class="th-only">สุ่ม</span><span class="en-only">New</span></button>
+            </div>
+          </div>
+          <div class="or-readout">
+            <div class="or-rb s2 hl"><div class="or-rl">V<sub>p</sub></div><div class="or-rv" id="or-vp">— V</div><div class="calc" id="or-vp-calc"></div></div>
+            <div class="or-rb"><div class="or-rl">V<sub>P-P</sub></div><div class="or-rv" id="or-vpp">— V</div></div>
+            <div class="or-rb"><div class="or-rl">V<sub>rms</sub></div><div class="or-rv" id="or-vrms">— V</div></div>
+            <div class="or-rb s2 hl"><div class="or-rl"><span class="th-only">คาบ T</span><span class="en-only">Period T</span></div><div class="or-rv" id="or-T">— ms</div><div class="calc" id="or-T-calc"></div></div>
+            <div class="or-rb s2"><div class="or-rl"><span class="th-only">ความถี่ f = 1/T</span><span class="en-only">Frequency f = 1/T</span></div><div class="or-rv" id="or-f">— Hz</div></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- ============ SECTION 6-4: วงจร Octopus (Curve Tracer) ============ -->
   <div class="section">
     <div class="section-title">
-      <span class="th-only">6-4 การประยุกต์ใช้งาน: วงจร Octopus (Curve Tracer)</span>
-      <span class="en-only">6-4 Application: The Octopus Circuit (Curve Tracer)</span>
+      <span class="th-only">การประยุกต์ใช้งาน: วงจร Octopus (Curve Tracer)</span>
+      <span class="en-only">Application: The Octopus Circuit (Curve Tracer)</span>
     </div>
     <div class="card">
       <p class="th-only">
@@ -802,7 +1000,7 @@
           <tr>
             <td><span class="th-only">หยุดภาพ / บันทึก</span><span class="en-only">Freeze / Save</span></td>
             <td><span class="th-only">❌ ไม่ได้</span><span class="en-only">❌ No</span></td>
-            <td><span class="th-only">✅ ได้ — กด RUN/STOP (หัวข้อ 6-3) และเก็บเป็นไฟล์ได้</span><span class="en-only">✅ Yes — press RUN/STOP (Section 6-3) and save to file</span></td>
+            <td><span class="th-only">✅ ได้ — กด RUN/STOP และเก็บเป็นไฟล์ได้</span><span class="en-only">✅ Yes — press RUN/STOP and save to file</span></td>
           </tr>
           <tr>
             <td><span class="th-only">วัดค่าอัตโนมัติ (Vpp, f, RMS)</span><span class="en-only">Auto measure (Vpp, f, RMS)</span></td>
@@ -817,12 +1015,12 @@
         </tbody>
       </table>
       <p class="th-only" style="font-size:0.92rem;margin-bottom:0;">
-        <strong>สรุป:</strong> ปัจจุบันห้องปฏิบัติการใช้ <strong>DSO เป็นหลัก</strong> (เช่น Tektronix TDS2024 ในหัวข้อ 6-3)
-        ส่วนแบบ Analog/CRT เรียนไว้เพื่อเข้าใจหลักการกำเนิดภาพบนจอ (หัวข้อ 6-2)
+        <strong>สรุป:</strong> ปัจจุบันห้องปฏิบัติการใช้ <strong>DSO เป็นหลัก</strong> (เช่น Tektronix TDS2024)
+        ส่วนแบบ Analog/CRT เรียนไว้เพื่อเข้าใจหลักการกำเนิดภาพบนจอ
       </p>
       <p class="en-only" style="font-size:0.92rem;margin-bottom:0;">
-        <strong>Summary:</strong> Modern labs mainly use <strong>DSOs</strong> (such as the Tektronix TDS2024 in Section 6-3),
-        while the Analog/CRT type is studied to understand how the image is formed on screen (Section 6-2).
+        <strong>Summary:</strong> Modern labs mainly use <strong>DSOs</strong> (such as the Tektronix TDS2024),
+        while the Analog/CRT type is studied to understand how the image is formed on screen.
       </p>
     </div>
   </div>
@@ -838,5 +1036,6 @@
 </footer>
 <script>const CURRENT_PAGE='oscilloscope';</script>
 <script src="nav.js"></script>
+<script src="osc-reader.js"></script>
 </body>
 </html>
