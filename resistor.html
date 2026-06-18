@@ -230,8 +230,32 @@
               V<sub>out</sub> = 5 × 10/(10+10) = <strong>2.5 V</strong>
             </span>
           </div>
-          <p class="th-only" style="margin-top:.75rem;font-size:.85rem;color:var(--text-light)">* ใช้กับโหลดกระแสต่ำเท่านั้น (เช่น input ไมโครคอนโทรลเลอร์) ถ้าโหลดดูดกระแสมาก V<sub>out</sub> จะต่ำกว่าที่คำนวณ</p>
-          <p class="en-only" style="margin-top:.75rem;font-size:.85rem;color:var(--text-light)">* Works best with high-impedance loads (e.g. microcontroller inputs). A low-resistance load will pull V<sub>out</sub> below the calculated value.</p>
+          <div style="margin-top:1rem">
+            <p class="th-only" style="font-weight:600;margin-bottom:.5rem;">ใช้ทำอะไร?</p>
+            <p class="en-only" style="font-weight:600;margin-bottom:.5rem;">Common uses</p>
+            <ul class="content-list th-only">
+              <li>ลดแรงดัน เช่น 5V → 2.5V ก่อนป้อนเข้า input ของไมโครคอนโทรลเลอร์</li>
+              <li>อ่านค่าเซ็นเซอร์แบบ resistive เช่น LDR (แสง), NTC (อุณหภูมิ)</li>
+              <li>สร้างจุดอ้างอิงแรงดัน (Reference voltage) ในวงจรขยาย</li>
+            </ul>
+            <ul class="content-list en-only">
+              <li>Step down voltage, e.g. 5V → 2.5V before a microcontroller input</li>
+              <li>Read resistive sensors such as LDR (light) or NTC thermistor (temperature)</li>
+              <li>Set a reference voltage in amplifier circuits</li>
+            </ul>
+          </div>
+          <div class="warn-box th-only" style="margin-top:1rem">
+            <strong>ข้อจำกัด:</strong><br>
+            • ใช้ได้ดีเฉพาะกับโหลดที่มี impedance สูง (กินกระแสน้อย) เท่านั้น<br>
+            • ถ้าโหลดดูดกระแสมาก V<sub>out</sub> จะต่ำกว่าที่คำนวณ เรียกว่า <strong>Loading Effect</strong><br>
+            • ถ้าต้องการจ่ายกระแสให้โหลดได้มาก ควรใช้ <strong>LDO Voltage Regulator</strong> แทน
+          </div>
+          <div class="warn-box en-only" style="margin-top:1rem">
+            <strong>Limitations:</strong><br>
+            • Works well only with high-impedance loads (low current draw)<br>
+            • A heavy load pulls V<sub>out</sub> below the calculated value — called <strong>Loading Effect</strong><br>
+            • For loads that need more current, use an <strong>LDO Voltage Regulator</strong> instead
+          </div>
         </div>
       </div>
     </div>
