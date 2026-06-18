@@ -85,14 +85,6 @@ const QUIZ_CATEGORIES_TH = [
     {q:'ฟองน้ำ (Sponge) ที่ใช้กับหัวแร้งมีไว้เพื่ออะไร?',opts:['วางหัวแร้งระหว่างพัก','เช็ดทำความสะอาดหัวแร้ง','ทำให้หัวแร้งเย็น','ดูดตะกั่วส่วนเกิน'],ans:1,exp:'ฟองน้ำเปียกใช้เช็ดทำความสะอาดหัวแร้ง ขจัดตะกั่วเก่าและฟลักซ์ที่ไหม้'},
     {q:'หัวแร้งบัดกรี 25-40W เหมาะกับงานใด?',opts:['งาน SMD ละเอียดมาก','งานบัดกรีทั่วไปบน PCB','งานเชื่อมสายไฟใหญ่','งานบัดกรีชิปไอซี'],ans:1,exp:'หัวแร้ง 25-40W เหมาะกับงานบัดกรีทั่วไปบน PCB'},
   ]},
-  { id:'ac-circuit', icon:'〜', name:'วงจร AC', questions:[
-    {q:'ไฟบ้านในประเทศไทยมีความถี่กี่ Hz?',opts:['25 Hz','50 Hz','60 Hz','100 Hz'],ans:1,exp:'ไฟบ้านในประเทศไทย (และส่วนใหญ่ของโลก) ใช้ความถี่ 50 Hz ต่างจากสหรัฐอเมริกาที่ใช้ 60 Hz'},
-    {q:'ค่า Peak Voltage (Vpeak) ของไฟบ้าน 220V RMS คือเท่าไร?',opts:['220 V','255 V','311 V','380 V'],ans:2,exp:'Vpeak = Vrms × √2 = 220 × 1.414 ≈ 311 V ค่า RMS คือค่าประสิทธิผลที่เทียบเท่ากับ DC'},
-    {q:'คาบ (Period, T) ของไฟ AC 50 Hz มีค่าเท่าไร?',opts:['5 ms','10 ms','20 ms','50 ms'],ans:2,exp:'T = 1/f = 1/50 = 0.02 s = 20 ms ความถี่และคาบเป็นส่วนกลับกัน'},
-    {q:'Impedance (Z) ของวงจร RC อนุกรมคำนวณจาก?',opts:['Z = R + Xc','Z = R − Xc','Z = √(R² + Xc²)','Z = R × Xc'],ans:2,exp:'Z = √(R² + Xc²) เนื่องจาก R และ Xc มีเฟสต่างกัน 90° ต้องใช้ Pythagoras ในการหาค่ารวม'},
-    {q:'Capacitive Reactance (Xc) จะมีค่าเพิ่มขึ้นเมื่อใด?',opts:['ความถี่เพิ่มขึ้น','ความถี่ลดลง','แรงดันเพิ่มขึ้น','ความจุเพิ่มขึ้น'],ans:1,exp:'Xc = 1/(2πfC) ความถี่ต่ำ → Xc สูง ตัวเก็บประจุจะบล็อก DC (f=0) และยอมให้ AC ความถี่สูงผ่านได้ดี'},
-    {q:'ในวงจร AC กระแสในตัวเก็บประจุ (C) สัมพันธ์กับแรงดันอย่างไร?',opts:['กระแสตามหลังแรงดัน 90°','กระแสนำหน้าแรงดัน 90°','กระแสและแรงดันเฟสตรงกัน','กระแสนำหน้าแรงดัน 180°'],ans:1,exp:'ใน Capacitor กระแสนำหน้าแรงดัน 90° (I leads V) ส่วนใน Inductor กระแสตามหลังแรงดัน 90° (I lags V)'},
-  ]},
   { id:'components', icon:'🔌', name:'อุปกรณ์สารกึ่งตัวนำ', questions:[
     {q:'ซีเนอร์ไดโอด (Zener Diode) แตกต่างจากไดโอดทั่วไปอย่างไร?',opts:['กระแสไหลได้สองทิศ','ควบคุมแรงดันให้คงที่ใน Reverse Bias','ขยายกำลัง','แทนตัวต้านทานได้'],ans:1,exp:'Zener Diode รักษาแรงดันให้คงที่ที่ค่า Zener Voltage ใช้ทำวงจร Voltage Regulator'},
     {q:'ทรานซิสเตอร์ (Transistor) ใช้งานหลักในด้านใด?',opts:['เก็บและปล่อยประจุ','ขยายสัญญาณและเป็นสวิตช์','แปลง AC เป็น DC','วัดกระแส'],ans:1,exp:'ทรานซิสเตอร์ใช้เป็นตัวขยายสัญญาณและสวิตช์ โดยกระแสที่ Base ควบคุมกระแส Collector-Emitter'},
@@ -188,14 +180,6 @@ const QUIZ_CATEGORIES_EN = [
     {q:'Where should solder wire be fed during soldering?',opts:['Directly onto the iron tip','At the junction between the component lead and pad','Only at the component lead','Only at the pad'],ans:1,exp:'Feed solder at the joint — not the iron tip — so it flows into the joint by itself.'},
     {q:'What is the sponge used with a soldering iron for?',opts:['To rest the iron while not in use','To clean the soldering iron tip','To cool the iron down','To absorb excess solder'],ans:1,exp:'A damp sponge is used to clean the iron tip, removing old solder and burnt flux.'},
     {q:'A 25–40W soldering iron is best suited for which type of work?',opts:['Very fine SMD work','General PCB soldering','Large wire splicing','Soldering IC chips'],ans:1,exp:'A 25–40W iron is ideal for general through-hole PCB soldering.'},
-  ]},
-  { id:'ac-circuit', icon:'〜', name:'AC Circuit', questions:[
-    {q:'What is the frequency of household electricity in Thailand?',opts:['25 Hz','50 Hz','60 Hz','100 Hz'],ans:1,exp:'Thailand (and most of the world) uses 50 Hz. The USA uses 60 Hz.'},
-    {q:'What is the Peak Voltage of a 220V RMS supply?',opts:['220 V','255 V','311 V','380 V'],ans:2,exp:'Vpeak = Vrms × √2 = 220 × 1.414 ≈ 311 V. RMS is the effective value equivalent to DC.'},
-    {q:'What is the period of a 50 Hz AC supply?',opts:['5 ms','10 ms','20 ms','50 ms'],ans:2,exp:'T = 1/f = 1/50 = 0.02 s = 20 ms. Frequency and period are reciprocals of each other.'},
-    {q:'How is Impedance (Z) of a series RC circuit calculated?',opts:['Z = R + Xc','Z = R − Xc','Z = √(R² + Xc²)','Z = R × Xc'],ans:2,exp:'Z = √(R² + Xc²) because R and Xc are 90° out of phase — Pythagoras theorem applies.'},
-    {q:'Capacitive Reactance (Xc) increases when?',opts:['Frequency increases','Frequency decreases','Voltage increases','Capacitance increases'],ans:1,exp:'Xc = 1/(2πfC) — lower frequency → higher Xc. Capacitors block DC (f=0) and pass high-frequency AC easily.'},
-    {q:'In an AC circuit, how does current in a capacitor relate to voltage in phase?',opts:['Current lags voltage by 90°','Current leads voltage by 90°','Current and voltage are in phase','Current leads voltage by 180°'],ans:1,exp:'In a capacitor, current leads voltage by 90° (I leads V). In an inductor, current lags voltage by 90° (I lags V).'},
   ]},
   { id:'components', icon:'🔌', name:'Semiconductor Devices', questions:[
     {q:'How does a Zener Diode differ from a regular diode?',opts:['Current flows both ways','Maintains a stable voltage in reverse bias','Amplifies power','Can replace a resistor'],ans:1,exp:'A Zener Diode maintains a constant voltage at its Zener Voltage in reverse bias. Used in Voltage Regulator circuits.'},

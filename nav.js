@@ -6,7 +6,6 @@ const NAV_LESSON_GROUPS = [
     items: [
       { id: 'electricity', href: 'electricity.html', label_th: '⚡ ไฟฟ้าเบื้องต้น', label_en: '⚡ Electricity Basics' },
       { id: 'ohm', href: 'ohm.html', label_th: '🔢 กฎของโอห์ม', label_en: "🔢 Ohm's Law" },
-      { id: 'ac-circuit', href: 'ac-circuit.html', label_th: '〜 วงจร AC', label_en: '〜 AC Circuit' },
     ],
   },
   {
