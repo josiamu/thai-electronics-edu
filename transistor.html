@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="ทรานซิสเตอร์ | สื่อการเรียนการสอน" data-title-en="Transistor | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ทรานซิสเตอร์ | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* bullet lists that flow as normal text (avoid .content-list flex layout) */
+.flow-list { list-style:none; padding:0; margin:0; }
+.flow-list li { position:relative; padding:.4rem 0 .4rem 1.2rem; border-bottom:1px solid var(--border); font-size:.92rem; }
+.flow-list li:last-child { border-bottom:none; }
+.flow-list li::before { content:"▸"; position:absolute; left:0; color:var(--accent); font-weight:700; }
+.sym-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:1rem; text-align:center; }
+.sym-grid svg { max-width:100%; }
+.sym-card { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; }
+.sym-card h4 { margin:.4rem 0 0; color:var(--primary); font-size:.95rem; }
+
+/* Interactive BJT switch simulator */
+.tr-wrap { display:grid; grid-template-columns:1fr 285px; gap:1.25rem; align-items:start; }
+@media (max-width:860px){ .tr-wrap{ grid-template-columns:1fr; } }
+.tr-screen { width:100%; height:auto; display:block; border-radius:12px; background:var(--bg); border:1px solid var(--border); }
+.tr-panel { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:.9rem 1rem; }
+.tr-ctrl { margin-bottom:.9rem; }
+.tr-ctrl-row { display:flex; justify-content:space-between; align-items:center; font-size:.84rem; font-weight:600; margin-bottom:.25rem; }
+.tr-ctrl-row span { color:var(--primary); font-size:.9rem; }
+.tr-ctrl input[type=range] { width:100%; cursor:pointer; accent-color:var(--primary); }
+.tr-fixed { font-size:.8rem; color:var(--text-light); background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:.4rem .6rem; margin-bottom:.9rem; }
+.tr-badge { text-align:center; font-weight:800; font-size:1.05rem; padding:.5rem; border-radius:10px; margin-bottom:.6rem; color:#fff; }
+.tr-readout { display:grid; grid-template-columns:1fr 1fr; gap:.45rem; }
+.tr-rb { background:var(--bg); border:1px solid var(--border); border-radius:9px; padding:.45rem .6rem; text-align:center; }
+.tr-rb.s2 { grid-column:1/-1; text-align:left; }
+.tr-rl { font-size:.72rem; color:var(--text-light); margin-bottom:.12rem; }
+.tr-rv { font-size:1.02rem; font-weight:700; color:var(--text); }
+.tr-rb .calc { font-size:.78rem; font-weight:600; color:var(--text); }
+.part-num { font-family:monospace; font-weight:700; color:var(--primary); }
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🎚️</div>
+    <div>
+      <h1 class="th-only">ทรานซิสเตอร์ (Transistor)</h1>
+      <h1 class="en-only">Transistor</h1>
+      <p class="th-only">BJT • NPN / PNP • สวิตช์ & ขยายสัญญาณ • β (hFE)</p>
+      <p class="en-only">BJT • NPN / PNP • Switch &amp; Amplifier • β (hFE)</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- SECTION 1: วัตถุประสงค์ -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">วัตถุประสงค์การเรียนรู้</span><span class="en-only">Learning Objectives</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li>บอกชนิดและโครงสร้างของทรานซิสเตอร์ได้</li>
+        <li>อธิบายหลักการทำงานเป็นสวิตช์และวงจรขยายได้</li>
+        <li>คำนวณกระแสและอัตราขยาย (β) ของ BJT ได้</li>
+        <li>ตรวจสอบทรานซิสเตอร์ดี/เสียด้วยมัลติมิเตอร์ได้</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>Identify the types and structure of transistors</li>
+        <li>Explain how a transistor works as a switch and amplifier</li>
+        <li>Calculate BJT currents and current gain (β)</li>
+        <li>Test a transistor with a multimeter</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 2: ทรานซิสเตอร์คืออะไร + ชนิด -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ทรานซิสเตอร์คืออะไร</span><span class="en-only">What Is a Transistor?</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <p class="th-only">ทรานซิสเตอร์เป็นอุปกรณ์<strong>สารกึ่งตัวนำ 3 ขา</strong> ที่ใช้กระแส (หรือแรงดัน) เล็กๆ ที่ขาควบคุม
+            ไป<strong>ควบคุมกระแสขนาดใหญ่</strong>ระหว่างอีกสองขา จึงทำหน้าที่ได้ทั้ง <strong>สวิตช์</strong> และ <strong>วงจรขยายสัญญาณ</strong>
+            ถือเป็นหัวใจของอุปกรณ์อิเล็กทรอนิกส์ทุกชนิด</p>
+          <p class="en-only">A transistor is a <strong>3-terminal semiconductor</strong> device in which a small control current (or voltage)
+            <strong>controls a much larger current</strong> between the other two terminals. It acts as both a <strong>switch</strong>
+            and a <strong>signal amplifier</strong> — the heart of all modern electronics.</p>
+        </div>
+        <div>
+          <div class="info-box th-only">
+            <strong>ชนิดหลัก:</strong><br>
+            • <strong>BJT</strong> (Bipolar Junction Transistor) — ควบคุมด้วยกระแส มี NPN และ PNP<br>
+            • <strong>FET / MOSFET</strong> — ควบคุมด้วยแรงดันที่ขา Gate กินกระแสน้อยมาก ใช้ในวงจรกำลังและดิจิตัล
+          </div>
+          <div class="info-box en-only">
+            <strong>Main types:</strong><br>
+            • <strong>BJT</strong> (Bipolar Junction Transistor) — current-controlled, comes as NPN and PNP<br>
+            • <strong>FET / MOSFET</strong> — voltage-controlled at the Gate, draws almost no current; used in power and digital circuits
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: สัญลักษณ์และขา -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">สัญลักษณ์และขาของทรานซิสเตอร์</span><span class="en-only">Symbols &amp; Terminals</span></div>
+    <div class="card">
+      <p class="th-only" style="margin-bottom:1rem;">BJT มี 3 ขา: <strong>B</strong> (Base, ขาควบคุม) • <strong>C</strong> (Collector) • <strong>E</strong> (Emitter)
+        — สังเกตหัวลูกศรที่ขา Emitter: <strong>NPN ลูกศรชี้ออก</strong>, <strong>PNP ลูกศรชี้เข้า</strong></p>
+      <p class="en-only" style="margin-bottom:1rem;">A BJT has 3 terminals: <strong>B</strong> (Base, control) • <strong>C</strong> (Collector) • <strong>E</strong> (Emitter).
+        The emitter arrow tells the type: <strong>NPN points out</strong>, <strong>PNP points in</strong>.</p>
+      <div class="sym-grid">
+
+        <div class="sym-card">
+          <svg viewBox="0 0 160 140" width="160" height="140" aria-label="NPN transistor symbol">
+            <circle cx="86" cy="70" r="42" fill="none" stroke="var(--border)" stroke-width="1.5"/>
+            <line x1="20" y1="70" x2="60" y2="70" stroke="var(--text)" stroke-width="2.5"/>
+            <line x1="60" y1="42" x2="60" y2="98" stroke="var(--text)" stroke-width="3.5"/>
+            <line x1="60" y1="55" x2="108" y2="30" stroke="var(--text)" stroke-width="2.5"/>
+            <line x1="108" y1="30" x2="108" y2="14" stroke="var(--text)" stroke-width="2.5"/>
+            <line x1="60" y1="85" x2="108" y2="110" stroke="var(--text)" stroke-width="2.5"/>
+            <line x1="108" y1="110" x2="108" y2="126" stroke="var(--text)" stroke-width="2.5"/>
+            <polygon points="92,98 104,108 88,112" fill="var(--primary)"/>
+            <text x="14" y="64" font-size="12" fill="var(--text-light)">B</text>
+            <text x="114" y="20" font-size="12" fill="var(--text-light)">C</text>
+            <text x="114" y="124" font-size="12" fill="var(--text-light)">E</text>
+          </svg>
+          <h4>NPN</h4>
+        </div>
+
+        <div class="sym-card">
+          <svg viewBox="0 0 160 140" width="160" height="140" aria-label="PNP transistor symbol">
+            <circle cx="86" cy="70" r="42" fill="none" stroke="var(--border)" stroke-width="1.5"/>
+            <line x1="20" y1="70" x2="60" y2="70" stroke="var(--text)" stroke-width="2.5"/>
+            <line x1="60" y1="42" x2="60" y2="98" stroke="var(--text)" stroke-width="3.5"/>
+            <line x1="60" y1="55" x2="108" y2="30" stroke="var(--text)" stroke-width="2.5"/>
+            <line x1="108" y1="30" x2="108" y2="14" stroke="var(--text)" stroke-width="2.5"/>
+            <line x1="60" y1="85" x2="108" y2="110" stroke="var(--text)" stroke-width="2.5"/>
+            <line x1="108" y1="110" x2="108" y2="126" stroke="var(--text)" stroke-width="2.5"/>
+            <polygon points="60,85 76,80 72,94" fill="var(--accent)"/>
+            <text x="14" y="64" font-size="12" fill="var(--text-light)">B</text>
+            <text x="114" y="20" font-size="12" fill="var(--text-light)">C</text>
+            <text x="114" y="124" font-size="12" fill="var(--text-light)">E</text>
+          </svg>
+          <h4>PNP</h4>
+        </div>
+
+        <div class="sym-card">
+          <svg viewBox="0 0 160 140" width="160" height="140" aria-label="N-channel MOSFET symbol">
+            <circle cx="86" cy="70" r="42" fill="none" stroke="var(--border)" stroke-width="1.5"/>
+            <line x1="22" y1="70" x2="52" y2="70" stroke="var(--text)" stroke-width="2.5"/>
+            <line x1="52" y1="44" x2="52" y2="96" stroke="var(--text)" stroke-width="2"/>
+            <line x1="62" y1="46" x2="62" y2="62" stroke="var(--text)" stroke-width="3.5"/>
+            <line x1="62" y1="62" x2="62" y2="78" stroke="var(--text)" stroke-width="3.5"/>
+            <line x1="62" y1="78" x2="62" y2="94" stroke="var(--text)" stroke-width="3.5"/>
+            <line x1="62" y1="54" x2="108" y2="54" stroke="var(--text)" stroke-width="2.5"/>
+            <line x1="108" y1="54" x2="108" y2="14" stroke="var(--text)" stroke-width="2.5"/>
+            <line x1="62" y1="86" x2="108" y2="86" stroke="var(--text)" stroke-width="2.5"/>
+            <line x1="108" y1="86" x2="108" y2="126" stroke="var(--text)" stroke-width="2.5"/>
+            <line x1="62" y1="70" x2="90" y2="70" stroke="var(--text)" stroke-width="2"/>
+            <polygon points="78,70 90,64 90,76" fill="var(--secondary)"/>
+            <text x="16" y="64" font-size="12" fill="var(--text-light)">G</text>
+            <text x="114" y="20" font-size="12" fill="var(--text-light)">D</text>
+            <text x="114" y="124" font-size="12" fill="var(--text-light)">S</text>
+          </svg>
+          <h4>N-MOSFET</h4>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: หลักการทำงาน -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">หลักการทำงาน (BJT)</span><span class="en-only">How a BJT Works</span></div>
+    <div class="card">
+      <p class="th-only">เมื่อป้อนแรงดันที่ขา Base ให้รอยต่อ B-E นำกระแส (V<sub>BE</sub> ≈ 0.7V) จะมี <strong>กระแสเบส I<sub>B</sub></strong> เล็กๆ ไหล
+        แล้ว <strong>เหนี่ยวนำให้กระแสคอลเลกเตอร์ I<sub>C</sub> ขนาดใหญ่</strong> ไหลจาก C ไป E
+        โดย I<sub>C</sub> = β × I<sub>B</sub> — กระแสเล็กควบคุมกระแสใหญ่ จึงเกิดการ "ขยาย"</p>
+      <p class="en-only">When the Base is driven so the B-E junction conducts (V<sub>BE</sub> ≈ 0.7V), a small <strong>base current I<sub>B</sub></strong> flows,
+        which lets a much <strong>larger collector current I<sub>C</sub></strong> flow from C to E, where I<sub>C</sub> = β × I<sub>B</sub>.
+        A small current controls a large one — that is "amplification".</p>
+      <div class="info-box th-only" style="margin-top:1rem;">
+        💡 <strong>เปรียบเทียบ:</strong> ทรานซิสเตอร์เหมือน "ก๊อกน้ำ" — มือหมุนเบาๆ (I<sub>B</sub>) ควบคุมน้ำไหลแรงๆ (I<sub>C</sub>)
+      </div>
+      <div class="info-box en-only" style="margin-top:1rem;">
+        💡 <strong>Analogy:</strong> a transistor is like a "water tap" — a light turn of the handle (I<sub>B</sub>) controls a strong flow (I<sub>C</sub>)
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: 3 ย่านทำงาน -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">3 ย่านการทำงาน</span><span class="en-only">Three Operating Regions</span></div>
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th><span class="th-only">ย่าน</span><span class="en-only">Region</span></th>
+              <th><span class="th-only">เงื่อนไข</span><span class="en-only">Condition</span></th>
+              <th>I<sub>C</sub></th>
+              <th><span class="th-only">การใช้งาน</span><span class="en-only">Use</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Cut-off</strong><br><span class="th-only">หยุดนำ</span><span class="en-only">Off</span></td>
+              <td>V<sub>BE</sub> &lt; 0.7V (I<sub>B</sub> ≈ 0)</td>
+              <td>≈ 0</td>
+              <td><span class="th-only">สวิตช์ <strong>ปิด</strong> (OFF)</span><span class="en-only">Switch <strong>OFF</strong></span></td>
+            </tr>
+            <tr>
+              <td><strong>Active</strong><br><span class="th-only">ขยาย</span><span class="en-only">Active</span></td>
+              <td><span class="th-only">I<sub>B</sub> น้อย, V<sub>CE</sub> ยังสูง</span><span class="en-only">small I<sub>B</sub>, V<sub>CE</sub> &gt; V<sub>CE(sat)</sub></span></td>
+              <td>β × I<sub>B</sub></td>
+              <td><span class="th-only">วงจร<strong>ขยายสัญญาณ</strong></span><span class="en-only"><strong>Amplifier</strong></span></td>
+            </tr>
+            <tr>
+              <td><strong>Saturation</strong><br><span class="th-only">อิ่มตัว</span><span class="en-only">Saturation</span></td>
+              <td><span class="th-only">I<sub>B</sub> มากพอ, V<sub>CE</sub> ≈ 0.2V</span><span class="en-only">enough I<sub>B</sub>, V<sub>CE</sub> ≈ 0.2V</span></td>
+              <td><span class="th-only">สูงสุด</span><span class="en-only">max</span></td>
+              <td><span class="th-only">สวิตช์ <strong>เปิด</strong> (ON)</span><span class="en-only">Switch <strong>ON</strong></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: สูตร -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">สูตรสำคัญ</span><span class="en-only">Key Formulas</span></div>
+    <div class="card">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem;">
+        <div>
+          <div class="section-subtitle" style="margin-top:0;"><span class="th-only">ความสัมพันธ์กระแส</span><span class="en-only">Current Relations</span></div>
+          <div class="formula-box" style="margin:.4rem 0;padding:.6rem .9rem;"><div class="formula" style="font-size:1rem;">I<sub>E</sub> = I<sub>C</sub> + I<sub>B</sub></div></div>
+          <div class="formula-box" style="margin:.4rem 0;padding:.6rem .9rem;"><div class="formula" style="font-size:1rem;">I<sub>C</sub> = β × I<sub>B</sub></div></div>
+        </div>
+        <div>
+          <div class="section-subtitle" style="margin-top:0;"><span class="th-only">อัตราขยายกระแส β (hFE)</span><span class="en-only">Current Gain β (hFE)</span></div>
+          <div class="formula-box" style="margin:.4rem 0;padding:.6rem .9rem;"><div class="formula" style="font-size:1rem;">β = I<sub>C</sub> / I<sub>B</sub></div></div>
+          <p class="th-only" style="font-size:.86rem;color:var(--text-light);margin:.4rem 0 0;">β ทั่วไป 50–300 (ทรานซิสเตอร์สัญญาณเล็ก)</p>
+          <p class="en-only" style="font-size:.86rem;color:var(--text-light);margin:.4rem 0 0;">Typical β is 50–300 for small-signal transistors</p>
+        </div>
+        <div>
+          <div class="section-subtitle" style="margin-top:0;"><span class="th-only">แรงดันคอลเลกเตอร์</span><span class="en-only">Collector Voltage</span></div>
+          <div class="formula-box" style="margin:.4rem 0;padding:.6rem .9rem;"><div class="formula" style="font-size:.95rem;">V<sub>CE</sub> = V<sub>CC</sub> − I<sub>C</sub>R<sub>C</sub></div></div>
+          <p class="th-only" style="font-size:.86rem;color:var(--text-light);margin:.4rem 0 0;">ตอนอิ่มตัว V<sub>CE</sub> ≈ 0.2V</p>
+          <p class="en-only" style="font-size:.86rem;color:var(--text-light);margin:.4rem 0 0;">At saturation V<sub>CE</sub> ≈ 0.2V</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: Interactive BJT switch simulator -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">⚡ ทดลอง: BJT เป็นสวิตช์ (โต้ตอบได้)</span><span class="en-only">⚡ Interactive: BJT as a Switch</span></div>
+    <div class="card" style="padding:1.25rem;">
+      <p class="th-only" style="margin:0 0 1rem;font-size:.92rem;color:var(--text-light);">
+        ปรับ <strong>กระแสเบส I<sub>B</sub></strong> และ <strong>β</strong> แล้วดูว่าทรานซิสเตอร์เคลื่อนผ่าน 3 ย่าน
+        (Cut-off → Active → Saturation) อย่างไร — หลอด LED จะสว่างตาม I<sub>C</sub>
+      </p>
+      <p class="en-only" style="margin:0 0 1rem;font-size:.92rem;color:var(--text-light);">
+        Adjust the <strong>base current I<sub>B</sub></strong> and <strong>β</strong> to see the transistor move through the three regions
+        (Cut-off → Active → Saturation) — the LED brightness follows I<sub>C</sub>.
+      </p>
+      <div class="tr-wrap">
+        <div>
+          <canvas id="tr-canvas" class="tr-screen"></canvas>
+        </div>
+        <div>
+          <div class="tr-panel">
+            <div style="font-weight:700;font-size:.9rem;margin-bottom:.7rem;color:var(--primary);">
+              <span class="th-only">⚙ ปรับค่า</span><span class="en-only">⚙ Adjust</span>
+            </div>
+            <div class="tr-fixed">V<sub>CC</sub> = 9 V &nbsp;•&nbsp; R<sub>C</sub> = 470 Ω &nbsp;•&nbsp; V<sub>CE(sat)</sub> = 0.2 V</div>
+            <div class="tr-ctrl">
+              <div class="tr-ctrl-row"><label>I<sub>B</sub> (<span class="th-only">กระแสเบส</span><span class="en-only">base current</span>)</label><span id="tr-ib-val">100 µA</span></div>
+              <input type="range" id="tr-ib" min="0" max="300" step="5" value="100">
+            </div>
+            <div class="tr-ctrl">
+              <div class="tr-ctrl-row"><label>β (hFE)</label><span id="tr-beta-val">100</span></div>
+              <input type="range" id="tr-beta" min="50" max="300" step="10" value="100">
+            </div>
+          </div>
+          <div id="tr-badge" class="tr-badge" style="margin-top:1rem;">ACTIVE</div>
+          <div class="tr-readout">
+            <div class="tr-rb"><div class="tr-rl">I<sub>C</sub></div><div class="tr-rv" id="tr-ic">— mA</div></div>
+            <div class="tr-rb"><div class="tr-rl">V<sub>CE</sub></div><div class="tr-rv" id="tr-vce">— V</div></div>
+            <div class="tr-rb s2"><div class="tr-rl">I<sub>C</sub> = β × I<sub>B</sub></div><div class="calc" id="tr-eq"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 8: การใช้งาน -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">การใช้งานจริง</span><span class="en-only">Real-World Applications</span></div>
+    <div class="card">
+      <ul class="flow-list th-only">
+        <li><strong>สวิตช์อิเล็กทรอนิกส์:</strong> ใช้สัญญาณเล็กจากไมโครคอนโทรลเลอร์ขับ LED, รีเลย์, มอเตอร์, บัซเซอร์</li>
+        <li><strong>วงจรขยายสัญญาณ:</strong> ขยายเสียง (audio amplifier), ขยายสัญญาณเซ็นเซอร์</li>
+        <li><strong>วงจรดิจิตัล / ลอจิกเกต:</strong> เป็นองค์ประกอบพื้นฐานภายในไอซีและ CPU</li>
+        <li><strong>วงจรกำเนิดสัญญาณ (Oscillator)</strong> และวงจรควบคุมแรงดัน</li>
+      </ul>
+      <ul class="flow-list en-only">
+        <li><strong>Electronic switch:</strong> a small microcontroller signal drives LEDs, relays, motors, buzzers</li>
+        <li><strong>Amplifier:</strong> audio amplifiers, boosting weak sensor signals</li>
+        <li><strong>Digital / logic gates:</strong> the basic building block inside ICs and CPUs</li>
+        <li><strong>Oscillators</strong> and voltage-regulation circuits</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 9: เช็คดี/เสียด้วยมัลติมิเตอร์ -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ตรวจสอบด้วยมัลติมิเตอร์ (โหมด Diode)</span><span class="en-only">Testing with a Multimeter (Diode Mode)</span></div>
+    <div class="card">
+      <p class="th-only" style="margin-bottom:.75rem;">มอง BJT เป็นไดโอด 2 ตัว (B-E และ B-C) ตั้งมิเตอร์ที่โหมดทดสอบไดโอด</p>
+      <p class="en-only" style="margin-bottom:.75rem;">Think of a BJT as two diodes (B-E and B-C). Set the meter to diode-test mode.</p>
+      <ul class="flow-list th-only">
+        <li><strong>NPN:</strong> สายแดง (+) ที่ขา B → แตะ C และ E ควรอ่านได้ ~0.6–0.7V ทั้งคู่ (นำกระแส)</li>
+        <li>สลับสาย (แดงที่ C/E, ดำที่ B) → ต้องขึ้น <strong>OL</strong> (ไม่นำ) ทั้งคู่</li>
+        <li>ระหว่าง <strong>C กับ E</strong> ต้องไม่นำกระแสทั้งสองทิศ (OL) — ถ้านำแสดงว่า<strong>ช็อต เสีย</strong></li>
+        <li><strong>PNP:</strong> ตรงข้าม — สายดำ (−) ที่ขา B จึงจะนำกระแสไป C และ E</li>
+      </ul>
+      <ul class="flow-list en-only">
+        <li><strong>NPN:</strong> red lead (+) on B, touch C then E → both should read ~0.6–0.7V (conducting)</li>
+        <li>Swap leads (red on C/E, black on B) → both must show <strong>OL</strong> (no conduction)</li>
+        <li>Between <strong>C and E</strong>, no conduction either way (OL) — if it conducts, the transistor is <strong>shorted/faulty</strong></li>
+        <li><strong>PNP:</strong> reversed — the black lead (−) on B is what conducts to C and E</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 10: เบอร์ยอดนิยม -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">เบอร์ยอดนิยมที่ควรรู้จัก</span><span class="en-only">Common Part Numbers</span></div>
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th><span class="th-only">เบอร์</span><span class="en-only">Part</span></th>
+              <th><span class="th-only">ชนิด</span><span class="en-only">Type</span></th>
+              <th><span class="th-only">การใช้งานทั่วไป</span><span class="en-only">Typical Use</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="part-num">2N2222 / PN2222</td><td>NPN</td><td><span class="th-only">สวิตช์/ขยายทั่วไป ~600mA</span><span class="en-only">General switching/amp, ~600mA</span></td></tr>
+            <tr><td class="part-num">BC547</td><td>NPN</td><td><span class="th-only">สัญญาณเล็ก, วงจรเสียง</span><span class="en-only">Small signal, audio</span></td></tr>
+            <tr><td class="part-num">BC557</td><td>PNP</td><td><span class="th-only">สัญญาณเล็ก (คู่ของ BC547)</span><span class="en-only">Small signal (complement of BC547)</span></td></tr>
+            <tr><td class="part-num">TIP120</td><td><span class="th-only">NPN Darlington</span><span class="en-only">NPN Darlington</span></td><td><span class="th-only">อัตราขยายสูง ขับมอเตอร์/โหลดหนัก</span><span class="en-only">High gain, drives motors/heavy loads</span></td></tr>
+            <tr><td class="part-num">2N3055</td><td><span class="th-only">NPN กำลัง</span><span class="en-only">NPN Power</span></td><td><span class="th-only">กระแสสูง ~15A วงจรเพาเวอร์</span><span class="en-only">High current ~15A, power circuits</span></td></tr>
+            <tr><td class="part-num">IRFZ44N</td><td>N-MOSFET</td><td><span class="th-only">สวิตช์กระแสสูง, PWM, มอเตอร์</span><span class="en-only">High-current switching, PWM, motors</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer>
+  <strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong>
+  <strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong>
+</footer>
+<script>const CURRENT_PAGE='transistor';</script>
+<script src="nav.js"></script>
+<script src="transistor-sim.js"></script>
+</body>
+</html>

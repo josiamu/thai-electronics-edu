@@ -45,6 +45,14 @@ const QUIZ_CATEGORIES_TH = [
     {q:'Zener Diode ทำงานในย่าน Bias ใด?',opts:['Forward Bias เท่านั้น','Reverse Bias ที่ Zener Voltage','ทั้งสองย่าน','No Bias'],ans:1,exp:'Zener Diode ออกแบบให้ทำงานใน Reverse Bias ที่แรงดัน Zener Voltage เพื่อรักษาแรงดันให้คงที่'},
     {q:'LED สีแดงมีแรงดัน Vf โดยประมาณเท่าไร?',opts:['0.7 V','1.2 V','1.8–2.0 V','3.0–3.5 V'],ans:2,exp:'LED สีแดงมี Vf ประมาณ 1.8–2.0 V สีน้ำเงินและขาวมี Vf สูงกว่าที่ 3.0–3.5 V'},
   ]},
+  { id:'transistor', icon:'🎚️', name:'ทรานซิสเตอร์', questions:[
+    {q:'ทรานซิสเตอร์ BJT มีกี่ขา และเรียกว่าอะไรบ้าง?',opts:['2 ขา: A-K','3 ขา: B-C-E','3 ขา: G-D-S','4 ขา'],ans:1,exp:'BJT มี 3 ขา: Base (ขาควบคุม), Collector และ Emitter'},
+    {q:'ในย่าน Active กระแส IC ของ BJT คำนวณจากสูตรใด?',opts:['IC = IB / β','IC = β × IB','IC = VCE / RC','IC = IB + IE'],ans:1,exp:'ในย่าน Active กระแสคอลเลกเตอร์ IC = β × IB กระแสเบสเล็กๆ ควบคุมกระแสคอลเลกเตอร์ที่ใหญ่กว่า'},
+    {q:'ถ้า IB = 20 µA และ β = 100 กระแส IC ในย่าน Active มีค่าเท่าไร?',opts:['0.2 mA','2 mA','20 mA','200 µA'],ans:1,exp:'IC = β × IB = 100 × 20µA = 2,000µA = 2 mA'},
+    {q:'ทรานซิสเตอร์ทำหน้าที่เป็นสวิตช์ "เปิด" (ON) ในย่านใด?',opts:['Cut-off','Active','Saturation','Breakdown'],ans:2,exp:'ย่าน Saturation (อิ่มตัว) VCE ≈ 0.2V กระแสไหลเต็มที่ เปรียบเหมือนสวิตช์ปิดวงจร (ON)'},
+    {q:'สัญลักษณ์ NPN ลูกศรที่ขา Emitter ชี้ทิศทางใด?',opts:['ชี้เข้าหา Base','ชี้ออกจาก Base','ไม่มีลูกศร','ชี้ขึ้น'],ans:1,exp:'NPN ลูกศรที่ Emitter ชี้ออกจาก Base ส่วน PNP ลูกศรชี้เข้าหา Base'},
+    {q:'ความสัมพันธ์ของกระแสในทรานซิสเตอร์ข้อใดถูกต้อง?',opts:['IE = IC − IB','IE = IC + IB','IE = IC × IB','IE = IB / IC'],ans:1,exp:'กระแสอิมิตเตอร์ IE = IC + IB เป็นผลรวมของกระแสคอลเลกเตอร์และกระแสเบส'},
+  ]},
   { id:'signal-generator', icon:'📶', name:'เครื่องกำเนิดสัญญาณ', questions:[
     {q:'Function Generator สามารถสร้างสัญญาณรูปคลื่นใดบ้าง?',opts:['คลื่นซายน์เท่านั้น','คลื่นซายน์และสแควร์','ซายน์ สแควร์ และไตรแองเกิล','สัญญาณ DC เท่านั้น'],ans:2,exp:'Function Generator สร้างคลื่น 3 รูปแบบหลัก: ซายน์ (Sine), สแควร์ (Square) และไตรแองเกิล (Triangle)'},
     {q:'คลื่นสแควร์ (Square Wave) มีลักษณะอย่างไร?',opts:['ค่อยๆ เพิ่มและลดอย่างราบเรียบ','สลับระหว่าง High และ Low อย่างฉับพลัน','เพิ่มขึ้นช้า ลงเร็ว','รูปสามเหลี่ยม'],ans:1,exp:'คลื่นสแควร์มีการสลับระหว่าง High และ Low อย่างทันทีทันใด ใช้ในวงจรดิจิตัลและทดสอบ Switching'},
@@ -140,6 +148,14 @@ const QUIZ_CATEGORIES_EN = [
     {q:'How many diodes does a Bridge Rectifier use?',opts:['1','2','3','4'],ans:3,exp:'A Bridge Rectifier uses 4 diodes arranged in a bridge configuration to rectify both half-cycles of AC into DC.'},
     {q:'In which bias region does a Zener Diode operate?',opts:['Forward Bias only','Reverse Bias at Zener Voltage','Both regions','No Bias'],ans:1,exp:'A Zener Diode is designed to operate in Reverse Bias at its Zener Voltage, maintaining a constant voltage.'},
     {q:'What is the approximate Vf of a red LED?',opts:['0.7 V','1.2 V','1.8–2.0 V','3.0–3.5 V'],ans:2,exp:'Red LEDs have Vf ≈ 1.8–2.0 V. Blue and white LEDs have higher Vf at 3.0–3.5 V.'},
+  ]},
+  { id:'transistor', icon:'🎚️', name:'Transistor', questions:[
+    {q:'How many terminals does a BJT have, and what are they?',opts:['2: A-K','3: B-C-E','3: G-D-S','4 terminals'],ans:1,exp:'A BJT has 3 terminals: Base (control), Collector, and Emitter.'},
+    {q:'In the active region, how is a BJT\'s collector current IC calculated?',opts:['IC = IB / β','IC = β × IB','IC = VCE / RC','IC = IB + IE'],ans:1,exp:'In the active region IC = β × IB — a small base current controls a much larger collector current.'},
+    {q:'If IB = 20 µA and β = 100, what is IC in the active region?',opts:['0.2 mA','2 mA','20 mA','200 µA'],ans:1,exp:'IC = β × IB = 100 × 20µA = 2,000µA = 2 mA.'},
+    {q:'In which region does a transistor act as a closed (ON) switch?',opts:['Cut-off','Active','Saturation','Breakdown'],ans:2,exp:'In Saturation, VCE ≈ 0.2V and current flows fully — like a closed switch (ON).'},
+    {q:'In the NPN symbol, which way does the emitter arrow point?',opts:['Into the Base','Out of the Base','No arrow','Upward'],ans:1,exp:'NPN: the emitter arrow points out of the Base. PNP: it points into the Base.'},
+    {q:'Which transistor current relationship is correct?',opts:['IE = IC − IB','IE = IC + IB','IE = IC × IB','IE = IB / IC'],ans:1,exp:'The emitter current IE = IC + IB, the sum of the collector and base currents.'},
   ]},
   { id:'signal-generator', icon:'📶', name:'Signal Generator', questions:[
     {q:'Which waveforms can a Function Generator produce?',opts:['Sine wave only','Sine and Square waves','Sine, Square, and Triangle','DC signals only'],ans:2,exp:'A Function Generator produces three main waveforms: Sine, Square, and Triangle waves.'},
