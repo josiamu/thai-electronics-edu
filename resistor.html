@@ -46,21 +46,112 @@
             <li>Unit: Ohm (Ω)</li>
           </ul>
         </div>
-        <div class="info-box">
-          <span class="th-only"><strong>ชนิดของตัวต้านทาน</strong><br>
-          • Fixed Resistor — ค่าคงที่<br>
-          • Variable Resistor (VR) — ปรับค่าได้<br>
-          • Thermistor (NTC/PTC) — เปลี่ยนตามอุณหภูมิ<br>
-          • LDR — เปลี่ยนตามแสง<br>
-          • Varistor (VDR) — เปลี่ยนตามแรงดัน</span>
-          <span class="en-only"><strong>Types of Resistors</strong><br>
-          • Fixed Resistor — constant value<br>
-          • Variable Resistor (VR) — adjustable<br>
-          • Thermistor (NTC/PTC) — changes with temperature<br>
-          • LDR — changes with light<br>
-          • Varistor (VDR) — changes with voltage</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">ชนิดของตัวต้านทานโดยละเอียด</span><span class="en-only">Resistor Types in Detail</span></div>
+    <div class="grid-2">
+
+      <div class="card">
+        <h3 class="th-only">🔧 Fixed Resistor — ค่าคงที่</h3>
+        <h3 class="en-only">🔧 Fixed Resistor</h3>
+        <p class="th-only">ชนิดที่พบมากที่สุด ค่าความต้านทาน<strong>ไม่เปลี่ยนแปลง</strong>ตามสภาพแวดล้อมใดๆ</p>
+        <p class="en-only">Most common type. Resistance value <strong>does not change</strong> with any external condition.</p>
+        <div class="info-box" style="margin-top:.75rem">
+          <span class="th-only">
+            <strong>การเปลี่ยนแปลง:</strong> ไม่มี — ค่าคงที่ตลอดอายุการใช้งาน<br>
+            <strong>ใช้งาน:</strong> จำกัดกระแส LED, voltage divider, pull-up/pull-down ใน Arduino
+          </span>
+          <span class="en-only">
+            <strong>Behavior:</strong> None — fixed value throughout its lifetime<br>
+            <strong>Used in:</strong> LED current limiting, voltage dividers, pull-up/pull-down resistors
+          </span>
         </div>
       </div>
+
+      <div class="card">
+        <h3 class="th-only">🎛 Variable Resistor (VR) / Potentiometer — ปรับค่าได้</h3>
+        <h3 class="en-only">🎛 Variable Resistor (VR) / Potentiometer</h3>
+        <p class="th-only">มีแกนหมุนหรือสไลด์ — ปรับค่าได้ตั้งแต่ <strong>0Ω จนถึงค่าสูงสุด</strong> (เช่น 10kΩ)</p>
+        <p class="en-only">Has a rotating or sliding shaft — adjustable from <strong>0Ω up to the maximum value</strong> (e.g. 10kΩ)</p>
+        <div class="info-box" style="margin-top:.75rem">
+          <span class="th-only">
+            <strong>การเปลี่ยนแปลง:</strong> หมุนตามเข็ม → R เพิ่ม / ทวนเข็ม → R ลด (ขึ้นกับแบบ)<br>
+            <strong>ใช้งาน:</strong> ปุ่มปรับเสียง, ปรับความสว่าง, ตั้งค่า bias วงจรขยาย
+          </span>
+          <span class="en-only">
+            <strong>Behavior:</strong> Clockwise → R increases / Counter-clockwise → R decreases (depends on wiring)<br>
+            <strong>Used in:</strong> Volume knobs, brightness control, amplifier bias adjustment
+          </span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>🌡 Thermistor — NTC</h3>
+        <p class="th-only"><strong>NTC</strong> = Negative Temperature Coefficient<br>อุณหภูมิสูงขึ้น → R <strong>ลดลง</strong></p>
+        <p class="en-only"><strong>NTC</strong> = Negative Temperature Coefficient<br>Temperature rises → R <strong>decreases</strong></p>
+        <div class="info-box" style="margin-top:.75rem">
+          <span class="th-only">
+            <strong>ตัวอย่าง:</strong> 25°C = 10kΩ → 50°C ≈ 3kΩ → 100°C ≈ 0.5kΩ<br>
+            <strong>ใช้งาน:</strong> เซ็นเซอร์วัดอุณหภูมิ (DS18B20, NTC 10k), ป้องกัน inrush current ในแหล่งจ่ายไฟ
+          </span>
+          <span class="en-only">
+            <strong>Example:</strong> 25°C = 10kΩ → 50°C ≈ 3kΩ → 100°C ≈ 0.5kΩ<br>
+            <strong>Used in:</strong> Temperature sensors, inrush current protection in power supplies
+          </span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>🌡 Thermistor — PTC</h3>
+        <p class="th-only"><strong>PTC</strong> = Positive Temperature Coefficient<br>อุณหภูมิสูงขึ้น → R <strong>เพิ่มขึ้น</strong></p>
+        <p class="en-only"><strong>PTC</strong> = Positive Temperature Coefficient<br>Temperature rises → R <strong>increases</strong></p>
+        <div class="info-box" style="margin-top:.75rem">
+          <span class="th-only">
+            <strong>หลักการ:</strong> เมื่อร้อนเกิน threshold → R พุ่งสูงมาก → กระแสไหลน้อยลงเอง → วงจรเย็นลง → R กลับมาปกติ<br>
+            <strong>ใช้งาน:</strong> ฟิวส์รีเซตได้อัตโนมัติ (Polyfuse), ป้องกันวงจรร้อนเกิน
+          </span>
+          <span class="en-only">
+            <strong>Principle:</strong> When overheated → R spikes → current drops → circuit cools → R returns to normal<br>
+            <strong>Used in:</strong> Self-resetting fuses (Polyfuse), overcurrent protection
+          </span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>☀️ LDR (Light Dependent Resistor)</h3>
+        <p class="th-only">แสงมาก → R <strong>ลดลง</strong> &nbsp;|&nbsp; แสงน้อย / มืด → R <strong>เพิ่มขึ้น</strong></p>
+        <p class="en-only">Bright light → R <strong>decreases</strong> &nbsp;|&nbsp; Darkness → R <strong>increases</strong></p>
+        <div class="info-box" style="margin-top:.75rem">
+          <span class="th-only">
+            <strong>ตัวอย่าง:</strong> กลางแจ้ง ≈ 1kΩ → ในร่ม ≈ 10kΩ → มืดสนิท ≈ 1MΩ<br>
+            <strong>ใช้งาน:</strong> ไฟถนนอัตโนมัติ (เปิดเมื่อมืด), เซ็นเซอร์แสงใน Arduino, กล้องถ่ายรูป
+          </span>
+          <span class="en-only">
+            <strong>Example:</strong> Sunlight ≈ 1kΩ → Indoors ≈ 10kΩ → Complete darkness ≈ 1MΩ<br>
+            <strong>Used in:</strong> Automatic street lights, Arduino light sensors, camera exposure meters
+          </span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>⚡ Varistor (VDR)</h3>
+        <p class="th-only"><strong>VDR</strong> = Voltage Dependent Resistor<br>ปกติ R สูงมาก → แรงดันเกิน threshold → R <strong>ลดฮวบ</strong> ดูดซับพลังงาน</p>
+        <p class="en-only"><strong>VDR</strong> = Voltage Dependent Resistor<br>Normally very high R → voltage exceeds threshold → R <strong>drops sharply</strong>, absorbing energy</p>
+        <div class="info-box" style="margin-top:.75rem">
+          <span class="th-only">
+            <strong>ตัวอย่าง:</strong> ปกติ R ≈ ∞ → แรงดันเกิน 270V (surge) → R ลดต่ำ → ดูดซับพลังงาน surge แทน<br>
+            <strong>ใช้งาน:</strong> ป้องกัน voltage spike จากฟ้าผ่าหรือสวิตช์ตัด, ใน surge protector และ power supply
+          </span>
+          <span class="en-only">
+            <strong>Example:</strong> Normal R ≈ ∞ → surge exceeds 270V → R drops → absorbs surge energy instead of the circuit<br>
+            <strong>Used in:</strong> Lightning/switch transient protection, surge protectors, power supply input stages
+          </span>
+        </div>
+      </div>
+
     </div>
   </div>
 
