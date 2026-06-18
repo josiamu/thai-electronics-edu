@@ -21,6 +21,7 @@ website/
 ├── quiz.js          — ข้อมูลข้อสอบ + logic แบบทดสอบ
 ├── downloads.js     — PDF preview modal + download interactions
 ├── oscilloscope.js  — Interactive I-V Curve Simulator
+├── signal-gen-sim.js — Interactive Waveform Generator (canvas, sine/square/triangle/sawtooth + freq/amp/duty/offset)
 ├── simulation.js    — logic จำลองวงจรและ animation
 ├── index.html          — หน้าหลัก (CURRENT_PAGE='home') — กลุ่มตรงกับ navbar: บทเรียน / งานปฏิบัติ / เครื่องมือ / คลังการเรียนรู้
 ├── electricity.html    — บทที่ 1
@@ -34,7 +35,7 @@ website/
 ├── diode.html          — บทที่ 9: PN Junction, I-V Curve, LED Vf by color, Rectifier Circuit
 ├── home-wiring.html    — บทเสริม: ระบบ L/N/G, แรงดันลอย (Ghost Voltage), ไฟรั่วจริง, Socket Tester, ความปลอดภัย
 ├── oscilloscope.html   — บทที่ 10: โครงสร้าง CRT, การอ่านค่า, สูตร T/f/Vpp, ตัวอย่าง 3 โจทย์, บท 6-4 วงจร Octopus (Curve Tracer) + Interactive I-V Curve Simulator (canvas, 11 อุปกรณ์)
-├── signal-generator.html — บทที่ 11: คลื่น 4 แบบ, โครงสร้าง 7 ส่วน, ตัวอย่างการใช้งาน
+├── signal-generator.html — บทที่ 11: คลื่น 4 แบบ, โครงสร้าง 7 ส่วน, พารามิเตอร์สำคัญ (f/T, Vpp/Vp/Vrms, Duty, Offset) + Interactive Waveform Generator (canvas)
 ├── simulation.html     — จำลองวงจร 3 แบบ (Series/Parallel/Mixed) + วิธีคำนวณ real-time + LED toggle
 ├── formulas.html       — สูตรสรุป + print-friendly
 ├── tools.html          — เครื่องคิดเลข 7 ตัว (4-band + 5-band มีชื่อไทย-อังกฤษครบ)

@@ -78,6 +78,26 @@
   text-anchor: middle;
   font-family: 'Anuphan', sans-serif;
 }
+/* ── Interactive Waveform Generator ── */
+.sg-wrap { display:grid; grid-template-columns:1fr 285px; gap:1.25rem; align-items:start; }
+@media (max-width:860px){ .sg-wrap{ grid-template-columns:1fr; } }
+.sg-screen { width:100%; height:auto; display:block; border-radius:12px; background:#08131a; border:1px solid var(--border); box-shadow:inset 0 2px 16px rgba(0,0,0,.55); }
+.sg-panel { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:.9rem 1rem; }
+.sg-waves { display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:1rem; }
+.sg-wave-btn { flex:1; min-width:58px; padding:.5rem .3rem; border:2px solid var(--border); background:var(--bg); border-radius:10px; cursor:pointer; font-family:inherit; font-size:.78rem; font-weight:600; color:var(--text-light); transition:all .18s; }
+.sg-wave-btn:hover { border-color:var(--primary); color:var(--primary); }
+.sg-wave-btn.active { background:var(--primary); color:#fff; border-color:var(--primary); box-shadow:0 4px 12px rgba(37,99,235,.25); }
+.sg-ctrl { margin-bottom:.8rem; }
+.sg-ctrl.disabled { opacity:.4; pointer-events:none; }
+.sg-ctrl-row { display:flex; justify-content:space-between; align-items:center; font-size:.84rem; font-weight:600; margin-bottom:.25rem; }
+.sg-ctrl-row span { color:var(--primary); font-size:.9rem; }
+.sg-ctrl input[type=range] { width:100%; cursor:pointer; accent-color:var(--primary); }
+.sg-readout { display:grid; grid-template-columns:1fr 1fr; gap:.45rem; margin-top:1rem; }
+.sg-rb { background:var(--bg); border:1px solid var(--border); border-radius:9px; padding:.45rem .6rem; text-align:center; }
+.sg-rb.s2 { grid-column:1/-1; }
+.sg-rl { font-size:.72rem; color:var(--text-light); margin-bottom:.12rem; }
+.sg-rv { font-size:1.02rem; font-weight:700; color:var(--text); }
+.sg-rb.hl .sg-rv { color:var(--primary); }
 </style>
 </head>
 <body>
@@ -121,8 +141,8 @@
   <!-- ============ SECTION 2: ชนิดของเครื่องกำเนิดสัญญาณ ============ -->
   <div class="section">
     <div class="section-title">
-      <span class="th-only">7-1 เครื่องกำเนิดสัญญาณ 5 ชนิด</span>
-      <span class="en-only">7-1 Five Types of Signal Generators</span>
+      <span class="th-only">เครื่องกำเนิดสัญญาณ 5 ชนิด</span>
+      <span class="en-only">Five Types of Signal Generators</span>
     </div>
     <div class="card">
       <table>
@@ -248,8 +268,8 @@
   <!-- ============ SECTION 4: โครงสร้าง Function Generator ============ -->
   <div class="section">
     <div class="section-title">
-      <span class="th-only">7-2 โครงสร้างภายในของ Function Generator</span>
-      <span class="en-only">7-2 Internal Structure of a Function Generator</span>
+      <span class="th-only">โครงสร้างภายในของ Function Generator</span>
+      <span class="en-only">Internal Structure of a Function Generator</span>
     </div>
     <div class="card">
       <p class="th-only" style="margin-bottom:1rem;">Function Generator มี <strong>7 ส่วนสำคัญ</strong> ในวงจรภายใน</p>
@@ -327,169 +347,162 @@
     </div>
   </div>
 
-  <!-- ============ SECTION 6: การใช้งาน Agilent 33120A ============ -->
+  <!-- ============ SECTION 6: พารามิเตอร์สำคัญ ============ -->
   <div class="section">
     <div class="section-title">
-      <span class="th-only">การใช้งาน Agilent 33120A Function Generator</span>
-      <span class="en-only">Using the Agilent 33120A Function Generator</span>
+      <span class="th-only">พารามิเตอร์สำคัญของสัญญาณ</span>
+      <span class="en-only">Key Signal Parameters</span>
     </div>
     <div class="card">
-      <p class="th-only" style="margin-bottom:1rem;">
-        Agilent 33120A เป็น Function Generator ยอดนิยมในห้องปฏิบัติการ
-        มีปุ่มและส่วนควบคุมสำคัญ <strong>12 ส่วน</strong> ดังนี้
-      </p>
-      <p class="en-only" style="margin-bottom:1rem;">
-        The Agilent 33120A is a popular laboratory Function Generator
-        with <strong>12 key controls</strong> as follows:
-      </p>
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th><span class="th-only">ปุ่ม/ส่วนควบคุม</span><span class="en-only">Button / Control</span></th>
-            <th><span class="th-only">หน้าที่</span><span class="en-only">Function</span></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td><strong>Power</strong></td>
-            <td><span class="th-only">เปิด/ปิดเครื่อง</span><span class="en-only">Power on/off</span></td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td><span class="th-only"><strong>ปุ่มหมุน (Knob)</strong></span><span class="en-only"><strong>Rotary Knob</strong></span></td>
-            <td><span class="th-only">หมุนเพื่อปรับเพิ่ม/ลด ความถี่และขนาดสัญญาณ</span><span class="en-only">Rotate to increase/decrease frequency and amplitude values</span></td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td><strong>Sine</strong></td>
-            <td><span class="th-only">เลือกกำเนิดคลื่นไซน์</span><span class="en-only">Select sine wave output</span></td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td><strong>Square</strong></td>
-            <td><span class="th-only">เลือกกำเนิดคลื่นสี่เหลี่ยม</span><span class="en-only">Select square wave output</span></td>
-          </tr>
-          <tr>
-            <td>5</td>
-            <td><strong>Triangle</strong></td>
-            <td><span class="th-only">เลือกกำเนิดคลื่นสามเหลี่ยม</span><span class="en-only">Select triangle wave output</span></td>
-          </tr>
-          <tr>
-            <td>6</td>
-            <td><strong>Sawtooth</strong></td>
-            <td><span class="th-only">เลือกกำเนิดคลื่นฟันเลื่อย</span><span class="en-only">Select sawtooth wave output</span></td>
-          </tr>
-          <tr>
-            <td>7</td>
-            <td><strong>Freq</strong></td>
-            <td><span class="th-only">เลือกโหมดปรับความถี่ของสัญญาณ</span><span class="en-only">Enter frequency adjustment mode</span></td>
-          </tr>
-          <tr>
-            <td>8</td>
-            <td><strong>Ampl</strong></td>
-            <td><span class="th-only">เลือกโหมดปรับขนาด (Amplitude) ของสัญญาณ</span><span class="en-only">Enter amplitude adjustment mode</span></td>
-          </tr>
-          <tr>
-            <td>9</td>
-            <td><strong>Menu</strong></td>
-            <td><span class="th-only">เปิดเมนูตั้งค่าความถี่และขนาดโดยละเอียด</span><span class="en-only">Opens detailed frequency and amplitude settings menu</span></td>
-          </tr>
-          <tr>
-            <td>10</td>
-            <td><strong>Up / Down</strong></td>
-            <td><span class="th-only">ปุ่มเพิ่ม/ลด ค่าความถี่และขนาดทีละขั้น</span><span class="en-only">Step up/down frequency and amplitude values</span></td>
-          </tr>
-          <tr>
-            <td>11</td>
-            <td><strong>Output</strong></td>
-            <td><span class="th-only">ขั้วต่อสัญญาณเอาต์พุต (BNC connector)</span><span class="en-only">Signal output terminal (BNC connector)</span></td>
-          </tr>
-          <tr>
-            <td>12</td>
-            <td><strong>Display</strong></td>
-            <td><span class="th-only">จอแสดงชนิดรูปคลื่น ความถี่ และขนาดสัญญาณ</span><span class="en-only">Shows waveform type, frequency, and amplitude</span></td>
-          </tr>
-        </tbody>
-      </table>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;">
+
+        <div>
+          <div class="section-subtitle" style="margin-top:0;">
+            <span class="th-only">ความถี่ &amp; คาบเวลา</span><span class="en-only">Frequency &amp; Period</span>
+          </div>
+          <p class="th-only" style="font-size:.9rem;color:var(--text-light);margin:.3rem 0 .5rem;">
+            <strong>ความถี่ (f)</strong> = จำนวนรอบต่อวินาที (Hz) • <strong>คาบ (T)</strong> = เวลาต่อ 1 รอบ (s)
+          </p>
+          <p class="en-only" style="font-size:.9rem;color:var(--text-light);margin:.3rem 0 .5rem;">
+            <strong>Frequency (f)</strong> = cycles per second (Hz) • <strong>Period (T)</strong> = time per cycle (s)
+          </p>
+          <div class="formula-box" style="margin:.4rem 0;padding:.6rem .9rem;"><div class="formula" style="font-size:1rem;">f = 1 / T</div></div>
+          <div class="formula-box" style="margin:.4rem 0;padding:.6rem .9rem;"><div class="formula" style="font-size:1rem;">T = 1 / f</div></div>
+        </div>
+
+        <div>
+          <div class="section-subtitle" style="margin-top:0;">
+            <span class="th-only">ขนาดสัญญาณ (Amplitude)</span><span class="en-only">Amplitude</span>
+          </div>
+          <p class="th-only" style="font-size:.9rem;color:var(--text-light);margin:.3rem 0 .5rem;">
+            <strong>V<sub>P-P</sub></strong> = ยอดถึงยอด • <strong>V<sub>p</sub></strong> = ยอดถึงศูนย์ • <strong>V<sub>rms</sub></strong> = ค่าประสิทธิผล
+          </p>
+          <p class="en-only" style="font-size:.9rem;color:var(--text-light);margin:.3rem 0 .5rem;">
+            <strong>V<sub>P-P</sub></strong> = peak-to-peak • <strong>V<sub>p</sub></strong> = peak • <strong>V<sub>rms</sub></strong> = effective value
+          </p>
+          <div class="formula-box" style="margin:.4rem 0;padding:.6rem .9rem;"><div class="formula" style="font-size:1rem;">V<sub>p</sub> = V<sub>P-P</sub> / 2</div></div>
+          <div class="formula-box" style="margin:.4rem 0;padding:.6rem .9rem;"><div class="formula" style="font-size:.95rem;">V<sub>rms</sub> = V<sub>p</sub> / √2 <span style="font-size:.8rem;color:var(--text-light);">(sine)</span></div></div>
+        </div>
+
+        <div>
+          <div class="section-subtitle" style="margin-top:0;">
+            <span class="th-only">Duty Cycle &amp; DC Offset</span><span class="en-only">Duty Cycle &amp; DC Offset</span>
+          </div>
+          <p class="th-only" style="font-size:.9rem;color:var(--text-light);margin:.3rem 0 .5rem;">
+            <strong>Duty Cycle</strong> = สัดส่วนเวลาที่สัญญาณอยู่ระดับสูง (สำคัญกับคลื่นสี่เหลี่ยม/พัลส์)
+          </p>
+          <p class="en-only" style="font-size:.9rem;color:var(--text-light);margin:.3rem 0 .5rem;">
+            <strong>Duty Cycle</strong> = fraction of time the signal is high (key for square/pulse)
+          </p>
+          <div class="formula-box" style="margin:.4rem 0;padding:.6rem .9rem;"><div class="formula" style="font-size:.95rem;">D = (t<sub>on</sub> / T) × 100%</div></div>
+          <p class="th-only" style="font-size:.86rem;color:var(--text-light);margin:.5rem 0 0;">
+            <strong>DC Offset</strong> เลื่อนทั้งสัญญาณขึ้น/ลง → V<sub>max</sub> = Offset + V<sub>p</sub>
+          </p>
+          <p class="en-only" style="font-size:.86rem;color:var(--text-light);margin:.5rem 0 0;">
+            <strong>DC Offset</strong> shifts the whole signal up/down → V<sub>max</sub> = Offset + V<sub>p</sub>
+          </p>
+        </div>
+      </div>
+
+      <!-- Vrms / Vavg table per waveform -->
+      <div class="table-wrap" style="margin-top:1.25rem;">
+        <table>
+          <thead>
+            <tr>
+              <th><span class="th-only">รูปคลื่น</span><span class="en-only">Waveform</span></th>
+              <th>V<sub>rms</sub></th>
+              <th><span class="th-only">V<sub>avg</sub> (เต็มคลื่น)</span><span class="en-only">V<sub>avg</sub> (full-wave)</span></th>
+              <th><span class="th-only">หมายเหตุ</span><span class="en-only">Note</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="th-only">ไซน์ (Sine)</span><span class="en-only">Sine</span></td>
+              <td>V<sub>p</sub> / √2 ≈ 0.707 V<sub>p</sub></td>
+              <td>0.637 V<sub>p</sub></td>
+              <td><span class="th-only">ใช้มากที่สุด</span><span class="en-only">Most common</span></td>
+            </tr>
+            <tr>
+              <td><span class="th-only">สี่เหลี่ยม (Square)</span><span class="en-only">Square</span></td>
+              <td>V<sub>p</sub></td>
+              <td>V<sub>p</sub></td>
+              <td><span class="th-only">V<sub>rms</sub> = V<sub>p</sub> (duty 50%)</span><span class="en-only">V<sub>rms</sub> = V<sub>p</sub> at 50% duty</span></td>
+            </tr>
+            <tr>
+              <td><span class="th-only">สามเหลี่ยม (Triangle)</span><span class="en-only">Triangle</span></td>
+              <td>V<sub>p</sub> / √3 ≈ 0.577 V<sub>p</sub></td>
+              <td>0.5 V<sub>p</sub></td>
+              <td><span class="th-only">—</span><span class="en-only">—</span></td>
+            </tr>
+            <tr>
+              <td><span class="th-only">ฟันเลื่อย (Sawtooth)</span><span class="en-only">Sawtooth</span></td>
+              <td>V<sub>p</sub> / √3 ≈ 0.577 V<sub>p</sub></td>
+              <td>0.5 V<sub>p</sub></td>
+              <td><span class="th-only">—</span><span class="en-only">—</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
-  <!-- ============ SECTION 7: ตัวอย่าง ============ -->
+  <!-- ============ SECTION 7: Interactive Waveform Generator ============ -->
   <div class="section">
     <div class="section-title">
-      <span class="th-only">ตัวอย่างการตั้งค่า</span>
-      <span class="en-only">Setup Examples</span>
+      <span class="th-only">⚡ ทดลองปรับสัญญาณ (โต้ตอบได้)</span>
+      <span class="en-only">⚡ Interactive Waveform Generator</span>
     </div>
-    <div class="example-pair">
-
-      <!-- Example 7-1 -->
-      <div class="step-card">
-        <h3 class="th-only">ตัวอย่างที่ 7-1 — Sine Wave 20V<sub>P-P</sub>, 1 kHz</h3>
-        <h3 class="en-only">Example 7-1 — Sine Wave 20V<sub>P-P</sub>, 1 kHz</h3>
-        <div class="info-box th-only" style="margin-bottom:0.75rem;">
-          <strong>โจทย์:</strong> ตั้งค่า Sine wave, 20V<sub>P-P</sub>, f = 1 kHz
+    <div class="card" style="padding:1.25rem;">
+      <div class="sg-wrap">
+        <div>
+          <canvas id="sg-canvas" class="sg-screen"></canvas>
+          <p class="th-only" style="font-size:.8rem;color:var(--text-light);margin:.6rem 0 0;text-align:center;">
+            จอจำลองออสซิลโลสโคป — ฐานเวลาคงที่ 0.2 ms/div, แนวตั้ง 2.5 V/div • เปลี่ยนความถี่เพื่อดูจำนวนรอบที่เปลี่ยนไป
+          </p>
+          <p class="en-only" style="font-size:.8rem;color:var(--text-light);margin:.6rem 0 0;text-align:center;">
+            Simulated oscilloscope screen — fixed 0.2 ms/div, 2.5 V/div • change frequency to see the number of cycles change
+          </p>
         </div>
-        <div class="info-box en-only" style="margin-bottom:0.75rem;">
-          <strong>Task:</strong> Set Sine wave, 20V<sub>P-P</sub>, f = 1 kHz
+        <div>
+          <div class="sg-panel">
+            <div style="font-weight:700;font-size:.9rem;margin-bottom:.7rem;color:var(--primary);">
+              <span class="th-only">⚙ ปรับค่า</span><span class="en-only">⚙ Adjust</span>
+            </div>
+            <div class="sg-waves">
+              <button class="sg-wave-btn active" data-wave="sine">∿<br><span class="th-only">ไซน์</span><span class="en-only">Sine</span></button>
+              <button class="sg-wave-btn" data-wave="square">⊓<br><span class="th-only">สี่เหลี่ยม</span><span class="en-only">Square</span></button>
+              <button class="sg-wave-btn" data-wave="triangle">△<br><span class="th-only">สามเหลี่ยม</span><span class="en-only">Triangle</span></button>
+              <button class="sg-wave-btn" data-wave="sawtooth">◺<br><span class="th-only">ฟันเลื่อย</span><span class="en-only">Saw</span></button>
+            </div>
+            <div class="sg-ctrl">
+              <div class="sg-ctrl-row"><label><span class="th-only">ความถี่</span><span class="en-only">Frequency</span></label><span id="sg-freq-val">2.00 kHz</span></div>
+              <input type="range" id="sg-freq" min="500" max="5000" step="100" value="2000">
+            </div>
+            <div class="sg-ctrl">
+              <div class="sg-ctrl-row"><label>Amplitude (V<sub>P-P</sub>)</label><span id="sg-amp-val">10 V</span></div>
+              <input type="range" id="sg-amp" min="2" max="14" step="1" value="10">
+            </div>
+            <div class="sg-ctrl disabled" id="sg-duty-ctrl">
+              <div class="sg-ctrl-row"><label>Duty Cycle</label><span id="sg-duty-val">50 %</span></div>
+              <input type="range" id="sg-duty" min="10" max="90" step="5" value="50">
+            </div>
+            <div class="sg-ctrl">
+              <div class="sg-ctrl-row"><label>DC Offset</label><span id="sg-offset-val">0 V</span></div>
+              <input type="range" id="sg-offset" min="-3" max="3" step="1" value="0">
+            </div>
+          </div>
+          <div class="sg-readout">
+            <div class="sg-rb hl"><div class="sg-rl"><span class="th-only">คาบ T</span><span class="en-only">Period T</span></div><div class="sg-rv" id="sg-r-T">0.50 ms</div></div>
+            <div class="sg-rb"><div class="sg-rl"><span class="th-only">ความถี่ f</span><span class="en-only">Freq f</span></div><div class="sg-rv" id="sg-r-f">2.00 kHz</div></div>
+            <div class="sg-rb"><div class="sg-rl">V<sub>P-P</sub></div><div class="sg-rv" id="sg-r-vpp">10.0 V</div></div>
+            <div class="sg-rb"><div class="sg-rl">V<sub>p</sub></div><div class="sg-rv" id="sg-r-vp">5.0 V</div></div>
+            <div class="sg-rb s2 hl"><div class="sg-rl">V<sub>rms</sub> = <span id="sg-r-vrms-f">V<sub>p</sub>/√2</span></div><div class="sg-rv" id="sg-r-vrms">3.54 V</div></div>
+            <div class="sg-rb"><div class="sg-rl">DC Offset</div><div class="sg-rv" id="sg-r-offset">0 V</div></div>
+            <div class="sg-rb"><div class="sg-rl">Duty</div><div class="sg-rv" id="sg-r-duty">—</div></div>
+            <div class="sg-rb s2"><div class="sg-rl"><span class="th-only">ฐานเวลา / แนวตั้ง</span><span class="en-only">Timebase / Vertical</span></div><div class="sg-rv" id="sg-r-tdiv" style="font-size:.82rem;">0.2 ms/div • 2.5 V/div</div></div>
+          </div>
         </div>
-        <ol class="step-list th-only">
-          <li>กดสวิตช์เปิดเครื่อง (ปุ่ม 1)</li>
-          <li>กดปุ่มเลือกคลื่นไซน์ <strong>Sine</strong> (ปุ่ม 3)</li>
-          <li>กด <strong>Ampl</strong> (ปุ่ม 8) แล้วหมุนปุ่ม Knob จนจอแสดง <strong>20.00 VP-P</strong></li>
-          <li>กด <strong>Freq</strong> (ปุ่ม 7) แล้วหมุนปุ่ม Knob จนจอแสดง <strong>1.00 kHz</strong></li>
-          <li>ตรวจสอบด้วย Oscilloscope ที่ขั้ว <strong>Output</strong> (ปุ่ม 11)</li>
-        </ol>
-        <ol class="step-list en-only">
-          <li>Press Power switch (Button 1)</li>
-          <li>Press <strong>Sine</strong> wave button (Button 3)</li>
-          <li>Press <strong>Ampl</strong> (Button 8) and turn Knob until display shows <strong>20.00 VP-P</strong></li>
-          <li>Press <strong>Freq</strong> (Button 7) and turn Knob until display shows <strong>1.00 kHz</strong></li>
-          <li>Verify with Oscilloscope at <strong>Output</strong> terminal (Button 11)</li>
-        </ol>
       </div>
-
-      <!-- Example 7-2 -->
-      <div class="step-card" style="border-left-color:var(--secondary);">
-        <h3 class="th-only" style="color:var(--secondary);">ตัวอย่างที่ 7-2 — Square Wave 2V<sub>P-P</sub>, 100 Hz</h3>
-        <h3 class="en-only" style="color:var(--secondary);">Example 7-2 — Square Wave 2V<sub>P-P</sub>, 100 Hz</h3>
-        <div class="info-box th-only" style="margin-bottom:0.75rem;">
-          <strong>โจทย์:</strong> ตั้งค่า Square wave, 2V<sub>P-P</sub>, f = 100 Hz
-        </div>
-        <div class="info-box en-only" style="margin-bottom:0.75rem;">
-          <strong>Task:</strong> Set Square wave, 2V<sub>P-P</sub>, f = 100 Hz
-        </div>
-        <ol class="step-list th-only">
-          <li>กดสวิตช์เปิดเครื่อง (ปุ่ม 1)</li>
-          <li>กดปุ่มเลือกคลื่นสี่เหลี่ยม <strong>Square</strong> (ปุ่ม 4)</li>
-          <li>กด <strong>Ampl</strong> (ปุ่ม 8) แล้วหมุนปุ่ม Knob จนจอแสดง <strong>2.00 VP-P</strong></li>
-          <li>กด <strong>Freq</strong> (ปุ่ม 7) แล้วหมุนปุ่ม Knob จนจอแสดง <strong>100 Hz</strong></li>
-          <li>ตรวจสอบด้วย Oscilloscope ที่ขั้ว <strong>Output</strong> (ปุ่ม 11)</li>
-        </ol>
-        <ol class="step-list en-only">
-          <li>Press Power switch (Button 1)</li>
-          <li>Press <strong>Square</strong> wave button (Button 4)</li>
-          <li>Press <strong>Ampl</strong> (Button 8) and turn Knob until display shows <strong>2.00 VP-P</strong></li>
-          <li>Press <strong>Freq</strong> (Button 7) and turn Knob until display shows <strong>100 Hz</strong></li>
-          <li>Verify with Oscilloscope at <strong>Output</strong> terminal (Button 11)</li>
-        </ol>
-      </div>
-
-    </div>
-
-    <!-- Tips box -->
-    <div class="warn-box th-only" style="margin-top:1rem;">
-      <strong>ข้อควรระวัง:</strong><br>
-      • ตรวจสอบให้แน่ใจว่าแรงดัน Output ที่ตั้งไม่เกินค่าทนทานของวงจรที่ทดสอบ<br>
-      • เชื่อมต่อสายดิน (GND) ก่อนต่อสัญญาณ Output เสมอ<br>
-      • ใช้สายโคแอกเชียล (Coaxial Cable) ต่อระหว่าง Function Generator กับ Oscilloscope
-    </div>
-    <div class="warn-box en-only" style="margin-top:1rem;">
-      <strong>Cautions:</strong><br>
-      • Ensure the set output voltage does not exceed the test circuit's tolerance<br>
-      • Always connect GND before connecting the output signal<br>
-      • Use coaxial cable between Function Generator and Oscilloscope
     </div>
   </div>
 
@@ -504,5 +517,6 @@
 </footer>
 <script>const CURRENT_PAGE='signal-generator';</script>
 <script src="nav.js"></script>
+<script src="signal-gen-sim.js"></script>
 </body>
 </html>
