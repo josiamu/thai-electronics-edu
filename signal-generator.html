@@ -202,64 +202,57 @@
 
       <!-- Waveform SVG: 4 panels in a row -->
       <div class="wave-svg-wrap">
-        <svg viewBox="0 0 620 170" width="620" height="170" xmlns="http://www.w3.org/2000/svg" aria-label="Four waveform types: Sine, Square, Triangle, Sawtooth">
+        <svg viewBox="0 0 620 152" width="620" height="152" xmlns="http://www.w3.org/2000/svg" aria-label="Four waveform types: Sine, Square, Triangle, Sawtooth">
+          <defs>
+            <filter id="wglow" x="-20%" y="-30%" width="140%" height="160%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <linearGradient id="gBlue"   x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eff6ff"/><stop offset="1" stop-color="#dbeafe"/></linearGradient>
+            <linearGradient id="gOrange" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff7ed"/><stop offset="1" stop-color="#ffedd5"/></linearGradient>
+            <linearGradient id="gGreen"  x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0fdf4"/><stop offset="1" stop-color="#dcfce7"/></linearGradient>
+            <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#faf5ff"/><stop offset="1" stop-color="#f3e8ff"/></linearGradient>
+          </defs>
 
           <!-- Panel backgrounds -->
-          <rect x="5"   y="5"  width="140" height="130" rx="6" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5"/>
-          <rect x="155" y="5"  width="140" height="130" rx="6" fill="#fff7ed" stroke="#fed7aa" stroke-width="1.5"/>
-          <rect x="305" y="5"  width="140" height="130" rx="6" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.5"/>
-          <rect x="455" y="5"  width="140" height="130" rx="6" fill="#faf5ff" stroke="#e9d5ff" stroke-width="1.5"/>
+          <rect x="5"   y="6" width="145" height="108" rx="10" fill="url(#gBlue)"   stroke="#bfdbfe" stroke-width="1.5"/>
+          <rect x="160" y="6" width="145" height="108" rx="10" fill="url(#gOrange)" stroke="#fed7aa" stroke-width="1.5"/>
+          <rect x="315" y="6" width="145" height="108" rx="10" fill="url(#gGreen)"  stroke="#bbf7d0" stroke-width="1.5"/>
+          <rect x="470" y="6" width="145" height="108" rx="10" fill="url(#gPurple)" stroke="#e9d5ff" stroke-width="1.5"/>
 
-          <!-- Grid center lines -->
-          <line x1="15"  y1="65" x2="135" y2="65" stroke="#bfdbfe" stroke-width="0.7" stroke-dasharray="3,3"/>
-          <line x1="165" y1="65" x2="285" y2="65" stroke="#fed7aa" stroke-width="0.7" stroke-dasharray="3,3"/>
-          <line x1="315" y1="65" x2="435" y2="65" stroke="#bbf7d0" stroke-width="0.7" stroke-dasharray="3,3"/>
-          <line x1="465" y1="65" x2="585" y2="65" stroke="#e9d5ff" stroke-width="0.7" stroke-dasharray="3,3"/>
+          <!-- Center reference lines -->
+          <line x1="19"  y1="60" x2="135" y2="60" stroke="#93c5fd" stroke-width="0.8" stroke-dasharray="4,3"/>
+          <line x1="174" y1="60" x2="290" y2="60" stroke="#fdba74" stroke-width="0.8" stroke-dasharray="4,3"/>
+          <line x1="329" y1="60" x2="445" y2="60" stroke="#86efac" stroke-width="0.8" stroke-dasharray="4,3"/>
+          <line x1="484" y1="60" x2="600" y2="60" stroke="#d8b4fe" stroke-width="0.8" stroke-dasharray="4,3"/>
 
-          <!-- SINE WAVE (blue, panel 1) -->
-          <!-- Center y=65, amplitude=40px, full 2 cycles over 120px -->
-          <polyline fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linejoin="round"
-            points="
-              15,65 18.75,52 22.5,33 26.25,17 30,10 33.75,10 37.5,17 41.25,33 45,52 48.75,65
-              52.5,78 56.25,97 60,113 63.75,120 67.5,120 71.25,113 75,97 78.75,78 82.5,65
-              86.25,52 90,33 93.75,17 97.5,10 101.25,10 105,17 108.75,33 112.5,52 116.25,65
-              120,78 123.75,97 127.5,113 131.25,120 135,120
-            "
-          />
+          <!-- SINE (blue) — smooth cubic bezier, 2 cycles -->
+          <path fill="none" stroke="#3b82f6" stroke-width="3" stroke-linecap="round" filter="url(#wglow)"
+            d="M19,60 C28.67,12 38.33,12 48,60 C57.67,108 67.33,108 77,60 C86.67,12 96.33,12 106,60 C115.67,108 125.33,108 135,60"/>
 
-          <!-- SQUARE WAVE (orange, panel 2) -->
-          <polyline fill="none" stroke="#f97316" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="square"
-            points="
-              165,65 165,15 195,15 195,115 225,115 225,15 255,15 255,115 285,115 285,65
-            "
-          />
+          <!-- SQUARE (orange) — 2 cycles -->
+          <path fill="none" stroke="#f97316" stroke-width="3" stroke-linejoin="miter" stroke-linecap="butt" filter="url(#wglow)"
+            d="M174,24 H203 V96 H232 V24 H261 V96 H290"/>
 
-          <!-- TRIANGLE WAVE (green, panel 3) -->
-          <polyline fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"
-            points="
-              315,65 330,15 345,65 360,115 375,65 390,15 405,65 420,115 435,65
-            "
-          />
+          <!-- TRIANGLE (green) — 2 cycles -->
+          <path fill="none" stroke="#10b981" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" filter="url(#wglow)"
+            d="M329,60 L343.5,24 L358,60 L372.5,96 L387,60 L401.5,24 L416,60 L430.5,96 L445,60"/>
 
-          <!-- SAWTOOTH WAVE (purple, panel 4) -->
-          <!-- Ramp up then vertical drop, repeat -->
-          <polyline fill="none" stroke="#8b5cf6" stroke-width="2.5" stroke-linejoin="round"
-            points="
-              465,115 495,15 495,115 525,15 525,115 555,15 555,115 585,15
-            "
-          />
+          <!-- SAWTOOTH (purple) — 2 cycles, ramp up + vertical drop -->
+          <path fill="none" stroke="#8b5cf6" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" filter="url(#wglow)"
+            d="M484,96 L542,24 L542,96 L600,24 L600,96"/>
 
-          <!-- Labels below each panel -->
-          <text x="75"  y="150" text-anchor="middle" fill="#1d4ed8" font-size="12" font-weight="600" font-family="'Anuphan',sans-serif">Sine Wave</text>
-          <text x="225" y="150" text-anchor="middle" fill="#c2410c" font-size="12" font-weight="600" font-family="'Anuphan',sans-serif">Square Wave</text>
-          <text x="375" y="150" text-anchor="middle" fill="#047857" font-size="12" font-weight="600" font-family="'Anuphan',sans-serif">Triangle Wave</text>
-          <text x="525" y="150" text-anchor="middle" fill="#6d28d9" font-size="12" font-weight="600" font-family="'Anuphan',sans-serif">Sawtooth Wave</text>
+          <!-- EN labels -->
+          <text x="77"  y="132" text-anchor="middle" fill="#1d4ed8" font-size="12.5" font-weight="700" font-family="'Anuphan',sans-serif">Sine</text>
+          <text x="232" y="132" text-anchor="middle" fill="#c2410c" font-size="12.5" font-weight="700" font-family="'Anuphan',sans-serif">Square</text>
+          <text x="387" y="132" text-anchor="middle" fill="#047857" font-size="12.5" font-weight="700" font-family="'Anuphan',sans-serif">Triangle</text>
+          <text x="542" y="132" text-anchor="middle" fill="#6d28d9" font-size="12.5" font-weight="700" font-family="'Anuphan',sans-serif">Sawtooth</text>
 
           <!-- TH sub-labels -->
-          <text x="75"  y="163" text-anchor="middle" fill="#1d4ed8" font-size="10" font-family="'Anuphan',sans-serif" class="th-only">คลื่นไซน์</text>
-          <text x="225" y="163" text-anchor="middle" fill="#c2410c" font-size="10" font-family="'Anuphan',sans-serif" class="th-only">คลื่นสี่เหลี่ยม</text>
-          <text x="375" y="163" text-anchor="middle" fill="#047857" font-size="10" font-family="'Anuphan',sans-serif" class="th-only">คลื่นสามเหลี่ยม</text>
-          <text x="525" y="163" text-anchor="middle" fill="#6d28d9" font-size="10" font-family="'Anuphan',sans-serif" class="th-only">คลื่นฟันเลื่อย</text>
+          <text x="77"  y="147" text-anchor="middle" fill="#1d4ed8" font-size="10.5" font-family="'Anuphan',sans-serif" class="th-only">คลื่นไซน์</text>
+          <text x="232" y="147" text-anchor="middle" fill="#c2410c" font-size="10.5" font-family="'Anuphan',sans-serif" class="th-only">คลื่นสี่เหลี่ยม</text>
+          <text x="387" y="147" text-anchor="middle" fill="#047857" font-size="10.5" font-family="'Anuphan',sans-serif" class="th-only">คลื่นสามเหลี่ยม</text>
+          <text x="542" y="147" text-anchor="middle" fill="#6d28d9" font-size="10.5" font-family="'Anuphan',sans-serif" class="th-only">คลื่นฟันเลื่อย</text>
         </svg>
       </div>
     </div>
