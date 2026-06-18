@@ -34,23 +34,73 @@
       <span class="en-only">Structure of an Atom</span>
     </div>
     <div class="card">
+      <!-- Bohr Atom Model SVG -->
+      <div style="display:flex;justify-content:center;margin-bottom:1.5rem">
+        <svg viewBox="0 0 400 300" style="width:100%;max-width:440px;display:block" aria-label="แบบจำลองโบร์ / Bohr Atom Model">
+          <!-- Orbit rings -->
+          <circle cx="150" cy="150" r="55"  fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="5 3" opacity="0.55"/>
+          <circle cx="150" cy="150" r="98"  fill="none" stroke="#0891b2" stroke-width="1.5" stroke-dasharray="5 3" opacity="0.55"/>
+          <circle cx="150" cy="150" r="141" fill="none" stroke="#059669" stroke-width="1.5" stroke-dasharray="5 3" opacity="0.5"/>
+          <!-- Nucleus -->
+          <circle cx="150" cy="150" r="36" fill="#ef4444" opacity="0.12"/>
+          <circle cx="150" cy="150" r="28" fill="#ef4444" opacity="0.28"/>
+          <circle cx="150" cy="150" r="22" fill="#ef4444"/>
+          <text x="150" y="147" text-anchor="middle" style="fill:white;font-size:7.5px;font-weight:700;font-family:Anuphan,sans-serif" class="th-only">โปรตอน P⁺</text>
+          <text x="150" y="157" text-anchor="middle" style="fill:white;font-size:7px;font-family:Anuphan,sans-serif"                class="th-only">นิวตรอน N⁰</text>
+          <text x="150" y="147" text-anchor="middle" style="fill:white;font-size:7.5px;font-weight:700;font-family:Anuphan,sans-serif" class="en-only">Proton P⁺</text>
+          <text x="150" y="157" text-anchor="middle" style="fill:white;font-size:7px;font-family:Anuphan,sans-serif"                class="en-only">Neutron N⁰</text>
+          <!-- Orbit 1: 2 electrons, r=55 -->
+          <g>
+            <animateTransform attributeName="transform" type="rotate" from="0 150 150" to="360 150 150" dur="5s" repeatCount="indefinite"/>
+            <circle cx="205" cy="150" r="7" fill="#3b82f6"/>
+            <circle cx="95"  cy="150" r="7" fill="#3b82f6"/>
+          </g>
+          <!-- Orbit 2: 4 electrons, r=98 -->
+          <g>
+            <animateTransform attributeName="transform" type="rotate" from="45 150 150" to="405 150 150" dur="9s" repeatCount="indefinite"/>
+            <circle cx="248" cy="150" r="7" fill="#0891b2"/>
+            <circle cx="52"  cy="150" r="7" fill="#0891b2"/>
+            <circle cx="150" cy="52"  r="7" fill="#0891b2"/>
+            <circle cx="150" cy="248" r="7" fill="#0891b2"/>
+          </g>
+          <!-- Orbit 3: 6 electrons, r=141 (reverse) -->
+          <g>
+            <animateTransform attributeName="transform" type="rotate" from="0 150 150" to="-360 150 150" dur="14s" repeatCount="indefinite"/>
+            <circle cx="291" cy="150" r="7" fill="#059669"/>
+            <circle cx="9"   cy="150" r="7" fill="#059669"/>
+            <circle cx="221" cy="272" r="7" fill="#059669"/>
+            <circle cx="79"  cy="272" r="7" fill="#059669"/>
+            <circle cx="221" cy="28"  r="7" fill="#059669"/>
+            <circle cx="79"  cy="28"  r="7" fill="#059669"/>
+          </g>
+          <!-- Legend dots + labels (right side, outside orbit 3) -->
+          <circle cx="297" cy="215" r="5" fill="#3b82f6"/>
+          <text x="306" y="219" style="font-size:10px;font-family:Anuphan,sans-serif;fill:var(--text,#1e293b)" class="th-only">วง 1: 2e⁻</text>
+          <text x="306" y="219" style="font-size:10px;font-family:Anuphan,sans-serif;fill:var(--text,#1e293b)" class="en-only">Orbit 1: 2e⁻</text>
+          <circle cx="297" cy="233" r="5" fill="#0891b2"/>
+          <text x="306" y="237" style="font-size:10px;font-family:Anuphan,sans-serif;fill:var(--text,#1e293b)" class="th-only">วง 2: max 8e⁻</text>
+          <text x="306" y="237" style="font-size:10px;font-family:Anuphan,sans-serif;fill:var(--text,#1e293b)" class="en-only">Orbit 2: max 8e⁻</text>
+          <circle cx="297" cy="251" r="5" fill="#059669"/>
+          <text x="306" y="255" style="font-size:10px;font-family:Anuphan,sans-serif;fill:var(--text,#1e293b)" class="th-only">วง 3: max 18e⁻</text>
+          <text x="306" y="255" style="font-size:10px;font-family:Anuphan,sans-serif;fill:var(--text,#1e293b)" class="en-only">Orbit 3: max 18e⁻</text>
+        </svg>
+      </div>
+      <!-- Component legend -->
       <div class="grid-2">
-        <ul class="content-list th-only">
-          <li><strong>โมเลกุล (Molecule)</strong> — กลุ่มของอะตอม</li>
-          <li><strong>อะตอม (Atom)</strong> — หน่วยย่อยที่เล็กที่สุดของธาตุ</li>
-          <li><strong>นิวเคลียส (Nucleus)</strong> — ใจกลางอะตอม ประกอบด้วยโปรตอน + นิวตรอน</li>
-          <li><strong>โปรตอน (Proton)</strong> — ประจุบวก (+)</li>
-          <li><strong>นิวตรอน (Neutron)</strong> — ไม่มีประจุ (เป็นกลาง)</li>
-          <li><strong>อิเล็กตรอน (Electron)</strong> — ประจุลบ (−) วิ่งรอบนิวเคลียส</li>
-        </ul>
-        <ul class="content-list en-only">
-          <li><strong>Molecule</strong> — A group of atoms</li>
-          <li><strong>Atom</strong> — The smallest unit of an element</li>
-          <li><strong>Nucleus</strong> — Center of the atom; contains protons + neutrons</li>
-          <li><strong>Proton</strong> — Positive charge (+)</li>
-          <li><strong>Neutron</strong> — No charge (neutral)</li>
-          <li><strong>Electron</strong> — Negative charge (−); orbits the nucleus</li>
-        </ul>
+        <div>
+          <div class="th-only" style="display:flex;flex-direction:column;gap:0.55rem">
+            <div style="display:flex;align-items:center;gap:0.6rem"><span style="width:13px;height:13px;border-radius:50%;background:#ef4444;flex-shrink:0;display:inline-block"></span><span><strong>นิวเคลียส</strong> — ใจกลางอะตอม</span></div>
+            <div style="display:flex;align-items:center;gap:0.6rem"><span style="width:13px;height:13px;border-radius:50%;background:#f97316;flex-shrink:0;display:inline-block"></span><span><strong>โปรตอน (P⁺)</strong> — ประจุบวก (+)</span></div>
+            <div style="display:flex;align-items:center;gap:0.6rem"><span style="width:13px;height:13px;border-radius:50%;background:#94a3b8;flex-shrink:0;display:inline-block"></span><span><strong>นิวตรอน (N⁰)</strong> — ไม่มีประจุ (เป็นกลาง)</span></div>
+            <div style="display:flex;align-items:center;gap:0.6rem"><span style="width:13px;height:13px;border-radius:50%;background:#3b82f6;flex-shrink:0;display:inline-block"></span><span><strong>อิเล็กตรอน (e⁻)</strong> — ประจุลบ (−) วิ่งรอบนิวเคลียส</span></div>
+          </div>
+          <div class="en-only" style="display:flex;flex-direction:column;gap:0.55rem">
+            <div style="display:flex;align-items:center;gap:0.6rem"><span style="width:13px;height:13px;border-radius:50%;background:#ef4444;flex-shrink:0;display:inline-block"></span><span><strong>Nucleus</strong> — Center of the atom</span></div>
+            <div style="display:flex;align-items:center;gap:0.6rem"><span style="width:13px;height:13px;border-radius:50%;background:#f97316;flex-shrink:0;display:inline-block"></span><span><strong>Proton (P⁺)</strong> — Positive charge (+)</span></div>
+            <div style="display:flex;align-items:center;gap:0.6rem"><span style="width:13px;height:13px;border-radius:50%;background:#94a3b8;flex-shrink:0;display:inline-block"></span><span><strong>Neutron (N⁰)</strong> — No charge (neutral)</span></div>
+            <div style="display:flex;align-items:center;gap:0.6rem"><span style="width:13px;height:13px;border-radius:50%;background:#3b82f6;flex-shrink:0;display:inline-block"></span><span><strong>Electron (e⁻)</strong> — Negative charge (−); orbits the nucleus</span></div>
+          </div>
+        </div>
         <div class="info-box">
           <span class="th-only"><strong>จำนวนอิเล็กตรอนสูงสุดในแต่ละวงโคจร</strong><br>
           วง 1: 2 ตัว (2×1²)<br>วง 2: 8 ตัว (2×2²)<br>วง 3: 18 ตัว (2×3²)<br>วง 4: 32 ตัว (2×4²)<br><br>
