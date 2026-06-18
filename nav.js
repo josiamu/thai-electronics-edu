@@ -14,9 +14,9 @@ const NAV_LESSON_GROUPS = [
     label_en: 'Electronic Components',
     items: [
       { id: 'resistor', href: 'resistor.html', label_th: '🎨 ตัวต้านทาน', label_en: '🎨 Resistor' },
+      { id: 'diode', href: 'diode.html', label_th: '💡 ไดโอด', label_en: '💡 Diode' },
       { id: 'capacitor', href: 'capacitor.html', label_th: '🔋 ตัวเก็บประจุ', label_en: '🔋 Capacitor' },
       { id: 'inductor', href: 'inductor.html', label_th: '🌀 ตัวเหนี่ยวนำ', label_en: '🌀 Inductor' },
-      { id: 'diode', href: 'diode.html', label_th: '💡 ไดโอด', label_en: '💡 Diode' },
     ],
   },
   {
