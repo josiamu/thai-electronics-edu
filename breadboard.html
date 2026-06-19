@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="ทดลองบนเบรดบอร์ด | สื่อการเรียนการสอน" data-title-en="Breadboard Lab | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ทดลองบนเบรดบอร์ด | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* ── layout ── */
+.bb-wrap { display:grid; grid-template-columns: 1fr 280px; gap:1.25rem; align-items:start; }
+@media (max-width: 920px) { .bb-wrap { grid-template-columns:1fr; } }
+
+/* ── palette / toolbar ── */
+.bb-toolbar { display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:.9rem; }
+.bb-tool {
+  display:inline-flex; align-items:center; gap:.4rem;
+  padding:.5rem .8rem; border-radius:10px; cursor:pointer;
+  background:var(--card); border:2px solid var(--border); color:var(--text);
+  font-family:inherit; font-size:.9rem; font-weight:600; transition:all .15s ease;
+}
+.bb-tool:hover { border-color:var(--primary); transform:translateY(-1px); }
+.bb-tool.active { background:var(--primary); border-color:var(--primary); color:#fff; box-shadow:0 4px 12px rgba(37,99,235,.3); }
+.bb-tool.danger.active { background:#ef4444; border-color:#ef4444; box-shadow:0 4px 12px rgba(239,68,68,.3); }
+.bb-tool .ti { font-size:1.05rem; }
+.bb-sep { width:1px; align-self:stretch; background:var(--border); margin:0 .2rem; }
+
+/* ── contextual value controls ── */
+.bb-valctrl { background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:.7rem .9rem; margin-bottom:.8rem; min-height:1.2rem; }
+.bb-valrow { display:none; align-items:center; gap:.7rem; flex-wrap:wrap; font-size:.875rem; font-weight:600; }
+.bb-valrow.show { display:flex; }
+.bb-valrow label { color:var(--text-light); }
+.bb-valrow select, .bb-valrow input[type=range] { font-family:inherit; }
+.bb-valrow select { padding:.3rem .5rem; border-radius:6px; border:1px solid var(--border); background:var(--card); color:var(--text); cursor:pointer; }
+.bb-valrow input[type=range] { accent-color:var(--primary); vertical-align:middle; }
+.bb-valrow .val { min-width:56px; color:var(--primary); font-weight:700; }
+
+/* ── hint line ── */
+.bb-hint { font-size:.85rem; color:var(--text-light); margin-bottom:.6rem; min-height:1.1em; }
+.bb-hint b { color:var(--primary); }
+
+/* ── breadboard svg ── */
+.bb-scroll { overflow-x:auto; border-radius:14px; }
+.bb-svg { width:100%; min-width:680px; height:auto; display:block; user-select:none; }
+.bb-board { fill:#eef2f7; stroke:#cbd5e1; stroke-width:1.5; }
+[data-theme="dark"] .bb-board { fill:#283341; stroke:#3b465a; }
+.bb-channel { fill:#dde4ec; }
+[data-theme="dark"] .bb-channel { fill:#1f2733; }
+.bb-hole { fill:#aeb9c6; cursor:pointer; transition:fill .12s ease; }
+.bb-hole:hover { fill:var(--primary); }
+[data-theme="dark"] .bb-hole { fill:#5a6678; }
+.bb-hole.used { fill:#7c8794; }
+.bb-rail-red { stroke:#ef4444; stroke-width:2; opacity:.55; }
+.bb-rail-blue { stroke:#3b82f6; stroke-width:2; opacity:.55; }
+.bb-lbl { font-family:'Anuphan',sans-serif; font-size:11px; fill:var(--text-light); text-anchor:middle; dominant-baseline:middle; }
+.bb-lbl-rail { font-size:13px; font-weight:800; }
+.bb-pin-hl { fill:none; stroke:#f59e0b; stroke-width:3; }
+.bb-comp-lead { stroke:#475569; stroke-width:3; stroke-linecap:round; fill:none; }
+[data-theme="dark"] .bb-comp-lead { stroke:#94a3b8; }
+.bb-comp-hit { cursor:pointer; }
+.bb-elec { fill:#fde68a; }
+
+/* ── readout ── */
+.bb-panel-title { font-weight:700; font-size:.9rem; color:var(--primary); margin-bottom:.5rem; }
+.bb-readout { font-size:.82rem; }
+.bb-rtbl { width:100%; border-collapse:collapse; }
+.bb-rtbl th, .bb-rtbl td { padding:.3rem .4rem; border-bottom:1px solid var(--border); text-align:left; }
+.bb-rtbl th { color:var(--text-light); font-weight:600; font-size:.74rem; }
+.bb-rtbl .v { text-align:right; font-weight:700; white-space:nowrap; }
+.bb-rtbl .nm { font-weight:600; }
+.bb-empty { color:var(--text-light); font-style:italic; padding:.4rem 0; }
+.bb-warn { margin-top:.7rem; }
+.bb-warn .w { background:rgba(239,68,68,.08); color:#dc2626; border-radius:8px; padding:.4rem .6rem; font-size:.8rem; margin-bottom:.35rem; }
+.bb-warn .ok { background:rgba(16,185,129,.1); color:#059669; border-radius:8px; padding:.4rem .6rem; font-size:.8rem; }
+.bb-dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:.3rem; vertical-align:middle; }
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🔧</div>
+    <div>
+      <h1 class="th-only">ทดลองบนเบรดบอร์ด (Breadboard Lab)</h1>
+      <h1 class="en-only">Breadboard Lab</h1>
+      <p class="th-only">เลือกอุปกรณ์แล้ววางลงบนเบรดบอร์ดเอง • ระบบคำนวณวงจรจริงด้วย Nodal Analysis • LED ติดเมื่อต่อถูก</p>
+      <p class="en-only">Pick components and place them yourself • Real nodal-analysis solver • LEDs light up when wired correctly</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+<div class="section">
+  <div class="section-title">
+    <span class="th-only">🔧 เบรดบอร์ดจำลอง (โต้ตอบได้)</span>
+    <span class="en-only">🔧 Interactive Breadboard</span>
+  </div>
+
+  <div class="card" style="padding:1.25rem;">
+    <!-- toolbar -->
+    <div class="bb-toolbar" id="bb-toolbar">
+      <button class="bb-tool" data-tool="battery"><span class="ti">🔋</span><span class="th-only">แบตเตอรี่</span><span class="en-only">Battery</span></button>
+      <button class="bb-tool" data-tool="resistor"><span class="ti">▭</span><span class="th-only">ตัวต้านทาน</span><span class="en-only">Resistor</span></button>
+      <button class="bb-tool" data-tool="led"><span class="ti">💡</span><span class="th-only">LED</span><span class="en-only">LED</span></button>
+      <button class="bb-tool" data-tool="diode"><span class="ti">▷|</span><span class="th-only">ไดโอด</span><span class="en-only">Diode</span></button>
+      <button class="bb-tool" data-tool="wire"><span class="ti">〜</span><span class="th-only">สายจัมเปอร์</span><span class="en-only">Jumper</span></button>
+      <span class="bb-sep"></span>
+      <button class="bb-tool danger" data-tool="delete"><span class="ti">🗑</span><span class="th-only">ลบ</span><span class="en-only">Delete</span></button>
+      <button class="bb-tool" id="bb-example"><span class="ti">💡</span><span class="th-only">ตัวอย่าง</span><span class="en-only">Example</span></button>
+      <button class="bb-tool" id="bb-clear"><span class="ti">♻</span><span class="th-only">ล้างทั้งหมด</span><span class="en-only">Clear all</span></button>
+    </div>
+
+    <!-- contextual value controls -->
+    <div class="bb-valctrl" id="bb-valctrl">
+      <div class="bb-valrow" id="bb-val-battery">
+        <label><span class="th-only">แรงดันแบตเตอรี่</span><span class="en-only">Battery voltage</span></label>
+        <input type="range" id="bb-batt-v" min="1" max="12" step="1" value="9">
+        <span class="val" id="bb-batt-v-out">9 V</span>
+        <span style="color:var(--text-light);font-weight:400;">
+          <span class="th-only">วางขั้ว + ก่อน แล้วตามด้วยขั้ว −</span>
+          <span class="en-only">Place + terminal first, then −</span>
+        </span>
+      </div>
+      <div class="bb-valrow" id="bb-val-resistor">
+        <label><span class="th-only">ค่าความต้านทาน</span><span class="en-only">Resistance</span></label>
+        <select id="bb-res-val">
+          <option value="100">100 Ω</option>
+          <option value="220">220 Ω</option>
+          <option value="330" selected>330 Ω</option>
+          <option value="470">470 Ω</option>
+          <option value="1000">1 kΩ</option>
+          <option value="2200">2.2 kΩ</option>
+          <option value="4700">4.7 kΩ</option>
+          <option value="10000">10 kΩ</option>
+        </select>
+      </div>
+      <div class="bb-valrow" id="bb-val-led">
+        <label><span class="th-only">สี LED</span><span class="en-only">LED color</span></label>
+        <select id="bb-led-color">
+          <option value="red">🔴 <span class="th-only">แดง</span> Red (Vf 1.8V)</option>
+          <option value="yellow">🟡 <span class="th-only">เหลือง</span> Yellow (Vf 2.0V)</option>
+          <option value="green">🟢 <span class="th-only">เขียว</span> Green (Vf 2.1V)</option>
+          <option value="blue">🔵 <span class="th-only">น้ำเงิน</span> Blue (Vf 3.0V)</option>
+          <option value="white">⚪ <span class="th-only">ขาว</span> White (Vf 3.2V)</option>
+        </select>
+        <span style="color:var(--text-light);font-weight:400;">
+          <span class="th-only">วางขา + (anode) ก่อน</span>
+          <span class="en-only">Place + (anode) leg first</span>
+        </span>
+      </div>
+      <div class="bb-valrow" id="bb-val-diode">
+        <span style="color:var(--text-light);font-weight:400;">
+          <span class="th-only">ไดโอดซิลิคอน Vf ≈ 0.7V — วางขั้ว anode ก่อน (กระแสไหล anode → cathode)</span>
+          <span class="en-only">Silicon diode Vf ≈ 0.7V — place anode first (current flows anode → cathode)</span>
+        </span>
+      </div>
+      <div class="bb-valrow" id="bb-val-wire">
+        <span style="color:var(--text-light);font-weight:400;">
+          <span class="th-only">สายจัมเปอร์ต่อ 2 จุดให้เป็นโนดเดียวกัน (0 Ω)</span>
+          <span class="en-only">A jumper joins two points into one node (0 Ω)</span>
+        </span>
+      </div>
+      <div class="bb-valrow show" id="bb-val-none">
+        <span style="color:var(--text-light);font-weight:400;">
+          <span class="th-only">👆 เลือกอุปกรณ์จากแถบด้านบน แล้วคลิกรูบนเบรดบอร์ด 2 จุดเพื่อวาง</span>
+          <span class="en-only">👆 Pick a component above, then click two holes on the board to place it</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="bb-hint" id="bb-hint"></div>
+
+    <div class="bb-wrap">
+      <div class="bb-scroll">
+        <svg class="bb-svg" id="bb-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+
+      <div>
+        <div class="card" style="padding:1rem;background:var(--bg);">
+          <div class="bb-panel-title">
+            <span class="th-only">📊 ผลการวัด</span><span class="en-only">📊 Measurements</span>
+          </div>
+          <div class="bb-readout" id="bb-readout"></div>
+          <div class="bb-warn" id="bb-warn"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- how it works -->
+  <div class="card" style="padding:1.25rem;margin-top:1.25rem;">
+    <div class="bb-panel-title">
+      <span class="th-only">🧠 เบรดบอร์ดต่อกันอย่างไร?</span><span class="en-only">🧠 How a breadboard connects</span>
+    </div>
+    <ul class="content-list th-only">
+      <li><strong>คอลัมน์กลาง:</strong> รู 5 รูในแนวตั้งคอลัมน์เดียวกัน (a-e หรือ f-j) <strong>ต่อถึงกัน</strong> — วางขาอุปกรณ์ในคอลัมน์เดียวกันเพื่อเชื่อมต่อ</li>
+      <li><strong>ร่องกลาง</strong> แยกครึ่งบน (a-e) กับครึ่งล่าง (f-j) ออกจากกัน</li>
+      <li><strong>ราง + / −</strong> (บนสุด/ล่างสุด) วิ่งยาวตลอดแนว ใช้จ่ายไฟ (power rail)</li>
+      <li><strong>LED มีขั้ว:</strong> ขายาว = + (anode), ขาสั้น = − (cathode) — ต่อกลับขั้วจะไม่ติด</li>
+      <li>ต้องมี <strong>แบตเตอรี่</strong> และวงจร <strong>ครบลูป</strong> กระแสจึงจะไหล</li>
+    </ul>
+    <ul class="content-list en-only">
+      <li><strong>Column:</strong> the 5 vertical holes of one column (a-e or f-j) are <strong>connected</strong> — put component legs in the same column to join them</li>
+      <li>The <strong>center channel</strong> separates the top half (a-e) from the bottom half (f-j)</li>
+      <li>The <strong>+ / − rails</strong> (top &amp; bottom) run the full length — used to distribute power</li>
+      <li><strong>LEDs are polarized:</strong> long leg = + (anode), short leg = − (cathode) — reversed, it won't light</li>
+      <li>You need a <strong>battery</strong> and a <strong>complete loop</strong> for current to flow</li>
+    </ul>
+  </div>
+</div>
+</div><!-- /container -->
+
+</main>
+
+<footer>
+  <strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong>
+  <strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong>
+</footer>
+<script>const CURRENT_PAGE='breadboard';</script>
+<script src="nav.js"></script>
+<script src="breadboard.js"></script>
+</body>
+</html>

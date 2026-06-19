@@ -21,6 +21,10 @@ website/
 ├── quiz.js          — ข้อมูลข้อสอบ + logic แบบทดสอบ
 ├── downloads.js     — PDF preview modal + download interactions
 ├── oscilloscope.js  — Interactive I-V Curve Simulator
+├── osc-reader.js    — Interactive Scope Reading Trainer (canvas, V/div & T/div sliders, AUTOSET/randomize, auto Vp/Vrms/T/f)
+├── transistor-sim.js — Interactive BJT switch simulator (canvas, IB & β sliders → Cut-off/Active/Saturation + LED glow)
+├── signal-gen-sim.js — Interactive Waveform Generator (canvas, sine/square/triangle/sawtooth + freq/amp/duty/offset)
+├── breadboard.js    — Interactive Breadboard Lab (SVG, วางอุปกรณ์ R/LED/diode/wire/battery เอง, union-find + MNA solver, electron animation)
 ├── simulation.js    — logic จำลองวงจรและ animation
 ├── index.html          — หน้าหลัก (CURRENT_PAGE='home') — กลุ่มตรงกับ navbar: บทเรียน / งานปฏิบัติ / เครื่องมือ / คลังการเรียนรู้
 ├── electricity.html    — บทที่ 1
@@ -32,10 +36,12 @@ website/
 ├── soldering.html      — บทที่ 7
 ├── ac-circuit.html     — บทที่ 8
 ├── diode.html          — บทที่ 9: PN Junction, I-V Curve, LED Vf by color, Rectifier Circuit
+├── transistor.html     — BJT (NPN/PNP) + MOSFET: สัญลักษณ์, 3 ย่าน (Cut-off/Active/Saturation), สูตร β/IC/IE, เช็คด้วยมัลติมิเตอร์, เบอร์ยอดนิยม + Interactive BJT switch simulator (canvas)
 ├── home-wiring.html    — บทเสริม: ระบบ L/N/G, แรงดันลอย (Ghost Voltage), ไฟรั่วจริง, Socket Tester, ความปลอดภัย
-├── oscilloscope.html   — บทที่ 10: โครงสร้าง CRT, การอ่านค่า, สูตร T/f/Vpp, ตัวอย่าง 3 โจทย์, บท 6-4 วงจร Octopus (Curve Tracer) + Interactive I-V Curve Simulator (canvas, 11 อุปกรณ์)
-├── signal-generator.html — บทที่ 11: คลื่น 4 แบบ, โครงสร้าง 7 ส่วน, ตัวอย่างการใช้งาน
+├── oscilloscope.html   — บทที่ 10: โครงสร้าง CRT, เทคนิคสำคัญ (Trigger/Probe ×1×10/Coupling), สูตร T/f/Vpp/Duty, ตัวอย่าง 4 โจทย์, Interactive Scope Reading Trainer (canvas), วงจร Octopus (Curve Tracer) + Interactive I-V Curve Simulator (canvas, 11 อุปกรณ์)
+├── signal-generator.html — บทที่ 11: คลื่น 4 แบบ, โครงสร้าง 7 ส่วน, พารามิเตอร์สำคัญ (f/T, Vpp/Vp/Vrms, Duty, Offset) + Interactive Waveform Generator (canvas)
 ├── simulation.html     — จำลองวงจร 3 แบบ (Series/Parallel/Mixed) + วิธีคำนวณ real-time + LED toggle
+├── breadboard.html     — ทดลองบนเบรดบอร์ด (400-point): เลือก/วางอุปกรณ์ R/LED/ไดโอด/จัมเปอร์/แบตเตอรี่เอง, คำนวณวงจรจริง (MNA), LED ติด/ดับ, electron animation
 ├── formulas.html       — สูตรสรุป + print-friendly
 ├── tools.html          — เครื่องคิดเลข 7 ตัว (4-band + 5-band มีชื่อไทย-อังกฤษครบ)
 ├── quiz.html           — แบบทดสอบ 77 ข้อ 12 หมวด — มีข้อสอบ EN ครบทุกข้อ
@@ -63,7 +69,7 @@ website/
   <script src="nav.js"></script>
 </body>
 ```
-CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `capacitor`, `inductor`, `multimeter`, `soldering`, `ac-circuit`, `diode`, `home-wiring`, `oscilloscope`, `signal-generator`, `simulation`, `formulas`, `tools`, `quiz`, `downloads`
+CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor`, `capacitor`, `inductor`, `multimeter`, `soldering`, `home-wiring`, `oscilloscope`, `signal-generator`, `simulation`, `breadboard`, `formulas`, `tools`, `quiz`, `downloads`
 
 ### ระบบ 2 ภาษา (Bilingual System)
 - CSS ใน style.css:
@@ -83,7 +89,7 @@ CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `capacitor`, `induct
 - NAV_LESSON_GROUPS → mega menu "บทเรียน / Lessons" แบ่ง 3 กลุ่ม: พื้นฐานไฟฟ้า, อุปกรณ์อิเล็กทรอนิกส์, เครื่องมือวัดและทดสอบ
 - บน desktop แสดง mega menu 3 คอลัมน์; บน mobile กลุ่มบทเรียนเป็น accordion เปิดทีละกลุ่ม
 - NAV_PRACTICE (soldering, home-wiring) → dropdown "งานปฏิบัติ / Practical"
-- NAV_TOOLS (simulation, formulas, tools) → dropdown "เครื่องมือ ▼" / "Tools ▼"
+- NAV_TOOLS (simulation, breadboard, formulas, tools) → dropdown "เครื่องมือ ▼" / "Tools ▼"
 - NAV_RESOURCES (quiz, downloads) → dropdown "คลังการเรียนรู้ / Resources"
 - Dark mode: `[data-theme="dark"]` บน `<html>`, บันทึกใน localStorage key `theme`
 - Lang toggle: ปุ่ม TH / EN ใน nav bar ทุกหน้า
@@ -104,10 +110,10 @@ CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `capacitor`, `induct
 | กลุ่ม | หน้า | สี card |
 |---|---|---|
 | 📚 พื้นฐานไฟฟ้า | electricity, ohm, ac-circuit | `topic-card-blue` |
-| 📚 อุปกรณ์อิเล็กทรอนิกส์ | resistor, capacitor, inductor, diode | `topic-card-blue` |
+| 📚 อุปกรณ์อิเล็กทรอนิกส์ | resistor, diode, transistor, capacitor, inductor | `topic-card-blue` |
 | 📚 เครื่องมือวัดและทดสอบ | multimeter, signal-generator, oscilloscope | `topic-card-blue` |
 | 🧰 งานปฏิบัติ | soldering, home-wiring | `topic-card-teal` |
-| 🛠 เครื่องมือ | simulation, formulas, tools | `topic-card-teal` |
+| 🛠 เครื่องมือ | simulation, breadboard, formulas, tools | `topic-card-teal` |
 | 📚 คลังการเรียนรู้ | quiz, downloads | `topic-card-orange` / `topic-card-green` |
 
 ### Deploy

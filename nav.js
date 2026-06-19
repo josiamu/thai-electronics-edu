@@ -39,6 +39,7 @@ const NAV_PRACTICE = [
 
 const NAV_TOOLS = [
   { id: 'simulation', href: 'simulation.html', label_th: '🔬 จำลองวงจร', label_en: '🔬 Circuit Sim' },
+  { id: 'breadboard', href: 'breadboard.html', label_th: '🔧 ทดลองบนเบรดบอร์ด', label_en: '🔧 Breadboard Lab' },
   { id: 'formulas', href: 'formulas.html', label_th: '📐 สูตรสรุป', label_en: '📐 Formulas' },
   { id: 'tools', href: 'tools.html', label_th: '🧮 เครื่องคิดเลข', label_en: '🧮 Calculators' },
 ];
