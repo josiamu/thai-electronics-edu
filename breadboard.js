@@ -76,6 +76,7 @@ var LED_COLORS = {
 
 // ════════════════════════════ STATE ════════════════════════════
 var holes = {};          // id -> {x, y, node, el}
+var holeAt = {};         // "x_y" -> id (reverse lookup for drag snapping)
 var comps = [];          // {id,type,a,b,value,vf,color,results,segs}
 var occupied = {};       // holeId -> compId (one pin per hole)
 var nextId = 1;
@@ -184,7 +185,9 @@ function addHole(id, x, y, node){
   c.addEventListener('click', function(){ onHoleClick(id); });
   gHoles.appendChild(c);
   holes[id] = { x:x, y:y, node:node, el:c };
+  holeAt[hkey(x, y)] = id;
 }
+function hkey(x, y){ return Math.round(x) + '_' + Math.round(y); }
 
 // ════════════════════════════ PLACEMENT ════════════════════════════
 var POLAR = { battery:1, led:1, diode:1 };    // first hole = + / anode
@@ -193,7 +196,8 @@ var TYPE_LABEL = {
   resistor:{ th:'ตัวต้านทาน', en:'Resistor' },
   led:     { th:'LED', en:'LED' },
   diode:   { th:'ไดโอด', en:'Diode' },
-  wire:    { th:'จัมเปอร์', en:'Jumper' }
+  wire:    { th:'จัมเปอร์', en:'Jumper' },
+  switch:  { th:'สวิตช์', en:'Switch' }
 };
 
 function isEN(){ return document.documentElement.lang === 'en'; }
@@ -247,6 +251,7 @@ function placeComp(type, a, b){
   if (type === 'led'){ c.color = ledColor; c.vf = LED_COLORS[ledColor].vf; }
   if (type === 'diode') c.vf = DIODE_VF;
   if (type === 'battery') c.value = batteryV;
+  if (type === 'switch') c.closed = true;   // starts closed (conducting)
   comps.push(c);
   occupied[a] = c.id; occupied[b] = c.id;
   rebuild();
@@ -293,14 +298,18 @@ function renderEditor(){
     ctrl = '<label>' + (en ? 'Voltage' : 'แรงดัน') + '</label><input type="range" id="bb-ed-bv" min="1" max="12" step="1" value="' + c.value + '"><span class="ev" id="bb-ed-bv-out">' + c.value + ' V</span>';
   } else if (c.type === 'diode'){
     ctrl = '<span style="color:var(--text-light)">' + (en ? 'Silicon diode, Vf ≈ 0.7 V' : 'ไดโอดซิลิคอน Vf ≈ 0.7 V') + '</span>';
+  } else if (c.type === 'switch'){
+    ctrl = '<label>' + (en ? 'State' : 'สถานะ') + '</label><span style="font-weight:700;color:' + (c.closed ? '#16a34a' : '#94a3b8') + '">' +
+           (c.closed ? (en ? 'ON (closed)' : 'ปิด (ต่อวงจร)') : (en ? 'OFF (open)' : 'เปิด (ตัดวงจร)')) + '</span>';
   }
   var polar = (c.type === 'led' || c.type === 'diode' || c.type === 'battery');
   var flip = polar ? '<button class="bb-ed-btn" id="bb-ed-flip">🔄 ' + (en ? 'Flip ±' : 'สลับขั้ว') + '</button>' : '';
+  var toggle = c.type === 'switch' ? '<button class="bb-ed-btn" id="bb-ed-toggle">⎍ ' + (en ? 'Toggle' : 'เปิด/ปิด') + '</button>' : '';
 
   box.innerHTML =
     '<div class="bb-ed-title" id="bb-ed-title">' + edTitle(c, en) + '</div>' +
     (ctrl ? '<div class="bb-ed-row">' + ctrl + '</div>' : '') +
-    '<div class="bb-ed-row bb-ed-actions">' + flip +
+    '<div class="bb-ed-row bb-ed-actions">' + toggle + flip +
       '<button class="bb-ed-btn danger" id="bb-ed-del">🗑 ' + (en ? 'Delete' : 'ลบ') + '</button>' +
       '<button class="bb-ed-btn" id="bb-ed-close">✕ ' + (en ? 'Close' : 'ปิด') + '</button></div>';
   box.style.display = '';
@@ -311,12 +320,67 @@ function renderEditor(){
   on('bb-ed-color', 'change', function(){ c.color = this.value; c.vf = LED_COLORS[this.value].vf; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-bv', 'input', function(){ c.value = +this.value; var o = $('bb-ed-bv-out'); if (o) o.textContent = c.value + ' V'; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-flip', 'click', function(){ var t = c.a; c.a = c.b; c.b = t; rebuild(); });
+  on('bb-ed-toggle', 'click', function(){ c.closed = !c.closed; rebuild(); renderEditor(); });
   on('bb-ed-del', 'click', function(){ deleteComp(c.id); });
   on('bb-ed-close', 'click', function(){ selectedId = null; rebuild(); renderEditor(); });
 }
 function on(id, ev, fn){ var e = $(id); if (e) e.addEventListener(ev, fn); }
 function edTitle(c, en){ return (en ? 'Edit: ' : 'แก้ไข: ') + compName(c, en); }
 function refreshEditorTitle(c){ var t = $('bb-ed-title'); if (t) t.textContent = edTitle(c, isEN()); }
+
+// ════════════════════════════ DRAG TO MOVE ════════════════════════════
+var dragComp = null, dragGrab = null, dragMoved = false;
+
+function svgCoords(e){
+  if (!svg.createSVGPoint || !svg.getScreenCTM) return null;   // unavailable in tests
+  var m = svg.getScreenCTM(); if (!m) return null;
+  var pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+  var p = pt.matrixTransform(m.inverse());
+  return { x:p.x, y:p.y };
+}
+function nearestHole(x, y){
+  var best = null, bd = Infinity;
+  for (var id in holes){ var h = holes[id], d = (h.x - x) * (h.x - x) + (h.y - y) * (h.y - y); if (d < bd){ bd = d; best = id; } }
+  return best;
+}
+function setCompHoles(c, na, nb){
+  delete occupied[c.a]; delete occupied[c.b];
+  c.a = na; c.b = nb; occupied[na] = c.id; occupied[nb] = c.id;
+}
+
+function startDrag(ev, c){
+  if (ev.button != null && ev.button !== 0) return;   // primary button / touch only
+  ev.stopPropagation(); if (ev.preventDefault) ev.preventDefault();
+  dragComp = c; dragMoved = false;
+  var p = svgCoords(ev);
+  dragGrab = p ? { ox: holes[c.a].x - p.x, oy: holes[c.a].y - p.y } : { ox:0, oy:0 };
+}
+function onPointerMove(ev){
+  if (!dragComp || tool === 'delete') return;
+  var p = svgCoords(ev); if (!p) return;
+  var c = dragComp;
+  var na = nearestHole(p.x + dragGrab.ox, p.y + dragGrab.oy);   // where endpoint a wants to be
+  if (!na) return;
+  var dx = holes[na].x - holes[c.a].x, dy = holes[na].y - holes[c.a].y;
+  if (dx === 0 && dy === 0) return;                              // no movement
+  var nb = holeAt[hkey(holes[c.b].x + dx, holes[c.b].y + dy)];   // matching hole for endpoint b
+  if (!nb || nb === na) return;                                  // b lands off-grid → invalid drop
+  if (occupied[na] && occupied[na] !== c.id) return;
+  if (occupied[nb] && occupied[nb] !== c.id) return;
+  dragMoved = true;
+  setCompHoles(c, na, nb);
+  selectedId = c.id;
+  rebuild();
+}
+function onPointerUp(){
+  if (!dragComp) return;
+  var c = dragComp; dragComp = null;
+  if (!dragMoved){                       // it was a tap, not a drag
+    if (tool === 'delete') deleteComp(c.id);
+    else if (c.type === 'switch'){ c.closed = !c.closed; selectComp(c.id); }
+    else selectComp(c.id);
+  } else { selectedId = c.id; renderEditor(); }
+}
 
 function showHL(id){ var h = holes[id]; hlEl.setAttribute('cx', h.x); hlEl.setAttribute('cy', h.y); hlEl.style.display = ''; }
 function hideHL(){ hlEl.style.display = 'none'; }
@@ -369,8 +433,10 @@ function solveCircuit(){
   var warnings = [];
 
   var batteries = comps.filter(function(c){ return c.type === 'battery'; });
-  var branches  = comps.filter(function(c){ return c.type !== 'wire' && c.type !== 'battery'; });
+  var branches  = comps.filter(function(c){ return c.type !== 'wire' && c.type !== 'battery' && c.type !== 'switch'; });
   var wires     = comps.filter(function(c){ return c.type === 'wire'; });
+  // a closed switch behaves like a jumper (0 Ω); an open one is ignored entirely
+  var joins     = wires.concat(comps.filter(function(c){ return c.type === 'switch' && c.closed; }));
 
   if (batteries.length === 0){
     return { ok:comps.length === 0, warnings:comps.length ? [{ t:'warn', th:'ยังไม่มีแหล่งจ่าย — เพิ่มแบตเตอรี่เพื่อให้กระแสไหล', en:'No power source — add a battery to make current flow' }] : [] };
@@ -379,7 +445,7 @@ function solveCircuit(){
   // 1) supernodes via union-find (wires merge nodes)
   var uf = UF();
   comps.forEach(function(c){ uf.add(holes[c.a].node); uf.add(holes[c.b].node); });
-  wires.forEach(function(c){ uf.union(holes[c.a].node, holes[c.b].node); });
+  joins.forEach(function(c){ uf.union(holes[c.a].node, holes[c.b].node); });
   function sn(holeId){ return uf.find(holes[holeId].node); }
 
   // 2) ground = negative terminal supernode of first battery
@@ -492,6 +558,7 @@ function solveCircuit(){
     if (Math.abs(I) > 0.8) warnings.push({ t:'warn', th:'กระแสจากแบตเตอรี่สูงมาก (' + fmtI(Math.abs(I)) + ') — อาจลัดวงจร!', en:'Very high battery current (' + fmtI(Math.abs(I)) + ') — possible short circuit!' });
   });
   wires.forEach(function(c){ c.results = { V:0, I:0, on:false }; });
+  comps.filter(function(c){ return c.type === 'switch'; }).forEach(function(c){ c.results = { V:0, I:0, on:c.closed }; });
 
   // reverse-biased LED hint
   comps.filter(function(c){ return c.type === 'led'; }).forEach(function(c){
@@ -527,11 +594,7 @@ function drawComp(c){
   var len = Math.sqrt(dx * dx + dy * dy);
   var ang = Math.atan2(dy, dx) * 180 / Math.PI;
   var g = el('g', { transform:'translate(' + A.x + ',' + A.y + ') rotate(' + ang.toFixed(2) + ')', class:'bb-comp-hit' });
-  g.addEventListener('click', function(ev){
-    ev.stopPropagation();
-    if (tool === 'delete') deleteComp(c.id);
-    else selectComp(c.id);
-  });
+  g.addEventListener('pointerdown', function(ev){ startDrag(ev, c); });
 
   if (c.type === 'wire'){
     if (c.id === selectedId) g.appendChild(el('line', { x1:0, y1:0, x2:len, y2:0, stroke:'#f59e0b', 'stroke-width':8, 'stroke-linecap':'round', opacity:'0.35' }));
@@ -539,8 +602,20 @@ function drawComp(c){
     gComps.appendChild(g); return;
   }
 
-  if (c.id === selectedId)   // highlight box behind the body
+  if (c.id === selectedId)   // highlight box behind the body (drawn for all non-wire parts)
     g.appendChild(el('rect', { x:-4, y:-16, width:len + 8, height:32, rx:6, fill:'rgba(245,158,11,0.10)', stroke:'#f59e0b', 'stroke-width':2, 'stroke-dasharray':'5 3' }));
+
+  if (c.type === 'switch'){
+    var sa = (len - 24) / 2, sb = sa + 24, cl = c.closed;
+    g.appendChild(el('line', { class:'bb-comp-lead', x1:0, y1:0, x2:sa, y2:0 }));
+    g.appendChild(el('line', { class:'bb-comp-lead', x1:sb, y1:0, x2:len, y2:0 }));
+    g.appendChild(el('circle', { cx:sa, cy:0, r:3, fill:'#475569' }));
+    g.appendChild(el('circle', { cx:sb, cy:0, r:3, fill:'#475569' }));
+    // lever: down/connected when closed, lifted when open
+    g.appendChild(el('line', { x1:sa, y1:0, x2:cl ? sb : sb - 4, y2:cl ? 0 : -13, stroke:cl ? '#16a34a' : '#94a3b8', 'stroke-width':3.4, 'stroke-linecap':'round' }));
+    gComps.appendChild(uprightText(len / 2, A.x, A.y, ang, -16, cl ? (isEN() ? 'ON' : 'ปิด') : (isEN() ? 'OFF' : 'เปิด'), cl ? '#16a34a' : '#94a3b8'));
+    gComps.appendChild(g); return;
+  }
 
   // leads from each hole to the body
   var bodyLen = Math.min(len * 0.5, 30), x1 = (len - bodyLen) / 2, x2 = x1 + bodyLen;
@@ -634,7 +709,7 @@ function rebuildElectrons(){
   while (gElec.firstChild) gElec.removeChild(gElec.firstChild);
   elecDots = [];
   comps.forEach(function(c){
-    if (c.type === 'wire' || c.type === 'battery') return;
+    if (c.type === 'wire' || c.type === 'battery' || c.type === 'switch') return;
     if (!c.results || !c.results.on) return;
     var I = Math.abs(c.results.I);
     if (I < 1e-5) return;
@@ -681,6 +756,8 @@ function renderReadout(res){
       if (c.type === 'led'){
         var lit = c.results && c.results.on;
         st = '<span class="bb-dot" style="background:' + (lit ? LED_COLORS[c.color].fill : '#94a3b8') + '"></span>' + (lit ? (en ? 'ON' : 'ติด') : (en ? 'off' : 'ดับ'));
+      } else if (c.type === 'switch'){
+        st = '<span class="bb-dot" style="background:' + (c.closed ? '#16a34a' : '#94a3b8') + '"></span>' + (c.closed ? (en ? 'ON' : 'ปิด') : (en ? 'OFF' : 'เปิด'));
       }
       rows += '<tr><td class="nm">' + nm + (st ? ' ' + st : '') + '</td>' +
               '<td class="v">' + (c.results ? fmtV(Math.abs(c.results.V)) : '—') + '</td>' +
@@ -716,11 +793,12 @@ function compName(c, en){
   if (c.type === 'battery') return (en ? 'Battery ' : 'แบตเตอรี่ ') + c.value + 'V';
   if (c.type === 'diode') return en ? 'Diode' : 'ไดโอด';
   if (c.type === 'led') return (en ? 'LED ' : 'LED ') + LED_COLORS[c.color][en ? 'en' : 'th'];
+  if (c.type === 'switch') return en ? 'Switch' : 'สวิตช์';
   return en ? 'Jumper' : 'จัมเปอร์';
 }
 
 // ════════════════════════════ TOOLBAR / CONTROLS ════════════════════════════
-var VALROWS = ['battery','resistor','led','diode','wire'];
+var VALROWS = ['battery','resistor','led','diode','wire','switch'];
 function selectTool(t){
   // toggle off if same
   tool = (tool === t) ? null : t;
@@ -791,6 +869,10 @@ function initControls(){
   $('bb-temp').addEventListener('input', function(){ env.temp = +this.value; $('bb-temp-out').textContent = env.temp + ' °C'; rebuild(); });
   $('bb-light').addEventListener('input', function(){ env.light = +this.value; $('bb-light-out').textContent = env.light + ' %'; rebuild(); });
   $('bb-vrpos').addEventListener('input', function(){ env.vrPos = +this.value; $('bb-vrpos-out').textContent = env.vrPos + ' %'; rebuild(); });
+  // drag-to-move: track pointer at the document level so fast drags don't slip off
+  document.addEventListener('pointermove', onPointerMove);
+  document.addEventListener('pointerup', onPointerUp);
+  document.addEventListener('pointercancel', onPointerUp);
   // cancel pending placement with Escape
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && pendingHole != null){ pendingHole = null; hideHL(); refreshHint(); } });
   // re-render text on language change

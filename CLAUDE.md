@@ -24,7 +24,7 @@ website/
 ├── osc-reader.js    — Interactive Scope Reading Trainer (canvas, V/div & T/div sliders, AUTOSET/randomize, auto Vp/Vrms/T/f)
 ├── transistor-sim.js — Interactive BJT switch simulator (canvas, IB & β sliders → Cut-off/Active/Saturation + LED glow)
 ├── signal-gen-sim.js — Interactive Waveform Generator (canvas, sine/square/triangle/sawtooth + freq/amp/duty/offset)
-├── breadboard.js    — Interactive Breadboard Lab (SVG, วางอุปกรณ์ R/VR/NTC/PTC/LDR/VDR/LED/diode/wire/battery เอง, union-find + MNA solver + iterative diode/VDR, Environment panel (temp/light/VR knob), คลิกอุปกรณ์เพื่อแก้ไข (ค่า/สี/Vc/สลับขั้ว/ลบ), electron animation)
+├── breadboard.js    — Interactive Breadboard Lab (SVG, วางอุปกรณ์ R/VR/NTC/PTC/LDR/VDR/LED/diode/wire/switch/battery เอง, union-find + MNA solver + iterative diode/VDR, switch (ปิด=jumper/เปิด=ตัดวงจร), Environment panel (temp/light/VR knob), คลิกอุปกรณ์เพื่อแก้ไข (ค่า/สี/Vc/สลับขั้ว/toggle/ลบ), ลาก-ย้ายอุปกรณ์ (pointer + snap), electron animation)
 ├── simulation.js    — logic จำลองวงจรและ animation
 ├── index.html          — หน้าหลัก (CURRENT_PAGE='home') — กลุ่มตรงกับ navbar: บทเรียน / งานปฏิบัติ / เครื่องมือ / คลังการเรียนรู้
 ├── electricity.html    — บทที่ 1
@@ -41,7 +41,7 @@ website/
 ├── oscilloscope.html   — บทที่ 10: โครงสร้าง CRT, เทคนิคสำคัญ (Trigger/Probe ×1×10/Coupling), สูตร T/f/Vpp/Duty, ตัวอย่าง 4 โจทย์, Interactive Scope Reading Trainer (canvas), วงจร Octopus (Curve Tracer) + Interactive I-V Curve Simulator (canvas, 11 อุปกรณ์)
 ├── signal-generator.html — บทที่ 11: คลื่น 4 แบบ, โครงสร้าง 7 ส่วน, พารามิเตอร์สำคัญ (f/T, Vpp/Vp/Vrms, Duty, Offset) + Interactive Waveform Generator (canvas)
 ├── simulation.html     — จำลองวงจร 3 แบบ (Series/Parallel/Mixed) + วิธีคำนวณ real-time + LED toggle
-├── breadboard.html     — ทดลองบนเบรดบอร์ด (400-point): เลือก/วางอุปกรณ์ R (คงที่/VR/NTC/PTC/LDR/VDR)/LED/ไดโอด/จัมเปอร์/แบตเตอรี่เอง, แผงสภาพแวดล้อม (อุณหภูมิ/แสง/VR knob), คำนวณวงจรจริง (MNA), LED ติด/ดับ, electron animation
+├── breadboard.html     — ทดลองบนเบรดบอร์ด (400-point): เลือก/วางอุปกรณ์ R (คงที่/VR/NTC/PTC/LDR/VDR)/LED/ไดโอด/จัมเปอร์/สวิตช์/แบตเตอรี่เอง, แผงสภาพแวดล้อม (อุณหภูมิ/แสง/VR knob), คลิกแก้ไข + ลาก-ย้ายอุปกรณ์, คำนวณวงจรจริง (MNA), LED ติด/ดับ, electron animation
 ├── formulas.html       — สูตรสรุป + print-friendly
 ├── tools.html          — เครื่องคิดเลข 7 ตัว (4-band + 5-band มีชื่อไทย-อังกฤษครบ)
 ├── quiz.html           — แบบทดสอบ 77 ข้อ 12 หมวด — มีข้อสอบ EN ครบทุกข้อ

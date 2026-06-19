@@ -60,7 +60,8 @@
 .bb-pin-hl { fill:none; stroke:#f59e0b; stroke-width:3; }
 .bb-comp-lead { stroke:#475569; stroke-width:3; stroke-linecap:round; fill:none; }
 [data-theme="dark"] .bb-comp-lead { stroke:#94a3b8; }
-.bb-comp-hit { cursor:pointer; }
+.bb-comp-hit { cursor:grab; touch-action:none; }
+.bb-comp-hit:active { cursor:grabbing; }
 .bb-elec { fill:#fde68a; }
 
 /* ── readout ── */
@@ -128,6 +129,7 @@
       <button class="bb-tool" data-tool="led"><span class="ti">💡</span><span class="th-only">LED</span><span class="en-only">LED</span></button>
       <button class="bb-tool" data-tool="diode"><span class="ti">▷|</span><span class="th-only">ไดโอด</span><span class="en-only">Diode</span></button>
       <button class="bb-tool" data-tool="wire"><span class="ti">〜</span><span class="th-only">สายจัมเปอร์</span><span class="en-only">Jumper</span></button>
+      <button class="bb-tool" data-tool="switch"><span class="ti">⎍</span><span class="th-only">สวิตช์</span><span class="en-only">Switch</span></button>
       <span class="bb-sep"></span>
       <button class="bb-tool danger" data-tool="delete"><span class="ti">🗑</span><span class="th-only">ลบ</span><span class="en-only">Delete</span></button>
       <button class="bb-tool" id="bb-example"><span class="ti">💡</span><span class="th-only">ตัวอย่าง</span><span class="en-only">Example</span></button>
@@ -201,6 +203,12 @@
         <span style="color:var(--text-light);font-weight:400;">
           <span class="th-only">สายจัมเปอร์ต่อ 2 จุดให้เป็นโนดเดียวกัน (0 Ω)</span>
           <span class="en-only">A jumper joins two points into one node (0 Ω)</span>
+        </span>
+      </div>
+      <div class="bb-valrow" id="bb-val-switch">
+        <span style="color:var(--text-light);font-weight:400;">
+          <span class="th-only">วางสวิตช์ (เริ่มที่ปิด) — คลิกที่สวิตช์เพื่อเปิด/ปิดวงจร</span>
+          <span class="en-only">Place a switch (starts closed) — click it to open/close the circuit</span>
         </span>
       </div>
       <div class="bb-valrow show" id="bb-val-none">
