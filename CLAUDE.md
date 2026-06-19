@@ -24,7 +24,7 @@ website/
 ├── osc-reader.js    — Interactive Scope Reading Trainer (canvas, V/div & T/div sliders, AUTOSET/randomize, auto Vp/Vrms/T/f)
 ├── transistor-sim.js — Interactive BJT switch simulator (canvas, IB & β sliders → Cut-off/Active/Saturation + LED glow)
 ├── signal-gen-sim.js — Interactive Waveform Generator (canvas, sine/square/triangle/sawtooth + freq/amp/duty/offset)
-├── breadboard.js    — Interactive Breadboard Lab (SVG, วางอุปกรณ์ R/VR/NTC/PTC/LDR/VDR/LED/diode/wire/battery เอง, union-find + MNA solver + iterative diode/VDR, Environment panel (temp/light/VR knob), electron animation)
+├── breadboard.js    — Interactive Breadboard Lab (SVG, วางอุปกรณ์ R/VR/NTC/PTC/LDR/VDR/LED/diode/wire/battery เอง, union-find + MNA solver + iterative diode/VDR, Environment panel (temp/light/VR knob), คลิกอุปกรณ์เพื่อแก้ไข (ค่า/สี/Vc/สลับขั้ว/ลบ), electron animation)
 ├── simulation.js    — logic จำลองวงจรและ animation
 ├── index.html          — หน้าหลัก (CURRENT_PAGE='home') — กลุ่มตรงกับ navbar: บทเรียน / งานปฏิบัติ / เครื่องมือ / คลังการเรียนรู้
 ├── electricity.html    — บทที่ 1

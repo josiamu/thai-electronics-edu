@@ -81,6 +81,20 @@
 .bb-env label { display:block; font-size:.82rem; font-weight:600; margin:.55rem 0 .15rem; }
 .bb-env input[type=range] { width:100%; accent-color:var(--primary); cursor:pointer; }
 .bb-env .ev { float:right; color:var(--primary); font-weight:700; }
+
+/* ── selected-component editor ── */
+.bb-editor { background:var(--card); border:2px solid #f59e0b; border-radius:10px; padding:.7rem .8rem; margin-bottom:1rem; box-shadow:0 4px 14px rgba(245,158,11,.18); }
+.bb-ed-title { font-weight:700; font-size:.85rem; color:#b45309; margin-bottom:.55rem; }
+.bb-ed-row { display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; font-size:.82rem; margin-bottom:.55rem; }
+.bb-ed-row:last-of-type { margin-bottom:0; }
+.bb-ed-row label { font-weight:600; color:var(--text-light); }
+.bb-ed-row select { padding:.28rem .45rem; border-radius:6px; border:1px solid var(--border); background:var(--card); color:var(--text); font-family:inherit; cursor:pointer; }
+.bb-ed-row input[type=range] { accent-color:var(--primary); cursor:pointer; flex:1; min-width:90px; }
+.bb-ed-row .ev { color:var(--primary); font-weight:700; min-width:42px; }
+.bb-ed-actions { display:flex; gap:.4rem; flex-wrap:wrap; }
+.bb-ed-btn { font-family:inherit; font-size:.78rem; font-weight:600; padding:.34rem .6rem; border-radius:7px; border:1px solid var(--border); background:var(--bg); color:var(--text); cursor:pointer; transition:border-color .12s ease; }
+.bb-ed-btn:hover { border-color:var(--primary); }
+.bb-ed-btn.danger { color:#dc2626; border-color:#fca5a5; }
 </style>
 </head>
 <body>
@@ -191,8 +205,8 @@
       </div>
       <div class="bb-valrow show" id="bb-val-none">
         <span style="color:var(--text-light);font-weight:400;">
-          <span class="th-only">👆 เลือกอุปกรณ์จากแถบด้านบน แล้วคลิกรูบนเบรดบอร์ด 2 จุดเพื่อวาง</span>
-          <span class="en-only">👆 Pick a component above, then click two holes on the board to place it</span>
+          <span class="th-only">👆 เลือกอุปกรณ์จากแถบด้านบน แล้วคลิกรูบนเบรดบอร์ด 2 จุดเพื่อวาง • คลิกอุปกรณ์ที่วางแล้วเพื่อแก้ไข</span>
+          <span class="en-only">👆 Pick a component above, then click two holes to place it • click a placed part to edit it</span>
         </span>
       </div>
     </div>
@@ -205,6 +219,7 @@
       </div>
 
       <div>
+        <div id="bb-editor" class="bb-editor" style="display:none;"></div>
         <div class="card" style="padding:1rem;background:var(--bg);margin-bottom:1rem;">
           <div class="bb-panel-title">
             <span class="th-only">🌍 สภาพแวดล้อม</span><span class="en-only">🌍 Environment</span>

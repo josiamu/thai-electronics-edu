@@ -81,6 +81,7 @@ var occupied = {};       // holeId -> compId (one pin per hole)
 var nextId = 1;
 var tool = null;         // armed tool: battery|resistor|led|diode|wire|delete|null
 var pendingHole = null;  // first clicked hole id (awaiting second)
+var selectedId = null;   // currently selected component (for the edit panel)
 var batteryV = 9;
 var resVal = 330;
 var resSubtype = 'resistor';   // resistor | vr | ntc | ptc | ldr | vdr
@@ -256,8 +257,66 @@ function deleteComp(id){
     if (c.id === id){ delete occupied[c.a]; delete occupied[c.b]; return false; }
     return true;
   });
+  if (selectedId === id) selectedId = null;
   rebuild();
+  renderEditor();
 }
+
+// ════════════════════════════ SELECT / EDIT ════════════════════════════
+function selectComp(id){
+  var c = compById(id);
+  if (!c || c.type === 'wire'){ selectedId = null; rebuild(); renderEditor(); return; }
+  pendingHole = null; hideHL();
+  selectedId = id;
+  rebuild();        // redraw highlight
+  renderEditor();
+}
+function compById(id){ for (var i = 0; i < comps.length; i++) if (comps[i].id === id) return comps[i]; return null; }
+
+function renderEditor(){
+  var box = $('bb-editor'), c = compById(selectedId), en = isEN();
+  if (!c || c.type === 'wire'){ box.style.display = 'none'; box.innerHTML = ''; return; }
+
+  var ctrl = '';
+  if (RFAM[c.type]){
+    var list = R_OPTIONS[c.type] || R_OPTIONS.resistor;
+    var L = (R_VAL_LABEL[c.type] || R_VAL_LABEL.resistor)[en ? 'en' : 'th'];
+    ctrl = '<label>' + L + '</label><select id="bb-ed-val">' +
+      list.map(function(r){ return '<option value="' + r + '"' + (r === c.value ? ' selected' : '') + '>' + rLabel(r) + '</option>'; }).join('') + '</select>';
+  } else if (c.type === 'vdr'){
+    ctrl = '<label>Vc</label><select id="bb-ed-vc">' +
+      [4, 6, 9, 12].map(function(v){ return '<option value="' + v + '"' + (v === c.vc ? ' selected' : '') + '>' + v + ' V</option>'; }).join('') + '</select>';
+  } else if (c.type === 'led'){
+    ctrl = '<label>' + (en ? 'Color' : 'สี') + '</label><select id="bb-ed-color">' +
+      Object.keys(LED_COLORS).map(function(k){ return '<option value="' + k + '"' + (k === c.color ? ' selected' : '') + '>' + LED_COLORS[k][en ? 'en' : 'th'] + '</option>'; }).join('') + '</select>';
+  } else if (c.type === 'battery'){
+    ctrl = '<label>' + (en ? 'Voltage' : 'แรงดัน') + '</label><input type="range" id="bb-ed-bv" min="1" max="12" step="1" value="' + c.value + '"><span class="ev" id="bb-ed-bv-out">' + c.value + ' V</span>';
+  } else if (c.type === 'diode'){
+    ctrl = '<span style="color:var(--text-light)">' + (en ? 'Silicon diode, Vf ≈ 0.7 V' : 'ไดโอดซิลิคอน Vf ≈ 0.7 V') + '</span>';
+  }
+  var polar = (c.type === 'led' || c.type === 'diode' || c.type === 'battery');
+  var flip = polar ? '<button class="bb-ed-btn" id="bb-ed-flip">🔄 ' + (en ? 'Flip ±' : 'สลับขั้ว') + '</button>' : '';
+
+  box.innerHTML =
+    '<div class="bb-ed-title" id="bb-ed-title">' + edTitle(c, en) + '</div>' +
+    (ctrl ? '<div class="bb-ed-row">' + ctrl + '</div>' : '') +
+    '<div class="bb-ed-row bb-ed-actions">' + flip +
+      '<button class="bb-ed-btn danger" id="bb-ed-del">🗑 ' + (en ? 'Delete' : 'ลบ') + '</button>' +
+      '<button class="bb-ed-btn" id="bb-ed-close">✕ ' + (en ? 'Close' : 'ปิด') + '</button></div>';
+  box.style.display = '';
+
+  // wire up controls (board re-solves; only the title text refreshes, inputs stay intact)
+  on('bb-ed-val', 'change', function(){ c.value = +this.value; rebuild(); refreshEditorTitle(c); });
+  on('bb-ed-vc', 'change', function(){ c.vc = +this.value; rebuild(); refreshEditorTitle(c); });
+  on('bb-ed-color', 'change', function(){ c.color = this.value; c.vf = LED_COLORS[this.value].vf; rebuild(); refreshEditorTitle(c); });
+  on('bb-ed-bv', 'input', function(){ c.value = +this.value; var o = $('bb-ed-bv-out'); if (o) o.textContent = c.value + ' V'; rebuild(); refreshEditorTitle(c); });
+  on('bb-ed-flip', 'click', function(){ var t = c.a; c.a = c.b; c.b = t; rebuild(); });
+  on('bb-ed-del', 'click', function(){ deleteComp(c.id); });
+  on('bb-ed-close', 'click', function(){ selectedId = null; rebuild(); renderEditor(); });
+}
+function on(id, ev, fn){ var e = $(id); if (e) e.addEventListener(ev, fn); }
+function edTitle(c, en){ return (en ? 'Edit: ' : 'แก้ไข: ') + compName(c, en); }
+function refreshEditorTitle(c){ var t = $('bb-ed-title'); if (t) t.textContent = edTitle(c, isEN()); }
 
 function showHL(id){ var h = holes[id]; hlEl.setAttribute('cx', h.x); hlEl.setAttribute('cy', h.y); hlEl.style.display = ''; }
 function hideHL(){ hlEl.style.display = 'none'; }
@@ -468,12 +527,20 @@ function drawComp(c){
   var len = Math.sqrt(dx * dx + dy * dy);
   var ang = Math.atan2(dy, dx) * 180 / Math.PI;
   var g = el('g', { transform:'translate(' + A.x + ',' + A.y + ') rotate(' + ang.toFixed(2) + ')', class:'bb-comp-hit' });
-  g.addEventListener('click', function(ev){ if (tool === 'delete'){ ev.stopPropagation(); deleteComp(c.id); } });
+  g.addEventListener('click', function(ev){
+    ev.stopPropagation();
+    if (tool === 'delete') deleteComp(c.id);
+    else selectComp(c.id);
+  });
 
   if (c.type === 'wire'){
+    if (c.id === selectedId) g.appendChild(el('line', { x1:0, y1:0, x2:len, y2:0, stroke:'#f59e0b', 'stroke-width':8, 'stroke-linecap':'round', opacity:'0.35' }));
     g.appendChild(el('line', { x1:0, y1:0, x2:len, y2:0, stroke:'#16a34a', 'stroke-width':4, 'stroke-linecap':'round' }));
     gComps.appendChild(g); return;
   }
+
+  if (c.id === selectedId)   // highlight box behind the body
+    g.appendChild(el('rect', { x:-4, y:-16, width:len + 8, height:32, rx:6, fill:'rgba(245,158,11,0.10)', stroke:'#f59e0b', 'stroke-width':2, 'stroke-dasharray':'5 3' }));
 
   // leads from each hole to the body
   var bodyLen = Math.min(len * 0.5, 30), x1 = (len - bodyLen) / 2, x2 = x1 + bodyLen;
@@ -705,7 +772,7 @@ function initControls(){
     btn.addEventListener('click', function(){ selectTool(btn.dataset.tool); });
   });
   $('bb-clear').addEventListener('click', function(){
-    comps = []; occupied = {}; pendingHole = null; hideHL(); rebuild();
+    comps = []; occupied = {}; pendingHole = null; selectedId = null; hideHL(); rebuild(); renderEditor();
   });
   $('bb-example').addEventListener('click', loadExample);
   $('bb-batt-v').addEventListener('input', function(){
@@ -727,12 +794,12 @@ function initControls(){
   // cancel pending placement with Escape
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && pendingHole != null){ pendingHole = null; hideHL(); refreshHint(); } });
   // re-render text on language change
-  document.addEventListener('langchange', function(){ refreshHint(); rebuild(); });
+  document.addEventListener('langchange', function(){ refreshHint(); rebuild(); renderEditor(); });
 }
 
 // ════════════════════════════ EXAMPLE: battery → R → LED loop ════════════════════════════
 function loadExample(){
-  comps = []; occupied = {}; pendingHole = null; hideHL();
+  comps = []; occupied = {}; pendingHole = null; selectedId = null; hideHL(); renderEditor();
   batteryV = 9; $('bb-batt-v').value = 9; $('bb-batt-v-out').textContent = '9 V';
   resVal = 330; $('bb-res-val').value = '330';
   ledColor = 'red'; $('bb-led-color').value = 'red';
