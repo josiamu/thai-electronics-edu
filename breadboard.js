@@ -23,6 +23,40 @@ function colX(c){ return X0 + (c - 1) * DX; }   // c = 1..COLS
 // component electrical params
 var DIODE_VF = 0.7, DIODE_RD = 8;
 var LED_RD = 14;
+var NTC_B = 3500, VDR_RD = 8;
+
+// resistor-family: linear types whose R depends only on the environment (not on circuit voltage)
+var RFAM = { resistor:1, vr:1, ntc:1, ptc:1, ldr:1 };
+function isNonlin(t){ return t === 'diode' || t === 'led' || t === 'vdr'; }
+
+// standard nominal-resistance lists per type (the "value" picked when placing)
+var R_OPTIONS = {
+  resistor: [100, 220, 330, 470, 1000, 2200, 4700, 10000],
+  vr:       [1000, 5000, 10000, 50000, 100000, 500000, 1000000],  // potentiometer max R
+  ntc:      [1000, 2200, 4700, 10000, 47000, 100000],             // R at 25°C (10k most common)
+  ptc:      [100, 220, 470, 1000, 2200, 4700],                    // R at 25°C
+  ldr:      [500, 1000, 2000, 5000, 10000, 20000]                 // R in full light
+};
+var R_DEFAULT = { resistor:330, vr:10000, ntc:10000, ptc:1000, ldr:1000 };
+var R_VAL_LABEL = {
+  resistor:{ th:'ค่า R', en:'R value' },
+  vr:      { th:'ค่าสูงสุด', en:'Max R' },
+  ntc:     { th:'R ที่ 25°C', en:'R at 25°C' },
+  ptc:     { th:'R ที่ 25°C', en:'R at 25°C' },
+  ldr:     { th:'R ตอนสว่าง', en:'Bright R' }
+};
+function rLabel(r){ return r >= 1e6 ? (r / 1e6) + ' MΩ' : r >= 1000 ? (r / 1000) + ' kΩ' : r + ' Ω'; }
+
+// effective resistance from nominal value + environment
+function effR(c){
+  switch (c.type){
+    case 'vr':  return Math.max(1, c.value * env.vrPos / 100);
+    case 'ntc': return c.value * Math.exp(NTC_B * (1 / (env.temp + 273.15) - 1 / 298.15));
+    case 'ptc': return Math.max(c.value * 0.2, c.value * (1 + 0.06 * (env.temp - 25)));
+    case 'ldr': return c.value * Math.pow(10, 2 * (1 - env.light / 100));   // value = R in full light
+    default:    return c.value;
+  }
+}
 var LED_COLORS = {
   red:    { vf:1.8, fill:'#ef4444', glow:'#fca5a5', th:'แดง',     en:'Red' },
   yellow: { vf:2.0, fill:'#eab308', glow:'#fde047', th:'เหลือง',  en:'Yellow' },
@@ -40,7 +74,10 @@ var tool = null;         // armed tool: battery|resistor|led|diode|wire|delete|n
 var pendingHole = null;  // first clicked hole id (awaiting second)
 var batteryV = 9;
 var resVal = 330;
+var resSubtype = 'resistor';   // resistor | vr | ntc | ptc | ldr | vdr
+var vdrVc = 6;
 var ledColor = 'red';
+var env = { temp:25, light:50, vrPos:50 };   // shared sensor environment
 
 // ════════════════════════════ DOM ════════════════════════════
 function $(id){ return document.getElementById(id); }
@@ -187,7 +224,7 @@ function onHoleClick(id){
   // second click
   if (id === pendingHole){ pendingHole = null; hideHL(); refreshHint(); return; }
   if (occupied[id]){ flashHint(isEN() ? 'That hole is already used.' : 'รูนี้มีขาอุปกรณ์อยู่แล้ว'); return; }
-  placeComp(tool, pendingHole, id);
+  placeComp(tool === 'resistor' ? resSubtype : tool, pendingHole, id);
   pendingHole = null;
   hideHL();
   refreshHint();
@@ -195,7 +232,8 @@ function onHoleClick(id){
 
 function placeComp(type, a, b){
   var c = { id:nextId++, type:type, a:a, b:b };
-  if (type === 'resistor') c.value = resVal;
+  if (RFAM[type]) c.value = resVal;            // resistor / vr / ntc / ptc / ldr
+  if (type === 'vdr') c.vc = vdrVc;
   if (type === 'led'){ c.color = ledColor; c.vf = LED_COLORS[ledColor].vf; }
   if (type === 'diode') c.vf = DIODE_VF;
   if (type === 'battery') c.value = batteryV;
@@ -293,9 +331,9 @@ function solveCircuit(){
   function gi(node){ return node === ground ? -1 : idx[node]; }
 
   // 4) iterate diode/LED on/off states
-  var diodes = branches.filter(function(c){ return c.type === 'diode' || c.type === 'led'; });
-  diodes.forEach(function(d){ d._on = false; });
-  var sol = null, iter, MAXIT = 60;
+  var nonlin = branches.filter(function(c){ return isNonlin(c.type); });
+  nonlin.forEach(function(d){ d._on = 0; });   // 0 off, 1 forward, -1 reverse (vdr)
+  var sol = null, iter, MAXIT = 80;
 
   for (iter = 0; iter < MAXIT; iter++){
     var A = []; for (var ri = 0; ri < M; ri++){ A.push(new Array(M).fill(0)); }
@@ -311,10 +349,15 @@ function solveCircuit(){
     // Gmin to ground (numerical stability)
     for (var ni = 0; ni < N; ni++) A[ni][ni] += 1e-9;
 
-    // resistors + diodes/leds
+    // resistor-family + diodes/leds/vdr
     branches.forEach(function(c){
       var i = gi(sn(c.a)), j = gi(sn(c.b));
-      if (c.type === 'resistor'){ stampG(i, j, 1 / c.value); return; }
+      if (RFAM[c.type]){ stampG(i, j, 1 / effR(c)); return; }
+      if (c.type === 'vdr'){   // symmetric clamp at ±Vc
+        if (c._on){ var gv = 1 / VDR_RD; stampG(i, j, gv); stampI(i, j, c._on > 0 ? gv * c.vc : -gv * c.vc); }
+        else { stampG(i, j, 1e-9); }
+        return;
+      }
       // diode / led: anode = a (i), cathode = b (j)
       var rd = c.type === 'led' ? LED_RD : DIODE_RD;
       if (c._on){ var g = 1 / rd; stampG(i, j, g); stampI(i, j, g * c.vf); }
@@ -335,14 +378,21 @@ function solveCircuit(){
     // node voltage accessor
     var V = function(node){ return node === ground ? 0 : sol[idx[node]]; };
 
-    // update diode states
+    // update non-linear states
     var changed = false;
-    diodes.forEach(function(c){
-      var vd = V(sn(c.a)) - V(sn(c.b));   // anode − cathode
+    nonlin.forEach(function(c){
+      var vd = V(sn(c.a)) - V(sn(c.b));   // anode − cathode (or across vdr)
+      if (c.type === 'vdr'){
+        if (c._on > 0){ if ((vd - c.vc) / VDR_RD < -1e-9){ c._on = 0; changed = true; } }
+        else if (c._on < 0){ if ((vd + c.vc) / VDR_RD > 1e-9){ c._on = 0; changed = true; } }
+        else if (vd > c.vc){ c._on = 1; changed = true; }
+        else if (vd < -c.vc){ c._on = -1; changed = true; }
+        return;
+      }
       if (c._on){
         var I = (vd - c.vf) / (c.type === 'led' ? LED_RD : DIODE_RD);
-        if (I < -1e-9){ c._on = false; changed = true; }
-      } else if (vd > c.vf){ c._on = true; changed = true; }
+        if (I < -1e-9){ c._on = 0; changed = true; }
+      } else if (vd > c.vf){ c._on = 1; changed = true; }
     });
     if (!changed) break;
   }
@@ -356,14 +406,17 @@ function solveCircuit(){
   // 5) per-component results + direction (sign: + means current a→b)
   branches.forEach(function(c){
     var va = Vof(sn(c.a)), vb = Vof(sn(c.b)), vd = va - vb, I = 0;
-    if (c.type === 'resistor'){ I = vd / c.value; c.results = { V:vd, I:I, on:Math.abs(I) > 1e-6 }; }
-    else {
-      var rd = c.type === 'led' ? LED_RD : DIODE_RD;
-      I = c._on ? (vd - c.vf) / rd : 0;
-      var lit = c._on && I > 3e-4;
-      c.results = { V:vd, I:I, on:lit };
-      if (c.type === 'led' && I > 0.03) warnings.push({ t:'warn', th:'กระแส LED สูงเกิน (' + fmtI(I) + ') — ในงานจริงต้องมี R จำกัดกระแส', en:'LED current too high (' + fmtI(I) + ') — add a current-limiting resistor' });
+    if (RFAM[c.type]){ var R = effR(c); I = vd / R; c.results = { V:vd, I:I, on:Math.abs(I) > 1e-6, R:R }; return; }
+    if (c.type === 'vdr'){
+      I = c._on > 0 ? (vd - c.vc) / VDR_RD : c._on < 0 ? (vd + c.vc) / VDR_RD : 0;
+      c.results = { V:vd, I:I, on:Math.abs(I) > 3e-4 };
+      return;
     }
+    var rd = c.type === 'led' ? LED_RD : DIODE_RD;
+    I = c._on ? (vd - c.vf) / rd : 0;
+    var lit = c._on && I > 3e-4;
+    c.results = { V:vd, I:I, on:lit };
+    if (c.type === 'led' && I > 0.03) warnings.push({ t:'warn', th:'กระแส LED สูงเกิน (' + fmtI(I) + ') — ในงานจริงต้องมี R จำกัดกระแส', en:'LED current too high (' + fmtI(I) + ') — add a current-limiting resistor' });
   });
   batteries.forEach(function(c, k){
     var I = sol[N + k];                 // source current
@@ -419,9 +472,15 @@ function drawComp(c){
   g.appendChild(el('line', { class:'bb-comp-lead', x1:x2, y1:0, x2:len, y2:0 }));
 
   var on = c.results && c.results.on;
-  if (c.type === 'resistor'){
+  if (RFAM[c.type] || c.type === 'vdr'){
     var heat = resistorHeat(c);
     g.appendChild(el('rect', { x:x1, y:-7, width:bodyLen, height:14, rx:3, fill:heat, stroke:'#78716c', 'stroke-width':1 }));
+    if (c.type !== 'resistor'){
+      drawRAccent(g, c.type, x1, x2, len);
+      var lab = c.type === 'vdr' ? 'VDR ' + c.vc + 'V'
+                                 : c.type.toUpperCase() + ' ' + fmtRshort(c.results && c.results.R ? c.results.R : effR(c));
+      g.appendChild(uprightText(len / 2, A.x, A.y, ang, -16, lab, '#7c3aed'));
+    }
   } else if (c.type === 'battery'){
     // two-cell symbol: long line (+) near a, short line (−) near b
     var mid = len / 2;
@@ -448,6 +507,25 @@ function diodeSymbol(g, x1, x2, triFill, barColor){
   g.appendChild(el('polygon', { points:x1 + ',-8 ' + x1 + ',8 ' + x2 + ',0', fill:triFill, stroke:'#334155', 'stroke-width':1 }));
   g.appendChild(el('line', { x1:x2, y1:-9, x2:x2, y2:9, stroke:barColor, 'stroke-width':3, 'stroke-linecap':'round' }));
 }
+
+// distinctive mark for each sensor / special resistor (drawn over the body)
+function drawRAccent(g, type, x1, x2, len){
+  var cx = len / 2;
+  if (type === 'ldr'){   // light arrows pointing into the body
+    g.appendChild(el('line', { x1:cx - 9, y1:-21, x2:cx - 3, y2:-12, stroke:'#f59e0b', 'stroke-width':1.8, 'stroke-linecap':'round' }));
+    g.appendChild(el('line', { x1:cx + 1, y1:-21, x2:cx + 7, y2:-12, stroke:'#f59e0b', 'stroke-width':1.8, 'stroke-linecap':'round' }));
+    return;
+  }
+  if (type === 'vdr'){   // straight diagonal slash (no arrow)
+    g.appendChild(el('line', { x1:x1 + 2, y1:9, x2:x2 - 2, y2:-9, stroke:'#334155', 'stroke-width':2, 'stroke-linecap':'round' }));
+    return;
+  }
+  // vr / ntc / ptc: diagonal arrow across the body (adjustable)
+  g.appendChild(el('line', { x1:x1 - 3, y1:11, x2:x2 + 3, y2:-11, stroke:'#334155', 'stroke-width':2, 'stroke-linecap':'round' }));
+  g.appendChild(el('polygon', { points:(x2 + 3) + ',-11 ' + (x2 - 3) + ',-8 ' + (x2 - 2) + ',-15', fill:'#334155' }));
+}
+
+function fmtRshort(r){ r = Math.round(r); return r >= 1000 ? (Math.round(r / 100) / 10) + 'k' : r + ''; }
 
 // place a horizontal (never upside-down) label above a rotated component
 function uprightText(localX, ax, ay, angDeg, dy, s, fill){
@@ -544,6 +622,11 @@ function renderReadout(res){
 
 function compName(c, en){
   if (c.type === 'resistor') return (en ? 'Resistor ' : 'R ') + fmtR(c.value);
+  if (c.type === 'vr' || c.type === 'ntc' || c.type === 'ptc' || c.type === 'ldr'){
+    var R = c.results && c.results.R ? c.results.R : effR(c);
+    return c.type.toUpperCase() + ' ' + fmtR(Math.round(R));
+  }
+  if (c.type === 'vdr') return 'VDR ' + c.vc + 'V';
   if (c.type === 'battery') return (en ? 'Battery ' : 'แบตเตอรี่ ') + c.value + 'V';
   if (c.type === 'diode') return en ? 'Diode' : 'ไดโอด';
   if (c.type === 'led') return (en ? 'LED ' : 'LED ') + LED_COLORS[c.color][en ? 'en' : 'th'];
@@ -562,7 +645,40 @@ function selectTool(t){
   // value control visibility
   VALROWS.forEach(function(v){ $('bb-val-' + v).classList.toggle('show', tool === v); });
   $('bb-val-none').classList.toggle('show', !tool || tool === 'delete');
+  if (tool === 'resistor') updateResControls();
   refreshHint();
+}
+
+// repopulate the value dropdown with the standard list for the current subtype
+function populateResVals(){
+  var list = R_OPTIONS[resSubtype] || R_OPTIONS.resistor;
+  if (list.indexOf(resVal) < 0) resVal = R_DEFAULT[resSubtype] || list[0];
+  var sel = $('bb-res-val');
+  sel.innerHTML = list.map(function(r){
+    return '<option value="' + r + '"' + (r === resVal ? ' selected' : '') + '>' + rLabel(r) + '</option>';
+  }).join('');
+  sel.value = resVal;
+  var L = R_VAL_LABEL[resSubtype] || R_VAL_LABEL.resistor;
+  $('bb-res-val-lbl').innerHTML = '<span class="th-only">' + L.th + '</span><span class="en-only">' + L.en + '</span>';
+}
+
+// show/hide value vs clamp-voltage controls depending on the chosen resistor subtype
+function updateResControls(){
+  var isVdr = resSubtype === 'vdr';
+  if (!isVdr) populateResVals();
+  $('bb-res-vc-wrap').style.display = isVdr ? '' : 'none';
+  $('bb-res-val-lbl').style.display = isVdr ? 'none' : '';
+  $('bb-res-val').style.display = isVdr ? 'none' : '';
+  var hints = {
+    resistor:{ th:'', en:'' },
+    vr:{ th:'ปรับด้วยลูกบิด VR ในแผงสภาพแวดล้อม', en:'Adjust with the VR knob in the Environment panel' },
+    ntc:{ th:'R ลดเมื่ออุณหภูมิเพิ่ม', en:'R drops as temperature rises' },
+    ptc:{ th:'R เพิ่มเมื่ออุณหภูมิเพิ่ม', en:'R rises as temperature rises' },
+    ldr:{ th:'ค่า R = ความต้านทานตอนสว่างเต็มที่ (มืด = R สูงขึ้น)', en:'R value = resistance in full light (dark = higher R)' },
+    vdr:{ th:'ต้านทานสูงจน V ถึง Vc แล้วนำกระแส (กันไฟกระชาก)', en:'High R until V reaches Vc, then conducts (surge clamp)' }
+  };
+  var h = hints[resSubtype] || hints.resistor;
+  $('bb-res-hint').textContent = isEN() ? h.en : h.th;
 }
 
 function initControls(){
@@ -577,14 +693,18 @@ function initControls(){
     batteryV = +this.value; $('bb-batt-v-out').textContent = batteryV + ' V';
     comps.forEach(function(c){ if (c.type === 'battery') c.value = batteryV; }); rebuild();
   });
-  $('bb-res-val').addEventListener('change', function(){
-    resVal = +this.value;
-    comps.forEach(function(c){ if (c.type === 'resistor') c.value = resVal; }); rebuild();
+  // these selectors set the value for the NEXT component placed — they do NOT
+  // retroactively change parts already on the board (each part keeps its own value)
+  $('bb-res-type').addEventListener('change', function(){
+    resSubtype = this.value; updateResControls();
   });
-  $('bb-led-color').addEventListener('change', function(){
-    ledColor = this.value;
-    comps.forEach(function(c){ if (c.type === 'led'){ c.color = ledColor; c.vf = LED_COLORS[ledColor].vf; } }); rebuild();
-  });
+  $('bb-res-val').addEventListener('change', function(){ resVal = +this.value; });
+  $('bb-res-vc').addEventListener('change', function(){ vdrVc = +this.value; });
+  $('bb-led-color').addEventListener('change', function(){ ledColor = this.value; });
+  // environment sliders (affect all sensors)
+  $('bb-temp').addEventListener('input', function(){ env.temp = +this.value; $('bb-temp-out').textContent = env.temp + ' °C'; rebuild(); });
+  $('bb-light').addEventListener('input', function(){ env.light = +this.value; $('bb-light-out').textContent = env.light + ' %'; rebuild(); });
+  $('bb-vrpos').addEventListener('input', function(){ env.vrPos = +this.value; $('bb-vrpos-out').textContent = env.vrPos + ' %'; rebuild(); });
   // cancel pending placement with Escape
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && pendingHole != null){ pendingHole = null; hideHL(); refreshHint(); } });
   // re-render text on language change

@@ -76,6 +76,11 @@
 .bb-warn .w { background:rgba(239,68,68,.08); color:#dc2626; border-radius:8px; padding:.4rem .6rem; font-size:.8rem; margin-bottom:.35rem; }
 .bb-warn .ok { background:rgba(16,185,129,.1); color:#059669; border-radius:8px; padding:.4rem .6rem; font-size:.8rem; }
 .bb-dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:.3rem; vertical-align:middle; }
+
+/* ── environment panel ── */
+.bb-env label { display:block; font-size:.82rem; font-weight:600; margin:.55rem 0 .15rem; }
+.bb-env input[type=range] { width:100%; accent-color:var(--primary); cursor:pointer; }
+.bb-env .ev { float:right; color:var(--primary); font-weight:700; }
 </style>
 </head>
 <body>
@@ -127,7 +132,16 @@
         </span>
       </div>
       <div class="bb-valrow" id="bb-val-resistor">
-        <label><span class="th-only">ค่าความต้านทาน</span><span class="en-only">Resistance</span></label>
+        <label><span class="th-only">ชนิด</span><span class="en-only">Type</span></label>
+        <select id="bb-res-type">
+          <option value="resistor"><span class="th-only">ตัวต้านทานคงที่</span> Fixed R</option>
+          <option value="vr">VR <span class="th-only">(ปรับค่า)</span></option>
+          <option value="ntc">NTC <span class="th-only">(เทอร์มิสเตอร์ −)</span></option>
+          <option value="ptc">PTC <span class="th-only">(เทอร์มิสเตอร์ +)</span></option>
+          <option value="ldr">LDR <span class="th-only">(ไวแสง)</span></option>
+          <option value="vdr">VDR <span class="th-only">(ไวแรงดัน)</span></option>
+        </select>
+        <label id="bb-res-val-lbl"><span class="th-only">ค่า R</span><span class="en-only">R value</span></label>
         <select id="bb-res-val">
           <option value="100">100 Ω</option>
           <option value="220">220 Ω</option>
@@ -138,6 +152,16 @@
           <option value="4700">4.7 kΩ</option>
           <option value="10000">10 kΩ</option>
         </select>
+        <span id="bb-res-vc-wrap" style="display:none;">
+          <label><span class="th-only">แรงดันแคลมป์ Vc</span><span class="en-only">Clamp Vc</span></label>
+          <select id="bb-res-vc">
+            <option value="4">4 V</option>
+            <option value="6" selected>6 V</option>
+            <option value="9">9 V</option>
+            <option value="12">12 V</option>
+          </select>
+        </span>
+        <span id="bb-res-hint" style="color:var(--text-light);font-weight:400;"></span>
       </div>
       <div class="bb-valrow" id="bb-val-led">
         <label><span class="th-only">สี LED</span><span class="en-only">LED color</span></label>
@@ -181,6 +205,23 @@
       </div>
 
       <div>
+        <div class="card" style="padding:1rem;background:var(--bg);margin-bottom:1rem;">
+          <div class="bb-panel-title">
+            <span class="th-only">🌍 สภาพแวดล้อม</span><span class="en-only">🌍 Environment</span>
+          </div>
+          <div style="font-size:.78rem;color:var(--text-light);margin-bottom:.3rem;">
+            <span class="th-only">ปรับแล้วดูค่า R ของเซนเซอร์ (NTC/PTC/LDR/VR) เปลี่ยน</span>
+            <span class="en-only">Adjust to see sensor R (NTC/PTC/LDR/VR) change</span>
+          </div>
+          <div class="bb-env">
+            <label>🌡 <span class="th-only">อุณหภูมิ</span><span class="en-only">Temperature</span> <span class="ev" id="bb-temp-out">25 °C</span></label>
+            <input type="range" id="bb-temp" min="-10" max="120" step="1" value="25">
+            <label>☀️ <span class="th-only">ความสว่าง</span><span class="en-only">Light level</span> <span class="ev" id="bb-light-out">50 %</span></label>
+            <input type="range" id="bb-light" min="0" max="100" step="1" value="50">
+            <label>🎚 <span class="th-only">ตำแหน่ง VR</span><span class="en-only">VR position</span> <span class="ev" id="bb-vrpos-out">50 %</span></label>
+            <input type="range" id="bb-vrpos" min="0" max="100" step="1" value="50">
+          </div>
+        </div>
         <div class="card" style="padding:1rem;background:var(--bg);">
           <div class="bb-panel-title">
             <span class="th-only">📊 ผลการวัด</span><span class="en-only">📊 Measurements</span>
