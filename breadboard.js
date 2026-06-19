@@ -38,6 +38,15 @@ var R_OPTIONS = {
   ldr:      [500, 1000, 2000, 5000, 10000, 20000]                 // R in full light
 };
 var R_DEFAULT = { resistor:330, vr:10000, ntc:10000, ptc:1000, ldr:1000 };
+// per-type border / label colour so each device reads differently at a glance
+var RTYPE_STYLE = {
+  resistor:{ border:'#78716c' },
+  vr:      { border:'#2563eb' },
+  ntc:     { border:'#0891b2' },
+  ptc:     { border:'#dc2626' },
+  ldr:     { border:'#ca8a04' },
+  vdr:     { border:'#16a34a' }
+};
 var R_VAL_LABEL = {
   resistor:{ th:'ค่า R', en:'R value' },
   vr:      { th:'ค่าสูงสุด', en:'Max R' },
@@ -474,19 +483,20 @@ function drawComp(c){
   var on = c.results && c.results.on;
   if (RFAM[c.type] || c.type === 'vdr'){
     var heat = resistorHeat(c);
-    g.appendChild(el('rect', { x:x1, y:-7, width:bodyLen, height:14, rx:3, fill:heat, stroke:'#78716c', 'stroke-width':1 }));
+    var bd = (RTYPE_STYLE[c.type] || RTYPE_STYLE.resistor).border;
+    g.appendChild(el('rect', { x:x1, y:-7, width:bodyLen, height:14, rx:3, fill:heat, stroke:bd, 'stroke-width':c.type === 'resistor' ? 1 : 1.8 }));
     if (c.type !== 'resistor'){
       drawRAccent(g, c.type, x1, x2, len);
       var lab = c.type === 'vdr' ? 'VDR ' + c.vc + 'V'
                                  : c.type.toUpperCase() + ' ' + fmtRshort(c.results && c.results.R ? c.results.R : effR(c));
-      g.appendChild(uprightText(len / 2, A.x, A.y, ang, -16, lab, '#7c3aed'));
+      gComps.appendChild(uprightText(len / 2, A.x, A.y, ang, -16, lab, bd));  // global coords — must NOT be inside the rotated group
     }
   } else if (c.type === 'battery'){
     // two-cell symbol: long line (+) near a, short line (−) near b
     var mid = len / 2;
     g.appendChild(el('line', { x1:mid - 5, y1:-11, x2:mid - 5, y2:11, stroke:'#475569', 'stroke-width':3 }));   // + long
     g.appendChild(el('line', { x1:mid + 5, y1:-6,  x2:mid + 5, y2:6,  stroke:'#475569', 'stroke-width':5 }));   // − short/thick
-    g.appendChild(uprightText(mid, A.x, A.y, ang, -18, c.value + 'V', '#2563eb'));
+    gComps.appendChild(uprightText(mid, A.x, A.y, ang, -18, c.value + 'V', '#2563eb'));  // global coords — sibling of g, not child
   } else if (c.type === 'diode'){
     diodeSymbol(g, x1, x2, on ? '#1e293b' : '#94a3b8', on ? '#f59e0b' : '#94a3b8');
   } else if (c.type === 'led'){
@@ -510,19 +520,28 @@ function diodeSymbol(g, x1, x2, triFill, barColor){
 
 // distinctive mark for each sensor / special resistor (drawn over the body)
 function drawRAccent(g, type, x1, x2, len){
-  var cx = len / 2;
-  if (type === 'ldr'){   // light arrows pointing into the body
-    g.appendChild(el('line', { x1:cx - 9, y1:-21, x2:cx - 3, y2:-12, stroke:'#f59e0b', 'stroke-width':1.8, 'stroke-linecap':'round' }));
-    g.appendChild(el('line', { x1:cx + 1, y1:-21, x2:cx + 7, y2:-12, stroke:'#f59e0b', 'stroke-width':1.8, 'stroke-linecap':'round' }));
+  var cx = len / 2, col = '#334155';
+  if (type === 'ldr'){   // two light rays pointing into the body
+    g.appendChild(el('line', { x1:cx - 9, y1:-21, x2:cx - 3, y2:-12, stroke:'#ca8a04', 'stroke-width':1.8, 'stroke-linecap':'round' }));
+    g.appendChild(el('line', { x1:cx + 1, y1:-21, x2:cx + 7, y2:-12, stroke:'#ca8a04', 'stroke-width':1.8, 'stroke-linecap':'round' }));
+    g.appendChild(el('polygon', { points:(cx - 3) + ',-12 ' + (cx - 7) + ',-13 ' + (cx - 5) + ',-17', fill:'#ca8a04' }));
+    g.appendChild(el('polygon', { points:(cx + 7) + ',-12 ' + (cx + 3) + ',-13 ' + (cx + 5) + ',-17', fill:'#ca8a04' }));
     return;
   }
   if (type === 'vdr'){   // straight diagonal slash (no arrow)
-    g.appendChild(el('line', { x1:x1 + 2, y1:9, x2:x2 - 2, y2:-9, stroke:'#334155', 'stroke-width':2, 'stroke-linecap':'round' }));
+    g.appendChild(el('line', { x1:x1 + 2, y1:9, x2:x2 - 2, y2:-9, stroke:col, 'stroke-width':2, 'stroke-linecap':'round' }));
     return;
   }
-  // vr / ntc / ptc: diagonal arrow across the body (adjustable)
-  g.appendChild(el('line', { x1:x1 - 3, y1:11, x2:x2 + 3, y2:-11, stroke:'#334155', 'stroke-width':2, 'stroke-linecap':'round' }));
-  g.appendChild(el('polygon', { points:(x2 + 3) + ',-11 ' + (x2 - 3) + ',-8 ' + (x2 - 2) + ',-15', fill:'#334155' }));
+  if (type === 'vr'){    // wiper: diagonal arrow across the body
+    g.appendChild(el('line', { x1:x1 - 3, y1:11, x2:x2 + 3, y2:-11, stroke:col, 'stroke-width':2, 'stroke-linecap':'round' }));
+    g.appendChild(el('polygon', { points:(x2 + 3) + ',-11 ' + (x2 - 3) + ',-8 ' + (x2 - 2) + ',-15', fill:col }));
+    return;
+  }
+  // ntc / ptc: thermistor symbol — oblique line with a foot (no arrowhead) + a ± sign
+  g.appendChild(el('line', { x1:x1 - 2, y1:11, x2:x2 + 2, y2:-11, stroke:col, 'stroke-width':2, 'stroke-linecap':'round' }));
+  g.appendChild(el('line', { x1:x1 - 2, y1:11, x2:x1 + 6, y2:11, stroke:col, 'stroke-width':2, 'stroke-linecap':'round' }));   // foot
+  g.appendChild(el('line', { x1:cx - 3, y1:13, x2:cx + 3, y2:13, stroke:col, 'stroke-width':1.8, 'stroke-linecap':'round' })); // minus (both)
+  if (type === 'ptc') g.appendChild(el('line', { x1:cx, y1:10, x2:cx, y2:16, stroke:col, 'stroke-width':1.8, 'stroke-linecap':'round' })); // -> plus
 }
 
 function fmtRshort(r){ r = Math.round(r); return r >= 1000 ? (Math.round(r / 100) / 10) + 'k' : r + ''; }
