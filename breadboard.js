@@ -217,7 +217,7 @@ function txt(x, y, s, cls, fill, anchor){
 
 function addHole(id, x, y, node){
   var c = el('circle', { class:'bb-hole', cx:x, cy:y, r:R_HOLE, 'data-id':id });
-  c.addEventListener('click', function(){ onHoleClick(id); });
+  c.addEventListener('click', function(e){ clickShift = !!(e && e.shiftKey); onHoleClick(id); });
   gHoles.appendChild(c);
   holes[id] = { x:x, y:y, node:node, el:c };
   holeAt[hkey(x, y)] = id;
@@ -383,6 +383,7 @@ function refreshEditorTitle(c){ var t = $('bb-ed-title'); if (t) t.textContent =
 
 // ════════════════════════════ DRAG TO MOVE ════════════════════════════
 var dragComp = null, dragGrab = null, dragMoved = false;
+var clickShift = false;   // was Shift held on the last hole/part click (meter span-extend)
 
 function svgCoords(e){
   if (!svg.createSVGPoint || !svg.getScreenCTM) return null;   // unavailable in tests
@@ -405,6 +406,7 @@ function startDrag(ev, c){
   if (ev.button != null && ev.button !== 0) return;   // primary button / touch only
   ev.stopPropagation(); if (ev.preventDefault) ev.preventDefault();
   dragComp = c; dragMoved = false;
+  clickShift = !!(ev && ev.shiftKey);
   var p = svgCoords(ev);
   dragGrab = p ? { ox: holes[c.a].x - p.x, oy: holes[c.a].y - p.y } : { ox:0, oy:0 };
 }
@@ -1055,8 +1057,10 @@ function meterClickComp(c){
     if (meterMode === 'd') meterRev = (meterTargetComp === c.id) ? !meterRev : false;  // re-tap flips orientation
     meterTargetComp = c.id; probeRed = probeBlk = null;
   } else {                             // V / continuity → probe across the part
-    probeRed = c.a; probeBlk = c.b; meterTargetComp = null;
-    if (meterMode === 'cont' && probeCtx && probeCtx.connected(c.a, c.b)) beep();
+    meterTargetComp = null;
+    if (clickShift && (probeRed != null || probeBlk != null)) meterExtend([c.a, c.b]);  // Shift = widen the span to reach this part
+    else { probeRed = c.a; probeBlk = c.b; }
+    if (meterMode === 'cont' && probeCtx && probeRed != null && probeBlk != null && probeCtx.connected(probeRed, probeBlk)) beep();
   }
   drawProbes(); updateMeter();
 }
@@ -1066,12 +1070,32 @@ function meterClickHole(id){
     return;
   }
   meterTargetComp = null;
-  if (probeRed == null) probeRed = id;
-  else if (probeBlk == null && id !== probeRed){
-    probeBlk = id;
-    if (meterMode === 'cont' && probeCtx && probeCtx.connected(probeRed, probeBlk)) beep();
-  } else { probeRed = id; probeBlk = null; }   // start a new pair
+  if (clickShift && (probeRed != null || probeBlk != null)) meterExtend([id]);          // Shift = widen the span to this point
+  else if (probeRed == null) probeRed = id;
+  else if (probeBlk == null && id !== probeRed) probeBlk = id;
+  else { probeRed = id; probeBlk = null; }   // start a new pair
+  if (meterMode === 'cont' && probeCtx && probeRed != null && probeBlk != null && probeCtx.connected(probeRed, probeBlk)) beep();
   drawProbes(); updateMeter();
+}
+// widen the probe span to also cover `extra` holes — keep the two endpoints that are farthest apart
+function meterExtend(extra){
+  var cand = [];
+  if (probeRed != null) cand.push(probeRed);
+  if (probeBlk != null) cand.push(probeBlk);
+  extra.forEach(function(h){ cand.push(h); });
+  var pair = farthestPair(cand);
+  probeRed = pair[0]; probeBlk = pair[1];
+}
+function farthestPair(ids){
+  var u = []; ids.forEach(function(id){ if (id != null && u.indexOf(id) < 0) u.push(id); });
+  if (u.length < 2) return [u[0], u[0]];
+  var best = [u[0], u[1]], bd = -1, i, j;
+  for (i = 0; i < u.length; i++) for (j = i + 1; j < u.length; j++){
+    var A = holes[u[i]], B = holes[u[j]], d = (A.x - B.x) * (A.x - B.x) + (A.y - B.y) * (A.y - B.y);
+    if (d > bd){ bd = d; best = [u[i], u[j]]; }
+  }
+  if (best[1] === probeRed) best = [best[1], best[0]];   // keep the existing red probe as red
+  return best;
 }
 
 function drawProbes(){
@@ -1082,6 +1106,10 @@ function drawProbes(){
     var c = compById(meterTargetComp);
     if (c){ markComp(c); if (meterMode === 'd' && !meterRev && c.type === 'led') ledTestGlow(c); }
     return;
+  }
+  if (probeRed != null && probeBlk != null){   // dashed line shows the measured span
+    var ha = holes[probeRed], hb = holes[probeBlk];
+    gProbe.appendChild(el('line', { x1:ha.x, y1:ha.y, x2:hb.x, y2:hb.y, stroke:'#f59e0b', 'stroke-width':2, 'stroke-dasharray':'4 3', opacity:'0.75' }));
   }
   if (probeRed != null) probeMark(probeRed, '#ef4444', '+');
   if (probeBlk != null) probeMark(probeBlk, '#1e293b', '−');
@@ -1119,7 +1147,7 @@ function updateMeter(){
   function setTip(th, e){ if (tip) tip.textContent = P(th, e); }
 
   if (meterMode === 'v'){
-    setTip('คลิกอุปกรณ์เพื่อวัดคร่อม หรือคลิกรู 2 จุด (แดง→ดำ)', 'Click a part to read across it, or two holes (red→black)');
+    setTip('คลิกอุปกรณ์ = วัดคร่อมตัวนั้น • Shift+คลิก = ขยายช่วงพาดหลายตัว • หรือคลิกรู 2 จุด', 'Click a part = across it • Shift+click = widen the span • or click two holes');
     if (probeRed == null) return lcd(P('แตะโพรบจุดแรก', 'Probe 1st point'), '', true);
     if (probeBlk == null) return lcd(P('แตะโพรบจุดที่สอง', 'Probe 2nd point'), '', true);
     if (!probeCtx) return lcd('—', '', true);
@@ -1129,7 +1157,7 @@ function updateMeter(){
     return lcd((d >= 0 ? '+' : '−') + Math.abs(d).toFixed(2), 'V');
   }
   if (meterMode === 'cont'){
-    setTip('คลิก 2 รู (หรืออุปกรณ์) เพื่อเช็คว่าต่อถึงกันไหม', 'Click two holes (or a part) to test continuity');
+    setTip('คลิก 2 รู/อุปกรณ์ • Shift+คลิก = ขยายช่วง', 'Click two holes/parts • Shift+click = widen the span');
     if (probeRed == null || probeBlk == null) return lcd(P('แตะโพรบ 2 จุด', 'Probe two points'), '', true);
     var con = probeCtx && probeCtx.connected(probeRed, probeBlk);
     var dd = $('bb-meter-read'); dd.classList.remove('muted');
