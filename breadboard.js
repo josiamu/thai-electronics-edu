@@ -74,6 +74,18 @@ var LED_COLORS = {
   white:  { vf:3.2, fill:'#e2e8f0', glow:'#ffffff', th:'ขาว',     en:'White' }
 };
 
+// reactive parts (transient simulation via Backward-Euler companion models)
+var CAP_OPTIONS = [1e-6, 10e-6, 47e-6, 100e-6, 220e-6, 470e-6, 1000e-6, 2200e-6];  // Farads
+var IND_OPTIONS = [1e-3, 10e-3, 100e-3, 0.5, 1, 5, 10];                            // Henries
+var CAP_DEFAULT = 470e-6, IND_DEFAULT = 1;
+function fmtC(F){ return Math.round(F * 1e6) + ' µF'; }
+function fmtL(H){ return H < 1 ? Math.round(H * 1000) + ' mH' : H + ' H'; }
+function fmtTime(s){
+  if (s < 1e-3) return (s * 1e6).toFixed(0) + ' µs';
+  if (s < 1)    return (s * 1e3).toFixed(s < 0.1 ? 1 : 0) + ' ms';
+  return s.toFixed(2) + ' s';
+}
+
 // ════════════════════════════ STATE ════════════════════════════
 var holes = {};          // id -> {x, y, node, el}
 var holeAt = {};         // "x_y" -> id (reverse lookup for drag snapping)
@@ -88,7 +100,20 @@ var resVal = 330;
 var resSubtype = 'resistor';   // resistor | vr | ntc | ptc | ldr | vdr
 var vdrVc = 6;
 var ledColor = 'red';
+var capVal = CAP_DEFAULT, indVal = IND_DEFAULT;
 var env = { temp:25, light:50, vrPos:50 };   // shared sensor environment
+
+// transient simulation
+var SIM_H = 1 / 60;            // nominal timestep used for the static display snapshot
+var SIM_SUBSTEP = 0.02;        // max integration step (s) — long frames are split into substeps
+var SIM_SPEEDS = [0.25, 1, 4]; // 🐢 / ▶ / ⏩ multipliers on real time
+var simSpeedIdx = 1;
+var simTime = 0;               // elapsed simulated time (s)
+var lastRes = null;            // most recent solve result (for live readout refresh)
+var graphHist = [];            // [{t, v}] history of the tracked signal
+var graphComp = null;          // component id whose signal the graph plots
+var graphTau = null;           // estimated time constant of the tracked component (s)
+var renderAcc = 0;             // throttle accumulator for readout/graph redraws
 
 // multimeter probe state
 var meterMode = 'v';        // 'v' | 'i' | 'r' | 'd' | 'cont'
@@ -207,7 +232,9 @@ var TYPE_LABEL = {
   led:     { th:'LED', en:'LED' },
   diode:   { th:'ไดโอด', en:'Diode' },
   wire:    { th:'จัมเปอร์', en:'Jumper' },
-  switch:  { th:'สวิตช์', en:'Switch' }
+  switch:  { th:'สวิตช์', en:'Switch' },
+  cap:     { th:'ตัวเก็บประจุ', en:'Capacitor' },
+  ind:     { th:'ตัวเหนี่ยวนำ', en:'Inductor' }
 };
 
 function isEN(){ return document.documentElement.lang === 'en'; }
@@ -268,6 +295,8 @@ function placeComp(type, a, b){
   if (type === 'diode') c.vf = DIODE_VF;
   if (type === 'battery') c.value = batteryV;
   if (type === 'switch') c.closed = true;   // starts closed (conducting)
+  if (type === 'cap'){ c.value = capVal; c._vPrev = 0; }
+  if (type === 'ind'){ c.value = indVal; c._iPrev = 0; }
   comps.push(c);
   occupied[a] = c.id; occupied[b] = c.id;
   rebuild();
@@ -317,6 +346,12 @@ function renderEditor(){
   } else if (c.type === 'switch'){
     ctrl = '<label>' + (en ? 'State' : 'สถานะ') + '</label><span style="font-weight:700;color:' + (c.closed ? '#16a34a' : '#94a3b8') + '">' +
            (c.closed ? (en ? 'ON (closed)' : 'ปิด (ต่อวงจร)') : (en ? 'OFF (open)' : 'เปิด (ตัดวงจร)')) + '</span>';
+  } else if (c.type === 'cap'){
+    ctrl = '<label>' + (en ? 'Capacitance' : 'ค่า C') + '</label><select id="bb-ed-cap">' +
+      CAP_OPTIONS.map(function(F){ return '<option value="' + F + '"' + (F === c.value ? ' selected' : '') + '>' + fmtC(F) + '</option>'; }).join('') + '</select>';
+  } else if (c.type === 'ind'){
+    ctrl = '<label>' + (en ? 'Inductance' : 'ค่า L') + '</label><select id="bb-ed-ind">' +
+      IND_OPTIONS.map(function(L2){ return '<option value="' + L2 + '"' + (L2 === c.value ? ' selected' : '') + '>' + fmtL(L2) + '</option>'; }).join('') + '</select>';
   }
   var polar = (c.type === 'led' || c.type === 'diode' || c.type === 'battery');
   var flip = polar ? '<button class="bb-ed-btn" id="bb-ed-flip">🔄 ' + (en ? 'Flip ±' : 'สลับขั้ว') + '</button>' : '';
@@ -334,6 +369,8 @@ function renderEditor(){
   on('bb-ed-val', 'change', function(){ c.value = +this.value; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-vc', 'change', function(){ c.vc = +this.value; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-color', 'change', function(){ c.color = this.value; c.vf = LED_COLORS[this.value].vf; rebuild(); refreshEditorTitle(c); });
+  on('bb-ed-cap', 'change', function(){ c.value = +this.value; rebuild(); refreshEditorTitle(c); });
+  on('bb-ed-ind', 'change', function(){ c.value = +this.value; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-bv', 'input', function(){ c.value = +this.value; var o = $('bb-ed-bv-out'); if (o) o.textContent = c.value + ' V'; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-flip', 'click', function(){ var t = c.a; c.a = c.b; c.b = t; rebuild(); });
   on('bb-ed-toggle', 'click', function(){ c.closed = !c.closed; rebuild(); renderEditor(); });
@@ -444,7 +481,9 @@ function solveLinear(A, b){
 }
 
 // ════════════════════════════ CIRCUIT SOLVER (MNA) ════════════════════════════
-function solveCircuit(){
+// h = integration timestep for reactive companion models; commit = advance C/L state by one step
+function solveCircuit(h, commit){
+  if (!(h > 0)) h = SIM_H;
   // reset results
   comps.forEach(function(c){ c.results = { V:0, I:0, on:false }; });
   var warnings = [];
@@ -503,10 +542,16 @@ function solveCircuit(){
     // Gmin to ground (numerical stability)
     for (var ni = 0; ni < N; ni++) A[ni][ni] += 1e-9;
 
-    // resistor-family + diodes/leds/vdr
+    // resistor-family + diodes/leds/vdr + reactive companion models
     branches.forEach(function(c){
       var i = gi(sn(c.a)), j = gi(sn(c.b));
       if (RFAM[c.type]){ stampG(i, j, 1 / effR(c)); return; }
+      if (c.type === 'cap'){   // Backward Euler: Geq = C/h in parallel with Ieq = (C/h)·Vprev
+        var Gc = c.value / h; stampG(i, j, Gc); stampI(i, j, Gc * c._vPrev); return;
+      }
+      if (c.type === 'ind'){   // Backward Euler: Geq = h/L in parallel with Ieq = Iprev
+        var Gl = h / c.value; stampG(i, j, Gl); stampI(i, j, -c._iPrev); return;
+      }
       if (c.type === 'vdr'){   // symmetric clamp at ±Vc
         if (c._on){ var gv = 1 / VDR_RD; stampG(i, j, gv); stampI(i, j, c._on > 0 ? gv * c.vc : -gv * c.vc); }
         else { stampG(i, j, 1e-9); }
@@ -561,6 +606,18 @@ function solveCircuit(){
   branches.forEach(function(c){
     var va = Vof(sn(c.a)), vb = Vof(sn(c.b)), vd = va - vb, I = 0;
     if (RFAM[c.type]){ var R = effR(c); I = vd / R; c.results = { V:vd, I:I, on:Math.abs(I) > 1e-6, R:R }; return; }
+    if (c.type === 'cap'){   // Ic = C/h·(Vnew − Vprev); advance Vprev only when committing a step
+      I = (c.value / h) * (vd - c._vPrev);
+      c.results = { V:vd, I:I, on:Math.abs(I) > 1e-6 };
+      if (commit) c._vPrev = vd;
+      return;
+    }
+    if (c.type === 'ind'){   // Il = Iprev + h/L·V; advance Iprev only when committing a step
+      I = c._iPrev + (h / c.value) * vd;
+      c.results = { V:vd, I:I, on:Math.abs(I) > 1e-6 };
+      if (commit) c._iPrev = I;
+      return;
+    }
     if (c.type === 'vdr'){
       I = c._on > 0 ? (vd - c.vc) / VDR_RD : c._on < 0 ? (vd + c.vc) / VDR_RD : 0;
       c.results = { V:vd, I:I, on:Math.abs(I) > 3e-4 };
@@ -607,7 +664,8 @@ function rebuild(){
   // re-style hole occupancy
   for (var id in holes) holes[id].el.classList.toggle('used', !!occupied[id]);
 
-  var res = solveCircuit();
+  var res = solveCircuit(SIM_H, false);   // snapshot of the current instant (does not advance C/L state)
+  lastRes = res;
 
   // draw components
   while (gComps.firstChild) gComps.removeChild(gComps.firstChild);
@@ -615,6 +673,7 @@ function rebuild(){
 
   rebuildElectrons();
   renderReadout(res);
+  syncTransientPanel();
   if (tool === 'meter'){ drawProbes(); updateMeter(); }   // keep the meter reading live
 }
 
@@ -680,6 +739,20 @@ function drawComp(c){
     // emission arrows
     g.appendChild(el('line', { x1:len/2+2, y1:-9, x2:len/2+9, y2:-16, stroke:on?col.fill:'#cbd5e1', 'stroke-width':1.6, 'stroke-linecap':'round' }));
     g.appendChild(el('line', { x1:len/2+8, y1:-5, x2:len/2+15, y2:-12, stroke:on?col.fill:'#cbd5e1', 'stroke-width':1.6, 'stroke-linecap':'round' }));
+  } else if (c.type === 'cap'){
+    // two parallel plates at the centre
+    var cm = len / 2;
+    g.appendChild(el('line', { x1:0, y1:0, x2:cm - 3, y2:0, class:'bb-comp-lead' }));
+    g.appendChild(el('line', { x1:cm + 3, y1:0, x2:len, y2:0, class:'bb-comp-lead' }));
+    g.appendChild(el('line', { x1:cm - 3, y1:-10, x2:cm - 3, y2:10, stroke:'#7c3aed', 'stroke-width':3 }));
+    g.appendChild(el('line', { x1:cm + 3, y1:-10, x2:cm + 3, y2:10, stroke:'#7c3aed', 'stroke-width':3 }));
+    gComps.appendChild(uprightText(cm, A.x, A.y, ang, -16, 'C ' + fmtC(c.value), '#7c3aed'));
+  } else if (c.type === 'ind'){
+    // coil: four humps over the body span
+    var n = 4, span = x2 - x1, r = span / (n * 2), d = 'M ' + x1 + ' 0';
+    for (var k = 0; k < n; k++){ var sx = x1 + k * 2 * r; d += ' A ' + r + ' ' + r + ' 0 0 1 ' + (sx + 2 * r) + ' 0'; }
+    g.appendChild(el('path', { d:d, fill:'none', stroke:'#0891b2', 'stroke-width':2.4 }));
+    gComps.appendChild(uprightText(len / 2, A.x, A.y, ang, -14, 'L ' + fmtL(c.value), '#0891b2'));
   }
   gComps.appendChild(g);
 }
@@ -758,6 +831,21 @@ var lastTs = null, rafId = null;
 function tick(ts){
   if (lastTs === null) lastTs = ts;
   var dt = Math.min((ts - lastTs) / 1000, 0.05); lastTs = ts;
+
+  // advance the transient simulation when reactive parts are present
+  if (hasReactive()){
+    var dtSim = dt * SIM_SPEEDS[simSpeedIdx];
+    var n = Math.max(1, Math.ceil(dtSim / SIM_SUBSTEP)), h = dtSim / n;
+    for (var s = 0; s < n; s++) lastRes = solveCircuit(h, true);
+    simTime += dtSim;
+    sampleGraph();
+    renderAcc += dt;
+    if (renderAcc > 0.06){
+      renderAcc = 0; rebuildElectrons(); renderReadout(lastRes); drawGraph();
+      if (tool === 'meter'){ drawProbes(); updateMeter(); }
+    }
+  }
+
   for (var i = 0; i < elecDots.length; i++){
     var d = elecDots[i], A = holes[d.a], B = holes[d.b];
     d.f = (d.f + d.speed * dt) % 1;
@@ -767,10 +855,132 @@ function tick(ts){
   }
   rafId = requestAnimationFrame(tick);
 }
+function hasReactive(){ return comps.some(function(c){ return c.type === 'cap' || c.type === 'ind'; }); }
 document.addEventListener('visibilitychange', function(){
   if (document.hidden){ if (rafId !== null){ cancelAnimationFrame(rafId); rafId = null; } lastTs = null; }
   else if (rafId === null) rafId = requestAnimationFrame(tick);
 });
+
+// ════════════════════════════ TRANSIENT PANEL / GRAPH ════════════════════════════
+// pick which reactive component the graph tracks (selected one wins, else first placed)
+function trackedComp(){
+  var sel = compById(graphComp);
+  if (sel && (sel.type === 'cap' || sel.type === 'ind')) return sel;
+  sel = compById(selectedId);
+  if (sel && (sel.type === 'cap' || sel.type === 'ind')) return sel;
+  for (var i = 0; i < comps.length; i++) if (comps[i].type === 'cap' || comps[i].type === 'ind') return comps[i];
+  return null;
+}
+// the graphed signal: capacitor → voltage, inductor → current
+function trackedSignal(c){ return c.type === 'cap' ? (c.results ? c.results.V : 0) : (c.results ? c.results.I : 0); }
+
+function restartTransient(){
+  comps.forEach(function(c){ if (c.type === 'cap') c._vPrev = 0; if (c.type === 'ind') c._iPrev = 0; });
+  simTime = 0; graphHist = []; renderAcc = 0;
+  rebuild();
+}
+
+function sampleGraph(){
+  var c = trackedComp(); if (!c){ graphHist = []; return; }
+  graphHist.push({ t:simTime, v:trackedSignal(c) });
+  var win = graphWindow();
+  while (graphHist.length > 2 && graphHist[0].t < simTime - win) graphHist.shift();
+  if (graphHist.length > 1200) graphHist.shift();
+}
+function graphWindow(){
+  // show ~5τ when known, otherwise a fixed window
+  if (graphTau && graphTau > 0) return Math.min(Math.max(graphTau * 5, 0.2), 120);
+  return 5;
+}
+
+function syncTransientPanel(){
+  var panel = $('bb-transient'); if (!panel) return;
+  var show = hasReactive();
+  panel.style.display = show ? '' : 'none';
+  if (!show){ graphHist = []; return; }
+  document.querySelectorAll('.bb-sp[data-sp]').forEach(function(b){ b.classList.toggle('active', +b.dataset.sp === simSpeedIdx); });
+  var c = trackedComp();
+  graphTau = c ? tauOf(c) : null;
+  drawGraph();
+}
+
+// estimate the time constant: τ = Rth·C (cap) or L/Rth (inductor), Rth seen across the part
+function tauOf(target){
+  if (!target || (target.type !== 'cap' && target.type !== 'ind')) return null;
+  var uf = UF();
+  comps.forEach(function(c){ uf.add(holes[c.a].node); uf.add(holes[c.b].node); });
+  // for the DC-ish Thevenin view: batteries shorted, inductors shorted, other caps open
+  comps.forEach(function(c){
+    if (c.type === 'wire' || (c.type === 'switch' && c.closed) || c.type === 'battery' || (c.type === 'ind' && c !== target))
+      uf.union(holes[c.a].node, holes[c.b].node);
+  });
+  function sn(h){ return uf.find(holes[h].node); }
+  var na = sn(target.a), nb = sn(target.b);
+  if (na === nb) return 0;
+  var ground = nb, idx = {}, N = 0, seen = {};
+  comps.forEach(function(c){ [sn(c.a), sn(c.b)].forEach(function(n){ if (seen[n]) return; seen[n] = true; if (n !== ground) idx[n] = N++; }); });
+  if (!(na in idx) && na !== ground) idx[na] = N++;
+  if (N === 0) return null;
+  var A = []; for (var r = 0; r < N; r++) A.push(new Array(N).fill(0));
+  var b = new Array(N).fill(0);
+  function gi(n){ return n === ground ? -1 : idx[n]; }
+  function stamp(i, j, g){ if (i >= 0) A[i][i] += g; if (j >= 0) A[j][j] += g; if (i >= 0 && j >= 0){ A[i][j] -= g; A[j][i] -= g; } }
+  for (var k = 0; k < N; k++) A[k][k] += 1e-9;
+  comps.forEach(function(c){
+    if (c === target || c.type === 'cap') return;
+    var i = gi(sn(c.a)), j = gi(sn(c.b));
+    if (RFAM[c.type]){ stamp(i, j, 1 / effR(c)); return; }
+    if ((c.type === 'diode' || c.type === 'led') && c.results && c.results.on) stamp(i, j, 1 / (c.type === 'led' ? LED_RD : DIODE_RD));
+    else if (c.type === 'vdr' && c.results && c.results.on) stamp(i, j, 1 / VDR_RD);
+  });
+  var ia = gi(na); if (ia < 0) return 0;
+  b[ia] = 1;                              // inject 1 A → node voltage equals Rth
+  var x = solveLinear(A, b);
+  if (!x) return null;
+  var Rth = Math.abs(x[ia]);
+  return target.type === 'cap' ? Rth * target.value : (Rth > 1e-9 ? target.value / Rth : null);
+}
+
+function drawGraph(){
+  var svg2 = $('bb-graph-svg'); if (!svg2) return;
+  while (svg2.firstChild) svg2.removeChild(svg2.firstChild);
+  var en = isEN(), info = $('bb-graph-info');
+  var c = trackedComp();
+  if (!c){ if (info) info.textContent = en ? 'Place a capacitor or inductor to see its curve.' : 'วางตัวเก็บประจุ/ตัวเหนี่ยวนำเพื่อดูเส้นโค้ง'; return; }
+
+  var W = 260, H = 130, pad = 6;
+  svg2.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+  svg2.setAttribute('preserveAspectRatio', 'none');
+  var isCap = c.type === 'cap', accent = isCap ? '#7c3aed' : '#0891b2';
+  var win = graphWindow(), t1 = simTime, t0 = Math.max(0, t1 - win);
+
+  // y-range from history within window (padded, always includes 0)
+  var vmax = 0, vmin = 0, i;
+  for (i = 0; i < graphHist.length; i++){ var v = graphHist[i].v; if (v > vmax) vmax = v; if (v < vmin) vmin = v; }
+  if (vmax - vmin < 1e-9) vmax = vmin + 1;
+  var rng = (vmax - vmin) * 1.15, mid = (vmax + vmin) / 2;
+  vmax = mid + rng / 2; vmin = mid - rng / 2;
+  function X(t){ return pad + (W - 2 * pad) * (win > 0 ? (t - t0) / win : 0); }
+  function Y(v){ return pad + (H - 2 * pad) * (1 - (v - vmin) / (vmax - vmin)); }
+
+  // zero baseline
+  if (vmin < 0 && vmax > 0){
+    svg2.appendChild(el('line', { x1:pad, y1:Y(0).toFixed(1), x2:W - pad, y2:Y(0).toFixed(1), stroke:'#334155', 'stroke-width':1, 'stroke-dasharray':'3 3' }));
+  }
+  // the curve
+  var pts = '';
+  for (i = 0; i < graphHist.length; i++){ var p = graphHist[i]; if (p.t < t0) continue; pts += X(p.t).toFixed(1) + ',' + Y(p.v).toFixed(1) + ' '; }
+  if (pts) svg2.appendChild(el('polyline', { points:pts.trim(), fill:'none', stroke:accent, 'stroke-width':2 }));
+  // current value dot
+  if (graphHist.length){ var last = graphHist[graphHist.length - 1]; svg2.appendChild(el('circle', { cx:X(last.t).toFixed(1), cy:Y(last.v).toFixed(1), r:3, fill:accent })); }
+
+  if (info){
+    var sig = trackedSignal(c);
+    var label = compName(c, en) + ' — ' + (isCap ? 'V' : 'I') + ' = <b>' + (isCap ? fmtV(sig) : fmtI(sig)) + '</b>';
+    var tauTxt = (graphTau != null && graphTau > 0) ? ' · τ ≈ <span class="tau">' + fmtTime(graphTau) + '</span>' : '';
+    info.innerHTML = label + tauTxt + ' · t = ' + fmtTime(simTime);
+  }
+}
 
 // ════════════════════════════ READOUT ════════════════════════════
 function renderReadout(res){
@@ -824,6 +1034,8 @@ function compName(c, en){
   if (c.type === 'diode') return en ? 'Diode' : 'ไดโอด';
   if (c.type === 'led') return (en ? 'LED ' : 'LED ') + LED_COLORS[c.color][en ? 'en' : 'th'];
   if (c.type === 'switch') return en ? 'Switch' : 'สวิตช์';
+  if (c.type === 'cap') return 'C ' + fmtC(c.value);
+  if (c.type === 'ind') return 'L ' + fmtL(c.value);
   return en ? 'Jumper' : 'จัมเปอร์';
 }
 
@@ -953,6 +1165,8 @@ function updateMeter(){
   if (c.type === 'wire') return lcd('≈ 0', 'Ω');
   if (c.type === 'vdr') return lcd(P('ไม่เชิงเส้น', 'non-linear'), '', true);
   if (c.type === 'diode' || c.type === 'led') return lcd(P('รอยต่อ PN', 'PN junction'), '', true);
+  if (c.type === 'cap') return lcd(P('เก็บประจุ (Xc)', 'capacitive (Xc)'), '', true);
+  if (c.type === 'ind') return lcd(P('≈ 0 Ω (ขดลวด)', '≈ 0 Ω (coil)'), '', true);
   return lcd('—', '', true);
 }
 
@@ -969,8 +1183,8 @@ function beep(){
 }
 
 // ════════════════════════════ TOOLBAR / CONTROLS ════════════════════════════
-var VALROWS = ['battery','resistor','led','diode','wire','switch','meter'];
-var COMP_TOOLS = ['battery','resistor','led','diode','wire','switch'];   // live inside the "Add component" dropdown
+var VALROWS = ['battery','resistor','led','diode','wire','switch','cap','ind','meter'];
+var COMP_TOOLS = ['battery','resistor','led','diode','wire','switch','cap','ind'];   // live inside the "Add component" dropdown
 function selectTool(t){
   // toggle off if same
   tool = (tool === t) ? null : t;
@@ -1020,6 +1234,14 @@ function populateResVals(){
   $('bb-res-val-lbl').innerHTML = '<span class="th-only">' + L.th + '</span><span class="en-only">' + L.en + '</span>';
 }
 
+// fill the capacitor / inductor value dropdowns
+function populateReactiveVals(){
+  var cs = $('bb-cap-val');
+  if (cs) cs.innerHTML = CAP_OPTIONS.map(function(F){ return '<option value="' + F + '"' + (F === capVal ? ' selected' : '') + '>' + fmtC(F) + '</option>'; }).join('');
+  var ls = $('bb-ind-val');
+  if (ls) ls.innerHTML = IND_OPTIONS.map(function(L){ return '<option value="' + L + '"' + (L === indVal ? ' selected' : '') + '>' + fmtL(L) + '</option>'; }).join('');
+}
+
 // show/hide value vs clamp-voltage controls depending on the chosen resistor subtype
 function updateResControls(){
   var isVdr = resSubtype === 'vdr';
@@ -1050,7 +1272,8 @@ function initControls(){
   });
   document.addEventListener('click', function(e){ if (!e.target.closest('#bb-comp-dropdown')) closeCompMenu(); });
   $('bb-clear').addEventListener('click', function(){
-    comps = []; occupied = {}; pendingHole = null; selectedId = null; hideHL(); resetMeter(); rebuild(); renderEditor();
+    comps = []; occupied = {}; pendingHole = null; selectedId = null; hideHL(); resetMeter();
+    simTime = 0; graphHist = []; graphComp = null; rebuild(); renderEditor();
   });
   // multimeter mode buttons
   document.querySelectorAll('.bb-mm[data-mm]').forEach(function(btn){
@@ -1069,6 +1292,13 @@ function initControls(){
   $('bb-res-val').addEventListener('change', function(){ resVal = +this.value; });
   $('bb-res-vc').addEventListener('change', function(){ vdrVc = +this.value; });
   $('bb-led-color').addEventListener('change', function(){ ledColor = this.value; });
+  $('bb-cap-val').addEventListener('change', function(){ capVal = +this.value; });
+  $('bb-ind-val').addEventListener('change', function(){ indVal = +this.value; });
+  // transient: speed presets + restart
+  document.querySelectorAll('.bb-sp[data-sp]').forEach(function(btn){
+    btn.addEventListener('click', function(){ simSpeedIdx = +btn.dataset.sp; syncTransientPanel(); });
+  });
+  $('bb-tr-restart').addEventListener('click', restartTransient);
   // environment sliders (affect all sensors)
   $('bb-temp').addEventListener('input', function(){ env.temp = +this.value; $('bb-temp-out').textContent = env.temp + ' °C'; rebuild(); });
   $('bb-light').addEventListener('input', function(){ env.light = +this.value; $('bb-light-out').textContent = env.light + ' %'; rebuild(); });
@@ -1089,7 +1319,8 @@ function initControls(){
 
 // ════════════════════════════ EXAMPLE: battery → R → LED loop ════════════════════════════
 function loadExample(){
-  comps = []; occupied = {}; pendingHole = null; selectedId = null; hideHL(); resetMeter(); renderEditor();
+  comps = []; occupied = {}; pendingHole = null; selectedId = null; hideHL(); resetMeter();
+  simTime = 0; graphHist = []; graphComp = null; renderEditor();
   batteryV = 9; $('bb-batt-v').value = 9; $('bb-batt-v-out').textContent = '9 V';
   resVal = 330; $('bb-res-val').value = '330';
   ledColor = 'red'; $('bb-led-color').value = 'red';
@@ -1114,6 +1345,7 @@ function place(type, a, b, props){
 // ════════════════════════════ INIT ════════════════════════════
 buildBoard();
 initControls();
+populateReactiveVals();
 selectTool(null);
 rebuild();
 rafId = requestAnimationFrame(tick);
