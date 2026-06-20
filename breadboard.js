@@ -90,11 +90,20 @@ var vdrVc = 6;
 var ledColor = 'red';
 var env = { temp:25, light:50, vrPos:50 };   // shared sensor environment
 
+// multimeter probe state
+var meterMode = 'v';        // 'v' | 'i' | 'r' | 'd' | 'cont'
+var probeRed = null;        // hole id for the red (+) probe   (V / continuity modes)
+var probeBlk = null;        // hole id for the black (−) probe
+var meterTargetComp = null; // component id being measured     (I / Ω / diode modes)
+var meterRev = false;       // diode-test probe orientation (false = forward, true = reversed → OL)
+var probeCtx = null;        // set by solveCircuit: { V(holeId), connected(h1,h2), ground, ok }
+var actx = null;            // lazily-created AudioContext for the continuity beep
+
 // ════════════════════════════ DOM ════════════════════════════
 function $(id){ return document.getElementById(id); }
 var svg = $('bb-svg');
 svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
-var gBoard, gHoles, gComps, gElec, hlEl;
+var gBoard, gHoles, gComps, gElec, gProbe, hlEl;
 
 // ════════════════════════════ SVG HELPERS ════════════════════════════
 function el(tag, attrs){
@@ -116,6 +125,7 @@ function buildBoard(){
   gHoles = el('g', {});  svg.appendChild(gHoles);
   gComps = el('g', {});  svg.appendChild(gComps);
   gElec  = el('g', {});  svg.appendChild(gElec);
+  gProbe = el('g', {});  svg.appendChild(gProbe);
   hlEl = el('circle', { class:'bb-pin-hl', r:R_HOLE + 4, style:'display:none' });
   svg.appendChild(hlEl);
 
@@ -205,6 +215,11 @@ function isEN(){ return document.documentElement.lang === 'en'; }
 function setHint(html){ $('bb-hint').innerHTML = html; }
 
 function refreshHint(){
+  if (tool === 'meter'){
+    setHint(isEN() ? '📟 <b>Multimeter</b>: pick a mode (V / I / Ω / ▷| / 🔊), then click a component — or two holes for V / continuity.'
+                   : '📟 <b>มัลติมิเตอร์</b>: เลือกโหมด (V / I / Ω / ▷| / 🔊) แล้วคลิกอุปกรณ์ — หรือคลิกรู 2 จุดสำหรับโหมด V / ความต่อเนื่อง');
+    return;
+  }
   if (tool === 'delete'){
     setHint(isEN() ? '🗑 <b>Delete</b>: click a component to remove it.'
                    : '🗑 <b>โหมดลบ</b>: คลิกอุปกรณ์ที่ต้องการลบ');
@@ -227,6 +242,7 @@ function refreshHint(){
 }
 
 function onHoleClick(id){
+  if (tool === 'meter'){ meterClickHole(id); return; }
   if (tool === 'delete' || !tool) return;
   if (pendingHole == null){
     if (occupied[id]){ flashHint(isEN() ? 'That hole is already used.' : 'รูนี้มีขาอุปกรณ์อยู่แล้ว'); return; }
@@ -356,7 +372,7 @@ function startDrag(ev, c){
   dragGrab = p ? { ox: holes[c.a].x - p.x, oy: holes[c.a].y - p.y } : { ox:0, oy:0 };
 }
 function onPointerMove(ev){
-  if (!dragComp || tool === 'delete') return;
+  if (!dragComp || tool === 'delete' || tool === 'meter') return;   // meter mode never drags parts
   var p = svgCoords(ev); if (!p) return;
   var c = dragComp;
   var na = nearestHole(p.x + dragGrab.ox, p.y + dragGrab.oy);   // where endpoint a wants to be
@@ -376,7 +392,8 @@ function onPointerUp(){
   if (!dragComp) return;
   var c = dragComp; dragComp = null;
   if (!dragMoved){                       // it was a tap, not a drag
-    if (tool === 'delete') deleteComp(c.id);
+    if (tool === 'meter') meterClickComp(c);
+    else if (tool === 'delete') deleteComp(c.id);
     else if (c.type === 'switch'){ c.closed = !c.closed; selectComp(c.id); }
     else selectComp(c.id);
   } else { selectedId = c.id; renderEditor(); }
@@ -431,6 +448,7 @@ function solveCircuit(){
   // reset results
   comps.forEach(function(c){ c.results = { V:0, I:0, on:false }; });
   var warnings = [];
+  probeCtx = { ok:false, ground:null, V:function(){ return null; }, connected:function(){ return false; } };
 
   var batteries = comps.filter(function(c){ return c.type === 'battery'; });
   var branches  = comps.filter(function(c){ return c.type !== 'wire' && c.type !== 'battery' && c.type !== 'switch'; });
@@ -438,15 +456,17 @@ function solveCircuit(){
   // a closed switch behaves like a jumper (0 Ω); an open one is ignored entirely
   var joins     = wires.concat(comps.filter(function(c){ return c.type === 'switch' && c.closed; }));
 
-  if (batteries.length === 0){
-    return { ok:comps.length === 0, warnings:comps.length ? [{ t:'warn', th:'ยังไม่มีแหล่งจ่าย — เพิ่มแบตเตอรี่เพื่อให้กระแสไหล', en:'No power source — add a battery to make current flow' }] : [] };
-  }
-
-  // 1) supernodes via union-find (wires merge nodes)
+  // supernodes via union-find (wires/closed switches merge nodes) — built first so the
+  // multimeter probe can test continuity even before a battery is added
   var uf = UF();
   comps.forEach(function(c){ uf.add(holes[c.a].node); uf.add(holes[c.b].node); });
   joins.forEach(function(c){ uf.union(holes[c.a].node, holes[c.b].node); });
   function sn(holeId){ return uf.find(holes[holeId].node); }
+  probeCtx.connected = function(h1, h2){ return sn(h1) === sn(h2); };
+
+  if (batteries.length === 0){
+    return { ok:comps.length === 0, warnings:comps.length ? [{ t:'warn', th:'ยังไม่มีแหล่งจ่าย — เพิ่มแบตเตอรี่เพื่อให้กระแสไหล', en:'No power source — add a battery to make current flow' }] : [] };
+  }
 
   // 2) ground = negative terminal supernode of first battery
   var ground = sn(batteries[0].b);
@@ -565,6 +585,15 @@ function solveCircuit(){
     if (!c.results.on && c.results.V < -0.3) warnings.push({ t:'warn', th:'LED ต่อกลับขั้ว — สลับขา + / − จึงจะติด', en:'LED is reverse-connected — swap its + / − legs to light it' });
   });
 
+  // expose solved node voltages to the multimeter probe
+  probeCtx.ok = true;
+  probeCtx.ground = ground;
+  probeCtx.V = function(holeId){
+    var s = sn(holeId);
+    if (s === ground) return 0;
+    return (s in idx) ? sol[idx[s]] : null;   // null = floating (no current reference)
+  };
+
   return { ok:true, warnings:warnings };
 }
 
@@ -586,6 +615,7 @@ function rebuild(){
 
   rebuildElectrons();
   renderReadout(res);
+  if (tool === 'meter'){ drawProbes(); updateMeter(); }   // keep the meter reading live
 }
 
 function drawComp(c){
@@ -797,8 +827,149 @@ function compName(c, en){
   return en ? 'Jumper' : 'จัมเปอร์';
 }
 
+// ════════════════════════════ MULTIMETER PROBE ════════════════════════════
+function resetMeter(){
+  probeRed = null; probeBlk = null; meterTargetComp = null; meterRev = false;
+  if (gProbe) while (gProbe.firstChild) gProbe.removeChild(gProbe.firstChild);
+}
+function meterIsCompMode(){ return meterMode === 'i' || meterMode === 'r' || meterMode === 'd'; }
+function setActiveMode(){
+  document.querySelectorAll('.bb-mm[data-mm]').forEach(function(b){ b.classList.toggle('active', b.dataset.mm === meterMode); });
+}
+
+// click handlers (routed from onHoleClick / onPointerUp when the meter tool is armed)
+function meterClickComp(c){
+  if (meterIsCompMode()){
+    if (meterMode === 'd') meterRev = (meterTargetComp === c.id) ? !meterRev : false;  // re-tap flips orientation
+    meterTargetComp = c.id; probeRed = probeBlk = null;
+  } else {                             // V / continuity → probe across the part
+    probeRed = c.a; probeBlk = c.b; meterTargetComp = null;
+    if (meterMode === 'cont' && probeCtx && probeCtx.connected(c.a, c.b)) beep();
+  }
+  drawProbes(); updateMeter();
+}
+function meterClickHole(id){
+  if (meterIsCompMode()){
+    flashHint(isEN() ? 'Click on a component to measure it.' : 'คลิกที่ตัวอุปกรณ์เพื่อวัดค่า');
+    return;
+  }
+  meterTargetComp = null;
+  if (probeRed == null) probeRed = id;
+  else if (probeBlk == null && id !== probeRed){
+    probeBlk = id;
+    if (meterMode === 'cont' && probeCtx && probeCtx.connected(probeRed, probeBlk)) beep();
+  } else { probeRed = id; probeBlk = null; }   // start a new pair
+  drawProbes(); updateMeter();
+}
+
+function drawProbes(){
+  if (!gProbe) return;
+  while (gProbe.firstChild) gProbe.removeChild(gProbe.firstChild);
+  if (tool !== 'meter') return;
+  if (meterIsCompMode()){
+    var c = compById(meterTargetComp);
+    if (c){ markComp(c); if (meterMode === 'd' && !meterRev && c.type === 'led') ledTestGlow(c); }
+    return;
+  }
+  if (probeRed != null) probeMark(probeRed, '#ef4444', '+');
+  if (probeBlk != null) probeMark(probeBlk, '#1e293b', '−');
+}
+// a real diode-tester pushes ~1 mA, lighting an LED faintly even with the circuit unpowered
+function ledTestGlow(c){
+  var A = holes[c.a], B = holes[c.b]; if (!A || !B) return;
+  var mx = (A.x + B.x) / 2, my = (A.y + B.y) / 2;
+  gProbe.appendChild(el('circle', { cx:mx, cy:my, r:10, fill:LED_COLORS[c.color].glow, opacity:'0.6', filter:'url(#bb-glow)' }));
+}
+function probeMark(holeId, color, sign){
+  var h = holes[holeId]; if (!h) return;
+  gProbe.appendChild(el('circle', { cx:h.x, cy:h.y, r:R_HOLE + 3, fill:'none', stroke:color, 'stroke-width':3 }));
+  gProbe.appendChild(el('circle', { cx:h.x, cy:h.y, r:2.6, fill:color }));
+  var t = txt(h.x, h.y - R_HOLE - 9, sign, 'bb-lbl', color);
+  t.setAttribute('font-weight', '800'); t.setAttribute('font-size', '14');
+  gProbe.appendChild(t);
+}
+function markComp(c){
+  var A = holes[c.a], B = holes[c.b]; if (!A || !B) return;
+  gProbe.appendChild(el('line', { x1:A.x, y1:A.y, x2:B.x, y2:B.y, stroke:'#7c3aed', 'stroke-width':7, 'stroke-linecap':'round', opacity:'0.25' }));
+  [A, B].forEach(function(h){ gProbe.appendChild(el('circle', { cx:h.x, cy:h.y, r:R_HOLE + 3, fill:'none', stroke:'#7c3aed', 'stroke-width':3 })); });
+}
+
+function lcd(big, unit, muted){
+  var d = $('bb-meter-read'); if (!d) return;
+  d.classList.toggle('muted', !!muted);
+  d.innerHTML = unit ? (big + ' <span class="u">' + unit + '</span>') : big;
+}
+function updateMeter(){
+  if (tool !== 'meter') return;
+  setActiveMode();
+  var en = isEN(), tip = $('bb-meter-tip');
+  function P(th, e){ return en ? e : th; }
+  function setTip(th, e){ if (tip) tip.textContent = P(th, e); }
+
+  if (meterMode === 'v'){
+    setTip('คลิกอุปกรณ์เพื่อวัดคร่อม หรือคลิกรู 2 จุด (แดง→ดำ)', 'Click a part to read across it, or two holes (red→black)');
+    if (probeRed == null) return lcd(P('แตะโพรบจุดแรก', 'Probe 1st point'), '', true);
+    if (probeBlk == null) return lcd(P('แตะโพรบจุดที่สอง', 'Probe 2nd point'), '', true);
+    if (!probeCtx) return lcd('—', '', true);
+    var va = probeCtx.V(probeRed), vb = probeCtx.V(probeBlk);
+    if (va == null || vb == null) return lcd(P('จุดลอย (ไม่มีอ้างอิง)', 'Floating node'), '', true);
+    var d = va - vb;
+    return lcd((d >= 0 ? '+' : '−') + Math.abs(d).toFixed(2), 'V');
+  }
+  if (meterMode === 'cont'){
+    setTip('คลิก 2 รู (หรืออุปกรณ์) เพื่อเช็คว่าต่อถึงกันไหม', 'Click two holes (or a part) to test continuity');
+    if (probeRed == null || probeBlk == null) return lcd(P('แตะโพรบ 2 จุด', 'Probe two points'), '', true);
+    var con = probeCtx && probeCtx.connected(probeRed, probeBlk);
+    var dd = $('bb-meter-read'); dd.classList.remove('muted');
+    dd.innerHTML = con ? '<span style="color:#34d399">🔊 ' + P('ต่อถึงกัน', 'Connected') + '</span>'
+                       : '<span style="color:#f87171">○ ' + P('เปิดวงจร', 'Open') + '</span>';
+    return;
+  }
+  // I / Ω / diode modes operate on a single component
+  var c = compById(meterTargetComp);
+  if (meterMode === 'd'){
+    setTip('คลิกไดโอด/LED เพื่ออ่าน Vf — คลิกซ้ำ = กลับขั้ว (OL)', 'Click a diode/LED to read Vf — click again to reverse (OL)');
+    if (!c) return lcd(P('คลิกไดโอด/LED', 'Tap a diode/LED'), '', true);
+    if (c.type === 'diode' || c.type === 'led'){
+      if (meterRev) return lcd('OL', P('กลับขั้ว', 'reversed'));   // reverse-biased → open
+      var vf = c.type === 'led' ? LED_COLORS[c.color].vf : (c.vf || DIODE_VF);
+      return lcd(vf.toFixed(2), 'V');
+    }
+    if (c.type === 'wire') return lcd('≈ 0.00', 'V');               // short → ~0 V drop
+    if (c.type === 'switch') return lcd(c.closed ? '≈ 0.00' : 'OL', c.closed ? 'V' : P('เปิด', 'open'));
+    return lcd(P('ใช้กับไดโอด/LED', 'Use on a diode/LED'), '', true);
+  }
+  if (meterMode === 'i'){
+    setTip('คลิกอุปกรณ์เพื่อวัดกระแสที่ไหลผ่าน', 'Click a part to read the current through it');
+    if (!c) return lcd(P('คลิกอุปกรณ์', 'Tap a part'), '', true);
+    if (c.type === 'wire' || c.type === 'switch') return lcd(P('ผ่านตัวนำ ≈ 0', 'through conductor'), '', true);
+    return lcd(fmtI(c.results ? c.results.I : 0), '');
+  }
+  // resistance
+  setTip('คลิกอุปกรณ์เพื่อวัดความต้านทาน (จริงต้องตัดไฟก่อนวัด)', 'Click a part to read resistance (real ohmmeters need power off)');
+  if (!c) return lcd(P('คลิกอุปกรณ์', 'Tap a part'), '', true);
+  if (RFAM[c.type]) return lcd(fmtR(Math.round(effR(c))), '');
+  if (c.type === 'switch') return lcd(c.closed ? '≈ 0' : '∞', 'Ω');
+  if (c.type === 'wire') return lcd('≈ 0', 'Ω');
+  if (c.type === 'vdr') return lcd(P('ไม่เชิงเส้น', 'non-linear'), '', true);
+  if (c.type === 'diode' || c.type === 'led') return lcd(P('รอยต่อ PN', 'PN junction'), '', true);
+  return lcd('—', '', true);
+}
+
+function beep(){
+  try {
+    var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+    if (!actx) actx = new AC();
+    var o = actx.createOscillator(), g = actx.createGain();
+    o.frequency.value = 2000; o.connect(g); g.connect(actx.destination);
+    g.gain.setValueAtTime(0.05, actx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + 0.15);
+    o.start(); o.stop(actx.currentTime + 0.16);
+  } catch (e) {}
+}
+
 // ════════════════════════════ TOOLBAR / CONTROLS ════════════════════════════
-var VALROWS = ['battery','resistor','led','diode','wire','switch'];
+var VALROWS = ['battery','resistor','led','diode','wire','switch','meter'];
 function selectTool(t){
   // toggle off if same
   tool = (tool === t) ? null : t;
@@ -810,6 +981,8 @@ function selectTool(t){
   VALROWS.forEach(function(v){ $('bb-val-' + v).classList.toggle('show', tool === v); });
   $('bb-val-none').classList.toggle('show', !tool || tool === 'delete');
   if (tool === 'resistor') updateResControls();
+  if (tool === 'meter'){ selectedId = null; renderEditor(); resetMeter(); setActiveMode(); updateMeter(); }
+  else resetMeter();
   refreshHint();
 }
 
@@ -850,7 +1023,11 @@ function initControls(){
     btn.addEventListener('click', function(){ selectTool(btn.dataset.tool); });
   });
   $('bb-clear').addEventListener('click', function(){
-    comps = []; occupied = {}; pendingHole = null; selectedId = null; hideHL(); rebuild(); renderEditor();
+    comps = []; occupied = {}; pendingHole = null; selectedId = null; hideHL(); resetMeter(); rebuild(); renderEditor();
+  });
+  // multimeter mode buttons
+  document.querySelectorAll('.bb-mm[data-mm]').forEach(function(btn){
+    btn.addEventListener('click', function(){ meterMode = btn.dataset.mm; resetMeter(); setActiveMode(); updateMeter(); });
   });
   $('bb-example').addEventListener('click', loadExample);
   $('bb-batt-v').addEventListener('input', function(){
@@ -881,7 +1058,7 @@ function initControls(){
 
 // ════════════════════════════ EXAMPLE: battery → R → LED loop ════════════════════════════
 function loadExample(){
-  comps = []; occupied = {}; pendingHole = null; selectedId = null; hideHL(); renderEditor();
+  comps = []; occupied = {}; pendingHole = null; selectedId = null; hideHL(); resetMeter(); renderEditor();
   batteryV = 9; $('bb-batt-v').value = 9; $('bb-batt-v-out').textContent = '9 V';
   resVal = 330; $('bb-res-val').value = '330';
   ledColor = 'red'; $('bb-led-color').value = 'red';
