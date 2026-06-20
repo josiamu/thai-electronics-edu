@@ -970,6 +970,7 @@ function beep(){
 
 // ════════════════════════════ TOOLBAR / CONTROLS ════════════════════════════
 var VALROWS = ['battery','resistor','led','diode','wire','switch','meter'];
+var COMP_TOOLS = ['battery','resistor','led','diode','wire','switch'];   // live inside the "Add component" dropdown
 function selectTool(t){
   // toggle off if same
   tool = (tool === t) ? null : t;
@@ -977,6 +978,8 @@ function selectTool(t){
   document.querySelectorAll('.bb-tool[data-tool]').forEach(function(btn){
     btn.classList.toggle('active', btn.dataset.tool === tool);
   });
+  updateCompTrigger();            // reflect the armed component on the dropdown trigger
+  closeCompMenu();
   // value control visibility
   VALROWS.forEach(function(v){ $('bb-val-' + v).classList.toggle('show', tool === v); });
   $('bb-val-none').classList.toggle('show', !tool || tool === 'delete');
@@ -984,6 +987,24 @@ function selectTool(t){
   if (tool === 'meter'){ selectedId = null; renderEditor(); resetMeter(); setActiveMode(); updateMeter(); }
   else resetMeter();
   refreshHint();
+}
+
+// ── "Add component" dropdown ──
+function openCompMenu(){  var m = $('bb-comp-menu'), t = $('bb-comp-trigger'); if (m) m.classList.add('open'); if (t) t.setAttribute('aria-expanded', 'true'); }
+function closeCompMenu(){ var m = $('bb-comp-menu'), t = $('bb-comp-trigger'); if (m) m.classList.remove('open'); if (t) t.setAttribute('aria-expanded', 'false'); }
+function toggleCompMenu(){ var m = $('bb-comp-menu'); if (m && m.classList.contains('open')) closeCompMenu(); else openCompMenu(); }
+function updateCompTrigger(){
+  var trig = $('bb-comp-trigger'); if (!trig) return;
+  var isComp = COMP_TOOLS.indexOf(tool) >= 0;
+  trig.classList.toggle('active', isComp);
+  document.querySelectorAll('.bb-dd-item[data-tool]').forEach(function(it){ it.classList.toggle('active', it.dataset.tool === tool); });
+  var lbl = trig.querySelector('.bb-dd-label'); if (!lbl) return;
+  if (isComp){
+    var L = TYPE_LABEL[tool];
+    lbl.innerHTML = '<span class="th-only">' + L.th + '</span><span class="en-only">' + L.en + '</span>';
+  } else {
+    lbl.innerHTML = '<span class="th-only">เพิ่มอุปกรณ์</span><span class="en-only">Add component</span>';
+  }
 }
 
 // repopulate the value dropdown with the standard list for the current subtype
@@ -1022,6 +1043,12 @@ function initControls(){
   document.querySelectorAll('.bb-tool[data-tool]').forEach(function(btn){
     btn.addEventListener('click', function(){ selectTool(btn.dataset.tool); });
   });
+  // "Add component" dropdown: trigger toggles the menu; items arm the tool
+  $('bb-comp-trigger').addEventListener('click', function(e){ e.stopPropagation(); toggleCompMenu(); });
+  document.querySelectorAll('.bb-dd-item[data-tool]').forEach(function(btn){
+    btn.addEventListener('click', function(){ selectTool(btn.dataset.tool); });
+  });
+  document.addEventListener('click', function(e){ if (!e.target.closest('#bb-comp-dropdown')) closeCompMenu(); });
   $('bb-clear').addEventListener('click', function(){
     comps = []; occupied = {}; pendingHole = null; selectedId = null; hideHL(); resetMeter(); rebuild(); renderEditor();
   });
@@ -1050,9 +1077,13 @@ function initControls(){
   document.addEventListener('pointermove', onPointerMove);
   document.addEventListener('pointerup', onPointerUp);
   document.addEventListener('pointercancel', onPointerUp);
-  // cancel pending placement with Escape
-  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && pendingHole != null){ pendingHole = null; hideHL(); refreshHint(); } });
-  // re-render text on language change
+  // cancel pending placement / close the component menu with Escape
+  document.addEventListener('keydown', function(e){
+    if (e.key !== 'Escape') return;
+    closeCompMenu();
+    if (pendingHole != null){ pendingHole = null; hideHL(); refreshHint(); }
+  });
+  // re-render text on language change (trigger label re-renders via th-only/en-only spans)
   document.addEventListener('langchange', function(){ refreshHint(); rebuild(); renderEditor(); });
 }
 

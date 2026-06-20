@@ -28,6 +28,20 @@
 .bb-tool .ti { font-size:1.05rem; }
 .bb-sep { width:1px; align-self:stretch; background:var(--border); margin:0 .2rem; }
 
+/* ── component dropdown ── */
+.bb-dropdown { position:relative; display:inline-block; }
+.bb-dd-trigger { gap:.45rem; }
+.bb-dd-caret { font-size:.7rem; opacity:.8; }
+.bb-dd-menu { position:absolute; top:calc(100% + 6px); left:0; z-index:30; display:none; flex-direction:column; gap:.15rem;
+  min-width:200px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:.4rem; box-shadow:0 10px 28px rgba(0,0,0,.18); }
+.bb-dd-menu.open { display:flex; }
+.bb-dd-item { display:flex; align-items:center; gap:.6rem; width:100%; text-align:left;
+  padding:.5rem .6rem; border:none; background:none; border-radius:8px; cursor:pointer;
+  font-family:inherit; font-size:.9rem; font-weight:600; color:var(--text); }
+.bb-dd-item:hover { background:var(--bg); }
+.bb-dd-item.active { background:var(--primary); color:#fff; }
+.bb-dd-item .ti { font-size:1.05rem; width:1.5rem; text-align:center; }
+
 /* ── contextual value controls ── */
 .bb-valctrl { background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:.7rem .9rem; margin-bottom:.8rem; min-height:1.2rem; }
 .bb-valrow { display:none; align-items:center; gap:.7rem; flex-wrap:wrap; font-size:.875rem; font-weight:600; }
@@ -134,16 +148,25 @@
   <div class="card" style="padding:1.25rem;">
     <!-- toolbar -->
     <div class="bb-toolbar" id="bb-toolbar">
-      <button class="bb-tool" data-tool="battery"><span class="ti">🔋</span><span class="th-only">แบตเตอรี่</span><span class="en-only">Battery</span></button>
-      <button class="bb-tool" data-tool="resistor"><span class="ti">▭</span><span class="th-only">ตัวต้านทาน</span><span class="en-only">Resistor</span></button>
-      <button class="bb-tool" data-tool="led"><span class="ti">💡</span><span class="th-only">LED</span><span class="en-only">LED</span></button>
-      <button class="bb-tool" data-tool="diode"><span class="ti">▷|</span><span class="th-only">ไดโอด</span><span class="en-only">Diode</span></button>
-      <button class="bb-tool" data-tool="wire"><span class="ti">〜</span><span class="th-only">สายจัมเปอร์</span><span class="en-only">Jumper</span></button>
-      <button class="bb-tool" data-tool="switch"><span class="ti">⎍</span><span class="th-only">สวิตช์</span><span class="en-only">Switch</span></button>
+      <div class="bb-dropdown" id="bb-comp-dropdown">
+        <button class="bb-tool bb-dd-trigger" id="bb-comp-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+          <span class="ti">➕</span>
+          <span class="bb-dd-label"><span class="th-only">เพิ่มอุปกรณ์</span><span class="en-only">Add component</span></span>
+          <span class="bb-dd-caret">▾</span>
+        </button>
+        <div class="bb-dd-menu" id="bb-comp-menu" role="menu">
+          <button class="bb-dd-item" data-tool="battery" role="menuitem"><span class="ti">🔋</span><span class="th-only">แบตเตอรี่</span><span class="en-only">Battery</span></button>
+          <button class="bb-dd-item" data-tool="resistor" role="menuitem"><span class="ti">▭</span><span class="th-only">ตัวต้านทาน</span><span class="en-only">Resistor</span></button>
+          <button class="bb-dd-item" data-tool="led" role="menuitem"><span class="ti">💡</span><span class="th-only">LED</span><span class="en-only">LED</span></button>
+          <button class="bb-dd-item" data-tool="diode" role="menuitem"><span class="ti">▷|</span><span class="th-only">ไดโอด</span><span class="en-only">Diode</span></button>
+          <button class="bb-dd-item" data-tool="wire" role="menuitem"><span class="ti">〜</span><span class="th-only">สายจัมเปอร์</span><span class="en-only">Jumper</span></button>
+          <button class="bb-dd-item" data-tool="switch" role="menuitem"><span class="ti">⎍</span><span class="th-only">สวิตช์</span><span class="en-only">Switch</span></button>
+        </div>
+      </div>
       <button class="bb-tool" data-tool="meter"><span class="ti">📟</span><span class="th-only">มัลติมิเตอร์</span><span class="en-only">Multimeter</span></button>
       <span class="bb-sep"></span>
       <button class="bb-tool danger" data-tool="delete"><span class="ti">🗑</span><span class="th-only">ลบ</span><span class="en-only">Delete</span></button>
-      <button class="bb-tool" id="bb-example"><span class="ti">💡</span><span class="th-only">ตัวอย่าง</span><span class="en-only">Example</span></button>
+      <button class="bb-tool" id="bb-example"><span class="ti">📋</span><span class="th-only">ตัวอย่าง</span><span class="en-only">Example</span></button>
       <button class="bb-tool" id="bb-clear"><span class="ti">♻</span><span class="th-only">ล้างทั้งหมด</span><span class="en-only">Clear all</span></button>
     </div>
 
