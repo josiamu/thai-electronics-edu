@@ -26,12 +26,13 @@ website/
 ├── signal-gen-sim.js — Interactive Waveform Generator (canvas, sine/square/triangle/sawtooth + freq/amp/duty/offset)
 ├── breadboard.js    — Interactive Breadboard Lab (SVG, toolbar: dropdown "เพิ่มอุปกรณ์" (battery/R/LED/diode/wire/switch/cap/ind) + ปุ่มมัลติมิเตอร์/ลบ/ตัวอย่าง/ล้าง, วางอุปกรณ์ R/VR/NTC/PTC/LDR/VDR/LED/diode/wire/switch/battery/capacitor/inductor เอง, union-find + MNA solver + iterative diode/VDR + transient (Backward-Euler companion สำหรับ C/L, เดินเวลาในลูป animation, กราฟ mini-scope V/I + speed 🐢/▶/⏩ + restart + τ), switch (ปิด=jumper/เปิด=ตัดวงจร), Environment panel (temp/light/VR knob), คลิกอุปกรณ์เพื่อแก้ไข (ค่า/สี/Vc/สลับขั้ว/toggle/ลบ), ลาก-ย้ายอุปกรณ์ (pointer + snap), electron animation, มัลติมิเตอร์เสมือน 5 โหมด V/I/Ω/diode-test/continuity (probeCtx จาก solver, คลิกอุปกรณ์/คลิกรู 2 จุด, จอ LCD + หัวโพรบ + เสียงปี๊บ continuity, diode test อ่าน Vf/คลิกซ้ำกลับขั้ว→OL + LED เรืองแสง))
 ├── simulation.js    — logic จำลองวงจรและ animation
+├── capacitor-sim.js — Interactive RC charge/discharge (canvas, R & C sliders → exponential curve, 63.2%@1τ marker, charge/discharge mode, live τ/5τ/Vc/% readout, normalized 0–5τ x-axis)
 ├── power-supply-sim.js — Interactive Power Supply (canvas scope, half/full-wave rectifier + filter C slider + load + 7805 regulator toggle, ripple shrinks with C, constant-current cap discharge sim, traces: pulsating DC/filtered/regulated)
 ├── index.html          — หน้าหลัก (CURRENT_PAGE='home') — กลุ่มตรงกับ navbar: บทเรียน / งานปฏิบัติ / เครื่องมือ / คลังการเรียนรู้
 ├── electricity.html    — บทที่ 1
 ├── ohm.html            — บทที่ 2
 ├── resistor.html       — บทที่ 3: รหัสสี 4 แถบ + 5 แถบ (ตารางครบทั้งคู่)
-├── capacitor.html      — บทที่ 4
+├── capacitor.html      — บทที่ 4: ชนิด, Q=CV+พลังงาน, RC time constant, อ่านรหัส, tolerance/voltage, อนุกรม/ขนาน + Interactive RC charge/discharge sim (canvas)
 ├── inductor.html       — บทที่ 5
 ├── power-supply.html   — แหล่งจ่ายไฟ: 4 ขั้น (หม้อแปลง→เรียงกระแส→กรอง→เรกูเลต), block diagram, สูตร ripple, 78xx/zener, linear vs switching, safety + Interactive Power Supply sim (canvas)
 ├── multimeter.html     — บทที่ 6

@@ -152,6 +152,7 @@ git push
 ├── osc-reader.js        — Scope reading trainer
 ├── transistor-sim.js    — BJT switch simulator
 ├── signal-gen-sim.js    — Waveform generator
+├── capacitor-sim.js     — RC charge/discharge simulator
 ├── power-supply-sim.js  — Power supply (AC→DC) simulator
 ├── breadboard.js        — Virtual breadboard lab (MNA solver + multimeter)
 ├── index.html           — Home page

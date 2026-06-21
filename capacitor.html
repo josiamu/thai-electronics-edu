@@ -9,6 +9,24 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+.rc-wrap { display:grid; grid-template-columns:1fr 285px; gap:1.25rem; align-items:start; }
+@media (max-width:860px){ .rc-wrap{ grid-template-columns:1fr; } }
+.rc-screen { width:100%; height:auto; display:block; border-radius:12px; background:#0b1220; border:1px solid var(--border); }
+.rc-panel { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:.9rem 1rem; }
+.rc-ctrl { margin-bottom:.9rem; }
+.rc-ctrl-row { display:flex; justify-content:space-between; align-items:center; font-size:.84rem; font-weight:600; margin-bottom:.25rem; }
+.rc-ctrl-row span { color:var(--primary); font-size:.9rem; }
+.rc-ctrl input[type=range] { width:100%; cursor:pointer; accent-color:var(--primary); }
+.rc-seg { display:flex; gap:.4rem; }
+.rc-seg button { flex:1; padding:.45rem .3rem; font-size:.84rem; font-weight:600; border:1px solid var(--border); background:var(--bg); color:var(--text); border-radius:8px; cursor:pointer; font-family:inherit; }
+.rc-seg button.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+.rc-fixed { font-size:.8rem; color:var(--text-light); background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:.4rem .6rem; margin-bottom:.9rem; }
+.rc-readout { display:grid; grid-template-columns:1fr 1fr; gap:.45rem; margin-top:.4rem; }
+.rc-rb { background:var(--bg); border:1px solid var(--border); border-radius:9px; padding:.45rem .6rem; text-align:center; }
+.rc-rl { font-size:.72rem; color:var(--text-light); margin-bottom:.12rem; }
+.rc-rv { font-size:1.02rem; font-weight:700; color:var(--text); }
+</style>
 </head>
 <body>
 <div id="nav-placeholder"></div>
@@ -181,6 +199,57 @@
             1τ → 63.2% | 2τ → 86.5%<br>
             3τ → 95.0% | 4τ → 98.2%<br>
             5τ → 99.3% (considered full)
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3b. Interactive RC simulator -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">⚡ ทดลอง: ชาร์จ/คายประจุ RC (โต้ตอบได้)</span><span class="en-only">⚡ Interactive: RC Charge / Discharge</span></div>
+    <div class="card" style="padding:1.25rem">
+      <p class="th-only" style="margin:0 0 1rem;font-size:.92rem;color:var(--text-light)">
+        ปรับ <strong>R</strong> และ <strong>C</strong> แล้วดูกราฟแรงดันคร่อมตัวเก็บประจุ V<sub>C</sub> เปลี่ยนตามเวลา —
+        สังเกตว่ารูปคลื่นเป็นเส้นโค้ง exponential เหมือนเดิมเสมอ แต่ <strong>τ = RC</strong> เป็นตัวกำหนดว่าเร็ว/ช้าแค่ไหน
+        (ที่ 1τ ชาร์จถึง 63.2% และเต็มที่ ~5τ)
+      </p>
+      <p class="en-only" style="margin:0 0 1rem;font-size:.92rem;color:var(--text-light)">
+        Adjust <strong>R</strong> and <strong>C</strong> and watch the capacitor voltage V<sub>C</sub> change over time —
+        the curve shape is always the same exponential, but <strong>τ = RC</strong> sets how fast it happens
+        (at 1τ it reaches 63.2%, and is essentially full by ~5τ).
+      </p>
+      <div class="rc-wrap">
+        <div>
+          <canvas id="rc-canvas" class="rc-screen"></canvas>
+        </div>
+        <div>
+          <div class="rc-panel">
+            <div style="font-weight:700;font-size:.9rem;margin-bottom:.7rem;color:var(--primary)">
+              <span class="th-only">⚙ ปรับค่า</span><span class="en-only">⚙ Adjust</span>
+            </div>
+            <div class="rc-ctrl">
+              <div class="rc-ctrl-row"><label><span class="th-only">โหมด</span><span class="en-only">Mode</span></label></div>
+              <div class="rc-seg" id="rc-mode">
+                <button data-mode="charge" class="active"><span class="th-only">ชาร์จ</span><span class="en-only">Charge</span></button>
+                <button data-mode="discharge"><span class="th-only">คายประจุ</span><span class="en-only">Discharge</span></button>
+              </div>
+            </div>
+            <div class="rc-fixed">V<sub>supply</sub> = 5 V</div>
+            <div class="rc-ctrl">
+              <div class="rc-ctrl-row"><label><span class="th-only">ตัวต้านทาน</span><span class="en-only">Resistor</span> R</label><span id="rc-r-val">10 kΩ</span></div>
+              <input type="range" id="rc-r" min="1" max="100" step="1" value="10">
+            </div>
+            <div class="rc-ctrl">
+              <div class="rc-ctrl-row"><label><span class="th-only">ตัวเก็บประจุ</span><span class="en-only">Capacitor</span> C</label><span id="rc-c-val">100 µF</span></div>
+              <input type="range" id="rc-c" min="10" max="1000" step="10" value="100">
+            </div>
+          </div>
+          <div class="rc-readout">
+            <div class="rc-rb"><div class="rc-rl">τ = R × C</div><div class="rc-rv" id="rc-tau">— s</div></div>
+            <div class="rc-rb"><div class="rc-rl"><span class="th-only">เต็ม</span><span class="en-only">Full</span> (5τ)</div><div class="rc-rv" id="rc-full">— s</div></div>
+            <div class="rc-rb"><div class="rc-rl">V<sub>C</sub></div><div class="rc-rv" id="rc-vc">— V</div></div>
+            <div class="rc-rb"><div class="rc-rl">%</div><div class="rc-rv" id="rc-pct">— %</div></div>
           </div>
         </div>
       </div>
@@ -371,5 +440,6 @@
 <footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
 <script>const CURRENT_PAGE='capacitor';</script>
 <script src="nav.js"></script>
+<script src="capacitor-sim.js"></script>
 </body>
 </html>
