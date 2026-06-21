@@ -15,9 +15,10 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | 🌏 **2 ภาษา** | สลับ TH ↔ EN ได้ทันทีผ่านปุ่มใน nav bar — จำการตั้งค่าไว้ |
 | 🌙 **Dark Mode** | ธีมสว่าง/มืด — จำการตั้งค่าไว้ |
 | 📱 **Responsive** | ใช้งานได้ทั้ง Desktop, Tablet, Mobile |
+| 🔬 **เครื่องมือจำลองเชิงโต้ตอบ** | เบรดบอร์ดเสมือน, ออสซิลโลสโคป, BJT switch, เครื่องกำเนิดสัญญาณ, แหล่งจ่ายไฟ, จำลองวงจร |
 | 🧮 **7 เครื่องคิดเลข** | รหัสสี, โอห์ม, กำลัง, พลังงาน, อนุกรม/ขนาน, แปลงหน่วย |
 | 📝 **แบบทดสอบ 77 ข้อ** | 12 หมวด, สุ่มข้อ, บันทึกคะแนนสูงสุด — มีทั้ง TH และ EN |
-| 📥 **PDF 21 ไฟล์** | ดาวน์โหลดใบเนื้อหาประกอบการเรียน |
+| 📥 **PDF 29 ไฟล์** | ดาวน์โหลดใบเนื้อหาประกอบการเรียน |
 | 🖨️ **Print-friendly** | หน้าสูตรสรุปพิมพ์ออกกระดาษ A4 ได้เลย |
 
 ---
@@ -25,23 +26,45 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 ## 📚 เนื้อหา / Content
 
 ### บทเรียน (Lessons)
-| # | ไทย | English | หน้า |
-|---|---|---|---|
-| 1 | แหล่งกำเนิดและประเภทไฟฟ้า | Electricity Sources & Types | `electricity.html` |
-| 2 | กฎของโอห์ม กำลังและพลังงาน | Ohm's Law, Power & Energy | `ohm.html` |
-| 3 | ตัวต้านทาน (Resistor) | Resistor | `resistor.html` |
-| 4 | ตัวเก็บประจุ (Capacitor) | Capacitor | `capacitor.html` |
-| 5 | ตัวเหนี่ยวนำและหม้อแปลง | Inductor & Transformer | `inductor.html` |
-| 6 | เครื่องมือวัดไฟฟ้า | Measuring Instruments | `multimeter.html` |
-| 7 | การบัดกรี (Soldering) | Soldering | `soldering.html` |
 
-### เครื่องมือ (Utilities)
+**พื้นฐานไฟฟ้า / Electrical Fundamentals**
+| ไทย | English | หน้า |
+|---|---|---|
+| แหล่งกำเนิดและประเภทไฟฟ้า | Electricity Sources & Types | `electricity.html` |
+| กฎของโอห์ม กำลังและพลังงาน | Ohm's Law, Power & Energy | `ohm.html` |
+
+**อุปกรณ์อิเล็กทรอนิกส์ / Electronic Components**
+| ไทย | English | หน้า |
+|---|---|---|
+| ตัวต้านทาน | Resistor | `resistor.html` |
+| ไดโอด | Diode | `diode.html` |
+| ทรานซิสเตอร์ | Transistor (BJT/MOSFET) | `transistor.html` |
+| ตัวเก็บประจุ | Capacitor | `capacitor.html` |
+| ตัวเหนี่ยวนำและหม้อแปลง | Inductor & Transformer | `inductor.html` |
+| แหล่งจ่ายไฟ | Power Supply | `power-supply.html` |
+
+**เครื่องมือวัดและทดสอบ / Measurement & Testing**
+| ไทย | English | หน้า |
+|---|---|---|
+| เครื่องมือวัดไฟฟ้า | Measuring Instruments | `multimeter.html` |
+| เครื่องกำเนิดสัญญาณ | Signal Generator | `signal-generator.html` |
+| ออสซิลโลสโคป | Oscilloscope | `oscilloscope.html` |
+
+**งานปฏิบัติ / Practical**
+| ไทย | English | หน้า |
+|---|---|---|
+| การบัดกรี | Soldering | `soldering.html` |
+| ไฟบ้านและความปลอดภัย | Home Wiring & Safety | `home-wiring.html` |
+
+### เครื่องมือ (Tools & Resources)
 | หน้า | ไทย | English |
 |---|---|---|
+| `simulation.html` | จำลองวงจร (อนุกรม/ขนาน/ผสม) | Circuit simulator |
+| `breadboard.html` | ทดลองบนเบรดบอร์ดเสมือน + มัลติมิเตอร์ | Virtual breadboard lab + multimeter |
 | `formulas.html` | สูตรสรุป + พิมพ์ PDF | Formula summary + print |
 | `tools.html` | เครื่องคิดเลขเชิงโต้ตอบ 7 ตัว | 7 interactive calculators |
 | `quiz.html` | แบบทดสอบ 77 ข้อ 12 หมวด | 77-question quiz, 12 categories |
-| `downloads.html` | ดาวน์โหลด PDF 21 ไฟล์ | Download 21 PDF files |
+| `downloads.html` | ดาวน์โหลด PDF 29 ไฟล์ | Download 29 PDF files |
 
 ---
 
@@ -49,9 +72,10 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 
 | # | ฟีเจอร์ | รายละเอียด |
 |---|---|---|
-| 1 | ⚡ **RC Charging Simulator** | จำลองการชาร์จ/คายประจุของตัวเก็บประจุแบบ real-time — แสดงกราฟเส้นโค้ง exponential, ค่า τ = RC และจุด 63.2% บนกราฟ ต่อยอดจาก `capacitor.html` |
-| 2 | 🔁 **AC Circuit Simulator** | จำลองวงจร AC แบบ interactive — Phasor Diagram หมุนได้, คำนวณ Z, φ, cos φ ต่อยอดจาก `ac-circuit.html` |
-| 3 | 🎮 **Resistor Color Code Game** | เกม drill แบบเร็ว — สุ่มแถบสีให้ทายค่าความต้านทาน มีคะแนนและจับเวลา เล่นซ้ำได้ |
+| 1 | 🔢 **Logic Gates** | บทลอจิกเกต AND/OR/NOT/NAND/NOR/XOR + ตารางความจริง พร้อม sim toggle input → LED |
+| 2 | ⏱️ **555 Timer** | บทไอซี 555 โหมด astable/monostable + สูตร f และ duty พร้อม sim R/C → LED กระพริบ |
+| 3 | ➕ **Op-Amp** | บทออปแอมป์ — comparator, inverting/non-inverting, buffer พร้อม sim input → output gain |
+| 4 | 🎮 **Resistor Color Code Game** | เกม drill แบบเร็ว — สุ่มแถบสีให้ทายค่าความต้านทาน มีคะแนนและจับเวลา เล่นซ้ำได้ |
 
 ---
 
@@ -117,22 +141,27 @@ git push
 ## 📁 File Structure
 
 ```
-website/
-├── style.css        — Global styles, dark mode, bilingual classes
-├── nav.js           — Shared navigation, lang toggle, dark mode toggle
-├── tools.js         — Calculator logic
-├── index.html       — Home page
-├── electricity.html — Lesson 1: Electricity Sources & Types
-├── ohm.html         — Lesson 2: Ohm's Law
-├── resistor.html    — Lesson 3: Resistor
-├── capacitor.html   — Lesson 4: Capacitor
-├── inductor.html    — Lesson 5: Inductor & Transformer
-├── multimeter.html  — Lesson 6: Measuring Instruments
-├── soldering.html   — Lesson 7: Soldering
-├── formulas.html    — Formula summary (print-friendly)
-├── tools.html       — Interactive calculators
-├── quiz.html        — Quiz (77 questions, 12 categories, bilingual)
-├── downloads.html   — PDF downloads
-├── CLAUDE.md        — Developer notes for Claude Code
-└── pdf/             — Thai PDF learning materials (~24 MB)
+.
+├── style.css            — Global styles, dark mode, bilingual classes
+├── nav.js               — Shared navigation, lang toggle, dark mode toggle
+├── tools.js             — Calculator logic
+├── quiz.js              — Quiz data + logic
+├── downloads.js         — PDF preview modal + downloads
+├── simulation.js        — Circuit simulator logic
+├── oscilloscope.js      — Interactive I-V curve simulator
+├── osc-reader.js        — Scope reading trainer
+├── transistor-sim.js    — BJT switch simulator
+├── signal-gen-sim.js    — Waveform generator
+├── power-supply-sim.js  — Power supply (AC→DC) simulator
+├── breadboard.js        — Virtual breadboard lab (MNA solver + multimeter)
+├── index.html           — Home page
+│   ├── electricity.html / ohm.html                 — Fundamentals
+│   ├── resistor.html / diode.html / transistor.html
+│   │   capacitor.html / inductor.html / power-supply.html   — Components
+│   ├── multimeter.html / signal-generator.html / oscilloscope.html  — Measurement
+│   ├── soldering.html / home-wiring.html           — Practical
+│   ├── simulation.html / breadboard.html           — Interactive labs
+│   └── formulas.html / tools.html / quiz.html / downloads.html      — Tools & resources
+├── CLAUDE.md / AGENTS.md — Developer notes (kept in sync)
+└── pdf/                 — Thai PDF learning materials (~24 MB)
 ```
