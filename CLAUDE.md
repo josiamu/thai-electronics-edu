@@ -26,12 +26,14 @@ website/
 ├── signal-gen-sim.js — Interactive Waveform Generator (canvas, sine/square/triangle/sawtooth + freq/amp/duty/offset)
 ├── breadboard.js    — Interactive Breadboard Lab (SVG, toolbar: dropdown "เพิ่มอุปกรณ์" (battery/R/LED/diode/wire/switch/cap/ind) + ปุ่มมัลติมิเตอร์/ลบ/ตัวอย่าง/ล้าง, วางอุปกรณ์ R/VR/NTC/PTC/LDR/VDR/LED/diode/wire/switch/battery/capacitor/inductor เอง, union-find + MNA solver + iterative diode/VDR + transient (Backward-Euler companion สำหรับ C/L, เดินเวลาในลูป animation, กราฟ mini-scope V/I + speed 🐢/▶/⏩ + restart + τ), switch (ปิด=jumper/เปิด=ตัดวงจร), Environment panel (temp/light/VR knob), คลิกอุปกรณ์เพื่อแก้ไข (ค่า/สี/Vc/สลับขั้ว/toggle/ลบ), ลาก-ย้ายอุปกรณ์ (pointer + snap), electron animation, มัลติมิเตอร์เสมือน 5 โหมด V/I/Ω/diode-test/continuity (probeCtx จาก solver, คลิกอุปกรณ์/คลิกรู 2 จุด, จอ LCD + หัวโพรบ + เสียงปี๊บ continuity, diode test อ่าน Vf/คลิกซ้ำกลับขั้ว→OL + LED เรืองแสง))
 ├── simulation.js    — logic จำลองวงจรและ animation
+├── power-supply-sim.js — Interactive Power Supply (canvas scope, half/full-wave rectifier + filter C slider + load + 7805 regulator toggle, ripple shrinks with C, constant-current cap discharge sim, traces: pulsating DC/filtered/regulated)
 ├── index.html          — หน้าหลัก (CURRENT_PAGE='home') — กลุ่มตรงกับ navbar: บทเรียน / งานปฏิบัติ / เครื่องมือ / คลังการเรียนรู้
 ├── electricity.html    — บทที่ 1
 ├── ohm.html            — บทที่ 2
 ├── resistor.html       — บทที่ 3: รหัสสี 4 แถบ + 5 แถบ (ตารางครบทั้งคู่)
 ├── capacitor.html      — บทที่ 4
 ├── inductor.html       — บทที่ 5
+├── power-supply.html   — แหล่งจ่ายไฟ: 4 ขั้น (หม้อแปลง→เรียงกระแส→กรอง→เรกูเลต), block diagram, สูตร ripple, 78xx/zener, linear vs switching, safety + Interactive Power Supply sim (canvas)
 ├── multimeter.html     — บทที่ 6
 ├── soldering.html      — บทที่ 7
 ├── ac-circuit.html     — บทที่ 8
@@ -69,7 +71,7 @@ website/
   <script src="nav.js"></script>
 </body>
 ```
-CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor`, `capacitor`, `inductor`, `multimeter`, `soldering`, `home-wiring`, `oscilloscope`, `signal-generator`, `simulation`, `breadboard`, `formulas`, `tools`, `quiz`, `downloads`
+CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor`, `capacitor`, `inductor`, `power-supply`, `multimeter`, `soldering`, `home-wiring`, `oscilloscope`, `signal-generator`, `simulation`, `breadboard`, `formulas`, `tools`, `quiz`, `downloads`
 
 ### ระบบ 2 ภาษา (Bilingual System)
 - CSS ใน style.css:

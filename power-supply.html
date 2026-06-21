@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="แหล่งจ่ายไฟ | สื่อการเรียนการสอน" data-title-en="Power Supply | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แหล่งจ่ายไฟ | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.flow-list { list-style:none; padding:0; margin:0; }
+.flow-list li { position:relative; padding:.4rem 0 .4rem 1.2rem; border-bottom:1px solid var(--border); font-size:.92rem; }
+.flow-list li:last-child { border-bottom:none; }
+.flow-list li::before { content:"▸"; position:absolute; left:0; color:var(--accent); font-weight:700; }
+
+/* 4-stage block diagram */
+.ps-stages { display:grid; grid-template-columns:repeat(4,1fr); gap:.5rem; align-items:stretch; }
+@media (max-width:760px){ .ps-stages{ grid-template-columns:1fr 1fr; } }
+.ps-stage { background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:.85rem .6rem; text-align:center; position:relative; }
+.ps-stage .ps-num { display:inline-block; width:24px; height:24px; line-height:24px; border-radius:50%; background:var(--primary); color:#fff; font-weight:700; font-size:.82rem; margin-bottom:.4rem; }
+.ps-stage h4 { margin:.2rem 0 .35rem; font-size:.95rem; color:var(--primary-dark); }
+.ps-stage p { margin:0; font-size:.8rem; color:var(--text-light); }
+.ps-stage svg { display:block; margin:.5rem auto .35rem; }
+
+/* Interactive power-supply simulator */
+.ps-wrap { display:grid; grid-template-columns:1fr 285px; gap:1.25rem; align-items:start; }
+@media (max-width:860px){ .ps-wrap{ grid-template-columns:1fr; } }
+.ps-screen { width:100%; height:auto; display:block; border-radius:12px; background:#0b1220; border:1px solid var(--border); }
+.ps-panel { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:.9rem 1rem; }
+.ps-ctrl { margin-bottom:.9rem; }
+.ps-ctrl-row { display:flex; justify-content:space-between; align-items:center; font-size:.84rem; font-weight:600; margin-bottom:.25rem; }
+.ps-ctrl-row span { color:var(--primary); font-size:.9rem; }
+.ps-ctrl input[type=range] { width:100%; cursor:pointer; accent-color:var(--primary); }
+.ps-seg { display:flex; gap:.4rem; }
+.ps-seg button { flex:1; padding:.4rem .3rem; font-size:.82rem; font-weight:600; border:1px solid var(--border); background:var(--bg); color:var(--text); border-radius:8px; cursor:pointer; font-family:inherit; }
+.ps-seg button.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+.ps-switch { display:flex; align-items:center; justify-content:space-between; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:.5rem .7rem; font-size:.86rem; font-weight:600; cursor:pointer; }
+.ps-switch input { width:18px; height:18px; accent-color:var(--secondary); cursor:pointer; }
+.ps-badge { text-align:center; font-weight:800; font-size:1rem; padding:.5rem; border-radius:10px; margin:1rem 0 .6rem; color:#fff; background:var(--primary); }
+.ps-readout { display:grid; grid-template-columns:1fr 1fr; gap:.45rem; }
+.ps-rb { background:var(--bg); border:1px solid var(--border); border-radius:9px; padding:.45rem .6rem; text-align:center; }
+.ps-rl { font-size:.72rem; color:var(--text-light); margin-bottom:.12rem; }
+.ps-rv { font-size:1.02rem; font-weight:700; color:var(--text); }
+.ps-legend { display:flex; flex-wrap:wrap; gap:1rem; justify-content:center; margin-top:.6rem; font-size:.8rem; color:var(--text-light); }
+.ps-legend span { display:inline-flex; align-items:center; gap:.35rem; }
+.ps-legend i { width:18px; height:3px; border-radius:2px; display:inline-block; }
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🔌</div>
+    <div>
+      <h1 class="th-only">แหล่งจ่ายไฟ (Power Supply)</h1>
+      <h1 class="en-only">Power Supply</h1>
+      <p class="th-only">หม้อแปลง → เรียงกระแส → กรอง → เรกูเลต • แปลงไฟ AC เป็น DC</p>
+      <p class="en-only">Transformer → Rectifier → Filter → Regulator • Converting AC to DC</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- SECTION 1: Learning objectives -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">วัตถุประสงค์การเรียนรู้</span><span class="en-only">Learning Objectives</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li>อธิบายขั้นตอนการแปลงไฟ AC เป็น DC ทั้ง 4 ขั้นได้</li>
+        <li>บอกหน้าที่ของหม้อแปลง ไดโอดเรียงกระแส ตัวเก็บประจุกรอง และเรกูเลเตอร์ได้</li>
+        <li>คำนวณแรงดันระลอก (ripple) และเลือกค่าตัวเก็บประจุกรองได้</li>
+        <li>เข้าใจการทำงานของ IC เรกูเลเตอร์ตระกูล 78xx</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>Explain the four stages that convert AC to DC</li>
+        <li>State the role of the transformer, rectifier, filter capacitor and regulator</li>
+        <li>Calculate ripple voltage and choose a filter capacitor value</li>
+        <li>Understand how the 78xx-series regulator ICs work</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 2: Block diagram -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ภาพรวม: 4 ขั้นตอนของแหล่งจ่ายไฟ</span><span class="en-only">Overview: The 4 Stages of a Power Supply</span></div>
+    <div class="card">
+      <p class="th-only" style="margin:0 0 1rem">แหล่งจ่ายไฟเชิงเส้น (Linear Power Supply) แปลงไฟบ้าน 220 V AC ให้เป็นไฟ DC เรียบนิ่งที่อุปกรณ์อิเล็กทรอนิกส์ใช้งานได้ โดยผ่าน 4 ขั้นตอน — รูปคลื่นจะ "เรียบ" ขึ้นเรื่อย ๆ ในแต่ละขั้น</p>
+      <p class="en-only" style="margin:0 0 1rem">A linear power supply turns 220 V AC mains into the smooth DC that electronics need, through four stages — the waveform gets progressively "smoother" at each step.</p>
+      <div class="ps-stages">
+        <div class="ps-stage">
+          <span class="ps-num">1</span>
+          <h4 class="th-only">หม้อแปลง</h4><h4 class="en-only">Transformer</h4>
+          <svg viewBox="0 0 70 34" width="70" height="34" aria-hidden="true">
+            <path d="M2,17 q5,-13 10,0 q5,13 10,0 q5,-13 10,0" fill="none" stroke="#f59e0b" stroke-width="2"/>
+            <line x1="35" y1="2" x2="35" y2="32" stroke="#94a3b8" stroke-width="1.5"/>
+            <path d="M40,17 q4,-9 8,0 q4,9 8,0 q4,-9 8,0" fill="none" stroke="#06b6d4" stroke-width="2"/>
+          </svg>
+          <p class="th-only">ลดแรงดัน 220 V → ~9–12 V AC</p><p class="en-only">Steps 220 V down to ~9–12 V AC</p>
+        </div>
+        <div class="ps-stage">
+          <span class="ps-num">2</span>
+          <h4 class="th-only">เรียงกระแส</h4><h4 class="en-only">Rectifier</h4>
+          <svg viewBox="0 0 70 34" width="70" height="34" aria-hidden="true">
+            <path d="M2,32 q6,-30 12,0 q6,30 12,0 q6,-30 12,0" fill="none" stroke="#475569" stroke-width="1.2" stroke-dasharray="3,2"/>
+            <path d="M2,32 q6,-30 12,0 q6,-30 12,0 q6,-30 12,0" fill="none" stroke="#22c55e" stroke-width="2"/>
+          </svg>
+          <p class="th-only">ไดโอด → DC พัลส์ (ทิศเดียว)</p><p class="en-only">Diodes → pulsating DC</p>
+        </div>
+        <div class="ps-stage">
+          <span class="ps-num">3</span>
+          <h4 class="th-only">กรอง</h4><h4 class="en-only">Filter</h4>
+          <svg viewBox="0 0 70 34" width="70" height="34" aria-hidden="true">
+            <path d="M2,30 q6,-26 12,0 q6,26 12,0 q6,-26 12,0" fill="none" stroke="#475569" stroke-width="1.2" stroke-dasharray="3,2"/>
+            <path d="M2,10 l11,0 q3,0 4,3 l5,5 q1,2 4,2 l5,-5 q3,-5 4,3 l5,5 q1,2 4,1" fill="none" stroke="#3b82f6" stroke-width="2"/>
+          </svg>
+          <p class="th-only">ตัวเก็บประจุ → ลดระลอก</p><p class="en-only">Capacitor → reduces ripple</p>
+        </div>
+        <div class="ps-stage">
+          <span class="ps-num">4</span>
+          <h4 class="th-only">เรกูเลต</h4><h4 class="en-only">Regulator</h4>
+          <svg viewBox="0 0 70 34" width="70" height="34" aria-hidden="true">
+            <path d="M2,14 q6,-9 12,0 q6,9 12,0 q6,-9 12,0" fill="none" stroke="#475569" stroke-width="1.2" stroke-dasharray="3,2"/>
+            <line x1="2" y1="14" x2="58" y2="14" stroke="#10b981" stroke-width="2.5"/>
+          </svg>
+          <p class="th-only">IC 78xx → DC เรียบนิ่ง</p><p class="en-only">78xx IC → clean steady DC</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: Stage 1 Transformer -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ขั้นที่ 1 — หม้อแปลง (Transformer)</span><span class="en-only">Stage 1 — Transformer</span></div>
+    <div class="card">
+      <p class="th-only">หม้อแปลงลดแรงดันไฟบ้าน 220 V AC ลงให้เหลือระดับที่ใช้งานได้ (เช่น 9 V หรือ 12 V AC) และ <strong>แยกวงจร (isolation)</strong> ออกจากไฟเมน เพื่อความปลอดภัย อัตราส่วนแรงดันเป็นไปตามอัตราส่วนจำนวนรอบขดลวด</p>
+      <p class="en-only">The transformer steps 220 V AC mains down to a usable level (e.g. 9 V or 12 V AC) and provides <strong>isolation</strong> from the mains for safety. The voltage ratio follows the turns ratio.</p>
+      <div class="formula-box"><div class="formula">V<sub>p</sub> / V<sub>s</sub> = N<sub>p</sub> / N<sub>s</sub></div></div>
+      <p class="th-only" style="font-size:.88rem;color:var(--text-light)">📘 ทบทวนรายละเอียดหม้อแปลงในบท <a href="inductor.html">ตัวเหนี่ยวนำและหม้อแปลง</a></p>
+      <p class="en-only" style="font-size:.88rem;color:var(--text-light)">📘 Review transformer details in the <a href="inductor.html">Inductor &amp; Transformer</a> lesson.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 4: Stage 2 Rectifier -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ขั้นที่ 2 — เรียงกระแส (Rectifier)</span><span class="en-only">Stage 2 — Rectifier</span></div>
+    <div class="card">
+      <p class="th-only">ไดโอดยอมให้กระแสไหลทางเดียว จึง "พับ" คลื่น AC ให้เหลือเฉพาะทิศบวก กลายเป็น DC พัลส์ (Pulsating DC)</p>
+      <p class="en-only">Diodes conduct in one direction only, "folding" the AC wave into the positive direction to produce pulsating DC.</p>
+      <div class="table-wrap" style="margin-top:1rem">
+        <table>
+          <thead><tr>
+            <th><span class="th-only">แบบ</span><span class="en-only">Type</span></th>
+            <th><span class="th-only">ไดโอด</span><span class="en-only">Diodes</span></th>
+            <th>V<sub>dc(avg)</sub></th>
+            <th><span class="th-only">ความถี่ระลอก</span><span class="en-only">Ripple freq</span></th>
+            <th><span class="th-only">แรงดันตกไดโอด</span><span class="en-only">Diode drop</span></th>
+          </tr></thead>
+          <tbody>
+            <tr><td><span class="th-only">ครึ่งคลื่น (Half-wave)</span><span class="en-only">Half-wave</span></td><td>1</td><td>0.318 × V<sub>pk</sub></td><td>50 Hz</td><td>~0.7 V</td></tr>
+            <tr><td><span class="th-only">เต็มคลื่นบริดจ์ (Full-wave bridge)</span><span class="en-only">Full-wave bridge</span></td><td>4</td><td>0.637 × V<sub>pk</sub></td><td>100 Hz</td><td>~1.4 V (2 ตัว)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="th-only" style="font-size:.88rem;color:var(--text-light);margin-top:.75rem">บริดจ์เต็มคลื่นนิยมที่สุด — ใช้คลื่น AC ครบ 100% และความถี่ระลอก 100 Hz ทำให้กรองง่ายกว่า 📘 ดูวงจรเรียงกระแสในบท <a href="diode.html">ไดโอด</a></p>
+      <p class="en-only" style="font-size:.88rem;color:var(--text-light);margin-top:.75rem">The full-wave bridge is most common — it uses 100% of the AC wave and its 100 Hz ripple is easier to filter. 📘 See rectifier circuits in the <a href="diode.html">Diode</a> lesson.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 5: Stage 3 Filter -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ขั้นที่ 3 — กรองด้วยตัวเก็บประจุ (Filter Capacitor)</span><span class="en-only">Stage 3 — Filter Capacitor</span></div>
+    <div class="card">
+      <p class="th-only">ต่อตัวเก็บประจุ (มักเป็นอิเล็กโทรไลต์ค่าสูง) ขนานกับโหลด มันจะ <strong>ประจุ</strong> ขึ้นยอดคลื่นแล้ว <strong>คายประจุ</strong> เลี้ยงโหลดในช่วงที่แรงดันตก ทำให้แรงดันเรียบขึ้น เหลือเพียง "ระลอก" (Ripple) เล็ก ๆ</p>
+      <p class="en-only">A capacitor (usually a large electrolytic) is placed across the load. It <strong>charges</strong> up to the peak then <strong>discharges</strong> into the load while the input falls, smoothing the voltage and leaving only a small <strong>ripple</strong>.</p>
+      <div class="formula-box">
+        <div class="formula">V<sub>ripple(pp)</sub> ≈ I<sub>load</sub> / (f<sub>r</sub> × C)</div>
+      </div>
+      <p class="th-only" style="font-size:.88rem;color:var(--text-light)">
+        I<sub>load</sub> = กระแสโหลด (A) &nbsp;|&nbsp; f<sub>r</sub> = ความถี่ระลอก (50 Hz ครึ่งคลื่น / 100 Hz เต็มคลื่น) &nbsp;|&nbsp; C = ตัวเก็บประจุกรอง (F)
+      </p>
+      <p class="en-only" style="font-size:.88rem;color:var(--text-light)">
+        I<sub>load</sub> = load current (A) &nbsp;|&nbsp; f<sub>r</sub> = ripple frequency (50 Hz half-wave / 100 Hz full-wave) &nbsp;|&nbsp; C = filter capacitor (F)
+      </p>
+      <div style="margin-top:1rem">
+        <p class="th-only"><strong>ตัวอย่าง:</strong> โหลด 0.5 A, บริดจ์เต็มคลื่น (f<sub>r</sub> = 100 Hz), C = 2200 µF</p>
+        <p class="en-only"><strong>Example:</strong> 0.5 A load, full-wave bridge (f<sub>r</sub> = 100 Hz), C = 2200 µF</p>
+        <p style="font-family:monospace">V<sub>ripple</sub> = 0.5 / (100 × 0.0022) ≈ <strong>2.3 V<sub>pp</sub></strong></p>
+        <p class="th-only" style="font-size:.9rem;color:var(--text-light)">ยิ่ง C มาก → ระลอกยิ่งน้อย → DC เรียบขึ้น (แต่ตัวเก็บประจุใหญ่/แพงขึ้น)</p>
+        <p class="en-only" style="font-size:.9rem;color:var(--text-light)">Larger C → smaller ripple → smoother DC (but a bigger, costlier capacitor)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: Stage 4 Regulator -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ขั้นที่ 4 — เรกูเลเตอร์ (Voltage Regulator)</span><span class="en-only">Stage 4 — Voltage Regulator</span></div>
+    <div class="grid-2" style="align-items:start">
+      <div class="card">
+        <h3 style="color:var(--primary)"><span class="th-only">IC ตระกูล 78xx</span><span class="en-only">78xx-series ICs</span></h3>
+        <p class="th-only">IC 3 ขา (Input / GND / Output) รักษาแรงดันขาออกให้คงที่แม้แรงดันขาเข้ามีระลอกหรือโหลดเปลี่ยน เลขท้ายบอกแรงดันออก</p>
+        <p class="en-only">A 3-pin IC (Input / GND / Output) that holds the output voltage constant despite input ripple or load changes. The number gives the output voltage.</p>
+        <div class="table-wrap" style="margin-top:.75rem">
+          <table>
+            <thead><tr><th>IC</th><th>V<sub>out</sub></th><th class="th-only">หมายเหตุ</th><th class="en-only">Note</th></tr></thead>
+            <tbody>
+              <tr><td class="part-num">7805</td><td>+5 V</td><td><span class="th-only">วงจรดิจิทัล/MCU</span><span class="en-only">Digital/MCU</span></td></tr>
+              <tr><td class="part-num">7809</td><td>+9 V</td><td><span class="th-only">ทั่วไป</span><span class="en-only">General</span></td></tr>
+              <tr><td class="part-num">7812</td><td>+12 V</td><td><span class="th-only">มอเตอร์/รีเลย์</span><span class="en-only">Motors/relays</span></td></tr>
+              <tr><td class="part-num">7905</td><td>−5 V</td><td><span class="th-only">แรงดันลบ</span><span class="en-only">Negative rail</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="th-only" style="font-size:.86rem;color:var(--text-light);margin-top:.6rem"><strong>Dropout:</strong> แรงดันขาเข้าต้องสูงกว่าขาออกอย่างน้อย ~2 V เสมอ ไม่งั้นเรกูเลเตอร์จะ "หลุด" และขาออกจะกระเพื่อมตาม</p>
+        <p class="en-only" style="font-size:.86rem;color:var(--text-light);margin-top:.6rem"><strong>Dropout:</strong> the input must stay at least ~2 V above the output, otherwise the regulator "drops out" and the output starts to ripple again.</p>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--primary)"><span class="th-only">ทางเลือก: ซีเนอร์ไดโอด</span><span class="en-only">Alternative: Zener Diode</span></h3>
+        <p class="th-only">วงจรควบคุมแรงดันอย่างง่ายใช้ซีเนอร์ไดโอดต่อ reverse-bias กับตัวต้านทานจำกัดกระแส ซีเนอร์จะ "ตรึง" แรงดันไว้ที่ค่า V<sub>Z</sub> เหมาะกับโหลดกระแสต่ำ</p>
+        <p class="en-only">A simple regulator uses a reverse-biased Zener diode with a current-limiting resistor. The Zener "clamps" the voltage at V<sub>Z</sub> — suitable for low-current loads.</p>
+        <p class="th-only" style="font-size:.86rem;color:var(--text-light);margin-top:.6rem">📘 ดูการทำงานของซีเนอร์ในบท <a href="diode.html">ไดโอด</a></p>
+        <p class="en-only" style="font-size:.86rem;color:var(--text-light);margin-top:.6rem">📘 See how Zeners work in the <a href="diode.html">Diode</a> lesson.</p>
+        <h3 style="color:var(--primary);margin-top:1rem"><span class="th-only">Linear vs Switching</span><span class="en-only">Linear vs Switching</span></h3>
+        <p class="th-only" style="font-size:.9rem">เรกูเลเตอร์เชิงเส้น (78xx) ง่าย เงียบ สัญญาณรบกวนต่ำ แต่ <strong>ร้อน</strong> และประสิทธิภาพต่ำ ส่วน Switching (SMPS) ประสิทธิภาพสูง เล็ก เย็น แต่ซับซ้อนและมีสัญญาณรบกวนมากกว่า</p>
+        <p class="en-only" style="font-size:.9rem">Linear regulators (78xx) are simple, quiet and low-noise but <strong>run hot</strong> and are inefficient. Switching supplies (SMPS) are efficient, small and cool but more complex and noisier.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: Interactive simulator -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">⚡ ทดลอง: สร้างแหล่งจ่ายไฟ (โต้ตอบได้)</span><span class="en-only">⚡ Interactive: Build a Power Supply</span></div>
+    <div class="card" style="padding:1.25rem">
+      <p class="th-only" style="margin:0 0 1rem;font-size:.92rem;color:var(--text-light)">
+        ปรับ <strong>แบบเรียงกระแส</strong>, <strong>ตัวเก็บประจุกรอง C</strong>, <strong>กระแสโหลด</strong> และเปิด/ปิด <strong>เรกูเลเตอร์ 7805</strong>
+        แล้วดูรูปคลื่นขาออกบนสโคป — สังเกตว่าระลอก (ripple) เล็กลงเมื่อ C มากขึ้น
+      </p>
+      <p class="en-only" style="margin:0 0 1rem;font-size:.92rem;color:var(--text-light)">
+        Adjust the <strong>rectifier type</strong>, <strong>filter capacitor C</strong>, <strong>load current</strong> and toggle the <strong>7805 regulator</strong>,
+        then watch the output waveform on the scope — notice the ripple shrink as C grows.
+      </p>
+      <div class="ps-wrap">
+        <div>
+          <canvas id="ps-canvas" class="ps-screen"></canvas>
+          <div class="ps-legend">
+            <span><i style="background:#64748b"></i><span class="th-only">DC พัลส์ (หลังเรียงกระแส)</span><span class="en-only">Pulsating DC (rectified)</span></span>
+            <span><i style="background:#3b82f6"></i><span class="th-only">หลังกรองด้วย C</span><span class="en-only">After filter C</span></span>
+            <span><i style="background:#10b981"></i><span class="th-only">หลังเรกูเลต</span><span class="en-only">After regulator</span></span>
+          </div>
+        </div>
+        <div>
+          <div class="ps-panel">
+            <div style="font-weight:700;font-size:.9rem;margin-bottom:.7rem;color:var(--primary)">
+              <span class="th-only">⚙ ปรับค่า</span><span class="en-only">⚙ Adjust</span>
+            </div>
+            <div class="ps-ctrl">
+              <div class="ps-ctrl-row"><label><span class="th-only">แบบเรียงกระแส</span><span class="en-only">Rectifier</span></label></div>
+              <div class="ps-seg" id="ps-mode">
+                <button data-mode="half"><span class="th-only">ครึ่งคลื่น</span><span class="en-only">Half</span></button>
+                <button data-mode="full" class="active"><span class="th-only">เต็มคลื่น</span><span class="en-only">Full bridge</span></button>
+              </div>
+            </div>
+            <div class="ps-ctrl">
+              <div class="ps-ctrl-row"><label><span class="th-only">ตัวเก็บประจุ</span><span class="en-only">Capacitor</span> C</label><span id="ps-cap-val">1000 µF</span></div>
+              <input type="range" id="ps-cap" min="0" max="4700" step="100" value="1000">
+            </div>
+            <div class="ps-ctrl">
+              <div class="ps-ctrl-row"><label><span class="th-only">กระแสโหลด</span><span class="en-only">Load current</span></label><span id="ps-load-val">200 mA</span></div>
+              <input type="range" id="ps-load" min="10" max="500" step="10" value="200">
+            </div>
+            <label class="ps-switch" for="ps-reg">
+              <span><span class="th-only">เรกูเลเตอร์ 7805 (+5 V)</span><span class="en-only">7805 regulator (+5 V)</span></span>
+              <input type="checkbox" id="ps-reg">
+            </label>
+          </div>
+          <div id="ps-badge" class="ps-badge">—</div>
+          <div class="ps-readout">
+            <div class="ps-rb"><div class="ps-rl">V<sub>peak</sub></div><div class="ps-rv" id="ps-vpk">— V</div></div>
+            <div class="ps-rb"><div class="ps-rl">V<sub>dc</sub> (avg)</div><div class="ps-rv" id="ps-vdc">— V</div></div>
+            <div class="ps-rb"><div class="ps-rl">V<sub>ripple(pp)</sub></div><div class="ps-rv" id="ps-vrip">— V</div></div>
+            <div class="ps-rb"><div class="ps-rl">V<sub>out</sub></div><div class="ps-rv" id="ps-vout">— V</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 8: Applications & safety -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">การใช้งานและข้อควรระวัง</span><span class="en-only">Applications &amp; Safety</span></div>
+    <div class="grid-2" style="align-items:start">
+      <div class="card">
+        <h3 class="th-only" style="color:var(--primary)">การใช้งานจริง</h3>
+        <h3 class="en-only" style="color:var(--primary)">Real-World Use</h3>
+        <ul class="flow-list th-only">
+          <li>อะแดปเตอร์ชาร์จโทรศัพท์ / โน้ตบุ๊ก</li>
+          <li>แหล่งจ่ายไฟบนบอร์ดทดลอง (5 V / 3.3 V)</li>
+          <li>ภาคจ่ายไฟในเครื่องเสียง ทีวี และเครื่องใช้ไฟฟ้า</li>
+          <li>ที่จ่ายไฟตั้งโต๊ะ (Bench power supply) ปรับแรงดันได้</li>
+        </ul>
+        <ul class="flow-list en-only">
+          <li>Phone / laptop charger adapters</li>
+          <li>On-board supplies for dev boards (5 V / 3.3 V)</li>
+          <li>Power sections in audio gear, TVs and appliances</li>
+          <li>Adjustable bench power supplies</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="th-only" style="color:#ef4444">⚠ ข้อควรระวัง</h3>
+        <h3 class="en-only" style="color:#ef4444">⚠ Safety</h3>
+        <ul class="flow-list th-only">
+          <li>ฝั่งไฟเมน 220 V อันตรายถึงชีวิต — ห้ามแตะขณะมีไฟ</li>
+          <li>ตัวเก็บประจุค่าสูง <strong>เก็บประจุค้าง</strong> หลังถอดปลั๊ก ต้องคายประจุก่อนจับ</li>
+          <li>ต่อขั้วอิเล็กโทรไลต์ให้ถูก (+/−) มิฉะนั้นอาจระเบิด</li>
+          <li>เรกูเลเตอร์เชิงเส้นร้อน — ติดแผ่นระบายความร้อนเมื่อกระแสสูง</li>
+        </ul>
+        <ul class="flow-list en-only">
+          <li>The 220 V mains side is lethal — never touch it while powered</li>
+          <li>Large capacitors <strong>store charge</strong> after unplugging — discharge before handling</li>
+          <li>Observe electrolytic polarity (+/−) or it may explode</li>
+          <li>Linear regulators get hot — use a heatsink at higher currents</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer>
+  <strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong>
+  <strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong>
+</footer>
+<script>const CURRENT_PAGE='power-supply';</script>
+<script src="nav.js"></script>
+<script src="power-supply-sim.js"></script>
+</body>
+</html>
