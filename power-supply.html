@@ -46,6 +46,17 @@
 .ps-legend { display:flex; flex-wrap:wrap; gap:1rem; justify-content:center; margin-top:.6rem; font-size:.8rem; color:var(--text-light); }
 .ps-legend span { display:inline-flex; align-items:center; gap:.35rem; }
 .ps-legend i { width:18px; height:3px; border-radius:2px; display:inline-block; }
+
+/* linear-vs-switching: flow chips + PWM duty bars */
+.ps-flow { display:flex; flex-wrap:wrap; align-items:center; gap:.35rem .4rem; margin:.7rem 0; }
+.ps-flow .ps-chip { display:inline-flex; align-items:center; background:var(--bg); border:1.5px solid var(--border); border-radius:8px; padding:.32rem .6rem; font-size:.82rem; font-weight:600; }
+.ps-flow .ps-chip.key { border-color:var(--primary); color:var(--primary-dark); background:rgba(37,99,235,.07); }
+.ps-flow .arr { display:inline-flex; align-items:center; align-self:stretch; color:var(--text-light); font-weight:700; }
+.ps-pwm { display:grid; gap:.4rem; margin:.5rem 0 .2rem; }
+.ps-pwm-row { display:flex; align-items:center; gap:.7rem; font-size:.82rem; }
+.ps-pwm-row .lab { width:150px; flex-shrink:0; color:var(--text-light); }
+.ps-pwm-bar { flex:1; height:14px; background:var(--bg); border:1px solid var(--border); border-radius:5px; overflow:hidden; }
+.ps-pwm-bar i { display:block; height:100%; background:var(--primary); }
 </style>
 </head>
 <body>
@@ -224,10 +235,108 @@
         <p class="en-only">A simple regulator uses a reverse-biased Zener diode with a current-limiting resistor. The Zener "clamps" the voltage at V<sub>Z</sub> — suitable for low-current loads.</p>
         <p class="th-only" style="font-size:.86rem;color:var(--text-light);margin-top:.6rem">📘 ดูการทำงานของซีเนอร์ในบท <a href="diode.html">ไดโอด</a></p>
         <p class="en-only" style="font-size:.86rem;color:var(--text-light);margin-top:.6rem">📘 See how Zeners work in the <a href="diode.html">Diode</a> lesson.</p>
-        <h3 style="color:var(--primary);margin-top:1rem"><span class="th-only">Linear vs Switching</span><span class="en-only">Linear vs Switching</span></h3>
-        <p class="th-only" style="font-size:.9rem">เรกูเลเตอร์เชิงเส้น (78xx) ง่าย เงียบ สัญญาณรบกวนต่ำ แต่ <strong>ร้อน</strong> และประสิทธิภาพต่ำ ส่วน Switching (SMPS) ประสิทธิภาพสูง เล็ก เย็น แต่ซับซ้อนและมีสัญญาณรบกวนมากกว่า</p>
-        <p class="en-only" style="font-size:.9rem">Linear regulators (78xx) are simple, quiet and low-noise but <strong>run hot</strong> and are inefficient. Switching supplies (SMPS) are efficient, small and cool but more complex and noisier.</p>
       </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6b: Linear vs Switching -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">เชิงเส้น vs สวิตชิ่ง (Linear vs Switching)</span><span class="en-only">Linear vs Switching</span></div>
+    <div class="card">
+      <p class="th-only" style="margin:0 0 .6rem">ทั้งสองแบบทำงานเหมือนกันคือ <strong>แปลงแรงดันที่สูงกว่าให้เหลือแรงดันออกที่นิ่งและคงที่</strong> สิ่งที่ต่างกันคือ "จัดการกับแรงดันส่วนที่เกินมา" อย่างไร:</p>
+      <ul class="th-only" style="margin:0;padding-left:1.2rem;font-size:.92rem">
+        <li><strong>เชิงเส้น (Linear)</strong> — ทิ้งแรงดันส่วนเกินไปเป็น <strong>ความร้อน</strong> → ได้ไฟสะอาด แต่สิ้นเปลืองและร้อน</li>
+        <li><strong>สวิตชิ่ง (Switching)</strong> — <strong>สับไฟเปิด-ปิดเร็วมาก</strong> จ่ายเท่าที่ต้องการพอดี จึงแทบไม่มีส่วนเกินให้เสีย → ประหยัดและเย็น</li>
+      </ul>
+      <p class="en-only" style="margin:0 0 .6rem">Both do the same job — <strong>turning a higher voltage into a steady, fixed output</strong> — but they differ in how they deal with the leftover voltage:</p>
+      <ul class="en-only" style="margin:0;padding-left:1.2rem;font-size:.92rem">
+        <li><strong>Linear</strong> — throws the excess away as <strong>heat</strong> → clean power, but wasteful and hot.</li>
+        <li><strong>Switching</strong> — <strong>switches on/off very fast</strong> and delivers only what's needed, so there's almost no excess to waste → efficient and cool.</li>
+      </ul>
+    </div>
+
+    <!-- 1) Linear -->
+    <div class="card" style="margin-top:1rem">
+      <h3 style="color:var(--primary);margin-top:0">1. Linear PSU <span class="th-only">(แหล่งจ่ายไฟเชิงเส้น)</span></h3>
+      <p class="th-only" style="font-size:.86rem;color:var(--text-light);margin-top:0">ตัวอย่าง: แหล่งจ่ายไฟห้องแลบแบบดั้งเดิม เช่น UNI-T UTP3315TFL-II</p>
+      <p class="en-only" style="font-size:.86rem;color:var(--text-light);margin-top:0">Example: classic bench supplies such as the UNI-T UTP3315TFL-II</p>
+      <div class="ps-flow">
+        <span class="ps-chip">220 VAC</span><span class="arr">→</span>
+        <span class="ps-chip"><span class="th-only">หม้อแปลง</span><span class="en-only">Transformer</span></span><span class="arr">→</span>
+        <span class="ps-chip">Bridge Rectifier</span><span class="arr">→</span>
+        <span class="ps-chip"><span class="th-only">ตัวเก็บประจุกรอง</span><span class="en-only">Filter cap</span></span><span class="arr">→</span>
+        <span class="ps-chip key">Linear Regulator</span><span class="arr">→</span>
+        <span class="ps-chip">DC Output</span>
+      </div>
+      <p class="th-only" style="font-size:.9rem">4 ขั้นแรกอธิบายละเอียดไว้ในหัวข้อด้านบนแล้ว — จุดสำคัญคือ <strong>Linear Regulator เผาแรงดันส่วนเกินทิ้งเป็นความร้อน</strong></p>
+      <p class="en-only" style="font-size:.9rem">The first stages are detailed in the sections above — the key point is that the <strong>linear regulator burns the excess voltage off as heat</strong>.</p>
+      <div class="formula-box"><div class="formula">P<sub>loss</sub> = (V<sub>in</sub> − V<sub>out</sub>) × I</div></div>
+      <p class="th-only" style="font-size:.88rem"><strong>ตัวอย่าง:</strong> แรงดันหลังกรอง 35 V ต้องการออก 5 V ที่ 1 A<br>กำลังขาออก P<sub>out</sub> = 5 × 1 = 5 W<br>แต่สูญเสีย Loss = (35 − 5) × 1 = <strong>30 W กลายเป็นความร้อน!</strong> → ต้องมีฮีตซิงค์ขนาดใหญ่</p>
+      <p class="en-only" style="font-size:.88rem"><strong>Example:</strong> 35 V after the filter, output 5 V at 1 A<br>Output power P<sub>out</sub> = 5 × 1 = 5 W<br>but loss = (35 − 5) × 1 = <strong>30 W of heat!</strong> → needs a large heatsink</p>
+      <p class="th-only" style="font-size:.84rem;color:var(--text-light)">💡 ประสิทธิภาพของ linear ≈ V<sub>out</sub> / V<sub>in</sub> ยิ่งแรงดันตกคร่อมมาก ยิ่งสูญเสียมาก (ตัวอย่างนี้ = 5/35 ≈ <strong>14%</strong>) งานจริงจึงออกแบบให้ V<sub>in</sub> − V<sub>out</sub> น้อย ๆ ประสิทธิภาพจึงอยู่ราว 40–60% ตามตารางด้านล่าง</p>
+      <p class="en-only" style="font-size:.84rem;color:var(--text-light)">💡 A linear regulator's efficiency ≈ V<sub>out</sub> / V<sub>in</sub> — the bigger the drop, the more is wasted (this example = 5/35 ≈ <strong>14%</strong>). Real designs keep V<sub>in</sub> − V<sub>out</sub> small, giving the ~40–60% shown in the table below.</p>
+    </div>
+
+    <!-- 2) Switching -->
+    <div class="card" style="margin-top:1rem">
+      <h3 style="color:var(--primary);margin-top:0">2. Switching PSU (SMPS)</h3>
+      <p class="th-only" style="font-size:.86rem;color:var(--text-light);margin-top:0">ตัวอย่าง: ที่ชาร์จมือถือ, อะแดปเตอร์โน้ตบุ๊ก, PSU คอมพิวเตอร์, Mean Well</p>
+      <p class="en-only" style="font-size:.86rem;color:var(--text-light);margin-top:0">Examples: phone chargers, laptop adapters, PC PSUs, Mean Well units</p>
+      <div class="ps-flow">
+        <span class="ps-chip">220 VAC</span><span class="arr">→</span>
+        <span class="ps-chip">Rectifier</span><span class="arr">→</span>
+        <span class="ps-chip"><span class="th-only">ตัวเก็บประจุ bulk</span><span class="en-only">Bulk cap</span></span><span class="arr">→</span>
+        <span class="ps-chip">310 VDC</span><span class="arr">→</span>
+        <span class="ps-chip key">MOSFET Switch</span><span class="arr">→</span>
+        <span class="ps-chip"><span class="th-only">หม้อแปลงความถี่สูง</span><span class="en-only">HF transformer</span></span><span class="arr">→</span>
+        <span class="ps-chip">Rectifier</span><span class="arr">→</span>
+        <span class="ps-chip">Filter</span><span class="arr">→</span>
+        <span class="ps-chip">DC Output</span>
+      </div>
+      <p class="th-only" style="font-size:.9rem">หัวใจคือ MOSFET <strong>สับไฟเปิด-ปิดเร็วมาก</strong> (เช่น 100,000 ครั้ง/วินาที = 100 kHz ไปจนถึงระดับ MHz) เพราะความถี่สูง <strong>หม้อแปลงจึงเล็กลงมาก</strong> (50 Hz = ใหญ่, 100 kHz = เล็ก)</p>
+      <p class="en-only" style="font-size:.9rem">The heart is a MOSFET <strong>switching on/off very fast</strong> (e.g. 100,000×/s = 100 kHz, up to MHz). The high frequency lets the <strong>transformer shrink dramatically</strong> (50 Hz = big, 100 kHz = tiny).</p>
+      <p class="th-only" style="font-size:.9rem;margin-bottom:.2rem">ควบคุมแรงดันด้วย <strong>PWM</strong> — ปรับ "ความกว้างพัลส์" (duty) ที่เปิด ยิ่งเปิดนาน แรงดันยิ่งสูง:</p>
+      <p class="en-only" style="font-size:.9rem;margin-bottom:.2rem">Voltage is set by <strong>PWM</strong> — adjusting the "pulse width" (duty cycle): the longer it's ON, the higher the output:</p>
+      <div class="ps-pwm">
+        <div class="ps-pwm-row"><span class="lab">Duty 10% — <span class="th-only">แรงดันต่ำ</span><span class="en-only">low</span></span><span class="ps-pwm-bar"><i style="width:10%"></i></span></div>
+        <div class="ps-pwm-row"><span class="lab">Duty 50% — <span class="th-only">ปานกลาง</span><span class="en-only">medium</span></span><span class="ps-pwm-bar"><i style="width:50%"></i></span></div>
+        <div class="ps-pwm-row"><span class="lab">Duty 90% — <span class="th-only">แรงดันสูง</span><span class="en-only">high</span></span><span class="ps-pwm-bar"><i style="width:90%"></i></span></div>
+      </div>
+      <p class="th-only" style="font-size:.84rem;color:var(--text-light);margin-top:.6rem">💡 หมายเหตุ: แบบ offline (ที่ชาร์จมือถือ/PSU คอม) ใช้ <strong>หม้อแปลง</strong> เพื่อแยกกราวด์จากไฟบ้านให้ปลอดภัย ส่วน DC-DC ที่ไม่แยกกราวด์ (เช่นโมดูล buck/boost LM2596) ใช้แค่ <strong>ตัวเหนี่ยวนำ</strong> ไม่มีหม้อแปลง</p>
+      <p class="en-only" style="font-size:.84rem;color:var(--text-light);margin-top:.6rem">💡 Note: offline supplies (phone chargers, PC PSUs) use a <strong>transformer</strong> to isolate the output from the mains for safety, while non-isolated DC-DC converters (e.g. buck/boost modules like the LM2596) use just an <strong>inductor</strong> — no transformer.</p>
+    </div>
+
+    <!-- water analogy -->
+    <div class="card" style="margin-top:1rem;border-left:4px solid var(--accent)">
+      <h3 style="margin-top:0">💧 <span class="th-only">เปรียบเทียบง่าย ๆ ด้วย "น้ำ"</span><span class="en-only">A simple "water" analogy</span></h3>
+      <div class="grid-2">
+        <div>
+          <strong>Linear</strong>
+          <p class="th-only" style="font-size:.88rem;margin:.3rem 0 0">เหมือนเปิดน้ำแรงสุด แล้วใช้วาล์วบีบให้เหลือน้อย — น้ำเข้า 35 ลิตร ใช้จริง 5 ลิตร <strong>ทิ้งไป 30 ลิตร</strong> (= ความร้อน)</p>
+          <p class="en-only" style="font-size:.88rem;margin:.3rem 0 0">Like opening the tap full, then pinching a valve to a trickle — 35 L in, 5 L used, <strong>30 L wasted</strong> (= heat).</p>
+        </div>
+        <div>
+          <strong>Switching</strong>
+          <p class="th-only" style="font-size:.88rem;margin:.3rem 0 0">เหมือนเปิดน้ำเป็นจังหวะ เปิด–ปิด–เปิด–ปิด เฉลี่ยแล้วได้น้ำพอดีที่ต้องการ <strong>จึงสูญเสียน้อยมาก</strong></p>
+          <p class="en-only" style="font-size:.88rem;margin:.3rem 0 0">Like pulsing the tap on–off–on–off, so the average is exactly what you need — <strong>very little is wasted</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- comparison table -->
+    <div class="table-wrap" style="margin-top:1rem">
+      <table>
+        <thead><tr><th><span class="th-only">หัวข้อ</span><span class="en-only">Topic</span></th><th>Linear</th><th>Switching</th></tr></thead>
+        <tbody>
+          <tr><td><span class="th-only">น้ำหนัก</span><span class="en-only">Weight</span></td><td><span class="th-only">หนัก</span><span class="en-only">Heavy</span></td><td><strong><span class="th-only">เบา</span><span class="en-only">Light</span></strong></td></tr>
+          <tr><td><span class="th-only">ความร้อน</span><span class="en-only">Heat</span></td><td><span class="th-only">สูง</span><span class="en-only">High</span></td><td><strong><span class="th-only">ต่ำ</span><span class="en-only">Low</span></strong></td></tr>
+          <tr><td>Noise</td><td><strong><span class="th-only">ต่ำมาก</span><span class="en-only">Very low</span></strong></td><td><span class="th-only">สูงกว่า</span><span class="en-only">Higher</span></td></tr>
+          <tr><td>Ripple</td><td><strong><span class="th-only">ต่ำ</span><span class="en-only">Low</span></strong></td><td><span class="th-only">สูงกว่า</span><span class="en-only">Higher</span></td></tr>
+          <tr><td><span class="th-only">ประสิทธิภาพ</span><span class="en-only">Efficiency</span></td><td>40–60%</td><td><strong>80–95%</strong></td></tr>
+          <tr><td><span class="th-only">ซ่อมง่าย</span><span class="en-only">Repairability</span></td><td><strong><span class="th-only">ง่าย</span><span class="en-only">Easy</span></strong></td><td><span class="th-only">ยาก</span><span class="en-only">Hard</span></td></tr>
+          <tr><td><span class="th-only">เหมาะเรียนพื้นฐาน</span><span class="en-only">Good for learning</span></td><td><strong><span class="th-only">ดีมาก</span><span class="en-only">Excellent</span></strong></td><td><span class="th-only">พอใช้</span><span class="en-only">OK</span></td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
