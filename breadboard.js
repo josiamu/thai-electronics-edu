@@ -1383,6 +1383,13 @@ function initControls(){
     btn.addEventListener('click', function(){ meterMode = btn.dataset.mm; resetMeter(); setActiveMode(); updateMeter(); });
   });
   $('bb-example').addEventListener('click', loadExample);
+  // save / load / share
+  $('bb-storage').addEventListener('click', openStorageModal);
+  $('bb-share').addEventListener('click', shareLink);
+  $('bb-modal-close').addEventListener('click', closeStorageModal);
+  $('bb-save-btn').addEventListener('click', function(){ saveCurrent($('bb-save-name').value); });
+  $('bb-save-name').addEventListener('keydown', function(e){ if (e.key === 'Enter') saveCurrent(this.value); });
+  $('bb-storage-modal').addEventListener('click', function(e){ if (e.target === this) closeStorageModal(); });
   $('bb-batt-v').addEventListener('input', function(){
     batteryV = +this.value; $('bb-batt-v-out').textContent = batteryV + ' V';
     comps.forEach(function(c){ if (c.type === 'battery') c.value = batteryV; }); rebuild();
@@ -1415,11 +1422,14 @@ function initControls(){
   // cancel pending placement / close the component menu with Escape
   document.addEventListener('keydown', function(e){
     if (e.key !== 'Escape') return;
-    closeCompMenu();
+    closeCompMenu(); closeStorageModal();
     if (pendingHole != null){ pendingHole = null; hideHL(); refreshHint(); }
   });
   // re-render text on language change (trigger label re-renders via th-only/en-only spans)
-  document.addEventListener('langchange', function(){ refreshHint(); rebuild(); renderEditor(); });
+  document.addEventListener('langchange', function(){
+    refreshHint(); rebuild(); renderEditor();
+    var m = $('bb-storage-modal'); if (m && !m.hidden) renderSavesList();
+  });
 }
 
 // ════════════════════════════ ROTARY VR KNOB ════════════════════════════
@@ -1585,6 +1595,124 @@ function place(type, a, b, props){
   comps.push(c); occupied[a] = c.id; occupied[b] = c.id;
 }
 
+// ════════════════════════════ SAVE / LOAD / SHARE ════════════════════════════
+var SAVES_KEY = 'bb-saves';
+// compact serialization — keep only the fields needed to rebuild each part
+function serializeCircuit(){
+  return {
+    v: 1,
+    env: { t: env.temp, l: env.light, vr: Math.round(env.vrPos) },
+    comps: comps.map(function(c){
+      var o = { t: c.type, a: c.a, b: c.b };
+      if (c.value != null) o.v = c.value;
+      if (c.color) o.c = c.color;
+      if (c.variant) o.dv = c.variant;
+      if (c.vz != null) o.vz = c.vz;
+      if (c.vf != null) o.vf = c.vf;
+      if (c.rd != null) o.rd = c.rd;
+      if (c.vc != null) o.vc = c.vc;
+      if (c.type === 'switch') o.cl = c.closed ? 1 : 0;
+      return o;
+    })
+  };
+}
+function applyCircuit(data){
+  comps = []; occupied = {}; pendingHole = null; selectedId = null; hideHL(); resetMeter();
+  simTime = 0; graphHist = []; graphComp = null; renderEditor();
+  if (data && data.env){
+    var e = data.env;
+    if (e.t != null){ env.temp = e.t; var te = $('bb-temp'); if (te) te.value = e.t; var teo = $('bb-temp-out'); if (teo) teo.textContent = e.t + ' °C'; }
+    if (e.l != null){ env.light = e.l; var li = $('bb-light'); if (li) li.value = e.l; var lio = $('bb-light-out'); if (lio) lio.textContent = e.l + ' %'; }
+    if (e.vr != null){ env.vrPos = e.vr; renderVrKnob(); }
+  }
+  ((data && data.comps) || []).forEach(function(o){
+    var props = {};
+    if (o.v != null) props.value = o.v;
+    if (o.c) props.color = o.c;
+    if (o.dv) props.variant = o.dv;
+    if (o.vz != null) props.vz = o.vz;
+    if (o.vf != null) props.vf = o.vf;
+    if (o.rd != null) props.rd = o.rd;
+    if (o.vc != null) props.vc = o.vc;
+    if (o.t === 'switch') props.closed = o.cl !== 0;
+    if (o.t === 'cap') props._vPrev = 0;
+    if (o.t === 'ind') props._iPrev = 0;
+    place(o.t, o.a, o.b, props);
+  });
+  // sync the battery slider to the first battery's voltage
+  var fb = comps.filter(function(c){ return c.type === 'battery'; })[0];
+  if (fb){ batteryV = fb.value; var bs = $('bb-batt-v'); if (bs) bs.value = batteryV; var bo = $('bb-batt-v-out'); if (bo) bo.textContent = batteryV + ' V'; }
+  rebuild();
+}
+
+// URL-safe base64 (handles UTF-8)
+function b64enc(str){ return btoa(unescape(encodeURIComponent(str))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+function b64dec(s){ s = s.replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; return decodeURIComponent(escape(atob(s))); }
+
+function buildShareURL(){ return location.origin + location.pathname + '?c=' + b64enc(JSON.stringify(serializeCircuit())); }
+function shareLink(){
+  if (!comps.length){ flashHint(isEN() ? 'Nothing to share yet — build a circuit first.' : 'ยังไม่มีวงจรให้แชร์ — ต่อวงจรก่อน'); return; }
+  var url = buildShareURL();
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(
+      function(){ setHint(isEN() ? '🔗 Link copied to clipboard — paste to share!' : '🔗 คัดลอกลิงก์แล้ว — วางเพื่อแชร์ได้เลย'); },
+      function(){ window.prompt(isEN() ? 'Copy this link:' : 'คัดลอกลิงก์นี้:', url); }
+    );
+  } else window.prompt(isEN() ? 'Copy this link:' : 'คัดลอกลิงก์นี้:', url);
+}
+function loadFromURL(){
+  try {
+    var m = location.search.match(/[?&]c=([^&]+)/);
+    if (!m) return false;
+    var data = JSON.parse(b64dec(decodeURIComponent(m[1])));
+    if (data && data.comps){ applyCircuit(data); setHint(isEN() ? '🔗 Loaded a shared circuit.' : '🔗 โหลดวงจรจากลิงก์แล้ว'); return true; }
+  } catch (err){ console.warn('share link parse failed', err); }
+  return false;
+}
+
+// ── localStorage named saves ──
+function loadSaves(){ try { return JSON.parse(localStorage.getItem(SAVES_KEY)) || []; } catch (e){ return []; } }
+function storeSaves(arr){ try { localStorage.setItem(SAVES_KEY, JSON.stringify(arr)); } catch (e){} }
+function saveCurrent(name){
+  if (!comps.length){ flashHint(isEN() ? 'Nothing to save yet.' : 'ยังไม่มีวงจรให้บันทึก'); return; }
+  name = (name || '').trim();
+  var arr = loadSaves();
+  if (!name) name = (isEN() ? 'Circuit ' : 'วงจร ') + (arr.length + 1);
+  arr.unshift({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name: name, ts: Date.now(), data: serializeCircuit() });
+  if (arr.length > 30) arr = arr.slice(0, 30);
+  storeSaves(arr); renderSavesList();
+  var inp = $('bb-save-name'); if (inp) inp.value = '';
+  flashHint(isEN() ? '💾 Saved "' + name + '"' : '💾 บันทึก "' + name + '" แล้ว');
+}
+function deleteSave(id){ storeSaves(loadSaves().filter(function(s){ return s.id !== id; })); renderSavesList(); }
+function applySave(id){
+  var s = loadSaves().filter(function(x){ return x.id === id; })[0];
+  if (!s) return;
+  applyCircuit(s.data); closeStorageModal();
+  setHint(isEN() ? '📂 Loaded "' + s.name + '"' : '📂 โหลด "' + s.name + '" แล้ว');
+}
+function bbEscapeHTML(s){ return String(s).replace(/[&<>"]/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]; }); }
+function fmtSaveDate(ts){ var d = new Date(ts); return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); }
+function renderSavesList(){
+  var box = $('bb-saves-list'); if (!box) return;
+  var en = isEN(), arr = loadSaves();
+  if (!arr.length){ box.innerHTML = '<div class="bb-saves-empty">' + (en ? 'No saved circuits yet.' : 'ยังไม่มีวงจรที่บันทึกไว้') + '</div>'; return; }
+  box.innerHTML = arr.map(function(s){
+    var n = (s.data && s.data.comps) ? s.data.comps.length : 0;
+    return '<div class="bb-save-item" data-id="' + s.id + '">' +
+      '<span class="nm"><b>' + bbEscapeHTML(s.name) + '</b><small>' + fmtSaveDate(s.ts) + ' · ' + n + (en ? ' parts' : ' ชิ้น') + '</small></span>' +
+      '<button class="bb-load-one">' + (en ? 'Load' : 'โหลด') + '</button>' +
+      '<button class="bb-del-one danger">' + (en ? 'Delete' : 'ลบ') + '</button></div>';
+  }).join('');
+  box.querySelectorAll('.bb-save-item').forEach(function(it){
+    var id = it.dataset.id;
+    it.querySelector('.bb-load-one').addEventListener('click', function(){ applySave(id); });
+    it.querySelector('.bb-del-one').addEventListener('click', function(){ deleteSave(id); });
+  });
+}
+function openStorageModal(){ renderSavesList(); var m = $('bb-storage-modal'); if (m) m.hidden = false; var inp = $('bb-save-name'); if (inp) inp.focus(); }
+function closeStorageModal(){ var m = $('bb-storage-modal'); if (m) m.hidden = true; }
+
 // ════════════════════════════ INIT ════════════════════════════
 buildBoard();
 initControls();
@@ -1592,5 +1720,6 @@ populateReactiveVals();
 updateDiodeControls();
 selectTool(null);
 rebuild();
+loadFromURL();   // if the page was opened with a ?c= share link, load that circuit
 rafId = requestAnimationFrame(tick);
 })();

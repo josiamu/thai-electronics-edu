@@ -108,6 +108,26 @@
 .bb-knob:hover .bb-knob-disc { stroke:var(--primary); }
 .bb-knob:focus-visible { box-shadow:0 0 0 3px rgba(37,99,235,.35); }
 .bb-knob-hint { position:absolute; left:0; right:0; top:50%; transform:translateY(-50%); text-align:center; font-size:.62rem; font-weight:700; letter-spacing:.04em; color:var(--text-light); pointer-events:none; text-transform:uppercase; }
+/* ── save / load modal ── */
+.bb-modal-backdrop { position:fixed; inset:0; background:rgba(15,23,42,.55); display:flex; align-items:center; justify-content:center; z-index:1000; padding:1rem; }
+.bb-modal-backdrop[hidden] { display:none; }
+.bb-modal { background:var(--card); color:var(--text); border-radius:14px; width:min(440px,100%); max-height:80vh; display:flex; flex-direction:column; box-shadow:0 20px 50px rgba(0,0,0,.3); }
+.bb-modal-head { display:flex; align-items:center; justify-content:space-between; padding:.9rem 1.1rem; border-bottom:1px solid var(--border); font-weight:700; }
+.bb-modal-x { background:none; border:none; font-size:1.1rem; cursor:pointer; color:var(--text-light); line-height:1; padding:.2rem .35rem; border-radius:6px; }
+.bb-modal-x:hover { color:var(--primary); background:var(--bg); }
+.bb-modal-body { padding:1rem 1.1rem; overflow-y:auto; }
+.bb-save-row { display:flex; gap:.5rem; margin-bottom:1rem; }
+.bb-save-row input { flex:1; min-width:0; padding:.5rem .65rem; border:1px solid var(--border); border-radius:8px; background:var(--bg); color:var(--text); font-family:inherit; font-size:.9rem; }
+.bb-save-row input:focus { outline:none; border-color:var(--primary); }
+.bb-saves-list { display:flex; flex-direction:column; gap:.5rem; }
+.bb-save-item { display:flex; align-items:center; gap:.5rem; padding:.55rem .7rem; border:1px solid var(--border); border-radius:9px; background:var(--bg); }
+.bb-save-item .nm { flex:1; min-width:0; }
+.bb-save-item .nm b { display:block; font-size:.88rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.bb-save-item .nm small { color:var(--text-light); font-size:.72rem; }
+.bb-save-item button { font-family:inherit; font-size:.78rem; font-weight:600; padding:.32rem .6rem; border-radius:7px; border:1px solid var(--border); background:var(--card); color:var(--text); cursor:pointer; white-space:nowrap; }
+.bb-save-item button:hover { border-color:var(--primary); }
+.bb-save-item button.danger:hover { border-color:#ef4444; color:#ef4444; }
+.bb-saves-empty { color:var(--text-light); font-size:.85rem; text-align:center; padding:1.2rem 0; }
 
 /* ── selected-component editor ── */
 .bb-editor { background:var(--card); border:2px solid #f59e0b; border-radius:10px; padding:.7rem .8rem; margin-bottom:1rem; box-shadow:0 4px 14px rgba(245,158,11,.18); }
@@ -195,6 +215,9 @@
       <button class="bb-tool danger" data-tool="delete"><span class="ti">🗑</span><span class="th-only">ลบ</span><span class="en-only">Delete</span></button>
       <button class="bb-tool" id="bb-example" title="สุ่มตัวอย่างวงจร / Random example circuit"><span class="ti">🎲</span><span class="th-only">สุ่มตัวอย่าง</span><span class="en-only">Random example</span></button>
       <button class="bb-tool" id="bb-clear"><span class="ti">♻</span><span class="th-only">ล้างทั้งหมด</span><span class="en-only">Clear all</span></button>
+      <span class="bb-sep"></span>
+      <button class="bb-tool" id="bb-storage"><span class="ti">💾</span><span class="th-only">บันทึก/โหลด</span><span class="en-only">Save / Load</span></button>
+      <button class="bb-tool" id="bb-share"><span class="ti">🔗</span><span class="th-only">แชร์ลิงก์</span><span class="en-only">Share link</span></button>
     </div>
 
     <!-- contextual value controls -->
@@ -415,6 +438,22 @@
   <strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong>
   <strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong>
 </footer>
+<!-- save / load modal -->
+<div class="bb-modal-backdrop" id="bb-storage-modal" hidden>
+  <div class="bb-modal" role="dialog" aria-modal="true" aria-labelledby="bb-modal-title">
+    <div class="bb-modal-head">
+      <span id="bb-modal-title"><span class="th-only">💾 บันทึก / โหลดวงจร</span><span class="en-only">💾 Save / Load circuit</span></span>
+      <button class="bb-modal-x" id="bb-modal-close" aria-label="Close">✕</button>
+    </div>
+    <div class="bb-modal-body">
+      <div class="bb-save-row">
+        <input type="text" id="bb-save-name" maxlength="40" placeholder="ตั้งชื่อวงจร… / Circuit name…">
+        <button class="bb-tool" id="bb-save-btn"><span class="ti">💾</span><span class="th-only">บันทึก</span><span class="en-only">Save</span></button>
+      </div>
+      <div class="bb-saves-list" id="bb-saves-list"></div>
+    </div>
+  </div>
+</div>
 <script>const CURRENT_PAGE='breadboard';</script>
 <script src="nav.js"></script>
 <script src="breadboard.js"></script>
