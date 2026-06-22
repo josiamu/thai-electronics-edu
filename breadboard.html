@@ -58,6 +58,7 @@
 
 /* ── breadboard svg ── */
 .bb-scroll { overflow-x:auto; border-radius:14px; }
+.bb-fileops { display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; margin-bottom:.85rem; padding-bottom:.85rem; border-bottom:1px dashed var(--border); }
 .bb-svg { width:100%; min-width:680px; height:auto; display:block; user-select:none; }
 .bb-board { fill:#eef2f7; stroke:#cbd5e1; stroke-width:1.5; }
 [data-theme="dark"] .bb-board { fill:#283341; stroke:#3b465a; }
@@ -192,6 +193,11 @@
   </div>
 
   <div class="card" style="padding:1.25rem;">
+    <!-- circuit file actions -->
+    <div class="bb-fileops">
+      <button class="bb-tool" id="bb-storage"><span class="ti">💾</span><span class="th-only">บันทึก/โหลด</span><span class="en-only">Save / Load</span></button>
+      <button class="bb-tool" id="bb-share"><span class="ti">🔗</span><span class="th-only">แชร์ลิงก์</span><span class="en-only">Share link</span></button>
+    </div>
     <!-- toolbar -->
     <div class="bb-toolbar" id="bb-toolbar">
       <div class="bb-dropdown" id="bb-comp-dropdown">
@@ -215,9 +221,6 @@
       <button class="bb-tool danger" data-tool="delete"><span class="ti">🗑</span><span class="th-only">ลบ</span><span class="en-only">Delete</span></button>
       <button class="bb-tool" id="bb-example" title="สุ่มตัวอย่างวงจร / Random example circuit"><span class="ti">🎲</span><span class="th-only">สุ่มตัวอย่าง</span><span class="en-only">Random example</span></button>
       <button class="bb-tool" id="bb-clear"><span class="ti">♻</span><span class="th-only">ล้างทั้งหมด</span><span class="en-only">Clear all</span></button>
-      <span class="bb-sep"></span>
-      <button class="bb-tool" id="bb-storage"><span class="ti">💾</span><span class="th-only">บันทึก/โหลด</span><span class="en-only">Save / Load</span></button>
-      <button class="bb-tool" id="bb-share"><span class="ti">🔗</span><span class="th-only">แชร์ลิงก์</span><span class="en-only">Share link</span></button>
     </div>
 
     <!-- contextual value controls -->
