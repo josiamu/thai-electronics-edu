@@ -25,6 +25,17 @@ var DIODE_VF = 0.7, DIODE_RD = 8;
 var LED_RD = 14;
 var NTC_B = 3500, VDR_RD = 8;
 
+// diode family variants (all internally type 'diode'; LED is its own type)
+// zener additionally conducts in reverse once |V| reaches Vz
+var DIODE_TYPES = {
+  silicon:   { vf:0.7,  rd:8,  th:'ซิลิคอน',     en:'Silicon',   border:'#334155' },
+  germanium: { vf:0.3,  rd:12, th:'เจอร์เมเนียม', en:'Germanium', border:'#92400e' },
+  schottky:  { vf:0.25, rd:6,  th:'ชอตต์กี',     en:'Schottky',  border:'#7c3aed' },
+  zener:     { vf:0.7,  rd:8,  th:'ซีเนอร์',      en:'Zener',     border:'#16a34a' }
+};
+var ZENER_VZ = [3.3, 4.7, 5.1, 6.2, 9.1, 12];
+function diodeRd(c){ return c.type === 'led' ? LED_RD : (c.rd || DIODE_RD); }
+
 // resistor-family: linear types whose R depends only on the environment (not on circuit voltage)
 var RFAM = { resistor:1, vr:1, ntc:1, ptc:1, ldr:1 };
 function isNonlin(t){ return t === 'diode' || t === 'led' || t === 'vdr'; }
@@ -100,6 +111,8 @@ var resVal = 330;
 var resSubtype = 'resistor';   // resistor | vr | ntc | ptc | ldr | vdr
 var vdrVc = 6;
 var ledColor = 'red';
+var diodeKind = 'silicon';   // silicon | germanium | schottky | zener | led — picks what the diode tool places
+var zenerVz = 5.1;
 var capVal = CAP_DEFAULT, indVal = IND_DEFAULT;
 var env = { temp:25, light:50, vrPos:50 };   // shared sensor environment
 
@@ -230,7 +243,7 @@ var TYPE_LABEL = {
   battery: { th:'แบตเตอรี่', en:'Battery' },
   resistor:{ th:'ตัวต้านทาน', en:'Resistor' },
   led:     { th:'LED', en:'LED' },
-  diode:   { th:'ไดโอด', en:'Diode' },
+  diode:   { th:'ไดโอด / LED', en:'Diode / LED' },
   wire:    { th:'จัมเปอร์', en:'Jumper' },
   switch:  { th:'สวิตช์', en:'Switch' },
   cap:     { th:'ตัวเก็บประจุ', en:'Capacitor' },
@@ -281,7 +294,10 @@ function onHoleClick(id){
   // second click
   if (id === pendingHole){ pendingHole = null; hideHL(); refreshHint(); return; }
   if (occupied[id]){ flashHint(isEN() ? 'That hole is already used.' : 'รูนี้มีขาอุปกรณ์อยู่แล้ว'); return; }
-  placeComp(tool === 'resistor' ? resSubtype : tool, pendingHole, id);
+  var placeType = tool === 'resistor' ? resSubtype
+                : tool === 'diode'    ? (diodeKind === 'led' ? 'led' : 'diode')
+                : tool;
+  placeComp(placeType, pendingHole, id);
   pendingHole = null;
   hideHL();
   refreshHint();
@@ -292,7 +308,12 @@ function placeComp(type, a, b){
   if (RFAM[type]) c.value = resVal;            // resistor / vr / ntc / ptc / ldr
   if (type === 'vdr') c.vc = vdrVc;
   if (type === 'led'){ c.color = ledColor; c.vf = LED_COLORS[ledColor].vf; }
-  if (type === 'diode') c.vf = DIODE_VF;
+  if (type === 'diode'){
+    var dk = (diodeKind === 'led' ? 'silicon' : diodeKind);
+    var dt = DIODE_TYPES[dk] || DIODE_TYPES.silicon;
+    c.variant = dk; c.vf = dt.vf; c.rd = dt.rd;
+    if (dk === 'zener') c.vz = zenerVz;
+  }
   if (type === 'battery') c.value = batteryV;
   if (type === 'switch') c.closed = true;   // starts closed (conducting)
   if (type === 'cap'){ c.value = capVal; c._vPrev = 0; }
@@ -342,7 +363,13 @@ function renderEditor(){
   } else if (c.type === 'battery'){
     ctrl = '<label>' + (en ? 'Voltage' : 'แรงดัน') + '</label><input type="range" id="bb-ed-bv" min="1" max="12" step="1" value="' + c.value + '"><span class="ev" id="bb-ed-bv-out">' + c.value + ' V</span>';
   } else if (c.type === 'diode'){
-    ctrl = '<span style="color:var(--text-light)">' + (en ? 'Silicon diode, Vf ≈ 0.7 V' : 'ไดโอดซิลิคอน Vf ≈ 0.7 V') + '</span>';
+    var dv = c.variant || 'silicon';
+    ctrl = '<label>' + (en ? 'Type' : 'ชนิด') + '</label><select id="bb-ed-dtype">' +
+      Object.keys(DIODE_TYPES).map(function(k){ return '<option value="' + k + '"' + (k === dv ? ' selected' : '') + '>' + DIODE_TYPES[k][en ? 'en' : 'th'] + '</option>'; }).join('') + '</select>';
+    if (dv === 'zener'){
+      ctrl += '<label style="margin-left:.6rem">Vz</label><select id="bb-ed-vz">' +
+        ZENER_VZ.map(function(v){ return '<option value="' + v + '"' + (v === c.vz ? ' selected' : '') + '>' + v + ' V</option>'; }).join('') + '</select>';
+    }
   } else if (c.type === 'switch'){
     ctrl = '<label>' + (en ? 'State' : 'สถานะ') + '</label><span style="font-weight:700;color:' + (c.closed ? '#16a34a' : '#94a3b8') + '">' +
            (c.closed ? (en ? 'ON (closed)' : 'ปิด (ต่อวงจร)') : (en ? 'OFF (open)' : 'เปิด (ตัดวงจร)')) + '</span>';
@@ -369,6 +396,13 @@ function renderEditor(){
   on('bb-ed-val', 'change', function(){ c.value = +this.value; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-vc', 'change', function(){ c.vc = +this.value; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-color', 'change', function(){ c.color = this.value; c.vf = LED_COLORS[this.value].vf; rebuild(); refreshEditorTitle(c); });
+  on('bb-ed-dtype', 'change', function(){
+    c.variant = this.value; var dt = DIODE_TYPES[c.variant];
+    c.vf = dt.vf; c.rd = dt.rd;
+    if (c.variant === 'zener'){ if (!c.vz) c.vz = zenerVz; } else delete c.vz;
+    rebuild(); renderEditor();   // re-render so the Vz selector shows/hides
+  });
+  on('bb-ed-vz', 'change', function(){ c.vz = +this.value; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-cap', 'change', function(){ c.value = +this.value; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-ind', 'change', function(){ c.value = +this.value; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-bv', 'input', function(){ c.value = +this.value; var o = $('bb-ed-bv-out'); if (o) o.textContent = c.value + ' V'; rebuild(); refreshEditorTitle(c); });
@@ -559,9 +593,10 @@ function solveCircuit(h, commit){
         else { stampG(i, j, 1e-9); }
         return;
       }
-      // diode / led: anode = a (i), cathode = b (j)
-      var rd = c.type === 'led' ? LED_RD : DIODE_RD;
-      if (c._on){ var g = 1 / rd; stampG(i, j, g); stampI(i, j, g * c.vf); }
+      // diode / led: anode = a (i), cathode = b (j). _on: 1 forward, -1 zener reverse, 0 off
+      var rd = diodeRd(c);
+      if (c._on > 0){ var g = 1 / rd; stampG(i, j, g); stampI(i, j, g * c.vf); }
+      else if (c._on < 0){ var gz = 1 / rd; stampG(i, j, gz); stampI(i, j, -gz * c.vz); }
       else { stampG(i, j, 1e-9); }
     });
 
@@ -590,10 +625,13 @@ function solveCircuit(h, commit){
         else if (vd < -c.vc){ c._on = -1; changed = true; }
         return;
       }
-      if (c._on){
-        var I = (vd - c.vf) / (c.type === 'led' ? LED_RD : DIODE_RD);
-        if (I < -1e-9){ c._on = 0; changed = true; }
+      var rd = diodeRd(c);
+      if (c._on > 0){
+        if ((vd - c.vf) / rd < -1e-9){ c._on = 0; changed = true; }
+      } else if (c._on < 0){
+        if ((vd + c.vz) / rd > 1e-9){ c._on = 0; changed = true; }
       } else if (vd > c.vf){ c._on = 1; changed = true; }
+      else if (c.variant === 'zener' && vd < -c.vz){ c._on = -1; changed = true; }
     });
     if (!changed) break;
   }
@@ -625,10 +663,10 @@ function solveCircuit(h, commit){
       c.results = { V:vd, I:I, on:Math.abs(I) > 3e-4 };
       return;
     }
-    var rd = c.type === 'led' ? LED_RD : DIODE_RD;
-    I = c._on ? (vd - c.vf) / rd : 0;
-    var lit = c._on && I > 3e-4;
-    c.results = { V:vd, I:I, on:lit };
+    var rd = diodeRd(c);
+    I = c._on > 0 ? (vd - c.vf) / rd : c._on < 0 ? (vd + c.vz) / rd : 0;
+    var on = Math.abs(I) > 3e-4;        // conducting (forward, or zener reverse)
+    c.results = { V:vd, I:I, on:on, lit:(c._on > 0 && on) };
     if (c.type === 'led' && I > 0.03) warnings.push({ t:'warn', th:'กระแส LED สูงเกิน (' + fmtI(I) + ') — ในงานจริงต้องมี R จำกัดกระแส', en:'LED current too high (' + fmtI(I) + ') — add a current-limiting resistor' });
   });
   batteries.forEach(function(c, k){
@@ -731,7 +769,11 @@ function drawComp(c){
     g.appendChild(el('line', { x1:mid + 5, y1:-6,  x2:mid + 5, y2:6,  stroke:'#475569', 'stroke-width':5 }));   // − short/thick
     gComps.appendChild(uprightText(mid, A.x, A.y, ang, -18, c.value + 'V', '#2563eb'));  // global coords — sibling of g, not child
   } else if (c.type === 'diode'){
-    diodeSymbol(g, x1, x2, on ? '#1e293b' : '#94a3b8', on ? '#f59e0b' : '#94a3b8');
+    var dv = c.variant || 'silicon', dt = DIODE_TYPES[dv] || DIODE_TYPES.silicon;
+    diodeSymbol(g, x1, x2, on ? '#1e293b' : '#94a3b8', on ? dt.border : '#94a3b8', dv);
+    var dlab = dv === 'zener' ? 'ZD ' + (c.vz || zenerVz) + 'V'
+             : dv === 'germanium' ? 'Ge' : dv === 'schottky' ? 'Sk' : 'Si';
+    gComps.appendChild(uprightText(len / 2, A.x, A.y, ang, -15, dlab, dt.border));
   } else if (c.type === 'led'){
     var col = LED_COLORS[c.color];
     if (on){
@@ -759,10 +801,18 @@ function drawComp(c){
   gComps.appendChild(g);
 }
 
-function diodeSymbol(g, x1, x2, triFill, barColor){
+function diodeSymbol(g, x1, x2, triFill, barColor, variant){
   // triangle pointing a→b (anode→cathode), bar at cathode end
   g.appendChild(el('polygon', { points:x1 + ',-8 ' + x1 + ',8 ' + x2 + ',0', fill:triFill, stroke:'#334155', 'stroke-width':1 }));
-  g.appendChild(el('line', { x1:x2, y1:-9, x2:x2, y2:9, stroke:barColor, 'stroke-width':3, 'stroke-linecap':'round' }));
+  if (variant === 'zener'){          // cathode bar with bent tails (Z shape)
+    g.appendChild(el('path', { d:'M ' + (x2 - 5) + ' -9 L ' + x2 + ' -9 L ' + x2 + ' 9 L ' + (x2 + 5) + ' 9',
+      fill:'none', stroke:barColor, 'stroke-width':3, 'stroke-linecap':'round', 'stroke-linejoin':'round' }));
+  } else if (variant === 'schottky'){ // cathode bar with square hooks (S shape)
+    g.appendChild(el('path', { d:'M ' + (x2 - 4) + ' -5 L ' + (x2 - 4) + ' -9 L ' + x2 + ' -9 L ' + x2 + ' 9 L ' + (x2 + 4) + ' 9 L ' + (x2 + 4) + ' 5',
+      fill:'none', stroke:barColor, 'stroke-width':3, 'stroke-linecap':'round', 'stroke-linejoin':'round' }));
+  } else {
+    g.appendChild(el('line', { x1:x2, y1:-9, x2:x2, y2:9, stroke:barColor, 'stroke-width':3, 'stroke-linecap':'round' }));
+  }
 }
 
 // distinctive mark for each sensor / special resistor (drawn over the body)
@@ -932,7 +982,7 @@ function tauOf(target){
     if (c === target || c.type === 'cap') return;
     var i = gi(sn(c.a)), j = gi(sn(c.b));
     if (RFAM[c.type]){ stamp(i, j, 1 / effR(c)); return; }
-    if ((c.type === 'diode' || c.type === 'led') && c.results && c.results.on) stamp(i, j, 1 / (c.type === 'led' ? LED_RD : DIODE_RD));
+    if ((c.type === 'diode' || c.type === 'led') && c.results && c.results.on) stamp(i, j, 1 / diodeRd(c));
     else if (c.type === 'vdr' && c.results && c.results.on) stamp(i, j, 1 / VDR_RD);
   });
   var ia = gi(na); if (ia < 0) return 0;
@@ -1033,7 +1083,11 @@ function compName(c, en){
   }
   if (c.type === 'vdr') return 'VDR ' + c.vc + 'V';
   if (c.type === 'battery') return (en ? 'Battery ' : 'แบตเตอรี่ ') + c.value + 'V';
-  if (c.type === 'diode') return en ? 'Diode' : 'ไดโอด';
+  if (c.type === 'diode'){
+    var dt = DIODE_TYPES[c.variant] || DIODE_TYPES.silicon;
+    if (c.variant === 'zener') return (en ? 'Zener ' : 'ซีเนอร์ ') + (c.vz || zenerVz) + 'V';
+    return en ? (dt.en + ' diode') : ('ไดโอด' + dt.th);
+  }
   if (c.type === 'led') return (en ? 'LED ' : 'LED ') + LED_COLORS[c.color][en ? 'en' : 'th'];
   if (c.type === 'switch') return en ? 'Switch' : 'สวิตช์';
   if (c.type === 'cap') return 'C ' + fmtC(c.value);
@@ -1211,8 +1265,8 @@ function beep(){
 }
 
 // ════════════════════════════ TOOLBAR / CONTROLS ════════════════════════════
-var VALROWS = ['battery','resistor','led','diode','wire','switch','cap','ind','meter'];
-var COMP_TOOLS = ['battery','resistor','led','diode','wire','switch','cap','ind'];   // live inside the "Add component" dropdown
+var VALROWS = ['battery','resistor','diode','wire','switch','cap','ind','meter'];
+var COMP_TOOLS = ['battery','resistor','diode','wire','switch','cap','ind'];   // live inside the "Add component" dropdown
 function selectTool(t){
   // toggle off if same
   tool = (tool === t) ? null : t;
@@ -1226,6 +1280,7 @@ function selectTool(t){
   VALROWS.forEach(function(v){ $('bb-val-' + v).classList.toggle('show', tool === v); });
   $('bb-val-none').classList.toggle('show', !tool || tool === 'delete');
   if (tool === 'resistor') updateResControls();
+  if (tool === 'diode') updateDiodeControls();
   if (tool === 'meter'){ selectedId = null; renderEditor(); resetMeter(); setActiveMode(); updateMeter(); }
   else resetMeter();
   refreshHint();
@@ -1247,6 +1302,21 @@ function updateCompTrigger(){
   } else {
     lbl.innerHTML = '<span class="th-only">เพิ่มอุปกรณ์</span><span class="en-only">Add component</span>';
   }
+}
+
+// show/hide the LED-colour and Zener-Vz sub-controls + the descriptive hint
+function updateDiodeControls(){
+  $('bb-diode-led-wrap').style.display = (diodeKind === 'led') ? '' : 'none';
+  $('bb-diode-vz-wrap').style.display  = (diodeKind === 'zener') ? '' : 'none';
+  var hints = {
+    silicon:   { th:'ไดโอดซิลิคอนทั่วไป Vf ≈ 0.7V — กระแสไหล anode → cathode', en:'General-purpose silicon diode, Vf ≈ 0.7V — current flows anode → cathode' },
+    germanium: { th:'เจอร์เมเนียม Vf ≈ 0.3V — แรงดันตกต่ำ ใช้ตรวจจับสัญญาณ/ความถี่สูง', en:'Germanium, Vf ≈ 0.3V — low drop, used in signal/RF detectors' },
+    schottky:  { th:'ชอตต์กี Vf ≈ 0.25V — สวิตช์เร็ว แรงดันตกต่ำ', en:'Schottky, Vf ≈ 0.25V — fast switching, low forward drop' },
+    zener:     { th:'ซีเนอร์ — นำกระแสย้อนกลับเมื่อแรงดันถึง Vz (ใช้คุมแรงดัน)', en:'Zener — conducts in reverse once V reaches Vz (voltage regulation)' },
+    led:       { th:'LED มีขั้ว — วางขา + (anode) ก่อน, ติดเมื่อต่อถูกขั้ว', en:'LED is polarized — place + (anode) leg first; lights when forward-biased' }
+  };
+  var h = hints[diodeKind] || hints.silicon;
+  $('bb-diode-hint').innerHTML = '<span class="th-only">' + h.th + '</span><span class="en-only">' + h.en + '</span>';
 }
 
 // repopulate the value dropdown with the standard list for the current subtype
@@ -1301,7 +1371,12 @@ function initControls(){
   document.addEventListener('click', function(e){ if (!e.target.closest('#bb-comp-dropdown')) closeCompMenu(); });
   $('bb-clear').addEventListener('click', function(){
     comps = []; occupied = {}; pendingHole = null; selectedId = null; hideHL(); resetMeter();
-    simTime = 0; graphHist = []; graphComp = null; rebuild(); renderEditor();
+    simTime = 0; graphHist = []; graphComp = null;
+    // reset the environment panel to defaults
+    env.temp = 25; $('bb-temp').value = 25; $('bb-temp-out').textContent = '25 °C';
+    env.light = 50; $('bb-light').value = 50; $('bb-light-out').textContent = '50 %';
+    env.vrPos = 50; renderVrKnob();   // reset the VR knob back to centre
+    rebuild(); renderEditor();
   });
   // multimeter mode buttons
   document.querySelectorAll('.bb-mm[data-mm]').forEach(function(btn){
@@ -1320,6 +1395,8 @@ function initControls(){
   $('bb-res-val').addEventListener('change', function(){ resVal = +this.value; });
   $('bb-res-vc').addEventListener('change', function(){ vdrVc = +this.value; });
   $('bb-led-color').addEventListener('change', function(){ ledColor = this.value; });
+  $('bb-diode-type').addEventListener('change', function(){ diodeKind = this.value; updateDiodeControls(); });
+  $('bb-diode-vz').addEventListener('change', function(){ zenerVz = +this.value; });
   $('bb-cap-val').addEventListener('change', function(){ capVal = +this.value; });
   $('bb-ind-val').addEventListener('change', function(){ indVal = +this.value; });
   // transient: speed presets + restart
@@ -1330,7 +1407,7 @@ function initControls(){
   // environment sliders (affect all sensors)
   $('bb-temp').addEventListener('input', function(){ env.temp = +this.value; $('bb-temp-out').textContent = env.temp + ' °C'; rebuild(); });
   $('bb-light').addEventListener('input', function(){ env.light = +this.value; $('bb-light-out').textContent = env.light + ' %'; rebuild(); });
-  $('bb-vrpos').addEventListener('input', function(){ env.vrPos = +this.value; $('bb-vrpos-out').textContent = env.vrPos + ' %'; rebuild(); });
+  initVrKnob();   // rotary VR position control (replaces the old slider)
   // drag-to-move: track pointer at the document level so fast drags don't slip off
   document.addEventListener('pointermove', onPointerMove);
   document.addEventListener('pointerup', onPointerUp);
@@ -1345,26 +1422,164 @@ function initControls(){
   document.addEventListener('langchange', function(){ refreshHint(); rebuild(); renderEditor(); });
 }
 
-// ════════════════════════════ EXAMPLE: battery → R → LED loop ════════════════════════════
+// ════════════════════════════ ROTARY VR KNOB ════════════════════════════
+// volume-style knob: 270° sweep (min at lower-left, max at lower-right, gap at bottom).
+// drives env.vrPos (0–100), same value the old slider produced.
+var KNOB_START = 135, KNOB_SWEEP = 270;   // degrees, standard SVG (0°=+x, clockwise as y is down)
+function knobXY(deg, R){ var t = deg * Math.PI / 180; return [50 + R * Math.cos(t), 50 + R * Math.sin(t)]; }
+function knobArc(fromDeg, toDeg, R){
+  var a = knobXY(fromDeg, R), b = knobXY(toDeg, R);
+  var large = Math.abs(toDeg - fromDeg) > 180 ? 1 : 0;
+  var sweep = toDeg >= fromDeg ? 1 : 0;
+  return 'M ' + a[0].toFixed(2) + ' ' + a[1].toFixed(2) + ' A ' + R + ' ' + R + ' 0 ' + large + ' ' + sweep + ' ' + b[0].toFixed(2) + ' ' + b[1].toFixed(2);
+}
+function renderVrKnob(){
+  var R = 38, ang = KNOB_START + (env.vrPos / 100) * KNOB_SWEEP;
+  var track = $('bb-knob-track'), fill = $('bb-knob-fill'), notch = $('bb-knob-notch'), knob = $('bb-vrknob');
+  if (!track) return;
+  track.setAttribute('d', knobArc(KNOB_START, KNOB_START + KNOB_SWEEP, R));
+  // a hair of sweep so 0% still shows a rounded cap, never a zero-length path
+  fill.setAttribute('d', knobArc(KNOB_START, ang + (env.vrPos < 0.5 ? 0.001 : 0), R));
+  var p1 = knobXY(ang, 13), p2 = knobXY(ang, 27);
+  notch.setAttribute('x1', p1[0].toFixed(2)); notch.setAttribute('y1', p1[1].toFixed(2));
+  notch.setAttribute('x2', p2[0].toFixed(2)); notch.setAttribute('y2', p2[1].toFixed(2));
+  if (knob) knob.setAttribute('aria-valuenow', Math.round(env.vrPos));
+  var out = $('bb-vrpos-out'); if (out) out.textContent = Math.round(env.vrPos) + ' %';
+}
+function setVrPos(v){
+  env.vrPos = Math.max(0, Math.min(100, v));
+  renderVrKnob();
+  rebuild();
+}
+// map a pointer position to a 0–100 value along the 270° sweep
+function knobValueFromPointer(ev, knob){
+  var r = knob.getBoundingClientRect();
+  var dx = ev.clientX - (r.left + r.width / 2), dy = ev.clientY - (r.top + r.height / 2);
+  if (Math.hypot(dx, dy) < r.width * 0.15) return env.vrPos;   // dead centre: keep current value
+  var ang = Math.atan2(dy, dx) * 180 / Math.PI;     // screen angle (clockwise, matches knobXY)
+  var rel = ang - KNOB_START;
+  while (rel < 0) rel += 360;
+  while (rel >= 360) rel -= 360;
+  if (rel > KNOB_SWEEP) rel = (rel < KNOB_SWEEP + (360 - KNOB_SWEEP) / 2) ? KNOB_SWEEP : 0;  // bottom dead-zone snaps to nearer end
+  return rel / KNOB_SWEEP * 100;
+}
+function initVrKnob(){
+  var knob = $('bb-vrknob'); if (!knob) return;
+  var dragging = false;
+  knob.addEventListener('pointerdown', function(ev){
+    dragging = true; knob.classList.add('dragging');
+    try { knob.setPointerCapture(ev.pointerId); } catch (e) {}
+    setVrPos(knobValueFromPointer(ev, knob)); knob.focus(); ev.preventDefault();
+  });
+  knob.addEventListener('pointermove', function(ev){ if (dragging) setVrPos(knobValueFromPointer(ev, knob)); });
+  function endDrag(){ dragging = false; knob.classList.remove('dragging'); }
+  knob.addEventListener('pointerup', endDrag);
+  knob.addEventListener('pointercancel', endDrag);
+  // scroll wheel nudges
+  knob.addEventListener('wheel', function(ev){ ev.preventDefault(); setVrPos(env.vrPos + (ev.deltaY < 0 ? 2 : -2)); }, { passive:false });
+  // keyboard (accessibility)
+  knob.addEventListener('keydown', function(ev){
+    var step = ev.shiftKey ? 10 : 1, k = ev.key, v = null;
+    if (k === 'ArrowUp' || k === 'ArrowRight') v = env.vrPos + step;
+    else if (k === 'ArrowDown' || k === 'ArrowLeft') v = env.vrPos - step;
+    else if (k === 'Home') v = 0;
+    else if (k === 'End') v = 100;
+    else if (k === 'PageUp') v = env.vrPos + 10;
+    else if (k === 'PageDown') v = env.vrPos - 10;
+    if (v !== null){ ev.preventDefault(); setVrPos(v); }
+  });
+  renderVrKnob();
+}
+
+// ════════════════════════════ EXAMPLES (random pick) ════════════════════════════
+// hole ids: power rails = TP/TN/BP/BN + col; tie-points = 't' + row(a–j) + col.
+// rows a–e of one column share a node, so chaining through a column joins parts.
+function setExampleBatt(v){
+  batteryV = v;
+  var s = $('bb-batt-v'); if (s) s.value = v;
+  var o = $('bb-batt-v-out'); if (o) o.textContent = v + ' V';
+}
+
+var EXAMPLES = [
+  { th:'LED พื้นฐาน (แบต → R → LED)', en:'Basic LED (battery → R → LED)', build:function(){
+      setExampleBatt(9);
+      place('battery', 'TP2', 'TN2', { value:9 });
+      place('wire', 'TP8', 'ta5', {});
+      place('resistor', 'tb5', 'ta9', { value:330 });
+      place('led', 'tb9', 'ta13', { color:'red', vf:1.8 });
+      place('wire', 'tb13', 'TN8', {});
+    } },
+  { th:'LED ขนาน 2 สี (แดง + เขียว)', en:'Two LEDs in parallel (red + green)', build:function(){
+      setExampleBatt(9);
+      place('battery', 'TP2', 'TN2', { value:9 });
+      place('wire', 'TP4', 'ta4', {});
+      // branch 1 — red
+      place('resistor', 'tb4', 'ta8', { value:330 });
+      place('led', 'tb8', 'ta11', { color:'red', vf:1.8 });
+      place('wire', 'tb11', 'TN4', {});
+      // branch 2 — green (shares the + column node at col4)
+      place('resistor', 'tc4', 'ta15', { value:470 });
+      place('led', 'tb15', 'ta19', { color:'green', vf:2.1 });
+      place('wire', 'tb19', 'TN8', {});
+    } },
+  { th:'ซีเนอร์ควบคุมแรงดัน 12V → 5.1V', en:'Zener regulator 12V → 5.1V', build:function(){
+      setExampleBatt(12);
+      place('battery', 'TP2', 'TN2', { value:12 });
+      place('wire', 'TP4', 'ta5', {});
+      place('resistor', 'tb5', 'ta10', { value:220 });          // series R
+      // zener clamps col10 to Vz: anode → − rail, cathode → regulated node (col10)
+      place('diode', 'tb14', 'tb10', { variant:'zener', vf:0.7, rd:8, vz:5.1 });
+      place('wire', 'ta14', 'TN4', {});
+      // LED load powered from the regulated 5.1 V node
+      place('resistor', 'tc10', 'ta17', { value:330 });
+      place('led', 'tb17', 'ta21', { color:'red', vf:1.8 });
+      place('wire', 'tb21', 'TN8', {});
+    } },
+  { th:'สวิตช์ควบคุม LED', en:'Switch-controlled LED', build:function(){
+      setExampleBatt(9);
+      place('battery', 'TP2', 'TN2', { value:9 });
+      place('wire', 'TP4', 'ta5', {});
+      place('switch', 'tb5', 'ta9', { closed:true });
+      place('resistor', 'tb9', 'ta13', { value:330 });
+      place('led', 'tb13', 'ta17', { color:'yellow', vf:2.0 });
+      place('wire', 'tb17', 'TN8', {});
+    } },
+  { th:'VR หรี่ไฟ LED (ปรับลูกบิดในแผงสภาพแวดล้อม)', en:'Potentiometer dimming an LED', build:function(){
+      setExampleBatt(9);
+      place('battery', 'TP2', 'TN2', { value:9 });
+      place('wire', 'TP4', 'ta5', {});
+      place('vr', 'tb5', 'ta9', { value:10000 });
+      place('resistor', 'tb9', 'ta13', { value:220 });
+      place('led', 'tb13', 'ta17', { color:'blue', vf:3.0 });
+      place('wire', 'tb17', 'TN8', {});
+    } },
+  { th:'ชาร์จตัวเก็บประจุ RC (ดูกราฟ Transient)', en:'RC capacitor charging (watch the transient)', build:function(){
+      setExampleBatt(9);
+      place('battery', 'TP2', 'TN2', { value:9 });
+      place('wire', 'TP4', 'ta5', {});
+      place('resistor', 'tb5', 'ta10', { value:10000 });
+      place('cap', 'tb10', 'ta14', { value:470e-6, _vPrev:0 });
+      place('wire', 'tb14', 'TN8', {});
+    } }
+];
+
+var lastExampleIdx = -1;
 function loadExample(){
   comps = []; occupied = {}; pendingHole = null; selectedId = null; hideHL(); resetMeter();
   simTime = 0; graphHist = []; graphComp = null; renderEditor();
-  batteryV = 9; $('bb-batt-v').value = 9; $('bb-batt-v-out').textContent = '9 V';
-  resVal = 330; $('bb-res-val').value = '330';
-  ledColor = 'red'; $('bb-led-color').value = 'red';
-  // battery: top+ rail(col2) → top− rail(col2)   (define rails)
-  place('battery', 'TP2', 'TN2', { value:9 });
-  // jumper: + rail → column 5 top
-  place('wire', 'TP8', 'ta5', {});
-  // resistor: col5 top → col9 top
-  place('resistor', 'tb5', 'ta9', { value:330 });
-  // LED: col9 top (anode) → col13 top (cathode)
-  place('led', 'tb9', 'ta13', { color:'red', vf:1.8 });
-  // jumper: col13 top → − rail
-  place('wire', 'tb13', 'TN8', {});
+  // pick a random example, avoiding an immediate repeat
+  var i = Math.floor(Math.random() * EXAMPLES.length);
+  if (EXAMPLES.length > 1 && i === lastExampleIdx) i = (i + 1) % EXAMPLES.length;
+  lastExampleIdx = i;
+  var ex = EXAMPLES[i];
+  ex.build();
   rebuild();
+  setHint((isEN() ? '📋 Example: ' + ex.en + ' — tap a part to edit, or use the multimeter.'
+                  : '📋 ตัวอย่าง: ' + ex.th + ' — คลิกอุปกรณ์เพื่อแก้ไข หรือใช้มัลติมิเตอร์'));
 }
 function place(type, a, b, props){
+  // guard: rail holes on every 6th column don't exist (visual gap) — bail loudly instead of corrupting the board
+  if (!holes[a] || !holes[b]){ console.warn('place(): unknown hole', !holes[a] ? a : b, '— skipped', type); return; }
   var c = { id:nextId++, type:type, a:a, b:b };
   for (var k in props) c[k] = props[k];
   comps.push(c); occupied[a] = c.id; occupied[b] = c.id;
@@ -1374,6 +1589,7 @@ function place(type, a, b, props){
 buildBoard();
 initControls();
 populateReactiveVals();
+updateDiodeControls();
 selectTool(null);
 rebuild();
 rafId = requestAnimationFrame(tick);

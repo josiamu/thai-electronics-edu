@@ -96,6 +96,18 @@
 .bb-env label { display:block; font-size:.82rem; font-weight:600; margin:.55rem 0 .15rem; }
 .bb-env input[type=range] { width:100%; accent-color:var(--primary); cursor:pointer; }
 .bb-env .ev { float:right; color:var(--primary); font-weight:700; }
+/* rotary VR knob (volume-style) */
+.bb-knob-wrap { display:flex; justify-content:center; padding:.4rem 0 .2rem; }
+.bb-knob { position:relative; width:84px; height:84px; cursor:grab; touch-action:none; -webkit-user-select:none; user-select:none; border-radius:50%; outline:none; }
+.bb-knob:active, .bb-knob.dragging { cursor:grabbing; }
+.bb-knob svg { width:100%; height:100%; display:block; overflow:visible; }
+.bb-knob-track { stroke:var(--border); }
+.bb-knob-fill  { stroke:var(--primary); transition:stroke .12s ease; }
+.bb-knob-disc  { fill:var(--card); stroke:var(--border); stroke-width:1.5; }
+.bb-knob-notch { stroke:var(--primary); stroke-width:4; stroke-linecap:round; }
+.bb-knob:hover .bb-knob-disc { stroke:var(--primary); }
+.bb-knob:focus-visible { box-shadow:0 0 0 3px rgba(37,99,235,.35); }
+.bb-knob-hint { position:absolute; left:0; right:0; top:50%; transform:translateY(-50%); text-align:center; font-size:.62rem; font-weight:700; letter-spacing:.04em; color:var(--text-light); pointer-events:none; text-transform:uppercase; }
 
 /* ── selected-component editor ── */
 .bb-editor { background:var(--card); border:2px solid #f59e0b; border-radius:10px; padding:.7rem .8rem; margin-bottom:1rem; box-shadow:0 4px 14px rgba(245,158,11,.18); }
@@ -171,8 +183,7 @@
         <div class="bb-dd-menu" id="bb-comp-menu" role="menu">
           <button class="bb-dd-item" data-tool="battery" role="menuitem"><span class="ti">🔋</span><span class="th-only">แบตเตอรี่</span><span class="en-only">Battery</span></button>
           <button class="bb-dd-item" data-tool="resistor" role="menuitem"><span class="ti">▭</span><span class="th-only">ตัวต้านทาน</span><span class="en-only">Resistor</span></button>
-          <button class="bb-dd-item" data-tool="led" role="menuitem"><span class="ti">💡</span><span class="th-only">LED</span><span class="en-only">LED</span></button>
-          <button class="bb-dd-item" data-tool="diode" role="menuitem"><span class="ti">▷|</span><span class="th-only">ไดโอด</span><span class="en-only">Diode</span></button>
+          <button class="bb-dd-item" data-tool="diode" role="menuitem"><span class="ti">▷|</span><span class="th-only">ไดโอด / LED</span><span class="en-only">Diode / LED</span></button>
           <button class="bb-dd-item" data-tool="wire" role="menuitem"><span class="ti">〜</span><span class="th-only">สายจัมเปอร์</span><span class="en-only">Jumper</span></button>
           <button class="bb-dd-item" data-tool="switch" role="menuitem"><span class="ti">⎍</span><span class="th-only">สวิตช์</span><span class="en-only">Switch</span></button>
           <button class="bb-dd-item" data-tool="cap" role="menuitem"><span class="ti">‖</span><span class="th-only">ตัวเก็บประจุ</span><span class="en-only">Capacitor</span></button>
@@ -182,7 +193,7 @@
       <button class="bb-tool" data-tool="meter"><span class="ti">📟</span><span class="th-only">มัลติมิเตอร์</span><span class="en-only">Multimeter</span></button>
       <span class="bb-sep"></span>
       <button class="bb-tool danger" data-tool="delete"><span class="ti">🗑</span><span class="th-only">ลบ</span><span class="en-only">Delete</span></button>
-      <button class="bb-tool" id="bb-example"><span class="ti">📋</span><span class="th-only">ตัวอย่าง</span><span class="en-only">Example</span></button>
+      <button class="bb-tool" id="bb-example" title="สุ่มตัวอย่างวงจร / Random example circuit"><span class="ti">🎲</span><span class="th-only">สุ่มตัวอย่าง</span><span class="en-only">Random example</span></button>
       <button class="bb-tool" id="bb-clear"><span class="ti">♻</span><span class="th-only">ล้างทั้งหมด</span><span class="en-only">Clear all</span></button>
     </div>
 
@@ -229,25 +240,37 @@
         </span>
         <span id="bb-res-hint" style="color:var(--text-light);font-weight:400;"></span>
       </div>
-      <div class="bb-valrow" id="bb-val-led">
-        <label><span class="th-only">สี LED</span><span class="en-only">LED color</span></label>
-        <select id="bb-led-color">
-          <option value="red">🔴 <span class="th-only">แดง</span> Red (Vf 1.8V)</option>
-          <option value="yellow">🟡 <span class="th-only">เหลือง</span> Yellow (Vf 2.0V)</option>
-          <option value="green">🟢 <span class="th-only">เขียว</span> Green (Vf 2.1V)</option>
-          <option value="blue">🔵 <span class="th-only">น้ำเงิน</span> Blue (Vf 3.0V)</option>
-          <option value="white">⚪ <span class="th-only">ขาว</span> White (Vf 3.2V)</option>
-        </select>
-        <span style="color:var(--text-light);font-weight:400;">
-          <span class="th-only">วางขา + (anode) ก่อน</span>
-          <span class="en-only">Place + (anode) leg first</span>
-        </span>
-      </div>
       <div class="bb-valrow" id="bb-val-diode">
-        <span style="color:var(--text-light);font-weight:400;">
-          <span class="th-only">ไดโอดซิลิคอน Vf ≈ 0.7V — วางขั้ว anode ก่อน (กระแสไหล anode → cathode)</span>
-          <span class="en-only">Silicon diode Vf ≈ 0.7V — place anode first (current flows anode → cathode)</span>
+        <label><span class="th-only">ชนิด</span><span class="en-only">Type</span></label>
+        <select id="bb-diode-type">
+          <option value="silicon"><span class="th-only">ไดโอดซิลิคอน</span> Silicon (Vf 0.7V)</option>
+          <option value="germanium"><span class="th-only">เจอร์เมเนียม</span> Germanium (Vf 0.3V)</option>
+          <option value="schottky"><span class="th-only">ชอตต์กี</span> Schottky (Vf 0.25V)</option>
+          <option value="zener"><span class="th-only">ซีเนอร์</span> Zener</option>
+          <option value="led"><span class="th-only">LED</span> LED</option>
+        </select>
+        <span id="bb-diode-led-wrap" style="display:none;">
+          <label><span class="th-only">สี</span><span class="en-only">Color</span></label>
+          <select id="bb-led-color">
+            <option value="red">🔴 <span class="th-only">แดง</span> Red (Vf 1.8V)</option>
+            <option value="yellow">🟡 <span class="th-only">เหลือง</span> Yellow (Vf 2.0V)</option>
+            <option value="green">🟢 <span class="th-only">เขียว</span> Green (Vf 2.1V)</option>
+            <option value="blue">🔵 <span class="th-only">น้ำเงิน</span> Blue (Vf 3.0V)</option>
+            <option value="white">⚪ <span class="th-only">ขาว</span> White (Vf 3.2V)</option>
+          </select>
         </span>
+        <span id="bb-diode-vz-wrap" style="display:none;">
+          <label>Vz</label>
+          <select id="bb-diode-vz">
+            <option value="3.3">3.3 V</option>
+            <option value="4.7">4.7 V</option>
+            <option value="5.1" selected>5.1 V</option>
+            <option value="6.2">6.2 V</option>
+            <option value="9.1">9.1 V</option>
+            <option value="12">12 V</option>
+          </select>
+        </span>
+        <span id="bb-diode-hint" style="color:var(--text-light);font-weight:400;"></span>
       </div>
       <div class="bb-valrow" id="bb-val-wire">
         <span style="color:var(--text-light);font-weight:400;">
@@ -319,8 +342,21 @@
             <input type="range" id="bb-temp" min="-10" max="120" step="1" value="25">
             <label>☀️ <span class="th-only">ความสว่าง</span><span class="en-only">Light level</span> <span class="ev" id="bb-light-out">50 %</span></label>
             <input type="range" id="bb-light" min="0" max="100" step="1" value="50">
-            <label>🎚 <span class="th-only">ตำแหน่ง VR</span><span class="en-only">VR position</span> <span class="ev" id="bb-vrpos-out">50 %</span></label>
-            <input type="range" id="bb-vrpos" min="0" max="100" step="1" value="50">
+            <label>🎛 <span class="th-only">ตำแหน่ง VR</span><span class="en-only">VR position</span> <span class="ev" id="bb-vrpos-out">50 %</span></label>
+            <div class="bb-knob-wrap">
+              <div class="bb-knob" id="bb-vrknob" tabindex="0" role="slider"
+                   aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-label="VR position">
+                <svg viewBox="0 0 100 100" aria-hidden="true">
+                  <path class="bb-knob-track" id="bb-knob-track" fill="none" stroke-width="8" stroke-linecap="round"/>
+                  <path class="bb-knob-fill"  id="bb-knob-fill"  fill="none" stroke-width="8" stroke-linecap="round"/>
+                  <circle class="bb-knob-disc" cx="50" cy="50" r="29"/>
+                  <line class="bb-knob-notch" id="bb-knob-notch" x1="50" y1="50" x2="50" y2="26"/>
+                </svg>
+                <span class="bb-knob-hint">
+                  <span class="th-only">หมุน</span><span class="en-only">turn</span>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
         <div class="card" style="padding:1rem;background:var(--bg);">
