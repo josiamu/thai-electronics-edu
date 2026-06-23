@@ -9,6 +9,23 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+.dtype-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1rem; margin-top:1rem; }
+.dtype { border:1px solid var(--border); border-left:4px solid var(--primary); border-radius:var(--radius); background:var(--card); padding:.9rem 1rem; }
+.dtype h4 { margin:0 0 .15rem; font-size:1.02rem; display:flex; align-items:center; gap:.4rem; }
+.dtype .dt-sub { font-size:.78rem; color:var(--text-light); margin-bottom:.55rem; }
+.dtype .dt-tags { display:flex; flex-wrap:wrap; gap:.35rem; margin-bottom:.55rem; }
+.dtype .dt-tag { font-size:.72rem; font-weight:600; padding:.12rem .5rem; border-radius:99px; background:var(--bg); border:1px solid var(--border); color:var(--text); }
+.dtype p { margin:.35rem 0; font-size:.86rem; line-height:1.55; }
+.dtype .dt-use { font-size:.82rem; color:var(--text-light); border-top:1px dashed var(--border); padding-top:.45rem; margin-top:.55rem; }
+/* image slot — placeholder until a real photo is dropped in */
+.dtype .dt-img { display:flex; align-items:center; justify-content:center; width:100%; height:120px; margin-bottom:.7rem; border-radius:10px; background:#fff; border:1px solid var(--border); overflow:hidden; }
+.dtype .dt-img img { display:block; width:100%; height:100%; object-fit:contain; padding:6px; }
+.dtype .dt-img.empty { border-style:dashed; border-color:var(--border); background:var(--bg); color:var(--text-light); text-align:center; font-size:.8rem; line-height:1.4; }
+.dtype-c1 { border-left-color:#2563eb; } .dtype-c2 { border-left-color:#ef4444; }
+.dtype-c3 { border-left-color:#f59e0b; } .dtype-c4 { border-left-color:#10b981; }
+.dtype-c5 { border-left-color:#8b5cf6; } .dtype-c6 { border-left-color:#06b6d4; }
+</style>
 </head>
 <body>
 <div id="nav-placeholder"></div>
@@ -202,37 +219,118 @@
   </div>
 
   <div class="section">
-    <div class="section-title"><span class="th-only">ประเภทของไดโอด</span><span class="en-only">Types of Diodes</span></div>
-    <div class="grid-3">
-      <div class="card">
-        <h3>Rectifier Diode</h3>
-        <p class="th-only">ไดโอดเรียงกระแส ใช้แปลงไฟ AC เป็น DC เช่น 1N4001–1N4007</p>
-        <p class="en-only">Used to convert AC to DC. Common types: 1N4001–1N4007.</p>
+    <div class="section-title"><span class="th-only">คุณสมบัติและชนิด</span><span class="en-only">Properties &amp; Types</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li>ยอมให้กระแสไหล<strong>ทางเดียว</strong> (Forward) และกั้นทางกลับ (Reverse)</li>
+            <li>มีแรงดันตกคร่อมขณะนำกระแส (V<sub>f</sub>) — ซิลิคอน ~0.7 V, ชอตต์กี ~0.3 V</li>
+            <li>มีขั้ว: <strong>Anode (+)</strong> และ <strong>Cathode (−)</strong> — ต่อกลับขั้วจะไม่ทำงาน</li>
+            <li>ใช้แปลงไฟ (Rectify), ป้องกันกลับขั้ว, ควบคุมแรงดัน, แสดงผล</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li>Allows current in <strong>one direction</strong> (forward), blocks the reverse</li>
+            <li>Has a forward voltage drop (V<sub>f</sub>) — silicon ~0.7 V, Schottky ~0.3 V</li>
+            <li>Polarized: <strong>Anode (+)</strong> and <strong>Cathode (−)</strong> — reversed = no conduction</li>
+            <li>Used for rectifying, reverse-polarity protection, voltage regulation, indication</li>
+          </ul>
+        </div>
+        <div class="info-box">
+          <span class="th-only"><strong>💡 จุดสังเกตสำคัญ</strong><br>
+          เลือกไดโอดให้ดู 3 อย่าง:<br>
+          ① <strong>กระแสสูงสุด</strong> (I<sub>F</sub>) ต้องมากกว่ากระแสในวงจร<br>
+          ② <strong>แรงดันทนกลับ</strong> (V<sub>R</sub> / PIV) ต้องสูงกว่าแรงดันที่กั้น<br>
+          ③ <strong>แรงดันตก V<sub>f</sub></strong> — ยิ่งต่ำยิ่งสูญเสียน้อย</span>
+          <span class="en-only"><strong>💡 Key things to check</strong><br>
+          Pick a diode by 3 ratings:<br>
+          ① <strong>Max current</strong> (I<sub>F</sub>) must exceed the circuit current<br>
+          ② <strong>Reverse voltage</strong> (V<sub>R</sub> / PIV) must exceed the blocked voltage<br>
+          ③ <strong>Forward drop V<sub>f</sub></strong> — lower means less loss</span>
+        </div>
       </div>
-      <div class="card">
-        <h3>LED</h3>
-        <p class="th-only">Light Emitting Diode — เปล่งแสงเมื่อมีกระแสไหล ใช้เป็นไฟแสดงสถานะ แรงดันตก 1.8–3.3 V</p>
-        <p class="en-only">Light Emitting Diode — emits light when current flows. Used as indicators. V<sub>f</sub> ≈ 1.8–3.3 V.</p>
-      </div>
-      <div class="card">
-        <h3>Zener Diode</h3>
-        <p class="th-only">ไดโอดซีเนอร์ — ทำงานใน Reverse Bias ได้ ใช้ควบคุมแรงดัน (Voltage Regulator)</p>
-        <p class="en-only">Works in reverse bias — used as a voltage regulator to maintain a stable output voltage.</p>
-      </div>
-      <div class="card">
-        <h3>Schottky Diode</h3>
-        <p class="th-only">แรงดันตกต่ำ (~0.2–0.3 V) ความเร็วสูง ใช้ในวงจรความถี่สูง</p>
-        <p class="en-only">Low forward voltage (~0.2–0.3 V), high speed — used in high-frequency circuits.</p>
-      </div>
-      <div class="card">
-        <h3>Photodiode</h3>
-        <p class="th-only">แปลงแสงเป็นกระแสไฟฟ้า ทำงานใน Reverse Bias ใช้ในเซ็นเซอร์แสง</p>
-        <p class="en-only">Converts light into electric current. Operates in reverse bias — used in light sensors.</p>
-      </div>
-      <div class="card">
-        <h3>Bridge Rectifier</h3>
-        <p class="th-only">ไดโอด 4 ตัวต่อเป็นบริดจ์ เรียงกระแสแบบเต็มคลื่น (Full-Wave)</p>
-        <p class="en-only">4 diodes in bridge configuration for full-wave rectification.</p>
+
+      <!-- per-type cards (img/dio-*.jpg) -->
+      <div class="dtype-grid">
+
+        <div class="dtype dtype-c1">
+          <div class="dt-img"><img src="img/dio-rectifier.jpg" alt="Rectifier diode 1N400x" loading="lazy"></div>
+          <h4>⚡ <span class="th-only">ไดโอดเรียงกระแส</span><span class="en-only">Rectifier</span></h4>
+          <div class="dt-sub">1N4001 – 1N4007</div>
+          <div class="dt-tags">
+            <span class="dt-tag">V<sub>f</sub> ~0.7 V</span>
+            <span class="dt-tag">Si</span>
+          </div>
+          <p class="th-only">ไดโอดซิลิคอนสำหรับ <strong>แปลงไฟ AC → DC</strong> ทนกระแส/แรงดันสูง แต่ตอบสนองช้า เหมาะกับความถี่ต่ำ (50–60 Hz) — เบอร์ยอดนิยมคือซีรีส์ 1N400x</p>
+          <p class="en-only">Silicon diode for <strong>AC → DC rectification</strong>, with high current/voltage ratings but slow switching — best at low frequency (50–60 Hz). The 1N400x series is the classic choice.</p>
+          <div class="dt-use"><span class="th-only">🔧 ใช้: แหล่งจ่ายไฟ, ป้องกันต่อกลับขั้ว</span><span class="en-only">🔧 Use: power supplies, reverse-polarity protection</span></div>
+        </div>
+
+        <div class="dtype dtype-c2">
+          <div class="dt-img"><img src="img/dio-led.jpg" alt="Red LED 5mm" loading="lazy"></div>
+          <h4>💡 <span class="th-only">แอลอีดี</span><span class="en-only">LED</span></h4>
+          <div class="dt-sub">Light Emitting Diode</div>
+          <div class="dt-tags">
+            <span class="dt-tag">V<sub>f</sub> 1.8–3.3 V</span>
+            <span class="dt-tag">I<sub>f</sub> ~10–20 mA</span>
+          </div>
+          <p class="th-only"><strong>เปล่งแสง</strong>เมื่อมีกระแสไหลทางforward — แรงดันตกขึ้นกับสี (แดงต่ำ, น้ำเงิน/ขาวสูง) <strong>ต้องต่อตัวต้านทานอนุกรมเสมอ</strong> เพื่อจำกัดกระแส</p>
+          <p class="en-only"><strong>Emits light</strong> when forward current flows — V<sub>f</sub> depends on color (red low, blue/white high). <strong>Always needs a series resistor</strong> to limit current.</p>
+          <div class="dt-use"><span class="th-only">🔧 ใช้: ไฟแสดงสถานะ, จอแสดงผล, ไฟส่องสว่าง</span><span class="en-only">🔧 Use: indicators, displays, lighting</span></div>
+        </div>
+
+        <div class="dtype dtype-c3">
+          <div class="dt-img"><img src="img/dio-zener.jpg" alt="Zener diode (glass body)" loading="lazy"></div>
+          <h4>🛡️ <span class="th-only">ซีเนอร์</span><span class="en-only">Zener</span></h4>
+          <div class="dt-sub">Zener Diode</div>
+          <div class="dt-tags">
+            <span class="dt-tag"><span class="th-only">ทำงาน reverse</span><span class="en-only">Reverse bias</span></span>
+            <span class="dt-tag">V<sub>z</sub> คงที่</span>
+          </div>
+          <p class="th-only">ออกแบบให้ทำงานใน <strong>reverse bias</strong> ที่แรงดันพังทลายคงที่ (V<sub>z</sub>) จึงใช้ <strong>อ้างอิง/ควบคุมแรงดัน</strong> ให้คงที่ได้ (เช่น 5.1 V, 12 V)</p>
+          <p class="en-only">Designed to operate in <strong>reverse bias</strong> at a fixed breakdown voltage (V<sub>z</sub>), so it provides a <strong>stable voltage reference/regulation</strong> (e.g. 5.1 V, 12 V).</p>
+          <div class="dt-use"><span class="th-only">🔧 ใช้: เรกูเลตแรงดัน, อ้างอิงแรงดัน, ป้องกันแรงดันเกิน</span><span class="en-only">🔧 Use: voltage regulation/reference, over-voltage clamp</span></div>
+        </div>
+
+        <div class="dtype dtype-c4">
+          <div class="dt-img"><img src="img/dio-schottky.jpg" alt="Schottky diode 1N5819" loading="lazy"></div>
+          <h4>⚡ <span class="th-only">ชอตต์กี</span><span class="en-only">Schottky</span></h4>
+          <div class="dt-sub">1N5817 – 1N5819</div>
+          <div class="dt-tags">
+            <span class="dt-tag">V<sub>f</sub> ~0.2–0.3 V</span>
+            <span class="dt-tag"><span class="th-only">เร็วมาก</span><span class="en-only">Very fast</span></span>
+          </div>
+          <p class="th-only"><strong>แรงดันตกต่ำ</strong>และ <strong>สวิตช์เร็วมาก</strong> สูญเสียพลังงานน้อย เหมาะกับความถี่สูง — ข้อด้อยคือกระแสรั่วกลับ (leakage) สูงกว่าไดโอดทั่วไป</p>
+          <p class="en-only"><strong>Low forward drop</strong> and <strong>very fast switching</strong> with low losses, ideal for high frequency — downside is higher reverse leakage than a normal diode.</p>
+          <div class="dt-use"><span class="th-only">🔧 ใช้: สวิตชิ่งเพาเวอร์, วงจรความถี่สูง, โซลาร์</span><span class="en-only">🔧 Use: switching supplies, high-frequency, solar</span></div>
+        </div>
+
+        <div class="dtype dtype-c5">
+          <div class="dt-img"><img src="img/dio-photodiode.jpg" alt="Photodiode" loading="lazy"></div>
+          <h4>📷 <span class="th-only">โฟโตไดโอด</span><span class="en-only">Photodiode</span></h4>
+          <div class="dt-sub">Photodiode</div>
+          <div class="dt-tags">
+            <span class="dt-tag"><span class="th-only">ไวต่อแสง</span><span class="en-only">Light sensitive</span></span>
+            <span class="dt-tag"><span class="th-only">ทำงาน reverse</span><span class="en-only">Reverse bias</span></span>
+          </div>
+          <p class="th-only"><strong>แปลงแสงเป็นกระแส</strong> — เมื่อมีแสงตกกระทบจะมีกระแสรั่วกลับเพิ่มตามความเข้มแสง ทำงานใน reverse bias ใช้เป็นเซ็นเซอร์</p>
+          <p class="en-only"><strong>Converts light into current</strong> — incident light increases the reverse current in proportion to intensity. Operates in reverse bias as a sensor.</p>
+          <div class="dt-use"><span class="th-only">🔧 ใช้: เซ็นเซอร์แสง, รีโมต IR, วัดแสง</span><span class="en-only">🔧 Use: light sensors, IR remotes, light metering</span></div>
+        </div>
+
+        <div class="dtype dtype-c6">
+          <div class="dt-img"><img src="img/dio-bridge.jpg" alt="Bridge rectifier (KBP)" loading="lazy"></div>
+          <h4>🔲 <span class="th-only">บริดจ์เรกติไฟเออร์</span><span class="en-only">Bridge Rectifier</span></h4>
+          <div class="dt-sub">Bridge Rectifier (KBP, KBU…)</div>
+          <div class="dt-tags">
+            <span class="dt-tag"><span class="th-only">ไดโอด 4 ตัว</span><span class="en-only">4 diodes</span></span>
+            <span class="dt-tag">Full-Wave</span>
+          </div>
+          <p class="th-only">รวมไดโอด <strong>4 ตัวต่อเป็นบริดจ์</strong> ในตัวถังเดียว (ขา ~/~ และ +/−) ทำ <strong>เรียงกระแสเต็มคลื่น</strong> ได้ทันที สะดวกกว่าต่อไดโอดเอง</p>
+          <p class="en-only"><strong>Four diodes in a bridge</strong> inside one package (~/~ and +/− pins) for <strong>full-wave rectification</strong> in a single part — handier than wiring diodes yourself.</p>
+          <div class="dt-use"><span class="th-only">🔧 ใช้: ภาคเรียงกระแสในแหล่งจ่ายไฟ AC→DC</span><span class="en-only">🔧 Use: AC→DC rectifier stage in power supplies</span></div>
+        </div>
+
       </div>
     </div>
   </div>
