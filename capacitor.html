@@ -26,6 +26,25 @@
 .rc-rb { background:var(--bg); border:1px solid var(--border); border-radius:9px; padding:.45rem .6rem; text-align:center; }
 .rc-rl { font-size:.72rem; color:var(--text-light); margin-bottom:.12rem; }
 .rc-rv { font-size:1.02rem; font-weight:700; color:var(--text); }
+/* capacitor type cards */
+.captype-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1rem; margin-top:1rem; }
+.captype { border:1px solid var(--border); border-left:4px solid var(--primary); border-radius:var(--radius); background:var(--card); padding:.9rem 1rem; }
+.captype .cap-img { display:block; width:100%; height:104px; margin-bottom:.7rem; border-radius:10px; background:#fff; border:1px solid var(--border); overflow:hidden; }
+.captype .cap-img img { display:block; width:100%; height:100%; object-fit:contain; padding:6px; }
+.captype h4 { margin:0 0 .15rem; font-size:1.02rem; display:flex; align-items:center; gap:.4rem; }
+.captype .cap-sub { font-size:.78rem; color:var(--text-light); margin-bottom:.55rem; }
+.captype .cap-tags { display:flex; flex-wrap:wrap; gap:.35rem; margin-bottom:.55rem; }
+.captype .cap-tag { font-size:.72rem; font-weight:600; padding:.12rem .5rem; border-radius:99px; background:var(--bg); border:1px solid var(--border); color:var(--text); }
+.captype .cap-tag.pol { background:#fee2e2; border-color:#fca5a5; color:#b91c1c; }
+.captype .cap-tag.nonpol { background:#dcfce7; border-color:#86efac; color:#15803d; }
+[data-theme="dark"] .captype .cap-tag.pol { background:#7f1d1d; border-color:#b91c1c; color:#fecaca; }
+[data-theme="dark"] .captype .cap-tag.nonpol { background:#14532d; border-color:#15803d; color:#bbf7d0; }
+.captype p { margin:.35rem 0; font-size:.86rem; line-height:1.55; }
+.captype .cap-use { font-size:.82rem; color:var(--text-light); border-top:1px dashed var(--border); padding-top:.45rem; margin-top:.55rem; }
+.captype-c1 { border-left-color:#2563eb; } .captype-c2 { border-left-color:#06b6d4; }
+.captype-c3 { border-left-color:#10b981; } .captype-c4 { border-left-color:#f59e0b; }
+.captype-c5 { border-left-color:#8b5cf6; } .captype-c6 { border-left-color:#ec4899; }
+.captype-c7 { border-left-color:#0ea5e9; } .captype-c8 { border-left-color:#64748b; }
 </style>
 </head>
 <body>
@@ -86,19 +105,213 @@
           </ul>
         </div>
         <div class="info-box">
-          <span class="th-only"><strong>ชนิดของตัวเก็บประจุ</strong><br>
-          • <strong>Electrolytic</strong> — มีขั้ว (+/−), ค่า μF, ทนแรงดันสูง<br>
-          • <strong>Ceramic (Disc)</strong> — ไม่มีขั้ว, ค่า pF–nF, ราคาถูก<br>
-          • <strong>Polyester (MKT)</strong> — ไม่มีขั้ว, ค่า nF–μF, เสถียร<br>
-          • <strong>Tantalum</strong> — มีขั้ว, ขนาดเล็ก, ค่าเสถียรกว่า Electrolytic<br>
-          • <strong>Variable</strong> — ปรับค่าได้ (ใช้ใน Radio tuner)</span>
-          <span class="en-only"><strong>Types of Capacitors</strong><br>
-          • <strong>Electrolytic</strong> — polarized (+/−), value in μF, high voltage<br>
-          • <strong>Ceramic (Disc)</strong> — non-polarized, value in pF–nF, low cost<br>
-          • <strong>Polyester (MKT)</strong> — non-polarized, value in nF–μF, stable<br>
-          • <strong>Tantalum</strong> — polarized, compact, more stable than Electrolytic<br>
-          • <strong>Variable</strong> — adjustable value (used in radio tuners)</span>
+          <span class="th-only"><strong>💡 จุดสังเกตสำคัญ</strong><br>
+          ก่อนเลือกใช้งานให้ดู 3 อย่างเสมอ:<br>
+          ① <strong>มีขั้วหรือไม่</strong> (มีขั้ว = ห้ามต่อกลับขั้ว ระเบิดได้)<br>
+          ② <strong>ช่วงค่าความจุ</strong> (pF / nF / μF)<br>
+          ③ <strong>แรงดันทนได้</strong> (ต้องสูงกว่าแรงดันใช้งานจริง)</span>
+          <span class="en-only"><strong>💡 Key things to check</strong><br>
+          Always look at 3 things before choosing one:<br>
+          ① <strong>Polarized?</strong> (polarized = never reverse it — it can explode)<br>
+          ② <strong>Capacitance range</strong> (pF / nF / μF)<br>
+          ③ <strong>Voltage rating</strong> (must exceed your working voltage)</span>
         </div>
+      </div>
+
+      <!-- detailed per-type cards -->
+      <div class="captype-grid">
+
+        <div class="captype captype-c1">
+          <div class="cap-img">
+            <img src="img/cap-electrolytic.jpg" alt="Aluminium electrolytic capacitor 100µF 35V" loading="lazy">
+          </div>
+          <h4>🛢️ <span class="th-only">อิเล็กโทรไลติก</span><span class="en-only">Electrolytic</span></h4>
+          <div class="cap-sub">Aluminium Electrolytic</div>
+          <div class="cap-tags">
+            <span class="cap-tag pol"><span class="th-only">มีขั้ว +/−</span><span class="en-only">Polarized +/−</span></span>
+            <span class="cap-tag">1 μF – 10,000 μF</span>
+          </div>
+          <p class="th-only">ทรงกระบอกโลหะ ใช้ฟอยล์อะลูมิเนียมม้วนกับสารอิเล็กโทรไลต์ ทำให้ได้ <strong>ค่าความจุสูงมาก</strong>ในขนาดเล็ก แต่ <strong>ต้องต่อให้ถูกขั้ว</strong> (ขาสั้น/แถบขาว = ลบ) ค่าคลาดเคลื่อนสูง (±20%) และเสื่อมตามอายุ/ความร้อน</p>
+          <p class="en-only">Metal can using rolled aluminium foil with an electrolyte, giving a <strong>very high capacitance</strong> in a small size, but it <strong>must be wired the right way round</strong> (short leg / white stripe = negative). Loose tolerance (±20%) and ages with heat/time.</p>
+          <div class="cap-use"><span class="th-only">🔧 ใช้: กรองไฟในแหล่งจ่ายไฟ, คัปปลิ้งความถี่ต่ำ</span><span class="en-only">🔧 Use: power-supply smoothing, low-frequency coupling</span></div>
+        </div>
+
+        <div class="captype captype-c2">
+          <div class="cap-img">
+            <img src="img/cap-ceramic.jpg" alt="Ceramic disc capacitor 103 (10nF)" loading="lazy">
+          </div>
+          <h4>⚪ <span class="th-only">เซรามิก</span><span class="en-only">Ceramic</span></h4>
+          <div class="cap-sub">Ceramic Disc / MLCC</div>
+          <div class="cap-tags">
+            <span class="cap-tag nonpol"><span class="th-only">ไม่มีขั้ว</span><span class="en-only">Non-polarized</span></span>
+            <span class="cap-tag">1 pF – 1 μF</span>
+          </div>
+          <p class="th-only">เม็ดกลมสีน้ำตาล/ฟ้า หรือแบบ SMD เป็นชนิดที่พบบ่อยที่สุด <strong>ราคาถูก เล็ก ตอบสนองความถี่สูงดี</strong> ต่อทางไหนก็ได้ แต่ค่าความจุไม่สูงและอาจเปลี่ยนตามอุณหภูมิ/แรงดัน (เกรด X7R, Y5V)</p>
+          <p class="en-only">Small brown/blue discs or SMD chips — the most common type. <strong>Cheap, tiny, great at high frequency</strong>, and not polarized. Capacitance is limited and can drift with temperature/voltage (grades X7R, Y5V).</p>
+          <div class="cap-use"><span class="th-only">🔧 ใช้: บายพาส/ดีคัปปลิ้งขา IC, กรองสัญญาณรบกวน</span><span class="en-only">🔧 Use: IC bypass/decoupling, noise filtering</span></div>
+        </div>
+
+        <div class="captype captype-c3">
+          <div class="cap-img">
+            <img src="img/cap-film.jpg" alt="Polyester/polypropylene film capacitor (yellow box)" loading="lazy">
+          </div>
+          <h4>🟨 <span class="th-only">ฟิล์ม (โพลีเอสเตอร์)</span><span class="en-only">Film (Polyester)</span></h4>
+          <div class="cap-sub">Polyester (MKT) / Polypropylene (MKP)</div>
+          <div class="cap-tags">
+            <span class="cap-tag nonpol"><span class="th-only">ไม่มีขั้ว</span><span class="en-only">Non-polarized</span></span>
+            <span class="cap-tag">1 nF – 10 μF</span>
+          </div>
+          <p class="th-only">ก้อนสี่เหลี่ยมสีเหลือง/แดง ใช้แผ่นฟิล์มพลาสติกเป็นไดอิเล็กตริก <strong>ค่าเสถียร แม่นยำ ทนแรงดันสูง</strong> เสียงรบกวนต่ำ จึงนิยมในวงจรเสียงและวงจรตั้งเวลา ขนาดใหญ่กว่าเซรามิกที่ค่าเท่ากัน</p>
+          <p class="en-only">Boxy yellow/red blocks using a plastic film dielectric. <strong>Stable, accurate, high-voltage</strong> and low-noise, so popular in audio and timing circuits. Bigger than a ceramic of the same value.</p>
+          <div class="cap-use"><span class="th-only">🔧 ใช้: วงจรเสียง, ตัวกรอง, วงจรตั้งเวลา/ออสซิลเลเตอร์</span><span class="en-only">🔧 Use: audio, filters, timing/oscillator circuits</span></div>
+        </div>
+
+        <div class="captype captype-c4">
+          <div class="cap-img">
+            <img src="img/cap-tantalum.jpg" alt="Tantalum bead capacitor (yellow drop)" loading="lazy">
+          </div>
+          <h4>🟠 <span class="th-only">แทนทาลัม</span><span class="en-only">Tantalum</span></h4>
+          <div class="cap-sub">Tantalum Electrolytic</div>
+          <div class="cap-tags">
+            <span class="cap-tag pol"><span class="th-only">มีขั้ว +/−</span><span class="en-only">Polarized +/−</span></span>
+            <span class="cap-tag">0.1 μF – 100 μF</span>
+          </div>
+          <p class="th-only">หยดสีส้ม/เหลือง (แถบ = ขั้วบวก) เป็นอิเล็กโทรไลต์ชนิดหนึ่งที่ <strong>เล็กกว่า เสถียรกว่า อายุยืนกว่า</strong> แบบอะลูมิเนียม แต่ <strong>ราคาแพง และไวต่อการต่อกลับขั้ว/แรงดันเกิน</strong> (อาจลัดวงจรแล้วลุกไหม้)</p>
+          <p class="en-only">Orange/yellow drops (stripe = positive). A type of electrolytic that is <strong>smaller, more stable and longer-lived</strong> than aluminium, but <strong>pricey and very sensitive to reverse polarity / over-voltage</strong> (can short and catch fire).</p>
+          <div class="cap-use"><span class="th-only">🔧 ใช้: กรองไฟในวงจรที่ต้องการขนาดเล็ก/ค่าเสถียร</span><span class="en-only">🔧 Use: filtering where small size / stable value matters</span></div>
+        </div>
+
+        <div class="captype captype-c5">
+          <div class="cap-img">
+            <img src="img/cap-supercap.jpg" alt="Supercapacitor 2.7V 3000F" loading="lazy">
+          </div>
+          <h4>🔵 <span class="th-only">ซูเปอร์คาปาซิเตอร์</span><span class="en-only">Supercapacitor</span></h4>
+          <div class="cap-sub">Super / Ultra Capacitor</div>
+          <div class="cap-tags">
+            <span class="cap-tag pol"><span class="th-only">มีขั้ว +/−</span><span class="en-only">Polarized +/−</span></span>
+            <span class="cap-tag">0.1 F – หลายพัน F</span>
+          </div>
+          <p class="th-only">ความจุ <strong>สูงมหาศาล (เป็นฟารัด)</strong> เก็บพลังงานได้เกือบเท่าแบตเตอรี่เล็กๆ แต่ <strong>แรงดันทนต่ำ (~2.5–5 V)</strong> ชาร์จ/คายเร็ว เหมาะกับการสำรองไฟชั่วคราว ไม่เหมาะกับงานความถี่สูง</p>
+          <p class="en-only">A <strong>huge capacitance (whole farads)</strong> — stores nearly as much as a small battery, but with a <strong>low voltage rating (~2.5–5 V)</strong>. Charges/discharges fast; good for short-term backup, not for high frequency.</p>
+          <div class="cap-use"><span class="th-only">🔧 ใช้: สำรองไฟหน่วยความจำ/RTC, เก็บพลังงานชั่วคราว</span><span class="en-only">🔧 Use: memory/RTC backup, short-term energy storage</span></div>
+        </div>
+
+        <div class="captype captype-c6">
+          <div class="cap-img">
+            <img src="img/cap-variable.jpg" alt="Variable / trimmer capacitor" loading="lazy">
+          </div>
+          <h4>🎛️ <span class="th-only">ปรับค่าได้</span><span class="en-only">Variable</span></h4>
+          <div class="cap-sub">Variable / Trimmer</div>
+          <div class="cap-tags">
+            <span class="cap-tag nonpol"><span class="th-only">ไม่มีขั้ว</span><span class="en-only">Non-polarized</span></span>
+            <span class="cap-tag">~5 pF – 500 pF</span>
+          </div>
+          <p class="th-only">หมุนหรือไขปรับเพื่อเปลี่ยน <strong>พื้นที่ซ้อนของแผ่นตัวนำ</strong> ทำให้ค่าความจุเปลี่ยนได้ ค่าน้อยมาก (pF) ใช้จูนความถี่ในวงจรวิทยุ — แบบเล็กไว้ปรับครั้งเดียวเรียกว่า <strong>ทริมเมอร์ (Trimmer)</strong></p>
+          <p class="en-only">Turned or screw-adjusted to change the <strong>overlapping area of the plates</strong>, varying the capacitance. Very small values (pF) used to tune radio frequencies — a tiny set-once version is called a <strong>trimmer</strong>.</p>
+          <div class="cap-use"><span class="th-only">🔧 ใช้: จูนความถี่วิทยุ, ปรับจูนวงจรละเอียด</span><span class="en-only">🔧 Use: radio tuning, fine circuit trimming</span></div>
+        </div>
+
+        <div class="captype captype-c7">
+          <div class="cap-img">
+            <img src="img/cap-mica.jpg" alt="Silver mica capacitor" loading="lazy">
+          </div>
+          <h4>🟤 <span class="th-only">ไมก้า</span><span class="en-only">Mica</span></h4>
+          <div class="cap-sub">Silver Mica</div>
+          <div class="cap-tags">
+            <span class="cap-tag nonpol"><span class="th-only">ไม่มีขั้ว</span><span class="en-only">Non-polarized</span></span>
+            <span class="cap-tag">1 pF – 10 nF</span>
+          </div>
+          <p class="th-only">ใช้แผ่นแร่ <strong>ไมก้า</strong> เคลือบเงินเป็นไดอิเล็กตริก ให้ค่าที่ <strong>เสถียรและแม่นยำสูงมาก (±1%)</strong> ทนแรงดันสูง สูญเสียต่ำที่ความถี่สูง จึงเหมาะกับวงจร RF/จูนความถี่ แต่ค่าน้อยและราคาแพง</p>
+          <p class="en-only">Uses a silver-coated <strong>mica</strong> mineral sheet as the dielectric, giving a <strong>very stable, accurate value (±1%)</strong>, high voltage rating and low loss at high frequency — ideal for RF/tuning circuits, but low value and pricey.</p>
+          <div class="cap-use"><span class="th-only">🔧 ใช้: วงจร RF, ออสซิลเลเตอร์, วงจรจูนความถี่แม่นยำ</span><span class="en-only">🔧 Use: RF, oscillators, precision tuning circuits</span></div>
+        </div>
+
+        <div class="captype captype-c8">
+          <div class="cap-img">
+            <img src="img/cap-ceramic-mlcc.jpg" alt="SMD multilayer ceramic chip capacitor (MLCC)" loading="lazy">
+          </div>
+          <h4>▪️ <span class="th-only">เซรามิกชิป (MLCC)</span><span class="en-only">Ceramic Chip (MLCC)</span></h4>
+          <div class="cap-sub">SMD Multilayer Ceramic</div>
+          <div class="cap-tags">
+            <span class="cap-tag nonpol"><span class="th-only">ไม่มีขั้ว</span><span class="en-only">Non-polarized</span></span>
+            <span class="cap-tag">1 pF – 100 µF</span>
+          </div>
+          <p class="th-only">เซรามิกหลายชั้นแบบ <strong>SMD (ติดผิวบอร์ด)</strong> ไม่มีขา — เป็นตัวเก็บประจุที่ <strong>พบมากที่สุดในอุปกรณ์ยุคใหม่</strong> (มือถือ/คอมพิวเตอร์) เล็กมาก ราคาถูก ความถี่สูงดีเยี่ยม แต่ค่าอาจดริฟต์ตามแรงดัน/อุณหภูมิ (เกรด X7R, X5R, C0G)</p>
+          <p class="en-only">Multilayer ceramic in an <strong>SMD (surface-mount)</strong> package with no leads — the <strong>most common capacitor in modern devices</strong> (phones/computers). Tiny, cheap, excellent at high frequency, but value can drift with voltage/temperature (grades X7R, X5R, C0G).</p>
+          <div class="cap-use"><span class="th-only">🔧 ใช้: ดีคัปปลิ้ง/บายพาสบนบอร์ด SMD ทุกชนิด</span><span class="en-only">🔧 Use: decoupling/bypass on all modern SMD boards</span></div>
+        </div>
+
+      </div>
+
+      <!-- quick comparison table -->
+      <h3 class="th-only" style="margin:1.5rem 0 .5rem">ตารางเปรียบเทียบอย่างย่อ</h3>
+      <h3 class="en-only" style="margin:1.5rem 0 .5rem">Quick comparison table</h3>
+      <div style="overflow-x:auto">
+      <table>
+        <tr>
+          <th><span class="th-only">ชนิด</span><span class="en-only">Type</span></th>
+          <th><span class="th-only">ขั้ว</span><span class="en-only">Polarity</span></th>
+          <th><span class="th-only">ช่วงค่า</span><span class="en-only">Range</span></th>
+          <th><span class="th-only">จุดเด่น</span><span class="en-only">Strength</span></th>
+          <th><span class="th-only">ข้อจำกัด</span><span class="en-only">Weakness</span></th>
+        </tr>
+        <tr>
+          <td><strong><span class="th-only">อิเล็กโทรไลติก</span><span class="en-only">Electrolytic</span></strong></td>
+          <td><span class="th-only">มีขั้ว</span><span class="en-only">Polarized</span></td>
+          <td>1 μF–10000 μF</td>
+          <td><span class="th-only">ค่าสูง ราคาถูก</span><span class="en-only">High value, cheap</span></td>
+          <td><span class="th-only">เสื่อม, คลาดเคลื่อนสูง</span><span class="en-only">Ages, loose tolerance</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="th-only">เซรามิก</span><span class="en-only">Ceramic</span></strong></td>
+          <td><span class="th-only">ไม่มีขั้ว</span><span class="en-only">Non-pol.</span></td>
+          <td>1 pF–1 μF</td>
+          <td><span class="th-only">เล็ก ถูก ความถี่สูงดี</span><span class="en-only">Tiny, cheap, HF</span></td>
+          <td><span class="th-only">ค่าไม่สูง, ดริฟต์ตามอุณหภูมิ</span><span class="en-only">Low value, drifts</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="th-only">ฟิล์ม</span><span class="en-only">Film</span></strong></td>
+          <td><span class="th-only">ไม่มีขั้ว</span><span class="en-only">Non-pol.</span></td>
+          <td>1 nF–10 μF</td>
+          <td><span class="th-only">เสถียร แม่นยำ ทนแรงดัน</span><span class="en-only">Stable, accurate</span></td>
+          <td><span class="th-only">ขนาดใหญ่กว่า</span><span class="en-only">Bulkier</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="th-only">แทนทาลัม</span><span class="en-only">Tantalum</span></strong></td>
+          <td><span class="th-only">มีขั้ว</span><span class="en-only">Polarized</span></td>
+          <td>0.1 μF–100 μF</td>
+          <td><span class="th-only">เล็ก เสถียร อายุยืน</span><span class="en-only">Small, stable</span></td>
+          <td><span class="th-only">แพง, กลับขั้วแล้วไหม้</span><span class="en-only">Pricey, fragile</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="th-only">ซูเปอร์คาป</span><span class="en-only">Supercap</span></strong></td>
+          <td><span class="th-only">มีขั้ว</span><span class="en-only">Polarized</span></td>
+          <td>0.1 F–1000s F</td>
+          <td><span class="th-only">ความจุมหาศาล</span><span class="en-only">Huge capacitance</span></td>
+          <td><span class="th-only">แรงดันต่ำ, ช้า</span><span class="en-only">Low voltage, slow</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="th-only">ปรับค่าได้</span><span class="en-only">Variable</span></strong></td>
+          <td><span class="th-only">ไม่มีขั้ว</span><span class="en-only">Non-pol.</span></td>
+          <td>5 pF–500 pF</td>
+          <td><span class="th-only">ปรับค่าได้</span><span class="en-only">Adjustable</span></td>
+          <td><span class="th-only">ค่าน้อยมาก</span><span class="en-only">Very small value</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="th-only">ไมก้า</span><span class="en-only">Mica</span></strong></td>
+          <td><span class="th-only">ไม่มีขั้ว</span><span class="en-only">Non-pol.</span></td>
+          <td>1 pF–10 nF</td>
+          <td><span class="th-only">แม่นยำสูง, RF ดี</span><span class="en-only">Very accurate, RF</span></td>
+          <td><span class="th-only">ค่าน้อย, แพง</span><span class="en-only">Low value, pricey</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="th-only">เซรามิกชิป (MLCC)</span><span class="en-only">Ceramic chip (MLCC)</span></strong></td>
+          <td><span class="th-only">ไม่มีขั้ว</span><span class="en-only">Non-pol.</span></td>
+          <td>1 pF–100 µF</td>
+          <td><span class="th-only">จิ๋ว, ถูก, พบบ่อยสุด</span><span class="en-only">Tiny, cheap, ubiquitous</span></td>
+          <td><span class="th-only">ดริฟต์ตามแรงดัน/อุณหภูมิ</span><span class="en-only">Drifts with V/temp</span></td>
+        </tr>
+      </table>
       </div>
     </div>
   </div>
