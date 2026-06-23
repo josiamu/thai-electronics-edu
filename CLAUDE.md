@@ -113,7 +113,7 @@ CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor
 | กลุ่ม | หน้า | สี card |
 |---|---|---|
 | 📚 พื้นฐานไฟฟ้า | electricity, ohm, ac-circuit | `topic-card-blue` |
-| 📚 อุปกรณ์อิเล็กทรอนิกส์ | resistor, diode, transistor, capacitor, inductor | `topic-card-blue` |
+| 📚 อุปกรณ์อิเล็กทรอนิกส์ | resistor, diode, capacitor, transistor, inductor | `topic-card-blue` |
 | 📚 เครื่องมือวัดและทดสอบ | multimeter, signal-generator, oscilloscope | `topic-card-blue` |
 | 🧰 งานปฏิบัติ | soldering, home-wiring | `topic-card-teal` |
 | 🛠 เครื่องมือ | simulation, breadboard, formulas, tools | `topic-card-teal` |

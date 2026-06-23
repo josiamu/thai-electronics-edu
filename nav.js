@@ -15,8 +15,8 @@ const NAV_LESSON_GROUPS = [
     items: [
       { id: 'resistor', href: 'resistor.html', label_th: '🎨 ตัวต้านทาน', label_en: '🎨 Resistor' },
       { id: 'diode', href: 'diode.html', label_th: '💡 ไดโอด', label_en: '💡 Diode' },
-      { id: 'transistor', href: 'transistor.html', label_th: '🎚️ ทรานซิสเตอร์', label_en: '🎚️ Transistor' },
       { id: 'capacitor', href: 'capacitor.html', label_th: '🔋 ตัวเก็บประจุ', label_en: '🔋 Capacitor' },
+      { id: 'transistor', href: 'transistor.html', label_th: '🎚️ ทรานซิสเตอร์', label_en: '🎚️ Transistor' },
       { id: 'inductor', href: 'inductor.html', label_th: '🌀 ตัวเหนี่ยวนำ', label_en: '🌀 Inductor' },
       { id: 'power-supply', href: 'power-supply.html', label_th: '🔌 แหล่งจ่ายไฟ', label_en: '🔌 Power Supply' },
     ],
