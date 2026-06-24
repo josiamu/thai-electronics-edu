@@ -39,6 +39,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | ตัวต้านทาน | Resistor | `resistor.html` |
 | ไดโอด | Diode | `diode.html` |
 | ทรานซิสเตอร์ | Transistor (BJT/MOSFET) | `transistor.html` |
+| รีเลย์ | Relay | `relay.html` |
 | ตัวเก็บประจุ | Capacitor | `capacitor.html` |
 | ตัวเหนี่ยวนำและหม้อแปลง | Inductor & Transformer | `inductor.html` |
 | แหล่งจ่ายไฟ | Power Supply | `power-supply.html` |
@@ -157,7 +158,7 @@ git push
 ├── breadboard.js        — Virtual breadboard lab (MNA solver + multimeter)
 ├── index.html           — Home page
 │   ├── electricity.html / ohm.html                 — Fundamentals
-│   ├── resistor.html / diode.html / transistor.html
+│   ├── resistor.html / diode.html / transistor.html / relay.html
 │   │   capacitor.html / inductor.html / power-supply.html   — Components
 │   ├── multimeter.html / signal-generator.html / oscilloscope.html  — Measurement
 │   ├── soldering.html / home-wiring.html           — Practical

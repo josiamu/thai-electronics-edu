@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="รีเลย์ (Relay) | สื่อการเรียนการสอน" data-title-en="Relay | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>รีเลย์ (Relay) | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🧲</div>
+    <div>
+      <h1 class="th-only">รีเลย์ (Relay)</h1>
+      <h1 class="en-only">Relay</h1>
+      <p class="th-only">สวิตช์แม่เหล็กไฟฟ้า • COM/NO/NC • SPDT/DPDT • ขับด้วยทรานซิสเตอร์ + ไดโอดกันย้อน</p>
+      <p class="en-only">Electromagnetic switch • COM/NO/NC • SPDT/DPDT • Transistor driver + flyback diode</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">วัตถุประสงค์การเรียนรู้</span><span class="en-only">Learning Objectives</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li>อธิบายหลักการทำงานของรีเลย์ในฐานะสวิตช์แม่เหล็กไฟฟ้าได้</li>
+        <li>บอกความหมายของขา COM / NO / NC และรูปแบบหน้าสัมผัส (SPST/SPDT/DPDT) ได้</li>
+        <li>อ่านสเปคแรงดันคอยล์และพิกัดหน้าสัมผัสจาก datasheet ได้</li>
+        <li>ออกแบบวงจรขับรีเลย์ด้วยทรานซิสเตอร์ พร้อมไดโอดกันแรงดันย้อน (flyback) ได้</li>
+        <li>ตรวจสอบรีเลย์และหาขาด้วยมัลติมิเตอร์ได้</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>Explain how a relay works as an electromagnetic switch</li>
+        <li>Identify the COM / NO / NC pins and contact forms (SPST/SPDT/DPDT)</li>
+        <li>Read coil voltage and contact ratings from a datasheet</li>
+        <li>Design a transistor relay-driver circuit with a flyback diode</li>
+        <li>Test a relay and identify its pins with a multimeter</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 1. รีเลย์คืออะไร -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">รีเลย์คืออะไร?</span><span class="en-only">What is a Relay?</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>สวิตช์ที่ทำงานด้วยแม่เหล็กไฟฟ้า</strong> ไม่ใช้มือกด</li>
+            <li>ป้อนไฟเข้า <strong>คอยล์</strong> เล็กน้อย → ดูดหน้าสัมผัสให้เปิด/ปิดวงจรโหลด</li>
+            <li><strong>แยกวงจรควบคุม (ไฟต่ำ) ออกจากวงจรโหลด (ไฟสูง) ทางไฟฟ้า</strong></li>
+            <li>ให้สัญญาณ 5 V จากไมโครคอนโทรลเลอร์ควบคุมไฟ AC 220 V ได้อย่างปลอดภัย</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li>A <strong>switch operated by an electromagnet</strong>, not by hand</li>
+            <li>A small current into the <strong>coil</strong> pulls contacts to open/close the load circuit</li>
+            <li><strong>Electrically isolates the control side (low power) from the load side (high power)</strong></li>
+            <li>Lets a 5 V microcontroller signal safely switch 220 V AC mains</li>
+          </ul>
+        </div>
+        <div class="info-box">
+          <strong class="th-only">💡 เปรียบเทียบง่ายๆ</strong>
+          <strong class="en-only">💡 Simple analogy</strong>
+          <p class="th-only" style="margin:0.4rem 0 0;">รีเลย์เหมือน <strong>"มือกล"</strong> ที่ใช้แม่เหล็กไฟฟ้าตัวเล็กไปกดสวิตช์ตัวใหญ่แทนเรา — เราใช้แรงน้อยๆ (ไฟคอยล์) ไปสั่งงานที่ใช้แรงมาก (ไฟโหลด) โดยมือเราไม่ต้องไปแตะไฟแรงสูงเลย</p>
+          <p class="en-only" style="margin:0.4rem 0 0;">A relay is like a <strong>"robotic finger"</strong>: a tiny electromagnet presses a big switch for you. A small effort (coil current) commands a large one (load current) — without your hand ever touching the high-power side.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. โครงสร้าง & หลักการทำงาน -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">โครงสร้างและหลักการทำงาน</span><span class="en-only">Structure &amp; How It Works</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div style="text-align:center;">
+          <svg viewBox="0 0 320 220" style="max-width:100%;height:auto;font-family:inherit;font-size:11px;" role="img" aria-label="Relay internal structure">
+            <!-- coil -->
+            <rect x="20" y="120" width="60" height="70" rx="4" fill="none" stroke="var(--primary)" stroke-width="2"/>
+            <line x1="30" y1="120" x2="70" y2="120" stroke="var(--primary)" stroke-width="2"/>
+            <line x1="30" y1="135" x2="70" y2="135" stroke="var(--primary)" stroke-width="2"/>
+            <line x1="30" y1="150" x2="70" y2="150" stroke="var(--primary)" stroke-width="2"/>
+            <line x1="30" y1="165" x2="70" y2="165" stroke="var(--primary)" stroke-width="2"/>
+            <text x="50" y="208" text-anchor="middle" fill="var(--text)">Coil (คอยล์)</text>
+            <line x1="20" y1="155" x2="5" y2="155" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="80" y1="155" x2="95" y2="155" stroke="var(--text)" stroke-width="1.5"/>
+            <!-- armature -->
+            <line x1="50" y1="120" x2="50" y2="95" stroke="var(--text-light)" stroke-width="2"/>
+            <line x1="50" y1="95" x2="180" y2="70" stroke="var(--accent)" stroke-width="4"/>
+            <circle cx="50" cy="95" r="3" fill="var(--accent)"/>
+            <text x="120" y="55" text-anchor="middle" fill="var(--accent)">Armature (คานเหล็ก)</text>
+            <!-- spring -->
+            <path d="M50 95 q-12 6 0 12 q-12 6 0 12" fill="none" stroke="var(--secondary)" stroke-width="1.5"/>
+            <!-- contacts -->
+            <circle cx="180" cy="70" r="4" fill="var(--text)"/>
+            <text x="200" y="73" fill="var(--text)">COM</text>
+            <circle cx="245" cy="45" r="4" fill="none" stroke="var(--text)" stroke-width="2"/>
+            <text x="255" y="48" fill="var(--text)">NO</text>
+            <circle cx="245" cy="95" r="4" fill="var(--text)"/>
+            <text x="255" y="98" fill="var(--text)">NC</text>
+            <line x1="180" y1="70" x2="245" y2="95" stroke="var(--text)" stroke-width="1.5" stroke-dasharray="3 3"/>
+          </svg>
+        </div>
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>คอยล์ (Coil):</strong> ขดลวดพันรอบแกนเหล็ก — ป้อนไฟแล้วกลายเป็นแม่เหล็กไฟฟ้า</li>
+            <li><strong>คาน/อาร์เมเจอร์ (Armature):</strong> เหล็กที่ถูกแม่เหล็กดูด ทำให้หน้าสัมผัสขยับ</li>
+            <li><strong>สปริง:</strong> ดึงคานกลับเมื่อไม่มีไฟคอยล์</li>
+            <li><strong>หน้าสัมผัส:</strong> COM (ขั้วร่วม), NO, NC</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li><strong>Coil:</strong> wire wound on an iron core — becomes an electromagnet when powered</li>
+            <li><strong>Armature:</strong> iron lever pulled by the magnet, moving the contacts</li>
+            <li><strong>Spring:</strong> returns the lever when the coil is off</li>
+            <li><strong>Contacts:</strong> COM (common), NO, NC</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top:1rem;">
+        <div class="info-box">
+          <strong class="th-only">⚪ ยังไม่ป้อนไฟคอยล์ (De-energized)</strong>
+          <strong class="en-only">⚪ Coil OFF (De-energized)</strong>
+          <p class="th-only" style="margin:0.4rem 0 0;">สปริงดึงคานไว้ → <strong>COM ต่อกับ NC</strong> (Normally Closed = ปกติปิด)<br>วงจรฝั่ง NO เปิดอยู่</p>
+          <p class="en-only" style="margin:0.4rem 0 0;">The spring holds the lever → <strong>COM connects to NC</strong> (Normally Closed).<br>The NO side is open.</p>
+        </div>
+        <div class="info-box">
+          <strong class="th-only">🔵 ป้อนไฟคอยล์แล้ว (Energized)</strong>
+          <strong class="en-only">🔵 Coil ON (Energized)</strong>
+          <p class="th-only" style="margin:0.4rem 0 0;">แม่เหล็กดูดคาน → <strong>COM ย้ายมาต่อกับ NO</strong> (Normally Open = ปกติเปิด)<br>วงจรฝั่ง NC เปิดออก</p>
+          <p class="en-only" style="margin:0.4rem 0 0;">The magnet pulls the lever → <strong>COM switches to NO</strong> (Normally Open).<br>The NC side opens.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. รูปแบบหน้าสัมผัส -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">รูปแบบหน้าสัมผัส (Pole &amp; Throw)</span><span class="en-only">Contact Forms (Pole &amp; Throw)</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>Pole (ขั้ว):</strong> จำนวนวงจรที่สลับได้พร้อมกัน (กี่ COM)</li>
+            <li><strong>Throw (ทาง):</strong> จำนวนตำแหน่งที่ COM ต่อไปได้ (1 = NO อย่างเดียว, 2 = NO+NC)</li>
+            <li><strong>NO</strong> (Normally Open) = ปกติเปิด ป้อนไฟคอยล์จึงปิด</li>
+            <li><strong>NC</strong> (Normally Closed) = ปกติปิด ป้อนไฟคอยล์จึงเปิด</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li><strong>Pole:</strong> how many circuits are switched at once (number of COMs)</li>
+            <li><strong>Throw:</strong> how many positions COM can connect to (1 = NO only, 2 = NO+NC)</li>
+            <li><strong>NO</strong> (Normally Open) = open until the coil is energized</li>
+            <li><strong>NC</strong> (Normally Closed) = closed until the coil is energized</li>
+          </ul>
+        </div>
+        <div>
+          <table>
+            <tr>
+              <th><span class="th-only">แบบ</span><span class="en-only">Type</span></th>
+              <th><span class="th-only">ความหมาย</span><span class="en-only">Meaning</span></th>
+            </tr>
+            <tr><td><strong>SPST</strong></td><td><span class="th-only">1 ขั้ว 1 ทาง (เปิด-ปิด ON/OFF)</span><span class="en-only">1 pole, 1 throw (simple ON/OFF)</span></td></tr>
+            <tr><td><strong>SPDT</strong></td><td><span class="th-only">1 ขั้ว 2 ทาง (COM + NO + NC) — พบบ่อยสุด</span><span class="en-only">1 pole, 2 throw (COM + NO + NC) — most common</span></td></tr>
+            <tr><td><strong>DPDT</strong></td><td><span class="th-only">2 ขั้ว 2 ทาง (สลับ 2 วงจรพร้อมกัน)</span><span class="en-only">2 pole, 2 throw (switches two circuits together)</span></td></tr>
+          </table>
+          <div class="info-box" style="margin-top:0.6rem;font-size:0.85rem;">
+            <span class="th-only">📌 รีเลย์ทั่วไปบนบอร์ด Arduino มักเป็น <strong>SPDT</strong> — มีครบ COM / NO / NC ให้เลือกใช้</span>
+            <span class="en-only">📌 The common relay on Arduino boards is usually <strong>SPDT</strong> — it has COM / NO / NC available.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. สเปคสำคัญ -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">สเปคสำคัญ (อ่าน Datasheet)</span><span class="en-only">Key Specs (Reading the Datasheet)</span></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 class="th-only">ฝั่งคอยล์ (Control)</h3>
+        <h3 class="en-only">Coil side (Control)</h3>
+        <ul class="content-list th-only">
+          <li><strong>แรงดันคอยล์:</strong> ที่นิยม 5 V, 12 V, 24 V DC</li>
+          <li><strong>ความต้านทานคอยล์:</strong> เช่น 70 Ω, 400 Ω</li>
+          <li>กระแสคอยล์หาได้จาก <strong>I = V / R</strong></li>
+        </ul>
+        <ul class="content-list en-only">
+          <li><strong>Coil voltage:</strong> commonly 5 V, 12 V, 24 V DC</li>
+          <li><strong>Coil resistance:</strong> e.g. 70 Ω, 400 Ω</li>
+          <li>Coil current is found from <strong>I = V / R</strong></li>
+        </ul>
+        <div class="formula-box" style="margin-top:0.5rem;">
+          <div class="formula">I<sub>coil</sub> = V<sub>coil</sub> / R<sub>coil</sub></div>
+        </div>
+        <div class="info-box" style="margin-top:0.5rem;">
+          <span class="th-only"><strong>ตัวอย่าง:</strong> คอยล์ 12 V, 400 Ω → I = 12 / 400 = <strong>30 mA</strong> (ทรานซิสเตอร์ขับต้องรับกระแสนี้ได้)</span>
+          <span class="en-only"><strong>Example:</strong> 12 V, 400 Ω coil → I = 12 / 400 = <strong>30 mA</strong> (the driver transistor must handle this).</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3 class="th-only">ฝั่งหน้าสัมผัส (Load)</h3>
+        <h3 class="en-only">Contact side (Load)</h3>
+        <ul class="content-list th-only">
+          <li><strong>พิกัดหน้าสัมผัส:</strong> เช่น <strong>10 A 250 VAC / 10 A 30 VDC</strong></li>
+          <li>ห้ามต่อโหลดเกินพิกัด → หน้าสัมผัสไหม้/ติดกัน</li>
+          <li>โหลดเหนี่ยวนำ (มอเตอร์) ให้เผื่อพิกัดมากขึ้น</li>
+        </ul>
+        <ul class="content-list en-only">
+          <li><strong>Contact rating:</strong> e.g. <strong>10 A 250 VAC / 10 A 30 VDC</strong></li>
+          <li>Never exceed the rating → contacts burn or weld shut</li>
+          <li>Inductive loads (motors) need extra margin</li>
+        </ul>
+        <div class="info-box" style="margin-top:0.5rem;">
+          <span class="th-only">⚠️ พิกัด AC กับ DC <strong>ไม่เท่ากัน</strong> — DC ดับอาร์กยากกว่า ตัวเลข VDC จึงมักต่ำกว่า VAC</span>
+          <span class="en-only">⚠️ AC and DC ratings <strong>differ</strong> — DC arcs are harder to quench, so the VDC figure is usually lower than VAC.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. ชนิดของรีเลย์ -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ชนิดของรีเลย์</span><span class="en-only">Types of Relays</span></div>
+    <div class="card">
+      <table>
+        <tr>
+          <th><span class="th-only">ชนิด</span><span class="en-only">Type</span></th>
+          <th><span class="th-only">ลักษณะเด่น</span><span class="en-only">Key feature</span></th>
+          <th><span class="th-only">ใช้งาน</span><span class="en-only">Use case</span></th>
+        </tr>
+        <tr>
+          <td><strong><span class="th-only">แม่เหล็กไฟฟ้า (EMR)</span><span class="en-only">Electromechanical (EMR)</span></strong></td>
+          <td><span class="th-only">มีคอยล์+หน้าสัมผัสจริง ได้ยินเสียง "คลิก"</span><span class="en-only">Real coil + contacts, audible "click"</span></td>
+          <td><span class="th-only">ทั่วไป, สวิตช์ไฟ AC/DC</span><span class="en-only">General AC/DC switching</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="th-only">รีดรีเลย์ (Reed)</span><span class="en-only">Reed</span></strong></td>
+          <td><span class="th-only">หน้าสัมผัสในหลอดแก้ว เล็ก-เร็ว กระแสต่ำ</span><span class="en-only">Contacts in a glass tube, small/fast, low current</span></td>
+          <td><span class="th-only">สัญญาณ, เครื่องมือวัด</span><span class="en-only">Signal, instrumentation</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="th-only">โซลิดสเตต (SSR)</span><span class="en-only">Solid State (SSR)</span></strong></td>
+          <td><span class="th-only">ไม่มีชิ้นส่วนเคลื่อนที่ ใช้เซมิคอนดักเตอร์ เงียบ-เร็ว-ทนทาน</span><span class="en-only">No moving parts, semiconductor-based, silent/fast/durable</span></td>
+          <td><span class="th-only">สวิตช์ AC บ่อยๆ, ฮีตเตอร์</span><span class="en-only">Frequent AC switching, heaters</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="th-only">รีเลย์รถยนต์</span><span class="en-only">Automotive</span></strong></td>
+          <td><span class="th-only">12 V ทนกระแสสูง (เลขขา 85/86/30/87)</span><span class="en-only">12 V, high current (pins 85/86/30/87)</span></td>
+          <td><span class="th-only">ไฟหน้า, ปั๊ม, ฮอร์น</span><span class="en-only">Headlights, pumps, horns</span></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 6. การขับรีเลย์ + flyback diode -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">⭐ การขับรีเลย์ด้วยทรานซิสเตอร์ + ไดโอดกันแรงดันย้อน</span><span class="en-only">⭐ Driving a Relay: Transistor + Flyback Diode</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <p class="th-only">ขา GPIO ของไมโครคอนโทรลเลอร์จ่ายกระแสได้น้อย (~20 mA) แต่คอยล์รีเลย์อาจกินมากกว่านั้น จึงใช้ <strong>ทรานซิสเตอร์เป็นสวิตช์</strong> (ทำงานย่าน Saturation) มาขับคอยล์</p>
+          <p class="en-only">A microcontroller GPIO pin sources little current (~20 mA), but a relay coil may need more — so we use a <strong>transistor as a switch</strong> (in saturation) to drive the coil.</p>
+          <div class="info-box" style="margin-top:0.6rem;border-left-color:#ef4444;">
+            <strong class="th-only">⚠️ ต้องมีไดโอดกันแรงดันย้อน (Flyback / Freewheeling)</strong>
+            <strong class="en-only">⚠️ A flyback (freewheeling) diode is required</strong>
+            <p class="th-only" style="margin:0.4rem 0 0;">คอยล์คือตัวเหนี่ยวนำ — ตอน <strong>ตัดไฟ</strong> มันสร้าง <strong>แรงดันย้อนกลับ (back-EMF)</strong> สูงหลายร้อยโวลต์ ซึ่งจะ <strong>ทำลายทรานซิสเตอร์</strong> ได้ ต่อไดโอด (เช่น 1N4001) <strong>คร่อมคอยล์แบบกลับขั้ว</strong> เพื่อให้กระแสย้อนไหลวนปลอดภัย</p>
+            <p class="en-only" style="margin:0.4rem 0 0;">The coil is an inductor — when <strong>switched off</strong> it generates a high <strong>back-EMF</strong> (hundreds of volts) that can <strong>destroy the transistor</strong>. Place a diode (e.g. 1N4001) <strong>reverse-biased across the coil</strong> so the reverse current circulates safely.</p>
+          </div>
+        </div>
+        <div style="text-align:center;">
+          <svg viewBox="0 0 300 230" style="max-width:100%;height:auto;font-family:inherit;font-size:11px;" role="img" aria-label="Transistor relay driver with flyback diode">
+            <!-- +V rail -->
+            <line x1="40" y1="20" x2="260" y2="20" stroke="var(--text)" stroke-width="1.5"/>
+            <text x="265" y="24" fill="var(--text)">+V</text>
+            <!-- coil -->
+            <rect x="120" y="40" width="30" height="60" rx="4" fill="none" stroke="var(--primary)" stroke-width="2"/>
+            <text x="100" y="75" text-anchor="end" fill="var(--primary)">Coil</text>
+            <line x1="135" y1="20" x2="135" y2="40" stroke="var(--text)" stroke-width="1.5"/>
+            <!-- flyback diode (parallel, reversed) -->
+            <line x1="200" y1="20" x2="200" y2="40" stroke="var(--text)" stroke-width="1.5"/>
+            <polygon points="192,75 208,75 200,60" fill="none" stroke="var(--accent)" stroke-width="2"/>
+            <line x1="192" y1="60" x2="208" y2="60" stroke="var(--accent)" stroke-width="2"/>
+            <line x1="200" y1="40" x2="200" y2="60" stroke="var(--accent)" stroke-width="1.5"/>
+            <line x1="200" y1="75" x2="200" y2="100" stroke="var(--accent)" stroke-width="1.5"/>
+            <text x="215" y="72" fill="var(--accent)">1N4001</text>
+            <line x1="135" y1="100" x2="200" y2="100" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="167" y1="100" x2="167" y2="120" stroke="var(--text)" stroke-width="1.5"/>
+            <!-- transistor (NPN) -->
+            <circle cx="167" cy="150" r="22" fill="none" stroke="var(--secondary)" stroke-width="2"/>
+            <line x1="167" y1="120" x2="167" y2="140" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="150" y1="150" x2="167" y2="140" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="150" y1="135" x2="150" y2="165" stroke="var(--text)" stroke-width="2"/>
+            <line x1="150" y1="158" x2="167" y2="168" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="167" y1="168" x2="167" y2="200" stroke="var(--text)" stroke-width="1.5"/>
+            <!-- base resistor -->
+            <line x1="150" y1="150" x2="110" y2="150" stroke="var(--text)" stroke-width="1.5"/>
+            <rect x="70" y="144" width="30" height="12" fill="none" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="70" y1="150" x2="40" y2="150" stroke="var(--text)" stroke-width="1.5"/>
+            <text x="38" y="153" text-anchor="end" fill="var(--text)">GPIO</text>
+            <text x="85" y="138" text-anchor="middle" fill="var(--text)">R</text>
+            <!-- ground -->
+            <line x1="40" y1="200" x2="260" y2="200" stroke="var(--text)" stroke-width="1.5"/>
+            <text x="265" y="204" fill="var(--text)">GND</text>
+          </svg>
+        </div>
+      </div>
+      <div class="info-box" style="margin-top:0.75rem;">
+        <span class="th-only">🔗 ทบทวน: ทรานซิสเตอร์ทำงานเป็นสวิตช์ในย่าน <strong>Saturation</strong> (ดูบททรานซิสเตอร์) ส่วนไดโอดกันย้อนอาศัยคุณสมบัติยอมให้กระแสไหลทางเดียว (ดูบทไดโอด)</span>
+        <span class="en-only">🔗 Recap: the transistor switches in <strong>saturation</strong> (see the Transistor lesson); the flyback diode relies on a diode's one-way conduction (see the Diode lesson).</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. การใช้งานจริง -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">การใช้งานจริง</span><span class="en-only">Real-World Uses</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <ul class="content-list th-only">
+          <li>ควบคุมอุปกรณ์ไฟ AC 220 V (หลอดไฟ, พัดลม, ปั๊มน้ำ) ด้วยบอร์ดไมโครฯ</li>
+          <li>ระบบอัตโนมัติในบ้าน / IoT (Smart home)</li>
+          <li>ระบบไฟรถยนต์ (ไฟหน้า, ฮอร์น, สตาร์ท)</li>
+        </ul>
+        <ul class="content-list en-only">
+          <li>Switching 220 V AC appliances (lamps, fans, water pumps) from a microcontroller</li>
+          <li>Home automation / IoT (smart home)</li>
+          <li>Automotive electrical systems (headlights, horn, starter)</li>
+        </ul>
+        <ul class="content-list th-only">
+          <li>วงจรล็อก/อินเตอร์ล็อก เพื่อความปลอดภัย</li>
+          <li>สลับสัญญาณ/เปลี่ยนเส้นทางวงจร (SPDT/DPDT)</li>
+          <li>แยกกราวด์ระหว่างวงจรควบคุมกับวงจรกำลัง</li>
+        </ul>
+        <ul class="content-list en-only">
+          <li>Latching / interlock circuits for safety</li>
+          <li>Routing signals / switching circuit paths (SPDT/DPDT)</li>
+          <li>Ground isolation between control and power circuits</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. การหาขา & ตรวจสอบด้วยมัลติมิเตอร์ -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">การหาขาและตรวจสอบด้วยมัลติมิเตอร์</span><span class="en-only">Finding Pins &amp; Testing with a Multimeter</span></div>
+    <div class="card">
+      <ol class="content-list th-only" style="list-style:decimal;padding-left:1.2rem;">
+        <li><strong>หาคอยล์:</strong> ตั้งโหมด Ω แล้ววัดหาคู่ขาที่มีค่าความต้านทาน (เช่น 70–400 Ω) = ขาคอยล์ 2 ขา</li>
+        <li><strong>หา NC:</strong> ตั้งโหมด continuity วัด COM กับขาที่เหลือ — คู่ที่ <strong>ดังปี๊บตอนยังไม่ป้อนไฟ</strong> คือ COM–NC</li>
+        <li><strong>หา NO:</strong> คู่ที่ <strong>ไม่ต่อ</strong> ตอนยังไม่ป้อนไฟ คือ COM–NO</li>
+        <li><strong>ทดสอบ:</strong> ป้อนไฟตรงตามแรงดันคอยล์ → ได้ยินเสียง "คลิก" และ COM–NO ต่อถึงกัน (NC จะตัด)</li>
+      </ol>
+      <ol class="content-list en-only" style="list-style:decimal;padding-left:1.2rem;">
+        <li><strong>Find the coil:</strong> in Ω mode, the pin pair showing resistance (e.g. 70–400 Ω) is the coil.</li>
+        <li><strong>Find NC:</strong> in continuity mode, the COM pair that <strong>beeps with the coil OFF</strong> is COM–NC.</li>
+        <li><strong>Find NO:</strong> the pair that is <strong>open</strong> with the coil OFF is COM–NO.</li>
+        <li><strong>Test:</strong> apply the rated coil voltage → you hear a "click" and COM–NO becomes connected (NC opens).</li>
+      </ol>
+      <div class="info-box" style="margin-top:0.6rem;">
+        <span class="th-only">🔗 ดูวิธีใช้โหมด Ω และ continuity เพิ่มเติมในบทเครื่องมือวัด</span>
+        <span class="en-only">🔗 See the Multimeter lesson for more on the Ω and continuity modes.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. ความปลอดภัย -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ข้อควรระวังและความปลอดภัย</span><span class="en-only">Safety &amp; Cautions</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li><strong>ไฟ AC 220 V อันตรายถึงชีวิต</strong> — ฝั่งโหลดต้องเดินสายและหุ้มฉนวนให้มิดชิด</li>
+        <li>เลือกพิกัดหน้าสัมผัสให้ <strong>สูงกว่ากระแสโหลดจริง</strong> เสมอ</li>
+        <li>โหลด AC แนะนำต่อผ่าน <strong>NO</strong> เพื่อให้ "ปกติตัดไฟ" ปลอดภัยกว่า</li>
+        <li>อย่าลืม <strong>ไดโอดกันแรงดันย้อน</strong> เมื่อขับด้วยทรานซิสเตอร์</li>
+        <li>โหลดเหนี่ยวนำ AC (มอเตอร์) ควรใส่ <strong>snubber (RC)</strong> ลดอาร์กที่หน้าสัมผัส</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li><strong>220 V AC can be lethal</strong> — wire and insulate the load side properly</li>
+        <li>Always pick a contact rating <strong>above the real load current</strong></li>
+        <li>Prefer wiring AC loads through <strong>NO</strong> so the default state is OFF (safer)</li>
+        <li>Never forget the <strong>flyback diode</strong> when driving with a transistor</li>
+        <li>For inductive AC loads (motors), add an <strong>RC snubber</strong> to reduce contact arcing</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
+<script>const CURRENT_PAGE='relay';</script>
+<script src="nav.js"></script>
+</body>
+</html>
