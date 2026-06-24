@@ -565,6 +565,88 @@
     </div>
   </div>
 
+  <!-- 5b. ESR (Equivalent Series Resistance) -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ESR — ความต้านทานอนุกรมสมมูล</span><span class="en-only">ESR — Equivalent Series Resistance</span></div>
+    <div class="card">
+      <p class="th-only">
+        ตัวเก็บประจุในอุดมคติเก็บประจุได้อย่างเดียว แต่ตัวจริงมี <strong>ความต้านทานแฝงเล็กน้อยต่ออนุกรม</strong>
+        อยู่ภายใน (จากขั้ว ฟอยล์ และสารอิเล็กโทรไลต์) เรียกว่า <strong>ESR (Equivalent Series Resistance)</strong> หน่วยเป็นโอห์ม (Ω)
+      </p>
+      <p class="en-only">
+        An ideal capacitor only stores charge, but a real one has a small <strong>resistance in series</strong>
+        inside it (from the leads, foil and electrolyte). This is the <strong>ESR (Equivalent Series Resistance)</strong>, measured in ohms (Ω).
+      </p>
+
+      <div class="grid-2" style="margin-top:0.75rem;">
+        <div class="info-box">
+          <strong class="th-only">⚠️ ทำไม ESR จึงสำคัญ</strong>
+          <strong class="en-only">⚠️ Why ESR matters</strong>
+          <ul class="content-list th-only" style="margin-top:0.4rem;">
+            <li>กระแสริปเปิลไหลผ่าน ESR → เกิด<strong>ความร้อน</strong> (P = I²·ESR) ทำให้ Cap ร้อนและเสื่อมเร็ว</li>
+            <li>ESR สูง → <strong>กรองไฟได้แย่ลง</strong> ริปเปิลในแหล่งจ่ายไฟมากขึ้น</li>
+            <li>วงจรสวิตชิ่ง (SMPS) ต้องการ Cap <strong>ESR ต่ำ (Low-ESR)</strong> โดยเฉพาะ</li>
+            <li>Cap เสื่อม/แห้ง → ESR สูงขึ้นมาก เป็นสัญญาณว่าควรเปลี่ยน</li>
+          </ul>
+          <ul class="content-list en-only" style="margin-top:0.4rem;">
+            <li>Ripple current through the ESR creates <strong>heat</strong> (P = I²·ESR), so the cap warms up and ages faster</li>
+            <li>High ESR → <strong>poorer filtering</strong>, more ripple in the power supply</li>
+            <li>Switch-mode supplies (SMPS) specifically need <strong>Low-ESR</strong> capacitors</li>
+            <li>A worn-out / dried cap shows much higher ESR — a sign it needs replacing</li>
+          </ul>
+        </div>
+        <div class="info-box">
+          <strong class="th-only">📉 แนวโน้มของค่า ESR</strong>
+          <strong class="en-only">📉 ESR trends</strong>
+          <ul class="content-list th-only" style="margin-top:0.4rem;">
+            <li>ค่าความจุ (μF) ยิ่งสูง → ESR ยิ่ง<strong>ต่ำ</strong></li>
+            <li>แรงดันทนได้ (V) ยิ่งสูง → ESR มักจะ<strong>ต่ำ</strong>ลง</li>
+            <li>ESR เพิ่มขึ้นเมื่อ<strong>อุณหภูมิต่ำ</strong>และที่<strong>ความถี่สูง</strong></li>
+            <li>ยิ่ง ESR ต่ำ ยิ่งดี (วัดด้วย ESR meter ขณะ Cap ยังอยู่ในวงจรได้)</li>
+          </ul>
+          <ul class="content-list en-only" style="margin-top:0.4rem;">
+            <li>Higher capacitance (μF) → <strong>lower</strong> ESR</li>
+            <li>Higher voltage rating (V) → usually <strong>lower</strong> ESR</li>
+            <li>ESR rises at <strong>low temperature</strong> and at <strong>high frequency</strong></li>
+            <li>Lower ESR is better (an ESR meter can test it in-circuit)</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3 class="th-only" style="margin-top:1rem;">ตารางอ้างอิงค่า ESR ทั่วไป (Electrolytic, หน่วย Ω)</h3>
+      <h3 class="en-only" style="margin-top:1rem;">Typical ESR reference table (electrolytic, in Ω)</h3>
+      <p class="th-only" style="margin:0.25rem 0 0.5rem;color:var(--text);opacity:0.8;">
+        แถว = ค่าความจุ &nbsp;|&nbsp; คอลัมน์ = แรงดันทนได้ &nbsp;|&nbsp; ตัวเลขในช่อง = ค่า ESR โดยประมาณที่ 100 kHz, 20 °C (“—” = ไม่มีรุ่นทั่วไป)
+      </p>
+      <p class="en-only" style="margin:0.25rem 0 0.5rem;color:var(--text);opacity:0.8;">
+        Rows = capacitance &nbsp;|&nbsp; Columns = voltage rating &nbsp;|&nbsp; Cell = approximate ESR at 100 kHz, 20 °C (“—” = no common part)
+      </p>
+
+      <div style="overflow-x:auto;">
+      <table>
+        <tr>
+          <th><span class="th-only">ค่าความจุ</span><span class="en-only">Capacitance</span></th>
+          <th>10 V</th><th>16 V</th><th>25 V</th><th>35 V</th><th>63 V</th><th>100 V</th><th>250 V</th>
+        </tr>
+        <tr><td><strong>10 μF</strong></td><td>—</td><td>8.0</td><td>5.3</td><td>3.2</td><td>2.4</td><td>3.0</td><td>2.5</td></tr>
+        <tr><td><strong>22 μF</strong></td><td>5.4</td><td>3.6</td><td>2.1</td><td>1.5</td><td>1.5</td><td>1.5</td><td>1.8</td></tr>
+        <tr><td><strong>47 μF</strong></td><td>2.2</td><td>1.6</td><td>1.2</td><td>0.68</td><td>0.56</td><td>0.7</td><td>0.8</td></tr>
+        <tr><td><strong>100 μF</strong></td><td>1.2</td><td>0.7</td><td>0.32</td><td>0.32</td><td>0.3</td><td>0.15</td><td>0.8</td></tr>
+        <tr><td><strong>220 μF</strong></td><td>0.6</td><td>0.33</td><td>0.23</td><td>0.17</td><td>0.16</td><td>0.09</td><td>0.5</td></tr>
+        <tr><td><strong>470 μF</strong></td><td>0.24</td><td>0.18</td><td>0.12</td><td>0.09</td><td>0.09</td><td>0.05</td><td>0.3</td></tr>
+        <tr><td><strong>1000 μF</strong></td><td>0.12</td><td>0.09</td><td>0.08</td><td>0.07</td><td>0.05</td><td>0.06</td><td>—</td></tr>
+        <tr><td><strong>4700 μF</strong></td><td>0.23</td><td>0.2</td><td>0.12</td><td>0.08</td><td>0.04</td><td>—</td><td>—</td></tr>
+        <tr><td><strong>10000 μF</strong></td><td>0.12</td><td>0.08</td><td>0.06</td><td>0.04</td><td>—</td><td>—</td><td>—</td></tr>
+      </table>
+      </div>
+
+      <div class="info-box" style="margin-top:0.75rem;">
+        <span class="th-only">💡 ค่าจากตารางเป็นเพียงค่าอ้างอิงทั่วไป — ค่าจริงขึ้นกับยี่ห้อ ซีรีส์ (Low-ESR/105 °C) ความถี่ และอุณหภูมิ ดูได้จาก datasheet ของผู้ผลิต</span>
+        <span class="en-only">💡 These are typical reference values — the real ESR depends on the brand, series (Low-ESR / 105 °C), frequency and temperature. Always check the manufacturer's datasheet.</span>
+      </div>
+    </div>
+  </div>
+
   <!-- 6. การแปลงหน่วย -->
   <div class="section">
     <div class="section-title"><span class="th-only">การแปลงหน่วยความจุ</span><span class="en-only">Capacitance Unit Conversion</span></div>
@@ -580,6 +662,11 @@
           <td><span class="th-only">ฟารัด</span><span class="en-only">Farad</span></td>
           <td>F</td><td>1 F</td>
           <td><span class="th-only">Super capacitor</span><span class="en-only">Supercapacitor</span></td>
+        </tr>
+        <tr>
+          <td><span class="th-only">มิลลิฟารัด</span><span class="en-only">Millifarad</span></td>
+          <td>mF</td><td>10⁻³ F</td>
+          <td><span class="th-only">ไม่นิยมใช้จริง มักเขียนเป็น μF แทน</span><span class="en-only">Rarely used in practice — usually written as μF instead</span></td>
         </tr>
         <tr>
           <td><span class="th-only">ไมโครฟารัด</span><span class="en-only">Microfarad</span></td>

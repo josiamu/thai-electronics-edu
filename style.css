@@ -226,8 +226,8 @@ tr:hover td { background: #eff6ff; }
 
 /* ── LIST ──────────────────────────────────────────────────── */
 ul.content-list { list-style: none; padding: 0; }
-ul.content-list li { padding: 0.45rem 0; border-bottom: 1px solid var(--border); display: flex; gap: 0.6rem; }
-ul.content-list li::before { content: "▸"; color: var(--accent); font-weight: 700; }
+ul.content-list li { padding: 0.45rem 0 0.45rem 1.4rem; border-bottom: 1px solid var(--border); position: relative; }
+ul.content-list li::before { content: "▸"; color: var(--accent); font-weight: 700; position: absolute; left: 0; top: 0.45rem; }
 
 /* ── COLOR STRIP ───────────────────────────────────────────── */
 .color-strip { display: inline-block; width: 28px; height: 20px; border-radius: 5px; border: 1px solid #ccc; vertical-align: middle; margin-right: 6px; }
