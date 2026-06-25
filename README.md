@@ -38,15 +38,19 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 |---|---|---|
 | ตัวต้านทาน | Resistor | `resistor.html` |
 | ไดโอด | Diode | `diode.html` |
+| ตัวเก็บประจุ | Capacitor | `capacitor.html` |
 | ทรานซิสเตอร์ | Transistor (BJT/MOSFET) | `transistor.html` |
+| ตัวเหนี่ยวนำและหม้อแปลง | Inductor & Transformer | `inductor.html` |
+| รีเลย์ | Relay | `relay.html` |
+| แหล่งจ่ายไฟ | Power Supply | `power-supply.html` |
+
+**วงจรรวมและดิจิทัล / ICs & Digital**
+| ไทย | English | หน้า |
+|---|---|---|
 | IC วงจรรวม | Integrated Circuit (IC) | `ic.html` |
 | IC ตั้งเวลา 555 | 555 Timer | `555.html` |
 | ออปแอมป์ | Op-Amp | `op-amp.html` |
 | ลอจิกเกต | Logic Gates | `logic-gates.html` |
-| รีเลย์ | Relay | `relay.html` |
-| ตัวเก็บประจุ | Capacitor | `capacitor.html` |
-| ตัวเหนี่ยวนำและหม้อแปลง | Inductor & Transformer | `inductor.html` |
-| แหล่งจ่ายไฟ | Power Supply | `power-supply.html` |
 
 **เครื่องมือวัดและทดสอบ / Measurement & Testing**
 | ไทย | English | หน้า |

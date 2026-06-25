@@ -112,7 +112,7 @@ nav {
 .nav-dropdown-menu a:hover { background: var(--bg); }
 .nav-dropdown-menu a.active { background: #eff6ff; color: var(--primary); font-weight: 700; }
 [data-theme="dark"] .nav-dropdown-menu a.active { background: #1e3a5f; color: #93c5fd; }
-.nav-mega-menu { width: min(720px, calc(100vw - 2rem)); grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.65rem; padding: 0.8rem; }
+.nav-mega-menu { width: min(900px, calc(100vw - 2rem)); grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.65rem; padding: 0.8rem; }
 .nav-dropdown.open .nav-mega-menu { display: grid; }
 .nav-mega-group { min-width: 0; padding: 0.25rem; }
 .nav-mega-group-toggle { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.45rem 0.65rem 0.6rem; border: 0; border-bottom: 2px solid var(--border); background: none; color: var(--primary-dark); font: inherit; font-size: 0.83rem; font-weight: 800; text-align: left; }
