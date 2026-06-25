@@ -17,6 +17,7 @@ const NAV_LESSON_GROUPS = [
       { id: 'diode', href: 'diode.html', label_th: '💡 ไดโอด', label_en: '💡 Diode' },
       { id: 'capacitor', href: 'capacitor.html', label_th: '🔋 ตัวเก็บประจุ', label_en: '🔋 Capacitor' },
       { id: 'transistor', href: 'transistor.html', label_th: '🎚️ ทรานซิสเตอร์', label_en: '🎚️ Transistor' },
+      { id: 'ic', href: 'ic.html', label_th: '🧩 IC วงจรรวม', label_en: '🧩 IC (Integrated Circuit)' },
       { id: 'relay', href: 'relay.html', label_th: '🧲 รีเลย์', label_en: '🧲 Relay' },
       { id: 'inductor', href: 'inductor.html', label_th: '🌀 ตัวเหนี่ยวนำ', label_en: '🌀 Inductor' },
       { id: 'power-supply', href: 'power-supply.html', label_th: '🔌 แหล่งจ่ายไฟ', label_en: '🔌 Power Supply' },

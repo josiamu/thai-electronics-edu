@@ -40,6 +40,7 @@ website/
 ├── ac-circuit.html     — บทที่ 8
 ├── diode.html          — บทที่ 9: PN Junction, I-V Curve, LED Vf by color, Rectifier Circuit
 ├── transistor.html     — BJT (NPN/PNP) + MOSFET: สัญลักษณ์, 3 ย่าน (Cut-off/Active/Saturation), สูตร β/IC/IE, เช็คด้วยมัลติมิเตอร์, เบอร์ยอดนิยม + Interactive BJT switch simulator (canvas)
+├── ic.html             — IC วงจรรวมเบื้องต้น: IC คืออะไร/ทำไมต้องรวม, ระดับการรวม (SSI→VLSI), แพ็กเกจ (DIP/SOIC/QFP/BGA), นับขา+หา Pin 1 (notch/dot, SVG DIP-8), อนาล็อก vs ดิจิทัล vs mixed-signal, อ่าน datasheet, IC ยอดนิยม (555/op-amp/7805/74xx/ATmega), ESD/การจับ (SVG, ไม่มี sim)
 ├── relay.html          — รีเลย์: โครงสร้าง (coil/armature/spring), COM/NO/NC, Pole&Throw (SPST/SPDT/DPDT), สเปค (coil V/R, contact rating), ชนิด (EMR/Reed/SSR/รถยนต์), วงจรขับด้วยทรานซิสเตอร์ + flyback diode, หาขา/เช็คด้วยมัลติมิเตอร์, ความปลอดภัย (SVG diagrams, ไม่มี sim)
 ├── home-wiring.html    — บทเสริม: ระบบ L/N/G, แรงดันลอย (Ghost Voltage), ไฟรั่วจริง, Socket Tester, ความปลอดภัย
 ├── oscilloscope.html   — บทที่ 10: โครงสร้าง CRT, เทคนิคสำคัญ (Trigger/Probe ×1×10/Coupling), สูตร T/f/Vpp/Duty, ตัวอย่าง 4 โจทย์, Interactive Scope Reading Trainer (canvas), วงจร Octopus (Curve Tracer) + Interactive I-V Curve Simulator (canvas, 11 อุปกรณ์)
@@ -73,7 +74,7 @@ website/
   <script src="nav.js"></script>
 </body>
 ```
-CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor`, `relay`, `capacitor`, `inductor`, `power-supply`, `multimeter`, `soldering`, `home-wiring`, `oscilloscope`, `signal-generator`, `simulation`, `breadboard`, `formulas`, `tools`, `quiz`, `downloads`
+CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor`, `ic`, `relay`, `capacitor`, `inductor`, `power-supply`, `multimeter`, `soldering`, `home-wiring`, `oscilloscope`, `signal-generator`, `simulation`, `breadboard`, `formulas`, `tools`, `quiz`, `downloads`
 
 ### ระบบ 2 ภาษา (Bilingual System)
 - CSS ใน style.css:
@@ -114,7 +115,7 @@ CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor
 | กลุ่ม | หน้า | สี card |
 |---|---|---|
 | 📚 พื้นฐานไฟฟ้า | electricity, ohm, ac-circuit | `topic-card-blue` |
-| 📚 อุปกรณ์อิเล็กทรอนิกส์ | resistor, diode, capacitor, transistor, relay, inductor | `topic-card-blue` |
+| 📚 อุปกรณ์อิเล็กทรอนิกส์ | resistor, diode, capacitor, transistor, ic, relay, inductor | `topic-card-blue` |
 | 📚 เครื่องมือวัดและทดสอบ | multimeter, signal-generator, oscilloscope | `topic-card-blue` |
 | 🧰 งานปฏิบัติ | soldering, home-wiring | `topic-card-teal` |
 | 🛠 เครื่องมือ | simulation, breadboard, formulas, tools | `topic-card-teal` |

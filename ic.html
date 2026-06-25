@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="IC วงจรรวมเบื้องต้น | สื่อการเรียนการสอน" data-title-en="Integrated Circuits (IC) Basics | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IC วงจรรวมเบื้องต้น | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🧩</div>
+    <div>
+      <h1 class="th-only">IC — วงจรรวมเบื้องต้น</h1>
+      <h1 class="en-only">Integrated Circuits (IC) — Basics</h1>
+      <p class="th-only">วงจรรวมคืออะไร • แพ็กเกจ DIP/SMD • นับขา & หา Pin 1 • อนาล็อก vs ดิจิทัล • อ่าน Datasheet</p>
+      <p class="en-only">What an IC is • DIP/SMD packages • Pin numbering & Pin 1 • Analog vs Digital • Reading a datasheet</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">วัตถุประสงค์การเรียนรู้</span><span class="en-only">Learning Objectives</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li>อธิบายได้ว่า IC (วงจรรวม) คืออะไร และทำไมจึงรวมอุปกรณ์จำนวนมากไว้ในชิปเดียว</li>
+        <li>บอกชื่อแพ็กเกจที่พบบ่อย (DIP / SOIC / QFP / SMD) และความแตกต่างได้</li>
+        <li>หา <strong>Pin 1</strong> และนับขา IC ได้อย่างถูกต้อง</li>
+        <li>แยกความต่างระหว่าง IC อนาล็อกกับดิจิทัลได้</li>
+        <li>อ่านข้อมูลสำคัญเบื้องต้นจาก datasheet ได้</li>
+        <li>รู้จัก IC ยอดนิยมที่จะได้เจอในบทเรียนถัดไป (555, op-amp, 7805, 74xx)</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>Explain what an IC is and why many components are integrated onto one chip</li>
+        <li>Name common packages (DIP / SOIC / QFP / SMD) and their differences</li>
+        <li>Locate <strong>Pin 1</strong> and number an IC's pins correctly</li>
+        <li>Distinguish analog ICs from digital ICs</li>
+        <li>Read the key first-page facts from a datasheet</li>
+        <li>Recognise popular ICs you'll meet in later lessons (555, op-amp, 7805, 74xx)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 1. IC คืออะไร -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">IC (วงจรรวม) คืออะไร?</span><span class="en-only">What is an IC?</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>IC = Integrated Circuit (วงจรรวม)</strong> — นำอุปกรณ์หลายตัว (ทรานซิสเตอร์ ตัวต้านทาน ไดโอด ตัวเก็บประจุ) มา <strong>สร้างรวมไว้บนชิ้นซิลิคอนเดียว</strong></li>
+            <li>ชิปตัวเล็กเท่าเล็บอาจมี <strong>ทรานซิสเตอร์เป็นพันล้านตัว</strong></li>
+            <li>แทนที่จะต่อวงจรจากชิ้นส่วนหลายสิบตัว → ใช้ IC ตัวเดียวจบ</li>
+            <li>ข้างในถูกห่อด้วยพลาสติก/เซรามิก เหลือแต่ <strong>ขา (pin)</strong> ออกมาให้ต่อใช้งาน</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li><strong>IC = Integrated Circuit</strong> — many components (transistors, resistors, diodes, capacitors) <strong>built together on one piece of silicon</strong></li>
+            <li>A chip the size of a fingernail can hold <strong>billions of transistors</strong></li>
+            <li>Instead of wiring dozens of discrete parts → one IC does the job</li>
+            <li>The silicon die is sealed in plastic/ceramic, leaving only the <strong>pins</strong> exposed for use</li>
+          </ul>
+        </div>
+        <div class="info-box">
+          <strong class="th-only">💡 เปรียบเทียบง่ายๆ</strong>
+          <strong class="en-only">💡 Simple analogy</strong>
+          <p class="th-only" style="margin:0.4rem 0 0;">อุปกรณ์เดี่ยวๆ (R, C, ทรานซิสเตอร์) เหมือน <strong>"อิฐทีละก้อน"</strong> ที่ต้องมาเรียงต่อเอง ส่วน IC เหมือน <strong>"บ้านสำเร็จรูป"</strong> ที่ประกอบวงจรทั้งก้อนมาให้แล้วในกล่องเดียว — เราแค่ต่อขาเข้า-ออก</p>
+          <p class="en-only" style="margin:0.4rem 0 0;">Discrete parts (R, C, transistors) are like <strong>laying bricks one by one</strong>. An IC is like a <strong>prefab module</strong>: a whole circuit pre-built in one package — you just connect its input/output pins.</p>
+        </div>
+      </div>
+      <div class="info-box" style="margin-top:0.9rem;">
+        <span class="th-only">🔗 IC สร้างจากทรานซิสเตอร์จำนวนมหาศาล — ทบทวนทรานซิสเตอร์ตัวเดี่ยวได้ในบท <strong>ทรานซิสเตอร์</strong> ก่อนมาดูว่ามันถูกรวมเป็นชิปได้อย่างไร</span>
+        <span class="en-only">🔗 An IC is built from huge numbers of transistors — review the single transistor in the <strong>Transistor</strong> lesson before seeing how they are integrated into a chip.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. ทำไมต้องรวม + ระดับการรวม -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ทำไมต้องรวมเป็นชิป? &amp; ระดับการรวม</span><span class="en-only">Why Integrate? &amp; Scale of Integration</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <h3 class="th-only">ข้อดีของการรวมเป็น IC</h3>
+          <h3 class="en-only">Benefits of integration</h3>
+          <ul class="content-list th-only">
+            <li><strong>เล็กลงมาก</strong> — ประหยัดพื้นที่บนแผงวงจร</li>
+            <li><strong>ถูกลง</strong> เมื่อผลิตจำนวนมาก</li>
+            <li><strong>เชื่อถือได้กว่า</strong> — จุดบัดกรีน้อยลง โอกาสหลวม/เสียน้อยลง</li>
+            <li><strong>กินไฟน้อย</strong> และ <strong>ทำงานเร็ว</strong> เพราะระยะทางสั้น</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li><strong>Far smaller</strong> — saves board space</li>
+            <li><strong>Cheaper</strong> in mass production</li>
+            <li><strong>More reliable</strong> — fewer solder joints to fail</li>
+            <li><strong>Low power</strong> and <strong>fast</strong> thanks to short internal distances</li>
+          </ul>
+        </div>
+        <div>
+          <table>
+            <tr>
+              <th><span class="th-only">ระดับ</span><span class="en-only">Scale</span></th>
+              <th><span class="th-only">จำนวนทรานซิสเตอร์</span><span class="en-only">Transistors</span></th>
+              <th><span class="th-only">ตัวอย่าง</span><span class="en-only">Example</span></th>
+            </tr>
+            <tr><td><strong>SSI</strong></td><td>&lt; 100</td><td><span class="th-only">เกตลอจิก 74xx</span><span class="en-only">74xx logic gates</span></td></tr>
+            <tr><td><strong>MSI</strong></td><td>100–3K</td><td><span class="th-only">ตัวนับ, รีจิสเตอร์</span><span class="en-only">counters, registers</span></td></tr>
+            <tr><td><strong>LSI</strong></td><td>3K–100K</td><td><span class="th-only">ไมโครฯรุ่นแรก</span><span class="en-only">early microprocessors</span></td></tr>
+            <tr><td><strong>VLSI</strong></td><td>&gt; 100K</td><td><span class="th-only">CPU, หน่วยความจำ</span><span class="en-only">CPUs, memory</span></td></tr>
+          </table>
+          <div class="info-box" style="margin-top:0.6rem;font-size:0.85rem;">
+            <span class="th-only">📌 ชิปสมัยใหม่ (CPU/GPU) อยู่ระดับ <strong>VLSI/ULSI</strong> หลายพันล้านทรานซิสเตอร์</span>
+            <span class="en-only">📌 Modern chips (CPU/GPU) are <strong>VLSI/ULSI</strong> — billions of transistors.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. แพ็กเกจ -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">แพ็กเกจของ IC (Package)</span><span class="en-only">IC Packages</span></div>
+    <div class="card">
+      <p class="th-only">"แพ็กเกจ" คือกล่องหุ้มชิปและรูปแบบการจัดขา — แบ่งกว้างๆ เป็น 2 กลุ่ม:</p>
+      <p class="en-only">A "package" is the casing around the die and how its pins are arranged — broadly two families:</p>
+      <div class="grid-2" style="margin-top:0.6rem;">
+        <div class="info-box">
+          <strong class="th-only">🕳️ Through-hole (เสียบรู)</strong>
+          <strong class="en-only">🕳️ Through-hole</strong>
+          <p class="th-only" style="margin:0.4rem 0 0;"><strong>DIP</strong> (Dual In-line Package) — 2 แถวขาเสียบลงรูบนเบรดบอร์ด/PCB ได้ง่าย เหมาะกับมือใหม่และการทดลอง</p>
+          <p class="en-only" style="margin:0.4rem 0 0;"><strong>DIP</strong> (Dual In-line Package) — two rows of legs that push into breadboard/PCB holes. Great for beginners and prototyping.</p>
+        </div>
+        <div class="info-box">
+          <strong class="th-only">📌 SMD / SMT (ติดผิวหน้า)</strong>
+          <strong class="en-only">📌 SMD / SMT (surface-mount)</strong>
+          <p class="th-only" style="margin:0.4rem 0 0;"><strong>SOIC, QFP, QFN, BGA</strong> — ขาเล็ก/แบนบัดกรีบนผิว PCB เล็กมาก ใช้ในงานผลิตจริง แต่บัดกรีมือยาก</p>
+          <p class="en-only" style="margin:0.4rem 0 0;"><strong>SOIC, QFP, QFN, BGA</strong> — tiny/flat leads soldered onto the PCB surface. Very compact, used in real products, but hard to hand-solder.</p>
+        </div>
+      </div>
+      <table style="margin-top:0.8rem;">
+        <tr>
+          <th><span class="th-only">แพ็กเกจ</span><span class="en-only">Package</span></th>
+          <th><span class="th-only">ลักษณะ</span><span class="en-only">Form</span></th>
+          <th><span class="th-only">หมายเหตุ</span><span class="en-only">Notes</span></th>
+        </tr>
+        <tr><td><strong>DIP</strong></td><td><span class="th-only">เสียบรู 2 แถว</span><span class="en-only">through-hole, 2 rows</span></td><td><span class="th-only">มือใหม่/ทดลอง</span><span class="en-only">beginner/prototyping</span></td></tr>
+        <tr><td><strong>SOIC</strong></td><td><span class="th-only">SMD ขาปีกนก</span><span class="en-only">SMD, gull-wing</span></td><td><span class="th-only">DIP เวอร์ชันย่อ</span><span class="en-only">shrunk DIP</span></td></tr>
+        <tr><td><strong>QFP</strong></td><td><span class="th-only">ขา 4 ด้าน</span><span class="en-only">leads on 4 sides</span></td><td><span class="th-only">ไมโครฯ/ชิปขาเยอะ</span><span class="en-only">MCUs, many pins</span></td></tr>
+        <tr><td><strong>BGA</strong></td><td><span class="th-only">ลูกบอลใต้ชิป</span><span class="en-only">solder balls underneath</span></td><td><span class="th-only">CPU/ชิปความเร็วสูง</span><span class="en-only">CPUs/high-speed</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 4. การนับขา & หา Pin 1 -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">⭐ การนับขา และการหา Pin 1</span><span class="en-only">⭐ Pin Numbering &amp; Finding Pin 1</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div style="text-align:center;">
+          <svg viewBox="0 0 260 200" style="max-width:100%;height:auto;font-family:inherit;font-size:11px;" role="img" aria-label="DIP-8 IC pin numbering top view">
+            <!-- body -->
+            <rect x="70" y="30" width="120" height="140" rx="6" fill="var(--card)" stroke="var(--text)" stroke-width="2"/>
+            <!-- notch -->
+            <path d="M110 30 a20 20 0 0 0 40 0" fill="none" stroke="var(--text)" stroke-width="2"/>
+            <text x="130" y="52" text-anchor="middle" fill="var(--text-light)" font-size="9">notch</text>
+            <!-- pin 1 dot -->
+            <circle cx="90" cy="52" r="5" fill="var(--primary)"/>
+            <!-- left pins 1-4 -->
+            <g stroke="var(--text)" stroke-width="2">
+              <line x1="70" y1="55" x2="45" y2="55"/>
+              <line x1="70" y1="90" x2="45" y2="90"/>
+              <line x1="70" y1="125" x2="45" y2="125"/>
+              <line x1="70" y1="160" x2="45" y2="160"/>
+            </g>
+            <text x="40" y="58" text-anchor="end" fill="var(--primary)" font-weight="700">1</text>
+            <text x="40" y="93" text-anchor="end" fill="var(--text)">2</text>
+            <text x="40" y="128" text-anchor="end" fill="var(--text)">3</text>
+            <text x="40" y="163" text-anchor="end" fill="var(--text)">4</text>
+            <!-- right pins 5-8 -->
+            <g stroke="var(--text)" stroke-width="2">
+              <line x1="190" y1="160" x2="215" y2="160"/>
+              <line x1="190" y1="125" x2="215" y2="125"/>
+              <line x1="190" y1="90" x2="215" y2="90"/>
+              <line x1="190" y1="55" x2="215" y2="55"/>
+            </g>
+            <text x="220" y="163" fill="var(--text)">5</text>
+            <text x="220" y="128" fill="var(--text)">6</text>
+            <text x="220" y="93" fill="var(--text)">7</text>
+            <text x="220" y="58" fill="var(--text)">8</text>
+            <!-- arrow showing direction -->
+            <path d="M90 70 q-8 45 38 90" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="3 3" marker-end="url(#arr)"/>
+            <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="var(--accent)"/></marker></defs>
+          </svg>
+          <div style="font-size:0.8rem;color:var(--text-light);">
+            <span class="th-only">DIP-8 มองจากด้านบน — นับทวนเข็มจาก Pin 1</span>
+            <span class="en-only">DIP-8 top view — count counter-clockwise from Pin 1</span>
+          </div>
+        </div>
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>หา Pin 1 ก่อนเสมอ</strong> — ดูจาก <strong>รอยบาก (notch)</strong> ครึ่งวงกลมที่ปลายด้านหนึ่ง หรือ <strong>จุดกลม</strong> ที่มุมข้างขา 1</li>
+            <li>หันรอยบากขึ้น/หันให้อยู่ทางซ้าย → Pin 1 คือขา <strong>ซ้ายล่างของรอยบาก</strong></li>
+            <li>นับ <strong>ทวนเข็มนาฬิกา</strong> ลงไปด้านซ้าย แล้ววกกลับขึ้นด้านขวา</li>
+            <li>ขาตรงข้าม Pin 1 (มุมทแยง) คือขาเลขสูงสุด</li>
+            <li>ต่อขาผิดด้าน = IC อาจ <strong>พังทันที</strong> จึงต้องเช็ก Pin 1 ทุกครั้ง</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li><strong>Always find Pin 1 first</strong> — look for the half-circle <strong>notch</strong> at one end, or a <strong>dot</strong> printed by pin 1's corner</li>
+            <li>With the notch up/left → Pin 1 is the pin at the <strong>bottom-left of the notch</strong></li>
+            <li>Count <strong>counter-clockwise</strong> down the left side, then back up the right side</li>
+            <li>The pin diagonally opposite Pin 1 is the highest number</li>
+            <li>Inserting it backwards can <strong>destroy the IC instantly</strong> — always check Pin 1</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. อนาล็อก vs ดิจิทัล -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">IC อนาล็อก vs ดิจิทัล</span><span class="en-only">Analog vs Digital ICs</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div class="info-box">
+          <strong class="th-only">〰️ IC อนาล็อก (Analog)</strong>
+          <strong class="en-only">〰️ Analog ICs</strong>
+          <p class="th-only" style="margin:0.4rem 0 0;">ทำงานกับ <strong>สัญญาณต่อเนื่อง</strong> (แรงดันค่อยๆ เปลี่ยน) เช่น op-amp ขยายสัญญาณ, เรกูเลเตอร์ 7805, ไอซีเสียง</p>
+          <p class="en-only" style="margin:0.4rem 0 0;">Work with <strong>continuous signals</strong> (smoothly varying voltage) — e.g. op-amps, the 7805 regulator, audio ICs.</p>
+        </div>
+        <div class="info-box">
+          <strong class="th-only">🔢 IC ดิจิทัล (Digital)</strong>
+          <strong class="en-only">🔢 Digital ICs</strong>
+          <p class="th-only" style="margin:0.4rem 0 0;">ทำงานกับ <strong>ลอจิก 0/1</strong> (HIGH/LOW) เช่น เกตลอจิก 74xx, ตัวนับ, หน่วยความจำ, ไมโครคอนโทรลเลอร์</p>
+          <p class="en-only" style="margin:0.4rem 0 0;">Work with <strong>logic 0/1</strong> (HIGH/LOW) — e.g. 74xx logic gates, counters, memory, microcontrollers.</p>
+        </div>
+      </div>
+      <div class="info-box" style="margin-top:0.7rem;">
+        <span class="th-only">🔀 บางตัวเป็น <strong>Mixed-signal</strong> มีทั้งสองส่วน เช่น ADC/DAC ที่แปลงอนาล็อก ↔ ดิจิทัล และไมโครคอนโทรลเลอร์ที่มี ADC ในตัว</span>
+        <span class="en-only">🔀 Some are <strong>mixed-signal</strong> with both — e.g. ADC/DAC chips that convert analog ↔ digital, and microcontrollers with a built-in ADC.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. อ่าน datasheet -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">อ่าน Datasheet เบื้องต้น</span><span class="en-only">Reading a Datasheet (Basics)</span></div>
+    <div class="card">
+      <p class="th-only">เบอร์ที่พิมพ์บนตัว IC (เช่น <strong>NE555</strong>, <strong>LM358</strong>) ใช้ค้นหา datasheet ได้ สิ่งที่ควรดูหน้าแรกๆ:</p>
+      <p class="en-only">The part number printed on the IC (e.g. <strong>NE555</strong>, <strong>LM358</strong>) lets you find its datasheet. What to check first:</p>
+      <ul class="content-list th-only">
+        <li><strong>หน้าที่ของชิป (Description):</strong> ทำอะไร</li>
+        <li><strong>Pinout / Pin configuration:</strong> ขาไหนทำหน้าที่อะไร (สำคัญที่สุด)</li>
+        <li><strong>แรงดันจ่ายไฟ (V<sub>CC</sub> / Supply):</strong> ช่วงแรงดันที่ใช้ได้ เช่น 4.5–16 V</li>
+        <li><strong>Absolute Maximum Ratings:</strong> ค่าห้ามเกิน (แรงดัน/กระแส/อุณหภูมิ) ไม่งั้นพัง</li>
+        <li><strong>Typical Application:</strong> วงจรตัวอย่างพร้อมค่าอุปกรณ์</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li><strong>Description:</strong> what the chip does</li>
+        <li><strong>Pinout / Pin configuration:</strong> what each pin does (most important)</li>
+        <li><strong>Supply voltage (V<sub>CC</sub>):</strong> the usable range, e.g. 4.5–16 V</li>
+        <li><strong>Absolute Maximum Ratings:</strong> never-exceed values (voltage/current/temp) or it fails</li>
+        <li><strong>Typical Application:</strong> example circuits with part values</li>
+      </ul>
+      <div class="info-box" style="margin-top:0.6rem;">
+        <span class="th-only">📌 ตัวอักษรนำหน้าเบอร์มักบอกผู้ผลิต (LM/NE/SN/CD…) ส่วนตัวเลขคือรุ่น — ฟังก์ชันเหมือนกันแม้ผู้ผลิตต่างกัน เช่น <strong>NE555 = LM555 = SE555</strong></span>
+        <span class="en-only">📌 The prefix often marks the maker (LM/NE/SN/CD…) and the number is the model — same function across makers, e.g. <strong>NE555 = LM555 = SE555</strong>.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. IC ยอดนิยม -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">IC ยอดนิยมที่จะได้เจอ</span><span class="en-only">Popular ICs You'll Meet</span></div>
+    <div class="card">
+      <table>
+        <tr>
+          <th><span class="th-only">เบอร์</span><span class="en-only">Part</span></th>
+          <th><span class="th-only">ชนิด</span><span class="en-only">Type</span></th>
+          <th><span class="th-only">ทำอะไร</span><span class="en-only">What it does</span></th>
+        </tr>
+        <tr>
+          <td><strong>NE555</strong></td>
+          <td><span class="th-only">ตัวตั้งเวลา</span><span class="en-only">Timer</span></td>
+          <td><span class="th-only">สร้างพัลส์/หน่วงเวลา/ไฟกระพริบ</span><span class="en-only">Pulses / delays / blinkers</span></td>
+        </tr>
+        <tr>
+          <td><strong>LM358 / 741</strong></td>
+          <td><span class="th-only">op-amp (อนาล็อก)</span><span class="en-only">Op-amp (analog)</span></td>
+          <td><span class="th-only">ขยาย/เปรียบเทียบสัญญาณ</span><span class="en-only">Amplify / compare signals</span></td>
+        </tr>
+        <tr>
+          <td><strong>7805</strong></td>
+          <td><span class="th-only">เรกูเลเตอร์</span><span class="en-only">Regulator</span></td>
+          <td><span class="th-only">รักษาแรงดันคงที่ 5 V</span><span class="en-only">Holds a steady 5 V</span></td>
+        </tr>
+        <tr>
+          <td><strong>74xx</strong></td>
+          <td><span class="th-only">ลอจิก (ดิจิทัล)</span><span class="en-only">Logic (digital)</span></td>
+          <td><span class="th-only">เกต AND/OR/NOT, ตัวนับ</span><span class="en-only">AND/OR/NOT gates, counters</span></td>
+        </tr>
+        <tr>
+          <td><strong>ATmega328</strong></td>
+          <td><span class="th-only">ไมโครคอนโทรลเลอร์</span><span class="en-only">Microcontroller</span></td>
+          <td><span class="th-only">"สมอง" ของบอร์ด Arduino UNO</span><span class="en-only">The "brain" of the Arduino UNO</span></td>
+        </tr>
+      </table>
+      <div class="info-box" style="margin-top:0.7rem;">
+        <span class="th-only">🔗 IC แต่ละตัวนี้คือบทเรียนของตัวเอง — <strong>7805</strong> อยู่ในบท <strong>แหล่งจ่ายไฟ</strong> แล้ว ส่วน <strong>555 / op-amp / เกตลอจิก</strong> เป็นบทที่กำลังจะตามมา</span>
+        <span class="en-only">🔗 Each of these is a lesson of its own — <strong>7805</strong> already appears in the <strong>Power Supply</strong> lesson, while <strong>555 / op-amp / logic gates</strong> are lessons still to come.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. การจับ & ข้อควรระวัง -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">การจับใช้งานและข้อควรระวัง</span><span class="en-only">Handling &amp; Cautions</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li><strong>ไฟฟ้าสถิต (ESD) ทำ IC พังได้</strong> — โดยเฉพาะ CMOS/ไมโครฯ ควรแตะกราวด์/ใส่สายรัดข้อมือก่อนจับ</li>
+        <li><strong>ใส่ให้ถูกทิศ</strong> — Pin 1 ตรงกับซ็อกเก็ต/สัญลักษณ์บน PCB เสมอ</li>
+        <li>แนะนำใช้ <strong>ซ็อกเก็ต IC</strong> สำหรับงานทดลอง จะได้ถอดเปลี่ยนง่ายและไม่ต้องบัดกรีโดนตัว IC</li>
+        <li><strong>อย่าจ่ายไฟเกินพิกัด</strong> และอย่าสลับขั้วไฟเลี้ยง (V<sub>CC</sub>/GND)</li>
+        <li>ระวัง <strong>ความร้อน</strong> ขณะบัดกรี — บัดกรีเร็วๆ หรือใช้ซ็อกเก็ต</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li><strong>Static (ESD) can kill an IC</strong> — especially CMOS/MCUs; touch ground or wear a wrist strap before handling</li>
+        <li><strong>Insert the right way round</strong> — match Pin 1 to the socket/PCB marking</li>
+        <li>Use an <strong>IC socket</strong> for prototyping — easy to swap, and no soldering heat on the IC</li>
+        <li><strong>Never exceed the rated supply</strong>, and never reverse V<sub>CC</sub>/GND</li>
+        <li>Mind <strong>soldering heat</strong> — solder quickly or use a socket</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
+<script>const CURRENT_PAGE='ic';</script>
+<script src="nav.js"></script>
+</body>
+</html>
