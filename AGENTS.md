@@ -30,6 +30,7 @@ website/
 ├── power-supply-sim.js — Interactive Power Supply (canvas scope, half/full-wave rectifier + filter C slider + load + 7805 regulator toggle, ripple shrinks with C, constant-current cap discharge sim, traces: pulsating DC/filtered/regulated)
 ├── 555-sim.js       — Interactive 555 Astable (canvas, R1/R2/C sliders → real f/T/Duty, draws Vcap charge/discharge between ⅓–⅔Vcc + output square wave, blinking LED in step with output, Vcc=5V, visual sweep = CYCLES periods)
 ├── opamp-sim.js     — Interactive Op-Amp amplifier (canvas, mode inverting/non-inverting + Rin/Rf/Vin sliders → closed-loop gain, draws input sine + amplified output clipped at ±Vsat=12V, readouts gain/Vout/clip)
+├── logic-sim.js     — Interactive Logic Gate (canvas, <select> gate + toggle A/B buttons → draws gate symbol w/ state-coloured wires + output LED, builds & highlights truth table; listens to langchange)
 ├── index.html          — หน้าหลัก (CURRENT_PAGE='home') — กลุ่มตรงกับ navbar: บทเรียน / งานปฏิบัติ / เครื่องมือ / คลังการเรียนรู้
 ├── electricity.html    — บทที่ 1
 ├── ohm.html            — บทที่ 2
@@ -45,6 +46,7 @@ website/
 ├── ic.html             — IC วงจรรวมเบื้องต้น: IC คืออะไร/ทำไมต้องรวม, ระดับการรวม (SSI→VLSI), แพ็กเกจ (DIP/SOIC/QFP/BGA), นับขา+หา Pin 1 (notch/dot, SVG DIP-8), อนาล็อก vs ดิจิทัล vs mixed-signal, อ่าน datasheet, IC ยอดนิยม (555/op-amp/7805/74xx/ATmega), ESD/การจับ (SVG, ไม่มี sim)
 ├── 555.html            — IC ตั้งเวลา 555: คืออะไร+ทำไมชื่อ 555, ขา 8 ขา (SVG DIP-8 pinout), โหมด Astable vs Monostable, สูตร t_HIGH/t_LOW/f/Duty (astable) + T=1.1RC (monostable), การใช้งาน, ทิป (RESET→Vcc, CTRL 10nF) + Interactive Astable sim (canvas)
 ├── op-amp.html         — ออปแอมป์: สัญลักษณ์ +/− (SVG), กฎทอง (V+=V−, ไม่มีกระแสเข้าขา), comparator (open loop), inverting (−Rf/Rin) / non-inverting (1+Rf/Rin) / buffer + วงจร SVG, ใช้งานจริง, เบอร์ยอดนิยม (741/LM358/LM324/TL07x) + ทิป (dual/single supply, rail-to-rail, slew) + Interactive amplifier sim (canvas, gain+clipping)
+├── logic-gates.html    — ลอจิกเกต: ดิจิทัล 0/1 (LOW/HIGH), 7 เกต (AND/OR/NOT/NAND/NOR/XOR/XNOR) + นิพจน์บูลีน + ตารางความจริงรวม, universal gates (NAND/NOR) + De Morgan, IC 74xx (7408/7432/7404/7400/7486)/CMOS + ทิป (logic levels, ห้ามอินพุตลอย, decoupling) + Interactive gate sim (canvas)
 ├── relay.html          — รีเลย์: โครงสร้าง (coil/armature/spring), COM/NO/NC, Pole&Throw (SPST/SPDT/DPDT), สเปค (coil V/R, contact rating), ชนิด (EMR/Reed/SSR/รถยนต์), วงจรขับด้วยทรานซิสเตอร์ + flyback diode, หาขา/เช็คด้วยมัลติมิเตอร์, ความปลอดภัย (SVG diagrams, ไม่มี sim)
 ├── home-wiring.html    — บทเสริม: ระบบ L/N/G, แรงดันลอย (Ghost Voltage), ไฟรั่วจริง, Socket Tester, ความปลอดภัย
 ├── oscilloscope.html   — บทที่ 10: โครงสร้าง CRT, เทคนิคสำคัญ (Trigger/Probe ×1×10/Coupling), สูตร T/f/Vpp/Duty, ตัวอย่าง 4 โจทย์, Interactive Scope Reading Trainer (canvas), วงจร Octopus (Curve Tracer) + Interactive I-V Curve Simulator (canvas, 11 อุปกรณ์)
@@ -78,7 +80,7 @@ website/
   <script src="nav.js"></script>
 </body>
 ```
-CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor`, `ic`, `timer555`, `opamp`, `relay`, `capacitor`, `inductor`, `power-supply`, `multimeter`, `soldering`, `home-wiring`, `oscilloscope`, `signal-generator`, `simulation`, `breadboard`, `formulas`, `tools`, `quiz`, `downloads`
+CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor`, `ic`, `timer555`, `opamp`, `logic`, `relay`, `capacitor`, `inductor`, `power-supply`, `multimeter`, `soldering`, `home-wiring`, `oscilloscope`, `signal-generator`, `simulation`, `breadboard`, `formulas`, `tools`, `quiz`, `downloads`
 
 ### ระบบ 2 ภาษา (Bilingual System)
 - CSS ใน style.css:
@@ -119,7 +121,7 @@ CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor
 | กลุ่ม | หน้า | สี card |
 |---|---|---|
 | 📚 พื้นฐานไฟฟ้า | electricity, ohm, ac-circuit | `topic-card-blue` |
-| 📚 อุปกรณ์อิเล็กทรอนิกส์ | resistor, diode, capacitor, transistor, ic, timer555, opamp, relay, inductor | `topic-card-blue` |
+| 📚 อุปกรณ์อิเล็กทรอนิกส์ | resistor, diode, capacitor, transistor, ic, timer555, opamp, logic, relay, inductor | `topic-card-blue` |
 | 📚 เครื่องมือวัดและทดสอบ | multimeter, signal-generator, oscilloscope | `topic-card-blue` |
 | 🧰 งานปฏิบัติ | soldering, home-wiring | `topic-card-teal` |
 | 🛠 เครื่องมือ | simulation, breadboard, formulas, tools | `topic-card-teal` |

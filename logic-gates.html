@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="ลอจิกเกต (Logic Gates) | สื่อการเรียนการสอน" data-title-en="Logic Gates | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ลอจิกเกต (Logic Gates) | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.sim-wrap { display:grid; grid-template-columns:1fr 250px; gap:1.25rem; align-items:start; }
+@media (max-width:860px){ .sim-wrap{ grid-template-columns:1fr; } }
+.sim-screen { width:100%; height:auto; display:block; border-radius:12px; background:#0b1220; border:1px solid var(--border); }
+.sim-panel { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:.9rem 1rem; }
+.sim-row { display:flex; justify-content:space-between; align-items:center; font-size:.84rem; font-weight:600; margin-bottom:.5rem; }
+.sim-select { width:100%; padding:.5rem; font-family:inherit; font-size:.95rem; font-weight:600; border:1px solid var(--border); border-radius:8px; background:var(--bg); color:var(--text); cursor:pointer; margin-bottom:.9rem; }
+.lg-toggle { width:100%; padding:.6rem; font-size:.95rem; font-weight:700; border:2px solid var(--border); background:var(--bg); color:var(--text); border-radius:9px; cursor:pointer; font-family:inherit; margin-bottom:.5rem; }
+.lg-toggle.on { background:var(--secondary); color:#fff; border-color:var(--secondary); }
+.lg-hint { font-size:.78rem; color:var(--text-light); margin:.2rem 0 .8rem; }
+#lg-truth { width:100%; margin-top:.4rem; }
+#lg-truth tr.active td { background:var(--primary); color:#fff; }
+#lg-truth td, #lg-truth th { text-align:center; }
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🔢</div>
+    <div>
+      <h1 class="th-only">ลอจิกเกต (Logic Gates)</h1>
+      <h1 class="en-only">Logic Gates</h1>
+      <p class="th-only">ดิจิทัล 0/1 • AND OR NOT NAND NOR XOR XNOR • ตารางความจริง • IC 74xx + ซิมโต้ตอบ</p>
+      <p class="en-only">Digital 0/1 • AND OR NOT NAND NOR XOR XNOR • Truth tables • 74xx ICs + live sim</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">วัตถุประสงค์การเรียนรู้</span><span class="en-only">Learning Objectives</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li>อธิบายสัญญาณดิจิทัล (ลอจิก 0/1, LOW/HIGH) และต่างจากสัญญาณอนาล็อกอย่างไร</li>
+        <li>บอกหน้าที่และเขียนตารางความจริงของเกต 7 ชนิดได้</li>
+        <li>อ่านสัญลักษณ์ของแต่ละเกตได้</li>
+        <li>เข้าใจว่า NAND/NOR เป็น "เกตสากล (universal)" สร้างเกตอื่นได้ทั้งหมด</li>
+        <li>รู้จัก IC ลอจิกตระกูล 74xx / CMOS 4000 และข้อควรระวัง</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>Explain digital signals (logic 0/1, LOW/HIGH) and how they differ from analog</li>
+        <li>State the function and write the truth table of the 7 gates</li>
+        <li>Read each gate's symbol</li>
+        <li>Understand that NAND/NOR are "universal" gates — any gate can be built from them</li>
+        <li>Recognise 74xx / CMOS 4000 logic ICs and their cautions</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 1. ดิจิทัล 0/1 -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">สัญญาณดิจิทัล: โลกของ 0 กับ 1</span><span class="en-only">Digital Signals: the World of 0 and 1</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li>สัญญาณดิจิทัลมีแค่ <strong>2 สถานะ:</strong> <strong>0</strong> (LOW, ~0 V) และ <strong>1</strong> (HIGH, ~Vcc)</li>
+            <li>ต่างจากอนาล็อกที่แรงดันค่อยๆ เปลี่ยนได้ทุกค่า</li>
+            <li><strong>ลอจิกเกต</strong> คือวงจรที่รับอินพุต 0/1 แล้วให้เอาต์พุต 0/1 ตามกฎตรรกะ</li>
+            <li>นำเกตมาต่อกันเป็นวงจรคำนวณ → เป็นพื้นฐานของ <strong>คอมพิวเตอร์และดิจิทัลทั้งหมด</strong></li>
+          </ul>
+          <ul class="content-list en-only">
+            <li>A digital signal has only <strong>two states:</strong> <strong>0</strong> (LOW, ~0 V) and <strong>1</strong> (HIGH, ~Vcc)</li>
+            <li>Unlike analog, whose voltage can take any value</li>
+            <li>A <strong>logic gate</strong> takes 0/1 inputs and gives a 0/1 output by a logic rule</li>
+            <li>Connect gates together to compute → the basis of <strong>all computers and digital systems</strong></li>
+          </ul>
+        </div>
+        <div class="info-box">
+          <strong class="th-only">💡 เปรียบเทียบง่ายๆ</strong>
+          <strong class="en-only">💡 Simple analogy</strong>
+          <p class="th-only" style="margin:0.4rem 0 0;">ลอจิกเกตเหมือน <strong>"สวิตช์ไฟที่มีกฎ"</strong> — เช่นเกต AND คือ "ไฟติดก็ต่อเมื่อกดสวิตช์ทั้งสองพร้อมกัน" ส่วน OR คือ "กดอันใดอันหนึ่งไฟก็ติด"</p>
+          <p class="en-only" style="margin:0.4rem 0 0;">A gate is like a <strong>"light switch with a rule"</strong> — AND means "the light turns on only if both switches are pressed", OR means "press either one and it turns on".</p>
+        </div>
+      </div>
+      <div class="info-box" style="margin-top:0.9rem;">
+        <span class="th-only">🔗 เกตเหล่านี้สร้างจากทรานซิสเตอร์และบรรจุใน <strong>IC</strong> — ทบทวนได้ในบท <strong>ทรานซิสเตอร์</strong> (สวิตช์) และ <strong>IC วงจรรวม</strong></span>
+        <span class="en-only">🔗 Gates are built from transistors and packaged in <strong>ICs</strong> — see the <strong>Transistor</strong> (as a switch) and <strong>IC basics</strong> lessons.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 7 เกต -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">เกตพื้นฐาน 7 ชนิด</span><span class="en-only">The 7 Basic Gates</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <table>
+            <tr><th><span class="th-only">เกต</span><span class="en-only">Gate</span></th><th><span class="th-only">นิพจน์</span><span class="en-only">Boolean</span></th><th><span class="th-only">กฎ</span><span class="en-only">Rule</span></th></tr>
+            <tr><td><strong>AND</strong></td><td>Y = A·B</td><td><span class="th-only">เป็น 1 เมื่อ <strong>ทุกอินพุต</strong> เป็น 1</span><span class="en-only">1 only if <strong>all</strong> inputs are 1</span></td></tr>
+            <tr><td><strong>OR</strong></td><td>Y = A+B</td><td><span class="th-only">เป็น 1 เมื่อ <strong>อย่างน้อยหนึ่ง</strong> อินพุตเป็น 1</span><span class="en-only">1 if <strong>any</strong> input is 1</span></td></tr>
+            <tr><td><strong>NOT</strong></td><td>Y = Ā</td><td><span class="th-only">กลับค่า (อินเวอร์เตอร์)</span><span class="en-only">Inverts the input</span></td></tr>
+            <tr><td><strong>NAND</strong></td><td>Y = A·B&#773;</td><td><span class="th-only">AND แล้วกลับค่า</span><span class="en-only">AND then inverted</span></td></tr>
+            <tr><td><strong>NOR</strong></td><td>Y = A+B&#773;</td><td><span class="th-only">OR แล้วกลับค่า</span><span class="en-only">OR then inverted</span></td></tr>
+            <tr><td><strong>XOR</strong></td><td>Y = A⊕B</td><td><span class="th-only">เป็น 1 เมื่ออินพุต <strong>ต่างกัน</strong></span><span class="en-only">1 when inputs <strong>differ</strong></span></td></tr>
+            <tr><td><strong>XNOR</strong></td><td>Y = A⊕B&#773;</td><td><span class="th-only">เป็น 1 เมื่ออินพุต <strong>เหมือนกัน</strong></span><span class="en-only">1 when inputs are <strong>the same</strong></span></td></tr>
+          </table>
+        </div>
+        <div>
+          <p style="font-weight:600;margin:0 0 .4rem;"><span class="th-only">ตารางความจริงรวม (2 อินพุต)</span><span class="en-only">Combined truth table (2 inputs)</span></p>
+          <table style="font-size:.86rem;text-align:center;">
+            <tr><th>A</th><th>B</th><th>AND</th><th>OR</th><th>NAND</th><th>NOR</th><th>XOR</th><th>XNOR</th></tr>
+            <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+            <tr><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+            <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+            <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+          </table>
+          <p style="font-weight:600;margin:.7rem 0 .4rem;">NOT</p>
+          <table style="font-size:.86rem;text-align:center;max-width:140px;">
+            <tr><th>A</th><th>Y</th></tr>
+            <tr><td>0</td><td>1</td></tr>
+            <tr><td>1</td><td>0</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. SIM -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">⭐ ลองเล่น: สลับอินพุตดูเอาต์พุต</span><span class="en-only">⭐ Try It: Toggle the Inputs</span></div>
+    <div class="card">
+      <p class="th-only">เลือกชนิดเกต แล้วกดปุ่ม A / B เพื่อสลับค่า 0↔1 ดูว่าเอาต์พุต Y (LED) ติดหรือดับ และแถวที่ตรงกันในตารางความจริงจะถูกไฮไลต์</p>
+      <p class="en-only">Pick a gate, then click A / B to toggle 0↔1 and watch the output Y (LED) turn on/off — the matching truth-table row is highlighted.</p>
+
+      <div class="sim-wrap" style="margin-top:1rem;">
+        <div>
+          <canvas id="logic-canvas" class="sim-screen"></canvas>
+          <p style="font-size:0.8rem;color:var(--text-light);margin:0.5rem 0 0;text-align:center;">
+            <span class="th-only">สายสีเขียว = ลอจิก 1, สีเทา = ลอจิก 0 • LED เขียว = เอาต์พุต 1</span>
+            <span class="en-only">Green wire = logic 1, grey = logic 0 • green LED = output 1</span>
+          </p>
+        </div>
+        <div>
+          <div class="sim-panel">
+            <div class="sim-row"><span class="th-only">เลือกเกต</span><span class="en-only">Gate</span></div>
+            <select id="lg-gate" class="sim-select">
+              <option value="AND">AND</option>
+              <option value="OR">OR</option>
+              <option value="NOT">NOT</option>
+              <option value="NAND">NAND</option>
+              <option value="NOR">NOR</option>
+              <option value="XOR">XOR</option>
+              <option value="XNOR">XNOR</option>
+            </select>
+            <button id="lg-a" class="lg-toggle">A = 0</button>
+            <button id="lg-b" class="lg-toggle">B = 0</button>
+            <p class="lg-hint"><span class="th-only">กดเพื่อสลับ 0/1 (NOT ใช้แค่ A)</span><span class="en-only">Click to toggle 0/1 (NOT uses A only)</span></p>
+            <table id="lg-truth"></table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. universal gates -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">เกตสากล (Universal Gates)</span><span class="en-only">Universal Gates</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>NAND</strong> และ <strong>NOR</strong> เรียกว่า "เกตสากล"</li>
+            <li>ใช้ NAND อย่างเดียว (หรือ NOR อย่างเดียว) สร้างเกตอื่นได้ <strong>ครบทุกชนิด</strong></li>
+            <li>เช่น NAND ที่ต่ออินพุตเข้าด้วยกัน = NOT, ฯลฯ</li>
+            <li>ทำให้โรงงานผลิต IC ชนิดเดียวก็พอ → ประหยัด</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li><strong>NAND</strong> and <strong>NOR</strong> are the "universal" gates</li>
+            <li>Using only NAND (or only NOR) you can build <strong>every other gate</strong></li>
+            <li>e.g. a NAND with its inputs tied together = NOT, and so on</li>
+            <li>So a factory can make just one gate type → cheaper</li>
+          </ul>
+        </div>
+        <div class="info-box">
+          <strong class="th-only">📌 พีชคณิตบูลีน</strong>
+          <strong class="en-only">📌 Boolean algebra</strong>
+          <p class="th-only" style="margin:0.4rem 0 0;">การลดรูปวงจรลอจิกใช้กฎพีชคณิตบูลีน เช่น <strong>กฎเดอมอร์แกน:</strong> A·B&#773; = Ā + B̄ และ A+B&#773; = Ā · B̄ — ช่วยแปลงระหว่าง AND/OR/NOT ได้</p>
+          <p class="en-only" style="margin:0.4rem 0 0;">Logic circuits are simplified with Boolean algebra, e.g. <strong>De Morgan's laws:</strong> A·B&#773; = Ā + B̄ and A+B&#773; = Ā · B̄ — handy for converting between AND/OR/NOT.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. IC ลอจิก + ทิป -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">IC ลอจิกและข้อควรระวัง</span><span class="en-only">Logic ICs &amp; Cautions</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <table>
+            <tr><th>IC</th><th><span class="th-only">เกต</span><span class="en-only">Gate</span></th></tr>
+            <tr><td><strong>7408</strong></td><td>AND ×4</td></tr>
+            <tr><td><strong>7432</strong></td><td>OR ×4</td></tr>
+            <tr><td><strong>7404</strong></td><td>NOT ×6</td></tr>
+            <tr><td><strong>7400</strong></td><td>NAND ×4</td></tr>
+            <tr><td><strong>7486</strong></td><td>XOR ×4</td></tr>
+          </table>
+          <p class="lg-hint th-only">ตระกูล <strong>74xx</strong> = TTL, <strong>74HCxx</strong> = CMOS เร็ว, <strong>4000</strong> = CMOS ดั้งเดิม</p>
+          <p class="lg-hint en-only"><strong>74xx</strong> = TTL, <strong>74HCxx</strong> = fast CMOS, <strong>4000</strong> = classic CMOS</p>
+        </div>
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>ระดับลอจิก:</strong> ดูจาก datasheet ว่าช่วงไหนคือ 0 และ 1 (ขึ้นกับ Vcc/ตระกูล)</li>
+            <li><strong>ห้ามปล่อยอินพุตลอย</strong> โดยเฉพาะ CMOS — ต่อลง 0 หรือ 1 ให้แน่นอน</li>
+            <li>ใส่ <strong>ตัวเก็บประจุ decoupling 0.1 µF</strong> ใกล้ขาไฟทุกตัว</li>
+            <li>เอาต์พุตขับ LED ต้องมี <strong>ตัวต้านทานจำกัดกระแส</strong></li>
+          </ul>
+          <ul class="content-list en-only">
+            <li><strong>Logic levels:</strong> check the datasheet for the 0 and 1 ranges (depend on Vcc/family)</li>
+            <li><strong>Never leave inputs floating</strong>, especially CMOS — tie them to a fixed 0 or 1</li>
+            <li>Add a <strong>0.1 µF decoupling capacitor</strong> near every supply pin</li>
+            <li>Driving an LED from an output needs a <strong>current-limiting resistor</strong></li>
+          </ul>
+        </div>
+      </div>
+      <div class="info-box" style="margin-top:0.7rem;">
+        <span class="th-only">🔗 ลองนำลอจิกไปใช้คู่กับ <strong>555</strong> (เป็นสัญญาณนาฬิกาป้อนวงจรนับ) หรือทดลองวงจรจริงบน <strong>เบรดบอร์ด</strong></span>
+        <span class="en-only">🔗 Pair logic with the <strong>555</strong> (as a clock for counters) or build real circuits on the <strong>Breadboard</strong>.</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
+<script>const CURRENT_PAGE='logic';</script>
+<script src="nav.js"></script>
+<script src="logic-sim.js"></script>
+</body>
+</html>

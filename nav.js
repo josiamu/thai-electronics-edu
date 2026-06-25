@@ -20,6 +20,7 @@ const NAV_LESSON_GROUPS = [
       { id: 'ic', href: 'ic.html', label_th: '🧩 IC วงจรรวม', label_en: '🧩 IC (Integrated Circuit)' },
       { id: 'timer555', href: '555.html', label_th: '⏱️ IC ตั้งเวลา 555', label_en: '⏱️ 555 Timer' },
       { id: 'opamp', href: 'op-amp.html', label_th: '📐 ออปแอมป์', label_en: '📐 Op-Amp' },
+      { id: 'logic', href: 'logic-gates.html', label_th: '🔢 ลอจิกเกต', label_en: '🔢 Logic Gates' },
       { id: 'relay', href: 'relay.html', label_th: '🧲 รีเลย์', label_en: '🧲 Relay' },
       { id: 'inductor', href: 'inductor.html', label_th: '🌀 ตัวเหนี่ยวนำ', label_en: '🌀 Inductor' },
       { id: 'power-supply', href: 'power-supply.html', label_th: '🔌 แหล่งจ่ายไฟ', label_en: '🔌 Power Supply' },
