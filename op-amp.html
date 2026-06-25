@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="ออปแอมป์ (Op-Amp) | สื่อการเรียนการสอน" data-title-en="Operational Amplifier (Op-Amp) | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ออปแอมป์ (Op-Amp) | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.sim-wrap { display:grid; grid-template-columns:1fr 285px; gap:1.25rem; align-items:start; }
+@media (max-width:860px){ .sim-wrap{ grid-template-columns:1fr; } }
+.sim-screen { width:100%; height:auto; display:block; border-radius:12px; background:#0b1220; border:1px solid var(--border); }
+.sim-panel { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:.9rem 1rem; }
+.sim-ctrl { margin-bottom:.9rem; }
+.sim-ctrl-row { display:flex; justify-content:space-between; align-items:center; font-size:.84rem; font-weight:600; margin-bottom:.25rem; }
+.sim-ctrl-row span { color:var(--primary); font-size:.9rem; }
+.sim-ctrl input[type=range] { width:100%; cursor:pointer; accent-color:var(--primary); }
+.sim-seg { display:flex; gap:.4rem; margin-bottom:.9rem; }
+.sim-seg button { flex:1; padding:.45rem .3rem; font-size:.82rem; font-weight:600; border:1px solid var(--border); background:var(--bg); color:var(--text); border-radius:8px; cursor:pointer; font-family:inherit; }
+.sim-seg button.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+.sim-fixed { font-size:.8rem; color:var(--text-light); background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:.4rem .6rem; margin-bottom:.9rem; }
+.sim-readout { display:grid; grid-template-columns:1fr 1fr; gap:.45rem; margin-top:.4rem; }
+.sim-rb { background:var(--bg); border:1px solid var(--border); border-radius:9px; padding:.45rem .6rem; text-align:center; }
+.sim-rl { font-size:.72rem; color:var(--text-light); margin-bottom:.12rem; }
+.sim-rv { font-size:1.02rem; font-weight:700; color:var(--text); }
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">📐</div>
+    <div>
+      <h1 class="th-only">ออปแอมป์ (Op-Amp)</h1>
+      <h1 class="en-only">Operational Amplifier (Op-Amp)</h1>
+      <p class="th-only">สัญลักษณ์ • กฎทอง • Comparator • Inverting / Non-inverting / Buffer • อัตราขยาย + ซิมโต้ตอบ</p>
+      <p class="en-only">Symbol • Golden rules • Comparator • Inverting / Non-inverting / Buffer • Gain + live sim</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">วัตถุประสงค์การเรียนรู้</span><span class="en-only">Learning Objectives</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li>บอกได้ว่าออปแอมป์คืออะไร อ่านสัญลักษณ์และขาเข้า +/− ได้</li>
+        <li>ใช้ "กฎทอง" ของออปแอมป์ในวงจรป้อนกลับได้</li>
+        <li>แยกการทำงานแบบ <strong>เปิดลูป (comparator)</strong> กับ <strong>ปิดลูป (วงจรขยาย)</strong> ได้</li>
+        <li>คำนวณอัตราขยายของวงจร <strong>Inverting, Non-inverting, Buffer</strong> ได้</li>
+        <li>อธิบายการตัดยอดสัญญาณที่ราง (clipping/saturation) ได้</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>State what an op-amp is and read its symbol and +/− inputs</li>
+        <li>Apply the op-amp "golden rules" in feedback circuits</li>
+        <li>Distinguish <strong>open-loop (comparator)</strong> from <strong>closed-loop (amplifier)</strong> operation</li>
+        <li>Calculate the gain of <strong>inverting, non-inverting and buffer</strong> circuits</li>
+        <li>Explain output clipping/saturation at the supply rails</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 1. คืออะไร + สัญลักษณ์ -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ออปแอมป์คืออะไร?</span><span class="en-only">What is an Op-Amp?</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>วงจรขยายผลต่าง (differential amplifier) อัตราขยายสูงมาก</strong> บรรจุใน IC ตัวเดียว</li>
+            <li>มีขาเข้า 2 ขา: <strong>+ (non-inverting)</strong> และ <strong>− (inverting)</strong> และขาออก 1 ขา</li>
+            <li>ขยาย <strong>ผลต่างของขาเข้าทั้งสอง:</strong> V<sub>out</sub> = A × (V<sub>+</sub> − V<sub>−</sub>) โดย A สูงมาก (หลักแสน–ล้าน)</li>
+            <li>เกือบทุกครั้งใช้กับ <strong>การป้อนกลับ (feedback)</strong> เพื่อกำหนดอัตราขยายที่แน่นอน</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li>A very high-gain <strong>differential amplifier</strong> in a single IC</li>
+            <li>Two inputs: <strong>+ (non-inverting)</strong> and <strong>− (inverting)</strong>, one output</li>
+            <li>Amplifies the <strong>difference of its inputs:</strong> V<sub>out</sub> = A × (V<sub>+</sub> − V<sub>−</sub>), with A huge (10⁵–10⁶)</li>
+            <li>Almost always used with <strong>feedback</strong> to set a precise, usable gain</li>
+          </ul>
+        </div>
+        <div style="text-align:center;">
+          <svg viewBox="0 0 240 160" style="max-width:100%;height:auto;font-family:inherit;font-size:12px;" role="img" aria-label="Op-amp symbol">
+            <polygon points="70,30 70,130 170,80" fill="none" stroke="var(--primary)" stroke-width="2"/>
+            <!-- inputs -->
+            <line x1="30" y1="55" x2="70" y2="55" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="30" y1="105" x2="70" y2="105" stroke="var(--text)" stroke-width="1.5"/>
+            <text x="80" y="59" fill="var(--text)">−</text>
+            <text x="80" y="110" fill="var(--text)">+</text>
+            <text x="24" y="50" text-anchor="end" fill="var(--text-light)" font-size="10">V−</text>
+            <text x="24" y="110" text-anchor="end" fill="var(--text-light)" font-size="10">V+</text>
+            <!-- output -->
+            <line x1="170" y1="80" x2="210" y2="80" stroke="var(--text)" stroke-width="1.5"/>
+            <text x="214" y="84" fill="var(--text-light)" font-size="10">Vout</text>
+            <!-- supplies -->
+            <line x1="120" y1="55" x2="120" y2="30" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="120" y1="105" x2="120" y2="130" stroke="var(--text)" stroke-width="1.5"/>
+            <text x="126" y="30" fill="#ef4444" font-size="10">+Vcc</text>
+            <text x="126" y="138" fill="#ef4444" font-size="10">−Vee</text>
+          </svg>
+        </div>
+      </div>
+      <div class="info-box" style="margin-top:0.9rem;">
+        <span class="th-only">🔗 ออปแอมป์เป็น <strong>IC</strong> อนาล็อกตัวหนึ่ง (มักเป็น DIP-8 เช่น LM358 มี 2 ตัวในชิปเดียว) — ทบทวนแพ็กเกจ/การนับขาได้ในบท <strong>IC วงจรรวม</strong></span>
+        <span class="en-only">🔗 An op-amp is an analog <strong>IC</strong> (often DIP-8, e.g. the LM358 has two per chip) — review packages/pin numbering in the <strong>IC basics</strong> lesson.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. กฎทอง -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">⭐ กฎทองของออปแอมป์ (มีการป้อนกลับ)</span><span class="en-only">⭐ The Op-Amp Golden Rules (with feedback)</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div class="info-box">
+          <strong class="th-only">กฎ 1: V<sub>+</sub> = V<sub>−</sub></strong>
+          <strong class="en-only">Rule 1: V<sub>+</sub> = V<sub>−</sub></strong>
+          <p class="th-only" style="margin:0.4rem 0 0;">เมื่อมีการป้อนกลับเชิงลบ ออปแอมป์จะปรับเอาต์พุตจน <strong>แรงดันขาเข้าทั้งสองเท่ากัน</strong> (เรียกว่า "virtual short" / ลัดวงจรเสมือน)</p>
+          <p class="en-only" style="margin:0.4rem 0 0;">With negative feedback, the op-amp drives the output until its <strong>two inputs are equal</strong> (the "virtual short").</p>
+        </div>
+        <div class="info-box">
+          <strong class="th-only">กฎ 2: ไม่มีกระแสไหลเข้าขาเข้า</strong>
+          <strong class="en-only">Rule 2: No current into the inputs</strong>
+          <p class="th-only" style="margin:0.4rem 0 0;">อิมพีแดนซ์ขาเข้าสูงมาก → <strong>กระแสเข้าขา +/− ≈ 0</strong> ใช้คำนวณกระแสในตัวต้านทานป้อนกลับได้ง่าย</p>
+          <p class="en-only" style="margin:0.4rem 0 0;">Input impedance is huge → <strong>input current ≈ 0</strong>, which makes the feedback-resistor currents easy to solve.</p>
+        </div>
+      </div>
+      <div class="info-box" style="margin-top:0.7rem;">
+        <span class="th-only">📌 2 กฎนี้ทำให้คำนวณอัตราขยายของวงจรออปแอมป์ได้โดยไม่ต้องรู้ค่า A ที่แท้จริงของชิป — อัตราขยายขึ้นกับ <strong>ตัวต้านทานภายนอก</strong> เท่านั้น</span>
+        <span class="en-only">📌 These two rules let you find a circuit's gain without knowing the chip's actual A — the gain depends only on the <strong>external resistors</strong>.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Comparator (open loop) -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">โหมดเปิดลูป: Comparator (ตัวเปรียบเทียบ)</span><span class="en-only">Open-Loop: Comparator</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li>ไม่มีการป้อนกลับ → อัตราขยายสูงมาก ทำให้เอาต์พุต <strong>"สุดราง" อย่างใดอย่างหนึ่ง</strong></li>
+        <li>ถ้า <strong>V<sub>+</sub> &gt; V<sub>−</sub></strong> → เอาต์พุตพุ่งไปราง <strong>บวก (+Vsat)</strong></li>
+        <li>ถ้า <strong>V<sub>+</sub> &lt; V<sub>−</sub></strong> → เอาต์พุตพุ่งไปราง <strong>ลบ (−Vsat)</strong></li>
+        <li>ใช้ตรวจว่าแรงดันถึงเกณฑ์หรือยัง เช่น วงจรเซนเซอร์แสง/อุณหภูมิ (ตัด-ต่อ)</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>No feedback → the huge gain forces the output to <strong>one rail or the other</strong></li>
+        <li>If <strong>V<sub>+</sub> &gt; V<sub>−</sub></strong> → output slams to the <strong>positive rail (+Vsat)</strong></li>
+        <li>If <strong>V<sub>+</sub> &lt; V<sub>−</sub></strong> → output slams to the <strong>negative rail (−Vsat)</strong></li>
+        <li>Used to detect a threshold — e.g. light/temperature trip circuits</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4. Inverting / Non-inverting / Buffer -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">โหมดปิดลูป: วงจรขยายพื้นฐาน</span><span class="en-only">Closed-Loop: Basic Amplifiers</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div style="text-align:center;">
+          <svg viewBox="0 0 260 150" style="max-width:100%;height:auto;font-family:inherit;font-size:10px;" role="img" aria-label="Inverting amplifier">
+            <polygon points="120,40 120,110 180,75 120,40" fill="none" stroke="var(--primary)" stroke-width="2"/>
+            <text x="128" y="60" fill="var(--text)">−</text><text x="128" y="103" fill="var(--text)">+</text>
+            <!-- input through Rin to - -->
+            <line x1="20" y1="55" x2="55" y2="55" stroke="var(--text)" stroke-width="1.5"/>
+            <rect x="55" y="49" width="30" height="12" fill="none" stroke="var(--text)" stroke-width="1.5"/>
+            <text x="70" y="46" text-anchor="middle" fill="var(--text)">Rin</text>
+            <line x1="85" y1="55" x2="120" y2="55" stroke="var(--text)" stroke-width="1.5"/>
+            <text x="16" y="58" text-anchor="end" fill="var(--text-light)">Vin</text>
+            <!-- feedback Rf -->
+            <line x1="100" y1="55" x2="100" y2="20" stroke="var(--text)" stroke-width="1.5"/>
+            <rect x="100" y="14" width="60" height="12" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+            <text x="130" y="11" text-anchor="middle" fill="var(--accent)">Rf</text>
+            <line x1="160" y1="20" x2="200" y2="20" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="200" y1="20" x2="200" y2="75" stroke="var(--text)" stroke-width="1.5"/>
+            <!-- + to ground -->
+            <line x1="105" y1="92" x2="120" y2="92" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="105" y1="92" x2="105" y2="105" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="98" y1="105" x2="112" y2="105" stroke="var(--text)" stroke-width="1.5"/>
+            <!-- out -->
+            <line x1="180" y1="75" x2="230" y2="75" stroke="var(--text)" stroke-width="1.5"/>
+            <text x="232" y="78" fill="var(--text-light)">Vout</text>
+          </svg>
+          <div style="font-size:.82rem;font-weight:600;"><span class="th-only">กลับเฟส (Inverting)</span><span class="en-only">Inverting</span></div>
+        </div>
+        <div>
+          <div class="formula-box"><div class="formula">A<sub>v</sub> = −R<sub>f</sub> / R<sub>in</sub></div></div>
+          <ul class="content-list th-only" style="margin-top:.5rem;">
+            <li>เอาต์พุต <strong>กลับเฟส</strong> กับอินพุต (เครื่องหมายลบ)</li>
+            <li>ขา + ต่อกราวด์ → ขา − เป็น "virtual ground" (≈ 0 V)</li>
+          </ul>
+          <ul class="content-list en-only" style="margin-top:.5rem;">
+            <li>Output is <strong>inverted</strong> vs input (the minus sign)</li>
+            <li>+ tied to ground → − becomes a "virtual ground" (≈ 0 V)</li>
+          </ul>
+        </div>
+      </div>
+
+      <hr style="border:none;border-top:1px solid var(--border);margin:1.1rem 0;">
+
+      <div class="grid-2">
+        <div style="text-align:center;">
+          <svg viewBox="0 0 260 150" style="max-width:100%;height:auto;font-family:inherit;font-size:10px;" role="img" aria-label="Non-inverting amplifier">
+            <polygon points="120,40 120,110 180,75 120,40" fill="none" stroke="var(--primary)" stroke-width="2"/>
+            <text x="128" y="60" fill="var(--text)">−</text><text x="128" y="103" fill="var(--text)">+</text>
+            <!-- input to + -->
+            <line x1="20" y1="92" x2="120" y2="92" stroke="var(--text)" stroke-width="1.5"/>
+            <text x="16" y="95" text-anchor="end" fill="var(--text-light)">Vin</text>
+            <!-- feedback Rf from out to - -->
+            <line x1="100" y1="55" x2="100" y2="20" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="100" y1="55" x2="120" y2="55" stroke="var(--text)" stroke-width="1.5"/>
+            <rect x="100" y="14" width="60" height="12" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+            <text x="130" y="11" text-anchor="middle" fill="var(--accent)">Rf</text>
+            <line x1="160" y1="20" x2="200" y2="20" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="200" y1="20" x2="200" y2="75" stroke="var(--text)" stroke-width="1.5"/>
+            <!-- Rin from - to ground -->
+            <line x1="100" y1="55" x2="60" y2="55" stroke="var(--text)" stroke-width="1.5"/>
+            <rect x="30" y="49" width="30" height="12" fill="none" stroke="var(--text)" stroke-width="1.5"/>
+            <text x="45" y="46" text-anchor="middle" fill="var(--text)">Rin</text>
+            <line x1="30" y1="55" x2="20" y2="55" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="20" y1="48" x2="20" y2="62" stroke="var(--text)" stroke-width="1.5"/>
+            <!-- out -->
+            <line x1="180" y1="75" x2="230" y2="75" stroke="var(--text)" stroke-width="1.5"/>
+            <text x="232" y="78" fill="var(--text-light)">Vout</text>
+          </svg>
+          <div style="font-size:.82rem;font-weight:600;"><span class="th-only">ไม่กลับเฟส (Non-inverting)</span><span class="en-only">Non-inverting</span></div>
+        </div>
+        <div>
+          <div class="formula-box"><div class="formula">A<sub>v</sub> = 1 + R<sub>f</sub> / R<sub>in</sub></div></div>
+          <ul class="content-list th-only" style="margin-top:.5rem;">
+            <li>เอาต์พุต <strong>เฟสเดียวกับ</strong> อินพุต อัตราขยาย ≥ 1 เสมอ</li>
+            <li>ป้อนสัญญาณเข้าขา + อิมพีแดนซ์อินพุตสูงมาก</li>
+          </ul>
+          <ul class="content-list en-only" style="margin-top:.5rem;">
+            <li>Output is <strong>in phase</strong> with input; gain is always ≥ 1</li>
+            <li>Signal enters the + input — very high input impedance</li>
+          </ul>
+          <div class="info-box" style="margin-top:.5rem;">
+            <span class="th-only"><strong>Buffer / Voltage follower:</strong> กรณีพิเศษที่ R<sub>f</sub> = 0, R<sub>in</sub> = ∞ → A<sub>v</sub> = 1 ใช้ "แยกโหลด" ไม่ให้วงจรก่อนหน้าถูกดึงกระแส</span>
+            <span class="en-only"><strong>Buffer / voltage follower:</strong> the special case R<sub>f</sub> = 0, R<sub>in</sub> = ∞ → A<sub>v</sub> = 1, used to "isolate" a source from its load.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. SIM -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">⭐ จำลองวงจรขยาย: อัตราขยายและการตัดยอด</span><span class="en-only">⭐ Amplifier Simulation: Gain &amp; Clipping</span></div>
+    <div class="card">
+      <p class="th-only">ป้อนสัญญาณไซน์เข้าวงจรขยาย ปรับ R<sub>in</sub>, R<sub>f</sub> และความสูงอินพุต ดูสัญญาณเอาต์พุตถูกขยาย — ถ้าอัตราขยาย × อินพุต <strong>เกินราง ±Vsat</strong> เอาต์พุตจะถูก <strong>ตัดยอด (clipping)</strong></p>
+      <p class="en-only">Feed a sine into the amplifier, adjust R<sub>in</sub>, R<sub>f</sub> and the input level, and watch the output get amplified — when gain × input <strong>exceeds the ±Vsat rails</strong>, the output <strong>clips</strong>.</p>
+
+      <div class="sim-wrap" style="margin-top:1rem;">
+        <div>
+          <canvas id="opamp-canvas" class="sim-screen"></canvas>
+          <p style="font-size:0.8rem;color:var(--text-light);margin:0.5rem 0 0;text-align:center;">
+            <span class="th-only">เส้นน้ำเงิน = อินพุต, เส้นเขียว = เอาต์พุต, เส้นแดงประ = ราง ±12 V (สังเกตการกลับเฟสในโหมด Inverting)</span>
+            <span class="en-only">Blue = input, green = output, dashed red = ±12 V rails (note the phase flip in Inverting mode)</span>
+          </p>
+        </div>
+        <div>
+          <div class="sim-panel">
+            <div class="sim-ctrl-row" style="margin-bottom:0.6rem;"><span class="th-only">⚙ ปรับค่า</span><span class="en-only">⚙ Adjust</span></div>
+            <div class="sim-seg" id="op-mode">
+              <button data-mode="inverting" class="active"><span class="th-only">กลับเฟส</span><span class="en-only">Inverting</span></button>
+              <button data-mode="noninverting"><span class="th-only">ไม่กลับเฟส</span><span class="en-only">Non-inv.</span></button>
+            </div>
+            <div class="sim-fixed">±V<sub>sat</sub> = ±12 V • <span class="th-only">อินพุต</span><span class="en-only">input</span> = sine</div>
+            <div class="sim-ctrl">
+              <div class="sim-ctrl-row"><label>R<sub>in</sub></label><span id="op-rin-val">10 kΩ</span></div>
+              <input type="range" id="op-rin" min="1" max="100" step="1" value="10">
+            </div>
+            <div class="sim-ctrl">
+              <div class="sim-ctrl-row"><label>R<sub>f</sub></label><span id="op-rf-val">100 kΩ</span></div>
+              <input type="range" id="op-rf" min="1" max="500" step="1" value="100">
+            </div>
+            <div class="sim-ctrl">
+              <div class="sim-ctrl-row"><label><span class="th-only">อินพุต</span><span class="en-only">Input</span> V<sub>in</sub></label><span id="op-vin-val">±1.00 V</span></div>
+              <input type="range" id="op-vin" min="0.1" max="5" step="0.1" value="1">
+            </div>
+          </div>
+          <div class="sim-readout">
+            <div class="sim-rb"><div class="sim-rl">Gain A<sub>v</sub></div><div class="sim-rv" id="op-gain">— V/V</div></div>
+            <div class="sim-rb"><div class="sim-rl">V<sub>in</sub> peak</div><div class="sim-rv" id="op-vinr">— V</div></div>
+            <div class="sim-rb"><div class="sim-rl">V<sub>out</sub> peak</div><div class="sim-rv" id="op-vout">— V</div></div>
+            <div class="sim-rb"><div class="sim-rl"><span class="th-only">สถานะ</span><span class="en-only">Status</span></div><div class="sim-rv" id="op-clip">—</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box" style="margin-top:0.9rem;">
+        <span class="th-only">🔬 ลองดู: เพิ่ม <strong>R<sub>f</sub></strong> → อัตราขยายสูงขึ้น เอาต์พุตโตขึ้นจน <strong>ชนราง = ตัดยอด</strong> (สัญญาณเพี้ยน) • สลับโหมดดูการกลับเฟส • Buffer = Non-inv ที่ R<sub>f</sub> เล็ก/R<sub>in</sub> ใหญ่ → gain ≈ 1</span>
+        <span class="en-only">🔬 Try it: raise <strong>R<sub>f</sub></strong> → higher gain, output grows until it <strong>hits the rails = clipping</strong> (distortion) • switch modes to see the phase flip • a buffer is the non-inverting case with tiny R<sub>f</sub>/large R<sub>in</sub> → gain ≈ 1</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. การใช้งานจริง -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">การใช้งานจริง</span><span class="en-only">Real-World Uses</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <ul class="content-list th-only">
+          <li>ขยายสัญญาณเล็กๆ จากเซนเซอร์/ไมโครโฟน</li>
+          <li>วงจรเปรียบเทียบ/ตัดต่อตามเกณฑ์ (comparator)</li>
+          <li>วงจรกรองความถี่ (active filter)</li>
+        </ul>
+        <ul class="content-list en-only">
+          <li>Amplifying small sensor/microphone signals</li>
+          <li>Threshold comparators (trip circuits)</li>
+          <li>Active filters</li>
+        </ul>
+        <ul class="content-list th-only">
+          <li>บวก/ลบ/อินทิเกรต/ดิฟเฟอเรนเชียลสัญญาณ (วงจรคณิต)</li>
+          <li>บัฟเฟอร์แยกโหลด (voltage follower)</li>
+          <li>วงจรกำเนิดสัญญาณ (oscillator)</li>
+        </ul>
+        <ul class="content-list en-only">
+          <li>Summing / integrating / differentiating signals (analog math)</li>
+          <li>Load-isolating buffers (voltage followers)</li>
+          <li>Signal oscillators</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. เบอร์ยอดนิยม + ทิป -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">เบอร์ยอดนิยมและข้อควรระวัง</span><span class="en-only">Popular Parts &amp; Cautions</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <table>
+            <tr><th><span class="th-only">เบอร์</span><span class="en-only">Part</span></th><th><span class="th-only">ลักษณะเด่น</span><span class="en-only">Notable</span></th></tr>
+            <tr><td><strong>741</strong></td><td><span class="th-only">คลาสสิก ตัวเดียว ใช้สอนพื้นฐาน</span><span class="en-only">Classic single, teaching staple</span></td></tr>
+            <tr><td><strong>LM358</strong></td><td><span class="th-only">2 ตัว/ชิป, ไฟเดี่ยวได้</span><span class="en-only">Dual, single-supply OK</span></td></tr>
+            <tr><td><strong>LM324</strong></td><td><span class="th-only">4 ตัว/ชิป</span><span class="en-only">Quad</span></td></tr>
+            <tr><td><strong>TL071/2</strong></td><td><span class="th-only">JFET, นอยซ์ต่ำ</span><span class="en-only">JFET, low noise</span></td></tr>
+          </table>
+        </div>
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>ไฟเลี้ยง:</strong> มีทั้งแบบ <strong>คู่ (±Vcc)</strong> และ <strong>เดี่ยว</strong> — สัญญาณ AC ที่ไฟเดี่ยวต้องยก bias ไว้กลางราง</li>
+            <li>เอาต์พุตแกว่งไม่ถึงรางเป๊ะ เว้นแต่ชนิด <strong>rail-to-rail</strong></li>
+            <li>มี <strong>offset</strong> และ <strong>slew rate</strong> จำกัด — ความถี่/ความเร็วสูงต้องเลือกเบอร์ให้เหมาะ</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li><strong>Supply:</strong> <strong>dual (±Vcc)</strong> or <strong>single</strong> — AC on a single supply needs a mid-rail bias</li>
+            <li>Output won't quite reach the rails unless it's a <strong>rail-to-rail</strong> type</li>
+            <li>Finite <strong>offset</strong> and <strong>slew rate</strong> — pick the right part for high speed/frequency</li>
+          </ul>
+        </div>
+      </div>
+      <div class="info-box" style="margin-top:0.7rem;">
+        <span class="th-only">🔗 อัตราขยายแบบ dB และการอ่านสัญญาณบนสโคปดูได้ในบท <strong>ออสซิลโลสโคป</strong>; ตัวต้านทานที่ใช้กำหนดอัตราขยายทบทวนได้ในบท <strong>ตัวต้านทาน</strong></span>
+        <span class="en-only">🔗 Gain in dB and reading signals on a scope are in the <strong>Oscilloscope</strong> lesson; the gain-setting resistors are covered in the <strong>Resistor</strong> lesson.</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
+<script>const CURRENT_PAGE='opamp';</script>
+<script src="nav.js"></script>
+<script src="opamp-sim.js"></script>
+</body>
+</html>
