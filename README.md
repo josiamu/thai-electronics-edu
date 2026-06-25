@@ -40,6 +40,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | ไดโอด | Diode | `diode.html` |
 | ทรานซิสเตอร์ | Transistor (BJT/MOSFET) | `transistor.html` |
 | IC วงจรรวม | Integrated Circuit (IC) | `ic.html` |
+| IC ตั้งเวลา 555 | 555 Timer | `555.html` |
 | รีเลย์ | Relay | `relay.html` |
 | ตัวเก็บประจุ | Capacitor | `capacitor.html` |
 | ตัวเหนี่ยวนำและหม้อแปลง | Inductor & Transformer | `inductor.html` |
@@ -156,10 +157,11 @@ git push
 ├── signal-gen-sim.js    — Waveform generator
 ├── capacitor-sim.js     — RC charge/discharge simulator
 ├── power-supply-sim.js  — Power supply (AC→DC) simulator
+├── 555-sim.js           — 555 astable simulator (LED blinker)
 ├── breadboard.js        — Virtual breadboard lab (MNA solver + multimeter)
 ├── index.html           — Home page
 │   ├── electricity.html / ohm.html                 — Fundamentals
-│   ├── resistor.html / diode.html / transistor.html / ic.html / relay.html
+│   ├── resistor.html / diode.html / transistor.html / ic.html / 555.html / relay.html
 │   │   capacitor.html / inductor.html / power-supply.html   — Components
 │   ├── multimeter.html / signal-generator.html / oscilloscope.html  — Measurement
 │   ├── soldering.html / home-wiring.html           — Practical

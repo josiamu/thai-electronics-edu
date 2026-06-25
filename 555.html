@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="IC ตั้งเวลา 555 | สื่อการเรียนการสอน" data-title-en="555 Timer IC | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IC ตั้งเวลา 555 | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.sim-wrap { display:grid; grid-template-columns:1fr 285px; gap:1.25rem; align-items:start; }
+@media (max-width:860px){ .sim-wrap{ grid-template-columns:1fr; } }
+.sim-screen { width:100%; height:auto; display:block; border-radius:12px; background:#0b1220; border:1px solid var(--border); }
+.sim-panel { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:.9rem 1rem; }
+.sim-ctrl { margin-bottom:.9rem; }
+.sim-ctrl-row { display:flex; justify-content:space-between; align-items:center; font-size:.84rem; font-weight:600; margin-bottom:.25rem; }
+.sim-ctrl-row span { color:var(--primary); font-size:.9rem; }
+.sim-ctrl input[type=range] { width:100%; cursor:pointer; accent-color:var(--primary); }
+.sim-fixed { font-size:.8rem; color:var(--text-light); background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:.4rem .6rem; margin-bottom:.9rem; }
+.sim-readout { display:grid; grid-template-columns:1fr 1fr; gap:.45rem; margin-top:.4rem; }
+.sim-rb { background:var(--bg); border:1px solid var(--border); border-radius:9px; padding:.45rem .6rem; text-align:center; }
+.sim-rl { font-size:.72rem; color:var(--text-light); margin-bottom:.12rem; }
+.sim-rv { font-size:1.02rem; font-weight:700; color:var(--text); }
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">⏱️</div>
+    <div>
+      <h1 class="th-only">IC ตั้งเวลา 555</h1>
+      <h1 class="en-only">555 Timer IC</h1>
+      <p class="th-only">8 ขา • Astable / Monostable • สูตร f, T, Duty • วงจรไฟกระพริบ + ซิมโต้ตอบ</p>
+      <p class="en-only">8 pins • Astable / Monostable • f, T, Duty formulas • LED blinker + live sim</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">วัตถุประสงค์การเรียนรู้</span><span class="en-only">Learning Objectives</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li>บอกหน้าที่ของ IC 555 และความหมายของขาทั้ง 8 ได้</li>
+        <li>แยกความต่างระหว่างโหมด <strong>Astable</strong> (สร้างคลื่นเอง) กับ <strong>Monostable</strong> (พัลส์ครั้งเดียว) ได้</li>
+        <li>คำนวณความถี่ f, คาบ T, และ Duty cycle ของวงจร astable จาก R1, R2, C ได้</li>
+        <li>คำนวณความกว้างพัลส์ของวงจร monostable (T = 1.1 RC) ได้</li>
+        <li>ออกแบบวงจรไฟ LED กระพริบด้วย 555 ได้</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>State what the 555 does and the role of all 8 pins</li>
+        <li>Distinguish <strong>Astable</strong> (self-oscillating) from <strong>Monostable</strong> (one-shot) modes</li>
+        <li>Calculate frequency f, period T and duty cycle of an astable circuit from R1, R2, C</li>
+        <li>Calculate the pulse width of a monostable circuit (T = 1.1 RC)</li>
+        <li>Design an LED blinker using a 555</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 1. 555 คืออะไร -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">IC 555 คืออะไร?</span><span class="en-only">What is the 555?</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>IC ตั้งเวลา/สร้างสัญญาณ</strong> ยอดนิยมที่สุดในโลก — ราคาถูก หาง่าย ใช้ง่าย</li>
+            <li>ข้างในมี <strong>ตัวเปรียบเทียบ 2 ตัว (comparator), Flip-Flop และทรานซิสเตอร์</strong> รวมไว้แล้ว</li>
+            <li>ต่อ <strong>ตัวต้านทาน + ตัวเก็บประจุ</strong> ภายนอกไม่กี่ตัว ก็กำหนดจังหวะเวลาได้</li>
+            <li>จ่ายไฟได้กว้าง <strong>4.5–15 V</strong> และเอาต์พุตขับโหลดได้ถึง ~200 mA</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li>The world's most popular <strong>timer / signal-generator IC</strong> — cheap, everywhere, easy</li>
+            <li>Inside it already has <strong>two comparators, a flip-flop and transistors</strong></li>
+            <li>Add just a few external <strong>resistors + a capacitor</strong> to set the timing</li>
+            <li>Wide supply <strong>4.5–15 V</strong>, and the output drives up to ~200 mA</li>
+          </ul>
+        </div>
+        <div class="info-box">
+          <strong class="th-only">💡 ทำไมชื่อ "555"?</strong>
+          <strong class="en-only">💡 Why "555"?</strong>
+          <p class="th-only" style="margin:0.4rem 0 0;">มาจากตัวต้านทานภายใน <strong>3 ตัว ค่า 5 kΩ</strong> ต่ออนุกรมเป็นตัวแบ่งแรงดัน — สร้างขีดเปรียบเทียบที่ <strong>⅓ และ ⅔ ของ Vcc</strong> ซึ่งเป็นหัวใจการทำงานของชิปนี้</p>
+          <p class="en-only" style="margin:0.4rem 0 0;">From the three internal <strong>5 kΩ resistors</strong> in series forming a divider — they set the comparison points at <strong>⅓ and ⅔ of Vcc</strong>, the heart of how the chip works.</p>
+        </div>
+      </div>
+      <div class="info-box" style="margin-top:0.9rem;">
+        <span class="th-only">🔗 555 เป็น <strong>IC</strong> ตัวหนึ่ง — ถ้ายังไม่ชัดเรื่องแพ็กเกจ DIP/การนับขา/หา Pin 1 ทบทวนได้ในบท <strong>IC วงจรรวม</strong> ก่อน</span>
+        <span class="en-only">🔗 The 555 is an <strong>IC</strong> — if DIP packages / pin numbering / finding Pin 1 are unclear, review the <strong>IC basics</strong> lesson first.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. ขา 8 ขา -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ขาทั้ง 8 ของ 555 (DIP-8)</span><span class="en-only">The 8 Pins (DIP-8)</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div style="text-align:center;">
+          <svg viewBox="0 0 300 210" style="max-width:100%;height:auto;font-family:inherit;font-size:10px;" role="img" aria-label="555 DIP-8 pinout">
+            <rect x="95" y="25" width="110" height="160" rx="6" fill="var(--card)" stroke="var(--text)" stroke-width="2"/>
+            <path d="M132 25 a18 18 0 0 0 36 0" fill="none" stroke="var(--text)" stroke-width="2"/>
+            <circle cx="115" cy="45" r="4" fill="var(--primary)"/>
+            <text x="150" y="115" text-anchor="middle" fill="var(--text-light)">555</text>
+            <!-- left pins 1-4 -->
+            <g stroke="var(--text)" stroke-width="2">
+              <line x1="95" y1="48" x2="68" y2="48"/><line x1="95" y1="88" x2="68" y2="88"/>
+              <line x1="95" y1="128" x2="68" y2="128"/><line x1="95" y1="168" x2="68" y2="168"/>
+            </g>
+            <text x="64" y="51" text-anchor="end" fill="var(--text)"><tspan fill="var(--primary)" font-weight="700">1</tspan> GND</text>
+            <text x="64" y="91" text-anchor="end" fill="var(--text)">2 TRIG</text>
+            <text x="64" y="131" text-anchor="end" fill="var(--text)">3 OUT</text>
+            <text x="64" y="171" text-anchor="end" fill="var(--text)">4 RESET</text>
+            <!-- right pins 5-8 -->
+            <g stroke="var(--text)" stroke-width="2">
+              <line x1="205" y1="168" x2="232" y2="168"/><line x1="205" y1="128" x2="232" y2="128"/>
+              <line x1="205" y1="88" x2="232" y2="88"/><line x1="205" y1="48" x2="232" y2="48"/>
+            </g>
+            <text x="236" y="171" fill="var(--text)">5 CTRL</text>
+            <text x="236" y="131" fill="var(--text)">6 THR</text>
+            <text x="236" y="91" fill="var(--text)">7 DISCH</text>
+            <text x="236" y="51" fill="var(--text)">8 Vcc</text>
+          </svg>
+        </div>
+        <div>
+          <table>
+            <tr><th>#</th><th><span class="th-only">ขา</span><span class="en-only">Pin</span></th><th><span class="th-only">หน้าที่</span><span class="en-only">Function</span></th></tr>
+            <tr><td>1</td><td>GND</td><td><span class="th-only">กราวด์</span><span class="en-only">Ground</span></td></tr>
+            <tr><td>2</td><td>TRIG</td><td><span class="th-only">ทริกเกอร์ (&lt; ⅓Vcc → เอาต์พุต HIGH)</span><span class="en-only">Trigger (&lt; ⅓Vcc → output HIGH)</span></td></tr>
+            <tr><td>3</td><td>OUT</td><td><span class="th-only">เอาต์พุต</span><span class="en-only">Output</span></td></tr>
+            <tr><td>4</td><td>RESET</td><td><span class="th-only">รีเซ็ต (ต่อ Vcc เมื่อไม่ใช้)</span><span class="en-only">Reset (tie to Vcc if unused)</span></td></tr>
+            <tr><td>5</td><td>CTRL</td><td><span class="th-only">คุมแรงดัน (ต่อ C 10nF ลงกราวด์)</span><span class="en-only">Control voltage (10nF to GND)</span></td></tr>
+            <tr><td>6</td><td>THR</td><td><span class="th-only">ทรีโชลด์ (&gt; ⅔Vcc → เอาต์พุต LOW)</span><span class="en-only">Threshold (&gt; ⅔Vcc → output LOW)</span></td></tr>
+            <tr><td>7</td><td>DISCH</td><td><span class="th-only">คายประจุ C</span><span class="en-only">Discharge C</span></td></tr>
+            <tr><td>8</td><td>Vcc</td><td><span class="th-only">ไฟเลี้ยง 4.5–15 V</span><span class="en-only">Supply 4.5–15 V</span></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. โหมดทำงาน -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">2 โหมดการทำงานหลัก</span><span class="en-only">Two Main Modes</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div class="info-box">
+          <strong class="th-only">🔁 Astable (สร้างคลื่นต่อเนื่อง)</strong>
+          <strong class="en-only">🔁 Astable (free-running)</strong>
+          <p class="th-only" style="margin:0.4rem 0 0;">เอาต์พุตสลับ HIGH/LOW <strong>เองตลอดเวลา</strong> เป็นคลื่นสี่เหลี่ยม — ใช้ทำ ไฟกระพริบ, เสียงบี๊บ, สัญญาณนาฬิกา (clock)</p>
+          <p class="en-only" style="margin:0.4rem 0 0;">The output toggles HIGH/LOW <strong>continuously</strong> as a square wave — used for blinkers, beepers, and clock signals.</p>
+        </div>
+        <div class="info-box">
+          <strong class="th-only">1️⃣ Monostable (พัลส์ครั้งเดียว / one-shot)</strong>
+          <strong class="en-only">1️⃣ Monostable (one-shot)</strong>
+          <p class="th-only" style="margin:0.4rem 0 0;">อยู่นิ่ง LOW จนกว่าจะถูก <strong>ทริกเกอร์</strong> → เอาต์พุต HIGH นาน <strong>ช่วงเวลาหนึ่ง</strong> แล้วกลับ LOW — ใช้ทำตัวตั้งเวลา/หน่วงเวลา</p>
+          <p class="en-only" style="margin:0.4rem 0 0;">Idles LOW until <strong>triggered</strong> → output goes HIGH for <strong>one fixed time</strong>, then back to LOW — used for timers/delays.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Astable + สูตร + SIM -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">⭐ โหมด Astable: สูตรและการจำลอง</span><span class="en-only">⭐ Astable Mode: Formulas &amp; Simulation</span></div>
+    <div class="card">
+      <p class="th-only">ต่อ R1 จาก Vcc → ขา 7, R2 จากขา 7 → ขา 6/2, และ C จากขา 6/2 → กราวด์ ตัวเก็บประจุจะ <strong>ชาร์จผ่าน R1+R2</strong> (เอาต์พุต HIGH) แล้ว <strong>คายผ่าน R2</strong> (เอาต์พุต LOW) สลับกันไปเรื่อยๆ ระหว่าง ⅓Vcc และ ⅔Vcc</p>
+      <p class="en-only">Wire R1 from Vcc → pin 7, R2 from pin 7 → pins 6/2, and C from pins 6/2 → GND. The capacitor <strong>charges through R1+R2</strong> (output HIGH) then <strong>discharges through R2</strong> (output LOW), oscillating between ⅓Vcc and ⅔Vcc.</p>
+
+      <div class="grid-2" style="margin-top:0.4rem;">
+        <div class="formula-box">
+          <div class="formula">t<sub>HIGH</sub> = 0.693 × (R1 + R2) × C</div>
+          <div class="formula">t<sub>LOW</sub> = 0.693 × R2 × C</div>
+        </div>
+        <div class="formula-box">
+          <div class="formula">f = 1.44 / ((R1 + 2·R2) × C)</div>
+          <div class="formula">Duty = (R1 + R2) / (R1 + 2·R2) × 100%</div>
+        </div>
+      </div>
+      <div class="info-box" style="margin-top:0.5rem;">
+        <span class="th-only">📌 เพราะ C ชาร์จผ่าน R1+R2 แต่คายผ่าน R2 เท่านั้น → t<sub>HIGH</sub> &gt; t<sub>LOW</sub> เสมอ ดังนั้น <strong>Duty cycle &gt; 50%</strong> เสมอในวงจรพื้นฐาน (อยากได้ 50% พอดีต้องเพิ่มไดโอดคร่อม R2)</span>
+        <span class="en-only">📌 Since C charges through R1+R2 but discharges through R2 only → t<sub>HIGH</sub> &gt; t<sub>LOW</sub> always, so the basic circuit's <strong>duty cycle is always &gt; 50%</strong> (for exactly 50%, add a diode across R2).</span>
+      </div>
+
+      <!-- Interactive simulator -->
+      <div class="sim-wrap" style="margin-top:1.1rem;">
+        <div>
+          <canvas id="astable-canvas" class="sim-screen"></canvas>
+          <p style="font-size:0.8rem;color:var(--text-light);margin:0.5rem 0 0;text-align:center;">
+            <span class="th-only">หน้าจอแสดง 2–3 คาบ — เส้นน้ำเงิน = แรงดันตัวเก็บประจุ, เส้นเขียว = เอาต์พุต, LED กระพริบตามเอาต์พุต (Vcc = 5 V)</span>
+            <span class="en-only">Showing ~2–3 cycles — blue = capacitor voltage, green = output, the LED blinks with the output (Vcc = 5 V)</span>
+          </p>
+        </div>
+        <div>
+          <div class="sim-panel">
+            <div class="sim-ctrl-row" style="margin-bottom:0.6rem;">
+              <span class="th-only">⚙ ปรับค่า</span><span class="en-only">⚙ Adjust</span>
+            </div>
+            <div class="sim-fixed">V<sub>cc</sub> = 5 V</div>
+            <div class="sim-ctrl">
+              <div class="sim-ctrl-row"><label>R1</label><span id="a-r1-val">10 kΩ</span></div>
+              <input type="range" id="a-r1" min="1" max="100" step="1" value="10">
+            </div>
+            <div class="sim-ctrl">
+              <div class="sim-ctrl-row"><label>R2</label><span id="a-r2-val">47 kΩ</span></div>
+              <input type="range" id="a-r2" min="1" max="100" step="1" value="47">
+            </div>
+            <div class="sim-ctrl">
+              <div class="sim-ctrl-row"><label><span class="th-only">ตัวเก็บประจุ</span><span class="en-only">Capacitor</span> C</label><span id="a-c-val">10 µF</span></div>
+              <input type="range" id="a-c" min="1" max="220" step="1" value="10">
+            </div>
+          </div>
+          <div class="sim-readout">
+            <div class="sim-rb"><div class="sim-rl">f</div><div class="sim-rv" id="a-f">— Hz</div></div>
+            <div class="sim-rb"><div class="sim-rl">T = 1/f</div><div class="sim-rv" id="a-t">— s</div></div>
+            <div class="sim-rb"><div class="sim-rl">Duty</div><div class="sim-rv" id="a-duty">— %</div></div>
+            <div class="sim-rb"><div class="sim-rl">LED</div><div class="sim-rv" id="a-led">—</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box" style="margin-top:0.9rem;">
+        <span class="th-only">🔬 ลองดู: เพิ่ม <strong>C</strong> หรือ <strong>R</strong> → คลื่นช้าลง (f ลด, T เพิ่ม) LED กระพริบช้าลง • เพิ่ม <strong>R1</strong> เทียบ R2 → Duty เข้าใกล้ 100% มากขึ้น</span>
+        <span class="en-only">🔬 Try it: raise <strong>C</strong> or <strong>R</strong> → slower wave (f down, T up), LED blinks slower • raise <strong>R1</strong> vs R2 → duty pushes toward 100%</span>
+      </div>
+      <div class="info-box" style="margin-top:0.6rem;">
+        <span class="th-only">🔗 การชาร์จ/คายประจุของ C ผ่าน R คือ <strong>RC time constant</strong> เดียวกับในบท <strong>ตัวเก็บประจุ</strong> — 555 แค่เปลี่ยนทิศทุกครั้งที่แรงดันแตะ ⅓ หรือ ⅔ Vcc</span>
+        <span class="en-only">🔗 The charge/discharge of C through R is the same <strong>RC time constant</strong> from the <strong>Capacitor</strong> lesson — the 555 just flips direction whenever the voltage hits ⅓ or ⅔ Vcc.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Monostable -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">โหมด Monostable (พัลส์ครั้งเดียว)</span><span class="en-only">Monostable Mode (One-shot)</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li>ปกติเอาต์พุต LOW และ C ถูกคายไว้</li>
+            <li>กดทริกเกอร์ (ขา 2 ลงต่ำกว่า ⅓Vcc) → เอาต์พุต <strong>HIGH</strong></li>
+            <li>C ชาร์จผ่าน R จนถึง ⅔Vcc → เอาต์พุตกลับ <strong>LOW</strong> เอง</li>
+            <li>ได้พัลส์เดียว ความกว้างตั้งด้วย R และ C</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li>Output idles LOW with C held discharged</li>
+            <li>A trigger (pin 2 dips below ⅓Vcc) → output goes <strong>HIGH</strong></li>
+            <li>C charges through R up to ⅔Vcc → output returns to <strong>LOW</strong> by itself</li>
+            <li>One pulse, its width set by R and C</li>
+          </ul>
+        </div>
+        <div>
+          <div class="formula-box">
+            <div class="formula">T = 1.1 × R × C</div>
+          </div>
+          <div class="info-box" style="margin-top:0.5rem;">
+            <span class="th-only"><strong>ตัวอย่าง:</strong> R = 100 kΩ, C = 10 µF → T = 1.1 × 100000 × 0.00001 = <strong>1.1 วินาที</strong></span>
+            <span class="en-only"><strong>Example:</strong> R = 100 kΩ, C = 10 µF → T = 1.1 × 100000 × 0.00001 = <strong>1.1 seconds</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. การใช้งานจริง -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">การใช้งานจริง</span><span class="en-only">Real-World Uses</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <ul class="content-list th-only">
+          <li>ไฟ LED กระพริบ, ไฟวิ่ง</li>
+          <li>สร้างเสียงบี๊บ/ออดจากลำโพง (astable ความถี่เสียง)</li>
+          <li>สัญญาณนาฬิกา (clock) ป้อนวงจรดิจิทัล/ตัวนับ</li>
+        </ul>
+        <ul class="content-list en-only">
+          <li>Blinking/running LEDs</li>
+          <li>Beeps/tones from a speaker (audio-frequency astable)</li>
+          <li>Clock signals for digital circuits/counters</li>
+        </ul>
+        <ul class="content-list th-only">
+          <li>ตัวตั้งเวลา/หน่วงเวลา (monostable)</li>
+          <li>วงจรหรี่ไฟ/ปรับความเร็วมอเตอร์ด้วย PWM</li>
+          <li>ปุ่มกดกันเด้ง (debounce) แบบ one-shot</li>
+        </ul>
+        <ul class="content-list en-only">
+          <li>Timers/delays (monostable)</li>
+          <li>Dimming/motor-speed control via PWM</li>
+          <li>One-shot switch debouncing</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. ทิป & ข้อควรระวัง -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ทิปและข้อควรระวัง</span><span class="en-only">Tips &amp; Cautions</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li><strong>ต่อขา 4 (RESET) เข้า Vcc</strong> เสมอเมื่อไม่ได้ใช้ ไม่งั้นชิปอาจถูกรีเซ็ตมั่ว</li>
+        <li>ต่อ <strong>ตัวเก็บประจุ 10 nF</strong> จากขา 5 (CTRL) ลงกราวด์ เพื่อกันสัญญาณรบกวน</li>
+        <li>ใช้ <strong>CMOS เวอร์ชัน (เช่น 7555/LMC555)</strong> ถ้าต้องการกินไฟต่ำและความถี่สูง</li>
+        <li>เอาต์พุตขับ LED ได้ตรงๆ แต่ <strong>ต้องมีตัวต้านทานจำกัดกระแส</strong> อนุกรมเสมอ</li>
+        <li>R2 ไม่ควรเล็กเกินไป (กระแสคายประจุพุ่งผ่านขา 7) — ใช้ R2 ≥ 1 kΩ</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li><strong>Tie pin 4 (RESET) to Vcc</strong> when unused, or the chip may reset randomly</li>
+        <li>Add a <strong>10 nF capacitor</strong> from pin 5 (CTRL) to GND to reject noise</li>
+        <li>Use a <strong>CMOS version (e.g. 7555/LMC555)</strong> for low power and higher frequency</li>
+        <li>The output can drive an LED directly, but <strong>always add a series current-limiting resistor</strong></li>
+        <li>Don't make R2 too small (discharge current through pin 7) — keep R2 ≥ 1 kΩ</li>
+      </ul>
+      <div class="info-box" style="margin-top:0.6rem;">
+        <span class="th-only">🔗 อย่าลืมตัวต้านทานจำกัดกระแส LED — ทบทวนการคำนวณได้ในบท <strong>ไดโอด</strong> และ <strong>กฎของโอห์ม</strong></span>
+        <span class="en-only">🔗 Don't forget the LED current-limiting resistor — review the maths in the <strong>Diode</strong> and <strong>Ohm's Law</strong> lessons.</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
+<script>const CURRENT_PAGE='timer555';</script>
+<script src="nav.js"></script>
+<script src="555-sim.js"></script>
+</body>
+</html>
