@@ -266,6 +266,22 @@ ul.content-list li::before { content: "▸"; color: var(--accent); font-weight: 
   .ann-item { flex-wrap: wrap; }
 }
 
+/* ── DOWNLOADS: ค้นหา + กรองหมวด ────────────────────────────── */
+.dl-toolbar { position: sticky; top: 60px; z-index: 40; background: var(--bg); padding: 0.85rem 0; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border); }
+.dl-search-wrap { position: relative; margin-bottom: 0.75rem; }
+.dl-search-icon { position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); font-size: 0.95rem; opacity: 0.6; pointer-events: none; }
+.dl-search { width: 100%; padding: 0.7rem 1rem 0.7rem 2.5rem; font-family: inherit; font-size: 0.95rem; color: var(--text); background: var(--card); border: 1px solid var(--border); border-radius: 12px; transition: border-color 0.15s, box-shadow 0.15s; }
+.dl-search:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
+.dl-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.dl-chip { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.85rem; border: 1px solid var(--border); background: var(--card); color: var(--text); border-radius: 999px; cursor: pointer; font-family: inherit; font-size: 0.85rem; transition: background 0.15s, color 0.15s, border-color 0.15s; }
+.dl-chip:hover { border-color: var(--primary); color: var(--primary); }
+.dl-chip.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+.dl-chip-n { font-size: 0.72rem; font-weight: 700; background: rgba(0,0,0,0.08); border-radius: 999px; padding: 0.05rem 0.45rem; }
+.dl-chip.active .dl-chip-n { background: rgba(255,255,255,0.25); }
+[data-theme="dark"] .dl-chip-n { background: rgba(255,255,255,0.12); }
+.dl-noresult { text-align: center; color: var(--text-light); font-size: 0.95rem; padding: 2rem 0; }
+.pdf-card.dl-hidden, .section.dl-hidden { display: none; }
+
 /* ── TABS ──────────────────────────────────────────────────── */
 .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
 .tab-btn { padding: 0.5rem 1.25rem; border-radius: 20px; border: 2px solid var(--border); background: var(--card); cursor: pointer; font-family: inherit; font-size: 0.92rem; font-weight: 600; color: var(--text-light); transition: all 0.2s; }

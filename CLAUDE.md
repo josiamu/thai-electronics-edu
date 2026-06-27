@@ -19,7 +19,7 @@ website/
 ├── nav.js           — inject nav bar + dark mode toggle + hamburger + language toggle + back-to-top button
 ├── tools.js         — logic เครื่องคิดเลขทุกตัว (calcR4, calcR5, calcOhm, ...)
 ├── quiz.js          — ข้อมูลข้อสอบ + logic แบบทดสอบ
-├── downloads.js     — PDF preview modal + download interactions
+├── downloads.js     — PDF preview modal + download interactions + ตัวกรองหน้า downloads (ช่องค้นหา #dl-search ค้นทั้งไทย-อังกฤษ + ชิปกรองหมวด #dl-chips ตาม .section[data-cat], ซ่อนด้วย .dl-hidden, แสดง #dl-noresult เมื่อไม่พบ, placeholder เปลี่ยนตามภาษา)
 ├── oscilloscope.js  — Interactive I-V Curve Simulator
 ├── osc-reader.js    — Interactive Scope Reading Trainer (canvas, V/div & T/div sliders, AUTOSET/randomize, auto Vp/Vrms/T/f)
 ├── transistor-sim.js — Interactive BJT switch simulator (canvas, IB & β sliders → Cut-off/Active/Saturation + LED glow)
@@ -57,7 +57,7 @@ website/
 ├── formulas.html       — สูตรสรุป + print-friendly
 ├── tools.html          — เครื่องคิดเลข 7 ตัว (4-band + 5-band มีชื่อไทย-อังกฤษครบ)
 ├── quiz.html           — แบบทดสอบ 77 ข้อ 12 หมวด — มีข้อสอบ EN ครบทุกข้อ
-├── downloads.html      — ดาวน์โหลด PDF 30 ไฟล์ (มีหัวข้อ "ใบงาน" → pdf/worksheet/)
+├── downloads.html      — ดาวน์โหลด PDF 30 ไฟล์ (มีหัวข้อ "ใบงาน" → pdf/worksheet/) + toolbar ค้นหา/กรองหมวด (sticky: #dl-search + #dl-chips, sections มี data-cat)
 └── pdf/                — ไฟล์ PDF ภาษาไทย (~24 MB)
 ```
 

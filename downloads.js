@@ -57,3 +57,52 @@
     if (e.key === 'Escape') closeModal();
   });
 })();
+
+/* ── ค้นหา + กรองหมวด ─────────────────────────────────────── */
+(function () {
+  const search   = document.getElementById('dl-search');
+  const chipBox  = document.getElementById('dl-chips');
+  const noResult = document.getElementById('dl-noresult');
+  if (!search || !chipBox) return;
+
+  const sections = Array.from(document.querySelectorAll('.section[data-cat]'));
+  let activeCat = 'all';
+
+  const norm = function (s) { return (s || '').toLowerCase().trim(); };
+
+  function apply() {
+    const q = norm(search.value);
+    let total = 0;
+    sections.forEach(function (sec) {
+      const catOk = activeCat === 'all' || sec.dataset.cat === activeCat;
+      let shown = 0;
+      sec.querySelectorAll('.pdf-card').forEach(function (card) {
+        // textContent มีทั้งไทย-อังกฤษ (span ที่ซ่อนยังอยู่ใน DOM) → ค้นได้ทั้ง 2 ภาษา
+        const show = catOk && (!q || norm(card.textContent).indexOf(q) !== -1);
+        card.classList.toggle('dl-hidden', !show);
+        if (show) shown++;
+      });
+      sec.classList.toggle('dl-hidden', shown === 0);
+      total += shown;
+    });
+    if (noResult) noResult.hidden = total !== 0;
+  }
+
+  search.addEventListener('input', apply);
+
+  chipBox.addEventListener('click', function (e) {
+    const chip = e.target.closest('.dl-chip');
+    if (!chip) return;
+    activeCat = chip.dataset.cat;
+    chipBox.querySelectorAll('.dl-chip').forEach(function (c) {
+      c.classList.toggle('active', c === chip);
+    });
+    apply();
+  });
+
+  function setPlaceholder() {
+    search.placeholder = document.documentElement.lang === 'en' ? 'Search files…' : 'ค้นหาไฟล์…';
+  }
+  setPlaceholder();
+  window.addEventListener('langchange', setPlaceholder);
+})();
