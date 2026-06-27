@@ -280,6 +280,8 @@ ul.content-list li::before { content: "▸"; color: var(--accent); font-weight: 
 .dl-chip.active .dl-chip-n { background: rgba(255,255,255,0.25); }
 [data-theme="dark"] .dl-chip-n { background: rgba(255,255,255,0.12); }
 .dl-noresult { text-align: center; color: var(--text-light); font-size: 0.95rem; padding: 2rem 0; }
+.dl-credit { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--secondary); border-radius: 12px; padding: 0.7rem 1rem; margin-bottom: 1rem; font-size: 0.9rem; color: var(--text); }
+.dl-credit strong { color: var(--primary); }
 .pdf-card.dl-hidden, .section.dl-hidden { display: none; }
 
 /* ── TABS ──────────────────────────────────────────────────── */
