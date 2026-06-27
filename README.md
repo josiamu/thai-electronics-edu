@@ -166,6 +166,7 @@ git push
 ├── 555-sim.js           — 555 astable simulator (LED blinker)
 ├── opamp-sim.js         — Op-amp amplifier simulator (gain + clipping)
 ├── logic-sim.js         — Logic-gate simulator (toggle inputs + truth table)
+├── announcements.js     — Home-page "latest news/updates" box (data-driven, dismissible, bilingual)
 ├── breadboard.js        — Virtual breadboard lab (MNA solver + multimeter)
 ├── index.html           — Home page
 │   ├── electricity.html / ohm.html                 — Fundamentals

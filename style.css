@@ -241,6 +241,31 @@ ul.content-list li::before { content: "▸"; color: var(--accent); font-weight: 
 .step-num { background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; border-radius: 50%; width: 34px; height: 34px; min-width: 34px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem; box-shadow: 0 2px 8px rgba(37,99,235,0.3); }
 .step-content { flex: 1; padding-top: 0.35rem; }
 
+/* ── ANNOUNCEMENTS (หน้าแรก) ───────────────────────────────── */
+.announcements { margin: 0 0 2rem; }
+.ann-head { font-weight: 700; font-size: 1.1rem; color: var(--text); margin: 0 0 0.75rem; }
+.ann-item { display: flex; align-items: flex-start; gap: 0.85rem; background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--primary); border-radius: 12px; padding: 0.85rem 1rem; margin-bottom: 0.6rem; box-shadow: var(--shadow); }
+.ann-lesson   { border-left-color: var(--primary); }
+.ann-download { border-left-color: var(--secondary); }
+.ann-update   { border-left-color: var(--accent); }
+.ann-icon { font-size: 1.5rem; line-height: 1.4; }
+.ann-body { flex: 1; min-width: 0; }
+.ann-tag { display: inline-block; font-size: 0.72rem; font-weight: 600; padding: 0.12rem 0.5rem; border-radius: 999px; background: rgba(37,99,235,0.1); color: var(--primary); margin-right: 0.4rem; }
+.ann-download .ann-tag { background: rgba(16,185,129,0.12); color: var(--secondary); }
+.ann-update .ann-tag { background: rgba(6,182,212,0.12); color: var(--accent); }
+.ann-new { display: inline-block; font-size: 0.66rem; font-weight: 700; color: #fff; background: #ef4444; padding: 0.1rem 0.4rem; border-radius: 999px; margin-right: 0.4rem; animation: annPulse 1.6s ease-in-out infinite; }
+@keyframes annPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+.ann-date { font-size: 0.75rem; color: var(--text-light); }
+.ann-text { margin-top: 0.2rem; color: var(--text); line-height: 1.5; }
+.ann-cta { align-self: center; white-space: nowrap; font-weight: 600; font-size: 0.9rem; color: var(--primary); text-decoration: none; padding: 0.4rem 0.7rem; border: 1px solid var(--border); border-radius: 8px; transition: all 0.2s; }
+.ann-cta:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+.ann-x { background: none; border: none; cursor: pointer; font-size: 1.4rem; line-height: 1; color: var(--text-light); padding: 0 0.2rem; align-self: flex-start; }
+.ann-x:hover { color: #ef4444; }
+@media (max-width: 640px) {
+  .ann-cta { align-self: stretch; text-align: center; }
+  .ann-item { flex-wrap: wrap; }
+}
+
 /* ── TABS ──────────────────────────────────────────────────── */
 .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
 .tab-btn { padding: 0.5rem 1.25rem; border-radius: 20px; border: 2px solid var(--border); background: var(--card); cursor: pointer; font-family: inherit; font-size: 0.92rem; font-weight: 600; color: var(--text-light); transition: all 0.2s; }
