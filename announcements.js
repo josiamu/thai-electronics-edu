@@ -8,6 +8,10 @@
  *   href  : ลิงก์ปลายทาง (เว้นว่าง '' ได้ถ้าไม่มีหน้าให้ไป)
  */
 const ANNOUNCEMENTS = [
+  { id:'worksheet-9-2026-06-27', date:'2026-06-27', type:'download',
+    th:'ใบงานใหม่: ใบความรู้ที่ 9 — ผ่าแผงวงจร เจาะลึกเทคนิค (PDF)',
+    en:'New worksheet: Sheet 9 — Dissecting the Circuit Board (PDF)',
+    href:'downloads.html' },
   { id:'logic-2026-06-27', date:'2026-06-27', type:'lesson',
     th:'เพิ่มบทเรียนใหม่: ลอจิกเกต (Logic Gates) พร้อมซิมูเลเตอร์เชิงโต้ตอบ',
     en:'New lesson: Logic Gates with an interactive simulator',

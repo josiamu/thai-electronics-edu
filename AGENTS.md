@@ -57,7 +57,7 @@ website/
 ├── formulas.html       — สูตรสรุป + print-friendly
 ├── tools.html          — เครื่องคิดเลข 7 ตัว (4-band + 5-band มีชื่อไทย-อังกฤษครบ)
 ├── quiz.html           — แบบทดสอบ 77 ข้อ 12 หมวด — มีข้อสอบ EN ครบทุกข้อ
-├── downloads.html      — ดาวน์โหลด PDF 29 ไฟล์
+├── downloads.html      — ดาวน์โหลด PDF 30 ไฟล์ (มีหัวข้อ "ใบงาน" → pdf/worksheet/)
 └── pdf/                — ไฟล์ PDF ภาษาไทย (~24 MB)
 ```
 
