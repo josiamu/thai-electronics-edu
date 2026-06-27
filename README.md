@@ -6,6 +6,8 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 
 🌐 **Live Site:** https://josiamu.github.io/thai-electronics-edu/
 
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
+
 ---
 
 ## ✨ Features / ฟีเจอร์
@@ -177,5 +179,26 @@ git push
 │   ├── simulation.html / breadboard.html           — Interactive labs
 │   └── formulas.html / tools.html / quiz.html / downloads.html      — Tools & resources
 ├── CLAUDE.md / AGENTS.md — Developer notes (kept in sync)
+├── LICENSE              — CC BY-NC 4.0 (+ note carving out third-party PDFs)
 └── pdf/                 — Thai PDF learning materials (~24 MB)
 ```
+
+---
+
+## 📄 สัญญาอนุญาต / License
+
+เนื้อหาต้นฉบับและซอร์สโค้ดของเว็บไซต์นี้ (บทเรียน 2 ภาษา, เครื่องมือจำลอง, เครื่องคิดเลข,
+โค้ด HTML/CSS/JS และสื่อต้นฉบับที่ผู้จัดทำสร้างเอง) เผยแพร่ภายใต้สัญญาอนุญาต
+**[Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/)**
+
+> ✅ เรียนได้ฟรี • นำไปใช้/ดัดแปลง/เผยแพร่ต่อได้ โดยต้องให้เครดิต
+> ❌ ห้ามใช้เพื่อการค้า — เช่น ขาย เปิดคอร์สเก็บเงิน หรือมุ่งหากำไร
+
+The original content and source code of this website are licensed under
+**CC BY-NC 4.0** — free to use, adapt, and share **with attribution** and
+**for non-commercial purposes only**.
+
+> ⚠️ **ไฟล์ PDF ในโฟลเดอร์ `pdf/`** เป็นสื่อจากหลายแหล่ง (รวมถึงเอกสารที่อาจารย์มอบให้)
+> **ไม่อยู่ภายใต้** สัญญาอนุญาตข้างต้น — ลิขสิทธิ์ยังเป็นของเจ้าของแต่ละราย นำมารวบรวมไว้
+> เพื่อการศึกษาแบบไม่แสวงหากำไรเท่านั้น หากเป็นเจ้าของและต้องการให้นำออก
+> ติดต่อ jodeveloper@gmail.com — ดูรายละเอียดในไฟล์ [`LICENSE`](LICENSE)

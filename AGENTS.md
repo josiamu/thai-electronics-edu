@@ -16,7 +16,7 @@
 ```
 website/
 ├── style.css        — shared CSS ทุกหน้า (CSS custom properties, dark mode, bilingual)
-├── nav.js           — inject nav bar + dark mode toggle + hamburger + language toggle + back-to-top button
+├── nav.js           — inject nav bar + dark mode toggle + hamburger + language toggle + back-to-top button + footer license line (CC BY-NC 4.0, bilingual, ต่อท้าย <footer> ทุกหน้า)
 ├── tools.js         — logic เครื่องคิดเลขทุกตัว (calcR4, calcR5, calcOhm, ...)
 ├── quiz.js          — ข้อมูลข้อสอบ + logic แบบทดสอบ
 ├── downloads.js     — PDF preview modal + download interactions + ตัวกรองหน้า downloads (ช่องค้นหา #dl-search ค้นทั้งไทย-อังกฤษ + ชิปกรองหมวด #dl-chips ตาม .section[data-cat], ซ่อนด้วย .dl-hidden, แสดง #dl-noresult เมื่อไม่พบ, placeholder เปลี่ยนตามภาษา)
@@ -58,7 +58,8 @@ website/
 ├── tools.html          — เครื่องคิดเลข 7 ตัว (4-band + 5-band มีชื่อไทย-อังกฤษครบ)
 ├── quiz.html           — แบบทดสอบ 77 ข้อ 12 หมวด — มีข้อสอบ EN ครบทุกข้อ
 ├── downloads.html      — ดาวน์โหลด PDF 30 ไฟล์ (มีหัวข้อ "ใบงาน" → pdf/worksheet/) + toolbar ค้นหา/กรองหมวด (sticky: #dl-search + #dl-chips, sections มี data-cat)
-└── pdf/                — ไฟล์ PDF ภาษาไทย (~24 MB)
+├── pdf/                — ไฟล์ PDF ภาษาไทย (~24 MB) — สื่อจากหลายแหล่ง ไม่อยู่ใต้ CC (ดู LICENSE)
+└── LICENSE             — CC BY-NC 4.0 (คลุมเฉพาะเนื้อหา/โค้ดต้นฉบับ; PDF แยกออกตาม NOTICE ในไฟล์)
 ```
 
 ## กฎสำคัญ
@@ -106,6 +107,7 @@ CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor
 - Dark mode: `[data-theme="dark"]` บน `<html>`, บันทึกใน localStorage key `theme`
 - Lang toggle: ปุ่ม TH / EN ใน nav bar ทุกหน้า
 - **Back-to-top button:** inject `<button id="back-to-top">` เข้า body อัตโนมัติ — ปรากฏเมื่อ scroll > 320px
+- **Footer license:** nav.js ต่อท้าย `.footer-license` (ลิงก์ CC BY-NC 4.0, bilingual th-only/en-only) เข้า `<footer>` ทุกหน้าอัตโนมัติ — ไม่ต้องแก้ทีละไฟล์
 
 > **กฎ:** เมื่อเพิ่มหน้าใหม่ใน nav.js (NAV_LESSON_GROUPS / NAV_PRACTICE / NAV_TOOLS) ต้องอัปเดต **index.html** ด้วยเสมอ — เพิ่ม card ในกลุ่มที่ตรงกัน และแก้จำนวนไฟล์/หัวข้อใน footer กับ card ดาวน์โหลด
 

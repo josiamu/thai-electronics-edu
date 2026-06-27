@@ -459,6 +459,9 @@ html:not([lang="en"]) .en-only { display: none !important; }
 /* ── FOOTER ────────────────────────────────────────────────── */
 footer { background: linear-gradient(90deg, #0f172a 0%, #1d4ed8 100%); color: #94a3b8; text-align: center; padding: 2rem 1.5rem; font-size: 0.9rem; margin-top: 2.5rem; }
 footer strong { color: #fff; }
+.footer-license { margin-top: 0.75rem; font-size: 0.78rem; opacity: 0.85; }
+.footer-license a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.footer-license a:hover { color: #fff; opacity: 1; }
 
 /* ── RESPONSIVE ────────────────────────────────────────────── */
 @media (max-width: 768px) {

@@ -269,6 +269,19 @@ const NAV_RESOURCES = [
     window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
   });
 
+  // ── สัญญาอนุญาต: เติมบรรทัด CC BY-NC 4.0 เข้า footer ทุกหน้าอัตโนมัติ (bilingual) ──
+  const pageFooter = document.querySelector('footer');
+  if (pageFooter && !pageFooter.querySelector('.footer-license')) {
+    const lic = document.createElement('div');
+    lic.className = 'footer-license';
+    lic.innerHTML =
+      '<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="license noopener">' +
+        '<span class="th-only">© 2026 · เนื้อหาและโค้ดต้นฉบับเผยแพร่ภายใต้สัญญาอนุญาต CC BY-NC 4.0 — เรียนได้ฟรี ห้ามใช้เชิงพาณิชย์</span>' +
+        '<span class="en-only">© 2026 · Original content &amp; code licensed under CC BY-NC 4.0 — free to learn, non-commercial</span>' +
+      '</a>';
+    pageFooter.appendChild(lic);
+  }
+
   document.getElementById('dark-toggle-btn').addEventListener('click', function () {
     const root = document.documentElement;
     const dark = root.getAttribute('data-theme') === 'dark';
