@@ -666,7 +666,10 @@ function solveCircuit(h, commit){
     var rd = diodeRd(c);
     I = c._on > 0 ? (vd - c.vf) / rd : c._on < 0 ? (vd + c.vz) / rd : 0;
     var on = Math.abs(I) > 3e-4;        // conducting (forward, or zener reverse)
-    c.results = { V:vd, I:I, on:on, lit:(c._on > 0 && on) };
+    // perceptual brightness 0..1 (≈ full at 12 mA) — fades smoothly to 0 so a discharging
+    // cap visibly dims the LED instead of snapping off
+    var bright = (c.type === 'led' && c._on > 0 && I > 0) ? Math.min(1, Math.sqrt(I / 0.012)) : 0;
+    c.results = { V:vd, I:I, on:on, lit:(c._on > 0 && on), bright:bright };
     if (c.type === 'led' && I > 0.03) warnings.push({ t:'warn', th:'กระแส LED สูงเกิน (' + fmtI(I) + ') — ในงานจริงต้องมี R จำกัดกระแส', en:'LED current too high (' + fmtI(I) + ') — add a current-limiting resistor' });
   });
   batteries.forEach(function(c, k){
@@ -709,6 +712,7 @@ function rebuild(){
 
   // draw components
   while (gComps.firstChild) gComps.removeChild(gComps.firstChild);
+  ledGlows = [];
   comps.forEach(drawComp);
 
   rebuildElectrons();
@@ -776,13 +780,18 @@ function drawComp(c){
     gComps.appendChild(uprightText(len / 2, A.x, A.y, ang, -15, dlab, dt.border));
   } else if (c.type === 'led'){
     var col = LED_COLORS[c.color];
-    if (on){
-      g.appendChild(el('circle', { cx:len / 2, cy:0, r:13, fill:col.glow, opacity:'0.7', filter:'url(#bb-glow)' }));
-    }
-    diodeSymbol(g, x1, x2, on ? col.fill : '#cbd5e1', on ? col.fill : '#94a3b8');
+    var b0 = (c.results && c.results.bright) || 0, lit0 = b0 > 0.02;
+    // glow halo scales with brightness (opacity + radius) so the fade is visible
+    var halo = el('circle', { cx:len / 2, cy:0, r:(7 + 7 * b0).toFixed(1), fill:col.glow, opacity:(0.7 * b0).toFixed(3), filter:'url(#bb-glow)' });
+    g.appendChild(halo);
+    var symAt = g.childNodes.length;
+    diodeSymbol(g, x1, x2, lit0 ? col.fill : '#cbd5e1', lit0 ? col.fill : '#94a3b8');
+    var tri = g.childNodes[symAt], bar = g.childNodes[symAt + 1];
     // emission arrows
-    g.appendChild(el('line', { x1:len/2+2, y1:-9, x2:len/2+9, y2:-16, stroke:on?col.fill:'#cbd5e1', 'stroke-width':1.6, 'stroke-linecap':'round' }));
-    g.appendChild(el('line', { x1:len/2+8, y1:-5, x2:len/2+15, y2:-12, stroke:on?col.fill:'#cbd5e1', 'stroke-width':1.6, 'stroke-linecap':'round' }));
+    var arr1 = el('line', { x1:len/2+2, y1:-9, x2:len/2+9, y2:-16, stroke:lit0?col.fill:'#cbd5e1', 'stroke-width':1.6, 'stroke-linecap':'round' });
+    var arr2 = el('line', { x1:len/2+8, y1:-5, x2:len/2+15, y2:-12, stroke:lit0?col.fill:'#cbd5e1', 'stroke-width':1.6, 'stroke-linecap':'round' });
+    g.appendChild(arr1); g.appendChild(arr2);
+    ledGlows.push({ c:c, halo:halo, tri:tri, bar:bar, arrows:[arr1, arr2] });
   } else if (c.type === 'cap'){
     // two parallel plates at the centre
     var cm = len / 2;
@@ -860,6 +869,19 @@ function resistorHeat(c){
 
 // ════════════════════════════ ELECTRON ANIMATION ════════════════════════════
 var elecDots = [];   // {el, a, b, dir, speed, f}
+var ledGlows = [];   // {c, halo, tri, bar, arrows} — restyled every transient frame so LEDs dim smoothly
+
+// update LED visuals from the latest brightness without redrawing the whole board
+function updateLeds(){
+  for (var i = 0; i < ledGlows.length; i++){
+    var G = ledGlows[i], b = (G.c.results && G.c.results.bright) || 0, col = LED_COLORS[G.c.color], lit = b > 0.02;
+    G.halo.setAttribute('opacity', (0.7 * b).toFixed(3));
+    G.halo.setAttribute('r', (7 + 7 * b).toFixed(1));
+    G.tri.setAttribute('fill', lit ? col.fill : '#cbd5e1');
+    G.bar.setAttribute('stroke', lit ? col.fill : '#94a3b8');
+    G.arrows.forEach(function(a){ a.setAttribute('stroke', lit ? col.fill : '#cbd5e1'); });
+  }
+}
 function rebuildElectrons(){
   while (gElec.firstChild) gElec.removeChild(gElec.firstChild);
   elecDots = [];
@@ -893,7 +915,7 @@ function tick(ts){
     sampleGraph();
     renderAcc += dt;
     if (renderAcc > 0.06){
-      renderAcc = 0; rebuildElectrons(); renderReadout(lastRes); drawGraph();
+      renderAcc = 0; rebuildElectrons(); updateLeds(); renderReadout(lastRes); drawGraph();
       if (tool === 'meter'){ drawProbes(); updateMeter(); }
     }
   }
@@ -1570,6 +1592,19 @@ var EXAMPLES = [
       place('resistor', 'tb5', 'ta10', { value:10000 });
       place('cap', 'tb10', 'ta14', { value:470e-6, _vPrev:0 });
       place('wire', 'tb14', 'TN8', {});
+    } },
+  { th:'ตัวเก็บประจุเลี้ยง LED — เปิดสวิตช์แล้วไฟค่อยๆ จาง', en:'Cap-backed LED — open the switch and it fades out', build:function(){
+      setExampleBatt(9);
+      place('battery', 'TP2', 'TN2', { value:9 });
+      place('wire', 'TP4', 'ta5', {});
+      place('switch', 'tb5', 'ta9', { closed:true });
+      // big cap sits in parallel across the supply node; charges while the switch is closed
+      place('cap', 'tb9', 'ta13', { value:4700e-6, _vPrev:0 });
+      place('wire', 'tb13', 'TN4', {});
+      // R + LED draw from the same node — when the switch opens the cap discharges through them
+      place('resistor', 'tc9', 'ta17', { value:470 });
+      place('led', 'tb17', 'ta21', { color:'red', vf:1.8 });
+      place('wire', 'tb21', 'TN8', {});
     } }
 ];
 
