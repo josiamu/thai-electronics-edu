@@ -739,14 +739,23 @@ function drawComp(c){
     g.appendChild(el('rect', { x:-4, y:-16, width:len + 8, height:32, rx:6, fill:'rgba(245,158,11,0.10)', stroke:'#f59e0b', 'stroke-width':2, 'stroke-dasharray':'5 3' }));
 
   if (c.type === 'switch'){
-    var sa = (len - 24) / 2, sb = sa + 24, cl = c.closed;
-    g.appendChild(el('line', { class:'bb-comp-lead', x1:0, y1:0, x2:sa, y2:0 }));
-    g.appendChild(el('line', { class:'bb-comp-lead', x1:sb, y1:0, x2:len, y2:0 }));
-    g.appendChild(el('circle', { cx:sa, cy:0, r:3, fill:'#475569' }));
-    g.appendChild(el('circle', { cx:sb, cy:0, r:3, fill:'#475569' }));
-    // lever: down/connected when closed, lifted when open
-    g.appendChild(el('line', { x1:sa, y1:0, x2:cl ? sb : sb - 4, y2:cl ? 0 : -13, stroke:cl ? '#16a34a' : '#94a3b8', 'stroke-width':3.4, 'stroke-linecap':'round' }));
-    gComps.appendChild(uprightText(len / 2, A.x, A.y, ang, -16, cl ? (isEN() ? 'ON' : 'ปิด') : (isEN() ? 'OFF' : 'เปิด'), cl ? '#16a34a' : '#94a3b8'));
+    // slide switch: housing tints + knob slides to the ON (left) / OFF (right) side
+    var cl = c.closed;
+    var bw = Math.min(34, len * 0.6), bx = (len - bw) / 2, bx2 = bx + bw;
+    g.appendChild(el('line', { class:'bb-comp-lead', x1:0, y1:0, x2:bx, y2:0 }));
+    g.appendChild(el('line', { class:'bb-comp-lead', x1:bx2, y1:0, x2:len, y2:0 }));
+    g.appendChild(el('circle', { cx:bx, cy:0, r:2.6, fill:'#475569' }));
+    g.appendChild(el('circle', { cx:bx2, cy:0, r:2.6, fill:'#475569' }));
+    // housing
+    g.appendChild(el('rect', { x:bx, y:-8, width:bw, height:16, rx:4,
+      fill:cl ? '#dcfce7' : '#f1f5f9', stroke:cl ? '#16a34a' : '#94a3b8', 'stroke-width':1.8 }));
+    // sliding knob (left = ON, right = OFF)
+    var kw = bw / 2 - 4, kx = cl ? bx + 3 : bx2 - kw - 3;
+    g.appendChild(el('rect', { x:kx, y:-6, width:kw, height:12, rx:3,
+      fill:cl ? '#16a34a' : '#64748b', stroke:'#334155', 'stroke-width':0.8 }));
+    g.appendChild(el('line', { x1:kx + kw / 2 - 2, y1:-3, x2:kx + kw / 2 - 2, y2:3, stroke:'#fff', 'stroke-width':1, opacity:'0.7' }));
+    g.appendChild(el('line', { x1:kx + kw / 2 + 2, y1:-3, x2:kx + kw / 2 + 2, y2:3, stroke:'#fff', 'stroke-width':1, opacity:'0.7' }));
+    gComps.appendChild(uprightText(len / 2, A.x, A.y, ang, -15, cl ? (isEN() ? 'ON' : 'ปิด') : (isEN() ? 'OFF' : 'เปิด'), cl ? '#16a34a' : '#94a3b8'));
     gComps.appendChild(g); return;
   }
 
