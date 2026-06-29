@@ -790,17 +790,20 @@ function drawComp(c){
   } else if (c.type === 'led'){
     var col = LED_COLORS[c.color];
     var b0 = (c.results && c.results.bright) || 0, lit0 = b0 > 0.02;
-    // glow halo scales with brightness (opacity + radius) so the fade is visible
-    var halo = el('circle', { cx:len / 2, cy:0, r:(7 + 7 * b0).toFixed(1), fill:col.glow, opacity:(0.7 * b0).toFixed(3), filter:'url(#bb-glow)' });
+    // wide soft halo — scales with brightness (opacity + radius) so the fade is visible
+    var halo = el('circle', { cx:len / 2, cy:0, r:(9 + 16 * b0).toFixed(1), fill:col.glow, opacity:(0.9 * b0).toFixed(3), filter:'url(#bb-glow)' });
     g.appendChild(halo);
     var symAt = g.childNodes.length;
     diodeSymbol(g, x1, x2, lit0 ? col.fill : '#cbd5e1', lit0 ? col.fill : '#94a3b8');
     var tri = g.childNodes[symAt], bar = g.childNodes[symAt + 1];
+    // bright hot core on top of the symbol — sells the "emitting light" look
+    var core = el('circle', { cx:len / 2, cy:0, r:(3 + 5 * b0).toFixed(1), fill:'#ffffff', opacity:(0.95 * b0).toFixed(3), filter:'url(#bb-glow)' });
+    g.appendChild(core);
     // emission arrows
     var arr1 = el('line', { x1:len/2+2, y1:-9, x2:len/2+9, y2:-16, stroke:lit0?col.fill:'#cbd5e1', 'stroke-width':1.6, 'stroke-linecap':'round' });
     var arr2 = el('line', { x1:len/2+8, y1:-5, x2:len/2+15, y2:-12, stroke:lit0?col.fill:'#cbd5e1', 'stroke-width':1.6, 'stroke-linecap':'round' });
     g.appendChild(arr1); g.appendChild(arr2);
-    ledGlows.push({ c:c, halo:halo, tri:tri, bar:bar, arrows:[arr1, arr2] });
+    ledGlows.push({ c:c, halo:halo, core:core, tri:tri, bar:bar, arrows:[arr1, arr2] });
   } else if (c.type === 'cap'){
     // two parallel plates at the centre
     var cm = len / 2;
@@ -884,8 +887,10 @@ var ledGlows = [];   // {c, halo, tri, bar, arrows} — restyled every transient
 function updateLeds(){
   for (var i = 0; i < ledGlows.length; i++){
     var G = ledGlows[i], b = (G.c.results && G.c.results.bright) || 0, col = LED_COLORS[G.c.color], lit = b > 0.02;
-    G.halo.setAttribute('opacity', (0.7 * b).toFixed(3));
-    G.halo.setAttribute('r', (7 + 7 * b).toFixed(1));
+    G.halo.setAttribute('opacity', (0.9 * b).toFixed(3));
+    G.halo.setAttribute('r', (9 + 16 * b).toFixed(1));
+    G.core.setAttribute('opacity', (0.95 * b).toFixed(3));
+    G.core.setAttribute('r', (3 + 5 * b).toFixed(1));
     G.tri.setAttribute('fill', lit ? col.fill : '#cbd5e1');
     G.bar.setAttribute('stroke', lit ? col.fill : '#94a3b8');
     G.arrows.forEach(function(a){ a.setAttribute('stroke', lit ? col.fill : '#cbd5e1'); });
