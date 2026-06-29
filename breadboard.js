@@ -766,10 +766,20 @@ function drawComp(c){
 
   var on = c.results && c.results.on;
   if (RFAM[c.type] || c.type === 'vdr'){
-    var heat = resistorHeat(c);
     var bd = (RTYPE_STYLE[c.type] || RTYPE_STYLE.resistor).border;
-    g.appendChild(el('rect', { x:x1, y:-7, width:bodyLen, height:14, rx:3, fill:heat, stroke:bd, 'stroke-width':c.type === 'resistor' ? 1 : 1.8 }));
-    if (c.type !== 'resistor'){
+    if (c.type === 'resistor'){
+      // realistic beige body + 5-band colour code (3 digits + multiplier + brown 1% tolerance)
+      g.appendChild(el('rect', { x:x1, y:-7, width:bodyLen, height:14, rx:5, fill:'#e3c79b', stroke:'#b08642', 'stroke-width':1 }));
+      var b = bands5(effR(c));
+      if (b){
+        var cols = [bandColor(b[0]), bandColor(b[1]), bandColor(b[2]), multColor(b[3]), '#92400e'];
+        var bw_ = Math.max(2, bodyLen * 0.085), frac = [0.16, 0.30, 0.44, 0.60, 0.86];
+        for (var bi = 0; bi < 5; bi++)
+          g.appendChild(el('rect', { x:x1 + bodyLen * frac[bi] - bw_ / 2, y:-7, width:bw_, height:14, fill:cols[bi], stroke:'rgba(0,0,0,.28)', 'stroke-width':0.4 }));
+      }
+      gComps.appendChild(uprightText(len / 2, A.x, A.y, ang, -16, fmtR(effR(c)), bd));
+    } else {
+      g.appendChild(el('rect', { x:x1, y:-7, width:bodyLen, height:14, rx:3, fill:resistorHeat(c), stroke:bd, 'stroke-width':1.8 }));
       drawRAccent(g, c.type, x1, x2, len);
       var lab = c.type === 'vdr' ? 'VDR ' + c.vc + 'V'
                                  : c.type.toUpperCase() + ' ' + fmtRshort(c.results && c.results.R ? c.results.R : effR(c));
@@ -863,6 +873,22 @@ function drawRAccent(g, type, x1, x2, len){
 }
 
 function fmtRshort(r){ r = Math.round(r); return r >= 1000 ? (Math.round(r / 100) / 10) + 'k' : r + ''; }
+
+// ── resistor colour code (5-band) ──────────────────────────────────────────
+// digit 0-9 → standard band colour
+var BAND_DIGIT = ['#1a1a1a','#92400e','#e11d2a','#f97316','#eab308','#22c55e','#2563eb','#8b5cf6','#6b7280','#f1f5f9'];
+function bandColor(d){ return BAND_DIGIT[d] || '#1a1a1a'; }
+function multColor(m){ return m === -1 ? '#d4af37' : m === -2 ? '#c0c0c0' : (BAND_DIGIT[m] || '#1a1a1a'); }
+// value → [d1, d2, d3, multiplierExponent] for a 3-significant-digit (5-band) resistor
+function bands5(R){
+  if (!(R > 0)) return null;
+  var mult = 0, v = R;
+  while (v >= 999.5){ v /= 10; mult++; }
+  while (v < 100){ v *= 10; mult--; }
+  v = Math.round(v);
+  if (v >= 1000){ v = Math.round(v / 10); mult++; }
+  return [Math.floor(v / 100), Math.floor(v / 10) % 10, v % 10, mult];
+}
 
 // place a horizontal (never upside-down) label above a rotated component
 function uprightText(localX, ax, ay, angDeg, dy, s, fill){
