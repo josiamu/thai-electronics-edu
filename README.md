@@ -71,7 +71,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | หน้า | ไทย | English |
 |---|---|---|
 | `simulation.html` | จำลองวงจร (อนุกรม/ขนาน/ผสม) | Circuit simulator |
-| `breadboard.html` | ทดลองบนเบรดบอร์ดเสมือน + มัลติมิเตอร์ | Virtual breadboard lab + multimeter |
+| `breadboard.html` | ทดลองบนเบรดบอร์ดเสมือน + มัลติมิเตอร์ (ตัวต้านทานแถบสีจริง, LED หรี่ตามกระแส, กราฟ transient) | Virtual breadboard lab + multimeter (real colour-coded resistors, current-proportional LEDs, transient graph) |
 | `formulas.html` | สูตรสรุป + พิมพ์ PDF | Formula summary + print |
 | `tools.html` | เครื่องคิดเลขเชิงโต้ตอบ 7 ตัว | 7 interactive calculators |
 | `quiz.html` | แบบทดสอบ 77 ข้อ 12 หมวด | 77-question quiz, 12 categories |
@@ -83,10 +83,12 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 
 | # | ฟีเจอร์ | รายละเอียด |
 |---|---|---|
-| 1 | 🔢 **Logic Gates** | บทลอจิกเกต AND/OR/NOT/NAND/NOR/XOR + ตารางความจริง พร้อม sim toggle input → LED |
-| 2 | ⏱️ **555 Timer** | บทไอซี 555 โหมด astable/monostable + สูตร f และ duty พร้อม sim R/C → LED กระพริบ |
-| 3 | ➕ **Op-Amp** | บทออปแอมป์ — comparator, inverting/non-inverting, buffer พร้อม sim input → output gain |
-| 4 | 🎮 **Resistor Color Code Game** | เกม drill แบบเร็ว — สุ่มแถบสีให้ทายค่าความต้านทาน มีคะแนนและจับเวลา เล่นซ้ำได้ |
+| 1 | 🎮 **Resistor Color Code Game** | เกม drill แบบเร็ว — สุ่มแถบสีให้ทายค่าความต้านทาน มีคะแนนและจับเวลา เล่นซ้ำได้ |
+| 2 | ↩️ **Undo / Redo บนเบรดบอร์ด** | ย้อน/ทำซ้ำการวาง–ลบอุปกรณ์ (Ctrl+Z / Ctrl+Y) |
+| 3 | 🎯 **โจทย์/ภารกิจบนเบรดบอร์ด** | การ์ดเป้าหมาย เช่น "ทำให้ LED ติด" / "แบ่งแรงดันให้ได้ ~5V" พร้อมระบบตรวจอัตโนมัติ |
+
+> ✅ **เสร็จแล้ว (เคยอยู่ใน roadmap):** บทลอจิกเกต (`logic-gates.html`), ไอซี 555 (`555.html`),
+> ออปแอมป์ (`op-amp.html`) — ทั้งหมดมี sim เชิงโต้ตอบครบแล้ว
 
 ---
 
