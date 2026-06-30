@@ -155,6 +155,7 @@ var zenerVz = 5.1;
 var capVal = CAP_DEFAULT, indVal = IND_DEFAULT;
 var transType = 'npn';                        // npn | pnp | nmos | pmos — next transistor placed
 var transBeta = BETA_DEFAULT, transVth = VTH_DEFAULT;
+var potVal = 10000;                           // total resistance of the next potentiometer placed
 var env = { temp:25, light:50, vrPos:50 };   // shared sensor environment
 
 // transient simulation
@@ -291,12 +292,19 @@ var TYPE_LABEL = {
   switch:  { th:'สวิตช์', en:'Switch' },
   cap:     { th:'ตัวเก็บประจุ', en:'Capacitor' },
   ind:     { th:'ตัวเหนี่ยวนำ', en:'Inductor' },
-  transistor:{ th:'ทรานซิสเตอร์', en:'Transistor' }
+  transistor:{ th:'ทรานซิสเตอร์', en:'Transistor' },
+  pot:       { th:'โพเทนชิโอมิเตอร์', en:'Potentiometer' }
 };
 
-// 3-pin parts use a third hole c.g (base/gate) in addition to a/b
-function isThreePin(c){ return c.type === 'transistor'; }
+// 3-pin parts use a third hole c.g (base/gate, or wiper) in addition to a/b
+function isThreePin(c){ return c.type === 'transistor' || c.type === 'pot'; }
+function isThreePinTool(t){ return t === 'transistor' || t === 'pot'; }
 function compNodes(c){ return isThreePin(c) ? [c.a, c.b, c.g] : [c.a, c.b]; }
+// potentiometer: total R split by the global VR knob into R1 (end a→wiper) and R2 (wiper→end b)
+function potR(c){
+  var total = c.value || potVal, k = Math.max(0, Math.min(1, env.vrPos / 100));
+  return { total:total, k:k, r1:Math.max(1, total * k), r2:Math.max(1, total * (1 - k)) };
+}
 
 function isEN(){ return document.documentElement.lang === 'en'; }
 
@@ -319,10 +327,12 @@ function refreshHint(){
     return;
   }
   var lbl = TYPE_LABEL[tool][isEN() ? 'en' : 'th'];
-  if (tool === 'transistor'){    // 3-pin placement: gate/base → collector/drain → emitter/source
-    var names = transKind({ tt: transType }) === 'fet'
-      ? (isEN() ? ['Gate', 'Drain', 'Source'] : ['Gate', 'Drain', 'Source'])
-      : (isEN() ? ['Base', 'Collector', 'Emitter'] : ['ขา B (เบส)', 'ขา C (คอลเลกเตอร์)', 'ขา E (อิมิตเตอร์)']);
+  if (isThreePinTool(tool)){    // 3-pin placement, step-by-step
+    var names = tool === 'pot'
+      ? (isEN() ? ['End 1', 'Wiper', 'End 2'] : ['ปลาย 1', 'ตัวปัด (wiper)', 'ปลาย 2'])
+      : transKind({ tt: transType }) === 'fet'
+        ? ['Gate', 'Drain', 'Source']
+        : (isEN() ? ['Base', 'Collector', 'Emitter'] : ['ขา B (เบส)', 'ขา C (คอลเลกเตอร์)', 'ขา E (อิมิตเตอร์)']);
     var step = pendingHole == null ? 0 : pendingHole2 == null ? 1 : 2;
     setHint((isEN() ? 'Placing <b>' + lbl + '</b>: click the <b>' + names[step] + '</b> hole'
                     : 'กำลังวาง <b>' + lbl + '</b>: คลิกรู <b>' + names[step] + '</b>') +
@@ -343,8 +353,8 @@ function onHoleClick(id){
   if (tool === 'meter'){ meterClickHole(id); return; }
   if (tool === 'delete' || !tool) return;
 
-  // 3-pin parts (transistor): collect base/gate → collector/drain → emitter/source
-  if (tool === 'transistor'){
+  // 3-pin parts (transistor / potentiometer): collect three holes in order
+  if (isThreePinTool(tool)){
     if (pendingHole == null){
       if (occupied[id]){ flashHint(isEN() ? 'That hole is already used.' : 'รูนี้มีขาอุปกรณ์อยู่แล้ว'); return; }
       pendingHole = id; showHL(id); refreshHint(); return;
@@ -352,8 +362,9 @@ function onHoleClick(id){
     if (id === pendingHole || id === pendingHole2){ flashHint(isEN() ? 'Pick a different hole.' : 'เลือกรูอื่น'); return; }
     if (occupied[id]){ flashHint(isEN() ? 'That hole is already used.' : 'รูนี้มีขาอุปกรณ์อยู่แล้ว'); return; }
     if (pendingHole2 == null){ pendingHole2 = id; showHL2(id); refreshHint(); return; }
-    // third click → place: pendingHole = base/gate, pendingHole2 = collector/drain, id = emitter/source
-    placeTransistor(pendingHole, pendingHole2, id);
+    // third click → place. transistor: base/gate, collector/drain, emitter/source. pot: end1, wiper, end2.
+    if (tool === 'pot') placePot(pendingHole, pendingHole2, id);
+    else placeTransistor(pendingHole, pendingHole2, id);
     pendingHole = pendingHole2 = null; hideHL(); refreshHint();
     return;
   }
@@ -403,6 +414,15 @@ function placeTransistor(base, coll, emit){
   if (transKind(c) === 'fet') c.vth = transVth; else c.beta = transBeta;
   comps.push(c);
   occupied[coll] = c.id; occupied[emit] = c.id; occupied[base] = c.id;
+  selectedId = c.id;
+  rebuild(); renderEditor();
+}
+
+// 3-pin potentiometer: a = end 1, b = end 2, g = wiper
+function placePot(end1, wiper, end2){
+  var c = { id:nextId++, type:'pot', a:end1, b:end2, g:wiper, value:potVal };
+  comps.push(c);
+  occupied[end1] = c.id; occupied[end2] = c.id; occupied[wiper] = c.id;
   selectedId = c.id;
   rebuild(); renderEditor();
 }
@@ -463,6 +483,12 @@ function renderEditor(){
   } else if (c.type === 'ind'){
     ctrl = '<label>' + (en ? 'Inductance' : 'ค่า L') + '</label><select id="bb-ed-ind">' +
       IND_OPTIONS.map(function(L2){ return '<option value="' + L2 + '"' + (L2 === c.value ? ' selected' : '') + '>' + fmtL(L2) + '</option>'; }).join('') + '</select>';
+  } else if (c.type === 'pot'){
+    var pl = R_OPTIONS.vr;
+    ctrl = '<label>' + (en ? 'Total R' : 'ค่ารวม') + '</label><select id="bb-ed-pot">' +
+      pl.map(function(r){ return '<option value="' + r + '"' + (r === c.value ? ' selected' : '') + '>' + rLabel(r) + '</option>'; }).join('') + '</select>' +
+      '<span style="margin-left:.6rem;color:var(--text-light);font-weight:600">' + Math.round(env.vrPos) + '% · R1 ' + fmtR(Math.round(potR(c).r1)) + ' / R2 ' + fmtR(Math.round(potR(c).r2)) + '</span>' +
+      '<span style="margin-left:.6rem;color:var(--text-light);font-weight:400">' + (en ? '(wiper = VR knob)' : '(ตัวปัด = ลูกบิด VR)') + '</span>';
   } else if (c.type === 'transistor'){
     ctrl = '<label>' + (en ? 'Type' : 'ชนิด') + '</label><select id="bb-ed-tt">' +
       Object.keys(TRANSISTOR_TYPES).map(function(k){ return '<option value="' + k + '"' + (k === c.tt ? ' selected' : '') + '>' + TRANSISTOR_TYPES[k][en ? 'en' : 'th'] + '</option>'; }).join('') + '</select>';
@@ -511,6 +537,7 @@ function renderEditor(){
   });
   on('bb-ed-beta', 'change', function(){ c.beta = +this.value; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-vth', 'change', function(){ c.vth = +this.value; rebuild(); refreshEditorTitle(c); });
+  on('bb-ed-pot', 'change', function(){ c.value = +this.value; rebuild(); renderEditor(); });
   on('bb-ed-bv', 'input', function(){ c.value = +this.value; var o = $('bb-ed-bv-out'); if (o) o.textContent = c.value + ' V'; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-flip', 'click', function(){ var t = c.a; c.a = c.b; c.b = t; rebuild(); });
   on('bb-ed-toggle', 'click', function(){ c.closed = !c.closed; rebuild(); renderEditor(); });
@@ -641,7 +668,8 @@ function solveCircuit(h, commit){
 
   var batteries   = comps.filter(function(c){ return c.type === 'battery'; });
   var transistors = comps.filter(function(c){ return c.type === 'transistor'; });
-  var branches    = comps.filter(function(c){ return c.type !== 'wire' && c.type !== 'battery' && c.type !== 'switch' && c.type !== 'transistor'; });
+  var pots        = comps.filter(function(c){ return c.type === 'pot'; });
+  var branches    = comps.filter(function(c){ return c.type !== 'wire' && c.type !== 'battery' && c.type !== 'switch' && c.type !== 'transistor' && c.type !== 'pot'; });
   var wires       = comps.filter(function(c){ return c.type === 'wire'; });
   // a closed switch behaves like a jumper (0 Ω); an open one is ignored entirely
   var joins       = wires.concat(comps.filter(function(c){ return c.type === 'switch' && c.closed; }));
@@ -752,6 +780,13 @@ function solveCircuit(h, commit){
       } else {            // saturation: C–E clamped near Vce_sat (resistor companion)
         stampG(iC, iE, 1 / BJT_RSAT); stampI(iC, iE, s * BJT_VCE_SAT / BJT_RSAT);
       }
+    });
+
+    // potentiometers (linear): two resistors R1 (end a→wiper) and R2 (wiper→end b)
+    pots.forEach(function(p){
+      var pr = potR(p);
+      stampG(gi(sn(p.a)), gi(sn(p.g)), 1 / pr.r1);
+      stampG(gi(sn(p.g)), gi(sn(p.b)), 1 / pr.r2);
     });
 
     // voltage sources (batteries): a = +, b = −
@@ -872,6 +907,13 @@ function solveCircuit(h, commit){
     t.results = { V:vce, I:s * Imain, on:region !== 'cutoff' && Imain > 3e-4, region:region, Ib:Ib, Ic:Imain, Vce:vce };
   });
 
+  // potentiometers — report the divider voltage + the current in each leg
+  pots.forEach(function(p){
+    var pr = potR(p), va = Vof(sn(p.a)), vw = Vof(sn(p.g)), vb = Vof(sn(p.b));
+    var Ia = (va - vw) / pr.r1, Ib2 = (vw - vb) / pr.r2;
+    p.results = { V:va - vb, I:Ia, on:(Math.abs(Ia) > 1e-6 || Math.abs(Ib2) > 1e-6), Ia:Ia, Ib:Ib2, Vw:vw, r1:pr.r1, r2:pr.r2 };
+  });
+
   // reverse-biased LED hint
   comps.filter(function(c){ return c.type === 'led'; }).forEach(function(c){
     if (!c.results.on && c.results.V < -0.3) warnings.push({ t:'warn', th:'LED ต่อกลับขั้ว — สลับขา + / − จึงจะติด', en:'LED is reverse-connected — swap its + / − legs to light it' });
@@ -915,6 +957,7 @@ function rebuild(){
 
 function drawComp(c){
   if (c.type === 'transistor'){ drawTransistor(c); return; }
+  if (c.type === 'pot'){ drawPot(c); return; }
   var A = holes[c.a], B = holes[c.b];
   var dx = B.x - A.x, dy = B.y - A.y;
   var len = Math.sqrt(dx * dx + dy * dy);
@@ -1099,6 +1142,32 @@ function drawTransistor(c){
   gComps.appendChild(g);
 }
 
+// 3-pin potentiometer: resistor body along a→b + a wiper arm from g to the body (position = VR knob)
+function drawPot(c){
+  var A = holes[c.a], B = holes[c.b], Wp = holes[c.g];
+  var dx = B.x - A.x, dy = B.y - A.y, len = Math.sqrt(dx * dx + dy * dy), ang = Math.atan2(dy, dx) * 180 / Math.PI;
+  var pr = potR(c), bd = RTYPE_STYLE.vr.border;
+  var g = el('g', { transform:'translate(' + A.x + ',' + A.y + ') rotate(' + ang.toFixed(2) + ')', class:'bb-comp-hit' });
+  g.addEventListener('pointerdown', function(ev){ startDrag(ev, c); });
+  if (c.id === selectedId)
+    g.appendChild(el('rect', { x:-4, y:-16, width:len + 8, height:32, rx:6, fill:'rgba(245,158,11,0.10)', stroke:'#f59e0b', 'stroke-width':2, 'stroke-dasharray':'5 3' }));
+  var bodyLen = Math.min(len * 0.5, 30), x1 = (len - bodyLen) / 2, x2 = x1 + bodyLen;
+  g.appendChild(el('line', { class:'bb-comp-lead', x1:0, y1:0, x2:x1, y2:0 }));
+  g.appendChild(el('line', { class:'bb-comp-lead', x1:x2, y1:0, x2:len, y2:0 }));
+  g.appendChild(el('rect', { x:x1, y:-7, width:bodyLen, height:14, rx:3, fill:resistorHeat(c), stroke:bd, 'stroke-width':1.8 }));
+  gComps.appendChild(g);
+  // wiper arm (global coords): from the wiper hole to the contact point that slides along the body with the knob
+  var f = (x1 + bodyLen * pr.k) / len;
+  var cx = A.x + dx * f, cy = A.y + dy * f;
+  var dlen = Math.sqrt((Wp.x - cx) * (Wp.x - cx) + (Wp.y - cy) * (Wp.y - cy)) || 1;
+  var ux = (cx - Wp.x) / dlen, uy = (cy - Wp.y) / dlen;     // unit vector wiper→contact (for the arrowhead)
+  gComps.appendChild(el('line', { x1:Wp.x, y1:Wp.y, x2:cx, y2:cy, stroke:bd, 'stroke-width':2.2, 'stroke-linecap':'round' }));
+  gComps.appendChild(el('circle', { cx:Wp.x, cy:Wp.y, r:2.6, fill:bd }));
+  gComps.appendChild(el('polygon', { points:
+    cx + ',' + cy + ' ' + (cx - ux * 7 - uy * 4) + ',' + (cy - uy * 7 + ux * 4) + ' ' + (cx - ux * 7 + uy * 4) + ',' + (cy - uy * 7 - ux * 4), fill:bd }));
+  gComps.appendChild(uprightText(len / 2, A.x, A.y, ang, -16, 'POT ' + fmtRshort(pr.total) + ' · ' + Math.round(env.vrPos) + '%', bd));
+}
+
 // distinctive mark for each sensor / special resistor (drawn over the body)
 function drawRAccent(g, type, x1, x2, len){
   var cx = len / 2, col = '#334155';
@@ -1181,6 +1250,18 @@ function rebuildElectrons(){
   comps.forEach(function(c){
     if (c.type === 'wire' || c.type === 'battery' || c.type === 'switch') return;
     if (!c.results || !c.results.on) return;
+    if (c.type === 'pot'){            // two legs: end a → wiper, wiper → end b
+      [[c.a, c.g, c.results.Ia], [c.g, c.b, c.results.Ib]].forEach(function(seg){
+        var Is = Math.abs(seg[2]); if (Is < 1e-5) return;
+        var sdir = seg[2] >= 0 ? 1 : -1, sspeed = Math.max(0.12, Math.min(0.9, Is * 18));
+        for (var q = 0; q < 2; q++){
+          var sd = el('circle', { class:'bb-elec', r:3.2, filter:'url(#bb-glow)' });
+          gElec.appendChild(sd);
+          elecDots.push({ el:sd, a:seg[0], b:seg[1], dir:sdir, speed:sspeed, f:q / 2 });
+        }
+      });
+      return;
+    }
     var I = Math.abs(c.results.I);
     if (I < 1e-5) return;
     var dir = c.results.I >= 0 ? 1 : -1;   // +1: a→b
@@ -1419,6 +1500,7 @@ function compName(c, en){
   if (c.type === 'switch') return en ? 'Switch' : 'สวิตช์';
   if (c.type === 'cap') return 'C ' + fmtC(c.value);
   if (c.type === 'ind') return 'L ' + fmtL(c.value);
+  if (c.type === 'pot') return (en ? 'Pot ' : 'POT ') + fmtR(c.value || potVal);
   if (c.type === 'transistor'){
     var ts = TRANSISTOR_TYPES[c.tt] || TRANSISTOR_TYPES.npn;
     return ts[en ? 'en' : 'th'] + (transKind(c) === 'fet' ? ' (Vth ' + (c.vth || transVth) + 'V)' : ' (β' + (c.beta || transBeta) + ')');
@@ -1574,6 +1656,7 @@ function updateMeter(){
   setTip('คลิกอุปกรณ์เพื่อวัดความต้านทาน (จริงต้องตัดไฟก่อนวัด)', 'Click a part to read resistance (real ohmmeters need power off)');
   if (!c) return lcd(P('คลิกอุปกรณ์', 'Tap a part'), '', true);
   if (RFAM[c.type]) return lcd(fmtR(Math.round(effR(c))), '');
+  if (c.type === 'pot') return lcd(fmtR(Math.round(potR(c).total)), '');   // end-to-end resistance
   if (c.type === 'switch') return lcd(c.closed ? '≈ 0' : '∞', 'Ω');
   if (c.type === 'wire') return lcd('≈ 0', 'Ω');
   if (c.type === 'vdr') return lcd(P('ไม่เชิงเส้น', 'non-linear'), '', true);
@@ -1596,8 +1679,8 @@ function beep(){
 }
 
 // ════════════════════════════ TOOLBAR / CONTROLS ════════════════════════════
-var VALROWS = ['battery','resistor','diode','wire','switch','cap','ind','transistor','meter'];
-var COMP_TOOLS = ['battery','resistor','diode','wire','switch','cap','ind','transistor'];   // live inside the "Add component" dropdown
+var VALROWS = ['battery','resistor','diode','wire','switch','cap','ind','transistor','pot','meter'];
+var COMP_TOOLS = ['battery','resistor','diode','wire','switch','cap','ind','transistor','pot'];   // live inside the "Add component" dropdown
 function selectTool(t){
   // toggle off if same
   tool = (tool === t) ? null : t;
@@ -1758,6 +1841,7 @@ function initControls(){
   $('bb-trans-type').addEventListener('change', function(){ transType = this.value; updateTransistorControls(); refreshHint(); });
   $('bb-trans-beta').addEventListener('change', function(){ transBeta = +this.value; });
   $('bb-trans-vth').addEventListener('change', function(){ transVth = +this.value; });
+  $('bb-pot-val').addEventListener('change', function(){ potVal = +this.value; });
   // transient: speed presets + restart
   document.querySelectorAll('.bb-sp[data-sp]').forEach(function(btn){
     btn.addEventListener('click', function(){ simSpeedIdx = +btn.dataset.sp; syncTransientPanel(); });

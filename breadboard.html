@@ -215,6 +215,7 @@
           <button class="bb-dd-item" data-tool="cap" role="menuitem"><span class="ti">‖</span><span class="th-only">ตัวเก็บประจุ</span><span class="en-only">Capacitor</span></button>
           <button class="bb-dd-item" data-tool="ind" role="menuitem"><span class="ti">◠◠</span><span class="th-only">ตัวเหนี่ยวนำ</span><span class="en-only">Inductor</span></button>
           <button class="bb-dd-item" data-tool="transistor" role="menuitem"><span class="ti">Q</span><span class="th-only">ทรานซิสเตอร์</span><span class="en-only">Transistor</span></button>
+          <button class="bb-dd-item" data-tool="pot" role="menuitem"><span class="ti">⊿</span><span class="th-only">โพเทนชิโอมิเตอร์</span><span class="en-only">Potentiometer</span></button>
         </div>
       </div>
       <button class="bb-tool" data-tool="meter"><span class="ti">📟</span><span class="th-only">มัลติมิเตอร์</span><span class="en-only">Multimeter</span></button>
@@ -354,6 +355,22 @@
           </select>
         </span>
         <span id="bb-trans-hint" style="color:var(--text-light);font-weight:400;"></span>
+      </div>
+      <div class="bb-valrow" id="bb-val-pot">
+        <label><span class="th-only">ค่ารวม</span><span class="en-only">Total R</span></label>
+        <select id="bb-pot-val">
+          <option value="1000">1 kΩ</option>
+          <option value="5000">5 kΩ</option>
+          <option value="10000" selected>10 kΩ</option>
+          <option value="50000">50 kΩ</option>
+          <option value="100000">100 kΩ</option>
+          <option value="500000">500 kΩ</option>
+          <option value="1000000">1 MΩ</option>
+        </select>
+        <span style="color:var(--text-light);font-weight:400;">
+          <span class="th-only">3 ขา: ปลาย–ปลาย–ตัวปัด → วงจรแบ่งแรงดัน · ตัวปัดคุมด้วยลูกบิด VR</span>
+          <span class="en-only">3 pins: end–end–wiper → voltage divider · wiper set by the VR knob</span>
+        </span>
       </div>
       <div class="bb-valrow" id="bb-val-meter">
         <label><span class="th-only">โหมด</span><span class="en-only">Mode</span></label>
