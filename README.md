@@ -71,7 +71,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | หน้า | ไทย | English |
 |---|---|---|
 | `simulation.html` | จำลองวงจร (อนุกรม/ขนาน/ผสม) | Circuit simulator |
-| `breadboard.html` | ทดลองบนเบรดบอร์ดเสมือน + มัลติมิเตอร์ (ตัวต้านทานแถบสีจริง, LED หรี่ตามกระแส, กราฟ transient) | Virtual breadboard lab + multimeter (real colour-coded resistors, current-proportional LEDs, transient graph) |
+| `breadboard.html` | ทดลองบนเบรดบอร์ดเสมือน + มัลติมิเตอร์ (ตัวต้านทานแถบสีจริง, LED หรี่ตามกระแส, ทรานซิสเตอร์ NPN/PNP/MOSFET, กราฟ transient) | Virtual breadboard lab + multimeter (real colour-coded resistors, current-proportional LEDs, NPN/PNP/MOSFET transistors, transient graph) |
 | `formulas.html` | สูตรสรุป + พิมพ์ PDF | Formula summary + print |
 | `tools.html` | เครื่องคิดเลขเชิงโต้ตอบ 7 ตัว | 7 interactive calculators |
 | `quiz.html` | แบบทดสอบ 77 ข้อ 12 หมวด | 77-question quiz, 12 categories |
@@ -171,7 +171,7 @@ git push
 ├── opamp-sim.js         — Op-amp amplifier simulator (gain + clipping)
 ├── logic-sim.js         — Logic-gate simulator (toggle inputs + truth table)
 ├── announcements.js     — Home-page "latest news/updates" box (data-driven, dismissible, bilingual)
-├── breadboard.js        — Virtual breadboard lab (MNA solver + multimeter)
+├── breadboard.js        — Virtual breadboard lab (MNA solver + transistors + multimeter)
 ├── index.html           — Home page
 │   ├── electricity.html / ohm.html                 — Fundamentals
 │   ├── resistor.html / diode.html / transistor.html / ic.html / 555.html / op-amp.html / logic-gates.html / relay.html

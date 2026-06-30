@@ -1907,6 +1907,33 @@ var EXAMPLES = [
       place('resistor', 'tc9', 'ta17', { value:470 });
       place('led', 'tb17', 'ta21', { color:'red', vf:1.8 });
       place('wire', 'tb21', 'TN8', {});
+    } },
+  { th:'ทรานซิสเตอร์ NPN เป็นสวิตช์ LED (สลับสวิตช์ที่ขาเบส)', en:'NPN transistor as an LED switch (toggle the base switch)', build:function(){
+      setExampleBatt(5);
+      place('battery', 'TP2', 'TN2', { value:5 });
+      place('wire', 'TP4', 'ta5', {});                          // + rail → col5 (Vcc)
+      // base drive: Vcc → switch → Rb → base
+      place('switch', 'tb5', 'ta8', { closed:true });
+      place('resistor', 'tb8', 'ta11', { value:10000 });        // Rb → base node (col11)
+      // collector load: Vcc → R → LED → collector
+      place('resistor', 'tc5', 'ta15', { value:330 });
+      place('led', 'tb15', 'ta19', { color:'red', vf:1.8 });    // cathode at col19 = collector
+      place('wire', 'TN8', 'ta23', {});                         // − rail → col23 (gnd = emitter)
+      place('transistor', 'tb19', 'tb23', { g:'tb11', tt:'npn', beta:100 });   // C=col19, E=col23, B=col11
+    } },
+  { th:'NPN ตรวจจับความมืด (LDR → ปรับสไลเดอร์แสง)', en:'NPN dark-detector (LDR → drag the light slider)', build:function(){
+      setExampleBatt(5);
+      place('battery', 'TP2', 'TN2', { value:5 });
+      place('wire', 'TP4', 'ta5', {});                          // Vcc → col5
+      // voltage divider into the base: Vcc → Rtop → base → LDR → gnd (dark = base high = ON)
+      place('resistor', 'tb5', 'ta9', { value:10000 });         // Rtop → base node (col9)
+      place('ldr', 'tb9', 'ta13', { value:1000 });              // LDR base(col9) → col13
+      place('wire', 'tb13', 'TN7', {});                         // col13 → − rail (gnd)
+      // collector load: Vcc → R → LED → collector
+      place('resistor', 'tc5', 'ta17', { value:330 });
+      place('led', 'tb17', 'ta21', { color:'green', vf:2.1 });
+      place('wire', 'TN10', 'ta25', {});                        // gnd → col25 (emitter)
+      place('transistor', 'tb21', 'tb25', { g:'tc9', tt:'npn', beta:100 });    // C=col21, E=col25, B=col9
     } }
 ];
 
