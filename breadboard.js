@@ -2063,7 +2063,7 @@ var EXAMPLES = [
       place('led', 'tb13', 'ta17', { color:'yellow', vf:2.0 });
       place('wire', 'tb17', 'TN8', {});
     } },
-  { th:'VR หรี่ไฟ LED (ปรับลูกบิดในแผงสภาพแวดล้อม)', en:'Potentiometer dimming an LED', build:function(){
+  { th:'VR แบบ 2 ขา (rheostat) หรี่ไฟ LED (ปรับลูกบิดในแผงสภาพแวดล้อม)', en:'Variable resistor (2-pin rheostat) dimming an LED', build:function(){
       setExampleBatt(9);
       place('battery', 'TP2', 'TN2', { value:9 });
       place('wire', 'TP4', 'ta5', {});
@@ -2071,6 +2071,17 @@ var EXAMPLES = [
       place('resistor', 'tb9', 'ta13', { value:220 });
       place('led', 'tb13', 'ta17', { color:'blue', vf:3.0 });
       place('wire', 'tb17', 'TN8', {});
+    } },
+  { th:'โพเทนชิโอมิเตอร์ 3 ขา หรี่ไฟ LED (แบ่งแรงดัน — หมุนลูกบิด VR)', en:'3-pin potentiometer LED dimmer (voltage divider — turn the VR knob)', build:function(){
+      setExampleBatt(9);
+      env.vrPos = 70; renderVrKnob();                          // start fairly bright; turn the knob down to dim
+      place('battery', 'TP2', 'TN2', { value:9 });
+      place('wire', 'TN4', 'tb5', { color:'black' });          // − rail → pot end 1 (col5)
+      place('wire', 'TP8', 'tb13', { color:'red' });           // + rail → pot end 2 (col13)
+      place('pot', 'ta5', 'ta13', { g:'ta9', value:10000 });   // end1=col5(−), end2=col13(+), wiper=col9
+      place('resistor', 'tb9', 'ta17', { value:330 });         // wiper output → R
+      place('led', 'tb17', 'ta21', { color:'red', vf:1.8 });   // → LED
+      place('wire', 'tb21', 'TN14', { color:'black' });        // LED → − rail (ground)
     } },
   { th:'ชาร์จตัวเก็บประจุ RC (ดูกราฟ Transient)', en:'RC capacitor charging (watch the transient)', build:function(){
       setExampleBatt(9);
