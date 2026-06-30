@@ -214,6 +214,7 @@
           <button class="bb-dd-item" data-tool="switch" role="menuitem"><span class="ti">⎍</span><span class="th-only">สวิตช์</span><span class="en-only">Switch</span></button>
           <button class="bb-dd-item" data-tool="cap" role="menuitem"><span class="ti">‖</span><span class="th-only">ตัวเก็บประจุ</span><span class="en-only">Capacitor</span></button>
           <button class="bb-dd-item" data-tool="ind" role="menuitem"><span class="ti">◠◠</span><span class="th-only">ตัวเหนี่ยวนำ</span><span class="en-only">Inductor</span></button>
+          <button class="bb-dd-item" data-tool="transistor" role="menuitem"><span class="ti">Q</span><span class="th-only">ทรานซิสเตอร์</span><span class="en-only">Transistor</span></button>
         </div>
       </div>
       <button class="bb-tool" data-tool="meter"><span class="ti">📟</span><span class="th-only">มัลติมิเตอร์</span><span class="en-only">Multimeter</span></button>
@@ -325,6 +326,34 @@
           <span class="th-only">ต้านการเปลี่ยนกระแส — กระแสค่อยๆ เพิ่ม (ดูกราฟ)</span>
           <span class="en-only">Opposes current change — current ramps up (watch the graph)</span>
         </span>
+      </div>
+      <div class="bb-valrow" id="bb-val-transistor">
+        <label><span class="th-only">ชนิด</span><span class="en-only">Type</span></label>
+        <select id="bb-trans-type">
+          <option value="npn">NPN · 2N2222</option>
+          <option value="pnp">PNP · 2N2907</option>
+          <option value="nmos">N-MOSFET · 2N7000</option>
+          <option value="pmos">P-MOSFET</option>
+        </select>
+        <span id="bb-trans-beta-wrap">
+          <label>β</label>
+          <select id="bb-trans-beta">
+            <option value="50">50</option>
+            <option value="100" selected>100</option>
+            <option value="200">200</option>
+            <option value="300">300</option>
+          </select>
+        </span>
+        <span id="bb-trans-vth-wrap" style="display:none;">
+          <label>Vth</label>
+          <select id="bb-trans-vth">
+            <option value="1">1 V</option>
+            <option value="2" selected>2 V</option>
+            <option value="3">3 V</option>
+            <option value="4">4 V</option>
+          </select>
+        </span>
+        <span id="bb-trans-hint" style="color:var(--text-light);font-weight:400;"></span>
       </div>
       <div class="bb-valrow" id="bb-val-meter">
         <label><span class="th-only">โหมด</span><span class="en-only">Mode</span></label>
