@@ -116,10 +116,24 @@ var BJT_VBE = 0.7,        // base-emitter turn-on (forward drop)
     BJT_VCE_SAT = 0.2,    // collector-emitter saturation voltage
     BJT_RBE = 35,         // B-E on-resistance (companion)
     BJT_RSAT = 6;         // C-E resistance in saturation
-var FET_RDSON = 0.8;      // drain-source on-resistance (ohmic switch model)
+// MOSFET square-law model (educational): all in device coords (Vth = magnitude)
+//   triode  (Vds < Vov):  Id = k·(Vov·Vds − ½Vds²)
+//   sat     (Vds ≥ Vov):  Id = ½·k·Vov²·(1 + λ·Vds)        where Vov = Vgs − Vth
+var MOS_K = 0.05,         // transconductance parameter (A/V²) — ~2N7000-class
+    MOS_LAMBDA = 0.02;    // channel-length modulation (1/V) → finite output resistance in saturation
 function transKind(c){ return (TRANSISTOR_TYPES[c.tt] || TRANSISTOR_TYPES.npn).kind; }
 function transSign(c){ return (c.tt === 'pnp' || c.tt === 'pmos') ? -1 : 1; }
 function pinNames(c){ return transKind(c) === 'fet' ? ['G', 'D', 'S'] : ['B', 'C', 'E']; }
+// drain current + small-signal derivatives at a device operating point (vgs, vds)
+function mosfetModel(vgs, vds, vth){
+  var vov = vgs - vth;
+  if (vov <= 0) return { Id:0, gm:0, gds:0, region:'cutoff' };
+  if (vds < vov){   // triode / ohmic
+    return { Id:MOS_K * (vov * vds - 0.5 * vds * vds), gm:MOS_K * vds, gds:MOS_K * (vov - vds), region:'triode' };
+  }
+  var f = 1 + MOS_LAMBDA * vds;   // saturation (active) — square-law with channel-length modulation
+  return { Id:0.5 * MOS_K * vov * vov * f, gm:MOS_K * vov * f, gds:0.5 * MOS_K * vov * vov * MOS_LAMBDA, region:'satfet' };
+}
 
 // ════════════════════════════ STATE ════════════════════════════
 var holes = {};          // id -> {x, y, node, el}
@@ -460,7 +474,7 @@ function renderEditor(){
         BETA_OPTIONS.map(function(v){ return '<option value="' + v + '"' + (v === c.beta ? ' selected' : '') + '>' + v + '</option>'; }).join('') + '</select>';
     }
     if (c.results && c.results.region){
-      var rg = { cutoff:{th:'Cut-off (ตัด)',en:'Cut-off'}, active:{th:'Active (ขยาย)',en:'Active'}, sat:{th:'Saturation (อิ่มตัว)',en:'Saturation'}, on:{th:'ON (นำกระแส)',en:'ON'} }[c.results.region];
+      var rg = { cutoff:{th:'Cut-off (ตัด)',en:'Cut-off'}, active:{th:'Active (ขยาย)',en:'Active'}, sat:{th:'Saturation (อิ่มตัว)',en:'Saturation'}, on:{th:'ON (นำกระแส)',en:'ON'}, triode:{th:'Triode/โอห์มมิก (สวิตช์)',en:'Triode (ohmic)'}, satfet:{th:'Saturation/อิ่มตัว (ขยาย)',en:'Saturation (active)'} }[c.results.region];
       ctrl += '<span style="margin-left:.6rem;color:var(--text-light);font-weight:600">' + (rg ? (en ? rg.en : rg.th) : '') + '</span>';
     }
   }
@@ -664,7 +678,10 @@ function solveCircuit(h, commit){
   // 4) iterate diode/LED on/off states + transistor regions
   var nonlin = branches.filter(function(c){ return isNonlin(c.type); });
   nonlin.forEach(function(d){ d._on = 0; });   // 0 off, 1 forward, -1 reverse (vdr)
-  transistors.forEach(function(t){ t._rg = 0; });   // 0 cutoff, 1 active/on, 2 saturation
+  // BJT: t._rg ∈ {0 cutoff,1 active,2 sat}. MOSFET: Newton operating point (t._vgs/_vds) + region string
+  transistors.forEach(function(t){
+    if (transKind(t) === 'fet'){ t._vgs = 0; t._vds = 0; t._mreg = 'cutoff'; } else t._rg = 0;
+  });
   var sol = null, iter, MAXIT = 80;
 
   for (iter = 0; iter < MAXIT; iter++){
@@ -715,8 +732,13 @@ function solveCircuit(h, commit){
       var iC = gi(sn(t.a)), iE = gi(sn(t.b)), iB = gi(sn(t.g));
       var s = transSign(t);   // +1 for npn/nmos, −1 for pnp/pmos
       if (transKind(t) === 'fet'){
-        // voltage-controlled switch: on → Rds_on resistor D–S; off → open. gate draws no current.
-        if (t._rg) stampG(iC, iE, 1 / FET_RDSON); else stampG(iC, iE, 1e-9);
+        // square-law MOSFET, linearized (Newton companion) about the stored operating point.
+        // device coords use s so one set of stamps covers n- and p-channel. gate draws no current.
+        var m = mosfetModel(t._vgs, t._vds, t.vth || VTH_DEFAULT);
+        var Ieq = m.Id - m.gm * t._vgs - m.gds * t._vds;
+        stampG(iC, iE, m.gds + 1e-9);          // output conductance gds (+ tiny gmin)
+        stampVCCS(iC, iE, iB, iE, m.gm);       // transconductance gm·(Vg−Vs) flows D→S
+        stampI(iC, iE, -s * Ieq);              // companion current source
         return;
       }
       // BJT large-signal companion
@@ -767,15 +789,21 @@ function solveCircuit(h, commit){
     });
     // transistor region selection (junction-based, mirrors the diode toggling)
     transistors.forEach(function(t){
-      var s = transSign(t), nr;
+      var s = transSign(t);
       if (transKind(t) === 'fet'){
-        var vgs = s * (V(sn(t.g)) - V(sn(t.b)));     // gate − source
-        nr = vgs >= (t.vth || VTH_DEFAULT) ? 1 : 0;
-      } else {
-        var vbe = s * (V(sn(t.g)) - V(sn(t.b)));     // base − emitter
-        var vbc = s * (V(sn(t.g)) - V(sn(t.a)));     // base − collector
-        nr = vbe < BJT_VBE_ON ? 0 : (vbc > BJT_VBC_ON ? 2 : 1);
+        // Newton step: re-linearize about the freshly solved operating point until it stops moving
+        var nvgs = s * (V(sn(t.g)) - V(sn(t.b)));    // gate − source (device coords)
+        var nvds = s * (V(sn(t.a)) - V(sn(t.b)));    // drain − source
+        var m = mosfetModel(nvgs, nvds, t.vth || VTH_DEFAULT);
+        if (Math.abs(nvgs - t._vgs) > 1e-4 || Math.abs(nvds - t._vds) > 1e-4 || m.region !== t._mreg) changed = true;
+        var dvg = nvgs - t._vgs;                     // limit the gate step for stability
+        if (dvg > 1) nvgs = t._vgs + 1; else if (dvg < -1) nvgs = t._vgs - 1;
+        t._vgs = nvgs; t._vds = nvds; t._mreg = m.region;
+        return;
       }
+      var vbe = s * (V(sn(t.g)) - V(sn(t.b)));       // base − emitter
+      var vbc = s * (V(sn(t.g)) - V(sn(t.a)));       // base − collector
+      var nr = vbe < BJT_VBE_ON ? 0 : (vbc > BJT_VBC_ON ? 2 : 1);
       if (nr !== t._rg){ t._rg = nr; changed = true; }
     });
     if (!changed) break;
@@ -832,8 +860,8 @@ function solveCircuit(h, commit){
     var vce = s * (vC - vE);             // collector-emitter (drain-source) voltage
     var Imain = 0, Ib = 0, region;
     if (transKind(t) === 'fet'){
-      region = t._rg ? 'on' : 'cutoff';
-      Imain = t._rg ? vce / FET_RDSON : 0;          // drain current D→S
+      var m = mosfetModel(s * (vB - vE), vce, t.vth || VTH_DEFAULT);   // evaluate at the solved point
+      region = m.region; Imain = m.Id;              // drain current D→S (device coords, ≥0)
     } else {
       var vbe = s * (vB - vE);
       Ib = t._rg ? Math.max(0, (vbe - BJT_VBE) / BJT_RBE) : 0;
@@ -841,7 +869,7 @@ function solveCircuit(h, commit){
       Imain = t._rg === 1 ? (t.beta || BETA_DEFAULT) * Ib : t._rg === 2 ? Math.max(0, (vce - BJT_VCE_SAT) / BJT_RSAT) : 0;
     }
     // results.I drives the C→E electron animation (a→b), signed by transistor polarity
-    t.results = { V:vce, I:s * Imain, on:t._rg > 0 && Imain > 3e-4, region:region, Ib:Ib, Ic:Imain, Vce:vce };
+    t.results = { V:vce, I:s * Imain, on:region !== 'cutoff' && Imain > 3e-4, region:region, Ib:Ib, Ic:Imain, Vce:vce };
   });
 
   // reverse-biased LED hint
@@ -1011,7 +1039,7 @@ function diodeSymbol(g, x1, x2, triFill, barColor, variant){
   }
 }
 
-function regionShort(r){ return r === 'cutoff' ? 'OFF' : r === 'active' ? 'ACT' : r === 'sat' ? 'SAT' : r === 'on' ? 'ON' : ''; }
+function regionShort(r){ return r === 'cutoff' ? 'OFF' : r === 'active' ? 'ACT' : r === 'sat' || r === 'satfet' ? 'SAT' : r === 'triode' ? 'OHM' : r === 'on' ? 'ON' : ''; }
 
 // 3-pin transistor: body circle at the centroid + colour-coded leads to each pin
 function drawTransistor(c){
@@ -1632,8 +1660,8 @@ function updateTransistorControls(){
   var hints = {
     npn:  { th:'NPN: ป้อนกระแสเข้าเบส (B) → คุมกระแส C→E, IC = β·IB (สวิตช์ฝั่งล่าง/ขยาย)', en:'NPN: current into Base (B) controls C→E, IC = β·IB (low-side switch / amp)' },
     pnp:  { th:'PNP: ดึงกระแสออกจากเบส → คุมกระแส E→C (สวิตช์ฝั่งบน)', en:'PNP: current out of Base controls E→C (high-side switch)' },
-    nmos: { th:'N-MOSFET: Vgs > Vth → นำ (D-S ต่อถึงกัน), เกตไม่กินกระแส', en:'N-MOSFET: Vgs > Vth turns it on (D-S conducts), gate draws no current' },
-    pmos: { th:'P-MOSFET: Vgs < −Vth → นำ (สวิตช์ฝั่งบนแบบ MOSFET)', en:'P-MOSFET: Vgs below −Vth turns it on (MOSFET high-side switch)' }
+    nmos: { th:'N-MOSFET: Vgs > Vth → นำ; Vds น้อย = triode (สวิตช์), Vds มาก = saturation (ขยาย, Id=½k·Vov²); เกตไม่กินกระแส', en:'N-MOSFET: Vgs > Vth turns it on; small Vds = triode (switch), large Vds = saturation (amp, Id=½k·Vov²); gate draws no current' },
+    pmos: { th:'P-MOSFET: Vgs < −Vth → นำ; triode (สวิตช์ฝั่งบน) / saturation (ขยาย)', en:'P-MOSFET: Vgs below −Vth turns it on; triode (high-side switch) / saturation (amp)' }
   };
   var h = hints[transType] || hints.npn;
   var hint = $('bb-trans-hint');
