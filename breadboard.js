@@ -85,6 +85,18 @@ var LED_COLORS = {
   white:  { vf:3.2, fill:'#e2e8f0', glow:'#ffffff', th:'ขาว',     en:'White' }
 };
 
+// jumper-wire colours (cosmetic only — all wires are still 0 Ω)
+var WIRE_COLORS = {
+  green:  { hex:'#16a34a', th:'เขียว',   en:'Green' },
+  red:    { hex:'#ef4444', th:'แดง',     en:'Red' },
+  black:  { hex:'#1f2937', th:'ดำ',      en:'Black' },
+  blue:   { hex:'#3b82f6', th:'น้ำเงิน', en:'Blue' },
+  yellow: { hex:'#eab308', th:'เหลือง',  en:'Yellow' },
+  orange: { hex:'#f97316', th:'ส้ม',     en:'Orange' },
+  white:  { hex:'#f1f5f9', th:'ขาว',     en:'White' }
+};
+function wireHex(c){ return (WIRE_COLORS[c && c.color] || WIRE_COLORS.green).hex; }
+
 // reactive parts (transient simulation via Backward-Euler companion models)
 var CAP_OPTIONS = [1e-6, 10e-6, 47e-6, 100e-6, 220e-6, 470e-6, 1000e-6, 2200e-6];  // Farads
 var IND_OPTIONS = [1e-3, 10e-3, 100e-3, 0.5, 1, 5, 10];                            // Henries
@@ -150,6 +162,7 @@ var resVal = 330;
 var resSubtype = 'resistor';   // resistor | vr | ntc | ptc | ldr | vdr
 var vdrVc = 6;
 var ledColor = 'red';
+var wireColor = 'green';      // colour of the next jumper wire placed
 var diodeKind = 'silicon';   // silicon | germanium | schottky | zener | led — picks what the diode tool places
 var zenerVz = 5.1;
 var capVal = CAP_DEFAULT, indVal = IND_DEFAULT;
@@ -402,6 +415,7 @@ function placeComp(type, a, b){
   var c = { id:nextId++, type:type, a:a, b:b };
   if (RFAM[type]) c.value = resVal;            // resistor / vr / ntc / ptc / ldr
   if (type === 'vdr') c.vc = vdrVc;
+  if (type === 'wire') c.color = wireColor;
   if (type === 'led'){ c.color = ledColor; c.vf = LED_COLORS[ledColor].vf; }
   if (type === 'diode'){
     var dk = (diodeKind === 'led' ? 'silicon' : diodeKind);
@@ -451,7 +465,7 @@ function deleteComp(id){
 // ════════════════════════════ SELECT / EDIT ════════════════════════════
 function selectComp(id){
   var c = compById(id);
-  if (!c || c.type === 'wire'){ selectedId = null; rebuild(); renderEditor(); return; }
+  if (!c){ selectedId = null; rebuild(); renderEditor(); return; }
   pendingHole = null; hideHL();
   selectedId = id;
   rebuild();        // redraw highlight
@@ -461,9 +475,13 @@ function compById(id){ for (var i = 0; i < comps.length; i++) if (comps[i].id ==
 
 function renderEditor(){
   var box = $('bb-editor'), c = compById(selectedId), en = isEN();
-  if (!c || c.type === 'wire'){ box.style.display = 'none'; box.innerHTML = ''; return; }
+  if (!c){ box.style.display = 'none'; box.innerHTML = ''; return; }
 
   var ctrl = '';
+  if (c.type === 'wire'){
+    ctrl = '<label>' + (en ? 'Color' : 'สี') + '</label><select id="bb-ed-wcolor">' +
+      Object.keys(WIRE_COLORS).map(function(k){ return '<option value="' + k + '"' + ((c.color || 'green') === k ? ' selected' : '') + '>' + WIRE_COLORS[k][en ? 'en' : 'th'] + '</option>'; }).join('') + '</select>';
+  } else
   if (RFAM[c.type]){
     var list = R_OPTIONS[c.type] || R_OPTIONS.resistor;
     var L = (R_VAL_LABEL[c.type] || R_VAL_LABEL.resistor)[en ? 'en' : 'th'];
@@ -554,6 +572,7 @@ function renderEditor(){
   on('bb-ed-beta', 'change', function(){ c.beta = +this.value; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-vth', 'change', function(){ c.vth = +this.value; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-pot', 'change', function(){ c.value = +this.value; rebuild(); renderEditor(); });
+  on('bb-ed-wcolor', 'change', function(){ c.color = this.value; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-bv', 'input', function(){ c.value = +this.value; var o = $('bb-ed-bv-out'); if (o) o.textContent = c.value + ' V'; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-acvp', 'input', function(){ c.vp = +this.value; var o = $('bb-ed-acvp-out'); if (o) o.textContent = c.vp + ' V'; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-acf', 'change', function(){ c.freq = +this.value; rebuild(); refreshEditorTitle(c); });
@@ -987,7 +1006,9 @@ function drawComp(c){
 
   if (c.type === 'wire'){
     if (c.id === selectedId) g.appendChild(el('line', { x1:0, y1:0, x2:len, y2:0, stroke:'#f59e0b', 'stroke-width':8, 'stroke-linecap':'round', opacity:'0.35' }));
-    g.appendChild(el('line', { x1:0, y1:0, x2:len, y2:0, stroke:'#16a34a', 'stroke-width':4, 'stroke-linecap':'round' }));
+    if ((c.color || 'green') === 'white')   // faint on the light board → add a thin casing
+      g.appendChild(el('line', { x1:0, y1:0, x2:len, y2:0, stroke:'#94a3b8', 'stroke-width':5, 'stroke-linecap':'round' }));
+    g.appendChild(el('line', { x1:0, y1:0, x2:len, y2:0, stroke:wireHex(c), 'stroke-width':4, 'stroke-linecap':'round' }));
     gComps.appendChild(g); return;
   }
 
@@ -1882,6 +1903,7 @@ function initControls(){
   $('bb-res-val').addEventListener('change', function(){ resVal = +this.value; });
   $('bb-res-vc').addEventListener('change', function(){ vdrVc = +this.value; });
   $('bb-led-color').addEventListener('change', function(){ ledColor = this.value; });
+  $('bb-wire-color').addEventListener('change', function(){ wireColor = this.value; });
   $('bb-diode-type').addEventListener('change', function(){ diodeKind = this.value; updateDiodeControls(); });
   $('bb-diode-vz').addEventListener('change', function(){ zenerVz = +this.value; });
   $('bb-cap-val').addEventListener('change', function(){ capVal = +this.value; });
