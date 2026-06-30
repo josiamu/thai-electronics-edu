@@ -153,6 +153,8 @@ var ledColor = 'red';
 var diodeKind = 'silicon';   // silicon | germanium | schottky | zener | led — picks what the diode tool places
 var zenerVz = 5.1;
 var capVal = CAP_DEFAULT, indVal = IND_DEFAULT;
+var AC_FREQ_OPTIONS = [0.5, 1, 2, 5, 10, 50, 60];   // Hz
+var acVp = 5, acFreq = 1, acOffset = 0;       // amplitude / frequency / DC offset of the next AC source
 var transType = 'npn';                        // npn | pnp | nmos | pmos — next transistor placed
 var transBeta = BETA_DEFAULT, transVth = VTH_DEFAULT;
 var potVal = 10000;                           // total resistance of the next potentiometer placed
@@ -281,8 +283,15 @@ function addHole(id, x, y, node){
 }
 function hkey(x, y){ return Math.round(x) + '_' + Math.round(y); }
 
+// AC source instantaneous value: offset + Vp·sin(2π f t + phase)
+function acValue(c, t){ return (c.offset || 0) + (c.vp != null ? c.vp : acVp) * Math.sin(2 * Math.PI * (c.freq || acFreq) * t + (c.phase || 0)); }
+function srcValue(c){ return c.type === 'ac' ? acValue(c, simTime) : c.value; }
+function hasAC(){ return comps.some(function(c){ return c.type === 'ac'; }); }
+function minACFreq(){ var f = Infinity; comps.forEach(function(c){ if (c.type === 'ac') f = Math.min(f, c.freq || acFreq); }); return isFinite(f) ? f : 0; }
+function maxACFreq(){ var f = 0; comps.forEach(function(c){ if (c.type === 'ac') f = Math.max(f, c.freq || acFreq); }); return f; }
+
 // ════════════════════════════ PLACEMENT ════════════════════════════
-var POLAR = { battery:1, led:1, diode:1 };    // first hole = + / anode
+var POLAR = { battery:1, led:1, diode:1, ac:1 };    // first hole = + / anode
 var TYPE_LABEL = {
   battery: { th:'แบตเตอรี่', en:'Battery' },
   resistor:{ th:'ตัวต้านทาน', en:'Resistor' },
@@ -292,6 +301,7 @@ var TYPE_LABEL = {
   switch:  { th:'สวิตช์', en:'Switch' },
   cap:     { th:'ตัวเก็บประจุ', en:'Capacitor' },
   ind:     { th:'ตัวเหนี่ยวนำ', en:'Inductor' },
+  ac:      { th:'แหล่งจ่าย AC', en:'AC source' },
   transistor:{ th:'ทรานซิสเตอร์', en:'Transistor' },
   pot:       { th:'โพเทนชิโอมิเตอร์', en:'Potentiometer' }
 };
@@ -400,6 +410,7 @@ function placeComp(type, a, b){
     if (dk === 'zener') c.vz = zenerVz;
   }
   if (type === 'battery') c.value = batteryV;
+  if (type === 'ac'){ c.vp = acVp; c.freq = acFreq; c.offset = acOffset; }
   if (type === 'switch') c.closed = true;   // starts closed (conducting)
   if (type === 'cap'){ c.value = capVal; c._vPrev = 0; }
   if (type === 'ind'){ c.value = indVal; c._iPrev = 0; }
@@ -466,6 +477,11 @@ function renderEditor(){
       Object.keys(LED_COLORS).map(function(k){ return '<option value="' + k + '"' + (k === c.color ? ' selected' : '') + '>' + LED_COLORS[k][en ? 'en' : 'th'] + '</option>'; }).join('') + '</select>';
   } else if (c.type === 'battery'){
     ctrl = '<label>' + (en ? 'Voltage' : 'แรงดัน') + '</label><input type="range" id="bb-ed-bv" min="1" max="12" step="1" value="' + c.value + '"><span class="ev" id="bb-ed-bv-out">' + c.value + ' V</span>';
+  } else if (c.type === 'ac'){
+    ctrl = '<label>' + (en ? 'Amplitude' : 'แอมพลิจูด Vp') + '</label><input type="range" id="bb-ed-acvp" min="1" max="12" step="1" value="' + c.vp + '"><span class="ev" id="bb-ed-acvp-out">' + c.vp + ' V</span>' +
+      '<label style="margin-left:.6rem">' + (en ? 'Freq' : 'ความถี่') + '</label><select id="bb-ed-acf">' +
+      AC_FREQ_OPTIONS.map(function(f){ return '<option value="' + f + '"' + (f === c.freq ? ' selected' : '') + '>' + f + ' Hz</option>'; }).join('') + '</select>' +
+      '<label style="margin-left:.6rem">' + (en ? 'Offset' : 'ออฟเซ็ต') + '</label><input type="range" id="bb-ed-acoff" min="-6" max="6" step="1" value="' + (c.offset || 0) + '"><span class="ev" id="bb-ed-acoff-out">' + (c.offset || 0) + ' V</span>';
   } else if (c.type === 'diode'){
     var dv = c.variant || 'silicon';
     ctrl = '<label>' + (en ? 'Type' : 'ชนิด') + '</label><select id="bb-ed-dtype">' +
@@ -504,7 +520,7 @@ function renderEditor(){
       ctrl += '<span style="margin-left:.6rem;color:var(--text-light);font-weight:600">' + (rg ? (en ? rg.en : rg.th) : '') + '</span>';
     }
   }
-  var polar = (c.type === 'led' || c.type === 'diode' || c.type === 'battery');
+  var polar = (c.type === 'led' || c.type === 'diode' || c.type === 'battery' || c.type === 'ac');
   var flip = polar ? '<button class="bb-ed-btn" id="bb-ed-flip">🔄 ' + (en ? 'Flip ±' : 'สลับขั้ว') + '</button>' : '';
   var toggle = c.type === 'switch' ? '<button class="bb-ed-btn" id="bb-ed-toggle">⎍ ' + (en ? 'Toggle' : 'เปิด/ปิด') + '</button>' : '';
 
@@ -539,6 +555,9 @@ function renderEditor(){
   on('bb-ed-vth', 'change', function(){ c.vth = +this.value; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-pot', 'change', function(){ c.value = +this.value; rebuild(); renderEditor(); });
   on('bb-ed-bv', 'input', function(){ c.value = +this.value; var o = $('bb-ed-bv-out'); if (o) o.textContent = c.value + ' V'; rebuild(); refreshEditorTitle(c); });
+  on('bb-ed-acvp', 'input', function(){ c.vp = +this.value; var o = $('bb-ed-acvp-out'); if (o) o.textContent = c.vp + ' V'; rebuild(); refreshEditorTitle(c); });
+  on('bb-ed-acf', 'change', function(){ c.freq = +this.value; rebuild(); refreshEditorTitle(c); });
+  on('bb-ed-acoff', 'input', function(){ c.offset = +this.value; var o = $('bb-ed-acoff-out'); if (o) o.textContent = c.offset + ' V'; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-flip', 'click', function(){ var t = c.a; c.a = c.b; c.b = t; rebuild(); });
   on('bb-ed-toggle', 'click', function(){ c.closed = !c.closed; rebuild(); renderEditor(); });
   on('bb-ed-del', 'click', function(){ deleteComp(c.id); });
@@ -666,10 +685,10 @@ function solveCircuit(h, commit){
   var warnings = [];
   probeCtx = { ok:false, ground:null, V:function(){ return null; }, connected:function(){ return false; } };
 
-  var batteries   = comps.filter(function(c){ return c.type === 'battery'; });
+  var sources     = comps.filter(function(c){ return c.type === 'battery' || c.type === 'ac'; });
   var transistors = comps.filter(function(c){ return c.type === 'transistor'; });
   var pots        = comps.filter(function(c){ return c.type === 'pot'; });
-  var branches    = comps.filter(function(c){ return c.type !== 'wire' && c.type !== 'battery' && c.type !== 'switch' && c.type !== 'transistor' && c.type !== 'pot'; });
+  var branches    = comps.filter(function(c){ return c.type !== 'wire' && c.type !== 'battery' && c.type !== 'ac' && c.type !== 'switch' && c.type !== 'transistor' && c.type !== 'pot'; });
   var wires       = comps.filter(function(c){ return c.type === 'wire'; });
   // a closed switch behaves like a jumper (0 Ω); an open one is ignored entirely
   var joins       = wires.concat(comps.filter(function(c){ return c.type === 'switch' && c.closed; }));
@@ -682,12 +701,12 @@ function solveCircuit(h, commit){
   function sn(holeId){ return uf.find(holes[holeId].node); }
   probeCtx.connected = function(h1, h2){ return sn(h1) === sn(h2); };
 
-  if (batteries.length === 0){
-    return { ok:comps.length === 0, warnings:comps.length ? [{ t:'warn', th:'ยังไม่มีแหล่งจ่าย — เพิ่มแบตเตอรี่เพื่อให้กระแสไหล', en:'No power source — add a battery to make current flow' }] : [] };
+  if (sources.length === 0){
+    return { ok:comps.length === 0, warnings:comps.length ? [{ t:'warn', th:'ยังไม่มีแหล่งจ่าย — เพิ่มแบตเตอรี่หรือแหล่งจ่าย AC เพื่อให้กระแสไหล', en:'No power source — add a battery or AC source to make current flow' }] : [] };
   }
 
-  // 2) ground = negative terminal supernode of first battery
-  var ground = sn(batteries[0].b);
+  // 2) ground = negative terminal supernode of the first source
+  var ground = sn(sources[0].b);
 
   // 3) index non-ground supernodes
   var idx = {}, N = 0, seen = {};
@@ -698,7 +717,7 @@ function solveCircuit(h, commit){
       if (node !== ground){ idx[node] = N++; }
     });
   });
-  var nV = batteries.length;
+  var nV = sources.length;
   var M = N + nV;
 
   function gi(node){ return node === ground ? -1 : idx[node]; }
@@ -789,12 +808,12 @@ function solveCircuit(h, commit){
       stampG(gi(sn(p.g)), gi(sn(p.b)), 1 / pr.r2);
     });
 
-    // voltage sources (batteries): a = +, b = −
-    batteries.forEach(function(c, k){
+    // voltage sources (battery = DC, ac = sinusoidal at the current sim time): a = +, b = −
+    sources.forEach(function(c, k){
       var col = N + k, p = gi(sn(c.a)), n = gi(sn(c.b));
       if (p >= 0){ A[p][col] += 1; A[col][p] += 1; }
       if (n >= 0){ A[n][col] -= 1; A[col][n] -= 1; }
-      bv[col] += c.value;
+      bv[col] += srcValue(c);
     });
 
     sol = solveLinear(A, bv);
@@ -880,10 +899,10 @@ function solveCircuit(h, commit){
     c.results = { V:vd, I:I, on:on, lit:(c._on > 0 && on), bright:bright };
     if (c.type === 'led' && I > 0.03) warnings.push({ t:'warn', th:'กระแส LED สูงเกิน (' + fmtI(I) + ') — ในงานจริงต้องมี R จำกัดกระแส', en:'LED current too high (' + fmtI(I) + ') — add a current-limiting resistor' });
   });
-  batteries.forEach(function(c, k){
+  sources.forEach(function(c, k){
     var I = sol[N + k];                 // source current
-    c.results = { V:c.value, I:Math.abs(I), on:Math.abs(I) > 1e-6, _raw:I };
-    if (Math.abs(I) > 0.8) warnings.push({ t:'warn', th:'กระแสจากแบตเตอรี่สูงมาก (' + fmtI(Math.abs(I)) + ') — อาจลัดวงจร!', en:'Very high battery current (' + fmtI(Math.abs(I)) + ') — possible short circuit!' });
+    c.results = { V:srcValue(c), I:Math.abs(I), on:Math.abs(I) > 1e-6, _raw:I };
+    if (Math.abs(I) > 0.8) warnings.push({ t:'warn', th:'กระแสจากแหล่งจ่ายสูงมาก (' + fmtI(Math.abs(I)) + ') — อาจลัดวงจร!', en:'Very high source current (' + fmtI(Math.abs(I)) + ') — possible short circuit!' });
   });
   wires.forEach(function(c){ c.results = { V:0, I:0, on:false }; });
   comps.filter(function(c){ return c.type === 'switch'; }).forEach(function(c){ c.results = { V:0, I:0, on:c.closed }; });
@@ -958,6 +977,7 @@ function rebuild(){
 function drawComp(c){
   if (c.type === 'transistor'){ drawTransistor(c); return; }
   if (c.type === 'pot'){ drawPot(c); return; }
+  if (c.type === 'ac'){ drawAC(c); return; }
   var A = holes[c.a], B = holes[c.b];
   var dx = B.x - A.x, dy = B.y - A.y;
   var len = Math.sqrt(dx * dx + dy * dy);
@@ -1142,6 +1162,28 @@ function drawTransistor(c){
   gComps.appendChild(g);
 }
 
+// AC source: circle with a sine glyph + polarity marks, along a→b
+function drawAC(c){
+  var A = holes[c.a], B = holes[c.b];
+  var dx = B.x - A.x, dy = B.y - A.y, len = Math.sqrt(dx * dx + dy * dy), ang = Math.atan2(dy, dx) * 180 / Math.PI;
+  var col = '#d97706';
+  var g = el('g', { transform:'translate(' + A.x + ',' + A.y + ') rotate(' + ang.toFixed(2) + ')', class:'bb-comp-hit' });
+  g.addEventListener('pointerdown', function(ev){ startDrag(ev, c); });
+  var mid = len / 2, R = 12;
+  if (c.id === selectedId)
+    g.appendChild(el('circle', { cx:mid, cy:0, r:R + 6, fill:'rgba(245,158,11,0.10)', stroke:'#f59e0b', 'stroke-width':2, 'stroke-dasharray':'5 3' }));
+  g.appendChild(el('line', { class:'bb-comp-lead', x1:0, y1:0, x2:mid - R, y2:0 }));
+  g.appendChild(el('line', { class:'bb-comp-lead', x1:mid + R, y1:0, x2:len, y2:0 }));
+  g.appendChild(el('circle', { cx:mid, cy:0, r:R, fill:'var(--card)', stroke:col, 'stroke-width':2 }));
+  // sine squiggle inside the circle
+  g.appendChild(el('path', { d:'M ' + (mid - 8) + ' 0 Q ' + (mid - 4) + ' -7 ' + mid + ' 0 T ' + (mid + 8) + ' 0', fill:'none', stroke:col, 'stroke-width':1.8, 'stroke-linecap':'round' }));
+  // polarity hints near each lead (a = +, b = −)
+  g.appendChild(txt(R * 0.6, -6, '+', 'bb-lbl', col));
+  g.appendChild(txt(len - R * 0.6, -6, '−', 'bb-lbl', col));
+  gComps.appendChild(g);
+  gComps.appendChild(uprightText(mid, A.x, A.y, ang, -17, (c.vp != null ? c.vp : acVp) + 'V ' + (c.freq || acFreq) + 'Hz', col));
+}
+
 // 3-pin potentiometer: resistor body along a→b + a wiper arm from g to the body (position = VR knob)
 function drawPot(c){
   var A = holes[c.a], B = holes[c.b], Wp = holes[c.g];
@@ -1248,7 +1290,7 @@ function rebuildElectrons(){
   while (gElec.firstChild) gElec.removeChild(gElec.firstChild);
   elecDots = [];
   comps.forEach(function(c){
-    if (c.type === 'wire' || c.type === 'battery' || c.type === 'switch') return;
+    if (c.type === 'wire' || c.type === 'battery' || c.type === 'ac' || c.type === 'switch') return;
     if (!c.results || !c.results.on) return;
     if (c.type === 'pot'){            // two legs: end a → wiper, wiper → end b
       [[c.a, c.g, c.results.Ia], [c.g, c.b, c.results.Ib]].forEach(function(seg){
@@ -1289,12 +1331,14 @@ function tick(ts){
   if (lastTs === null) lastTs = ts;
   var dt = Math.min((ts - lastTs) / 1000, 0.05); lastTs = ts;
 
-  // advance the transient simulation when reactive parts are present
-  if (hasReactive()){
+  // advance the transient simulation when reactive parts OR an AC source are present
+  if (hasReactive() || hasAC()){
     var dtSim = dt * SIM_SPEEDS[simSpeedIdx];
-    var n = Math.max(1, Math.ceil(dtSim / SIM_SUBSTEP)), h = dtSim / n;
-    for (var s = 0; s < n; s++) lastRes = solveCircuit(h, true);
-    simTime += dtSim;
+    // substep small enough to resolve the highest AC frequency (≥40 points/cycle) — avoids aliasing
+    var subMax = SIM_SUBSTEP, fmax = maxACFreq();
+    if (fmax > 0) subMax = Math.min(subMax, 1 / (fmax * 40));
+    var n = Math.max(1, Math.ceil(dtSim / subMax)), h = dtSim / n;
+    for (var s = 0; s < n; s++){ simTime += h; lastRes = solveCircuit(h, true); }   // advance time per substep (AC value tracks simTime)
     sampleGraph();
     renderAcc += dt;
     if (renderAcc > 0.06){
@@ -1319,17 +1363,18 @@ document.addEventListener('visibilitychange', function(){
 });
 
 // ════════════════════════════ TRANSIENT PANEL / GRAPH ════════════════════════════
-// pick which reactive component the graph tracks (selected one wins, else first placed)
+// pick which component the graph tracks (selected one wins, else first reactive, else AC source)
+function graphable(c){ return c && (c.type === 'cap' || c.type === 'ind' || c.type === 'ac'); }
 function trackedComp(){
-  var sel = compById(graphComp);
-  if (sel && (sel.type === 'cap' || sel.type === 'ind')) return sel;
-  sel = compById(selectedId);
-  if (sel && (sel.type === 'cap' || sel.type === 'ind')) return sel;
-  for (var i = 0; i < comps.length; i++) if (comps[i].type === 'cap' || comps[i].type === 'ind') return comps[i];
+  var sel = compById(graphComp);   if (graphable(sel)) return sel;
+  sel = compById(selectedId);      if (graphable(sel)) return sel;
+  var i;
+  for (i = 0; i < comps.length; i++) if (comps[i].type === 'cap' || comps[i].type === 'ind') return comps[i];
+  for (i = 0; i < comps.length; i++) if (comps[i].type === 'ac') return comps[i];   // fall back to the AC source
   return null;
 }
-// the graphed signal: capacitor → voltage, inductor → current
-function trackedSignal(c){ return c.type === 'cap' ? (c.results ? c.results.V : 0) : (c.results ? c.results.I : 0); }
+// the graphed signal: inductor → current, capacitor/AC source → voltage
+function trackedSignal(c){ return c.type === 'ind' ? (c.results ? c.results.I : 0) : (c.results ? c.results.V : 0); }
 
 function restartTransient(){
   comps.forEach(function(c){ if (c.type === 'cap') c._vPrev = 0; if (c.type === 'ind') c._iPrev = 0; });
@@ -1345,19 +1390,21 @@ function sampleGraph(){
   if (graphHist.length > 1200) graphHist.shift();
 }
 function graphWindow(){
-  // show ~5τ when known, otherwise a fixed window
+  // show ~5τ when a time constant is known; else ~3 AC periods; else a fixed window
   if (graphTau && graphTau > 0) return Math.min(Math.max(graphTau * 5, 0.2), 120);
+  var f = minACFreq();
+  if (f > 0) return Math.min(Math.max(3 / f, 0.4), 30);
   return 5;
 }
 
 function syncTransientPanel(){
   var panel = $('bb-transient'); if (!panel) return;
-  var show = hasReactive();
+  var show = hasReactive() || hasAC();
   panel.style.display = show ? '' : 'none';
   if (!show){ graphHist = []; return; }
   document.querySelectorAll('.bb-sp[data-sp]').forEach(function(b){ b.classList.toggle('active', +b.dataset.sp === simSpeedIdx); });
   var c = trackedComp();
-  graphTau = c ? tauOf(c) : null;
+  graphTau = (c && (c.type === 'cap' || c.type === 'ind')) ? tauOf(c) : null;
   drawGraph();
 }
 
@@ -1368,7 +1415,7 @@ function tauOf(target){
   comps.forEach(function(c){ uf.add(holes[c.a].node); uf.add(holes[c.b].node); });
   // for the DC-ish Thevenin view: batteries shorted, inductors shorted, other caps open
   comps.forEach(function(c){
-    if (c.type === 'wire' || (c.type === 'switch' && c.closed) || c.type === 'battery' || (c.type === 'ind' && c !== target))
+    if (c.type === 'wire' || (c.type === 'switch' && c.closed) || c.type === 'battery' || c.type === 'ac' || (c.type === 'ind' && c !== target))
       uf.union(holes[c.a].node, holes[c.b].node);
   });
   function sn(h){ return uf.find(holes[h].node); }
@@ -1403,12 +1450,12 @@ function drawGraph(){
   while (svg2.firstChild) svg2.removeChild(svg2.firstChild);
   var en = isEN(), info = $('bb-graph-info');
   var c = trackedComp();
-  if (!c){ if (info) info.textContent = en ? 'Place a capacitor or inductor to see its curve.' : 'วางตัวเก็บประจุ/ตัวเหนี่ยวนำเพื่อดูเส้นโค้ง'; return; }
+  if (!c){ if (info) info.textContent = en ? 'Place a capacitor, inductor, or AC source to see its curve.' : 'วางตัวเก็บประจุ/ตัวเหนี่ยวนำ/แหล่งจ่าย AC เพื่อดูเส้นโค้ง'; return; }
 
   var W = 260, H = 130, pad = 6;
   svg2.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
   svg2.setAttribute('preserveAspectRatio', 'none');
-  var isCap = c.type === 'cap', accent = isCap ? '#7c3aed' : '#0891b2';
+  var isCurrent = c.type === 'ind', accent = c.type === 'cap' ? '#7c3aed' : c.type === 'ind' ? '#0891b2' : '#d97706';
   var win = graphWindow(), t1 = simTime, t0 = Math.max(0, t1 - win);
 
   // y-range from history within window (padded, always includes 0)
@@ -1433,7 +1480,7 @@ function drawGraph(){
 
   if (info){
     var sig = trackedSignal(c);
-    var label = compName(c, en) + ' — ' + (isCap ? 'V' : 'I') + ' = <b>' + (isCap ? fmtV(sig) : fmtI(sig)) + '</b>';
+    var label = compName(c, en) + ' — ' + (isCurrent ? 'I' : 'V') + ' = <b>' + (isCurrent ? fmtI(sig) : fmtV(sig)) + '</b>';
     var tauTxt = (graphTau != null && graphTau > 0) ? ' · τ ≈ <span class="tau">' + fmtTime(graphTau) + '</span>' : '';
     info.innerHTML = label + tauTxt + ' · t = ' + fmtTime(simTime);
   }
@@ -1491,6 +1538,7 @@ function compName(c, en){
   }
   if (c.type === 'vdr') return 'VDR ' + c.vc + 'V';
   if (c.type === 'battery') return (en ? 'Battery ' : 'แบตเตอรี่ ') + c.value + 'V';
+  if (c.type === 'ac') return (en ? 'AC ' : 'AC ') + (c.vp != null ? c.vp : acVp) + 'V ' + (c.freq || acFreq) + 'Hz';
   if (c.type === 'diode'){
     var dt = DIODE_TYPES[c.variant] || DIODE_TYPES.silicon;
     if (c.variant === 'zener') return (en ? 'Zener ' : 'ซีเนอร์ ') + (c.vz || zenerVz) + 'V';
@@ -1679,8 +1727,8 @@ function beep(){
 }
 
 // ════════════════════════════ TOOLBAR / CONTROLS ════════════════════════════
-var VALROWS = ['battery','resistor','diode','wire','switch','cap','ind','transistor','pot','meter'];
-var COMP_TOOLS = ['battery','resistor','diode','wire','switch','cap','ind','transistor','pot'];   // live inside the "Add component" dropdown
+var VALROWS = ['battery','ac','resistor','diode','wire','switch','cap','ind','transistor','pot','meter'];
+var COMP_TOOLS = ['battery','ac','resistor','diode','wire','switch','cap','ind','transistor','pot'];   // live inside the "Add component" dropdown
 function selectTool(t){
   // toggle off if same
   tool = (tool === t) ? null : t;
@@ -1842,6 +1890,9 @@ function initControls(){
   $('bb-trans-beta').addEventListener('change', function(){ transBeta = +this.value; });
   $('bb-trans-vth').addEventListener('change', function(){ transVth = +this.value; });
   $('bb-pot-val').addEventListener('change', function(){ potVal = +this.value; });
+  $('bb-ac-vp').addEventListener('input', function(){ acVp = +this.value; $('bb-ac-vp-out').textContent = acVp + ' V'; });
+  $('bb-ac-freq').addEventListener('change', function(){ acFreq = +this.value; });
+  $('bb-ac-offset').addEventListener('input', function(){ acOffset = +this.value; $('bb-ac-offset-out').textContent = acOffset + ' V'; });
   // transient: speed presets + restart
   document.querySelectorAll('.bb-sp[data-sp]').forEach(function(btn){
     btn.addEventListener('click', function(){ simSpeedIdx = +btn.dataset.sp; syncTransientPanel(); });
@@ -2046,6 +2097,22 @@ var EXAMPLES = [
       place('led', 'tb17', 'ta21', { color:'green', vf:2.1 });
       place('wire', 'TN10', 'ta25', {});                        // gnd → col25 (emitter)
       place('transistor', 'tb21', 'tb25', { g:'tc9', tt:'npn', beta:100 });    // C=col21, E=col25, B=col9
+    } },
+  { th:'ตัวกรอง RC ความถี่ต่ำผ่าน (AC → R → C, ดูคลื่นในแผง Transient)', en:'RC low-pass filter (AC → R → C, watch the Transient panel)', build:function(){
+      place('ac', 'TP2', 'TN2', { vp:5, freq:1, offset:0 });
+      place('wire', 'TP4', 'ta5', {});               // source + → col5
+      place('resistor', 'tb5', 'ta9', { value:10000 });
+      place('cap', 'tb9', 'ta13', { value:10e-6, _vPrev:0 });   // output across C (col9)
+      place('wire', 'tb13', 'TN8', {});              // C bottom → − rail
+    } },
+  { th:'เรียงกระแสครึ่งคลื่น + ตัวกรอง (AC → ไดโอด → C → โหลด)', en:'Half-wave rectifier + filter (AC → diode → C → load)', build:function(){
+      place('ac', 'TP2', 'TN2', { vp:6, freq:2, offset:0 });
+      place('wire', 'TP4', 'ta5', {});               // source + → col5
+      place('diode', 'tb5', 'ta9', { variant:'silicon', vf:0.7, rd:8 });   // rectify into col9
+      place('cap', 'tb9', 'ta13', { value:100e-6, _vPrev:0 });             // smoothing cap col9→col13
+      place('wire', 'tb13', 'TN8', {});              // C bottom → − rail
+      place('resistor', 'tc9', 'ta17', { value:1000 });                    // load across the cap
+      place('wire', 'tb17', 'TN10', {});             // load → − rail
     } }
 ];
 
@@ -2093,6 +2160,9 @@ function serializeCircuit(){
       if (c.tt) o.tt = c.tt;
       if (c.beta != null) o.beta = c.beta;
       if (c.vth != null) o.vth = c.vth;
+      if (c.vp != null) o.vp = c.vp;
+      if (c.freq != null) o.f = c.freq;
+      if (c.offset != null) o.off = c.offset;
       if (c.type === 'switch') o.cl = c.closed ? 1 : 0;
       return o;
     })
@@ -2120,6 +2190,9 @@ function applyCircuit(data){
     if (o.tt) props.tt = o.tt;
     if (o.beta != null) props.beta = o.beta;
     if (o.vth != null) props.vth = o.vth;
+    if (o.vp != null) props.vp = o.vp;
+    if (o.f != null) props.freq = o.f;
+    if (o.off != null) props.offset = o.off;
     if (o.t === 'switch') props.closed = o.cl !== 0;
     if (o.t === 'cap') props._vPrev = 0;
     if (o.t === 'ind') props._iPrev = 0;

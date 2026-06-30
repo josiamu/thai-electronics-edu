@@ -208,6 +208,7 @@
         </button>
         <div class="bb-dd-menu" id="bb-comp-menu" role="menu">
           <button class="bb-dd-item" data-tool="battery" role="menuitem"><span class="ti">🔋</span><span class="th-only">แบตเตอรี่</span><span class="en-only">Battery</span></button>
+          <button class="bb-dd-item" data-tool="ac" role="menuitem"><span class="ti">∿</span><span class="th-only">แหล่งจ่าย AC</span><span class="en-only">AC source</span></button>
           <button class="bb-dd-item" data-tool="resistor" role="menuitem"><span class="ti">▭</span><span class="th-only">ตัวต้านทาน</span><span class="en-only">Resistor</span></button>
           <button class="bb-dd-item" data-tool="diode" role="menuitem"><span class="ti">▷|</span><span class="th-only">ไดโอด / LED</span><span class="en-only">Diode / LED</span></button>
           <button class="bb-dd-item" data-tool="wire" role="menuitem"><span class="ti">〜</span><span class="th-only">สายจัมเปอร์</span><span class="en-only">Jumper</span></button>
@@ -234,6 +235,28 @@
         <span style="color:var(--text-light);font-weight:400;">
           <span class="th-only">วางขั้ว + ก่อน แล้วตามด้วยขั้ว −</span>
           <span class="en-only">Place + terminal first, then −</span>
+        </span>
+      </div>
+      <div class="bb-valrow" id="bb-val-ac">
+        <label><span class="th-only">แอมพลิจูด Vp</span><span class="en-only">Amplitude Vp</span></label>
+        <input type="range" id="bb-ac-vp" min="1" max="12" step="1" value="5">
+        <span class="val" id="bb-ac-vp-out">5 V</span>
+        <label><span class="th-only">ความถี่</span><span class="en-only">Freq</span></label>
+        <select id="bb-ac-freq">
+          <option value="0.5">0.5 Hz</option>
+          <option value="1" selected>1 Hz</option>
+          <option value="2">2 Hz</option>
+          <option value="5">5 Hz</option>
+          <option value="10">10 Hz</option>
+          <option value="50">50 Hz</option>
+          <option value="60">60 Hz</option>
+        </select>
+        <label><span class="th-only">ออฟเซ็ต</span><span class="en-only">Offset</span></label>
+        <input type="range" id="bb-ac-offset" min="-6" max="6" step="1" value="0">
+        <span class="val" id="bb-ac-offset-out">0 V</span>
+        <span style="color:var(--text-light);font-weight:400;">
+          <span class="th-only">ไฟสลับรูปไซน์ — วางขั้ว + ก่อน · ดูคลื่นในแผง Transient</span>
+          <span class="en-only">Sine AC — place + terminal first · watch the Transient panel</span>
         </span>
       </div>
       <div class="bb-valrow" id="bb-val-resistor">
