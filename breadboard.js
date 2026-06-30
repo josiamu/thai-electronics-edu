@@ -2023,129 +2023,128 @@ var EXAMPLES = [
   { th:'LED พื้นฐาน (แบต → R → LED)', en:'Basic LED (battery → R → LED)', build:function(){
       setExampleBatt(9);
       place('battery', 'TP2', 'TN2', { value:9 });
-      place('wire', 'TP8', 'ta5', {});
-      place('resistor', 'tb5', 'ta9', { value:330 });
-      place('led', 'tb9', 'ta13', { color:'red', vf:1.8 });
-      place('wire', 'tb13', 'TN8', {});
+      place('wire', 'TP5', 'tc5', { color:'red' });             // + rail ↓ col5
+      place('resistor', 'ta5', 'ta9', { value:330 });           // → R (row a)
+      place('led', 'tb9', 'tb13', { color:'red', vf:1.8 });     // → LED (row b, shares col9)
+      place('wire', 'tc13', 'TN13', { color:'black' });         // → − rail ↑ col13
     } },
   { th:'LED ขนาน 2 สี (แดง + เขียว)', en:'Two LEDs in parallel (red + green)', build:function(){
       setExampleBatt(9);
       place('battery', 'TP2', 'TN2', { value:9 });
-      place('wire', 'TP4', 'ta4', {});
-      // branch 1 — red
-      place('resistor', 'tb4', 'ta8', { value:330 });
-      place('led', 'tb8', 'ta11', { color:'red', vf:1.8 });
-      place('wire', 'tb11', 'TN4', {});
-      // branch 2 — green (shares the + column node at col4)
-      place('resistor', 'tc4', 'ta15', { value:470 });
-      place('led', 'tb15', 'ta19', { color:'green', vf:2.1 });
-      place('wire', 'tb19', 'TN8', {});
+      place('wire', 'TP5', 'te5', { color:'red' });             // + bus col5
+      // branch 1 — red (rows a/b)
+      place('resistor', 'ta5', 'ta9', { value:330 });
+      place('led', 'tb9', 'tb13', { color:'red', vf:1.8 });
+      // branch 2 — green (rows c/d, shares the + bus at col5, − bus at col13)
+      place('resistor', 'tc5', 'tc10', { value:470 });
+      place('led', 'td10', 'td13', { color:'green', vf:2.1 });
+      place('wire', 'tc13', 'TN13', { color:'black' });         // − bus col13 ↑ rail
     } },
   { th:'ซีเนอร์ควบคุมแรงดัน 12V → 5.1V', en:'Zener regulator 12V → 5.1V', build:function(){
       setExampleBatt(12);
       place('battery', 'TP2', 'TN2', { value:12 });
-      place('wire', 'TP4', 'ta5', {});
-      place('resistor', 'tb5', 'ta10', { value:220 });          // series R
-      // zener clamps col10 to Vz: anode → − rail, cathode → regulated node (col10)
-      place('diode', 'tb14', 'tb10', { variant:'zener', vf:0.7, rd:8, vz:5.1 });
-      place('wire', 'ta14', 'TN4', {});
-      // LED load powered from the regulated 5.1 V node
-      place('resistor', 'tc10', 'ta17', { value:330 });
-      place('led', 'tb17', 'ta21', { color:'red', vf:1.8 });
-      place('wire', 'tb21', 'TN8', {});
+      place('wire', 'TP5', 'tc5', { color:'red' });             // + rail ↓ col5
+      place('resistor', 'ta5', 'ta9', { value:220 });           // series R → regulated node col9
+      // zener clamps col9 to Vz: cathode → col9, anode → − rail
+      place('diode', 'ta13', 'tb9', { variant:'zener', vf:0.7, rd:8, vz:5.1 });
+      place('wire', 'tb13', 'TN13', { color:'black' });         // zener anode (col13) → − rail
+      // LED load powered from the regulated 5.1 V node (col9)
+      place('resistor', 'tc9', 'tc15', { value:330 });
+      place('led', 'ta15', 'ta19', { color:'red', vf:1.8 });
+      place('wire', 'tb19', 'TN19', { color:'black' });
     } },
   { th:'สวิตช์ควบคุม LED', en:'Switch-controlled LED', build:function(){
       setExampleBatt(9);
       place('battery', 'TP2', 'TN2', { value:9 });
-      place('wire', 'TP4', 'ta5', {});
-      place('switch', 'tb5', 'ta9', { closed:true });
-      place('resistor', 'tb9', 'ta13', { value:330 });
-      place('led', 'tb13', 'ta17', { color:'yellow', vf:2.0 });
-      place('wire', 'tb17', 'TN8', {});
+      place('wire', 'TP5', 'tc5', { color:'red' });
+      place('switch', 'ta5', 'ta9', { closed:true });
+      place('resistor', 'tb9', 'tb13', { value:330 });
+      place('led', 'ta13', 'ta17', { color:'yellow', vf:2.0 });
+      place('wire', 'tc17', 'TN17', { color:'black' });
     } },
   { th:'VR แบบ 2 ขา (rheostat) หรี่ไฟ LED (ปรับลูกบิดในแผงสภาพแวดล้อม)', en:'Variable resistor (2-pin rheostat) dimming an LED', build:function(){
       setExampleBatt(9);
       place('battery', 'TP2', 'TN2', { value:9 });
-      place('wire', 'TP4', 'ta5', {});
-      place('vr', 'tb5', 'ta9', { value:10000 });
-      place('resistor', 'tb9', 'ta13', { value:220 });
-      place('led', 'tb13', 'ta17', { color:'blue', vf:3.0 });
-      place('wire', 'tb17', 'TN8', {});
+      place('wire', 'TP5', 'tc5', { color:'red' });
+      place('vr', 'ta5', 'ta9', { value:10000 });
+      place('resistor', 'tb9', 'tb13', { value:220 });
+      place('led', 'ta13', 'ta17', { color:'blue', vf:3.0 });
+      place('wire', 'tc17', 'TN17', { color:'black' });
     } },
   { th:'โพเทนชิโอมิเตอร์ 3 ขา หรี่ไฟ LED (แบ่งแรงดัน — หมุนลูกบิด VR)', en:'3-pin potentiometer LED dimmer (voltage divider — turn the VR knob)', build:function(){
       setExampleBatt(9);
       env.vrPos = 70; renderVrKnob();                          // start fairly bright; turn the knob down to dim
       place('battery', 'TP2', 'TN2', { value:9 });
-      place('wire', 'TN4', 'tb5', { color:'black' });          // − rail → pot end 1 (col5)
-      place('wire', 'TP8', 'tb13', { color:'red' });           // + rail → pot end 2 (col13)
-      place('pot', 'ta5', 'ta13', { g:'ta9', value:10000 });   // end1=col5(−), end2=col13(+), wiper=col9
-      place('resistor', 'tb9', 'ta17', { value:330 });         // wiper output → R
-      place('led', 'tb17', 'ta21', { color:'red', vf:1.8 });   // → LED
-      place('wire', 'tb21', 'TN14', { color:'black' });        // LED → − rail (ground)
+      place('wire', 'TN5', 'tc5', { color:'black' });          // − rail ↓ pot end1 (col5)
+      place('wire', 'TP11', 'tc11', { color:'red' });          // + rail ↓ pot end2 (col11)
+      place('pot', 'ta5', 'ta11', { g:'tb8', value:10000 });   // end1=col5(−), end2=col11(+), wiper=col8
+      place('resistor', 'te8', 'te14', { value:330 });         // wiper (col8) → R
+      place('led', 'td14', 'td17', { color:'red', vf:1.8 });   // → LED
+      place('wire', 'tc17', 'TN17', { color:'black' });        // → − rail
     } },
   { th:'ชาร์จตัวเก็บประจุ RC (ดูกราฟ Transient)', en:'RC capacitor charging (watch the transient)', build:function(){
       setExampleBatt(9);
       place('battery', 'TP2', 'TN2', { value:9 });
-      place('wire', 'TP4', 'ta5', {});
-      place('resistor', 'tb5', 'ta10', { value:10000 });
-      place('cap', 'tb10', 'ta14', { value:470e-6, _vPrev:0 });
-      place('wire', 'tb14', 'TN8', {});
+      place('wire', 'TP5', 'tc5', { color:'red' });
+      place('resistor', 'ta5', 'ta9', { value:10000 });
+      place('cap', 'tb9', 'tb13', { value:470e-6, _vPrev:0 });
+      place('wire', 'tc13', 'TN13', { color:'black' });
     } },
   { th:'ตัวเก็บประจุเลี้ยง LED — เปิดสวิตช์แล้วไฟค่อยๆ จาง', en:'Cap-backed LED — open the switch and it fades out', build:function(){
       setExampleBatt(9);
       place('battery', 'TP2', 'TN2', { value:9 });
-      place('wire', 'TP4', 'ta5', {});
-      place('switch', 'tb5', 'ta9', { closed:true });
+      place('wire', 'TP5', 'tc5', { color:'red' });
+      place('switch', 'ta5', 'ta9', { closed:true });          // node S = col9
       // big cap sits in parallel across the supply node; charges while the switch is closed
-      place('cap', 'tb9', 'ta13', { value:4700e-6, _vPrev:0 });
-      place('wire', 'tb13', 'TN4', {});
+      place('cap', 'tb9', 'tb13', { value:4700e-6, _vPrev:0 });
+      place('wire', 'tc13', 'TN13', { color:'black' });        // cap bottom → − rail
       // R + LED draw from the same node — when the switch opens the cap discharges through them
-      place('resistor', 'tc9', 'ta17', { value:470 });
-      place('led', 'tb17', 'ta21', { color:'red', vf:1.8 });
-      place('wire', 'tb21', 'TN8', {});
+      place('resistor', 'td9', 'td17', { value:470 });
+      place('led', 'ta17', 'ta21', { color:'red', vf:1.8 });
+      place('wire', 'tb21', 'TN21', { color:'black' });
     } },
   { th:'ทรานซิสเตอร์ NPN เป็นสวิตช์ LED (สลับสวิตช์ที่ขาเบส)', en:'NPN transistor as an LED switch (toggle the base switch)', build:function(){
       setExampleBatt(5);
       place('battery', 'TP2', 'TN2', { value:5 });
-      place('wire', 'TP4', 'ta5', {});                          // + rail → col5 (Vcc)
-      // base drive: Vcc → switch → Rb → base
-      place('switch', 'tb5', 'ta8', { closed:true });
-      place('resistor', 'tb8', 'ta11', { value:10000 });        // Rb → base node (col11)
-      // collector load: Vcc → R → LED → collector
-      place('resistor', 'tc5', 'ta15', { value:330 });
-      place('led', 'tb15', 'ta19', { color:'red', vf:1.8 });    // cathode at col19 = collector
-      place('wire', 'TN8', 'ta23', {});                         // − rail → col23 (gnd = emitter)
-      place('transistor', 'tb19', 'tb23', { g:'tb11', tt:'npn', beta:100 });   // C=col19, E=col23, B=col11
+      place('wire', 'TP5', 'tc5', { color:'red' });             // + rail ↓ col5 (Vcc)
+      // base drive (rows a/b): Vcc → switch → Rb → base (col13)
+      place('switch', 'ta5', 'ta9', { closed:true });
+      place('resistor', 'tb9', 'tb13', { value:10000 });        // Rb → base node col13
+      // collector load (rows d/e): Vcc → R → LED → collector (col15)
+      place('resistor', 'td5', 'td11', { value:330 });
+      place('led', 'te11', 'te15', { color:'red', vf:1.8 });    // cathode col15 = collector
+      place('wire', 'TN19', 'td19', { color:'black' });         // − rail ↓ col19 (emitter)
+      place('transistor', 'td15', 'te19', { g:'te13', tt:'npn', beta:100 });   // C=col15, E=col19, B=col13
     } },
   { th:'NPN ตรวจจับความมืด (LDR → ปรับสไลเดอร์แสง)', en:'NPN dark-detector (LDR → drag the light slider)', build:function(){
       setExampleBatt(5);
       place('battery', 'TP2', 'TN2', { value:5 });
-      place('wire', 'TP4', 'ta5', {});                          // Vcc → col5
-      // voltage divider into the base: Vcc → Rtop → base → LDR → gnd (dark = base high = ON)
-      place('resistor', 'tb5', 'ta9', { value:10000 });         // Rtop → base node (col9)
-      place('ldr', 'tb9', 'ta13', { value:1000 });              // LDR base(col9) → col13
-      place('wire', 'tb13', 'TN7', {});                         // col13 → − rail (gnd)
-      // collector load: Vcc → R → LED → collector
-      place('resistor', 'tc5', 'ta17', { value:330 });
-      place('led', 'tb17', 'ta21', { color:'green', vf:2.1 });
-      place('wire', 'TN10', 'ta25', {});                        // gnd → col25 (emitter)
-      place('transistor', 'tb21', 'tb25', { g:'tc9', tt:'npn', beta:100 });    // C=col21, E=col25, B=col9
+      place('wire', 'TP5', 'tc5', { color:'red' });             // Vcc ↓ col5
+      // base divider (rows a/b): Vcc → Rtop → base (col9) → LDR → gnd (dark = base high = ON)
+      place('resistor', 'ta5', 'ta9', { value:10000 });         // Rtop → base node col9
+      place('ldr', 'tb9', 'tb13', { value:1000 });              // LDR base(col9) → col13
+      place('wire', 'tc13', 'TN13', { color:'black' });         // col13 → − rail (gnd)
+      // collector load (rows d/e): Vcc → R → LED → collector (col15)
+      place('resistor', 'td5', 'td11', { value:330 });
+      place('led', 'te11', 'te15', { color:'green', vf:2.1 });
+      place('wire', 'TN19', 'td19', { color:'black' });         // gnd ↓ col19 (emitter)
+      place('transistor', 'td15', 'te19', { g:'tc9', tt:'npn', beta:100 });    // C=col15, E=col19, B=col9
     } },
   { th:'ตัวกรอง RC ความถี่ต่ำผ่าน (AC → R → C, ดูคลื่นในแผง Transient)', en:'RC low-pass filter (AC → R → C, watch the Transient panel)', build:function(){
       place('ac', 'TP2', 'TN2', { vp:5, freq:1, offset:0 });
-      place('wire', 'TP4', 'ta5', {});               // source + → col5
-      place('resistor', 'tb5', 'ta9', { value:10000 });
-      place('cap', 'tb9', 'ta13', { value:10e-6, _vPrev:0 });   // output across C (col9)
-      place('wire', 'tb13', 'TN8', {});              // C bottom → − rail
+      place('wire', 'TP5', 'tc5', { color:'red' });            // source + ↓ col5
+      place('resistor', 'ta5', 'ta9', { value:10000 });
+      place('cap', 'tb9', 'tb13', { value:10e-6, _vPrev:0 });  // output across C (col9)
+      place('wire', 'tc13', 'TN13', { color:'black' });        // C bottom → − rail
     } },
   { th:'เรียงกระแสครึ่งคลื่น + ตัวกรอง (AC → ไดโอด → C → โหลด)', en:'Half-wave rectifier + filter (AC → diode → C → load)', build:function(){
       place('ac', 'TP2', 'TN2', { vp:6, freq:2, offset:0 });
-      place('wire', 'TP4', 'ta5', {});               // source + → col5
-      place('diode', 'tb5', 'ta9', { variant:'silicon', vf:0.7, rd:8 });   // rectify into col9
-      place('cap', 'tb9', 'ta13', { value:100e-6, _vPrev:0 });             // smoothing cap col9→col13
-      place('wire', 'tb13', 'TN8', {});              // C bottom → − rail
-      place('resistor', 'tc9', 'ta17', { value:1000 });                    // load across the cap
-      place('wire', 'tb17', 'TN10', {});             // load → − rail
+      place('wire', 'TP5', 'tc5', { color:'red' });            // source + ↓ col5
+      place('diode', 'ta5', 'ta9', { variant:'silicon', vf:0.7, rd:8 });   // rectify into col9
+      place('cap', 'tb9', 'tb13', { value:100e-6, _vPrev:0 });             // smoothing cap col9→col13
+      place('wire', 'tc13', 'TN13', { color:'black' });        // C bottom → − rail
+      place('resistor', 'td9', 'td15', { value:1000 });                    // load across the cap
+      place('wire', 'te15', 'TN15', { color:'black' });        // load → − rail
     } }
 ];
 
