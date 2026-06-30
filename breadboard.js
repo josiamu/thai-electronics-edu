@@ -625,16 +625,17 @@ function solveCircuit(h, commit){
   var warnings = [];
   probeCtx = { ok:false, ground:null, V:function(){ return null; }, connected:function(){ return false; } };
 
-  var batteries = comps.filter(function(c){ return c.type === 'battery'; });
-  var branches  = comps.filter(function(c){ return c.type !== 'wire' && c.type !== 'battery' && c.type !== 'switch'; });
-  var wires     = comps.filter(function(c){ return c.type === 'wire'; });
+  var batteries   = comps.filter(function(c){ return c.type === 'battery'; });
+  var transistors = comps.filter(function(c){ return c.type === 'transistor'; });
+  var branches    = comps.filter(function(c){ return c.type !== 'wire' && c.type !== 'battery' && c.type !== 'switch' && c.type !== 'transistor'; });
+  var wires       = comps.filter(function(c){ return c.type === 'wire'; });
   // a closed switch behaves like a jumper (0 Ω); an open one is ignored entirely
-  var joins     = wires.concat(comps.filter(function(c){ return c.type === 'switch' && c.closed; }));
+  var joins       = wires.concat(comps.filter(function(c){ return c.type === 'switch' && c.closed; }));
 
   // supernodes via union-find (wires/closed switches merge nodes) — built first so the
   // multimeter probe can test continuity even before a battery is added
   var uf = UF();
-  comps.forEach(function(c){ uf.add(holes[c.a].node); uf.add(holes[c.b].node); });
+  comps.forEach(function(c){ compNodes(c).forEach(function(h){ uf.add(holes[h].node); }); });
   joins.forEach(function(c){ uf.union(holes[c.a].node, holes[c.b].node); });
   function sn(holeId){ return uf.find(holes[holeId].node); }
   probeCtx.connected = function(h1, h2){ return sn(h1) === sn(h2); };
@@ -649,7 +650,8 @@ function solveCircuit(h, commit){
   // 3) index non-ground supernodes
   var idx = {}, N = 0, seen = {};
   comps.forEach(function(c){
-    [sn(c.a), sn(c.b)].forEach(function(node){
+    compNodes(c).forEach(function(holeId){
+      var node = sn(holeId);
       if (seen[node]) return; seen[node] = true;
       if (node !== ground){ idx[node] = N++; }
     });
@@ -659,9 +661,10 @@ function solveCircuit(h, commit){
 
   function gi(node){ return node === ground ? -1 : idx[node]; }
 
-  // 4) iterate diode/LED on/off states
+  // 4) iterate diode/LED on/off states + transistor regions
   var nonlin = branches.filter(function(c){ return isNonlin(c.type); });
   nonlin.forEach(function(d){ d._on = 0; });   // 0 off, 1 forward, -1 reverse (vdr)
+  transistors.forEach(function(t){ t._rg = 0; });   // 0 cutoff, 1 active/on, 2 saturation
   var sol = null, iter, MAXIT = 80;
 
   for (iter = 0; iter < MAXIT; iter++){
@@ -674,6 +677,13 @@ function solveCircuit(h, commit){
       if (i >= 0 && j >= 0){ A[i][j] -= g; A[j][i] -= g; }
     }
     function stampI(i, j, Is){ if (i >= 0) bv[i] += Is; if (j >= 0) bv[j] -= Is; }
+    // VCCS: current gm·(V(p)−V(q)) flows from node i to node j
+    function stampVCCS(i, j, p, q, gm){
+      if (i >= 0 && p >= 0) A[i][p] += gm;
+      if (i >= 0 && q >= 0) A[i][q] -= gm;
+      if (j >= 0 && p >= 0) A[j][p] -= gm;
+      if (j >= 0 && q >= 0) A[j][q] += gm;
+    }
 
     // Gmin to ground (numerical stability)
     for (var ni = 0; ni < N; ni++) A[ni][ni] += 1e-9;
@@ -698,6 +708,28 @@ function solveCircuit(h, commit){
       if (c._on > 0){ var g = 1 / rd; stampG(i, j, g); stampI(i, j, g * c.vf); }
       else if (c._on < 0){ var gz = 1 / rd; stampG(i, j, gz); stampI(i, j, -gz * c.vz); }
       else { stampG(i, j, 1e-9); }
+    });
+
+    // transistors — pins: iC = a (collector/drain), iE = b (emitter/source), iB = g (base/gate)
+    transistors.forEach(function(t){
+      var iC = gi(sn(t.a)), iE = gi(sn(t.b)), iB = gi(sn(t.g));
+      var s = transSign(t);   // +1 for npn/nmos, −1 for pnp/pmos
+      if (transKind(t) === 'fet'){
+        // voltage-controlled switch: on → Rds_on resistor D–S; off → open. gate draws no current.
+        if (t._rg) stampG(iC, iE, 1 / FET_RDSON); else stampG(iC, iE, 1e-9);
+        return;
+      }
+      // BJT large-signal companion
+      if (t._rg === 0){ stampG(iB, iE, 1e-9); stampG(iC, iE, 1e-9); return; }   // cutoff
+      var beta = t.beta || BETA_DEFAULT, gbe = 1 / BJT_RBE, gmc = beta * gbe;
+      // base-emitter junction (diode companion); current direction set by s
+      stampG(iB, iE, gbe); stampI(iB, iE, s * gbe * BJT_VBE);
+      if (t._rg === 1){   // active: collector is a VCCS  IC = β·IB = gmc·(Vbe − Von)
+        if (s > 0){ stampVCCS(iC, iE, iB, iE, gmc); stampI(iC, iE,  gmc * BJT_VBE); }
+        else      { stampVCCS(iE, iC, iE, iB, gmc); stampI(iE, iC,  gmc * BJT_VBE); }
+      } else {            // saturation: C–E clamped near Vce_sat (resistor companion)
+        stampG(iC, iE, 1 / BJT_RSAT); stampI(iC, iE, s * BJT_VCE_SAT / BJT_RSAT);
+      }
     });
 
     // voltage sources (batteries): a = +, b = −
@@ -732,6 +764,19 @@ function solveCircuit(h, commit){
         if ((vd + c.vz) / rd > 1e-9){ c._on = 0; changed = true; }
       } else if (vd > c.vf){ c._on = 1; changed = true; }
       else if (c.variant === 'zener' && vd < -c.vz){ c._on = -1; changed = true; }
+    });
+    // transistor region selection (junction-based, mirrors the diode toggling)
+    transistors.forEach(function(t){
+      var s = transSign(t), nr;
+      if (transKind(t) === 'fet'){
+        var vgs = s * (V(sn(t.g)) - V(sn(t.b)));     // gate − source
+        nr = vgs >= (t.vth || VTH_DEFAULT) ? 1 : 0;
+      } else {
+        var vbe = s * (V(sn(t.g)) - V(sn(t.b)));     // base − emitter
+        var vbc = s * (V(sn(t.g)) - V(sn(t.a)));     // base − collector
+        nr = vbe < BJT_VBE_ON ? 0 : (vbc > BJT_VBC_ON ? 2 : 1);
+      }
+      if (nr !== t._rg){ t._rg = nr; changed = true; }
     });
     if (!changed) break;
   }
@@ -779,6 +824,25 @@ function solveCircuit(h, commit){
   });
   wires.forEach(function(c){ c.results = { V:0, I:0, on:false }; });
   comps.filter(function(c){ return c.type === 'switch'; }).forEach(function(c){ c.results = { V:0, I:0, on:c.closed }; });
+
+  // transistors — report Vce/Vds across a→b and the collector/drain current
+  transistors.forEach(function(t){
+    var s = transSign(t);
+    var vC = Vof(sn(t.a)), vE = Vof(sn(t.b)), vB = Vof(sn(t.g));
+    var vce = s * (vC - vE);             // collector-emitter (drain-source) voltage
+    var Imain = 0, Ib = 0, region;
+    if (transKind(t) === 'fet'){
+      region = t._rg ? 'on' : 'cutoff';
+      Imain = t._rg ? vce / FET_RDSON : 0;          // drain current D→S
+    } else {
+      var vbe = s * (vB - vE);
+      Ib = t._rg ? Math.max(0, (vbe - BJT_VBE) / BJT_RBE) : 0;
+      region = t._rg === 0 ? 'cutoff' : t._rg === 2 ? 'sat' : 'active';
+      Imain = t._rg === 1 ? (t.beta || BETA_DEFAULT) * Ib : t._rg === 2 ? Math.max(0, (vce - BJT_VCE_SAT) / BJT_RSAT) : 0;
+    }
+    // results.I drives the C→E electron animation (a→b), signed by transistor polarity
+    t.results = { V:vce, I:s * Imain, on:t._rg > 0 && Imain > 3e-4, region:region, Ib:Ib, Ic:Imain, Vce:vce };
+  });
 
   // reverse-biased LED hint
   comps.filter(function(c){ return c.type === 'led'; }).forEach(function(c){
@@ -1099,6 +1163,15 @@ function rebuildElectrons(){
       gElec.appendChild(dot);
       elecDots.push({ el:dot, a:c.a, b:c.b, dir:dir, speed:speed, f:k / n });
     }
+    // BJT: also animate the (smaller) base current along g→b so the control path is visible
+    if (c.type === 'transistor' && transKind(c) === 'bjt' && c.results.Ib > 1e-6){
+      var sb = transSign(c), ds = sb >= 0 ? 1 : -1, bspeed = Math.max(0.1, Math.min(0.7, c.results.Ib * 60));
+      for (var kb = 0; kb < 2; kb++){
+        var bd = el('circle', { class:'bb-elec', r:2.4, filter:'url(#bb-glow)' });
+        gElec.appendChild(bd);
+        elecDots.push({ el:bd, a:c.g, b:c.b, dir:ds, speed:bspeed, f:kb / 2 });
+      }
+    }
   });
 }
 
@@ -1273,6 +1346,9 @@ function renderReadout(res){
         st = '<span class="bb-dot" style="background:' + (lit ? LED_COLORS[c.color].fill : '#94a3b8') + '"></span>' + (lit ? (en ? 'ON' : 'ติด') : (en ? 'off' : 'ดับ'));
       } else if (c.type === 'switch'){
         st = '<span class="bb-dot" style="background:' + (c.closed ? '#16a34a' : '#94a3b8') + '"></span>' + (c.closed ? (en ? 'ON' : 'ปิด') : (en ? 'OFF' : 'เปิด'));
+      } else if (c.type === 'transistor'){
+        var rg = c.results && c.results.region, conduct = rg && rg !== 'cutoff';
+        st = '<span class="bb-dot" style="background:' + (conduct ? '#16a34a' : '#94a3b8') + '"></span>' + (regionShort(rg) || '—');
       }
       rows += '<tr><td class="nm">' + nm + (st ? ' ' + st : '') + '</td>' +
               '<td class="v">' + (c.results ? fmtV(Math.abs(c.results.V)) : '—') + '</td>' +
