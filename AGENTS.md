@@ -31,7 +31,7 @@ website/
 ├── 555-sim.js       — Interactive 555 Astable (canvas, R1/R2/C sliders → real f/T/Duty, draws Vcap charge/discharge between ⅓–⅔Vcc + output square wave, blinking LED in step with output, Vcc=5V, visual sweep = CYCLES periods)
 ├── opamp-sim.js     — Interactive Op-Amp amplifier (canvas, mode inverting/non-inverting + Rin/Rf/Vin sliders → closed-loop gain, draws input sine + amplified output clipped at ±Vsat=12V, readouts gain/Vout/clip)
 ├── logic-sim.js     — Interactive Logic Gate (canvas, <select> gate + toggle A/B buttons → draws gate symbol w/ state-coloured wires + output LED, builds & highlights truth table; listens to langchange)
-├── announcements.js — กล่อง "ข่าวสาร/อัปเดตล่าสุด" บนหน้าแรก (data-driven: array ANNOUNCEMENTS {id,date,type:lesson/download/update,th,en,href} → render เข้า #announcements ใน index.html, bilingual th-only/en-only, ป้าย "ใหม่" เมื่อ date ≤30 วัน, ปิดได้รายอัน เก็บใน localStorage key `ann-dismissed`)
+├── announcements.js — กล่อง "ข่าวสาร/อัปเดตล่าสุด" บนหน้าแรก (data-driven: array ANNOUNCEMENTS {id,date,type:lesson/download/update,th,en,href,expires?} → render เข้า #announcements ใน index.html, bilingual th-only/en-only, ป้าย "ใหม่" เมื่อ date ≤30 วัน, auto-expire: หายเองเมื่อเลย ANN_MAX_AGE_DAYS (=3) วันจาก date หรือเลย expires (ถ้าใส่ override อายุ default), ปิดได้รายอัน เก็บใน localStorage key `ann-dismissed`)
 ├── index.html          — หน้าหลัก (CURRENT_PAGE='home') — กลุ่มตรงกับ navbar: บทเรียน / งานปฏิบัติ / เครื่องมือ / คลังการเรียนรู้ + กล่องข่าวสาร (#announcements → announcements.js)
 ├── electricity.html    — บทที่ 1
 ├── ohm.html            — บทที่ 2
