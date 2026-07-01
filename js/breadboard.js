@@ -2145,6 +2145,28 @@ var EXAMPLES = [
       place('wire', 'tc13', 'TN13', { color:'black' });        // C bottom → − rail
       place('resistor', 'td9', 'td15', { value:1000 });                    // load across the cap
       place('wire', 'te15', 'TN15', { color:'black' });        // load → − rail
+    } },
+  { th:'เรียงกระแสเต็มคลื่นแบบบริดจ์ (AC → 4 ไดโอด → C → โหลด)', en:'Full-wave bridge rectifier (AC → 4 diodes → C → load)', build:function(){
+      // nodes: A = + rail (col5), B = − rail = ground (col17), OUT+ = col9, OUT− = col13.
+      // layout spans both halves — top rows a–e and bottom rows f–j are separate nodes,
+      // joined across the center gap by blue jumpers (te*↔tf*). D4 + load sit on the bottom half.
+      // solver grounds sources[0].b (= AC −), so B is 0 V and the DC output pair floats — never tie OUT− to the − rail (would short D4).
+      place('ac', 'TP2', 'TN2', { vp:6, freq:2, offset:0 });
+      place('wire', 'TP5', 'tb5', { color:'red' });            // + rail → node A (col5)
+      place('wire', 'TN17', 'ta17', { color:'black' });        // − rail → node B (col17)
+      // bridge (diode a=anode, b=cathode)
+      place('diode', 'ta5', 'ta9', { variant:'silicon', vf:0.7, rd:8 });    // D1: A → OUT+
+      place('diode', 'tb17', 'tb9', { variant:'silicon', vf:0.7, rd:8 });   // D2: B → OUT+
+      place('diode', 'tc13', 'tc5', { variant:'silicon', vf:0.7, rd:8 });   // D3: OUT− → A
+      place('diode', 'tg13', 'tg17', { variant:'silicon', vf:0.7, rd:8 });  // D4 (bottom half): OUT− → B
+      // load (bottom half) across OUT+ (col9) ↔ OUT− (col13)
+      place('resistor', 'th9', 'th13', { value:1000 });
+      // blue jumpers bridge top↔bottom for OUT−, B, OUT+
+      place('wire', 'te13', 'tf13', { color:'blue' });
+      place('wire', 'te17', 'tf17', { color:'blue' });
+      place('wire', 'te9', 'tf9', { color:'blue' });
+      // smoothing cap across OUT+ ↔ OUT− (top half)
+      place('cap', 'td9', 'td13', { value:100e-6, _vPrev:0 });
     } }
 ];
 
