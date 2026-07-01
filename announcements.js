@@ -8,6 +8,14 @@
  *   href  : ลิงก์ปลายทาง (เว้นว่าง '' ได้ถ้าไม่มีหน้าให้ไป)
  */
 const ANNOUNCEMENTS = [
+  { id:'rectifier-pdf-2026-07-01', date:'2026-07-01', type:'download',
+    th:'ไฟล์ใหม่: วงจรเรียงกระแส (Rectifier) — ครึ่งคลื่น/เต็มคลื่น/บริดจ์ + ริปเปิล (PDF)',
+    en:'New file: Rectifier Circuits — half/full-wave/bridge + ripple (PDF)',
+    href:'downloads.html' },
+  { id:'worksheet-3-2026-07-01', date:'2026-07-01', type:'download',
+    th:'ใบงานใหม่: ใบความรู้ที่ 3 — เจาะลึกไดโอดความถี่สูง (Schottky & Fast Recovery) (PDF)',
+    en:'New worksheet: Sheet 3 — High-Frequency Diodes (Schottky & Fast Recovery) (PDF)',
+    href:'downloads.html' },
   { id:'worksheet-9-2026-06-27', date:'2026-06-27', type:'download',
     th:'ใบงานใหม่: ใบความรู้ที่ 9 — ผ่าแผงวงจร เจาะลึกเทคนิค (PDF)',
     en:'New worksheet: Sheet 9 — Dissecting the Circuit Board (PDF)',
