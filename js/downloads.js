@@ -105,4 +105,41 @@
   }
   setPlaceholder();
   window.addEventListener('langchange', setPlaceholder);
+
+  // ── มาจากกล่องข่าวหน้าแรก (?cat=/?file=) → กรองหมวด + เลื่อนไป/ไฮไลต์การ์ดให้อัตโนมัติ ──
+  (function fromNews() {
+    var params = new URLSearchParams(location.search);
+    var cat  = params.get('cat');
+    var file = params.get('file');
+    if (!cat && !file) return;
+
+    if (cat) {
+      var chip = chipBox.querySelector('.dl-chip[data-cat="' + cat + '"]');
+      if (chip) {
+        activeCat = cat;
+        chipBox.querySelectorAll('.dl-chip').forEach(function (c) {
+          c.classList.toggle('active', c === chip);
+        });
+      }
+    }
+    apply();
+
+    var target = null;
+    if (file) {
+      document.querySelectorAll('.pdf-card[data-pdf]').forEach(function (c) {
+        if (c.dataset.pdf === file) target = c;
+      });
+    } else {
+      target = document.querySelector('.pdf-card:not(.dl-hidden)');
+    }
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (target.animate) {
+        target.animate(
+          [{ boxShadow: '0 0 0 3px var(--primary)' }, { boxShadow: '0 0 0 3px rgba(0,0,0,0)' }],
+          { duration: 1800, easing: 'ease-out' }
+        );
+      }
+    }
+  })();
 })();

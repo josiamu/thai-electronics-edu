@@ -9,16 +9,19 @@
  *   expires : (ไม่บังคับ) 'YYYY-MM-DD' — วันที่ให้ประกาศหายเอง
  *             • ไม่ใส่ = หายอัตโนมัติเมื่อเลย ANN_MAX_AGE_DAYS วันนับจาก date
  *             • ใส่    = override อายุ default (เช่นอยากให้อยู่นาน/สั้นกว่า, หรือถาวรด้วยวันไกลๆ)
+ *   cat     : (ไม่บังคับ, ใช้กับ href='downloads.html') data-cat ของหมวด → เปิดหน้า downloads แล้วกรองหมวดนั้นให้เลย
+ *   file    : (ไม่บังคับ, ใช้กับ href='downloads.html') ค่า data-pdf ของการ์ด → เลื่อนไป + ไฮไลต์การ์ดนั้นให้อัตโนมัติ
+ *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
   { id:'rectifier-pdf-2026-07-01', date:'2026-07-01', type:'download',
     th:'ไฟล์ใหม่: วงจรเรียงกระแส (Rectifier) — ครึ่งคลื่น/เต็มคลื่น/บริดจ์ + ริปเปิล (PDF)',
     en:'New file: Rectifier Circuits — half/full-wave/bridge + ripple (PDF)',
-    href:'downloads.html' },
+    href:'downloads.html', cat:'components', file:'pdf/วงจรเรียงกระแส.pdf' },
   { id:'worksheet-3-2026-07-01', date:'2026-07-01', type:'download',
     th:'ใบงานใหม่: ใบความรู้ที่ 3 — เจาะลึกไดโอดความถี่สูง (Schottky & Fast Recovery) (PDF)',
     en:'New worksheet: Sheet 3 — High-Frequency Diodes (Schottky & Fast Recovery) (PDF)',
-    href:'downloads.html' },
+    href:'downloads.html', cat:'worksheet', file:'pdf/worksheet/📖 ใบความรู้ที่ 3 เจาะลึกไดโอดความถี่สูง.pdf' },
   { id:'worksheet-9-2026-06-27', date:'2026-06-27', type:'download',
     th:'ใบงานใหม่: ใบความรู้ที่ 9 — ผ่าแผงวงจร เจาะลึกเทคนิค (PDF)',
     en:'New worksheet: Sheet 9 — Dissecting the Circuit Board (PDF)',
@@ -84,8 +87,15 @@ const ANNOUNCEMENTS = [
       var newBadge = isRecent(a.date)
         ? '<span class="ann-new"><span class="th-only">ใหม่</span><span class="en-only">NEW</span></span>'
         : '';
-      var cta = a.href
-        ? '<a class="ann-cta" href="' + a.href + '"><span class="th-only">เปิดดู →</span><span class="en-only">Open →</span></a>'
+      var href = a.href;
+      if (href && (a.cat || a.file)) {          // แนบ query ให้ downloads.html กรอง/เลื่อนให้เอง
+        var qs = [];
+        if (a.cat)  qs.push('cat=' + encodeURIComponent(a.cat));
+        if (a.file) qs.push('file=' + encodeURIComponent(a.file));
+        href += (href.indexOf('?') === -1 ? '?' : '&') + qs.join('&');
+      }
+      var cta = href
+        ? '<a class="ann-cta" href="' + href + '"><span class="th-only">เปิดดู →</span><span class="en-only">Open →</span></a>'
         : '';
       return '<div class="ann-item ' + t.cls + '">' +
           '<span class="ann-icon">' + t.icon + '</span>' +

@@ -19,7 +19,7 @@ website/
 ├── js/nav.js           — inject nav bar + dark mode toggle + hamburger + language toggle + back-to-top button + footer license line (CC BY-NC 4.0, bilingual, ต่อท้าย <footer> ทุกหน้า)
 ├── js/tools.js         — logic เครื่องคิดเลขทุกตัว (calcR4, calcR5, calcOhm, ...)
 ├── js/quiz.js          — ข้อมูลข้อสอบ + logic แบบทดสอบ
-├── js/downloads.js     — PDF preview modal + download interactions + ตัวกรองหน้า downloads (ช่องค้นหา #dl-search ค้นทั้งไทย-อังกฤษ + ชิปกรองหมวด #dl-chips ตาม .section[data-cat], ซ่อนด้วย .dl-hidden, แสดง #dl-noresult เมื่อไม่พบ, placeholder เปลี่ยนตามภาษา)
+├── js/downloads.js     — PDF preview modal + download interactions + ตัวกรองหน้า downloads (ช่องค้นหา #dl-search ค้นทั้งไทย-อังกฤษ + ชิปกรองหมวด #dl-chips ตาม .section[data-cat], ซ่อนด้วย .dl-hidden, แสดง #dl-noresult เมื่อไม่พบ, placeholder เปลี่ยนตามภาษา; อ่าน ?cat=/?file= จาก URL ตอนโหลด → กรองหมวด + เลื่อนไป/ไฮไลต์การ์ดให้เอง (deep-link จากกล่องข่าวหน้าแรก))
 ├── js/oscilloscope.js  — Interactive I-V Curve Simulator
 ├── js/osc-reader.js    — Interactive Scope Reading Trainer (canvas, V/div & T/div sliders, AUTOSET/randomize, auto Vp/Vrms/T/f)
 ├── js/transistor-sim.js — Interactive BJT switch simulator (canvas, IB & β sliders → Cut-off/Active/Saturation + LED glow)
@@ -31,7 +31,7 @@ website/
 ├── js/555-sim.js       — Interactive 555 Astable (canvas, R1/R2/C sliders → real f/T/Duty, draws Vcap charge/discharge between ⅓–⅔Vcc + output square wave, blinking LED in step with output, Vcc=5V, visual sweep = CYCLES periods)
 ├── js/opamp-sim.js     — Interactive Op-Amp amplifier (canvas, mode inverting/non-inverting + Rin/Rf/Vin sliders → closed-loop gain, draws input sine + amplified output clipped at ±Vsat=12V, readouts gain/Vout/clip)
 ├── js/logic-sim.js     — Interactive Logic Gate (canvas, <select> gate + toggle A/B buttons → draws gate symbol w/ state-coloured wires + output LED, builds & highlights truth table; listens to langchange)
-├── js/announcements.js — กล่อง "ข่าวสาร/อัปเดตล่าสุด" บนหน้าแรก (data-driven: array ANNOUNCEMENTS {id,date,type:lesson/download/update,th,en,href,expires?} → render เข้า #announcements ใน index.html, bilingual th-only/en-only, ป้าย "ใหม่" เมื่อ date ≤30 วัน, auto-expire: หายเองเมื่อเลย ANN_MAX_AGE_DAYS (=3) วันจาก date หรือเลย expires (ถ้าใส่ override อายุ default), ปิดได้รายอัน เก็บใน localStorage key `ann-dismissed`)
+├── js/announcements.js — กล่อง "ข่าวสาร/อัปเดตล่าสุด" บนหน้าแรก (data-driven: array ANNOUNCEMENTS {id,date,type:lesson/download/update,th,en,href,expires?,cat?,file?} → render เข้า #announcements ใน index.html, bilingual th-only/en-only, ป้าย "ใหม่" เมื่อ date ≤30 วัน, auto-expire: หายเองเมื่อเลย ANN_MAX_AGE_DAYS (=3) วันจาก date หรือเลย expires (ถ้าใส่ override อายุ default), ปิดได้รายอัน เก็บใน localStorage key `ann-dismissed`, download-type แนบ cat/file เป็น query ให้ downloads.html กรอง/ไฮไลต์ให้เอง)
 ├── index.html          — หน้าหลัก (CURRENT_PAGE='home') — กลุ่มตรงกับ navbar: บทเรียน / งานปฏิบัติ / เครื่องมือ / คลังการเรียนรู้ + กล่องข่าวสาร (#announcements → announcements.js)
 ├── electricity.html    — บทที่ 1
 ├── ohm.html            — บทที่ 2
