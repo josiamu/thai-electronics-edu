@@ -122,7 +122,7 @@ html:not([lang="en"]) .en-only { display: none !important; }
 
 ---
 
-## 🧮 เครื่องคิดเลข / Calculators (`tools.js`)
+## 🧮 เครื่องคิดเลข / Calculators (`js/tools.js`)
 
 | ฟังก์ชัน | คำอธิบาย |
 |---|---|
@@ -155,23 +155,23 @@ git push
 
 ```
 .
-├── style.css            — Global styles, dark mode, bilingual classes
-├── nav.js               — Shared navigation, lang toggle, dark mode toggle
-├── tools.js             — Calculator logic
-├── quiz.js              — Quiz data + logic
-├── downloads.js         — PDF preview modal + downloads
-├── simulation.js        — Circuit simulator logic
-├── oscilloscope.js      — Interactive I-V curve simulator
-├── osc-reader.js        — Scope reading trainer
-├── transistor-sim.js    — BJT switch simulator
-├── signal-gen-sim.js    — Waveform generator
-├── capacitor-sim.js     — RC charge/discharge simulator
-├── power-supply-sim.js  — Power supply (AC→DC) simulator
-├── 555-sim.js           — 555 astable simulator (LED blinker)
-├── opamp-sim.js         — Op-amp amplifier simulator (gain + clipping)
-├── logic-sim.js         — Logic-gate simulator (toggle inputs + truth table)
-├── announcements.js     — Home-page "latest news/updates" box (data-driven, dismissible, bilingual)
-├── breadboard.js        — Virtual breadboard lab (MNA solver + transistors + multimeter)
+├── css/style.css            — Global styles, dark mode, bilingual classes
+├── js/nav.js               — Shared navigation, lang toggle, dark mode toggle
+├── js/tools.js             — Calculator logic
+├── js/quiz.js              — Quiz data + logic
+├── js/downloads.js         — PDF preview modal + downloads
+├── js/simulation.js        — Circuit simulator logic
+├── js/oscilloscope.js      — Interactive I-V curve simulator
+├── js/osc-reader.js        — Scope reading trainer
+├── js/transistor-sim.js    — BJT switch simulator
+├── js/signal-gen-sim.js    — Waveform generator
+├── js/capacitor-sim.js     — RC charge/discharge simulator
+├── js/power-supply-sim.js  — Power supply (AC→DC) simulator
+├── js/555-sim.js           — 555 astable simulator (LED blinker)
+├── js/opamp-sim.js         — Op-amp amplifier simulator (gain + clipping)
+├── js/logic-sim.js         — Logic-gate simulator (toggle inputs + truth table)
+├── js/announcements.js     — Home-page "latest news/updates" box (data-driven, dismissible, bilingual)
+├── js/breadboard.js        — Virtual breadboard lab (MNA solver + transistors + multimeter)
 ├── index.html           — Home page
 │   ├── electricity.html / ohm.html                 — Fundamentals
 │   ├── resistor.html / diode.html / transistor.html / ic.html / 555.html / op-amp.html / logic-gates.html / relay.html
