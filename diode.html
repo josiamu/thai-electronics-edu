@@ -589,55 +589,61 @@
         <h3 class="en-only" style="color:var(--primary)">Full-Wave Bridge Rectifier</h3>
         <p class="th-only" style="font-size:.9rem">ใช้ไดโอด <strong>4 ตัว</strong> ต่อเป็นบริดจ์ — เรียงได้ทั้งครึ่งคลื่นบวกและลบ</p>
         <p class="en-only" style="font-size:.9rem">Uses <strong>4 diodes</strong> in a bridge — rectifies both positive and negative half-cycles.</p>
-        <!-- Bridge circuit SVG (corrected) -->
-        <svg viewBox="0 0 300 200" width="300" height="200" style="max-width:100%;display:block;margin:.75rem auto 0" role="img" aria-label="Full-wave bridge rectifier circuit">
-          <!-- Bridge edges / wires -->
-          <line x1="70"  y1="150" x2="150" y2="35"  stroke="var(--text)" stroke-width="1.5"/>
-          <line x1="230" y1="150" x2="150" y2="35"  stroke="var(--text)" stroke-width="1.5"/>
-          <line x1="150" y1="105" x2="70"  y2="150" stroke="var(--text)" stroke-width="1.5"/>
-          <line x1="150" y1="105" x2="230" y2="150" stroke="var(--text)" stroke-width="1.5"/>
-          <!-- AC source (across left & right nodes, bottom) -->
-          <line x1="70"  y1="150" x2="133" y2="150" stroke="var(--text)" stroke-width="1.5"/>
-          <line x1="167" y1="150" x2="230" y2="150" stroke="var(--text)" stroke-width="1.5"/>
-          <circle cx="150" cy="150" r="16" fill="var(--card)" stroke="var(--text)" stroke-width="1.5"/>
-          <text x="150" y="156" text-anchor="middle" font-size="16" fill="var(--text)">~</text>
-          <!-- Load R_L (DC out, across top & bottom nodes) -->
-          <line x1="150" y1="35" x2="150" y2="52"  stroke="var(--text)" stroke-width="1.5"/>
-          <rect x="140" y="52" width="20" height="36" rx="3" fill="none" stroke="var(--text)" stroke-width="1.8"/>
-          <line x1="150" y1="88" x2="150" y2="105" stroke="var(--text)" stroke-width="1.5"/>
-          <!-- Diodes (arrow = conduction direction, all toward + node) -->
-          <g transform="translate(110,92.5) rotate(-55.18)">
-            <polygon points="-10,-8 -10,8 8,0" fill="var(--primary)"/>
-            <line x1="8" y1="-10" x2="8" y2="10" stroke="var(--text)" stroke-width="2"/>
-          </g>
-          <g transform="translate(190,92.5) rotate(-124.82)">
-            <polygon points="-10,-8 -10,8 8,0" fill="var(--primary)"/>
-            <line x1="8" y1="-10" x2="8" y2="10" stroke="var(--text)" stroke-width="2"/>
-          </g>
-          <g transform="translate(110,127.5) rotate(150.64)">
-            <polygon points="-10,-8 -10,8 8,0" fill="var(--primary)"/>
-            <line x1="8" y1="-10" x2="8" y2="10" stroke="var(--text)" stroke-width="2"/>
-          </g>
-          <g transform="translate(190,127.5) rotate(29.36)">
-            <polygon points="-10,-8 -10,8 8,0" fill="var(--primary)"/>
-            <line x1="8" y1="-10" x2="8" y2="10" stroke="var(--text)" stroke-width="2"/>
-          </g>
+        <!-- Bridge circuit SVG — two vertical diode legs, all diodes point up to + rail -->
+        <svg viewBox="0 0 320 214" width="300" height="200" style="max-width:100%;display:block;margin:.75rem auto 0" role="img" aria-label="Full-wave bridge rectifier circuit">
+          <!-- Top (+) rail and bottom (−) rail -->
+          <line x1="100" y1="45"  x2="260" y2="45"  stroke="var(--text)" stroke-width="1.5"/>
+          <line x1="100" y1="175" x2="260" y2="175" stroke="var(--text)" stroke-width="1.5"/>
+          <!-- Left leg wire segments (gaps left for diodes) -->
+          <line x1="100" y1="45"  x2="100" y2="68"  stroke="var(--text)" stroke-width="1.5"/>
+          <line x1="100" y1="86"  x2="100" y2="133" stroke="var(--text)" stroke-width="1.5"/>
+          <line x1="100" y1="151" x2="100" y2="175" stroke="var(--text)" stroke-width="1.5"/>
+          <!-- Right leg wire segments -->
+          <line x1="200" y1="45"  x2="200" y2="68"  stroke="var(--text)" stroke-width="1.5"/>
+          <line x1="200" y1="86"  x2="200" y2="133" stroke="var(--text)" stroke-width="1.5"/>
+          <line x1="200" y1="151" x2="200" y2="175" stroke="var(--text)" stroke-width="1.5"/>
+          <!-- AC source across the two leg mid-points -->
+          <line x1="100" y1="110" x2="135" y2="110" stroke="var(--text)" stroke-width="1.5"/>
+          <line x1="165" y1="110" x2="200" y2="110" stroke="var(--text)" stroke-width="1.5"/>
+          <circle cx="150" cy="110" r="15" fill="var(--card)" stroke="var(--text)" stroke-width="1.5"/>
+          <text x="150" y="115" text-anchor="middle" font-size="15" fill="var(--text)">~</text>
+          <!-- Load R_L on the right (DC out) -->
+          <line x1="260" y1="45"  x2="260" y2="70"  stroke="var(--text)" stroke-width="1.5"/>
+          <line x1="260" y1="150" x2="260" y2="175" stroke="var(--text)" stroke-width="1.5"/>
+          <rect x="251" y="70" width="18" height="80" rx="3" fill="none" stroke="var(--text)" stroke-width="1.8"/>
+          <!-- Diodes: all point UP toward the + rail -->
+          <!-- D1 (top-left) -->
+          <polygon points="92,86 108,86 100,68" fill="var(--primary)"/>
+          <line x1="92" y1="68" x2="108" y2="68" stroke="var(--text)" stroke-width="2"/>
+          <!-- D2 (bottom-left) -->
+          <polygon points="92,151 108,151 100,133" fill="var(--primary)"/>
+          <line x1="92" y1="133" x2="108" y2="133" stroke="var(--text)" stroke-width="2"/>
+          <!-- D3 (top-right) -->
+          <polygon points="192,86 208,86 200,68" fill="var(--primary)"/>
+          <line x1="192" y1="68" x2="208" y2="68" stroke="var(--text)" stroke-width="2"/>
+          <!-- D4 (bottom-right) -->
+          <polygon points="192,151 208,151 200,133" fill="var(--primary)"/>
+          <line x1="192" y1="133" x2="208" y2="133" stroke="var(--text)" stroke-width="2"/>
           <!-- Node dots -->
-          <circle cx="150" cy="35"  r="3" fill="var(--text)"/>
-          <circle cx="150" cy="105" r="3" fill="var(--text)"/>
-          <circle cx="70"  cy="150" r="3" fill="var(--text)"/>
-          <circle cx="230" cy="150" r="3" fill="var(--text)"/>
+          <circle cx="100" cy="45"  r="3" fill="var(--text)"/>
+          <circle cx="200" cy="45"  r="3" fill="var(--text)"/>
+          <circle cx="100" cy="175" r="3" fill="var(--text)"/>
+          <circle cx="200" cy="175" r="3" fill="var(--text)"/>
+          <circle cx="100" cy="110" r="3" fill="var(--text)"/>
+          <circle cx="200" cy="110" r="3" fill="var(--text)"/>
           <!-- Diode labels -->
-          <text x="82"  y="86"  font-size="10" fill="var(--primary)">D1</text>
-          <text x="202" y="86"  font-size="10" fill="var(--primary)">D3</text>
-          <text x="80"  y="136" font-size="10" fill="var(--primary)">D2</text>
-          <text x="202" y="136" font-size="10" fill="var(--primary)">D4</text>
-          <!-- +/- and load label -->
-          <text x="160" y="42"  font-size="14" fill="#22c55e" font-weight="bold">+</text>
-          <text x="163" y="106" font-size="15" fill="#ef4444" font-weight="bold">−</text>
-          <text x="167" y="74"  font-size="10" fill="var(--text-light)">R<tspan font-size="7" dy="2">L</tspan></text>
-          <text x="150" y="184" text-anchor="middle" font-size="10" fill="var(--text-light)" class="th-only">ไฟ AC เข้า</text>
-          <text x="150" y="184" text-anchor="middle" font-size="10" fill="var(--text-light)" class="en-only">AC input</text>
+          <text x="74"  y="82"  font-size="10" fill="var(--primary)">D1</text>
+          <text x="74"  y="150" font-size="10" fill="var(--primary)">D2</text>
+          <text x="210" y="82"  font-size="10" fill="var(--primary)">D3</text>
+          <text x="210" y="150" font-size="10" fill="var(--primary)">D4</text>
+          <!-- Output +/− and load label -->
+          <text x="238" y="40"  font-size="14" fill="#22c55e" font-weight="bold">+</text>
+          <text x="238" y="190" font-size="15" fill="#ef4444" font-weight="bold">−</text>
+          <text x="274" y="114" font-size="10" fill="var(--text-light)">R<tspan font-size="7" dy="2">L</tspan></text>
+          <text x="150" y="92" text-anchor="middle" font-size="9" fill="var(--text-light)" class="th-only">แหล่งจ่าย AC</text>
+          <text x="150" y="92" text-anchor="middle" font-size="9" fill="var(--text-light)" class="en-only">AC source</text>
+          <text x="255" y="208" text-anchor="middle" font-size="9" fill="var(--primary)" class="th-only">DC ออก</text>
+          <text x="255" y="208" text-anchor="middle" font-size="9" fill="var(--primary)" class="en-only">DC out</text>
         </svg>
         <p class="th-only" style="font-size:.82rem;color:var(--text-light);margin-top:.4rem;text-align:center">ครึ่งคลื่นบวก: <strong>D1 + D4</strong> นำกระแส &nbsp;|&nbsp; ครึ่งคลื่นลบ: <strong>D2 + D3</strong> นำกระแส — กระแสผ่านโหลดทิศเดียวกันเสมอ</p>
         <p class="en-only" style="font-size:.82rem;color:var(--text-light);margin-top:.4rem;text-align:center">Positive half: <strong>D1 + D4</strong> conduct &nbsp;|&nbsp; Negative half: <strong>D2 + D3</strong> conduct — load current always flows the same direction.</p>
