@@ -96,18 +96,54 @@
 
       <div class="card">
         <div class="res-img"><img src="img/res-variable.jpg" alt="Rotary potentiometer B10K" loading="lazy"></div>
-        <h3 class="th-only">🎛 Variable Resistor (VR) / Potentiometer — ปรับค่าได้</h3>
-        <h3 class="en-only">🎛 Variable Resistor (VR) / Potentiometer</h3>
-        <p class="th-only">มีแกนหมุนหรือสไลด์ — ปรับค่าได้ตั้งแต่ <strong>0Ω จนถึงค่าสูงสุด</strong> (เช่น 10kΩ)</p>
-        <p class="en-only">Has a rotating or sliding shaft — adjustable from <strong>0Ω up to the maximum value</strong> (e.g. 10kΩ)</p>
+        <h3 class="th-only">🎛 Potentiometer — แบ่งแรงดัน (3 ขา)</h3>
+        <h3 class="en-only">🎛 Potentiometer — Voltage Divider (3-terminal)</h3>
+        <p class="th-only">ต่อ <strong>3 ขา</strong> (ปลาย 2 ข้าง + ตัวปัด/wiper) หมุนแกนเพื่อ<strong>แบ่งแรงดัน</strong> — เอา output ที่ขากลางเป็น "แรงดัน" ที่ปรับได้</p>
+        <p class="en-only">Uses <strong>3 terminals</strong> (two ends + a wiper). Rotating the shaft <strong>divides the voltage</strong> — the wiper outputs an adjustable voltage.</p>
         <div class="info-box" style="margin-top:.75rem">
           <span class="th-only">
-            <strong>การเปลี่ยนแปลง:</strong> หมุนตามเข็ม → R เพิ่ม / ทวนเข็ม → R ลด (ขึ้นกับแบบ)<br>
-            <strong>ใช้งาน:</strong> ปุ่มปรับเสียง, ปรับความสว่าง, ตั้งค่า bias วงจรขยาย
+            <strong>การเปลี่ยนแปลง:</strong> เลื่อนตัวปัด → อัตราส่วนแรงดันที่ขากลางเปลี่ยน (0 → Vin)<br>
+            <strong>ใช้งาน:</strong> ปุ่มปรับเสียง (volume), ปรับความสว่าง, ตั้งค่า bias วงจรขยาย
           </span>
           <span class="en-only">
-            <strong>Behavior:</strong> Clockwise → R increases / Counter-clockwise → R decreases (depends on wiring)<br>
+            <strong>Behavior:</strong> Move the wiper → the voltage ratio at the middle pin changes (0 → Vin)<br>
             <strong>Used in:</strong> Volume knobs, brightness control, amplifier bias adjustment
+          </span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="res-img"><img src="img/res-rheostat.jpg" alt="Wirewound rheostat" loading="lazy"></div>
+        <h3 class="th-only">🔩 Rheostat — ปรับกระแส (2 ขา)</h3>
+        <h3 class="en-only">🔩 Rheostat — Current Control (2-terminal)</h3>
+        <p class="th-only">ต่อ <strong>2 ขา</strong> (ปลาย 1 ข้าง + ตัวปัด) ทำหน้าที่เป็น<strong>ความต้านทานปรับได้</strong> — ใช้ปรับ "กระแส" ในวงจร</p>
+        <p class="en-only">Uses <strong>2 terminals</strong> (one end + the wiper). Acts as an <strong>adjustable resistance</strong> to control the <strong>current</strong> in a circuit.</p>
+        <div class="info-box" style="margin-top:.75rem">
+          <span class="th-only">
+            <strong>เกร็ด:</strong> โพเทนชิโอมิเตอร์ต่อแค่ 2 ขา ก็เป็นรีโอสแตตได้ทันที — แบบกำลังสูงมักเป็นขดลวด<br>
+            <strong>ใช้งาน:</strong> หรี่ไฟ, ปรับความเร็วมอเตอร์/พัดลม, จำกัดกระแส
+          </span>
+          <span class="en-only">
+            <strong>Note:</strong> A potentiometer wired with just 2 terminals becomes a rheostat — high-power ones are wirewound<br>
+            <strong>Used in:</strong> Light dimming, motor/fan speed control, current limiting
+          </span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="res-img"><img src="img/res-trimmer.jpg" alt="Trimmer / preset potentiometer" loading="lazy"></div>
+        <h3 class="th-only">🔧 Trimmer / Preset — ปรับตั้งครั้งเดียว</h3>
+        <h3 class="en-only">🔧 Trimmer / Preset — Set-and-forget</h3>
+        <p class="th-only">VR ขนาด<strong>จิ๋วบนแผ่นวงจร</strong> ปรับด้วยไขควงเล็ก ตั้งค่าครั้งเดียวตอน calibrate แล้วไม่แตะอีก</p>
+        <p class="en-only">A <strong>tiny board-mounted</strong> variable resistor, adjusted with a small screwdriver — set once during calibration, then left alone.</p>
+        <div class="info-box" style="margin-top:.75rem">
+          <span class="th-only">
+            <strong>อ่านค่า:</strong> พิมพ์รหัส 3 หลัก เช่น <strong>103 = 10kΩ</strong>, 502 = 5kΩ<br>
+            <strong>ใช้งาน:</strong> ปรับ contrast จอ LCD, ตั้ง offset/bias, คาลิเบรตเซ็นเซอร์
+          </span>
+          <span class="en-only">
+            <strong>Marking:</strong> 3-digit code, e.g. <strong>103 = 10kΩ</strong>, 502 = 5kΩ<br>
+            <strong>Used in:</strong> LCD contrast, offset/bias trimming, sensor calibration
           </span>
         </div>
       </div>
