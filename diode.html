@@ -25,6 +25,7 @@
 .dtype-c1 { border-left-color:#2563eb; } .dtype-c2 { border-left-color:#ef4444; }
 .dtype-c3 { border-left-color:#f59e0b; } .dtype-c4 { border-left-color:#10b981; }
 .dtype-c5 { border-left-color:#8b5cf6; } .dtype-c6 { border-left-color:#06b6d4; }
+.dtype-c7 { border-left-color:#f97316; }
 </style>
 </head>
 <body>
@@ -305,6 +306,19 @@
           <div class="dt-use"><span class="th-only">🔧 ใช้: สวิตชิ่งเพาเวอร์, วงจรความถี่สูง, โซลาร์</span><span class="en-only">🔧 Use: switching supplies, high-frequency, solar</span></div>
         </div>
 
+        <div class="dtype dtype-c7">
+          <div class="dt-img"><img src="img/dio-fastrecovery.jpg" alt="Fast / ultra-fast recovery diode" loading="lazy"></div>
+          <h4>⏱️ <span class="th-only">ฟาสต์/อัลตราฟาสต์ รีคัฟเวอรี</span><span class="en-only">Fast / Ultra-Fast Recovery</span></h4>
+          <div class="dt-sub">FR10x · UF400x · MUR / HER</div>
+          <div class="dt-tags">
+            <span class="dt-tag">t<sub>rr</sub> <span class="th-only">สั้น</span><span class="en-only">short</span></span>
+            <span class="dt-tag"><span class="th-only">ความถี่สูง</span><span class="en-only">High freq</span></span>
+          </div>
+          <p class="th-only">ไดโอดทั่วไป (1N400x) พอกระแสสลับทิศ จะ <strong>"ปิดไม่ทัน"</strong> — มีช่วงสั้นๆ ที่กระแสยังไหลย้อนกลับได้ เรียกว่า <strong>เวลาคืนตัว (t<sub>rr</sub>)</strong> ตัวนี้ถูกออกแบบให้ปิดเร็วกว่ามาก (เร็วกว่าเป็นร้อยเท่า) จึงใช้กับวงจรที่สวิตช์เร็วๆ ได้โดยไม่ร้อนและไม่สูญเสียพลังงาน</p>
+          <p class="en-only">When the current reverses, an ordinary diode (1N400x) <strong>can't "turn off" instantly</strong> — for a brief moment current still leaks backwards. That delay is the <strong>recovery time (t<sub>rr</sub>)</strong>. This diode turns off far faster (hundreds of times faster), so it handles fast-switching circuits without heating up or wasting power.</p>
+          <div class="dt-use"><span class="th-only">🔧 ใช้: แหล่งจ่ายสวิตชิ่ง (SMPS), flyback, อินเวอร์เตอร์, freewheeling/snubber</span><span class="en-only">🔧 Use: switching supplies (SMPS), flyback, inverters, freewheeling/snubber</span></div>
+        </div>
+
         <div class="dtype dtype-c5">
           <div class="dt-img"><img src="img/dio-photodiode.jpg" alt="Photodiode" loading="lazy"></div>
           <h4>📷 <span class="th-only">โฟโตไดโอด</span><span class="en-only">Photodiode</span></h4>
@@ -336,83 +350,37 @@
   </div>
 
   <div class="section">
-    <div class="section-title"><span class="th-only">แรงดันตกคร่อมของ LED แต่ละสี</span><span class="en-only">LED Forward Voltage by Color</span></div>
+    <div class="section-title"><span class="th-only">เลือกอะไรดี: Schottky หรือ Ultra-Fast Recovery?</span><span class="en-only">Schottky vs Ultra-Fast Recovery — Which One?</span></div>
     <div class="card">
-      <p class="th-only">แรงดันตกคร่อม (V<sub>f</sub>) ของ LED จะต่างกันตามสีและวัสดุสารกึ่งตัวนำที่ใช้ผลิต โดยทั่วไปยิ่งสีมีความยาวคลื่นสั้น แรงดันตกจะยิ่งสูง</p>
-      <p class="en-only">LED forward voltage (V<sub>f</sub>) varies by color depending on the semiconductor material used. Shorter wavelength colors generally have higher V<sub>f</sub>.</p>
+      <p class="th-only">ทั้งคู่เป็นไดโอด "สวิตช์เร็ว" เหมือนกัน แต่จุดแข็งคนละด้าน — เลือกตาม<strong>แรงดันของงาน</strong>เป็นหลัก</p>
+      <p class="en-only">Both are "fast-switching" diodes, but their strengths differ — pick mainly by the <strong>voltage of your application</strong>.</p>
       <div class="table-wrap" style="margin-top:1rem">
         <table>
           <thead>
             <tr>
-              <th><span class="th-only">สี</span><span class="en-only">Color</span></th>
-              <th><span class="th-only">ตัวอย่าง</span><span class="en-only">Sample</span></th>
-              <th>V<sub>f</sub> (V)</th>
-              <th><span class="th-only">ความยาวคลื่น</span><span class="en-only">Wavelength</span></th>
-              <th><span class="th-only">วัสดุ</span><span class="en-only">Material</span></th>
+              <th></th>
+              <th>⚡ Schottky</th>
+              <th>⏱️ Ultra-Fast Recovery</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><span class="th-only">อินฟราเรด (IR)</span><span class="en-only">Infrared (IR)</span></td>
-              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#6b0000;border:2px solid #aaa;vertical-align:middle"></span></td>
-              <td>1.2 – 1.6</td>
-              <td>&gt; 700 nm</td>
-              <td>GaAs</td>
+              <td><span class="th-only">จุดเด่น</span><span class="en-only">Strength</span></td>
+              <td><span class="th-only"><strong>เร็วที่สุด</strong> + แรงดันตกคร่อมต่ำ (~0.2–0.3 V)</span><span class="en-only"><strong>Fastest</strong> + lowest forward drop (~0.2–0.3 V)</span></td>
+              <td><span class="th-only"><strong>ทนแรงดันสูง</strong> + เร็วมาก</span><span class="en-only"><strong>High voltage rating</strong> + very fast</span></td>
             </tr>
             <tr>
-              <td><span class="th-only">แดง (Red)</span><span class="en-only">Red</span></td>
-              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#ef4444;border:2px solid #aaa;vertical-align:middle"></span></td>
-              <td>1.8 – 2.2</td>
-              <td>620 – 750 nm</td>
-              <td>GaAsP / AlGaAs</td>
-            </tr>
-            <tr>
-              <td><span class="th-only">ส้ม (Orange)</span><span class="en-only">Orange</span></td>
-              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#f97316;border:2px solid #aaa;vertical-align:middle"></span></td>
-              <td>2.0 – 2.2</td>
-              <td>590 – 625 nm</td>
-              <td>GaAsP</td>
-            </tr>
-            <tr>
-              <td><span class="th-only">เหลือง (Yellow)</span><span class="en-only">Yellow</span></td>
-              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#eab308;border:2px solid #aaa;vertical-align:middle"></span></td>
-              <td>2.0 – 2.4</td>
-              <td>570 – 590 nm</td>
-              <td>GaAsP</td>
-            </tr>
-            <tr>
-              <td><span class="th-only">เขียว (Green)</span><span class="en-only">Green</span></td>
-              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#22c55e;border:2px solid #aaa;vertical-align:middle"></span></td>
-              <td>2.0 – 3.5</td>
-              <td>495 – 570 nm</td>
-              <td>GaP / InGaN</td>
-            </tr>
-            <tr>
-              <td><span class="th-only">น้ำเงิน (Blue)</span><span class="en-only">Blue</span></td>
-              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#3b82f6;border:2px solid #aaa;vertical-align:middle"></span></td>
-              <td>3.0 – 3.5</td>
-              <td>450 – 495 nm</td>
-              <td>InGaN</td>
-            </tr>
-            <tr>
-              <td><span class="th-only">ขาว (White)</span><span class="en-only">White</span></td>
-              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#f1f5f9;border:2px solid #aaa;vertical-align:middle"></span></td>
-              <td>3.0 – 3.4</td>
-              <td><span class="th-only">กว้าง (phosphor)</span><span class="en-only">broadband (phosphor)</span></td>
-              <td>InGaN + phosphor</td>
-            </tr>
-            <tr>
-              <td><span class="th-only">ม่วง / UV</span><span class="en-only">Violet / UV</span></td>
-              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#a855f7;border:2px solid #aaa;vertical-align:middle"></span></td>
-              <td>3.0 – 4.0</td>
-              <td>380 – 450 nm</td>
-              <td>InGaN</td>
+              <td><span class="th-only">เหมาะกับ</span><span class="en-only">Best for</span></td>
+              <td><span class="th-only">งาน<strong>แรงดันต่ำ</strong>ที่ต้องการประสิทธิภาพสูง (5–24 V, USB, โซลาร์, DC-DC)</span><span class="en-only"><strong>Low-voltage</strong>, high-efficiency work (5–24 V, USB, solar, DC-DC)</span></td>
+              <td><span class="th-only">ภาคจ่ายไฟจาก<strong>ไฟบ้าน (220 VAC)</strong>, อินเวอร์เตอร์, งานกำลังสูง</span><span class="en-only"><strong>Mains-powered (220 VAC)</strong> supplies, inverters, high-power stages</span></td>
             </tr>
           </tbody>
         </table>
       </div>
-      <p class="th-only" style="margin-top:.75rem;font-size:.85rem;color:var(--text-light)">* ค่า V<sub>f</sub> เป็นค่าอ้างอิงทั่วไป อาจแตกต่างกันตามยี่ห้อและกระแส I<sub>f</sub> ที่ใช้งาน</p>
-      <p class="en-only" style="margin-top:.75rem;font-size:.85rem;color:var(--text-light)">* V<sub>f</sub> values are typical references and may vary by manufacturer and operating current I<sub>f</sub>.</p>
+      <div class="info-box" style="margin-top:1rem">
+        <span class="th-only"><strong>💡 หลักจำง่ายๆ:</strong> ถ้า<strong>แรงดันต่ำ</strong> ให้คิดถึง <strong>Schottky</strong> ก่อน — แต่ถ้าเป็นภาคสวิตชิ่งที่<strong>รับไฟบ้านหรือแรงดันสูง</strong> ให้คิดถึง <strong>Ultra-Fast Recovery</strong> ก่อน</span>
+        <span class="en-only"><strong>💡 Rule of thumb:</strong> For <strong>low voltage</strong>, think <strong>Schottky</strong> first — for switching stages running off <strong>mains or high voltage</strong>, think <strong>Ultra-Fast Recovery</strong> first.</span>
+      </div>
     </div>
   </div>
 
@@ -455,6 +423,69 @@
   </div>
 
   <div class="section">
+    <div class="section-title"><span class="th-only">แรงดันตกคร่อมของ LED แต่ละสี</span><span class="en-only">LED Forward Voltage by Color</span></div>
+    <div class="card">
+      <p class="th-only">แรงดันตกคร่อม (V<sub>f</sub>) ของ LED จะต่างกันตามสีและวัสดุสารกึ่งตัวนำที่ใช้ผลิต โดยทั่วไปยิ่งสีมีความยาวคลื่นสั้น แรงดันตกจะยิ่งสูง</p>
+      <p class="en-only">LED forward voltage (V<sub>f</sub>) varies by color depending on the semiconductor material used. Shorter wavelength colors generally have higher V<sub>f</sub>.</p>
+      <div class="table-wrap" style="margin-top:1rem">
+        <table>
+          <thead>
+            <tr>
+              <th><span class="th-only">สี</span><span class="en-only">Color</span></th>
+              <th><span class="th-only">ตัวอย่าง</span><span class="en-only">Sample</span></th>
+              <th>V<sub>f</sub> (V)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="th-only">อินฟราเรด (IR)</span><span class="en-only">Infrared (IR)</span></td>
+              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#6b0000;border:2px solid #aaa;vertical-align:middle"></span></td>
+              <td>1.2 – 1.6</td>
+            </tr>
+            <tr>
+              <td><span class="th-only">แดง (Red)</span><span class="en-only">Red</span></td>
+              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#ef4444;border:2px solid #aaa;vertical-align:middle"></span></td>
+              <td>1.8 – 2.2</td>
+            </tr>
+            <tr>
+              <td><span class="th-only">ส้ม (Orange)</span><span class="en-only">Orange</span></td>
+              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#f97316;border:2px solid #aaa;vertical-align:middle"></span></td>
+              <td>2.0 – 2.2</td>
+            </tr>
+            <tr>
+              <td><span class="th-only">เหลือง (Yellow)</span><span class="en-only">Yellow</span></td>
+              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#eab308;border:2px solid #aaa;vertical-align:middle"></span></td>
+              <td>2.0 – 2.4</td>
+            </tr>
+            <tr>
+              <td><span class="th-only">เขียว (Green)</span><span class="en-only">Green</span></td>
+              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#22c55e;border:2px solid #aaa;vertical-align:middle"></span></td>
+              <td>2.0 – 3.5</td>
+            </tr>
+            <tr>
+              <td><span class="th-only">น้ำเงิน (Blue)</span><span class="en-only">Blue</span></td>
+              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#3b82f6;border:2px solid #aaa;vertical-align:middle"></span></td>
+              <td>3.0 – 3.5</td>
+            </tr>
+            <tr>
+              <td><span class="th-only">ขาว (White)</span><span class="en-only">White</span></td>
+              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#f1f5f9;border:2px solid #aaa;vertical-align:middle"></span></td>
+              <td>3.0 – 3.4</td>
+            </tr>
+            <tr>
+              <td><span class="th-only">ม่วง / UV</span><span class="en-only">Violet / UV</span></td>
+              <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#a855f7;border:2px solid #aaa;vertical-align:middle"></span></td>
+              <td>3.0 – 4.0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="th-only" style="margin-top:.75rem;font-size:.85rem;color:var(--text-light)">* ค่า V<sub>f</sub> เป็นค่าอ้างอิงทั่วไป อาจแตกต่างกันตามยี่ห้อและกระแส I<sub>f</sub> ที่ใช้งาน</p>
+      <p class="en-only" style="margin-top:.75rem;font-size:.85rem;color:var(--text-light)">* V<sub>f</sub> values are typical references and may vary by manufacturer and operating current I<sub>f</sub>.</p>
+    </div>
+  </div>
+
+  <div class="section">
     <div class="section-title"><span class="th-only">การต่อ LED ในวงจร</span><span class="en-only">Connecting LED in a Circuit</span></div>
     <div class="card">
       <p class="th-only">LED ต้องต่อ <strong>ตัวต้านทานอนุกรม</strong> เสมอ เพื่อจำกัดกระแสไม่ให้ LED ไหม้</p>
@@ -484,51 +515,6 @@
       </div>
     </div>
   </div>
-
-  <div class="section">
-    <div class="section-title"><span class="th-only">สรุปเปรียบเทียบไดโอด</span><span class="en-only">Diode Comparison Summary</span></div>
-    <div class="card">
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th><span class="th-only">ประเภท</span><span class="en-only">Type</span></th>
-              <th>V<sub>f</sub></th>
-              <th><span class="th-only">การใช้งาน</span><span class="en-only">Application</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Rectifier (1N4007)</td>
-              <td>~0.7 V</td>
-              <td><span class="th-only">เรียงกระแส AC→DC</span><span class="en-only">AC→DC rectification</span></td>
-            </tr>
-            <tr>
-              <td>LED (Red)</td>
-              <td>~1.8–2.2 V</td>
-              <td><span class="th-only">แสดงสถานะ, ไฟตกแต่ง</span><span class="en-only">Status indicator, lighting</span></td>
-            </tr>
-            <tr>
-              <td>LED (Blue/White)</td>
-              <td>~3.0–3.4 V</td>
-              <td><span class="th-only">แสดงสถานะ, ไฟตกแต่ง</span><span class="en-only">Status indicator, lighting</span></td>
-            </tr>
-            <tr>
-              <td>Zener (5.1 V)</td>
-              <td>~0.7 V (fwd)</td>
-              <td><span class="th-only">ควบคุมแรงดัน 5.1 V</span><span class="en-only">5.1 V voltage regulation</span></td>
-            </tr>
-            <tr>
-              <td>Schottky (1N5819)</td>
-              <td>~0.2–0.3 V</td>
-              <td><span class="th-only">วงจรความเร็วสูง</span><span class="en-only">High-speed circuits</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
 
   <div class="section">
     <div class="section-title"><span class="th-only">วงจรเรียงกระแส (Rectifier Circuit)</span><span class="en-only">Rectifier Circuit</span></div>
@@ -702,6 +688,55 @@
       </div>
       <p class="th-only" style="font-size:.82rem;color:var(--text-light);margin-top:.75rem">f = ความถี่ไฟ AC (50 Hz ในประเทศไทย) | ต่อ Capacitor คร่อม R<sub>L</sub> เพื่อลด ripple</p>
       <p class="en-only" style="font-size:.82rem;color:var(--text-light);margin-top:.75rem">f = AC frequency (50 Hz in Thailand) | Add a capacitor across R<sub>L</sub> to smooth ripple.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">สรุปเปรียบเทียบไดโอด</span><span class="en-only">Diode Comparison Summary</span></div>
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th><span class="th-only">ประเภท</span><span class="en-only">Type</span></th>
+              <th>V<sub>f</sub></th>
+              <th><span class="th-only">การใช้งาน</span><span class="en-only">Application</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Rectifier (1N4007)</td>
+              <td>~0.7 V</td>
+              <td><span class="th-only">เรียงกระแส AC→DC</span><span class="en-only">AC→DC rectification</span></td>
+            </tr>
+            <tr>
+              <td>LED (Red)</td>
+              <td>~1.8–2.2 V</td>
+              <td><span class="th-only">แสดงสถานะ, ไฟตกแต่ง</span><span class="en-only">Status indicator, lighting</span></td>
+            </tr>
+            <tr>
+              <td>LED (Blue/White)</td>
+              <td>~3.0–3.4 V</td>
+              <td><span class="th-only">แสดงสถานะ, ไฟตกแต่ง</span><span class="en-only">Status indicator, lighting</span></td>
+            </tr>
+            <tr>
+              <td>Zener (5.1 V)</td>
+              <td>~0.7 V (fwd)</td>
+              <td><span class="th-only">ควบคุมแรงดัน 5.1 V</span><span class="en-only">5.1 V voltage regulation</span></td>
+            </tr>
+            <tr>
+              <td>Schottky (1N5819)</td>
+              <td>~0.2–0.3 V</td>
+              <td><span class="th-only">วงจรความเร็วสูง</span><span class="en-only">High-speed circuits</span></td>
+            </tr>
+            <tr>
+              <td>Fast/Ultra-Fast (UF400x)</td>
+              <td>~1 V</td>
+              <td><span class="th-only">สวิตชิ่งเพาเวอร์, ความถี่สูง</span><span class="en-only">Switching power, high-frequency</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
