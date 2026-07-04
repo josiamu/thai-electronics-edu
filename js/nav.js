@@ -269,8 +269,20 @@ const NAV_RESOURCES = [
     window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
   });
 
-  // ── สัญญาอนุญาต: เติมบรรทัด CC BY-NC 4.0 เข้า footer ทุกหน้าอัตโนมัติ (bilingual) ──
+  // ── บรรทัด "ครอบคลุมเนื้อหาจาก N หัวข้อ": เติมเข้า footer ทุกหน้าอัตโนมัติ (bilingual) ──
+  // แหล่งความจริงเดียว — แก้เลขที่ TOPIC_COUNT ที่เดียว ทุกหน้าอัปเดตพร้อมกัน (อย่า hardcode ในแต่ละหน้า)
+  const TOPIC_COUNT = 29;
   const pageFooter = document.querySelector('footer');
+  if (pageFooter && !pageFooter.querySelector('.footer-topics')) {
+    const topics = document.createElement('div');
+    topics.className = 'footer-topics';
+    topics.innerHTML =
+      '<span class="th-only">ครอบคลุมเนื้อหาจาก ' + TOPIC_COUNT + ' หัวข้อ</span>' +
+      '<span class="en-only">Covering ' + TOPIC_COUNT + ' topics</span>';
+    pageFooter.appendChild(topics);
+  }
+
+  // ── สัญญาอนุญาต: เติมบรรทัด CC BY-NC 4.0 เข้า footer ทุกหน้าอัตโนมัติ (bilingual) ──
   if (pageFooter && !pageFooter.querySelector('.footer-license')) {
     const lic = document.createElement('div');
     lic.className = 'footer-license';

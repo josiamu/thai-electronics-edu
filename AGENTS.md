@@ -16,7 +16,7 @@
 ```
 website/
 ├── css/style.css        — shared CSS ทุกหน้า (CSS custom properties, dark mode, bilingual)
-├── js/nav.js           — inject nav bar + dark mode toggle + hamburger + language toggle + back-to-top button + footer license line (CC BY-NC 4.0, bilingual, ต่อท้าย <footer> ทุกหน้า)
+├── js/nav.js           — inject nav bar + dark mode toggle + hamburger + language toggle + back-to-top button + footer topic-count line (`.footer-topics` "ครอบคลุมเนื้อหาจาก N หัวข้อ" — เลข N อยู่ที่ค่าเดียว `TOPIC_COUNT` ใน nav.js, ฉีดทุกหน้า) + footer license line (CC BY-NC 4.0, bilingual, ต่อท้าย <footer> ทุกหน้า)
 ├── js/tools.js         — logic เครื่องคิดเลขทุกตัว (calcR4, calcR5, calcOhm, ...)
 ├── js/quiz.js          — ข้อมูลข้อสอบ + logic แบบทดสอบ
 ├── js/downloads.js     — PDF preview modal + download interactions + ตัวกรองหน้า downloads (ช่องค้นหา #dl-search ค้นทั้งไทย-อังกฤษ + ชิปกรองหมวด #dl-chips ตาม .section[data-cat], ซ่อนด้วย .dl-hidden, แสดง #dl-noresult เมื่อไม่พบ, placeholder เปลี่ยนตามภาษา; อ่าน ?cat=/?file= จาก URL ตอนโหลด → กรองหมวด + เลื่อนไป/ไฮไลต์การ์ดให้เอง (deep-link จากกล่องข่าวหน้าแรก))
@@ -108,9 +108,10 @@ CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor
 - Dark mode: `[data-theme="dark"]` บน `<html>`, บันทึกใน localStorage key `theme`
 - Lang toggle: ปุ่ม TH / EN ใน nav bar ทุกหน้า
 - **Back-to-top button:** inject `<button id="back-to-top">` เข้า body อัตโนมัติ — ปรากฏเมื่อ scroll > 320px
+- **Footer topic-count:** nav.js ต่อท้าย `.footer-topics` ("ครอบคลุมเนื้อหาจาก N หัวข้อ" / "Covering N topics") เข้า `<footer>` ทุกหน้าอัตโนมัติ — เลข N นิยามที่เดียวใน `const TOPIC_COUNT` ใน nav.js (อย่า hardcode ในแต่ละหน้า); เพิ่มหน้าใหม่แล้วอยากปรับเลข → แก้ที่ TOPIC_COUNT ที่เดียว
 - **Footer license:** nav.js ต่อท้าย `.footer-license` (ลิงก์ CC BY-NC 4.0, bilingual th-only/en-only) เข้า `<footer>` ทุกหน้าอัตโนมัติ — ไม่ต้องแก้ทีละไฟล์
 
-> **กฎ:** เมื่อเพิ่มหน้าใหม่ใน nav.js (NAV_LESSON_GROUPS / NAV_PRACTICE / NAV_TOOLS) ต้องอัปเดต **index.html** ด้วยเสมอ — เพิ่ม card ในกลุ่มที่ตรงกัน และแก้จำนวนไฟล์/หัวข้อใน footer กับ card ดาวน์โหลด
+> **กฎ:** เมื่อเพิ่มหน้าใหม่ใน nav.js (NAV_LESSON_GROUPS / NAV_PRACTICE / NAV_TOOLS) ต้องอัปเดต **index.html** ด้วยเสมอ — เพิ่ม card ในกลุ่มที่ตรงกัน และแก้ card ดาวน์โหลด; ส่วนจำนวนหัวข้อใน footer แก้ที่ `TOPIC_COUNT` ใน nav.js ที่เดียว (ทุกหน้าอัปเดตพร้อมกัน)
 
 ### CSS (style.css)
 - Color palette: `--primary: #2563eb`, `--accent: #06b6d4`, `--secondary: #10b981`, `--bg: #f8fafc`
