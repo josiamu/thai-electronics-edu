@@ -382,36 +382,41 @@
   </div>
 
   <div class="section">
-    <div class="section-title"><span class="th-only">เลือกอะไรดี: Schottky หรือ Ultra-Fast Recovery?</span><span class="en-only">Schottky vs Ultra-Fast Recovery — Which One?</span></div>
+    <div class="section-title"><span class="th-only">เลือกอะไรดี: Si ธรรมดา / Schottky / Ultra-Fast?</span><span class="en-only">Which Diode: Standard Si, Schottky or Ultra-Fast?</span></div>
     <div class="card">
-      <p class="th-only">ทั้งคู่เป็นไดโอด "สวิตช์เร็ว" เหมือนกัน แต่จุดแข็งคนละด้าน — เลือกตาม<strong>แรงดันของงาน</strong>เป็นหลัก</p>
-      <p class="en-only">Both are "fast-switching" diodes, but their strengths differ — pick mainly by the <strong>voltage of your application</strong>.</p>
+      <p class="th-only">ดูแค่ 2 อย่าง: <strong>ความถี่ของงาน</strong> กับ <strong>แรงดันของงาน</strong> — แล้วคำตอบมีแค่ 3 แบบ</p>
+      <p class="en-only">Look at just two things — the <strong>frequency</strong> and the <strong>voltage</strong> of the job — and there are only three answers.</p>
       <div class="table-wrap" style="margin-top:1rem">
         <table>
           <thead>
             <tr>
-              <th></th>
-              <th>⚡ Schottky</th>
-              <th>⏱️ Ultra-Fast Recovery</th>
+              <th><span class="th-only">งานแบบไหน</span><span class="en-only">The job</span></th>
+              <th><span class="th-only">เลือก</span><span class="en-only">Pick</span></th>
+              <th><span class="th-only">เหตุผล</span><span class="en-only">Why</span></th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><span class="th-only">จุดเด่น</span><span class="en-only">Strength</span></td>
-              <td><span class="th-only"><strong>เร็วที่สุด</strong> + แรงดันตกคร่อมต่ำ (~0.2–0.3 V)</span><span class="en-only"><strong>Fastest</strong> + lowest forward drop (~0.2–0.3 V)</span></td>
-              <td><span class="th-only"><strong>ทนแรงดันสูง</strong> + เร็วมาก</span><span class="en-only"><strong>High voltage rating</strong> + very fast</span></td>
+              <td><span class="th-only">เรียงกระแส<strong>ไฟบ้าน 50 Hz</strong></span><span class="en-only">Rectifying <strong>50 Hz mains</strong></span></td>
+              <td>🔧 <strong>Si <span class="th-only">ธรรมดา</span><span class="en-only">standard</span></strong><br>(1N4007)</td>
+              <td><span class="th-only">ถูก ทนถึง 1000 V — ที่ 50 Hz คาบยาว 20,000 µs ค่า t<sub>rr</sub> ~30 µs จึง<strong>ไม่มีผลเลย</strong></span><span class="en-only">Cheap, rated 1000 V — at 50 Hz the period is 20,000 µs, so a t<sub>rr</sub> of ~30 µs <strong>doesn't matter at all</strong></span></td>
             </tr>
             <tr>
-              <td><span class="th-only">เหมาะกับ</span><span class="en-only">Best for</span></td>
-              <td><span class="th-only">งาน<strong>แรงดันต่ำ</strong>ที่ต้องการประสิทธิภาพสูง (5–24 V, USB, โซลาร์, DC-DC)</span><span class="en-only"><strong>Low-voltage</strong>, high-efficiency work (5–24 V, USB, solar, DC-DC)</span></td>
-              <td><span class="th-only">ภาคจ่ายไฟจาก<strong>ไฟบ้าน (220 VAC)</strong>, อินเวอร์เตอร์, งานกำลังสูง</span><span class="en-only"><strong>Mains-powered (220 VAC)</strong> supplies, inverters, high-power stages</span></td>
+              <td><span class="th-only"><strong>ความถี่สูง + แรงดันต่ำ</strong> (5–24 V เช่นเอาต์พุต USB, DC-DC, โซลาร์)</span><span class="en-only"><strong>High frequency + low voltage</strong> (5–24 V: USB outputs, DC-DC, solar)</span></td>
+              <td>⚡ <strong>Schottky</strong><br>(1N5819)</td>
+              <td><span class="th-only"><strong>ไม่มี reverse recovery เลย</strong> + Vf ต่ำสุด (~0.2–0.3 V) ประสิทธิภาพดีสุด — แต่ทนแรงดันย้อนได้น้อย (~40 V)</span><span class="en-only"><strong>No reverse recovery at all</strong> + lowest Vf (~0.2–0.3 V), best efficiency — but low reverse rating (~40 V)</span></td>
+            </tr>
+            <tr>
+              <td><span class="th-only"><strong>ความถี่สูง + แรงดันสูง</strong> (เกิน ~100 V เช่นภาคสวิตชิ่งฝั่งไฟบ้าน, อินเวอร์เตอร์, LED driver)</span><span class="en-only"><strong>High frequency + high voltage</strong> (above ~100 V: mains-side switching, inverters, LED drivers)</span></td>
+              <td>⏱️ <strong>Ultra-Fast</strong><br>(UF4007)</td>
+              <td><span class="th-only">จุดที่ Schottky ไปไม่ถึง — ยอมจ่าย Vf ~1 V แลกกับ t<sub>rr</sub> ~75 ns ที่<strong>ปิดทันทุกลูกคลื่น</strong></span><span class="en-only">Where Schottky can't go — trade a ~1 V Vf for a ~75 ns t<sub>rr</sub> that <strong>turns off in time every cycle</strong></span></td>
             </tr>
           </tbody>
         </table>
       </div>
       <div class="info-box" style="margin-top:1rem">
-        <span class="th-only"><strong>💡 หลักจำง่ายๆ:</strong> ถ้า<strong>แรงดันต่ำ</strong> ให้คิดถึง <strong>Schottky</strong> ก่อน — แต่ถ้าเป็นภาคสวิตชิ่งที่<strong>รับไฟบ้านหรือแรงดันสูง</strong> ให้คิดถึง <strong>Ultra-Fast Recovery</strong> ก่อน</span>
-        <span class="en-only"><strong>💡 Rule of thumb:</strong> For <strong>low voltage</strong>, think <strong>Schottky</strong> first — for switching stages running off <strong>mains or high voltage</strong>, think <strong>Ultra-Fast Recovery</strong> first.</span>
+        <span class="th-only"><strong>💡 เห็นครบทั้งสามในของชิ้นเดียว:</strong> ที่ชาร์จมือถือ — บริดจ์ฝั่งไฟบ้านใช้ <strong>Si ธรรมดา</strong> (50 Hz), ไดโอด clamp ฝั่งไพรมารีที่เจอสไปค์สูง + ~100 kHz ใช้ <strong>Ultra-Fast</strong>, ส่วนเอาต์พุต 5 V ใช้ <strong>Schottky</strong></span>
+        <span class="en-only"><strong>💡 All three in one device:</strong> a phone charger — the mains-side bridge uses <strong>standard Si</strong> (50 Hz), the primary-side clamp diode facing high spikes at ~100 kHz uses <strong>Ultra-Fast</strong>, and the 5 V output uses <strong>Schottky</strong></span>
       </div>
     </div>
   </div>
