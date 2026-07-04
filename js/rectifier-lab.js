@@ -38,9 +38,10 @@
     lmode: 'r',            // r (resistor) | i (constant current)
     rlPos: 57,             // slider 0..100 → 50 Ω .. 10 kΩ (log scale)
     iload: 100,            // mA
-    cap: 0                 // µF (0 = none)
+    cap: 0,                // µF (0 = none)
+    speed: 1               // sweep speed: 0 pause | 0.25 slow | 1 normal
   };
-  var sim = null, off = 0, raf = null;
+  var sim = null, off = 0, flowT = 0, raf = null;
 
   function $(id) { return document.getElementById(id); }
 
@@ -155,8 +156,9 @@
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
     if (dashed) ctx.setLineDash([5, 4]); else ctx.setLineDash([]);
     ctx.beginPath();
+    var o = off | 0;
     for (var i = 0; i < N; i++) {
-      var idx = (i + off) % N;
+      var idx = (i + o) % N;
       var x = px(i), y = vy(arr[idx]);
       if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
     }
@@ -237,8 +239,70 @@
     }
   }
 
+  // conventional-current flow paths (follow the drawn wires; load segment always same direction)
+  var FLOWPATHS = {
+    half: { pos: [[30, 47], [30, 30], [250, 30], [250, 95], [30, 95], [30, 77]] },
+    ct: {
+      pos: [[42, 22], [258, 22], [258, 142], [60, 142], [60, 74], [42, 74]],
+      neg: [[42, 126], [180, 126], [180, 22], [258, 22], [258, 142], [60, 142], [60, 74], [42, 74]]
+    },
+    bridge: {
+      pos: [[126, 80], [95, 80], [95, 25], [255, 25], [255, 135], [185, 135], [185, 80], [154, 80]],
+      neg: [[154, 80], [185, 80], [185, 25], [255, 25], [255, 135], [95, 135], [95, 80], [126, 80]]
+    }
+  };
+  var FLOWGEO = {}, FLOWDOTS = {};
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  (function () {
+    for (var c in FLOWPATHS) {
+      FLOWGEO[c] = {};
+      for (var ph in FLOWPATHS[c]) {
+        var pts = FLOWPATHS[c][ph], lens = [0], tot = 0;
+        for (var i = 1; i < pts.length; i++) {
+          tot += Math.sqrt(Math.pow(pts[i][0] - pts[i - 1][0], 2) + Math.pow(pts[i][1] - pts[i - 1][1], 2));
+          lens.push(tot);
+        }
+        FLOWGEO[c][ph] = { pts: pts, lens: lens, total: tot };
+      }
+      var svg = SVGS[c];
+      if (!svg) continue;
+      var dots = [];
+      for (var j = 0; j < 9; j++) {
+        var d = document.createElementNS(SVGNS, 'circle');
+        d.setAttribute('r', '2.6');
+        d.setAttribute('fill', '#f59e0b');
+        d.style.display = 'none';
+        svg.appendChild(d);
+        dots.push(d);
+      }
+      FLOWDOTS[c] = dots;
+    }
+  })();
+
+  function updateFlow(phase) {          // 'pos' | 'neg' | null
+    for (var c in FLOWDOTS) {
+      var dots = FLOWDOTS[c];
+      var geo = (c === state.circ && phase) ? FLOWGEO[c][phase] : null;
+      for (var i = 0; i < dots.length; i++) {
+        if (!geo) { dots[i].style.display = 'none'; continue; }
+        var t = (flowT + i / dots.length) % 1;
+        var dst = t * geo.total, pts = geo.pts, lens = geo.lens, p = pts[pts.length - 1];
+        for (var j = 1; j < pts.length; j++) {
+          if (dst <= lens[j]) {
+            var f = (dst - lens[j - 1]) / ((lens[j] - lens[j - 1]) || 1);
+            p = [pts[j - 1][0] + f * (pts[j][0] - pts[j - 1][0]), pts[j - 1][1] + f * (pts[j][1] - pts[j - 1][1])];
+            break;
+          }
+        }
+        dots[i].style.display = '';
+        dots[i].setAttribute('cx', p[0].toFixed(1));
+        dots[i].setAttribute('cy', p[1].toFixed(1));
+      }
+    }
+  }
+
   function glow() {
-    var idx = (N - 1 + off) % N;
+    var idx = (N - 1 + (off | 0)) % N;
     var conducting = sim.vrect[idx] > 0.05 && sim.vrect[idx] >= sim.vout[idx] - 0.05;
     var pos = sim.vs[idx] >= 0;
     var breakdown = sim.vout[idx] < -0.05;
@@ -250,6 +314,7 @@
     for (var i = 0; i < ds.length; i++) {
       if (ds[i]) ds[i].setAttribute('fill', onList[i] ? onCol : D_OFF);
     }
+    updateFlow(conducting ? (pos ? 'pos' : 'neg') : null);
   }
 
   // ---------- readouts ----------
@@ -262,6 +327,43 @@
     if (w >= 1) return w.toFixed(2) + ' W';
     var m = w * 1000;
     return (m >= 10 ? m.toFixed(0) : m.toFixed(1)) + ' mW';
+  }
+
+  // live "where the numbers come from" panel — textbook formulas with values substituted
+  function updateMath() {
+    var el = $('rl-math');
+    var en = document.documentElement.lang === 'en';
+    if (sim.warnZ) {
+      el.innerHTML = '<div class="rl-math-warn">⚠ ' + (en
+        ? 'Standard formulas don’t apply — the diode is conducting in reverse (breakdown)'
+        : 'สูตรมาตรฐานใช้ไม่ได้ — ไดโอดกำลังนำกระแสย้อนกลับ (breakdown)') + '</div>';
+      return;
+    }
+    var Vf = DIODES[state.diode].vf;
+    var n = state.circ === 'bridge' ? 2 : 1;
+    var Vpk = sim.Vpk;
+    var base = state.circ === 'ct' ? Vpk / 2 : Vpk;
+    var vpo = Math.max(0, base - n * Vf);
+    var meas = function (v) {
+      return ' <span>(' + (en ? 'measured' : 'วัดได้') + ' ' + v.toFixed(2) + ' V)</span>';
+    };
+    var lines = [];
+    lines.push('V<sub>p</sub> = √2 × ' + state.vrms + ' = <b>' + Vpk.toFixed(2) + ' V</b>');
+    if (state.circ === 'ct') {
+      lines.push('V<sub>p</sub>(' + (en ? 'half-winding' : 'ครึ่งขด') + ') = ' + Vpk.toFixed(2) + ' ÷ 2 = <b>' + base.toFixed(2) + ' V</b>');
+    }
+    lines.push('V<sub>p(out)</sub> = ' + base.toFixed(2) + ' − ' + n + '×' + Vf.toFixed(2) + ' = <b>' + vpo.toFixed(2) + ' V</b>');
+    if (!sim.hasCap) {
+      var kf = state.circ === 'half' ? 0.318 : 0.637;
+      lines.push('V<sub>dc</sub> = ' + kf + ' × ' + vpo.toFixed(2) + ' = <b>' + (kf * vpo).toFixed(2) + ' V</b>' + meas(sim.vavg));
+    } else {
+      var fr = state.circ === 'half' ? 50 : 100;
+      var vppCalc = sim.iavg / (fr * state.cap * 1e-6);
+      lines.push('V<sub>pp</sub> ≈ I ÷ (f×C) = ' + (sim.iavg * 1000).toFixed(1) + 'mA ÷ (' + fr + ' × ' + state.cap + 'µF) = <b>' + vppCalc.toFixed(2) + ' V</b>' + meas(sim.vpp));
+      lines.push('V<sub>dc</sub> ≈ V<sub>p(out)</sub> − V<sub>pp</sub>/2 = ' + vpo.toFixed(2) + ' − ' + (sim.vpp / 2).toFixed(2) + ' = <b>' + (vpo - sim.vpp / 2).toFixed(2) + ' V</b>' + meas(sim.vavg));
+    }
+    el.innerHTML = '<div class="rl-math-title">' + (en ? '📐 Where the numbers come from' : '📐 ที่มาของตัวเลข') + '</div>'
+      + lines.map(function (l) { return '<div class="rl-math-line">' + l + '</div>'; }).join('');
   }
 
   function refresh() {
@@ -309,10 +411,12 @@
     badge.textContent = txt;
     badge.style.background = col;
     updateDiagram();
+    updateMath();
   }
 
   function loop() {
-    off = (off + 2) % N;
+    off = (off + 2 * state.speed) % N;
+    flowT = (flowT + 0.004 * state.speed) % 1;
     draw();
     glow();
     raf = requestAnimationFrame(loop);
@@ -341,6 +445,7 @@
   }
 
   seg('rl-circ', 'data-circ', function (v) { state.circ = v; refresh(); });
+  seg('rl-speed', 'data-s', function (v) { state.speed = parseFloat(v); });
   seg('rl-lmode', 'data-lmode', function (v) {
     state.lmode = v;
     $('rl-row-r').style.display = v === 'r' ? '' : 'none';

@@ -50,6 +50,14 @@
 .rl-legend { display:flex; flex-wrap:wrap; gap:.8rem 1rem; justify-content:center; margin-top:.6rem; font-size:.8rem; color:var(--text-light); }
 .rl-legend span { display:inline-flex; align-items:center; gap:.35rem; }
 .rl-legend i { width:18px; height:3px; border-radius:2px; display:inline-block; }
+.rl-speedrow { display:flex; justify-content:flex-end; margin-bottom:.4rem; }
+.rl-speedrow .rl-seg button { flex:0 0 auto; padding:.28rem .6rem; font-size:.78rem; }
+.rl-math { margin-top:.7rem; background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:.6rem .8rem; font-size:.84rem; }
+.rl-math-title { font-weight:700; color:var(--primary); margin-bottom:.35rem; font-size:.82rem; }
+.rl-math-line { font-family:ui-monospace,Consolas,monospace; padding:.12rem 0; color:var(--text); overflow-x:auto; white-space:nowrap; }
+.rl-math-line b { color:var(--primary); }
+.rl-math-line span { color:var(--text-light); font-size:.78rem; }
+.rl-math-warn { color:#dc2626; font-weight:600; }
 </style>
 </head>
 <body>
@@ -839,6 +847,15 @@
               <text x="262" y="138" font-size="14" fill="#ef4444" font-weight="bold">−</text>
               <text x="280" y="84" font-size="10" fill="var(--text-light)">R<tspan font-size="7" dy="2">L</tspan></text>
             </svg>
+            <p class="th-only" style="font-size:.76rem;color:var(--text-light);text-align:center;margin:.4rem 0 0">🟠 จุดส้ม = ทิศทางกระแส — วิ่งเฉพาะช่วงที่ไดโอดนำกระแส (ถ้ามี C จะเห็นเป็นห้วงสั้นๆ ตรงยอดคลื่น เพราะช่วงอื่น C เป็นตัวจ่ายโหลด)</p>
+            <p class="en-only" style="font-size:.76rem;color:var(--text-light);text-align:center;margin:.4rem 0 0">🟠 Orange dots = current direction — they flow only while a diode conducts (with C, only in short bursts at the peaks; the cap feeds the load the rest of the time)</p>
+          </div>
+          <div class="rl-speedrow">
+            <div class="rl-seg" id="rl-speed">
+              <button data-s="0">⏸ <span class="th-only">หยุด</span><span class="en-only">Pause</span></button>
+              <button data-s="0.25">🐢 <span class="th-only">ช้า</span><span class="en-only">Slow</span></button>
+              <button data-s="1" class="active">▶ <span class="th-only">ปกติ</span><span class="en-only">Normal</span></button>
+            </div>
           </div>
           <canvas id="rl-canvas" class="rl-screen"></canvas>
           <div class="rl-legend">
@@ -847,6 +864,7 @@
             <span><i style="background:#3b82f6"></i><span class="th-only">แรงดันคร่อมโหลด</span><span class="en-only">Voltage across load</span></span>
             <span><i style="background:#10b981"></i>V<sub>dc</sub></span>
           </div>
+          <div id="rl-math" class="rl-math"></div>
         </div>
         <div>
           <div class="rl-panel">
