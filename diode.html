@@ -867,6 +867,7 @@
                 <option value="si" selected>Si — ซิลิคอน 1N4007 (Vf 0.7 V)</option>
                 <option value="ge">Ge — เจอร์เมเนียม 1N34A (Vf 0.3 V)</option>
                 <option value="schottky">Schottky — ชอตต์กี 1N5819 (Vf 0.25 V)</option>
+                <option value="ufast">Ultra-Fast — อัลตราฟาสต์ UF4007 (Vf 1.0 V)</option>
                 <option value="zener">Zener — ซีเนอร์ (Vf 0.7 V + Vz)</option>
                 <option value="led">LED (Vf 2.0 V)</option>
                 <option value="ideal">Ideal — อุดมคติ (Vf 0 V)</option>
@@ -926,7 +927,7 @@
       <h3 class="th-only" style="color:var(--primary)">🧪 ลองทำดู</h3>
       <h3 class="en-only" style="color:var(--primary)">🧪 Try This</h3>
       <ol class="content-list th-only" style="font-size:.92rem">
-        <li><strong>ผลของ Vf:</strong> ครึ่งคลื่น + Si ที่ 9 V rms → ยอดคลื่นออก ≈ 12.0 V (12.7 − 0.7) แล้วสลับเป็น Ge / Schottky — ยอดขยับขึ้นตาม Vf ที่ลดลง</li>
+        <li><strong>ผลของ Vf:</strong> ครึ่งคลื่น + Si ที่ 9 V rms → ยอดคลื่นออก ≈ 12.0 V (12.7 − 0.7) แล้วสลับเป็น Ge / Schottky — ยอดขยับขึ้นตาม Vf ที่ลดลง ส่วน Ultra-Fast ยอดต่ำกว่า Si เพราะ Vf สูงกว่า (~1 V) — ข้อดีจริงของมันคือ t<sub>rr</sub> สั้น ซึ่งเห็นผลที่ความถี่สูง (สวิตชิ่งเพาเวอร์) ไม่ใช่ที่ 50 Hz</li>
         <li><strong>บริดจ์ตก 2×Vf:</strong> เปลี่ยนเป็นบริดจ์ — แรงดันหายไป 2 เท่าของ Vf และความถี่ริปเปิลกลายเป็น 100 Hz</li>
         <li><strong>LED เป็นไดโอดได้ไหม:</strong> เลือก LED แล้วลดแรงดันเหลือ 3 V rms — เห็นช่วง "เงียบ" กว้างขึ้นเพราะไม่นำกระแสจนกว่าแรงดันจะเกิน 2 V (และดู PIV — LED จริงทนย้อนกลับได้แค่ ~5 V!)</li>
         <li><strong>ทำไมไม่ใช้ Zener เรียงกระแส:</strong> เลือก Zener 5.1 V ที่ 9 V rms ครึ่งคลื่น — เห็นคลื่นรั่วด้านลบเพราะ breakdown แต่ถ้าเลือก Vz 36 V (สูงกว่า PIV) จะกลับมาทำงานเหมือนไดโอดปกติ</li>
@@ -934,7 +935,7 @@
         <li><strong>แท็ปกลาง vs บริดจ์:</strong> ที่แรงดันเดียวกัน แท็ปกลางได้แรงดันออกครึ่งเดียว (ใช้ทีละครึ่งขด) แต่ตกแค่ 1 Vf — เทรดออฟคลาสสิกของสองวงจรนี้</li>
       </ol>
       <ol class="content-list en-only" style="font-size:.92rem">
-        <li><strong>Effect of Vf:</strong> Half-wave + Si at 9 V rms → output peak ≈ 12.0 V (12.7 − 0.7). Switch to Ge / Schottky — the peak rises as Vf drops.</li>
+        <li><strong>Effect of Vf:</strong> Half-wave + Si at 9 V rms → output peak ≈ 12.0 V (12.7 − 0.7). Switch to Ge / Schottky — the peak rises as Vf drops. Ultra-Fast sits lower than Si because its Vf is higher (~1 V) — its real advantage is a short t<sub>rr</sub>, which matters at high frequency (switching supplies), not at 50 Hz.</li>
         <li><strong>Bridge drops 2×Vf:</strong> Switch to bridge — twice the diode drop disappears, and the ripple frequency becomes 100 Hz.</li>
         <li><strong>Can an LED rectify?</strong> Pick LED and lower the voltage to 3 V rms — the "silent" gaps widen because it won't conduct below 2 V (and check PIV — a real LED only survives ~5 V reverse!).</li>
         <li><strong>Why not rectify with a Zener:</strong> Pick Zener 5.1 V at 9 V rms half-wave — the negative half leaks through due to breakdown. Choose Vz 36 V (above PIV) and it behaves like a normal diode again.</li>

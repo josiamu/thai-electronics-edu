@@ -25,6 +25,7 @@
     si:       { vf: 0.7 },
     ge:       { vf: 0.3 },
     schottky: { vf: 0.25 },
+    ufast:    { vf: 1.0 },
     zener:    { vf: 0.7 },
     led:      { vf: 2.0 }
   };
