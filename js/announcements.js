@@ -14,6 +14,10 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'rectifier-lab-2026-07-04', date:'2026-07-04', type:'update',
+    th:'Lab ใหม่ในบทไดโอด: ทดลองแปลง AC เป็น DC — เลือกวงจร/ชนิดไดโอด/แรงดัน/โหลด แล้วดูรูปคลื่นจริง',
+    en:'New lab in the Diode lesson: AC → DC rectifier — pick the circuit, diode type, voltage & load and watch the waveform',
+    href:'diode.html#rectifier-lab' },
   { id:'rectifier-pdf-2026-07-01', date:'2026-07-01', type:'download',
     th:'ไฟล์ใหม่: วงจรเรียงกระแส (Rectifier) — ครึ่งคลื่น/เต็มคลื่น/บริดจ์ + ริปเปิล (PDF)',
     en:'New file: Rectifier Circuits — half/full-wave/bridge + ripple (PDF)',

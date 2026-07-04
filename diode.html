@@ -26,6 +26,30 @@
 .dtype-c3 { border-left-color:#f59e0b; } .dtype-c4 { border-left-color:#10b981; }
 .dtype-c5 { border-left-color:#8b5cf6; } .dtype-c6 { border-left-color:#06b6d4; }
 .dtype-c7 { border-left-color:#f97316; }
+
+/* Interactive rectifier lab */
+.rl-wrap { display:grid; grid-template-columns:1fr 285px; gap:1.25rem; align-items:start; }
+@media (max-width:860px){ .rl-wrap{ grid-template-columns:1fr; } }
+.rl-diagram { background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:.5rem .75rem; margin-bottom:.7rem; }
+.rl-diagram svg { display:block; margin:0 auto; max-width:340px; width:100%; height:auto; }
+.rl-screen { width:100%; height:auto; display:block; border-radius:12px; background:#0b1220; border:1px solid var(--border); }
+.rl-panel { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:.9rem 1rem; }
+.rl-ctrl { margin-bottom:.9rem; }
+.rl-ctrl-row { display:flex; justify-content:space-between; align-items:center; font-size:.84rem; font-weight:600; margin-bottom:.25rem; }
+.rl-ctrl-row span { color:var(--primary); font-size:.9rem; }
+.rl-ctrl input[type=range] { width:100%; cursor:pointer; accent-color:var(--primary); }
+.rl-ctrl select { width:100%; padding:.42rem .5rem; font-size:.84rem; font-weight:600; font-family:inherit; color:var(--text); background:var(--bg); border:1px solid var(--border); border-radius:8px; cursor:pointer; }
+.rl-seg { display:flex; gap:.4rem; }
+.rl-seg button { flex:1; padding:.4rem .3rem; font-size:.82rem; font-weight:600; border:1px solid var(--border); background:var(--bg); color:var(--text); border-radius:8px; cursor:pointer; font-family:inherit; }
+.rl-seg button.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+.rl-badge { text-align:center; font-weight:800; font-size:.94rem; padding:.5rem; border-radius:10px; margin:1rem 0 .6rem; color:#fff; background:var(--primary); }
+.rl-readout { display:grid; grid-template-columns:1fr 1fr; gap:.45rem; }
+.rl-rb { background:var(--bg); border:1px solid var(--border); border-radius:9px; padding:.45rem .6rem; text-align:center; }
+.rl-rlab { font-size:.72rem; color:var(--text-light); margin-bottom:.12rem; }
+.rl-rval { font-size:1rem; font-weight:700; color:var(--text); }
+.rl-legend { display:flex; flex-wrap:wrap; gap:.8rem 1rem; justify-content:center; margin-top:.6rem; font-size:.8rem; color:var(--text-light); }
+.rl-legend span { display:inline-flex; align-items:center; gap:.35rem; }
+.rl-legend i { width:18px; height:3px; border-radius:2px; display:inline-block; }
 </style>
 </head>
 <body>
@@ -691,6 +715,235 @@
     </div>
   </div>
 
+  <!-- Interactive Rectifier Lab -->
+  <div class="section" id="rectifier-lab">
+    <div class="section-title"><span class="th-only">🔬 ทดลอง: แปลง AC เป็น DC (โต้ตอบได้)</span><span class="en-only">🔬 Interactive Lab: AC → DC Rectifier</span></div>
+    <div class="card" style="padding:1.25rem">
+      <p class="th-only" style="margin:0 0 1rem;font-size:.92rem;color:var(--text-light)">
+        เลือก <strong>วงจรเรียงกระแส</strong>, <strong>ชนิดไดโอด</strong>, <strong>แรงดัน AC</strong>, <strong>โหลด</strong> (ตัวต้านทาน หรือกระแสคงที่)
+        และ <strong>ตัวเก็บประจุกรอง</strong> แล้วดูรูปคลื่นบนสโคป — ไดโอดสีส้มในแผนภาพคือตัวที่กำลังนำกระแส
+      </p>
+      <p class="en-only" style="margin:0 0 1rem;font-size:.92rem;color:var(--text-light)">
+        Pick a <strong>rectifier circuit</strong>, <strong>diode type</strong>, <strong>AC voltage</strong>, <strong>load</strong> (resistor or constant current)
+        and <strong>filter capacitor</strong>, then watch the waveform on the scope — the orange diode in the diagram is the one conducting right now.
+      </p>
+      <div class="rl-wrap">
+        <div>
+          <div class="rl-diagram">
+            <!-- Half-wave -->
+            <svg id="rl-svg-half" viewBox="0 0 320 120" role="img" aria-label="Half-wave rectifier circuit">
+              <circle cx="30" cy="62" r="15" fill="none" stroke="var(--text)" stroke-width="1.5"/>
+              <text x="30" y="67" text-anchor="middle" font-size="14" fill="var(--text)">~</text>
+              <line x1="30" y1="47" x2="30" y2="30" stroke="var(--text)" stroke-width="1.5"/>
+              <line x1="30" y1="77" x2="30" y2="95" stroke="var(--text)" stroke-width="1.5"/>
+              <line x1="30" y1="30" x2="110" y2="30" stroke="var(--text)" stroke-width="1.5"/>
+              <polygon id="rl-h-d1" points="110,20 110,40 134,30" fill="#94a3b8"/>
+              <line x1="134" y1="20" x2="134" y2="40" stroke="var(--text)" stroke-width="2"/>
+              <line x1="134" y1="30" x2="250" y2="30" stroke="var(--text)" stroke-width="1.5"/>
+              <line x1="250" y1="30" x2="250" y2="45" stroke="var(--text)" stroke-width="1.5"/>
+              <rect x="242" y="45" width="16" height="36" rx="3" fill="none" stroke="var(--text)" stroke-width="1.8"/>
+              <line x1="250" y1="81" x2="250" y2="95" stroke="var(--text)" stroke-width="1.5"/>
+              <line x1="30" y1="95" x2="250" y2="95" stroke="var(--text)" stroke-width="1.5"/>
+              <g id="rl-h-cap" opacity="0.15">
+                <line x1="200" y1="30" x2="200" y2="56" stroke="var(--text)" stroke-width="1.5"/>
+                <line x1="190" y1="56" x2="210" y2="56" stroke="var(--text)" stroke-width="2.2"/>
+                <line x1="190" y1="64" x2="210" y2="64" stroke="var(--text)" stroke-width="2.2"/>
+                <line x1="200" y1="64" x2="200" y2="95" stroke="var(--text)" stroke-width="1.5"/>
+                <circle cx="200" cy="30" r="2.5" fill="var(--text)"/>
+                <circle cx="200" cy="95" r="2.5" fill="var(--text)"/>
+                <text x="216" y="64" font-size="10" fill="var(--text-light)">C</text>
+              </g>
+              <text x="122" y="54" text-anchor="middle" font-size="10" fill="var(--primary)">D1</text>
+              <text x="272" y="66" font-size="10" fill="var(--text-light)">R<tspan font-size="7" dy="2">L</tspan></text>
+              <text x="30" y="112" text-anchor="middle" font-size="9" fill="var(--text-light)">AC</text>
+            </svg>
+            <!-- Full-wave center-tap -->
+            <svg id="rl-svg-ct" viewBox="0 0 320 155" role="img" aria-label="Full-wave center-tap rectifier circuit" style="display:none">
+              <path d="M42,22 a4,4 0 0 1 0,8 a4,4 0 0 1 0,8 a4,4 0 0 1 0,8 a4,4 0 0 1 0,8 a4,4 0 0 1 0,8 a4,4 0 0 1 0,8 a4,4 0 0 1 0,8 a4,4 0 0 1 0,8 a4,4 0 0 1 0,8 a4,4 0 0 1 0,8 a4,4 0 0 1 0,8 a4,4 0 0 1 0,8 a4,4 0 0 1 0,8"
+                    fill="none" stroke="var(--text)" stroke-width="1.8"/>
+              <line x1="42" y1="22" x2="120" y2="22" stroke="var(--text)" stroke-width="1.5"/>
+              <polygon id="rl-c-d1" points="120,12 120,32 144,22" fill="#94a3b8"/>
+              <line x1="144" y1="12" x2="144" y2="32" stroke="var(--text)" stroke-width="2"/>
+              <line x1="144" y1="22" x2="258" y2="22" stroke="var(--text)" stroke-width="1.5"/>
+              <line x1="42" y1="126" x2="120" y2="126" stroke="var(--text)" stroke-width="1.5"/>
+              <polygon id="rl-c-d2" points="120,116 120,136 144,126" fill="#94a3b8"/>
+              <line x1="144" y1="116" x2="144" y2="136" stroke="var(--text)" stroke-width="2"/>
+              <line x1="144" y1="126" x2="180" y2="126" stroke="var(--text)" stroke-width="1.5"/>
+              <line x1="180" y1="126" x2="180" y2="22" stroke="var(--text)" stroke-width="1.5"/>
+              <circle cx="180" cy="22" r="2.5" fill="var(--text)"/>
+              <line x1="42" y1="74" x2="60" y2="74" stroke="var(--text)" stroke-width="1.5"/>
+              <line x1="60" y1="74" x2="60" y2="142" stroke="var(--text)" stroke-width="1.5"/>
+              <line x1="60" y1="142" x2="258" y2="142" stroke="var(--text)" stroke-width="1.5"/>
+              <line x1="258" y1="22" x2="258" y2="52" stroke="var(--text)" stroke-width="1.5"/>
+              <rect x="250" y="52" width="16" height="46" rx="3" fill="none" stroke="var(--text)" stroke-width="1.8"/>
+              <line x1="258" y1="98" x2="258" y2="142" stroke="var(--text)" stroke-width="1.5"/>
+              <g id="rl-c-cap" opacity="0.15">
+                <line x1="215" y1="22" x2="215" y2="66" stroke="var(--text)" stroke-width="1.5"/>
+                <line x1="205" y1="66" x2="225" y2="66" stroke="var(--text)" stroke-width="2.2"/>
+                <line x1="205" y1="74" x2="225" y2="74" stroke="var(--text)" stroke-width="2.2"/>
+                <line x1="215" y1="74" x2="215" y2="142" stroke="var(--text)" stroke-width="1.5"/>
+                <circle cx="215" cy="22" r="2.5" fill="var(--text)"/>
+                <circle cx="215" cy="142" r="2.5" fill="var(--text)"/>
+                <text x="229" y="74" font-size="10" fill="var(--text-light)">C</text>
+              </g>
+              <text x="130" y="46" text-anchor="middle" font-size="10" fill="var(--primary)">D1</text>
+              <text x="130" y="112" text-anchor="middle" font-size="10" fill="var(--primary)">D2</text>
+              <text x="66" y="70" font-size="9" fill="var(--text-light)">CT</text>
+              <text x="282" y="80" font-size="10" fill="var(--text-light)">R<tspan font-size="7" dy="2">L</tspan></text>
+            </svg>
+            <!-- Full-wave bridge -->
+            <svg id="rl-svg-bridge" viewBox="0 0 320 160" role="img" aria-label="Full-wave bridge rectifier circuit" style="display:none">
+              <line x1="95" y1="25" x2="255" y2="25" stroke="var(--text)" stroke-width="1.5"/>
+              <line x1="95" y1="135" x2="255" y2="135" stroke="var(--text)" stroke-width="1.5"/>
+              <line x1="95" y1="25" x2="95" y2="48" stroke="var(--text)" stroke-width="1.5"/>
+              <line x1="87" y1="48" x2="103" y2="48" stroke="var(--text)" stroke-width="2"/>
+              <polygon id="rl-b-d1" points="87,66 103,66 95,48" fill="#94a3b8"/>
+              <line x1="95" y1="66" x2="95" y2="94" stroke="var(--text)" stroke-width="1.5"/>
+              <line x1="87" y1="94" x2="103" y2="94" stroke="var(--text)" stroke-width="2"/>
+              <polygon id="rl-b-d2" points="87,112 103,112 95,94" fill="#94a3b8"/>
+              <line x1="95" y1="112" x2="95" y2="135" stroke="var(--text)" stroke-width="1.5"/>
+              <line x1="185" y1="25" x2="185" y2="48" stroke="var(--text)" stroke-width="1.5"/>
+              <line x1="177" y1="48" x2="193" y2="48" stroke="var(--text)" stroke-width="2"/>
+              <polygon id="rl-b-d3" points="177,66 193,66 185,48" fill="#94a3b8"/>
+              <line x1="185" y1="66" x2="185" y2="94" stroke="var(--text)" stroke-width="1.5"/>
+              <line x1="177" y1="94" x2="193" y2="94" stroke="var(--text)" stroke-width="2"/>
+              <polygon id="rl-b-d4" points="177,112 193,112 185,94" fill="#94a3b8"/>
+              <line x1="185" y1="112" x2="185" y2="135" stroke="var(--text)" stroke-width="1.5"/>
+              <line x1="95" y1="80" x2="126" y2="80" stroke="var(--text)" stroke-width="1.5"/>
+              <circle cx="140" cy="80" r="14" fill="none" stroke="var(--text)" stroke-width="1.5"/>
+              <text x="140" y="85" text-anchor="middle" font-size="14" fill="var(--text)">~</text>
+              <line x1="154" y1="80" x2="185" y2="80" stroke="var(--text)" stroke-width="1.5"/>
+              <line x1="255" y1="25" x2="255" y2="58" stroke="var(--text)" stroke-width="1.5"/>
+              <rect x="247" y="58" width="16" height="44" rx="3" fill="none" stroke="var(--text)" stroke-width="1.8"/>
+              <line x1="255" y1="102" x2="255" y2="135" stroke="var(--text)" stroke-width="1.5"/>
+              <g id="rl-b-cap" opacity="0.15">
+                <line x1="222" y1="25" x2="222" y2="76" stroke="var(--text)" stroke-width="1.5"/>
+                <line x1="212" y1="76" x2="232" y2="76" stroke="var(--text)" stroke-width="2.2"/>
+                <line x1="212" y1="84" x2="232" y2="84" stroke="var(--text)" stroke-width="2.2"/>
+                <line x1="222" y1="84" x2="222" y2="135" stroke="var(--text)" stroke-width="1.5"/>
+                <circle cx="222" cy="25" r="2.5" fill="var(--text)"/>
+                <circle cx="222" cy="135" r="2.5" fill="var(--text)"/>
+                <text x="236" y="84" font-size="10" fill="var(--text-light)">C</text>
+              </g>
+              <circle cx="95" cy="25" r="2.5" fill="var(--text)"/>
+              <circle cx="185" cy="25" r="2.5" fill="var(--text)"/>
+              <circle cx="95" cy="135" r="2.5" fill="var(--text)"/>
+              <circle cx="185" cy="135" r="2.5" fill="var(--text)"/>
+              <circle cx="95" cy="80" r="2.5" fill="var(--text)"/>
+              <circle cx="185" cy="80" r="2.5" fill="var(--text)"/>
+              <text x="70" y="62" font-size="10" fill="var(--primary)">D1</text>
+              <text x="70" y="110" font-size="10" fill="var(--primary)">D2</text>
+              <text x="198" y="62" font-size="10" fill="var(--primary)">D3</text>
+              <text x="198" y="110" font-size="10" fill="var(--primary)">D4</text>
+              <text x="262" y="33" font-size="13" fill="#22c55e" font-weight="bold">+</text>
+              <text x="262" y="138" font-size="14" fill="#ef4444" font-weight="bold">−</text>
+              <text x="280" y="84" font-size="10" fill="var(--text-light)">R<tspan font-size="7" dy="2">L</tspan></text>
+            </svg>
+          </div>
+          <canvas id="rl-canvas" class="rl-screen"></canvas>
+          <div class="rl-legend">
+            <span><i style="background:#64748b"></i><span class="th-only">AC เข้า (ขดทุติยภูมิ)</span><span class="en-only">AC in (secondary)</span></span>
+            <span id="rl-leg-rect" style="display:none"><i style="background:#94a3b8"></i><span class="th-only">หลังเรียงกระแส (ก่อนกรอง)</span><span class="en-only">Rectified (before filter)</span></span>
+            <span><i style="background:#3b82f6"></i><span class="th-only">แรงดันคร่อมโหลด</span><span class="en-only">Voltage across load</span></span>
+            <span><i style="background:#10b981"></i>V<sub>dc</sub></span>
+          </div>
+        </div>
+        <div>
+          <div class="rl-panel">
+            <div style="font-weight:700;font-size:.9rem;margin-bottom:.7rem;color:var(--primary)">
+              <span class="th-only">⚙ ปรับค่า</span><span class="en-only">⚙ Adjust</span>
+            </div>
+            <div class="rl-ctrl">
+              <div class="rl-ctrl-row"><label><span class="th-only">วงจรเรียงกระแส</span><span class="en-only">Circuit</span></label></div>
+              <div class="rl-seg" id="rl-circ">
+                <button data-circ="half" class="active"><span class="th-only">ครึ่งคลื่น</span><span class="en-only">Half</span></button>
+                <button data-circ="ct"><span class="th-only">แท็ปกลาง</span><span class="en-only">C-tap</span></button>
+                <button data-circ="bridge"><span class="th-only">บริดจ์</span><span class="en-only">Bridge</span></button>
+              </div>
+            </div>
+            <div class="rl-ctrl">
+              <div class="rl-ctrl-row"><label><span class="th-only">ชนิดไดโอด</span><span class="en-only">Diode type</span></label></div>
+              <select id="rl-diode">
+                <option value="si" selected>Si — ซิลิคอน 1N4007 (Vf 0.7 V)</option>
+                <option value="ge">Ge — เจอร์เมเนียม 1N34A (Vf 0.3 V)</option>
+                <option value="schottky">Schottky — ชอตต์กี 1N5819 (Vf 0.25 V)</option>
+                <option value="zener">Zener — ซีเนอร์ (Vf 0.7 V + Vz)</option>
+                <option value="led">LED (Vf 2.0 V)</option>
+                <option value="ideal">Ideal — อุดมคติ (Vf 0 V)</option>
+              </select>
+            </div>
+            <div class="rl-ctrl" id="rl-vz-row" style="display:none">
+              <div class="rl-ctrl-row"><label>V<sub>z</sub> (Zener)</label></div>
+              <select id="rl-vz">
+                <option value="3.3">3.3 V</option>
+                <option value="5.1" selected>5.1 V</option>
+                <option value="9.1">9.1 V</option>
+                <option value="15">15 V</option>
+                <option value="36">36 V</option>
+              </select>
+            </div>
+            <div class="rl-ctrl">
+              <div class="rl-ctrl-row"><label><span class="th-only">แรงดัน AC</span><span class="en-only">AC voltage</span></label><span id="rl-vrms-val">9 V rms</span></div>
+              <input type="range" id="rl-vrms" min="3" max="24" step="1" value="9">
+            </div>
+            <div class="rl-ctrl">
+              <div class="rl-ctrl-row"><label><span class="th-only">โหลด</span><span class="en-only">Load</span></label></div>
+              <div class="rl-seg" id="rl-lmode">
+                <button data-lmode="r" class="active"><span class="th-only">ตัวต้านทาน</span><span class="en-only">Resistor</span></button>
+                <button data-lmode="i"><span class="th-only">กระแสคงที่</span><span class="en-only">Const. I</span></button>
+              </div>
+            </div>
+            <div class="rl-ctrl" id="rl-row-r">
+              <div class="rl-ctrl-row"><label>R<sub>L</sub></label><span id="rl-rl-val">1 kΩ</span></div>
+              <input type="range" id="rl-rl" min="0" max="100" step="1" value="57">
+            </div>
+            <div class="rl-ctrl" id="rl-row-i" style="display:none">
+              <div class="rl-ctrl-row"><label><span class="th-only">กระแสโหลด</span><span class="en-only">Load current</span></label><span id="rl-i-val">100 mA</span></div>
+              <input type="range" id="rl-i" min="5" max="500" step="5" value="100">
+            </div>
+            <div class="rl-ctrl" style="margin-bottom:0">
+              <div class="rl-ctrl-row"><label><span class="th-only">ตัวเก็บประจุกรอง</span><span class="en-only">Filter cap</span> C</label><span id="rl-cap-val">—</span></div>
+              <input type="range" id="rl-cap" min="0" max="4700" step="100" value="0">
+            </div>
+          </div>
+          <div id="rl-badge" class="rl-badge">—</div>
+          <div class="rl-readout">
+            <div class="rl-rb"><div class="rl-rlab">V<sub>p</sub> <span class="th-only">เข้า</span><span class="en-only">in</span></div><div class="rl-rval" id="rl-vpin">— V</div></div>
+            <div class="rl-rb"><div class="rl-rlab">V<sub>p</sub> <span class="th-only">ออก</span><span class="en-only">out</span></div><div class="rl-rval" id="rl-vpout">— V</div></div>
+            <div class="rl-rb"><div class="rl-rlab">V<sub>dc</sub> (avg)</div><div class="rl-rval" id="rl-vdc">— V</div></div>
+            <div class="rl-rb"><div class="rl-rlab">Ripple</div><div class="rl-rval" id="rl-vrip">— V</div></div>
+            <div class="rl-rb"><div class="rl-rlab">I<sub>peak</sub></div><div class="rl-rval" id="rl-ipk">— mA</div></div>
+            <div class="rl-rb"><div class="rl-rlab">I<sub>avg</sub></div><div class="rl-rval" id="rl-iavg">— mA</div></div>
+            <div class="rl-rb"><div class="rl-rlab">PIV / <span class="th-only">ไดโอด</span><span class="en-only">diode</span></div><div class="rl-rval" id="rl-piv">— V</div></div>
+            <div class="rl-rb"><div class="rl-rlab">f<sub>ripple</sub></div><div class="rl-rval" id="rl-frip">—</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Guided experiments -->
+    <div class="card" style="margin-top:.75rem">
+      <h3 class="th-only" style="color:var(--primary)">🧪 ลองทำดู</h3>
+      <h3 class="en-only" style="color:var(--primary)">🧪 Try This</h3>
+      <ol class="content-list th-only" style="font-size:.92rem">
+        <li><strong>ผลของ Vf:</strong> ครึ่งคลื่น + Si ที่ 9 V rms → ยอดคลื่นออก ≈ 12.0 V (12.7 − 0.7) แล้วสลับเป็น Ge / Schottky — ยอดขยับขึ้นตาม Vf ที่ลดลง</li>
+        <li><strong>บริดจ์ตก 2×Vf:</strong> เปลี่ยนเป็นบริดจ์ — แรงดันหายไป 2 เท่าของ Vf และความถี่ริปเปิลกลายเป็น 100 Hz</li>
+        <li><strong>LED เป็นไดโอดได้ไหม:</strong> เลือก LED แล้วลดแรงดันเหลือ 3 V rms — เห็นช่วง "เงียบ" กว้างขึ้นเพราะไม่นำกระแสจนกว่าแรงดันจะเกิน 2 V (และดู PIV — LED จริงทนย้อนกลับได้แค่ ~5 V!)</li>
+        <li><strong>ทำไมไม่ใช้ Zener เรียงกระแส:</strong> เลือก Zener 5.1 V ที่ 9 V rms ครึ่งคลื่น — เห็นคลื่นรั่วด้านลบเพราะ breakdown แต่ถ้าเลือก Vz 36 V (สูงกว่า PIV) จะกลับมาทำงานเหมือนไดโอดปกติ</li>
+        <li><strong>ริปเปิลกับโหลด:</strong> เปิด C = 1000 µF แล้วลด R<sub>L</sub> (หรือเพิ่มกระแส) — ริปเปิลบานขึ้นตามสูตร V<sub>pp</sub> ≈ I / (f<sub>ripple</sub> × C)</li>
+        <li><strong>แท็ปกลาง vs บริดจ์:</strong> ที่แรงดันเดียวกัน แท็ปกลางได้แรงดันออกครึ่งเดียว (ใช้ทีละครึ่งขด) แต่ตกแค่ 1 Vf — เทรดออฟคลาสสิกของสองวงจรนี้</li>
+      </ol>
+      <ol class="content-list en-only" style="font-size:.92rem">
+        <li><strong>Effect of Vf:</strong> Half-wave + Si at 9 V rms → output peak ≈ 12.0 V (12.7 − 0.7). Switch to Ge / Schottky — the peak rises as Vf drops.</li>
+        <li><strong>Bridge drops 2×Vf:</strong> Switch to bridge — twice the diode drop disappears, and the ripple frequency becomes 100 Hz.</li>
+        <li><strong>Can an LED rectify?</strong> Pick LED and lower the voltage to 3 V rms — the "silent" gaps widen because it won't conduct below 2 V (and check PIV — a real LED only survives ~5 V reverse!).</li>
+        <li><strong>Why not rectify with a Zener:</strong> Pick Zener 5.1 V at 9 V rms half-wave — the negative half leaks through due to breakdown. Choose Vz 36 V (above PIV) and it behaves like a normal diode again.</li>
+        <li><strong>Ripple vs load:</strong> Set C = 1000 µF then lower R<sub>L</sub> (or raise the current) — ripple grows per V<sub>pp</sub> ≈ I / (f<sub>ripple</sub> × C).</li>
+        <li><strong>Center-tap vs bridge:</strong> At the same voltage, center-tap gives half the output (each half-winding works alternately) but loses only 1 Vf — the classic trade-off.</li>
+      </ol>
+    </div>
+  </div>
+
   <div class="section">
     <div class="section-title"><span class="th-only">สรุปเปรียบเทียบไดโอด</span><span class="en-only">Diode Comparison Summary</span></div>
     <div class="card">
@@ -752,5 +1005,6 @@
 </footer>
 <script>const CURRENT_PAGE='diode';</script>
 <script src="js/nav.js"></script>
+<script src="js/rectifier-lab.js"></script>
 </body>
 </html>

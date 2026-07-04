@@ -28,6 +28,7 @@ website/
 ├── js/simulation.js    — logic จำลองวงจรและ animation
 ├── js/capacitor-sim.js — Interactive RC charge/discharge (canvas, R & C sliders → exponential curve, 63.2%@1τ marker, charge/discharge mode, live τ/5τ/Vc/% readout, normalized 0–5τ x-axis)
 ├── js/power-supply-sim.js — Interactive Power Supply (canvas scope, half/full-wave rectifier + filter C slider + load + 7805 regulator toggle, ripple shrinks with C, constant-current cap discharge sim, traces: pulsating DC/filtered/regulated)
+├── js/rectifier-lab.js — Interactive AC→DC Rectifier Lab ในหน้า diode.html (#rectifier-lab): canvas สโคป (AC เข้า/หลังเรียง/คร่อมโหลด/เส้น Vdc + ripple marker) + แผนภาพ SVG 3 วงจรไฮไลต์ไดโอดตัวที่นำกระแสตามเฟส; เลือกวงจร half/center-tap/bridge × ไดโอด Si/Ge/Schottky/Zener(เลือก Vz)/LED/ideal, Vrms 3–24V @50Hz, โหลด 2 โหมด (RL log-slider 50Ω–10kΩ / กระแสคงที่ 5–500mA), filter C 0–4700µF (peak-detector + discharge exp/linear ตามโหมดโหลด); readouts Vp เข้า/ออก, Vdc, ripple Vpp, Ipk/Iavg, PIV/ไดโอด, f_ripple 50/100Hz; Zener breakdown เมื่อแรงดันย้อนเกิน Vz → half-wave เห็นคลื่นรั่วด้านลบ, CT/bridge ยอดคลื่นถูกกด + badge เตือนแดง, LED เตือน PIV>~5V; CSS `.rl-*` อยู่ใน <style> ของ diode.html
 ├── js/555-sim.js       — Interactive 555 Astable (canvas, R1/R2/C sliders → real f/T/Duty, draws Vcap charge/discharge between ⅓–⅔Vcc + output square wave, blinking LED in step with output, Vcc=5V, visual sweep = CYCLES periods)
 ├── js/opamp-sim.js     — Interactive Op-Amp amplifier (canvas, mode inverting/non-inverting + Rin/Rf/Vin sliders → closed-loop gain, draws input sine + amplified output clipped at ±Vsat=12V, readouts gain/Vout/clip)
 ├── js/logic-sim.js     — Interactive Logic Gate (canvas, <select> gate + toggle A/B buttons → draws gate symbol w/ state-coloured wires + output LED, builds & highlights truth table; listens to langchange)
@@ -42,7 +43,7 @@ website/
 ├── multimeter.html     — บทที่ 6
 ├── soldering.html      — บทที่ 7
 ├── ac-circuit.html     — บทที่ 8
-├── diode.html          — บทที่ 9: PN Junction, I-V Curve, LED Vf by color, Rectifier Circuit
+├── diode.html          — บทที่ 9: PN Junction, I-V Curve, LED Vf by color, Rectifier Circuit + Interactive AC→DC Rectifier Lab (canvas, js/rectifier-lab.js)
 ├── transistor.html     — BJT (NPN/PNP) + MOSFET: สัญลักษณ์, 3 ย่าน (Cut-off/Active/Saturation), สูตร β/IC/IE, เช็คด้วยมัลติมิเตอร์, เบอร์ยอดนิยม + Interactive BJT switch simulator (canvas)
 ├── ic.html             — IC วงจรรวมเบื้องต้น: IC คืออะไร/ทำไมต้องรวม, ระดับการรวม (SSI→VLSI), แพ็กเกจ (DIP/SOIC/QFP/BGA), นับขา+หา Pin 1 (notch/dot, SVG DIP-8), อนาล็อก vs ดิจิทัล vs mixed-signal, อ่าน datasheet, IC ยอดนิยม (555/op-amp/7805/74xx/ATmega), ESD/การจับ (SVG, ไม่มี sim)
 ├── 555.html            — IC ตั้งเวลา 555: คืออะไร+ทำไมชื่อ 555, ขา 8 ขา (SVG DIP-8 pinout), โหมด Astable vs Monostable, สูตร t_HIGH/t_LOW/f/Duty (astable) + T=1.1RC (monostable), การใช้งาน, ทิป (RESET→Vcc, CTRL 10nF) + Interactive Astable sim (canvas)

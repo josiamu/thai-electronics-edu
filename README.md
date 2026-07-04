@@ -17,7 +17,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | 🌏 **2 ภาษา** | สลับ TH ↔ EN ได้ทันทีผ่านปุ่มใน nav bar — จำการตั้งค่าไว้ |
 | 🌙 **Dark Mode** | ธีมสว่าง/มืด — จำการตั้งค่าไว้ |
 | 📱 **Responsive** | ใช้งานได้ทั้ง Desktop, Tablet, Mobile |
-| 🔬 **เครื่องมือจำลองเชิงโต้ตอบ** | เบรดบอร์ดเสมือน, ออสซิลโลสโคป, BJT switch, เครื่องกำเนิดสัญญาณ, แหล่งจ่ายไฟ, จำลองวงจร |
+| 🔬 **เครื่องมือจำลองเชิงโต้ตอบ** | เบรดบอร์ดเสมือน, ออสซิลโลสโคป, BJT switch, เครื่องกำเนิดสัญญาณ, แหล่งจ่ายไฟ, เรียงกระแส AC→DC, จำลองวงจร |
 | 🧮 **7 เครื่องคิดเลข** | รหัสสี, โอห์ม, กำลัง, พลังงาน, อนุกรม/ขนาน, แปลงหน่วย |
 | 📝 **แบบทดสอบ 77 ข้อ** | 12 หมวด, สุ่มข้อ, บันทึกคะแนนสูงสุด — มีทั้ง TH และ EN |
 | 📥 **PDF 32 ไฟล์** | ดาวน์โหลดใบเนื้อหา + ใบงานประกอบการเรียน |
@@ -167,6 +167,7 @@ git push
 ├── js/signal-gen-sim.js    — Waveform generator
 ├── js/capacitor-sim.js     — RC charge/discharge simulator
 ├── js/power-supply-sim.js  — Power supply (AC→DC) simulator
+├── js/rectifier-lab.js     — AC→DC rectifier lab (half/center-tap/bridge × all diode types + filter C)
 ├── js/555-sim.js           — 555 astable simulator (LED blinker)
 ├── js/opamp-sim.js         — Op-amp amplifier simulator (gain + clipping)
 ├── js/logic-sim.js         — Logic-gate simulator (toggle inputs + truth table)
