@@ -915,8 +915,10 @@
             <div class="rl-rb"><div class="rl-rlab">Ripple</div><div class="rl-rval" id="rl-vrip">— V</div></div>
             <div class="rl-rb"><div class="rl-rlab">I<sub>peak</sub></div><div class="rl-rval" id="rl-ipk">— mA</div></div>
             <div class="rl-rb"><div class="rl-rlab">I<sub>avg</sub></div><div class="rl-rval" id="rl-iavg">— mA</div></div>
-            <div class="rl-rb"><div class="rl-rlab">PIV / <span class="th-only">ไดโอด</span><span class="en-only">diode</span></div><div class="rl-rval" id="rl-piv">— V</div></div>
+            <div class="rl-rb"><div class="rl-rlab">PIV / <span class="th-only">พิกัดทน</span><span class="en-only">rating</span></div><div class="rl-rval" id="rl-piv">— V</div></div>
             <div class="rl-rb"><div class="rl-rlab">f<sub>ripple</sub></div><div class="rl-rval" id="rl-frip">—</div></div>
+            <div class="rl-rb"><div class="rl-rlab"><span class="th-only">P สูญในไดโอด</span><span class="en-only">P lost in diode</span></div><div class="rl-rval" id="rl-pd">— W</div></div>
+            <div class="rl-rb"><div class="rl-rlab">η <span class="th-only">ประสิทธิภาพ</span><span class="en-only">efficiency</span></div><div class="rl-rval" id="rl-eff">— %</div></div>
           </div>
         </div>
       </div>
@@ -929,6 +931,8 @@
       <ol class="content-list th-only" style="font-size:.92rem">
         <li><strong>ผลของ Vf:</strong> ครึ่งคลื่น + Si ที่ 9 V rms → ยอดคลื่นออก ≈ 12.0 V (12.7 − 0.7) แล้วสลับเป็น Ge / Schottky — ยอดขยับขึ้นตาม Vf ที่ลดลง ส่วน Ultra-Fast ยอดต่ำกว่า Si เพราะ Vf สูงกว่า (~1 V) — ข้อดีจริงของมันคือ t<sub>rr</sub> สั้น ซึ่งเห็นผลที่ความถี่สูง (สวิตชิ่งเพาเวอร์) ไม่ใช่ที่ 50 Hz</li>
         <li><strong>บริดจ์ตก 2×Vf:</strong> เปลี่ยนเป็นบริดจ์ — แรงดันหายไป 2 เท่าของ Vf และความถี่ริปเปิลกลายเป็น 100 Hz</li>
+        <li><strong>เคสต้องใช้ Si:</strong> ชอตต์กี + ครึ่งคลื่น + 24 V rms + C = 1000 µF — PIV พุ่งเป็น ≈ 2V<sub>p</sub> ≈ 67 V เกินพิกัด 40 V ของ 1N5819 (ป้ายแดง!) สลับเป็น Si 1N4007 ที่ทน 1000 V หายทันที — นี่คือเหตุผลที่วงจรเรียงกระแสไฟบ้านใช้ซิลิคอน</li>
+        <li><strong>เคสต้องใช้ชอตต์กี:</strong> บริดจ์ + ลดเหลือ 3 V rms + R<sub>L</sub> ≈ 100 Ω — ดูช่อง η: Si เหลือแค่ ~62% (Vf 0.7 V × 2 ตัวกินไฟเกิน 1 ใน 3!) แต่ชอตต์กีได้ ~86% — งานแรงดันต่ำกระแสสูงอย่างที่ชาร์จมือถือจึงใช้ชอตต์กี</li>
         <li><strong>LED เป็นไดโอดได้ไหม:</strong> เลือก LED แล้วลดแรงดันเหลือ 3 V rms — เห็นช่วง "เงียบ" กว้างขึ้นเพราะไม่นำกระแสจนกว่าแรงดันจะเกิน 2 V (และดู PIV — LED จริงทนย้อนกลับได้แค่ ~5 V!)</li>
         <li><strong>ทำไมไม่ใช้ Zener เรียงกระแส:</strong> เลือก Zener 5.1 V ที่ 9 V rms ครึ่งคลื่น — เห็นคลื่นรั่วด้านลบเพราะ breakdown แต่ถ้าเลือก Vz 36 V (สูงกว่า PIV) จะกลับมาทำงานเหมือนไดโอดปกติ</li>
         <li><strong>ริปเปิลกับโหลด:</strong> เปิด C = 1000 µF แล้วลด R<sub>L</sub> (หรือเพิ่มกระแส) — ริปเปิลบานขึ้นตามสูตร V<sub>pp</sub> ≈ I / (f<sub>ripple</sub> × C)</li>
@@ -937,6 +941,8 @@
       <ol class="content-list en-only" style="font-size:.92rem">
         <li><strong>Effect of Vf:</strong> Half-wave + Si at 9 V rms → output peak ≈ 12.0 V (12.7 − 0.7). Switch to Ge / Schottky — the peak rises as Vf drops. Ultra-Fast sits lower than Si because its Vf is higher (~1 V) — its real advantage is a short t<sub>rr</sub>, which matters at high frequency (switching supplies), not at 50 Hz.</li>
         <li><strong>Bridge drops 2×Vf:</strong> Switch to bridge — twice the diode drop disappears, and the ripple frequency becomes 100 Hz.</li>
+        <li><strong>When you must use Si:</strong> Schottky + half-wave + 24 V rms + C = 1000 µF — PIV jumps to ≈ 2V<sub>p</sub> ≈ 67 V, beyond the 1N5819's 40 V rating (red badge!). Switch to Si 1N4007 (rated 1000 V) and it clears — this is why mains rectifiers use silicon.</li>
+        <li><strong>When Schottky wins:</strong> Bridge + drop to 3 V rms + R<sub>L</sub> ≈ 100 Ω — watch η: Si keeps only ~62% (two 0.7 V drops eat over a third of the power!) while Schottky reaches ~86% — low-voltage high-current jobs like phone chargers use Schottky.</li>
         <li><strong>Can an LED rectify?</strong> Pick LED and lower the voltage to 3 V rms — the "silent" gaps widen because it won't conduct below 2 V (and check PIV — a real LED only survives ~5 V reverse!).</li>
         <li><strong>Why not rectify with a Zener:</strong> Pick Zener 5.1 V at 9 V rms half-wave — the negative half leaks through due to breakdown. Choose Vz 36 V (above PIV) and it behaves like a normal diode again.</li>
         <li><strong>Ripple vs load:</strong> Set C = 1000 µF then lower R<sub>L</sub> (or raise the current) — ripple grows per V<sub>pp</sub> ≈ I / (f<sub>ripple</sub> × C).</li>

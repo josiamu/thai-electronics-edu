@@ -18,16 +18,16 @@
   var F0 = 50;                        // mains frequency (Hz, Thailand)
   var N = 600, TWIN = 0.06;           // 60 ms window = 3 mains cycles
   var DT = TWIN / N;
-  var LED_VR = 5;                     // typical LED max reverse voltage
 
+  // vr = max reverse voltage rating (V_RRM per datasheet); zener uses its own breakdown model
   var DIODES = {
-    ideal:    { vf: 0 },
-    si:       { vf: 0.7 },
-    ge:       { vf: 0.3 },
-    schottky: { vf: 0.25 },
-    ufast:    { vf: 1.0 },
-    zener:    { vf: 0.7 },
-    led:      { vf: 2.0 }
+    ideal:    { vf: 0,    vr: Infinity },
+    si:       { vf: 0.7,  vr: 1000 },   // 1N4007
+    ge:       { vf: 0.3,  vr: 60 },     // 1N34A
+    schottky: { vf: 0.25, vr: 40 },     // 1N5819
+    ufast:    { vf: 1.0,  vr: 1000 },   // UF4007
+    zener:    { vf: 0.7,  vr: Infinity },
+    led:      { vf: 2.0,  vr: 5 }
   };
 
   var state = {
@@ -107,25 +107,33 @@
     }
 
     // stats
-    var vmax = -1e9, vmin = 1e9, vsum = 0, imax = 0, isum = 0, piv = 0;
+    var vmax = -1e9, vmin = 1e9, vsum = 0, imax = 0, isum = 0, piv = 0, psum = 0;
     for (k = 0; k < N; k++) {
       if (vout[k] > vmax) vmax = vout[k];
       if (vout[k] < vmin) vmin = vout[k];
       vsum += vout[k];
       if (cur[k] > imax) imax = cur[k];
       isum += cur[k];
+      psum += vout[k] * cur[k];
       if (circ === 'half') piv = Math.max(piv, vout[k] - vs[k]);
       else if (circ === 'ct') piv = Math.max(piv, vout[k] + Math.abs(vs[k]) / 2);
     }
     if (circ === 'bridge') piv = Math.max(0, Vpk - Vf);
 
+    // all load charge passes through nD conducting diodes → avg conduction loss = nD·Vf·Iavg
+    var iavg = isum / N, pload = psum / N;
+    var pdiode = nD * Vf * iavg;
+    var vrrm = DIODES[state.diode].vr;
+
     return {
       vs: vs, vrect: vrect, vout: vout, cur: cur,
       Vpk: Vpk, vmax: vmax, vmin: vmin, vavg: vsum / N, vpp: vmax - vmin,
-      ipk: imax, iavg: isum / N, piv: piv,
+      ipk: imax, iavg: iavg, piv: piv, vrrm: vrrm,
+      pload: pload, pdiode: pdiode,
+      eff: pload > 1e-9 ? pload / (pload + pdiode) * 100 : 0,
       hasCap: C > 0,
       warnZ: broke,
-      warnLED: state.diode === 'led' && piv > LED_VR
+      warnPIV: piv > vrrm
     };
   }
 
@@ -250,6 +258,11 @@
     var m = a * 1000;
     return (m >= 100 ? m.toFixed(0) : m >= 10 ? m.toFixed(1) : m.toFixed(2)) + ' mA';
   }
+  function fP(w) {
+    if (w >= 1) return w.toFixed(2) + ' W';
+    var m = w * 1000;
+    return (m >= 10 ? m.toFixed(0) : m.toFixed(1)) + ' mW';
+  }
 
   function refresh() {
     sim = simulate();
@@ -262,18 +275,24 @@
     $('rl-vrip').textContent = sim.vpp.toFixed(2) + ' Vpp';
     $('rl-ipk').textContent = fI(sim.ipk);
     $('rl-iavg').textContent = fI(sim.iavg);
-    $('rl-piv').textContent = fV(sim.piv);
-    $('rl-piv').style.color = (sim.warnZ || sim.warnLED) ? '#ef4444' : '';
+    $('rl-piv').textContent = isFinite(sim.vrrm)
+      ? sim.piv.toFixed(1) + ' / ' + sim.vrrm + ' V'
+      : fV(sim.piv);
+    $('rl-piv').style.color = (sim.warnZ || sim.warnPIV) ? '#ef4444' : '';
     $('rl-frip').textContent = state.circ === 'half' ? '50 Hz' : '100 Hz';
+    $('rl-pd').textContent = fP(sim.pdiode);
+    $('rl-eff').textContent = sim.eff.toFixed(0) + ' %';
     $('rl-leg-rect').style.display = sim.hasCap ? '' : 'none';
 
     var badge = $('rl-badge'), txt, col;
     if (sim.warnZ) {
       txt = en ? '⚠ Zener breakdown — conducts in reverse!' : '⚠ ซีเนอร์ breakdown — นำกระแสย้อนกลับ!';
       col = '#dc2626';
-    } else if (sim.warnLED) {
-      txt = en ? '⚠ PIV > ~5 V — a real LED would fail' : '⚠ PIV เกินพิกัด LED (~5 V) — ของจริงจะพัง';
-      col = '#f97316';
+    } else if (sim.warnPIV) {
+      txt = en
+        ? '⚠ PIV exceeds Vᵣ rating (' + sim.vrrm + ' V) — a real diode would fail'
+        : '⚠ PIV เกินพิกัดไดโอด (ทนได้ ' + sim.vrrm + ' V) — ของจริงจะพัง';
+      col = '#ef4444';
     } else if (sim.vmax < 0.4) {
       txt = en ? 'Almost no output — Vf too high vs input' : 'แทบไม่มีเอาต์พุต — Vf สูงเทียบแรงดันเข้า';
       col = '#64748b';
