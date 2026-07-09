@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="ออปโตอิเล็กทรอนิกส์ (Optoelectronics) | สื่อการเรียนการสอน" data-title-en="Optoelectronics | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ออปโตอิเล็กทรอนิกส์ (Optoelectronics) | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.sim-wrap { display:grid; grid-template-columns:1fr 285px; gap:1.25rem; align-items:start; }
+@media (max-width:860px){ .sim-wrap{ grid-template-columns:1fr; } }
+.sim-screen { width:100%; height:auto; display:block; border-radius:12px; background:#0b1220; border:1px solid var(--border); }
+.sim-panel { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:.9rem 1rem; }
+.sim-ctrl { margin-bottom:.9rem; }
+.sim-ctrl-row { display:flex; justify-content:space-between; align-items:center; font-size:.84rem; font-weight:600; margin-bottom:.25rem; }
+.sim-ctrl-row span { color:var(--primary); font-size:.9rem; }
+.sim-ctrl input[type=range] { width:100%; cursor:pointer; accent-color:var(--primary); }
+.sim-fixed { font-size:.8rem; color:var(--text-light); background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:.4rem .6rem; margin-bottom:.9rem; }
+.sim-readout { display:grid; grid-template-columns:1fr 1fr; gap:.45rem; margin-top:.4rem; }
+.sim-rb { background:var(--bg); border:1px solid var(--border); border-radius:9px; padding:.45rem .6rem; text-align:center; }
+.sim-rl { font-size:.72rem; color:var(--text-light); margin-bottom:.12rem; }
+.sim-rv { font-size:1.02rem; font-weight:700; color:var(--text); }
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🔦</div>
+    <div>
+      <h1 class="th-only">ออปโตอิเล็กทรอนิกส์ (Optoelectronics)</h1>
+      <h1 class="en-only">Optoelectronics</h1>
+      <p class="th-only">อุปกรณ์กำเนิดแสง • อุปกรณ์รับแสง • 7-Segment • ออปโตคัปเปลอร์ PC817 + ซิมโต้ตอบ</p>
+      <p class="en-only">Light emitters • Light detectors • 7-Segment • PC817 optocoupler + live sim</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">วัตถุประสงค์การเรียนรู้</span><span class="en-only">Learning Objectives</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li>บอกได้ว่าออปโตอิเล็กทรอนิกส์คืออะไร และแยกอุปกรณ์เป็นฝั่ง <strong>กำเนิดแสง</strong> กับ <strong>รับแสง</strong> ได้</li>
+        <li>อธิบายการทำงานของ LED, IR LED, เลเซอร์ไดโอด และ <strong>7-Segment display</strong> ได้</li>
+        <li>เปรียบเทียบ <strong>LDR, โฟโตไดโอด, โฟโตทรานซิสเตอร์, โซลาร์เซลล์</strong> (ความไว/ความเร็ว) ได้</li>
+        <li>อธิบายโครงสร้างและประโยชน์ของ <strong>ออปโตคัปเปลอร์ (PC817)</strong> และคำนวณจากค่า <strong>CTR</strong> ได้</li>
+        <li>เช็คอุปกรณ์ออปโตด้วยมัลติมิเตอร์ได้</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>State what optoelectronics is and sort devices into <strong>emitters</strong> vs <strong>detectors</strong></li>
+        <li>Explain LEDs, IR LEDs, laser diodes and the <strong>7-segment display</strong></li>
+        <li>Compare the <strong>LDR, photodiode, phototransistor and solar cell</strong> (sensitivity/speed)</li>
+        <li>Explain the structure and benefits of an <strong>optocoupler (PC817)</strong> and calculate with its <strong>CTR</strong></li>
+        <li>Test opto devices with a multimeter</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 1. คืออะไร -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ออปโตอิเล็กทรอนิกส์คืออะไร?</span><span class="en-only">What is Optoelectronics?</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li>สาขาที่ว่าด้วยอุปกรณ์ที่ <strong>แปลงระหว่างไฟฟ้ากับแสง</strong></li>
+            <li>แบ่งเป็น 2 ฝั่งใหญ่:
+              <br>💡 <strong>ตัวกำเนิดแสง (Emitter):</strong> ไฟฟ้า → แสง เช่น LED, เลเซอร์ไดโอด
+              <br>👁️ <strong>ตัวรับแสง (Detector):</strong> แสง → ไฟฟ้า เช่น LDR, โฟโตไดโอด</li>
+            <li>คำว่า "แสง" รวมถึงแสงที่ตามองไม่เห็นด้วย เช่น <strong>อินฟราเรด (IR)</strong> และอัลตราไวโอเลต (UV)</li>
+            <li>จับคู่ emitter + detector = ส่งสัญญาณด้วยแสง เช่น รีโมท, ไฟเบอร์ออปติก, ออปโตคัปเปลอร์</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li>The field of devices that <strong>convert between electricity and light</strong></li>
+            <li>Two big families:
+              <br>💡 <strong>Emitters:</strong> electricity → light, e.g. LEDs, laser diodes
+              <br>👁️ <strong>Detectors:</strong> light → electricity, e.g. LDRs, photodiodes</li>
+            <li>"Light" includes invisible bands too — <strong>infrared (IR)</strong> and ultraviolet (UV)</li>
+            <li>Pair an emitter with a detector = signalling with light: remotes, fiber optics, optocouplers</li>
+          </ul>
+        </div>
+        <div style="text-align:center;">
+          <svg viewBox="0 0 260 150" style="max-width:100%;height:auto;font-family:inherit;font-size:11px;" role="img" aria-label="Emitter and detector chain">
+            <!-- electric in -->
+            <text x="30" y="52" text-anchor="middle" fill="var(--text)">⚡</text>
+            <line x1="42" y1="48" x2="62" y2="48" stroke="var(--text-light)" stroke-width="1.5" marker-end="url(#arr)"/>
+            <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--text-light)"/></marker></defs>
+            <!-- emitter box -->
+            <rect x="64" y="26" width="60" height="44" rx="8" fill="none" stroke="var(--primary)" stroke-width="2"/>
+            <text x="94" y="44" text-anchor="middle" fill="var(--primary)" font-weight="600">Emitter</text>
+            <text x="94" y="60" text-anchor="middle" fill="var(--text-light)" font-size="9">LED / Laser</text>
+            <!-- light waves -->
+            <path d="M130 40 q6 -5 12 0 t12 0" fill="none" stroke="#f59e0b" stroke-width="1.6"/>
+            <path d="M130 50 q6 -5 12 0 t12 0" fill="none" stroke="#f59e0b" stroke-width="1.6"/>
+            <path d="M130 60 q6 -5 12 0 t12 0" fill="none" stroke="#f59e0b" stroke-width="1.6"/>
+            <text x="142" y="30" text-anchor="middle" fill="#f59e0b" font-size="9">แสง / light</text>
+            <!-- detector box -->
+            <rect x="160" y="26" width="66" height="44" rx="8" fill="none" stroke="var(--secondary)" stroke-width="2"/>
+            <text x="193" y="44" text-anchor="middle" fill="var(--secondary)" font-weight="600">Detector</text>
+            <text x="193" y="60" text-anchor="middle" fill="var(--text-light)" font-size="9">Photodiode / LDR</text>
+            <!-- electric out -->
+            <line x1="193" y1="72" x2="193" y2="94" stroke="var(--text-light)" stroke-width="1.5" marker-end="url(#arr)"/>
+            <text x="193" y="112" text-anchor="middle" fill="var(--text)">⚡</text>
+            <text x="94" y="94" text-anchor="middle" fill="var(--text-light)" font-size="9.5">ไฟฟ้า → แสง</text>
+            <text x="94" y="106" text-anchor="middle" fill="var(--text-light)" font-size="9.5">electricity → light</text>
+            <text x="230" y="94" text-anchor="end" fill="var(--text-light)" font-size="9.5">แสง → ไฟฟ้า</text>
+            <text x="230" y="106" text-anchor="end" fill="var(--text-light)" font-size="9.5">light → electricity</text>
+          </svg>
+        </div>
+      </div>
+      <div class="info-box" style="margin-top:0.9rem;">
+        <span class="th-only">🔗 อุปกรณ์ออปโตส่วนใหญ่สร้างจาก <strong>รอยต่อ PN</strong> เหมือนไดโอด — ทบทวนหลักการได้ในบท <strong>ไดโอด</strong> (มีตาราง V<sub>f</sub> ของ LED แต่ละสีด้วย)</span>
+        <span class="en-only">🔗 Most opto devices are built on a <strong>PN junction</strong> just like a diode — review the <strong>Diode</strong> lesson (it has the LED V<sub>f</sub>-by-color table too).</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. ฝั่งกำเนิดแสง -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">💡 ฝั่งกำเนิดแสง (Emitters)</span><span class="en-only">💡 Light Emitters</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>LED:</strong> ไดโอดเปล่งแสงเมื่อไบแอสตรง — สีขึ้นกับสารกึ่งตัวนำ (V<sub>f</sub> แดง ≈ 1.8 V … น้ำเงิน/ขาว ≈ 3.2 V) <em>ต้องมี R จำกัดกระแสเสมอ</em> (ดูบทไดโอด)</li>
+            <li><strong>IR LED (อินฟราเรด):</strong> เปล่งแสงที่ตามองไม่เห็น (~940 nm), V<sub>f</sub> ต่ำ ≈ 1.2 V — หัวใจของรีโมทและเซนเซอร์วัตถุ</li>
+            <li><strong>เลเซอร์ไดโอด:</strong> แสงเข้ม เฟสเดียว เป็นลำแคบ — ใช้ในพอยน์เตอร์, เครื่องอ่านบาร์โค้ด, ไฟเบอร์ออปติก ⚠️ <strong>ห้ามส่องตา</strong></li>
+          </ul>
+          <ul class="content-list en-only">
+            <li><strong>LED:</strong> emits light under forward bias — color set by the semiconductor (V<sub>f</sub> red ≈ 1.8 V … blue/white ≈ 3.2 V). <em>Always needs a current-limit resistor</em> (see the Diode lesson)</li>
+            <li><strong>IR LED:</strong> emits invisible light (~940 nm), low V<sub>f</sub> ≈ 1.2 V — the heart of remotes and object sensors</li>
+            <li><strong>Laser diode:</strong> intense, coherent, narrow beam — pointers, barcode scanners, fiber optics ⚠️ <strong>never aim at eyes</strong></li>
+          </ul>
+          <div class="info-box" style="margin-top:.5rem;">
+            <span class="th-only">📱 <strong>ทิปช่าง:</strong> ตาเรามองแสง IR ไม่เห็น แต่<strong>กล้องหน้ามือถือเห็น</strong> — จ่ายไฟให้ IR LED (หรือกดรีโมท) แล้วส่องผ่านกล้อง จะเห็นเป็นแสงม่วงจางๆ ใช้เช็คว่ารีโมทเสียหรือไม่</span>
+            <span class="en-only">📱 <strong>Technician tip:</strong> your eyes can't see IR, but a <strong>phone's front camera can</strong> — power the IR LED (or press a remote) and view it through the camera: it glows faint purple. Great for checking dead remotes.</span>
+          </div>
+        </div>
+        <div style="text-align:center;">
+          <!-- 7-segment SVG -->
+          <svg viewBox="0 0 230 170" style="max-width:100%;height:auto;font-family:inherit;font-size:10px;" role="img" aria-label="7-segment display">
+            <rect x="30" y="10" width="90" height="150" rx="8" fill="#1e293b"/>
+            <!-- segments of digit 8 (all on) : a top, b tr, c br, d bottom, e bl, f tl, g mid -->
+            <g fill="#ef4444">
+              <polygon points="52,24 94,24 100,30 94,36 52,36 46,30"/>            <!-- a -->
+              <polygon points="98,34 104,40 104,72 98,78 92,72 92,40"/>           <!-- b -->
+              <polygon points="98,88 104,94 104,126 98,132 92,126 92,94"/>        <!-- c -->
+              <polygon points="52,130 94,130 100,136 94,142 52,142 46,136"/>      <!-- d -->
+              <polygon points="48,88 54,94 54,126 48,132 42,126 42,94"/>          <!-- e -->
+              <polygon points="48,34 54,40 54,72 48,78 42,72 42,40"/>             <!-- f -->
+              <polygon points="52,77 94,77 100,83 94,89 52,89 46,83"/>            <!-- g -->
+              <circle cx="112" cy="140" r="5"/>                                    <!-- dp -->
+            </g>
+            <!-- labels -->
+            <text x="73" y="20" text-anchor="middle" fill="var(--text-light)">a</text>
+            <text x="112" y="58" fill="var(--text-light)">b</text>
+            <text x="112" y="112" fill="var(--text-light)">c</text>
+            <text x="73" y="156" text-anchor="middle" fill="var(--text-light)">d</text>
+            <text x="32" y="112" text-anchor="end" fill="var(--text-light)">e</text>
+            <text x="32" y="58" text-anchor="end" fill="var(--text-light)">f</text>
+            <text x="73" y="73" text-anchor="middle" fill="var(--text-light)">g</text>
+            <text x="122" y="144" fill="var(--text-light)">dp</text>
+            <text x="170" y="55" text-anchor="middle" fill="var(--text)" font-size="11" font-weight="600">= LED 8 ดวง</text>
+            <text x="170" y="70" text-anchor="middle" fill="var(--text-light)" font-size="9">(a–g + dp)</text>
+            <text x="170" y="95" text-anchor="middle" fill="var(--text-light)" font-size="9">Common Anode /</text>
+            <text x="170" y="107" text-anchor="middle" fill="var(--text-light)" font-size="9">Common Cathode</text>
+          </svg>
+          <div style="font-size:.82rem;font-weight:600;"><span class="th-only">7-Segment Display — LED 7 แท่ง + จุด</span><span class="en-only">7-Segment Display — 7 bars + dot</span></div>
+        </div>
+      </div>
+      <hr style="border:none;border-top:1px solid var(--border);margin:1.1rem 0;">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>7-Segment</strong> คือ LED 8 ดวง (แท่ง a–g + จุด dp) เรียงเป็นเลข "8" — เลือกติดทีละแท่งเพื่อแสดงเลข 0–9</li>
+            <li><strong>Common Cathode (CC):</strong> ขา K ทุกดวงรวมกันต่อ GND → จ่าย <strong>ลอจิก HIGH</strong> เข้าขาแท่งเพื่อให้ติด</li>
+            <li><strong>Common Anode (CA):</strong> ขา A ทุกดวงรวมกันต่อ V<sub>cc</sub> → ดึงขาแท่งลง <strong>LOW</strong> เพื่อให้ติด</li>
+            <li>ทุกแท่งต้องมี <strong>R จำกัดกระแส</strong> ของตัวเอง (ห้ามใช้ R ตัวเดียวที่ขา common — ความสว่างจะเปลี่ยนตามจำนวนแท่งที่ติด)</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li>A <strong>7-segment</strong> is 8 LEDs (bars a–g + dot dp) arranged as an "8" — light chosen bars to show 0–9</li>
+            <li><strong>Common Cathode (CC):</strong> all cathodes tied to GND → drive a segment <strong>HIGH</strong> to light it</li>
+            <li><strong>Common Anode (CA):</strong> all anodes tied to V<sub>cc</sub> → pull a segment <strong>LOW</strong> to light it</li>
+            <li>Every segment needs its <strong>own current-limit resistor</strong> (one shared R at the common pin makes brightness vary with digit)</li>
+          </ul>
+        </div>
+        <div>
+          <table>
+            <tr><th><span class="th-only">เลข</span><span class="en-only">Digit</span></th><th><span class="th-only">แท่งที่ติด</span><span class="en-only">Segments on</span></th></tr>
+            <tr><td><strong>0</strong></td><td>a b c d e f</td></tr>
+            <tr><td><strong>1</strong></td><td>b c</td></tr>
+            <tr><td><strong>7</strong></td><td>a b c</td></tr>
+            <tr><td><strong>8</strong></td><td>a b c d e f g</td></tr>
+            <tr><td><strong>9</strong></td><td>a b c d f g</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. ฝั่งรับแสง -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">👁️ ฝั่งรับแสง (Detectors)</span><span class="en-only">👁️ Light Detectors</span></div>
+    <div class="card">
+      <div style="overflow-x:auto;">
+        <table>
+          <tr>
+            <th><span class="th-only">อุปกรณ์</span><span class="en-only">Device</span></th>
+            <th><span class="th-only">หลักการ</span><span class="en-only">Principle</span></th>
+            <th><span class="th-only">ความเร็ว</span><span class="en-only">Speed</span></th>
+            <th><span class="th-only">เหมาะกับ</span><span class="en-only">Best for</span></th>
+          </tr>
+          <tr>
+            <td><strong>LDR</strong><br><span style="font-size:.8rem;color:var(--text-light);">(Light Dependent Resistor)</span></td>
+            <td><span class="th-only">ตัวต้านทานที่ค่า R <strong>ลดลงเมื่อแสงมาก</strong> (มืด ≈ MΩ → สว่าง ≈ kΩ)</span><span class="en-only">Resistor whose R <strong>drops with light</strong> (dark ≈ MΩ → bright ≈ kΩ)</span></td>
+            <td><span class="th-only">ช้ามาก (ms–s)</span><span class="en-only">Very slow (ms–s)</span></td>
+            <td><span class="th-only">ไฟถนนอัตโนมัติ, วัดความสว่างแบบง่าย</span><span class="en-only">Auto street lights, simple light sensing</span></td>
+          </tr>
+          <tr>
+            <td><strong><span class="th-only">โฟโตไดโอด</span><span class="en-only">Photodiode</span></strong></td>
+            <td><span class="th-only">ไดโอดที่ <strong>ไบแอสกลับ</strong> — แสงยิ่งมาก กระแสรั่วย้อนกลับยิ่งมาก (เชิงเส้นดี)</span><span class="en-only"><strong>Reverse-biased</strong> diode — more light, more reverse current (very linear)</span></td>
+            <td><span class="th-only">เร็วมาก (ns)</span><span class="en-only">Very fast (ns)</span></td>
+            <td><span class="th-only">ไฟเบอร์ออปติก, เครื่องวัดแสง, การสื่อสาร</span><span class="en-only">Fiber optics, light meters, comms</span></td>
+          </tr>
+          <tr>
+            <td><strong><span class="th-only">โฟโตทรานซิสเตอร์</span><span class="en-only">Phototransistor</span></strong></td>
+            <td><span class="th-only">ทรานซิสเตอร์ที่ใช้ <strong>แสงแทนกระแสเบส</strong> — ขยายในตัว ไวกว่าโฟโตไดโอด 100–1000 เท่า</span><span class="en-only">Transistor whose <strong>base current is light</strong> — built-in gain, 100–1000× more sensitive than a photodiode</span></td>
+            <td><span class="th-only">ปานกลาง (µs)</span><span class="en-only">Medium (µs)</span></td>
+            <td><span class="th-only">รีโมท IR, ออปโตคัปเปลอร์, เซนเซอร์นับชิ้นงาน</span><span class="en-only">IR remotes, optocouplers, object counters</span></td>
+          </tr>
+          <tr>
+            <td><strong><span class="th-only">โซลาร์เซลล์</span><span class="en-only">Solar cell</span></strong></td>
+            <td><span class="th-only">รอยต่อ PN พื้นที่ใหญ่ ทำงานโหมด <strong>photovoltaic</strong> — สร้างแรงดันเอง (~0.5–0.6 V/เซลล์)</span><span class="en-only">Large-area PN junction in <strong>photovoltaic</strong> mode — generates its own voltage (~0.5–0.6 V/cell)</span></td>
+            <td>—</td>
+            <td><span class="th-only">ผลิตพลังงาน (ต่ออนุกรมเพิ่มแรงดัน)</span><span class="en-only">Energy harvesting (series cells for voltage)</span></td>
+          </tr>
+        </table>
+      </div>
+      <div class="info-box" style="margin-top:0.9rem;">
+        <span class="th-only">🔬 ลองเล่นจริงได้เลย: <strong>เบรดบอร์ดเสมือน</strong> มี LDR ให้วาง + แผงปรับความเข้มแสง — ต่อวงจรแบ่งแรงดันด้วย LDR แล้วเลื่อนสไลเดอร์แสงดูแรงดันเปลี่ยน</span>
+        <span class="en-only">🔬 Try it live: the <strong>Breadboard Lab</strong> has an LDR component + a light-level slider — build an LDR voltage divider and watch the voltage move</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Optocoupler -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">⭐ ออปโตคัปเปลอร์ (Optocoupler / Opto-isolator)</span><span class="en-only">⭐ Optocoupler / Opto-isolator</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li>จับ <strong>LED (IR) + โฟโตทรานซิสเตอร์</strong> ใส่ไว้ใน IC ตัวเดียว — สัญญาณข้ามจากฝั่งเข้าไปฝั่งออก <strong>ด้วยแสงล้วนๆ ไม่มีสายไฟเชื่อมถึงกัน</strong></li>
+            <li>สองฝั่ง <strong>แยกกันทางไฟฟ้า (isolation)</strong> ทนแรงดันต่างกันได้หลาย kV (PC817 ≈ 5 kV)</li>
+            <li>ประโยชน์: <strong>แยกกราวด์</strong> สองระบบ, ป้องกันวงจรควบคุม (MCU) จากฝั่งแรงดันสูง, กันสัญญาณรบกวน</li>
+            <li>เบอร์ยอดนิยม: <strong>PC817</strong> (DIP-4, ทรานซิสเตอร์ออก), 4N35, 6N137 (ความเร็วสูง), MOC3021 (ขับ TRIAC ฝั่งไฟบ้าน)</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li>An <strong>IR LED + phototransistor</strong> sealed in one IC — the signal crosses from input to output <strong>as pure light, with no wire between the sides</strong></li>
+            <li>The two sides are <strong>electrically isolated</strong>, withstanding several kV between them (PC817 ≈ 5 kV)</li>
+            <li>Why: <strong>separate the grounds</strong> of two systems, protect a controller (MCU) from a high-voltage side, block noise</li>
+            <li>Popular parts: <strong>PC817</strong> (DIP-4, transistor output), 4N35, 6N137 (high speed), MOC3021 (mains TRIAC driver)</li>
+          </ul>
+        </div>
+        <div style="text-align:center;">
+          <!-- PC817 DIP-4 internal SVG -->
+          <svg viewBox="0 0 260 170" style="max-width:100%;height:auto;font-family:inherit;font-size:10px;" role="img" aria-label="PC817 optocoupler internal structure">
+            <rect x="55" y="25" width="150" height="110" rx="10" fill="none" stroke="var(--text)" stroke-width="2"/>
+            <text x="130" y="18" text-anchor="middle" fill="var(--text)" font-weight="600" font-size="11">PC817 (DIP-4)</text>
+            <!-- pins -->
+            <line x1="20" y1="55" x2="55" y2="55" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="20" y1="105" x2="55" y2="105" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="205" y1="55" x2="240" y2="55" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="205" y1="105" x2="240" y2="105" stroke="var(--text)" stroke-width="1.5"/>
+            <text x="16" y="50" text-anchor="end" fill="var(--text-light)">1 · A</text>
+            <text x="16" y="118" text-anchor="end" fill="var(--text-light)">2 · K</text>
+            <text x="244" y="50" fill="var(--text-light)">4 · C</text>
+            <text x="244" y="118" fill="var(--text-light)">3 · E</text>
+            <!-- LED symbol (left side) -->
+            <line x1="55" y1="55" x2="88" y2="55" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="55" y1="105" x2="88" y2="105" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="88" y1="55" x2="88" y2="70" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="88" y1="105" x2="88" y2="90" stroke="var(--text)" stroke-width="1.5"/>
+            <polygon points="78,70 98,70 88,90" fill="none" stroke="#ef4444" stroke-width="1.8"/>
+            <line x1="78" y1="90" x2="98" y2="90" stroke="#ef4444" stroke-width="1.8"/>
+            <!-- light arrows -->
+            <line x1="104" y1="72" x2="128" y2="72" stroke="#f59e0b" stroke-width="1.6" marker-end="url(#arr2)"/>
+            <line x1="104" y1="86" x2="128" y2="86" stroke="#f59e0b" stroke-width="1.6" marker-end="url(#arr2)"/>
+            <defs><marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#f59e0b"/></marker></defs>
+            <!-- phototransistor (right side) -->
+            <line x1="152" y1="62" x2="152" y2="98" stroke="var(--secondary)" stroke-width="2.4"/>
+            <line x1="152" y1="70" x2="172" y2="52" stroke="var(--text)" stroke-width="1.8"/>
+            <line x1="152" y1="90" x2="172" y2="108" stroke="var(--text)" stroke-width="1.8"/>
+            <polygon points="172,108 163,104 168,98" fill="var(--text)"/>
+            <line x1="172" y1="52" x2="172" y2="55" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="172" y1="108" x2="172" y2="105" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="172" y1="55" x2="205" y2="55" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="172" y1="105" x2="205" y2="105" stroke="var(--text)" stroke-width="1.5"/>
+            <!-- isolation barrier -->
+            <line x1="120" y1="30" x2="120" y2="130" stroke="var(--text-light)" stroke-width="1" stroke-dasharray="4,4"/>
+            <text x="130" y="150" text-anchor="middle" fill="var(--text-light)" font-size="9">↔ isolation ~5 kV</text>
+          </svg>
+          <div style="font-size:.82rem;font-weight:600;"><span class="th-only">โครงสร้างภายใน: LED (ขา 1-2) → แสง → โฟโตทรานซิสเตอร์ (ขา 4-3)</span><span class="en-only">Inside: LED (pins 1-2) → light → phototransistor (pins 4-3)</span></div>
+        </div>
+      </div>
+
+      <hr style="border:none;border-top:1px solid var(--border);margin:1.1rem 0;">
+
+      <div class="grid-2">
+        <div>
+          <div class="formula-box"><div class="formula">CTR = ( I<sub>C</sub> / I<sub>F</sub> ) × 100%</div></div>
+          <ul class="content-list th-only" style="margin-top:.5rem;">
+            <li><strong>CTR (Current Transfer Ratio)</strong> = อัตราส่วนกระแสออกต่อกระแสเข้า เทียบได้กับ β ของทรานซิสเตอร์</li>
+            <li>PC817 มี CTR ≈ 50–300% (แล้วแต่เกรด) เช่น CTR 100%: จ่าย I<sub>F</sub> = 10 mA → ได้ I<sub>C</sub> สูงสุด ≈ 10 mA</li>
+            <li>งานสวิตช์ควรจ่าย I<sub>F</sub> เผื่อให้ทรานซิสเตอร์ <strong>อิ่มตัว (saturate)</strong> ไปเลย → เอาต์พุตชัดเจน HIGH/LOW</li>
+          </ul>
+          <ul class="content-list en-only" style="margin-top:.5rem;">
+            <li><strong>CTR (Current Transfer Ratio)</strong> = output current over input current — the opto's version of a transistor's β</li>
+            <li>PC817 has CTR ≈ 50–300% (grade-dependent); e.g. CTR 100%: drive I<sub>F</sub> = 10 mA → up to I<sub>C</sub> ≈ 10 mA</li>
+            <li>For switching, overdrive I<sub>F</sub> so the transistor <strong>saturates</strong> → clean HIGH/LOW output</li>
+          </ul>
+        </div>
+        <div style="text-align:center;">
+          <!-- example application circuit -->
+          <svg viewBox="0 0 280 170" style="max-width:100%;height:auto;font-family:inherit;font-size:9.5px;" role="img" aria-label="Optocoupler application circuit">
+            <text x="60" y="16" text-anchor="middle" fill="var(--primary)" font-weight="600" font-size="10">ฝั่งควบคุม 5V</text>
+            <text x="225" y="16" text-anchor="middle" fill="#ef4444" font-weight="600" font-size="10">ฝั่งโหลด 12/24V</text>
+            <!-- input: MCU -> R -> LED -->
+            <rect x="10" y="55" width="38" height="26" rx="5" fill="none" stroke="var(--primary)" stroke-width="1.6"/>
+            <text x="29" y="71" text-anchor="middle" fill="var(--primary)">MCU</text>
+            <line x1="48" y1="68" x2="66" y2="68" stroke="var(--text)" stroke-width="1.5"/>
+            <rect x="66" y="62" width="26" height="12" fill="none" stroke="var(--text)" stroke-width="1.5"/>
+            <text x="79" y="58" text-anchor="middle" fill="var(--text)">330Ω</text>
+            <line x1="92" y1="68" x2="108" y2="68" stroke="var(--text)" stroke-width="1.5"/>
+            <!-- opto box -->
+            <rect x="108" y="40" width="60" height="70" rx="7" fill="none" stroke="var(--text)" stroke-width="1.8"/>
+            <text x="138" y="34" text-anchor="middle" fill="var(--text)" font-weight="600">PC817</text>
+            <polygon points="116,60 130,60 123,74" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+            <line x1="116" y1="74" x2="130" y2="74" stroke="#ef4444" stroke-width="1.5"/>
+            <line x1="123" y1="74" x2="123" y2="92" stroke="var(--text)" stroke-width="1.2"/>
+            <line x1="123" y1="92" x2="108" y2="92" stroke="var(--text)" stroke-width="1.2"/>
+            <line x1="100" y1="92" x2="108" y2="92" stroke="var(--text)" stroke-width="1.2"/>
+            <line x1="95" y1="98" x2="105" y2="98" stroke="var(--text)" stroke-width="1.4"/>
+            <line x1="97" y1="101" x2="103" y2="101" stroke="var(--text)" stroke-width="1.2"/>
+            <line x1="100" y1="92" x2="100" y2="98" stroke="var(--text)" stroke-width="1.2"/>
+            <line x1="134" y1="64" x2="146" y2="64" stroke="#f59e0b" stroke-width="1.4" marker-end="url(#arr3)"/>
+            <line x1="134" y1="74" x2="146" y2="74" stroke="#f59e0b" stroke-width="1.4" marker-end="url(#arr3)"/>
+            <defs><marker id="arr3" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="#f59e0b"/></marker></defs>
+            <line x1="152" y1="58" x2="152" y2="82" stroke="var(--secondary)" stroke-width="2"/>
+            <line x1="152" y1="64" x2="162" y2="52" stroke="var(--text)" stroke-width="1.4"/>
+            <line x1="152" y1="76" x2="162" y2="88" stroke="var(--text)" stroke-width="1.4"/>
+            <!-- output side: to transistor/relay -->
+            <line x1="162" y1="52" x2="162" y2="46" stroke="var(--text)" stroke-width="1.4"/>
+            <line x1="162" y1="46" x2="196" y2="46" stroke="var(--text)" stroke-width="1.4"/>
+            <rect x="196" y="40" width="24" height="12" fill="none" stroke="var(--text)" stroke-width="1.4"/>
+            <text x="208" y="36" text-anchor="middle" fill="var(--text)">R</text>
+            <line x1="220" y1="46" x2="248" y2="46" stroke="var(--text)" stroke-width="1.4"/>
+            <text x="256" y="50" fill="#ef4444">+V</text>
+            <line x1="162" y1="88" x2="162" y2="120" stroke="var(--text)" stroke-width="1.4"/>
+            <line x1="162" y1="120" x2="200" y2="120" stroke="var(--text)" stroke-width="1.4"/>
+            <rect x="200" y="106" width="52" height="28" rx="5" fill="none" stroke="var(--accent)" stroke-width="1.6"/>
+            <text x="226" y="123" text-anchor="middle" fill="var(--accent)"><tspan class="th-only">รีเลย์/โหลด</tspan><tspan class="en-only">Relay/Load</tspan></text>
+            <!-- isolation -->
+            <line x1="138" y1="118" x2="138" y2="146" stroke="var(--text-light)" stroke-width="1" stroke-dasharray="4,4"/>
+            <text x="138" y="160" text-anchor="middle" fill="var(--text-light)">กราวด์แยกกันคนละฝั่ง / separate grounds</text>
+          </svg>
+          <div style="font-size:.82rem;font-weight:600;"><span class="th-only">ตัวอย่าง: MCU ฝั่ง 5V สั่งงานโหลดฝั่ง 12/24V โดยไม่แตะกันทางไฟฟ้า</span><span class="en-only">Example: a 5V MCU drives a 12/24V load with no electrical contact</span></div>
+        </div>
+      </div>
+      <div class="info-box" style="margin-top:0.9rem;">
+        <span class="th-only">🔗 ถ้าโหลดเป็นขดลวดรีเลย์ อย่าลืม <strong>ไดโอด flyback</strong> — ดูวงจรขับรีเลย์เต็มๆ ในบท <strong>รีเลย์</strong>; SSR (Solid State Relay) ก็คือออปโตคัปเปลอร์ + สวิตช์กำลัง ในกล่องเดียว</span>
+        <span class="en-only">🔗 If the load is a relay coil, don't forget the <strong>flyback diode</strong> — see the full driver circuit in the <strong>Relay</strong> lesson; an SSR (solid-state relay) is just an optocoupler + power switch in one box.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. การใช้งานจริง -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">การใช้งานจริง</span><span class="en-only">Real-World Uses</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <ul class="content-list th-only">
+          <li><strong>รีโมทคอนโทรล:</strong> IR LED ส่งรหัสแบบกะพริบเร็วบนคลื่นพาห์ <strong>38 kHz</strong> → ตัวรับ (เช่น TSOP1738) กรองเฉพาะ 38 kHz จึงไม่กวนด้วยแสงห้อง</li>
+          <li><strong>Opto-interrupter (ตัวขวางแสง):</strong> LED กับโฟโตทรานซิสเตอร์หันหน้าชนกันเป็นร่อง — วัตถุผ่านร่อง = สัญญาณขาด ใช้นับชิ้นงาน/หาตำแหน่งในพรินเตอร์</li>
+          <li><strong>Rotary encoder แบบแสง:</strong> จานเจาะรูหมุนตัดลำแสง → นับพัลส์ = ความเร็ว/ตำแหน่งมอเตอร์</li>
+        </ul>
+        <ul class="content-list en-only">
+          <li><strong>Remote controls:</strong> an IR LED blinks a code on a <strong>38 kHz</strong> carrier → the receiver (e.g. TSOP1738) filters for 38 kHz, ignoring room light</li>
+          <li><strong>Opto-interrupter:</strong> LED and phototransistor face each other across a slot — an object in the slot breaks the beam; used for counting/positioning in printers</li>
+          <li><strong>Optical rotary encoders:</strong> a slotted disc chops the beam → count pulses = motor speed/position</li>
+        </ul>
+        <ul class="content-list th-only">
+          <li><strong>ไฟเบอร์ออปติก:</strong> เลเซอร์/LED ยิงแสงเข้าเส้นใยแก้ว สะท้อนกลับหมดภายใน (total internal reflection) วิ่งได้หลายกิโลเมตร — กระดูกสันหลังของอินเทอร์เน็ต</li>
+          <li><strong>เครื่องวัดออกซิเจนปลายนิ้ว (pulse oximeter):</strong> LED แดง + IR ยิงผ่านนิ้ว วัดการดูดกลืนแสงของเลือด</li>
+          <li><strong>แหล่งจ่ายสวิตชิง:</strong> ใช้ออปโตคัปเปลอร์ส่งสัญญาณ feedback ข้ามฝั่งไฟบ้าน↔ฝั่งไฟต่ำอย่างปลอดภัย (มีในที่ชาร์จโทรศัพท์แทบทุกตัว)</li>
+        </ul>
+        <ul class="content-list en-only">
+          <li><strong>Fiber optics:</strong> a laser/LED fires light down a glass fiber with total internal reflection for kilometers — the backbone of the internet</li>
+          <li><strong>Pulse oximeters:</strong> red + IR LEDs shine through a fingertip, measuring blood's light absorption</li>
+          <li><strong>Switching power supplies:</strong> an optocoupler carries the feedback signal safely across the mains↔low-voltage barrier (inside nearly every phone charger)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. เช็คด้วยมัลติมิเตอร์ -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">เช็คอุปกรณ์ออปโตด้วยมัลติมิเตอร์</span><span class="en-only">Testing Opto Devices with a Multimeter</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>LED / IR LED:</strong> โหมด diode-test — จิ้มถูกขั้วอ่านค่า V<sub>f</sub> (IR ≈ 1.1–1.3 V, แดง ≈ 1.8 V, ขาว/น้ำเงิน ≈ 2.6–3 V) LED อาจเรืองแสงจางๆ; กลับขั้วต้องขึ้น <strong>OL</strong></li>
+            <li><strong>LDR:</strong> โหมด Ω — เอามือบัง: ค่า R พุ่งขึ้น (แสน Ω–MΩ), ส่องไฟ: ตกเหลือหลัก kΩ</li>
+            <li><strong>โฟโตไดโอด/โฟโตทรานซิสเตอร์:</strong> วัด R ขณะบัง vs ส่องไฟ — ต้องต่างกันชัดเจน</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li><strong>LED / IR LED:</strong> diode-test mode — forward reads V<sub>f</sub> (IR ≈ 1.1–1.3 V, red ≈ 1.8 V, white/blue ≈ 2.6–3 V), the LED may glow faintly; reversed must read <strong>OL</strong></li>
+            <li><strong>LDR:</strong> Ω mode — cover it: R jumps (100s kΩ–MΩ); shine a light: drops to a few kΩ</li>
+            <li><strong>Photodiode/phototransistor:</strong> measure R covered vs lit — expect a clear difference</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>ออปโตคัปเปลอร์ (PC817):</strong>
+              <br>① diode-test ขา 1→2: ต้องอ่านเหมือน LED (~1.2 V) กลับขั้ว = OL
+              <br>② วัด Ω คร่อมขา 4-3 (C-E): ปกติ = OL
+              <br>③ จ่ายไฟให้ LED ฝั่งเข้า (5V ผ่าน R 330Ω เข้าขา 1-2) แล้ววัดขา 4-3 ใหม่ → ค่า R ต้อง <strong>ตกฮวบ</strong> = ตัวคัปเปลอร์ยังดี</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li><strong>Optocoupler (PC817):</strong>
+              <br>① diode-test pins 1→2: reads like an LED (~1.2 V), reversed = OL
+              <br>② measure Ω across pins 4-3 (C-E): normally OL
+              <br>③ power the input LED (5V through 330Ω into pins 1-2) and re-measure 4-3 → R must <strong>drop sharply</strong> = coupler is good</li>
+          </ul>
+          <div class="info-box" style="margin-top:.5rem;">
+            <span class="th-only">🔗 วิธีใช้โหมด diode-test และ Ω ทบทวนได้ในบท <strong>เครื่องมือวัด</strong> — หรือฝึกกับ <strong>มัลติมิเตอร์เสมือน</strong> ในเบรดบอร์ดแล็บ</span>
+            <span class="en-only">🔗 Review diode-test and Ω modes in the <strong>Measuring Tools</strong> lesson — or practice with the <strong>virtual multimeter</strong> in the Breadboard Lab</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
+<script>const CURRENT_PAGE='opto';</script>
+<script src="js/nav.js"></script>
+</body>
+</html>
