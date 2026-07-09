@@ -543,12 +543,12 @@ function renderEditor(){
     ctrl = '<label>' + (en ? 'Color' : 'สี') + '</label><select id="bb-ed-color">' +
       Object.keys(LED_COLORS).map(function(k){ return '<option value="' + k + '"' + (k === c.color ? ' selected' : '') + '>' + LED_COLORS[k][en ? 'en' : 'th'] + '</option>'; }).join('') + '</select>';
   } else if (c.type === 'battery'){
-    ctrl = '<label>' + (en ? 'Voltage' : 'แรงดัน') + '</label><input type="range" id="bb-ed-bv" min="1" max="12" step="1" value="' + c.value + '"><span class="ev" id="bb-ed-bv-out">' + c.value + ' V</span>';
+    ctrl = '<label>' + (en ? 'Voltage' : 'แรงดัน') + '</label><input type="range" id="bb-ed-bv" min="1" max="30" step="1" value="' + c.value + '"><span class="ev" id="bb-ed-bv-out">' + c.value + ' V</span>';
   } else if (c.type === 'ac'){
-    ctrl = '<label>' + (en ? 'Amplitude' : 'แอมพลิจูด Vp') + '</label><input type="range" id="bb-ed-acvp" min="1" max="12" step="1" value="' + c.vp + '"><span class="ev" id="bb-ed-acvp-out">' + c.vp + ' V</span>' +
+    ctrl = '<label>' + (en ? 'Amplitude' : 'แอมพลิจูด Vp') + '</label><input type="range" id="bb-ed-acvp" min="1" max="30" step="1" value="' + c.vp + '"><span class="ev" id="bb-ed-acvp-out">' + c.vp + ' V</span>' +
       '<label style="margin-left:.6rem">' + (en ? 'Freq' : 'ความถี่') + '</label><select id="bb-ed-acf">' +
       AC_FREQ_OPTIONS.map(function(f){ return '<option value="' + f + '"' + (f === c.freq ? ' selected' : '') + '>' + f + ' Hz</option>'; }).join('') + '</select>' +
-      '<label style="margin-left:.6rem">' + (en ? 'Offset' : 'ออฟเซ็ต') + '</label><input type="range" id="bb-ed-acoff" min="-6" max="6" step="1" value="' + (c.offset || 0) + '"><span class="ev" id="bb-ed-acoff-out">' + (c.offset || 0) + ' V</span>';
+      '<label style="margin-left:.6rem">' + (en ? 'Offset' : 'ออฟเซ็ต') + '</label><input type="range" id="bb-ed-acoff" min="-30" max="30" step="1" value="' + (c.offset || 0) + '"><span class="ev" id="bb-ed-acoff-out">' + (c.offset || 0) + ' V</span>';
   } else if (c.type === 'diode'){
     var dv = c.variant || 'silicon';
     ctrl = '<label>' + (en ? 'Type' : 'ชนิด') + '</label><select id="bb-ed-dtype">' +
