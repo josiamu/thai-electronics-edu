@@ -17,9 +17,9 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | 🌏 **2 ภาษา** | สลับ TH ↔ EN ได้ทันทีผ่านปุ่มใน nav bar — จำการตั้งค่าไว้ |
 | 🌙 **Dark Mode** | ธีมสว่าง/มืด — จำการตั้งค่าไว้ |
 | 📱 **Responsive** | ใช้งานได้ทั้ง Desktop, Tablet, Mobile |
-| 🔬 **เครื่องมือจำลองเชิงโต้ตอบ** | เบรดบอร์ดเสมือน, ออสซิลโลสโคป, BJT switch, เครื่องกำเนิดสัญญาณ, แหล่งจ่ายไฟ, เรียงกระแส AC→DC, จำลองวงจร |
+| 🔬 **เครื่องมือจำลองเชิงโต้ตอบ** | เบรดบอร์ดเสมือน, ออสซิลโลสโคป, BJT switch, เครื่องกำเนิดสัญญาณ, แหล่งจ่ายไฟ, เรียงกระแส AC→DC, ออปโตคัปเปลอร์, จำลองวงจร |
 | 🧮 **7 เครื่องคิดเลข** | รหัสสี, โอห์ม, กำลัง, พลังงาน, อนุกรม/ขนาน, แปลงหน่วย |
-| 📝 **แบบทดสอบ 77 ข้อ** | 12 หมวด, สุ่มข้อ, บันทึกคะแนนสูงสุด — มีทั้ง TH และ EN |
+| 📝 **แบบทดสอบ 84 ข้อ** | 13 หมวด, สุ่มข้อ, บันทึกคะแนนสูงสุด — มีทั้ง TH และ EN |
 | 📥 **PDF 32 ไฟล์** | ดาวน์โหลดใบเนื้อหา + ใบงานประกอบการเรียน |
 | 🖨️ **Print-friendly** | หน้าสูตรสรุปพิมพ์ออกกระดาษ A4 ได้เลย |
 
@@ -44,6 +44,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | ทรานซิสเตอร์ | Transistor (BJT/MOSFET) | `transistor.html` |
 | ตัวเหนี่ยวนำและหม้อแปลง | Inductor & Transformer | `inductor.html` |
 | รีเลย์ | Relay | `relay.html` |
+| ออปโตอิเล็กทรอนิกส์ | Optoelectronics | `optoelectronics.html` |
 | แหล่งจ่ายไฟ | Power Supply | `power-supply.html` |
 
 **วงจรรวมและดิจิทัล / ICs & Digital**
@@ -74,7 +75,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | `breadboard.html` | ทดลองบนเบรดบอร์ดเสมือน + มัลติมิเตอร์ (ตัวต้านทานแถบสีจริง, LED หรี่ตามกระแส, ทรานซิสเตอร์ NPN/PNP/MOSFET, โพเทนชิโอมิเตอร์ 3 ขา, แหล่งจ่าย AC, กราฟ transient) | Virtual breadboard lab + multimeter (real colour-coded resistors, current-proportional LEDs, NPN/PNP/MOSFET transistors, 3-pin potentiometer, AC source, transient graph) |
 | `formulas.html` | สูตรสรุป + พิมพ์ PDF | Formula summary + print |
 | `tools.html` | เครื่องคิดเลขเชิงโต้ตอบ 7 ตัว | 7 interactive calculators |
-| `quiz.html` | แบบทดสอบ 77 ข้อ 12 หมวด | 77-question quiz, 12 categories |
+| `quiz.html` | แบบทดสอบ 84 ข้อ 13 หมวด | 84-question quiz, 13 categories |
 | `downloads.html` | ดาวน์โหลด PDF 32 ไฟล์ | Download 32 PDF files |
 
 ---
@@ -171,12 +172,13 @@ git push
 ├── js/555-sim.js           — 555 astable simulator (LED blinker)
 ├── js/opamp-sim.js         — Op-amp amplifier simulator (gain + clipping)
 ├── js/logic-sim.js         — Logic-gate simulator (toggle inputs + truth table)
+├── js/opto-sim.js          — Optocoupler simulator (IF/CTR/RL → IC, Vout, saturation)
 ├── js/announcements.js     — Home-page "latest news/updates" box (data-driven, dismissible, bilingual)
 ├── js/breadboard.js        — Virtual breadboard lab (MNA solver + transistors + multimeter)
 ├── index.html           — Home page
 │   ├── electricity.html / ohm.html                 — Fundamentals
 │   ├── resistor.html / diode.html / transistor.html / ic.html / 555.html / op-amp.html / logic-gates.html / relay.html
-│   │   capacitor.html / inductor.html / power-supply.html   — Components
+│   │   capacitor.html / inductor.html / optoelectronics.html / power-supply.html   — Components
 │   ├── multimeter.html / signal-generator.html / oscilloscope.html  — Measurement
 │   ├── soldering.html / home-wiring.html           — Practical
 │   ├── simulation.html / breadboard.html           — Interactive labs
