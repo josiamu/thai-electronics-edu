@@ -25,7 +25,7 @@
 .dtype-c1 { border-left-color:#2563eb; } .dtype-c2 { border-left-color:#ef4444; }
 .dtype-c3 { border-left-color:#f59e0b; } .dtype-c4 { border-left-color:#10b981; }
 .dtype-c5 { border-left-color:#8b5cf6; } .dtype-c6 { border-left-color:#06b6d4; }
-.dtype-c7 { border-left-color:#f97316; }
+.dtype-c7 { border-left-color:#f97316; } .dtype-c8 { border-left-color:#e11d48; }
 
 /* Interactive rectifier lab */
 .rl-wrap { display:grid; grid-template-columns:1fr 285px; gap:1.25rem; align-items:start; }
@@ -307,7 +307,7 @@
             <span class="dt-tag">V<sub>f</sub> 1.8–3.3 V</span>
             <span class="dt-tag">I<sub>f</sub> ~10–20 mA</span>
           </div>
-          <p class="th-only"><strong>เปล่งแสง</strong>เมื่อมีกระแสไหลทางforward — แรงดันตกขึ้นกับสี (แดงต่ำ, น้ำเงิน/ขาวสูง) <strong>ต้องต่อตัวต้านทานอนุกรมเสมอ</strong> เพื่อจำกัดกระแส</p>
+          <p class="th-only"><strong>เปล่งแสง</strong>เมื่อมีกระแสไหลทาง forward — แรงดันตกขึ้นกับสี (แดงต่ำ, น้ำเงิน/ขาวสูง) <strong>ต้องต่อตัวต้านทานอนุกรมเสมอ</strong> เพื่อจำกัดกระแส</p>
           <p class="en-only"><strong>Emits light</strong> when forward current flows — V<sub>f</sub> depends on color (red low, blue/white high). <strong>Always needs a series resistor</strong> to limit current.</p>
           <div class="dt-use"><span class="th-only">🔧 ใช้: ไฟแสดงสถานะ, จอแสดงผล, ไฟส่องสว่าง</span><span class="en-only">🔧 Use: indicators, displays, lighting</span></div>
         </div>
@@ -349,6 +349,19 @@
           <p class="th-only">ไดโอดทั่วไป (1N400x) พอกระแสสลับทิศ จะ <strong>"ปิดไม่ทัน"</strong> — มีช่วงสั้นๆ ที่กระแสยังไหลย้อนกลับได้ เรียกว่า <strong>เวลาคืนตัว (t<sub>rr</sub>)</strong> ตัวนี้ถูกออกแบบให้ปิดเร็วกว่ามาก (เร็วกว่าเป็นร้อยเท่า) จึงใช้กับวงจรที่สวิตช์เร็วๆ ได้โดยไม่ร้อนและไม่สูญเสียพลังงาน</p>
           <p class="en-only">When the current reverses, an ordinary diode (1N400x) <strong>can't "turn off" instantly</strong> — for a brief moment current still leaks backwards. That delay is the <strong>recovery time (t<sub>rr</sub>)</strong>. This diode turns off far faster (hundreds of times faster), so it handles fast-switching circuits without heating up or wasting power.</p>
           <div class="dt-use"><span class="th-only">🔧 ใช้: แหล่งจ่ายสวิตชิ่ง (SMPS), flyback, อินเวอร์เตอร์, freewheeling/snubber</span><span class="en-only">🔧 Use: switching supplies (SMPS), flyback, inverters, freewheeling/snubber</span></div>
+        </div>
+
+        <div class="dtype dtype-c8">
+          <div class="dt-img"><img src="img/dio-tvs.jpg" alt="TVS diode (P6KE/1.5KE axial)" loading="lazy"></div>
+          <h4>💥 <span class="th-only">ทีวีเอส (กันไฟกระชาก)</span><span class="en-only">TVS (Transient Suppressor)</span></h4>
+          <div class="dt-sub">TVS — P6KE · 1.5KE · SMAJ/SMBJ</div>
+          <div class="dt-tags">
+            <span class="dt-tag"><span class="th-only">ตอบสนองระดับ ps</span><span class="en-only">ps response</span></span>
+            <span class="dt-tag">Uni / Bi-directional</span>
+          </div>
+          <p class="th-only">ไดโอด<strong>ป้องกันแรงดันเกินชั่วขณะ</strong> (Transient Voltage Suppressor) — สภาวะปกติไม่นำกระแส แต่เมื่อมี<strong>ไฟกระชาก/สไปก์</strong>เกินแรงดันพังทลาย จะนำกระแสทันที (เร็วระดับพิโกวินาที) เพื่อ<strong>หนีบ (clamp)</strong> แรงดันไว้ไม่ให้ถึงวงจร — หลักการคล้ายซีเนอร์ แต่ออกแบบให้รับพลังงานพัลส์สูงมากช่วงสั้นๆ (หลักร้อย–พันวัตต์) มีทั้งแบบทิศเดียว (uni) และสองทิศ (bi) สำหรับสาย AC/สายสัญญาณ</p>
+          <p class="en-only">A <strong>Transient Voltage Suppressor</strong> — normally off, but when a <strong>surge/spike</strong> exceeds its breakdown voltage it conducts within picoseconds to <strong>clamp</strong> the voltage away from your circuit. Works like a Zener, but is built to absorb very high pulse power in short bursts (hundreds to thousands of watts). Comes uni-directional and bi-directional (for AC/signal lines).</p>
+          <div class="dt-use"><span class="th-only">🔧 ใช้: กันฟ้าผ่า/ESD ที่พอร์ต USB·LAN·สายสัญญาณ, กัน load dump ในรถยนต์, คร่อมไฟเลี้ยง</span><span class="en-only">🔧 Use: lightning/ESD protection on USB·LAN·signal ports, automotive load dump, across supply rails</span></div>
         </div>
 
         <div class="dtype dtype-c5">
@@ -1016,6 +1029,11 @@
               <td>Fast/Ultra-Fast (UF400x)</td>
               <td>~1 V</td>
               <td><span class="th-only">สวิตชิ่งเพาเวอร์, ความถี่สูง</span><span class="en-only">Switching power, high-frequency</span></td>
+            </tr>
+            <tr>
+              <td>TVS (P6KE, SMBJ)</td>
+              <td>~1 V (fwd)</td>
+              <td><span class="th-only">หนีบไฟกระชาก/ESD ป้องกันวงจร</span><span class="en-only">Surge/ESD clamping protection</span></td>
             </tr>
           </tbody>
         </table>
