@@ -381,7 +381,55 @@
     </div>
   </div>
 
-  <!-- 5. การใช้งานจริง -->
+  <!-- 5. SIM -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">⭐ จำลองออปโตคัปเปลอร์: จาก I<sub>F</sub> ถึง V<sub>out</sub></span><span class="en-only">⭐ Optocoupler Simulation: from I<sub>F</sub> to V<sub>out</sub></span></div>
+    <div class="card">
+      <p class="th-only">ปรับกระแส LED ฝั่งเข้า (I<sub>F</sub>) ดูแสงข้ามช่องแยกไปขับโฟโตทรานซิสเตอร์ — กระแสออก I<sub>C</sub> = CTR × I<sub>F</sub> ไหลผ่าน R<sub>L</sub> ทำให้ V<sub>out</sub> ตกลงจาก V<sub>cc</sub> ถ้าขับแรงพอ ทรานซิสเตอร์จะ <strong>อิ่มตัว</strong> → V<sub>out</sub> ≈ 0.2 V (เอาต์พุตเป็น LOW ชัดเจน)</p>
+      <p class="en-only">Adjust the input LED current (I<sub>F</sub>) and watch light cross the isolation gap to drive the phototransistor — the output current I<sub>C</sub> = CTR × I<sub>F</sub> flows through R<sub>L</sub>, pulling V<sub>out</sub> down from V<sub>cc</sub>. Drive it hard enough and the transistor <strong>saturates</strong> → V<sub>out</sub> ≈ 0.2 V (a clean LOW).</p>
+
+      <div class="sim-wrap" style="margin-top:1rem;">
+        <div>
+          <canvas id="opto-canvas" class="sim-screen"></canvas>
+          <p style="font-size:0.8rem;color:var(--text-light);margin:0.5rem 0 0;text-align:center;">
+            <span class="th-only">จุดส้ม = โฟตอน (แสง) — ยิ่ง I<sub>F</sub> มาก แสงยิ่งหนาแน่น • แถบขวา = V<sub>out</sub></span>
+            <span class="en-only">Orange dots = photons — more I<sub>F</sub>, denser light • right bar = V<sub>out</sub></span>
+          </p>
+        </div>
+        <div>
+          <div class="sim-panel">
+            <div class="sim-ctrl-row" style="margin-bottom:0.6rem;"><span class="th-only">⚙ ปรับค่า</span><span class="en-only">⚙ Adjust</span></div>
+            <div class="sim-fixed">V<sub>cc</sub> = 5 V • V<sub>CE(sat)</sub> ≈ 0.2 V</div>
+            <div class="sim-ctrl">
+              <div class="sim-ctrl-row"><label><span class="th-only">กระแส LED</span><span class="en-only">LED current</span> I<sub>F</sub></label><span id="opto-if-val">5.0 mA</span></div>
+              <input type="range" id="opto-if" min="0" max="20" step="0.5" value="5">
+            </div>
+            <div class="sim-ctrl">
+              <div class="sim-ctrl-row"><label>CTR</label><span id="opto-ctr-val">100%</span></div>
+              <input type="range" id="opto-ctr" min="50" max="300" step="10" value="100">
+            </div>
+            <div class="sim-ctrl">
+              <div class="sim-ctrl-row"><label><span class="th-only">โหลด</span><span class="en-only">Load</span> R<sub>L</sub></label><span id="opto-rl-val">1.0 kΩ</span></div>
+              <input type="range" id="opto-rl" min="0.1" max="10" step="0.1" value="1">
+            </div>
+          </div>
+          <div class="sim-readout">
+            <div class="sim-rb"><div class="sim-rl">I<sub>C</sub></div><div class="sim-rv" id="opto-ic">— mA</div></div>
+            <div class="sim-rb"><div class="sim-rl">V<sub>out</sub></div><div class="sim-rv" id="opto-vout">— V</div></div>
+            <div class="sim-rb"><div class="sim-rl">CTR × I<sub>F</sub></div><div class="sim-rv" id="opto-icmax">— mA</div></div>
+            <div class="sim-rb"><div class="sim-rl"><span class="th-only">สถานะ</span><span class="en-only">State</span></div><div class="sim-rv" id="opto-state">—</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box" style="margin-top:0.9rem;">
+        <span class="th-only">🔬 ลองดู: ที่ R<sub>L</sub> = 1 kΩ ต้องมี I<sub>C</sub> ≈ 4.8 mA ถึงจะอิ่มตัว — CTR 100% จึงต้องจ่าย I<sub>F</sub> ≥ ~4.8 mA • ลด CTR เหลือ 50% (ตัวเสื่อม/เกรดต่ำ) → ต้องจ่าย I<sub>F</sub> เพิ่มเป็น 2 เท่า • ลด R<sub>L</sub> → ยิ่งต้องขับแรงขึ้นอีก นี่คือเหตุผลที่งานจริงเผื่อ I<sub>F</sub> ไว้เสมอ</span>
+        <span class="en-only">🔬 Try it: at R<sub>L</sub> = 1 kΩ saturation needs I<sub>C</sub> ≈ 4.8 mA — so at CTR 100% you must drive I<sub>F</sub> ≥ ~4.8 mA • drop CTR to 50% (aged/low-grade part) → you need twice the I<sub>F</sub> • lower R<sub>L</sub> → even more drive needed. This is why real designs overdrive I<sub>F</sub>.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. การใช้งานจริง -->
   <div class="section">
     <div class="section-title"><span class="th-only">การใช้งานจริง</span><span class="en-only">Real-World Uses</span></div>
     <div class="card">
@@ -456,5 +504,6 @@
 <footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
 <script>const CURRENT_PAGE='opto';</script>
 <script src="js/nav.js"></script>
+<script src="js/opto-sim.js"></script>
 </body>
 </html>
