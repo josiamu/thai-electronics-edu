@@ -31,10 +31,15 @@ var DIODE_TYPES = {
   silicon:   { vf:0.7,  rd:8,  th:'ซิลิคอน',     en:'Silicon',   border:'#334155' },
   germanium: { vf:0.3,  rd:12, th:'เจอร์เมเนียม', en:'Germanium', border:'#92400e' },
   schottky:  { vf:0.25, rd:6,  th:'ชอตต์กี',     en:'Schottky',  border:'#7c3aed' },
-  zener:     { vf:0.7,  rd:8,  th:'ซีเนอร์',      en:'Zener',     border:'#16a34a' }
+  zener:     { vf:0.7,  rd:8,  th:'ซีเนอร์',      en:'Zener',     border:'#16a34a' },
+  // TVS (unidirectional): conducts forward like silicon, clamps in reverse at V_BR (fast surge
+  // protection). Electrically the same reverse-breakdown model as a zener, so it reuses c.vz.
+  tvs:       { vf:0.7,  rd:6,  th:'ทีวีเอส',      en:'TVS',       border:'#e11d48' }
 };
 var ZENER_VZ = [3.3, 4.7, 5.1, 6.2, 9.1, 12];
 function diodeRd(c){ return c.type === 'led' ? LED_RD : (c.rd || DIODE_RD); }
+// diode variants that also conduct in reverse once |V| reaches the breakdown/clamp voltage (c.vz)
+function hasReverseClamp(c){ return c.variant === 'zener' || c.variant === 'tvs'; }
 
 // resistor-family: linear types whose R depends only on the environment (not on circuit voltage)
 var RFAM = { resistor:1, vr:1, ntc:1, ptc:1, ldr:1 };
@@ -456,7 +461,7 @@ function placeComp(type, a, b){
     var dk = (diodeKind === 'led' ? 'silicon' : diodeKind);
     var dt = DIODE_TYPES[dk] || DIODE_TYPES.silicon;
     c.variant = dk; c.vf = dt.vf; c.rd = dt.rd;
-    if (dk === 'zener') c.vz = zenerVz;
+    if (dk === 'zener' || dk === 'tvs') c.vz = zenerVz;
   }
   if (type === 'battery') c.value = batteryV;
   if (type === 'ac'){ c.vp = acVp; c.freq = acFreq; c.offset = acOffset; }
@@ -548,8 +553,8 @@ function renderEditor(){
     var dv = c.variant || 'silicon';
     ctrl = '<label>' + (en ? 'Type' : 'ชนิด') + '</label><select id="bb-ed-dtype">' +
       Object.keys(DIODE_TYPES).map(function(k){ return '<option value="' + k + '"' + (k === dv ? ' selected' : '') + '>' + DIODE_TYPES[k][en ? 'en' : 'th'] + '</option>'; }).join('') + '</select>';
-    if (dv === 'zener'){
-      ctrl += '<label style="margin-left:.6rem">Vz</label><select id="bb-ed-vz">' +
+    if (dv === 'zener' || dv === 'tvs'){
+      ctrl += '<label style="margin-left:.6rem">' + (dv === 'tvs' ? 'V<sub>BR</sub>' : 'Vz') + '</label><select id="bb-ed-vz">' +
         ZENER_VZ.map(function(v){ return '<option value="' + v + '"' + (v === c.vz ? ' selected' : '') + '>' + v + ' V</option>'; }).join('') + '</select>';
     }
   } else if (c.type === 'switch'){
@@ -609,7 +614,7 @@ function renderEditor(){
   on('bb-ed-dtype', 'change', function(){
     c.variant = this.value; var dt = DIODE_TYPES[c.variant];
     c.vf = dt.vf; c.rd = dt.rd;
-    if (c.variant === 'zener'){ if (!c.vz) c.vz = zenerVz; } else delete c.vz;
+    if (c.variant === 'zener' || c.variant === 'tvs'){ if (!c.vz) c.vz = zenerVz; } else delete c.vz;
     rebuild(); renderEditor();   // re-render so the Vz selector shows/hides
   });
   on('bb-ed-vz', 'change', function(){ c.vz = +this.value; rebuild(); refreshEditorTitle(c); });
@@ -938,7 +943,7 @@ function solveCircuit(h, commit){
       } else if (c._on < 0){
         if ((vd + c.vz) / rd > 1e-9){ c._on = 0; changed = true; }
       } else if (vd > c.vf){ c._on = 1; changed = true; }
-      else if (c.variant === 'zener' && vd < -c.vz){ c._on = -1; changed = true; }
+      else if (hasReverseClamp(c) && vd < -c.vz){ c._on = -1; changed = true; }
     });
     // transistor region selection (junction-based, mirrors the diode toggling)
     transistors.forEach(function(t){
@@ -1181,6 +1186,7 @@ function drawComp(c){
     var dv = c.variant || 'silicon', dt = DIODE_TYPES[dv] || DIODE_TYPES.silicon;
     diodeSymbol(g, x1, x2, on ? '#1e293b' : '#94a3b8', on ? dt.border : '#94a3b8', dv);
     var dlab = dv === 'zener' ? 'ZD ' + (c.vz || zenerVz) + 'V'
+             : dv === 'tvs' ? 'TVS ' + (c.vz || zenerVz) + 'V'
              : dv === 'germanium' ? 'Ge' : dv === 'schottky' ? 'Sk' : 'Si';
     gComps.appendChild(uprightText(len / 2, A.x, A.y, ang, -15, dlab, dt.border));
   } else if (c.type === 'led'){
@@ -1226,6 +1232,9 @@ function diodeSymbol(g, x1, x2, triFill, barColor, variant){
       fill:'none', stroke:barColor, 'stroke-width':3, 'stroke-linecap':'round', 'stroke-linejoin':'round' }));
   } else if (variant === 'schottky'){ // cathode bar with square hooks (S shape)
     g.appendChild(el('path', { d:'M ' + (x2 - 4) + ' -5 L ' + (x2 - 4) + ' -9 L ' + x2 + ' -9 L ' + x2 + ' 9 L ' + (x2 + 4) + ' 9 L ' + (x2 + 4) + ' 5',
+      fill:'none', stroke:barColor, 'stroke-width':3, 'stroke-linecap':'round', 'stroke-linejoin':'round' }));
+  } else if (variant === 'tvs'){       // cathode bar with both tails bent the same way ( [ bracket )
+    g.appendChild(el('path', { d:'M ' + (x2 - 5) + ' -9 L ' + x2 + ' -9 L ' + x2 + ' 9 L ' + (x2 - 5) + ' 9',
       fill:'none', stroke:barColor, 'stroke-width':3, 'stroke-linecap':'round', 'stroke-linejoin':'round' }));
   } else {
     g.appendChild(el('line', { x1:x2, y1:-9, x2:x2, y2:9, stroke:barColor, 'stroke-width':3, 'stroke-linecap':'round' }));
@@ -1750,6 +1759,7 @@ function compName(c, en){
   if (c.type === 'diode'){
     var dt = DIODE_TYPES[c.variant] || DIODE_TYPES.silicon;
     if (c.variant === 'zener') return (en ? 'Zener ' : 'ซีเนอร์ ') + (c.vz || zenerVz) + 'V';
+    if (c.variant === 'tvs') return 'TVS ' + (c.vz || zenerVz) + 'V';
     return en ? (dt.en + ' diode') : ('ไดโอด' + dt.th);
   }
   if (c.type === 'led') return (en ? 'LED ' : 'LED ') + LED_COLORS[c.color][en ? 'en' : 'th'];
@@ -1984,12 +1994,15 @@ function updateCompTrigger(){
 // show/hide the LED-colour and Zener-Vz sub-controls + the descriptive hint
 function updateDiodeControls(){
   $('bb-diode-led-wrap').style.display = (diodeKind === 'led') ? '' : 'none';
-  $('bb-diode-vz-wrap').style.display  = (diodeKind === 'zener') ? '' : 'none';
+  $('bb-diode-vz-wrap').style.display  = (diodeKind === 'zener' || diodeKind === 'tvs') ? '' : 'none';
+  var vzLabel = $('bb-diode-vz-label');
+  if (vzLabel) vzLabel.innerHTML = diodeKind === 'tvs' ? 'V<sub>BR</sub>' : 'Vz';
   var hints = {
     silicon:   { th:'ไดโอดซิลิคอนทั่วไป Vf ≈ 0.7V — กระแสไหล anode → cathode', en:'General-purpose silicon diode, Vf ≈ 0.7V — current flows anode → cathode' },
     germanium: { th:'เจอร์เมเนียม Vf ≈ 0.3V — แรงดันตกต่ำ ใช้ตรวจจับสัญญาณ/ความถี่สูง', en:'Germanium, Vf ≈ 0.3V — low drop, used in signal/RF detectors' },
     schottky:  { th:'ชอตต์กี Vf ≈ 0.25V — สวิตช์เร็ว แรงดันตกต่ำ', en:'Schottky, Vf ≈ 0.25V — fast switching, low forward drop' },
     zener:     { th:'ซีเนอร์ — นำกระแสย้อนกลับเมื่อแรงดันถึง Vz (ใช้คุมแรงดัน)', en:'Zener — conducts in reverse once V reaches Vz (voltage regulation)' },
+    tvs:       { th:'TVS — หนีบไฟกระชาก/สไปก์ที่เกิน V_BR (กันวงจร, เร็วมาก คล้ายซีเนอร์กำลังสูง)', en:'TVS — clamps surges/spikes above V_BR (fast circuit protection, like a high-power zener)' },
     led:       { th:'LED มีขั้ว — วางขา + (anode) ก่อน, ติดเมื่อต่อถูกขั้ว', en:'LED is polarized — place + (anode) leg first; lights when forward-biased' }
   };
   var h = hints[diodeKind] || hints.silicon;
@@ -2245,6 +2258,20 @@ var EXAMPLES = [
       // LED load powered from the regulated 5.1 V node (col9)
       place('resistor', 'tc9', 'tc15', { value:330 });
       place('led', 'ta15', 'ta19', { color:'red', vf:1.8 });
+      place('wire', 'tb19', 'TN19', { color:'black' });
+    } },
+  { th:'TVS หนีบไฟกระชาก (แหล่งจ่าย 12V → โหลดเห็นแค่ ~5V)', en:'TVS surge clamp (12V supply → load only sees ~5V)', build:function(){
+      setExampleBatt(12);
+      place('battery', 'TP2', 'TN2', { value:12 });
+      place('wire', 'TP5', 'tc5', { color:'red' });             // + rail ↓ col5 (the "surge")
+      place('resistor', 'ta5', 'ta9', { value:220 });           // line impedance → protected node col9
+      // TVS sits reverse across the protected node: cathode → col9, anode → − rail.
+      // below V_BR it is open; the moment col9 tries to exceed V_BR it conducts and clamps.
+      place('diode', 'ta13', 'tb9', { variant:'tvs', vf:0.7, rd:6, vz:5.1 });
+      place('wire', 'tb13', 'TN13', { color:'black' });         // TVS anode (col13) → − rail
+      // protected load hangs off the clamped node (col9)
+      place('resistor', 'tc9', 'tc15', { value:330 });
+      place('led', 'ta15', 'ta19', { color:'green', vf:2.1 });
       place('wire', 'tb19', 'TN19', { color:'black' });
     } },
   { th:'สวิตช์ควบคุม LED', en:'Switch-controlled LED', build:function(){
