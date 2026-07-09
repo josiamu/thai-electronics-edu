@@ -100,6 +100,15 @@ const QUIZ_CATEGORIES_TH = [
     {q:'ไทรแอก (Triac) นิยมใช้ในงานใด?',opts:['วงจรขยายเสียง','ควบคุมกำลังไฟ AC เช่น หรี่ไฟ','วงจรดิจิตัล','วงจรชาร์จแบตเตอรี่'],ans:1,exp:'Triac ควบคุมกำลังไฟ AC ได้ทั้งสองทิศทาง นิยมใช้ใน Dimmer หรี่ไฟ ควบคุมความเร็วมอเตอร์ AC'},
     {q:'ขาของทรานซิสเตอร์ BJT มีกี่ขา และชื่ออะไร?',opts:['2 ขา: Anode-Cathode','3 ขา: Base-Collector-Emitter','3 ขา: Gate-Source-Drain','4 ขา'],ans:1,exp:'BJT มี 3 ขา: Base (B) = อินพุตควบคุม, Collector (C) = ขาหลัก, Emitter (E) = ขาออก'},
   ]},
+  { id:'opto', icon:'🔦', name:'ออปโตอิเล็กทรอนิกส์', questions:[
+    {q:'ออปโตคัปเปลอร์ (Optocoupler) ทำหน้าที่อะไร?',opts:['ขยายความเข้มแสง','ส่งสัญญาณด้วยแสงโดยแยกสองวงจรออกจากกันทางไฟฟ้า','แปลงแสงเป็นเสียง','เก็บพลังงานจากแสง'],ans:1,exp:'ภายในมี LED + โฟโตทรานซิสเตอร์ สัญญาณข้ามฝั่งด้วยแสงล้วนๆ สองฝั่งจึงแยกกันทางไฟฟ้า (isolation) ทนแรงดันต่างกันได้หลาย kV'},
+    {q:'ค่า CTR ของออปโตคัปเปลอร์หมายถึงอะไร?',opts:['อัตราส่วนกระแสออกต่อกระแสเข้า (IC/IF × 100%)','แรงดันพังทลายของฉนวน','ความเร็วในการตอบสนอง','ความยาวคลื่นแสงที่ใช้'],ans:0,exp:'CTR (Current Transfer Ratio) = IC/IF × 100% เทียบได้กับ β ของทรานซิสเตอร์ เช่น CTR 100% จ่าย IF 10 mA ได้ IC สูงสุด ≈ 10 mA'},
+    {q:'อุปกรณ์รับแสงตัวใดตอบสนอง "เร็วที่สุด"?',opts:['LDR','โฟโตไดโอด','โซลาร์เซลล์','เทอร์มิสเตอร์'],ans:1,exp:'โฟโตไดโอดตอบสนองระดับนาโนวินาที จึงใช้ในไฟเบอร์ออปติกและการสื่อสาร ส่วน LDR ช้ามาก (ระดับมิลลิวินาที–วินาที)'},
+    {q:'เมื่อแสงตกกระทบ LDR มากขึ้น ค่าความต้านทานจะเป็นอย่างไร?',opts:['เพิ่มขึ้น','ลดลง','คงที่','กลายเป็นอนันต์'],ans:1,exp:'LDR (Light Dependent Resistor) ค่า R ลดลงเมื่อแสงมาก — มืด ≈ MΩ, สว่าง ≈ kΩ ใช้ทำวงจรไฟถนนอัตโนมัติ'},
+    {q:'7-Segment แบบ Common Anode ต้องทำอย่างไรให้แท่ง (segment) ติดสว่าง?',opts:['จ่ายลอจิก HIGH เข้าขาแท่ง','ดึงขาแท่งลง LOW','ต่อขา common ลง GND','จ่ายไฟ AC เข้าขาแท่ง'],ans:1,exp:'Common Anode ขา A ทุกดวงต่อรวมกับ Vcc ดังนั้นต้องดึงขาแท่งลง LOW เพื่อให้กระแสไหลผ่าน LED แท่งนั้น (Common Cathode ทำกลับกัน คือจ่าย HIGH)'},
+    {q:'รีโมทคอนโทรลอินฟราเรดส่งรหัสบนคลื่นพาห์ความถี่ประมาณเท่าใด?',opts:['50 Hz','38 kHz','2.4 GHz','940 MHz'],ans:1,exp:'IR LED กะพริบรหัสบนคลื่นพาห์ ~38 kHz ตัวรับ (เช่น TSOP1738) กรองเฉพาะความถี่นี้ จึงไม่ถูกรบกวนจากแสงในห้อง'},
+    {q:'โฟโตทรานซิสเตอร์ต่างจากโฟโตไดโอดอย่างไร?',opts:['ไวกว่ามากเพราะขยายกระแสในตัว แต่ตอบสนองช้ากว่า','เร็วกว่าเสมอ','สร้างแรงดันได้เองโดยไม่ต้องจ่ายไฟ','ทนแรงดันย้อนกลับได้สูงกว่า'],ans:0,exp:'โฟโตทรานซิสเตอร์ใช้แสงแทนกระแสเบสแล้วขยายต่อในตัว จึงไวกว่าโฟโตไดโอด 100–1000 เท่า แต่ตอบสนองช้ากว่า (µs vs ns)'},
+  ]},
 ];
 
 const QUIZ_CATEGORIES_EN = [
@@ -203,6 +212,15 @@ const QUIZ_CATEGORIES_EN = [
     {q:'What is a Relay?',opts:['A large capacitor','An electromagnetically controlled switch','An adjustable resistor','A special diode'],ans:1,exp:'A Relay is a switch operated by an electromagnet — it controls a high-power circuit using a small signal.'},
     {q:'What is a Triac commonly used for?',opts:['Audio amplifier circuits','AC power control such as light dimming','Digital circuits','Battery charging circuits'],ans:1,exp:'A Triac controls AC power in both directions. Commonly used in light dimmers and AC motor speed controllers.'},
     {q:'How many terminals does a BJT transistor have, and what are they called?',opts:['2: Anode-Cathode','3: Base-Collector-Emitter','3: Gate-Source-Drain','4 terminals'],ans:1,exp:'BJT has 3 terminals: Base (B) = control input, Collector (C) = main terminal, Emitter (E) = output terminal.'},
+  ]},
+  { id:'opto', icon:'🔦', name:'Optoelectronics', questions:[
+    {q:'What does an optocoupler do?',opts:['Amplifies light intensity','Passes a signal via light while keeping two circuits electrically isolated','Converts light to sound','Stores light energy'],ans:1,exp:'Inside are an LED + phototransistor. The signal crosses as pure light, so the two sides are electrically isolated and can differ by several kV.'},
+    {q:'What does an optocoupler\'s CTR value mean?',opts:['Output-to-input current ratio (IC/IF × 100%)','The insulation breakdown voltage','The response speed','The light wavelength used'],ans:0,exp:'CTR (Current Transfer Ratio) = IC/IF × 100%, the opto\'s version of a transistor\'s β. E.g. at CTR 100%, IF = 10 mA gives up to IC ≈ 10 mA.'},
+    {q:'Which light detector responds the fastest?',opts:['LDR','Photodiode','Solar cell','Thermistor'],ans:1,exp:'Photodiodes respond in nanoseconds, which is why fiber optics and communications use them. LDRs are very slow (milliseconds to seconds).'},
+    {q:'When more light falls on an LDR, its resistance…?',opts:['Increases','Decreases','Stays constant','Becomes infinite'],ans:1,exp:'An LDR\'s resistance drops with light — dark ≈ MΩ, bright ≈ kΩ. Used in automatic street-light circuits.'},
+    {q:'How do you light a segment on a Common Anode 7-segment display?',opts:['Drive the segment pin HIGH','Pull the segment pin LOW','Tie the common pin to GND','Feed AC into the segment pin'],ans:1,exp:'In Common Anode, all anodes tie to Vcc, so a segment lights when its pin is pulled LOW (Common Cathode is the opposite — drive HIGH).'},
+    {q:'IR remote controls send their codes on a carrier of about…?',opts:['50 Hz','38 kHz','2.4 GHz','940 MHz'],ans:1,exp:'The IR LED blinks the code on a ~38 kHz carrier; the receiver (e.g. TSOP1738) filters for that frequency, ignoring room light.'},
+    {q:'How does a phototransistor differ from a photodiode?',opts:['Far more sensitive thanks to built-in gain, but slower','Always faster','Generates its own voltage without a supply','Withstands higher reverse voltage'],ans:0,exp:'A phototransistor uses light as its base current and amplifies it, so it is 100–1000× more sensitive than a photodiode but slower (µs vs ns).'},
   ]},
 ];
 

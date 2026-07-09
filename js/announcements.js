@@ -14,6 +14,10 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'opto-2026-07-09', date:'2026-07-09', type:'lesson',
+    th:'เพิ่มบทเรียนใหม่: ออปโตอิเล็กทรอนิกส์ — LED/IR, 7-Segment, ตัวรับแสง, ออปโตคัปเปลอร์ + ซิม PC817',
+    en:'New lesson: Optoelectronics — LED/IR, 7-segment, light detectors, optocoupler + PC817 sim',
+    href:'optoelectronics.html' },
   { id:'rectifier-lab-2026-07-04', date:'2026-07-04', type:'update',
     th:'Lab ใหม่ในบทไดโอด: ทดลองแปลง AC เป็น DC — เลือกวงจร/ชนิดไดโอด/แรงดัน/โหลด แล้วดูรูปคลื่นจริง',
     en:'New lab in the Diode lesson: AC → DC rectifier — pick the circuit, diode type, voltage & load and watch the waveform',
