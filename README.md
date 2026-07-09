@@ -72,7 +72,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | หน้า | ไทย | English |
 |---|---|---|
 | `simulation.html` | จำลองวงจร (อนุกรม/ขนาน/ผสม) | Circuit simulator |
-| `breadboard.html` | ทดลองบนเบรดบอร์ดเสมือน + มัลติมิเตอร์ (ตัวต้านทานแถบสีจริง, LED หรี่ตามกระแส, ทรานซิสเตอร์ NPN/PNP/MOSFET, โพเทนชิโอมิเตอร์ 3 ขา, แหล่งจ่าย AC, กราฟ transient) | Virtual breadboard lab + multimeter (real colour-coded resistors, current-proportional LEDs, NPN/PNP/MOSFET transistors, 3-pin potentiometer, AC source, transient graph) |
+| `breadboard.html` | ทดลองบนเบรดบอร์ดเสมือน + มัลติมิเตอร์ (ตัวต้านทานแถบสีจริง, LED หรี่ตามกระแส, ทรานซิสเตอร์ NPN/PNP/MOSFET, โพเทนชิโอมิเตอร์ 3 ขา, ออปโตคัปเปลอร์ 4 ขา, แหล่งจ่าย AC, กราฟ transient) | Virtual breadboard lab + multimeter (real colour-coded resistors, current-proportional LEDs, NPN/PNP/MOSFET transistors, 3-pin potentiometer, 4-pin optocoupler, AC source, transient graph) |
 | `formulas.html` | สูตรสรุป + พิมพ์ PDF | Formula summary + print |
 | `tools.html` | เครื่องคิดเลขเชิงโต้ตอบ 7 ตัว | 7 interactive calculators |
 | `quiz.html` | แบบทดสอบ 84 ข้อ 13 หมวด | 84-question quiz, 13 categories |
