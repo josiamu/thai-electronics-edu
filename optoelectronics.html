@@ -87,31 +87,33 @@
           </ul>
         </div>
         <div style="text-align:center;">
-          <svg viewBox="0 0 260 150" style="max-width:100%;height:auto;font-family:inherit;font-size:11px;" role="img" aria-label="Emitter and detector chain">
-            <!-- electric in -->
-            <text x="30" y="52" text-anchor="middle" fill="var(--text)">⚡</text>
-            <line x1="42" y1="48" x2="62" y2="48" stroke="var(--text-light)" stroke-width="1.5" marker-end="url(#arr)"/>
+          <svg viewBox="0 0 330 148" style="max-width:100%;height:auto;font-family:inherit;font-size:11px;" role="img" aria-label="Emitter and detector chain">
             <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--text-light)"/></marker></defs>
+            <!-- light label (above, clear of both boxes) -->
+            <text x="152" y="38" text-anchor="middle" fill="#f59e0b" font-size="10">แสง / light</text>
+            <!-- electric in -->
+            <text x="16" y="79" text-anchor="middle" fill="var(--text)" font-size="14">⚡</text>
+            <line x1="28" y1="74" x2="48" y2="74" stroke="var(--text-light)" stroke-width="1.5" marker-end="url(#arr)"/>
             <!-- emitter box -->
-            <rect x="64" y="26" width="60" height="44" rx="8" fill="none" stroke="var(--primary)" stroke-width="2"/>
-            <text x="94" y="44" text-anchor="middle" fill="var(--primary)" font-weight="600">Emitter</text>
-            <text x="94" y="60" text-anchor="middle" fill="var(--text-light)" font-size="9">LED / Laser</text>
-            <!-- light waves -->
-            <path d="M130 40 q6 -5 12 0 t12 0" fill="none" stroke="#f59e0b" stroke-width="1.6"/>
-            <path d="M130 50 q6 -5 12 0 t12 0" fill="none" stroke="#f59e0b" stroke-width="1.6"/>
-            <path d="M130 60 q6 -5 12 0 t12 0" fill="none" stroke="#f59e0b" stroke-width="1.6"/>
-            <text x="142" y="30" text-anchor="middle" fill="#f59e0b" font-size="9">แสง / light</text>
+            <rect x="52" y="48" width="76" height="52" rx="8" fill="none" stroke="var(--primary)" stroke-width="2"/>
+            <text x="90" y="70" text-anchor="middle" fill="var(--primary)" font-weight="600">Emitter</text>
+            <text x="90" y="88" text-anchor="middle" fill="var(--text-light)" font-size="9">LED / Laser</text>
+            <!-- light waves (between the boxes) -->
+            <path d="M134 60 q6 -5 12 0 t12 0" fill="none" stroke="#f59e0b" stroke-width="1.6"/>
+            <path d="M134 72 q6 -5 12 0 t12 0" fill="none" stroke="#f59e0b" stroke-width="1.6"/>
+            <path d="M134 84 q6 -5 12 0 t12 0" fill="none" stroke="#f59e0b" stroke-width="1.6"/>
             <!-- detector box -->
-            <rect x="160" y="26" width="66" height="44" rx="8" fill="none" stroke="var(--secondary)" stroke-width="2"/>
-            <text x="193" y="44" text-anchor="middle" fill="var(--secondary)" font-weight="600">Detector</text>
-            <text x="193" y="60" text-anchor="middle" fill="var(--text-light)" font-size="9">Photodiode / LDR</text>
+            <rect x="166" y="48" width="100" height="52" rx="8" fill="none" stroke="var(--secondary)" stroke-width="2"/>
+            <text x="216" y="70" text-anchor="middle" fill="var(--secondary)" font-weight="600">Detector</text>
+            <text x="216" y="88" text-anchor="middle" fill="var(--text-light)" font-size="8.5">Photodiode / LDR</text>
             <!-- electric out -->
-            <line x1="193" y1="72" x2="193" y2="94" stroke="var(--text-light)" stroke-width="1.5" marker-end="url(#arr)"/>
-            <text x="193" y="112" text-anchor="middle" fill="var(--text)">⚡</text>
-            <text x="94" y="94" text-anchor="middle" fill="var(--text-light)" font-size="9.5">ไฟฟ้า → แสง</text>
-            <text x="94" y="106" text-anchor="middle" fill="var(--text-light)" font-size="9.5">electricity → light</text>
-            <text x="230" y="94" text-anchor="end" fill="var(--text-light)" font-size="9.5">แสง → ไฟฟ้า</text>
-            <text x="230" y="106" text-anchor="end" fill="var(--text-light)" font-size="9.5">light → electricity</text>
+            <line x1="270" y1="74" x2="290" y2="74" stroke="var(--text-light)" stroke-width="1.5" marker-end="url(#arr)"/>
+            <text x="304" y="79" text-anchor="middle" fill="var(--text)" font-size="14">⚡</text>
+            <!-- captions (below, clear of the arrows) -->
+            <text x="90" y="122" text-anchor="middle" fill="var(--text-light)" font-size="9.5">ไฟฟ้า → แสง</text>
+            <text x="90" y="136" text-anchor="middle" fill="var(--text-light)" font-size="9.5">electricity → light</text>
+            <text x="216" y="122" text-anchor="middle" fill="var(--text-light)" font-size="9.5">แสง → ไฟฟ้า</text>
+            <text x="216" y="136" text-anchor="middle" fill="var(--text-light)" font-size="9.5">light → electricity</text>
           </svg>
         </div>
       </div>
@@ -163,11 +165,12 @@
             <text x="112" y="58" fill="var(--text-light)">b</text>
             <text x="112" y="112" fill="var(--text-light)">c</text>
             <text x="73" y="156" text-anchor="middle" fill="var(--text-light)">d</text>
-            <text x="32" y="112" text-anchor="end" fill="var(--text-light)">e</text>
-            <text x="32" y="58" text-anchor="end" fill="var(--text-light)">f</text>
+            <text x="58" y="112" fill="var(--text-light)">e</text>
+            <text x="58" y="58" fill="var(--text-light)">f</text>
             <text x="73" y="73" text-anchor="middle" fill="var(--text-light)">g</text>
             <text x="122" y="144" fill="var(--text-light)">dp</text>
-            <text x="170" y="55" text-anchor="middle" fill="var(--text)" font-size="11" font-weight="600">= LED 8 ดวง</text>
+            <text class="th-only" x="170" y="55" text-anchor="middle" fill="var(--text)" font-size="11" font-weight="600">= LED 8 ดวง</text>
+            <text class="en-only" x="170" y="55" text-anchor="middle" fill="var(--text)" font-size="11" font-weight="600">= 8 LEDs</text>
             <text x="170" y="70" text-anchor="middle" fill="var(--text-light)" font-size="9">(a–g + dp)</text>
             <text x="170" y="95" text-anchor="middle" fill="var(--text-light)" font-size="9">Common Anode /</text>
             <text x="170" y="107" text-anchor="middle" fill="var(--text-light)" font-size="9">Common Cathode</text>
@@ -271,7 +274,7 @@
         </div>
         <div style="text-align:center;">
           <!-- PC817 DIP-4 internal SVG -->
-          <svg viewBox="0 0 260 170" style="max-width:100%;height:auto;font-family:inherit;font-size:10px;" role="img" aria-label="PC817 optocoupler internal structure">
+          <svg viewBox="-16 0 292 170" style="max-width:100%;height:auto;font-family:inherit;font-size:10px;" role="img" aria-label="PC817 optocoupler internal structure">
             <rect x="55" y="25" width="150" height="110" rx="10" fill="none" stroke="var(--text)" stroke-width="2"/>
             <text x="130" y="18" text-anchor="middle" fill="var(--text)" font-weight="600" font-size="11">PC817 (DIP-4)</text>
             <!-- pins -->
@@ -330,8 +333,10 @@
         <div style="text-align:center;">
           <!-- example application circuit -->
           <svg viewBox="0 0 280 170" style="max-width:100%;height:auto;font-family:inherit;font-size:9.5px;" role="img" aria-label="Optocoupler application circuit">
-            <text x="60" y="16" text-anchor="middle" fill="var(--primary)" font-weight="600" font-size="10">ฝั่งควบคุม 5V</text>
-            <text x="225" y="16" text-anchor="middle" fill="#ef4444" font-weight="600" font-size="10">ฝั่งโหลด 12/24V</text>
+            <text class="th-only" x="60" y="16" text-anchor="middle" fill="var(--primary)" font-weight="600" font-size="10">ฝั่งควบคุม 5V</text>
+            <text class="en-only" x="60" y="16" text-anchor="middle" fill="var(--primary)" font-weight="600" font-size="10">Control side 5V</text>
+            <text class="th-only" x="225" y="16" text-anchor="middle" fill="#ef4444" font-weight="600" font-size="10">ฝั่งโหลด 12/24V</text>
+            <text class="en-only" x="225" y="16" text-anchor="middle" fill="#ef4444" font-weight="600" font-size="10">Load side 12/24V</text>
             <!-- input: MCU -> R -> LED -->
             <rect x="10" y="55" width="38" height="26" rx="5" fill="none" stroke="var(--primary)" stroke-width="1.6"/>
             <text x="29" y="71" text-anchor="middle" fill="var(--primary)">MCU</text>
@@ -369,7 +374,8 @@
             <text x="226" y="123" text-anchor="middle" fill="var(--accent)"><tspan class="th-only">รีเลย์/โหลด</tspan><tspan class="en-only">Relay/Load</tspan></text>
             <!-- isolation -->
             <line x1="138" y1="118" x2="138" y2="146" stroke="var(--text-light)" stroke-width="1" stroke-dasharray="4,4"/>
-            <text x="138" y="160" text-anchor="middle" fill="var(--text-light)">กราวด์แยกกันคนละฝั่ง / separate grounds</text>
+            <text class="th-only" x="138" y="160" text-anchor="middle" fill="var(--text-light)">กราวด์แยกกันคนละฝั่ง</text>
+            <text class="en-only" x="138" y="160" text-anchor="middle" fill="var(--text-light)">separate grounds</text>
           </svg>
           <div style="font-size:.82rem;font-weight:600;"><span class="th-only">ตัวอย่าง: MCU ฝั่ง 5V สั่งงานโหลดฝั่ง 12/24V โดยไม่แตะกันทางไฟฟ้า</span><span class="en-only">Example: a 5V MCU drives a 12/24V load with no electrical contact</span></div>
         </div>
