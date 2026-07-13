@@ -14,6 +14,18 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'worksheet-current-journey-2026-07-13', date:'2026-07-13', type:'download',
+    th:'ใบงานใหม่: เสริมขั้นสูง — การเดินทางของกระแสไฟ (Capacitive Dropper, เรียงกระแส/เรกูเลต, IR 38kHz) (PDF)',
+    en:'New worksheet: Advanced — The Journey of Current (capacitive dropper, rectify/regulate, IR 38kHz) (PDF)',
+    href:'downloads.html', cat:'worksheet', file:'pdf/worksheet/ใบความรู้เสริมขั้นสูง การเดินทางของกระแสไฟ.pdf' },
+  { id:'worksheet-fan-motor-2026-07-13', date:'2026-07-13', type:'download',
+    th:'ใบงานใหม่: พื้นฐานการซ่อมและตรวจเช็คมอเตอร์พัดลมไฟฟ้า (มอเตอร์คาปาซิเตอร์รัน, สวิตช์ปรับความเร็ว) (PDF)',
+    en:'New worksheet: Fan Motor Repair & Testing Basics (capacitor-run motor, speed switch) (PDF)',
+    href:'downloads.html', cat:'worksheet', file:'pdf/worksheet/ใบความรู้ พื้นฐานการซ่อมและตรวจเช็คมอเตอร์พัดลมไฟฟ้า.pdf' },
+  { id:'transistor-bjt-pdf-2026-07-13', date:'2026-07-13', type:'download',
+    th:'ไฟล์ใหม่: ทรานซิสเตอร์ — โครงสร้าง BJT (เพิ่มเติม) — NPN/PNP, รอยต่อ P-N, ประวัติและหลักการ (PDF)',
+    en:'New file: Transistor — BJT Structure (Part 2) — NPN/PNP, P-N junctions, history & principles (PDF)',
+    href:'downloads.html', cat:'components', file:'pdf/ทรานซิสเตอร์_2.pdf' },
   { id:'opto-2026-07-09', date:'2026-07-09', type:'lesson',
     th:'เพิ่มบทเรียนใหม่: ออปโตอิเล็กทรอนิกส์ — LED/IR, 7-Segment, ตัวรับแสง, ออปโตคัปเปลอร์ + ซิม PC817',
     en:'New lesson: Optoelectronics — LED/IR, 7-segment, light detectors, optocoupler + PC817 sim',
