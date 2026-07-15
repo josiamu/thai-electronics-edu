@@ -38,6 +38,30 @@
 .tr-rv { font-size:1.02rem; font-weight:700; color:var(--text); }
 .tr-rb .calc { font-size:.78rem; font-weight:600; color:var(--text); }
 .part-num { font-family:monospace; font-weight:700; color:var(--primary); }
+
+/* Interactive step-by-step: how a BJT works */
+.bs-wrap { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; }
+.bs-tabs { display:grid; grid-template-columns:repeat(auto-fit,minmax(125px,1fr)); gap:.4rem; margin-bottom:.9rem; }
+@media (max-width:700px){ .bs-tabs{ grid-template-columns:repeat(2,1fr); } }
+.bs-tab { display:flex; align-items:center; gap:.45rem; justify-content:center; text-align:center;
+  background:var(--card); border:1px solid var(--border); border-radius:10px; padding:.5rem .5rem;
+  font:inherit; font-size:.82rem; font-weight:600; color:var(--text-light); cursor:pointer; transition:.15s; }
+.bs-tab:hover { border-color:var(--primary); color:var(--text); }
+.bs-tab .bs-n { display:flex; align-items:center; justify-content:center; min-width:22px; height:22px;
+  border-radius:50%; background:var(--border); color:var(--text); font-size:.78rem; font-weight:800; }
+.bs-tab.active { background:var(--primary); border-color:var(--primary); color:#fff; box-shadow:0 2px 8px rgba(37,99,235,.3); }
+.bs-tab.active .bs-n { background:rgba(255,255,255,.28); color:#fff; }
+.bs-canvas { width:100%; height:auto; aspect-ratio:680/320; display:block;
+  background:var(--card); border:1px solid var(--border); border-radius:12px; }
+.bs-nav { display:flex; gap:.5rem; justify-content:center; margin:.75rem 0; }
+.bs-navbtn { background:var(--card); border:1px solid var(--border); border-radius:9px; padding:.4rem .9rem;
+  font:inherit; font-size:.85rem; font-weight:600; color:var(--text); cursor:pointer; transition:.15s; }
+.bs-navbtn:hover { border-color:var(--primary); color:var(--primary); }
+.bs-navbtn.active { background:var(--primary); border-color:var(--primary); color:#fff; }
+.bs-desc { display:none; background:var(--card); border:1px solid var(--border); border-left:4px solid var(--accent);
+  border-radius:12px; padding:.9rem 1.1rem; font-size:.93rem; }
+.bs-desc.active { display:block; }
+.bs-desc p { margin:0; }
 </style>
 </head>
 <body>
@@ -179,17 +203,570 @@
   <div class="section">
     <div class="section-title"><span class="th-only">หลักการทำงาน (BJT)</span><span class="en-only">How a BJT Works</span></div>
     <div class="card">
-      <p class="th-only">เมื่อป้อนแรงดันที่ขา Base ให้รอยต่อ B-E นำกระแส (V<sub>BE</sub> ≈ 0.7V) จะมี <strong>กระแสเบส I<sub>B</sub></strong> เล็กๆ ไหล
-        แล้ว <strong>เหนี่ยวนำให้กระแสคอลเลกเตอร์ I<sub>C</sub> ขนาดใหญ่</strong> ไหลจาก C ไป E
-        โดย I<sub>C</sub> = β × I<sub>B</sub> — กระแสเล็กควบคุมกระแสใหญ่ จึงเกิดการ "ขยาย"</p>
-      <p class="en-only">When the Base is driven so the B-E junction conducts (V<sub>BE</sub> ≈ 0.7V), a small <strong>base current I<sub>B</sub></strong> flows,
+      <p class="th-only">สรุปสั้นๆ ก่อน: เมื่อป้อนแรงดันที่ขา Base ให้รอยต่อ B-E นำกระแส (V<sub>BE</sub> ≈ 0.7V) จะมี <strong>กระแสเบส I<sub>B</sub></strong> เล็กๆ ไหล
+        แล้ว <strong>เหนี่ยวนำให้กระแสคอลเลกเตอร์ I<sub>C</sub> ขนาดใหญ่</strong> ไหลจาก C ไป E โดย I<sub>C</sub> = β × I<sub>B</sub>
+        — กระแสเล็กควบคุมกระแสใหญ่ จึงเกิดการ "ขยาย" &nbsp;หัวข้อถัดไปจะอธิบายว่า<strong>ทำไม</strong>ถึงเป็นเช่นนั้น</p>
+      <p class="en-only">The short version: when the Base is driven so the B-E junction conducts (V<sub>BE</sub> ≈ 0.7V), a small <strong>base current I<sub>B</sub></strong> flows,
         which lets a much <strong>larger collector current I<sub>C</sub></strong> flow from C to E, where I<sub>C</sub> = β × I<sub>B</sub>.
-        A small current controls a large one — that is "amplification".</p>
-      <div class="info-box th-only" style="margin-top:1rem;">
-        💡 <strong>เปรียบเทียบ:</strong> ทรานซิสเตอร์เหมือน "ก๊อกน้ำ" — มือหมุนเบาๆ (I<sub>B</sub>) ควบคุมน้ำไหลแรงๆ (I<sub>C</sub>)
+        A small current controls a large one — that is "amplification". The rest of this section explains <strong>why</strong> it happens.</p>
+
+      <!-- 4.1 โครงสร้างภายใน -->
+      <div class="section-subtitle"><span class="th-only">1. โครงสร้างภายใน — ทำไมถึงขยายได้</span><span class="en-only">1. Inside the device — why it amplifies</span></div>
+      <p class="th-only">BJT คือสารกึ่งตัวนำ 3 ชั้นเรียงติดกัน (NPN = N–P–N) เกิดเป็น<strong>รอยต่อ PN 2 รอยต่อ</strong> คือ B-E และ B-C
+        แต่ความลับของการขยายอยู่ที่ <strong>สัดส่วนของแต่ละชั้น</strong> ซึ่งไม่เท่ากันเลย:</p>
+      <p class="en-only">A BJT is three semiconductor layers stacked together (NPN = N–P–N), forming <strong>two PN junctions</strong>: B-E and B-C.
+        The secret to amplification is that the three layers are deliberately <strong>not alike</strong>:</p>
+
+      <div style="text-align:center;margin:1rem 0;">
+        <svg viewBox="0 0 560 250" width="100%" style="max-width:560px;" aria-label="NPN cross-section">
+          <!-- blocks -->
+          <rect x="70" y="55" width="110" height="115" rx="4" fill="#dbeafe" stroke="var(--primary)" stroke-width="1.5"/>
+          <rect x="180" y="55" width="34" height="115" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5"/>
+          <rect x="214" y="55" width="170" height="115" rx="4" fill="#dbeafe" stroke="var(--primary)" stroke-width="1.5"/>
+          <!-- junction hints -->
+          <line x1="180" y1="55" x2="180" y2="170" stroke="#ef4444" stroke-width="1" stroke-dasharray="3 3"/>
+          <line x1="214" y1="55" x2="214" y2="170" stroke="#ef4444" stroke-width="1" stroke-dasharray="3 3"/>
+          <!-- layer labels -->
+          <text x="125" y="105" font-size="20" font-weight="700" fill="var(--primary-dark)" text-anchor="middle">N⁺</text>
+          <text x="125" y="128" font-size="11" fill="#475569" text-anchor="middle">Emitter</text>
+          <text x="197" y="45" font-size="16" font-weight="700" fill="#dc2626" text-anchor="middle">P</text>
+          <text x="197" y="30" font-size="11" fill="var(--text-light)" text-anchor="middle">Base</text>
+          <text x="299" y="105" font-size="20" font-weight="700" fill="var(--primary-dark)" text-anchor="middle">N</text>
+          <text x="299" y="128" font-size="11" fill="#475569" text-anchor="middle">Collector</text>
+          <!-- leads -->
+          <line x1="70" y1="112" x2="24" y2="112" stroke="var(--text)" stroke-width="2.5"/>
+          <text x="16" y="105" font-size="13" font-weight="700" fill="var(--text)">E</text>
+          <line x1="384" y1="112" x2="432" y2="112" stroke="var(--text)" stroke-width="2.5"/>
+          <text x="438" y="105" font-size="13" font-weight="700" fill="var(--text)">C</text>
+          <line x1="197" y1="170" x2="197" y2="215" stroke="var(--text)" stroke-width="2.5"/>
+          <text x="203" y="212" font-size="13" font-weight="700" fill="var(--text)">B</text>
+          <!-- main electron flow -->
+          <defs>
+            <marker id="ah-g" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 z" fill="#10b981"/>
+            </marker>
+            <marker id="ah-o" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 z" fill="#f59e0b"/>
+            </marker>
+          </defs>
+          <line x1="40" y1="88" x2="360" y2="88" stroke="#10b981" stroke-width="5" marker-end="url(#ah-g)" opacity=".85"/>
+          <text x="300" y="80" font-size="11" font-weight="700" fill="#059669" text-anchor="middle">e⁻ ≈ 99%</text>
+          <!-- base recombination current -->
+          <path d="M197,140 L197,205" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#ah-o)"/>
+          <text x="252" y="192" font-size="11" font-weight="700" fill="#d97706" text-anchor="middle">e⁻ ≈ 1%</text>
+          <!-- bias captions -->
+          <text x="150" y="240" font-size="11" fill="var(--text-light)" text-anchor="middle">B-E: forward (0.7V)</text>
+          <text x="330" y="240" font-size="11" fill="var(--text-light)" text-anchor="middle">B-C: reverse</text>
+        </svg>
       </div>
-      <div class="info-box en-only" style="margin-top:1rem;">
-        💡 <strong>Analogy:</strong> a transistor is like a "water tap" — a light turn of the handle (I<sub>B</sub>) controls a strong flow (I<sub>C</sub>)
+
+      <ul class="flow-list th-only">
+        <li><strong>Emitter (N⁺) — โด๊ปสารเจือหนักที่สุด:</strong> เพื่อ "ยิง" อิเล็กตรอนอิสระออกมาให้ได้มากที่สุด (คำว่า emitter = ผู้ปล่อย)</li>
+        <li><strong>Base (P) — บางมากและโด๊ปน้อย:</strong> บางระดับไมครอน มีโฮลให้จับคู่กับอิเล็กตรอนน้อย อิเล็กตรอนที่วิ่งเข้ามาจึงแทบไม่มีอะไรมาขวาง</li>
+        <li><strong>Collector (N) — พื้นที่กว้างที่สุด:</strong> คอยกวาดอิเล็กตรอนที่ทะลุเบสมาเก็บให้หมด และมีเนื้อที่ระบายความร้อน (P = V<sub>CE</sub> × I<sub>C</sub> ตกที่นี่)</li>
+      </ul>
+      <ul class="flow-list en-only">
+        <li><strong>Emitter (N⁺) — the most heavily doped:</strong> its job is to "emit" as many free electrons as possible</li>
+        <li><strong>Base (P) — very thin and lightly doped:</strong> only microns thick with few holes to recombine with, so injected electrons meet almost no obstacles</li>
+        <li><strong>Collector (N) — the largest region:</strong> it sweeps up every electron that crosses the base, and has the area to dissipate heat (P = V<sub>CE</sub> × I<sub>C</sub> is burnt here)</li>
+      </ul>
+      <div class="info-box th-only">
+        ⚠️ <strong>เพราะโครงสร้างไม่สมมาตรนี้เอง ทรานซิสเตอร์จึงสลับขา C กับ E ไม่ได้</strong> — ถ้าต่อกลับ (reverse-active) มันยังนำกระแสได้บ้าง แต่ β จะเหลือแค่ 2–5 เท่านั้น
+      </div>
+      <div class="info-box en-only">
+        ⚠️ <strong>Because the structure is asymmetric, C and E are not interchangeable.</strong> Swapped (reverse-active mode) it still conducts, but β collapses to just 2–5.
+      </div>
+
+      <!-- 4.2 เงื่อนไขไบอัส -->
+      <div class="section-subtitle"><span class="th-only">2. เงื่อนไขไบอัสของ 2 รอยต่อ</span><span class="en-only">2. How the two junctions must be biased</span></div>
+      <p class="th-only">ย่านการทำงานของ BJT ถูกกำหนดโดยไบอัสของรอยต่อทั้งสอง ไม่ใช่แค่ค่ากระแสเบสเพียงอย่างเดียว:</p>
+      <p class="en-only">The operating region is set by how the two junctions are biased — not just by the base current alone:</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th><span class="th-only">ย่าน</span><span class="en-only">Region</span></th>
+              <th><span class="th-only">รอยต่อ B-E</span><span class="en-only">B-E junction</span></th>
+              <th><span class="th-only">รอยต่อ B-C</span><span class="en-only">B-C junction</span></th>
+              <th><span class="th-only">ผลที่ได้</span><span class="en-only">Result</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Cut-off</strong></td>
+              <td><span class="th-only">ย้อนกลับ / ไม่ถึง 0.7V</span><span class="en-only">reverse / below 0.7V</span></td>
+              <td><span class="th-only">ย้อนกลับ</span><span class="en-only">reverse</span></td>
+              <td><span class="th-only">ไม่มีอิเล็กตรอนถูกฉีดเข้าเบส → I<sub>C</sub> ≈ 0</span><span class="en-only">no electrons injected into the base → I<sub>C</sub> ≈ 0</span></td>
+            </tr>
+            <tr>
+              <td><strong>Active</strong></td>
+              <td><span class="th-only"><strong>ตรง</strong> (0.7V)</span><span class="en-only"><strong>forward</strong> (0.7V)</span></td>
+              <td><span class="th-only"><strong>ย้อนกลับ</strong></span><span class="en-only"><strong>reverse</strong></span></td>
+              <td><span class="th-only">คอลเลกเตอร์กวาดอิเล็กตรอนได้เต็มที่ → I<sub>C</sub> = β·I<sub>B</sub></span><span class="en-only">the collector sweeps up every carrier → I<sub>C</sub> = β·I<sub>B</sub></span></td>
+            </tr>
+            <tr>
+              <td><strong>Saturation</strong></td>
+              <td><span class="th-only">ตรง</span><span class="en-only">forward</span></td>
+              <td><span class="th-only"><strong>ตรง</strong> (ด้วย)</span><span class="en-only"><strong>forward</strong> too</span></td>
+              <td><span class="th-only">สนามที่ดูดอิเล็กตรอนหมดแรง I<sub>C</sub> ถูกจำกัดด้วย R<sub>C</sub> ไม่ใช่ β อีกต่อไป, V<sub>CE</sub> ≈ 0.2V</span><span class="en-only">the sweeping field is gone; I<sub>C</sub> is limited by R<sub>C</sub>, not β. V<sub>CE</sub> ≈ 0.2V</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 4.3 ทีละขั้น -->
+      <div class="section-subtitle"><span class="th-only">3. เกิดอะไรขึ้นทีละขั้น (NPN ในย่าน Active)</span><span class="en-only">3. Step by step (NPN in the active region)</span></div>
+      <p class="th-only" style="font-size:.92rem;color:var(--text-light);margin-bottom:.8rem;">
+        👆 <strong>คลิกปุ่มขั้นที่ 1–5</strong> เพื่อดูภาพตัดขวางเปลี่ยนไปทีละขั้น (หรือกด "เล่นอัตโนมัติ" ให้ไล่เองทั้ง 5 ขั้น)
+      </p>
+      <p class="en-only" style="font-size:.92rem;color:var(--text-light);margin-bottom:.8rem;">
+        👆 <strong>Click steps 1–5</strong> to watch the cross-section change at each stage (or hit "Auto-play" to run through all five).
+      </p>
+
+      <div class="bs-wrap" id="bjt-steps">
+        <div class="bs-tabs">
+          <button class="bs-tab" data-step="1"><span class="bs-n">1</span><span class="th-only">ไบอัส B-E</span><span class="en-only">Bias B-E</span></button>
+          <button class="bs-tab" data-step="2"><span class="bs-n">2</span><span class="th-only">ฉีดอิเล็กตรอน</span><span class="en-only">Inject</span></button>
+          <button class="bs-tab" data-step="3"><span class="bs-n">3</span><span class="th-only">จับคู่ ~1% = I<sub>B</sub></span><span class="en-only">~1% recombines = I<sub>B</sub></span></button>
+          <button class="bs-tab" data-step="4"><span class="bs-n">4</span><span class="th-only">กวาด ~99% = I<sub>C</sub></span><span class="en-only">~99% swept = I<sub>C</sub></span></button>
+          <button class="bs-tab" data-step="5"><span class="bs-n">5</span><span class="th-only">ผลลัพธ์ β</span><span class="en-only">Result: β</span></button>
+        </div>
+
+        <canvas id="bs-canvas" class="bs-canvas"></canvas>
+
+        <div class="bs-nav">
+          <button id="bs-prev" class="bs-navbtn">◀ <span class="th-only">ก่อนหน้า</span><span class="en-only">Prev</span></button>
+          <button id="bs-play" class="bs-navbtn"><span class="th-only">▶ เล่นอัตโนมัติ</span><span class="en-only">▶ Auto-play</span></button>
+          <button id="bs-next" class="bs-navbtn"><span class="th-only">ถัดไป</span><span class="en-only">Next</span> ▶</button>
+        </div>
+
+        <div class="bs-desc" data-step="1">
+          <p class="th-only"><strong>ขั้นที่ 1 — ปลดล็อกรอยต่อ B-E:</strong> ป้อนแรงดันบวกที่ขา B เทียบกับ E จนถึง <strong>V<sub>BE</sub> ≈ 0.7V</strong>
+            แรงดันนี้ไป "ทลาย" แนวปลอดพาหะ (depletion region — แถบเทาที่รอยต่อ) ทำให้รอยต่อ B-E เริ่มนำกระแส
+            <br><span style="color:var(--text-light);">สังเกต: แถบเทาที่ B-E ยุบลง แต่ยังไม่มีอิเล็กตรอนวิ่ง — ต่ำกว่า 0.7V เมื่อไหร่ ทรานซิสเตอร์อยู่ในย่าน <strong>Cut-off</strong></span></p>
+          <p class="en-only"><strong>Step 1 — unlock the B-E junction:</strong> drive B positive with respect to E until <strong>V<sub>BE</sub> ≈ 0.7V</strong>.
+            That collapses the depletion region (the grey band at the junction) so B-E starts to conduct.
+            <br><span style="color:var(--text-light);">Notice: the grey band shrinks but nothing flows yet — below 0.7V the transistor sits in <strong>cut-off</strong>.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="2">
+          <p class="th-only"><strong>ขั้นที่ 2 — อีมิตเตอร์ฉีดอิเล็กตรอน:</strong> อีมิตเตอร์ที่โด๊ปหนัก (N⁺) <strong>ฉีดอิเล็กตรอนจำนวนมหาศาลเข้าไปในเบส</strong>
+            — นี่คือกระแสหลักทั้งหมดของทรานซิสเตอร์ (= I<sub>E</sub>) สมมติว่ามี 100 ตัว
+            <br><span style="color:var(--text-light);">สังเกต: ตอนนี้อิเล็กตรอนไปกองอยู่ที่เบส เพราะรอยต่อ B-C ยังกั้นอยู่ (แถบเทาฝั่งขวา)</span></p>
+          <p class="en-only"><strong>Step 2 — the emitter injects:</strong> the heavily doped emitter (N⁺) <strong>floods the base with electrons</strong>
+            — this is the transistor's whole current (= I<sub>E</sub>). Say 100 of them.
+            <br><span style="color:var(--text-light);">Notice: they pile up in the base, because the B-C junction still blocks them (grey band on the right).</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="3">
+          <p class="th-only"><strong>ขั้นที่ 3 — เบสกินไปแค่ ~1%:</strong> เบสบางมากและมีโฮลน้อย (วงแดงในภาพ) อิเล็กตรอนที่จับคู่ (recombine) กับโฮล
+            แล้วต้องไหลออกทางขา B จึงมีแค่ <strong>~1 ตัวจาก 100</strong> — <strong>ส่วนนี้แหละคือ I<sub>B</sub></strong> (จุดสีส้ม)
+            <br><span style="color:var(--text-light);">นี่คือหัวใจ: I<sub>B</sub> เป็นแค่ "เศษที่รั่วออกมา" ไม่ใช่ต้นทางของกระแสใหญ่</span></p>
+          <p class="en-only"><strong>Step 3 — the base only takes ~1%:</strong> the base is thin and hole-poor (the red circles), so only about
+            <strong>1 electron in 100</strong> recombines and leaves through the base lead — <strong>that is I<sub>B</sub></strong> (the orange dots).
+            <br><span style="color:var(--text-light);">This is the key idea: I<sub>B</sub> is the "leakage", not the source of the big current.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="4">
+          <p class="th-only"><strong>ขั้นที่ 4 — คอลเลกเตอร์กวาดที่เหลือทั้งหมด:</strong> อีก <strong>~99 ตัว</strong> วิ่งข้ามเบสไปถึงรอยต่อ B-C ซึ่ง<strong>ไบอัสย้อนกลับ</strong>
+            (C เป็นบวกกว่า B มาก) สนามไฟฟ้าแรงตรงนั้น (ลูกศรน้ำเงิน) <strong>ดูดอิเล็กตรอนเข้าคอลเลกเตอร์จนหมด</strong> → กลายเป็น <strong>I<sub>C</sub></strong>
+            <br><span style="color:var(--text-light);">พลังงานที่ผลักกระแสก้อนนี้มาจาก V<sub>CC</sub> ที่ต่ออยู่กับขา C ไม่ได้มาจากขา B</span></p>
+          <p class="en-only"><strong>Step 4 — the collector sweeps up the rest:</strong> the other <strong>~99</strong> cross the base to the <strong>reverse-biased</strong> B-C junction
+            (C is far more positive than B). Its strong field (blue arrows) <strong>pulls every one of them into the collector</strong> → that is <strong>I<sub>C</sub></strong>.
+            <br><span style="color:var(--text-light);">The energy behind this current comes from V<sub>CC</sub> at the collector, not from the base.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="5">
+          <p class="th-only"><strong>ขั้นที่ 5 — จึงเกิดการขยาย:</strong> กระแสก้อนเดียวถูกแบ่งเป็น <strong>99 : 1</strong> โดยอัตโนมัติ (I<sub>C</sub> : I<sub>B</sub>)
+            และสัดส่วนนี้ถูกล็อกไว้ด้วยโครงสร้าง → ถ้าเราดัน I<sub>B</sub> เพิ่มเป็น 2 เท่า อิเล็กตรอนที่ถูกฉีดต้องเพิ่มเป็น 2 เท่าตาม I<sub>C</sub> ก็เพิ่ม 2 เท่าเช่นกัน
+            <br><strong>ขยับ I<sub>B</sub> แค่ 1 หน่วย แต่ I<sub>C</sub> ขยับตาม 99 หน่วย → I<sub>C</sub> = β × I<sub>B</sub></strong></p>
+          <p class="en-only"><strong>Step 5 — and that is the amplification:</strong> one current splits itself <strong>99 : 1</strong> (I<sub>C</sub> : I<sub>B</sub>),
+            and the structure locks that ratio in. Double I<sub>B</sub> and the injection must double, so I<sub>C</sub> doubles too.
+            <br><strong>Move I<sub>B</sub> by 1 unit and I<sub>C</sub> moves by 99 → I<sub>C</sub> = β × I<sub>B</sub></strong></p>
+        </div>
+      </div>
+
+      <div class="info-box th-only">
+        💡 <strong>เปรียบเทียบ:</strong> ทรานซิสเตอร์เหมือน "ก๊อกน้ำ" — มือหมุนเบาๆ (I<sub>B</sub>) ควบคุมน้ำไหลแรงๆ (I<sub>C</sub>)
+        โดยที่แรงมือ<strong>ไม่ได้เป็นตัวจ่ายน้ำเอง</strong> พลังงานมาจากแรงดัน V<sub>CC</sub> ในท่อ — ทรานซิสเตอร์แค่ทำหน้าที่ควบคุมเท่านั้น
+      </div>
+      <div class="info-box en-only">
+        💡 <strong>Analogy:</strong> a transistor is a "water tap" — a light turn of the handle (I<sub>B</sub>) controls a strong flow (I<sub>C</sub>).
+        Your hand <strong>does not supply the water</strong>: the energy comes from V<sub>CC</sub>. The transistor only controls it.
+      </div>
+
+      <!-- 4.4 ขยายได้อย่างไร -->
+      <div class="section-subtitle"><span class="th-only">4. แล้วมัน "ขยาย" ตรงไหน — I<sub>B</sub> ไม่ใช่ต้นทางของ I<sub>C</sub></span><span class="en-only">4. So where is the "amplification"? — I<sub>B</sub> is not the source of I<sub>C</sub></span></div>
+      <p class="th-only">จุดที่คนสับสนกันมากที่สุดคือคำว่า "กระแสเล็กควบคุมกระแสใหญ่" แล้วเผลอคิดว่าทรานซิสเตอร์ <strong>เสกกระแสเพิ่มขึ้นมาจาก I<sub>B</sub></strong> — ซึ่งไม่ใช่เลย ลองมองใหม่ 3 ข้อนี้:</p>
+      <p class="en-only">The most common confusion is hearing "a small current controls a large one" and assuming the transistor <strong>creates extra current out of I<sub>B</sub></strong>. It does not. Three points fix this:</p>
+      <ul class="flow-list th-only">
+        <li><strong>กระแสใหญ่ไม่ได้มาจากขา B — มันมาจาก V<sub>CC</sub>:</strong> ทรานซิสเตอร์ไม่สร้างพลังงาน มันเป็นแค่ <strong>วาล์ว</strong> พลังงานของ I<sub>C</sub> มาจากแหล่งจ่ายที่ต่อกับคอลเลกเตอร์อยู่แล้ว ขา B แค่สั่งว่าจะเปิดวาล์วกว้างแค่ไหน (เหมือนก๊อกน้ำ — แรงน้ำมาจากท่อประปา ไม่ได้มาจากมือเรา)</li>
+        <li><strong>I<sub>B</sub> คือ "เศษที่รั่วออกมา" ไม่ใช่ต้นทาง:</strong> จากขั้นที่ 2–4 ข้างบน อิเล็กตรอน 100 ตัวถูกฉีดจาก E เข้าเบส แล้วถูกแบ่งเป็น 1 ตัวออกทางขา B (= I<sub>B</sub>) กับ 99 ตัวไปคอลเลกเตอร์ (= I<sub>C</sub>) — <strong>ทั้งสองคือกระแสก้อนเดียวกันที่ถูกแบ่งสัดส่วน 99 : 1</strong> ไม่ใช่ I<sub>B</sub> ไหลไปแล้วกลายเป็น I<sub>C</sub></li>
+        <li><strong>"ขยาย" คือกลับด้านการมอง:</strong> สัดส่วน 99:1 ถูกล็อกไว้ด้วยโครงสร้าง ดังนั้นถ้าเราดัน I<sub>B</sub> จาก 1 → 2 หน่วย ธรรมชาติของอุปกรณ์บังคับให้อิเล็กตรอนที่ถูกฉีดเพิ่มเป็น 200 ตัว → I<sub>C</sub> ต้องขึ้นจาก 99 → 198 ตามไปเอง<br>
+          <strong>ขยับ I<sub>B</sub> แค่ 1 หน่วย แต่ I<sub>C</sub> ขยับตาม 99 หน่วย — นี่แหละคือการขยาย</strong></li>
+      </ul>
+      <ul class="flow-list en-only">
+        <li><strong>The big current comes from V<sub>CC</sub>, not from the base:</strong> a transistor creates no energy — it is a <strong>valve</strong>. The energy in I<sub>C</sub> comes from the supply already wired to the collector; the base only decides how far the valve opens (like a tap: the pressure is in the pipe, not in your hand)</li>
+        <li><strong>I<sub>B</sub> is the "leakage", not the source:</strong> from steps 2–4 above, 100 electrons are injected from E into the base and split into 1 leaving via the base lead (= I<sub>B</sub>) and 99 reaching the collector (= I<sub>C</sub>). <strong>They are one and the same current, split 99 : 1</strong> — I<sub>B</sub> does not "turn into" I<sub>C</sub></li>
+        <li><strong>Amplification is that view, reversed:</strong> the 99:1 split is locked in by the structure. So if we push I<sub>B</sub> from 1 → 2 units, physics forces the injection up to 200 electrons → I<sub>C</sub> must follow from 99 → 198.<br>
+          <strong>Move I<sub>B</sub> by 1 unit and I<sub>C</sub> moves by 99 — that is the amplification.</strong></li>
+      </ul>
+      <div class="info-box th-only">
+        🔊 <strong>แล้วกลายเป็นวงจรขยายเสียงได้ยังไง?</strong> เอา I<sub>C</sub> ที่แกว่งไปมานั้นวิ่งผ่าน R<sub>C</sub> แล้วอ่านแรงดันที่ขา C (V<sub>CE</sub> = V<sub>CC</sub> − I<sub>C</sub>R<sub>C</sub>)
+        กระแสแกว่งเยอะ → แรงดันแกว่งเยอะตาม สัญญาณเล็กๆ ที่ป้อนเข้าขา B จึงโผล่ที่ขา C ในรูป<strong>สัญญาณหน้าตาเดิมแต่ตัวใหญ่ขึ้น</strong>
+      </div>
+      <div class="info-box en-only">
+        🔊 <strong>How does that become an audio amplifier?</strong> Run the swinging I<sub>C</sub> through R<sub>C</sub> and read the voltage at the collector (V<sub>CE</sub> = V<sub>CC</sub> − I<sub>C</sub>R<sub>C</sub>).
+        A big current swing gives a big voltage swing, so a tiny signal on the base reappears at the collector as <strong>the same shape, much bigger</strong>.
+      </div>
+
+      <!-- 4.5 α และ β -->
+      <div class="section-subtitle"><span class="th-only">5. ตัวเลข "99%" กลายเป็น β ได้อย่างไร</span><span class="en-only">5. How that "99%" becomes β</span></div>
+      <p class="th-only">สัดส่วนอิเล็กตรอนที่วิ่งถึงคอลเลกเตอร์สำเร็จเรียกว่า <strong>α</strong> (alpha) และอัตราขยายกระแส <strong>β</strong> ก็คำนวณมาจาก α โดยตรง:</p>
+      <p class="en-only">The fraction of electrons that make it to the collector is called <strong>α</strong> (alpha), and the current gain <strong>β</strong> follows directly from it:</p>
+      <div class="grid-3">
+        <div class="formula-box" style="padding:.8rem 1rem;"><div class="formula" style="font-size:1rem;">α = I<sub>C</sub> / I<sub>E</sub></div></div>
+        <div class="formula-box" style="padding:.8rem 1rem;"><div class="formula" style="font-size:1rem;">β = α / (1 − α)</div></div>
+        <div class="formula-box" style="padding:.8rem 1rem;"><div class="formula" style="font-size:1rem;">I<sub>E</sub> = I<sub>C</sub> + I<sub>B</sub></div></div>
+      </div>
+      <p class="th-only" style="font-size:.92rem;">ลองแทนค่า: α = 0.99 → β = 0.99 / 0.01 = <strong>99</strong> &nbsp;•&nbsp; ถ้าทำเบสให้บางลงอีกจน α = 0.995 → β = <strong>199</strong>
+        <br>เห็นได้ว่า <strong>α เปลี่ยนนิดเดียว แต่ β เปลี่ยนเป็นเท่าตัว</strong> — นี่คือเหตุผลที่ β ของทรานซิสเตอร์เบอร์เดียวกันจากคนละล็อตต่างกันได้ 2–3 เท่า และเป็นเหตุผลที่วงจรที่ดี<strong>ต้องไม่พึ่งค่า β ที่แน่นอน</strong></p>
+      <p class="en-only" style="font-size:.92rem;">Plug in numbers: α = 0.99 → β = 0.99 / 0.01 = <strong>99</strong> &nbsp;•&nbsp; make the base thinner so α = 0.995 → β = <strong>199</strong>.
+        <br>A <strong>tiny change in α swings β enormously</strong> — which is why two transistors with the same part number can differ 2–3× in β, and why good circuits <strong>must never depend on an exact β</strong>.</p>
+
+      <!-- 4.6 ใครกำหนดอะไร -->
+      <div class="section-subtitle"><span class="th-only">6. ใครกำหนดอะไร — ตัวทรานซิสเตอร์ หรือ วงจรที่เราต่อ?</span><span class="en-only">6. Who decides what — the transistor, or the circuit you build?</span></div>
+      <p class="th-only">คำถามนี้สำคัญมาก และคำตอบคือ <strong>"คนละหน้าที่กัน"</strong>:</p>
+      <p class="en-only">This is a crucial question, and the answer is that <strong>they each decide a different thing</strong>:</p>
+      <div class="grid-2">
+        <div class="info-box th-only" style="margin-top:0;">
+          🔧 <strong>ทรานซิสเตอร์กำหนด "คูณกี่เท่า"</strong><br>
+          อัตราส่วน 99:1 (= β) ถูกล็อกมาตั้งแต่โรงงาน จากความบางของเบสและการโด๊ปสาร — <strong>เราเปลี่ยนมันด้วยการต่อวงจรไม่ได้</strong> ซื้อ 2N2222 มาก็ติดค่า β ≈ 100–300 มาแบบนั้น
+        </div>
+        <div class="info-box th-only" style="margin-top:0;border-left-color:var(--secondary);">
+          🔌 <strong>วงจรกำหนด "เท่าไหร่"</strong><br>
+          ทรานซิสเตอร์ไม่ได้บอกว่า I<sub>B</sub> ต้องกี่ mA — ตัวบังคับคือ R<sub>B</sub> กับแรงดันที่เราป้อน<br>
+          I<sub>B</sub> = (V<sub>in</sub> − 0.7) / R<sub>B</sub><br>
+          พอวงจรกำหนด I<sub>B</sub> มาแล้ว ทรานซิสเตอร์ถึงค่อยคูณ β ออกมาเป็น I<sub>C</sub>
+        </div>
+        <div class="info-box en-only" style="margin-top:0;">
+          🔧 <strong>The transistor sets the multiplier</strong><br>
+          The 99:1 ratio (= β) is locked in at the factory by the base width and doping — <strong>no wiring can change it</strong>. Buy a 2N2222 and it arrives with β ≈ 100–300 built in.
+        </div>
+        <div class="info-box en-only" style="margin-top:0;border-left-color:var(--secondary);">
+          🔌 <strong>The circuit sets the magnitude</strong><br>
+          Nothing in the transistor says how many mA I<sub>B</sub> should be — R<sub>B</sub> and your drive voltage do:<br>
+          I<sub>B</sub> = (V<sub>in</sub> − 0.7) / R<sub>B</sub><br>
+          Once the circuit fixes I<sub>B</sub>, the transistor multiplies it by β to give I<sub>C</sub>.
+        </div>
+      </div>
+      <p class="th-only" style="margin-top:1rem;"><strong>แต่มีข้อสำคัญ:</strong> กฎ β จะเป็นจริงก็ต่อเมื่อวงจร <strong>ยอมให้</strong> I<sub>C</sub> ไหลได้ถึงขนาดนั้น
+        เพราะกระแสสูงสุดที่คอลเลกเตอร์ไหลได้ถูกจำกัดด้วย V<sub>CC</sub> และ R<sub>C</sub> อยู่แล้ว (≈ V<sub>CC</sub>/R<sub>C</sub>) — ลองเทียบ 2 กรณีนี้ (β = 100, V<sub>CC</sub>/R<sub>C</sub> = 20mA):</p>
+      <p class="en-only" style="margin-top:1rem;"><strong>But there is a catch:</strong> the β rule only holds if the circuit <strong>lets</strong> I<sub>C</sub> get that big.
+        The collector current is already capped by V<sub>CC</sub> and R<sub>C</sub> (≈ V<sub>CC</sub>/R<sub>C</sub>). Compare two cases (β = 100, V<sub>CC</sub>/R<sub>C</sub> = 20mA):</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>I<sub>B</sub> <span class="th-only">ที่วงจรป้อน</span><span class="en-only">from the circuit</span></th>
+              <th><span class="th-only">I<sub>C</sub> ที่ β "อยากให้เป็น"</span><span class="en-only">I<sub>C</sub> that β "wants"</span></th>
+              <th><span class="th-only">I<sub>C</sub> ที่วงจร "ยอมให้ไหล"</span><span class="en-only">I<sub>C</sub> the circuit allows</span></th>
+              <th><span class="th-only">ผลจริง</span><span class="en-only">What actually happens</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>0.1 mA</td>
+              <td>10 mA</td>
+              <td><span class="th-only">ได้ถึง 20 mA</span><span class="en-only">up to 20 mA</span></td>
+              <td><span class="th-only">ได้ 10 mA จริง → <strong>Active</strong> (กฎ β ใช้ได้)</span><span class="en-only">10 mA flows → <strong>Active</strong> (β rule holds)</span></td>
+            </tr>
+            <tr>
+              <td>1 mA</td>
+              <td>100 mA</td>
+              <td><span class="th-only">ได้แค่ 20 mA</span><span class="en-only">only 20 mA</span></td>
+              <td><span class="th-only">ตันที่ 20 mA → <strong>Saturation</strong> (กฎ β พัง, อัตราส่วนจริงเหลือ 20:1)</span><span class="en-only">clamps at 20 mA → <strong>Saturation</strong> (β rule breaks; real ratio is 20:1)</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info-box th-only">
+        🔑 <strong>สรุปประโยคเดียว:</strong> ทรานซิสเตอร์เป็นคนตั้งกฎ β แต่<strong>วงจรมีสิทธิ์ "ยับยั้ง" กฎนั้นได้</strong> —
+        และเวลาที่วงจรยับยั้งสำเร็จ เราเรียกว่า <strong>ย่านอิ่มตัว (Saturation)</strong> ซึ่งก็คือตอนที่มันทำงานเป็น<strong>สวิตช์</strong>นั่นเอง
+      </div>
+      <div class="info-box en-only">
+        🔑 <strong>In one line:</strong> the transistor writes the β rule, but <strong>the circuit can veto it</strong> —
+        and when the veto succeeds we call it <strong>saturation</strong>, which is exactly when the transistor behaves as a <strong>switch</strong>.
+      </div>
+
+      <!-- 4.7 NPN vs PNP -->
+      <div class="section-subtitle"><span class="th-only">7. NPN กับ PNP ต่างกันตรงไหน</span><span class="en-only">7. NPN vs PNP</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>NPN</th>
+              <th>PNP</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="th-only">พาหะหลัก</span><span class="en-only">Main carrier</span></td>
+              <td><span class="th-only">อิเล็กตรอน (เร็วกว่า)</span><span class="en-only">electrons (faster)</span></td>
+              <td><span class="th-only">โฮล (ช้ากว่า)</span><span class="en-only">holes (slower)</span></td>
+            </tr>
+            <tr>
+              <td><span class="th-only">เปิดเมื่อ</span><span class="en-only">Turns on when</span></td>
+              <td>V<sub>B</sub> <span class="th-only">สูงกว่า</span><span class="en-only">above</span> V<sub>E</sub> ≈ +0.7V</td>
+              <td>V<sub>B</sub> <span class="th-only">ต่ำกว่า</span><span class="en-only">below</span> V<sub>E</sub> ≈ −0.7V</td>
+            </tr>
+            <tr>
+              <td><span class="th-only">ทิศกระแสสมมติ</span><span class="en-only">Conventional current</span></td>
+              <td><span class="th-only">ไหลเข้า C และ B → ออกที่ E</span><span class="en-only">into C and B → out of E</span></td>
+              <td><span class="th-only">ไหลเข้า E → ออกที่ C และ B</span><span class="en-only">into E → out of C and B</span></td>
+            </tr>
+            <tr>
+              <td><span class="th-only">ตำแหน่งในวงจร</span><span class="en-only">Typical position</span></td>
+              <td><span class="th-only">ต่อโหลด<strong>ด้านบน</strong> ทรานซิสเตอร์อยู่ฝั่งกราวด์ (low-side switch)</span><span class="en-only">load on top, transistor to ground (<strong>low-side</strong> switch)</span></td>
+              <td><span class="th-only">ทรานซิสเตอร์อยู่<strong>ฝั่ง +V</strong> โหลดอยู่ด้านล่าง (high-side switch)</span><span class="en-only">transistor on +V, load below (<strong>high-side</strong> switch)</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="th-only" style="font-size:.92rem;color:var(--text-light);margin-top:.6rem;">
+        หลักการภายในเหมือนกันทุกอย่าง เพียงแค่<strong>สลับชนิดสารและกลับขั้วแรงดันทั้งหมด</strong> — งานทั่วไปนิยม NPN เพราะอิเล็กตรอนเคลื่อนที่ได้เร็วกว่าโฮล ทำให้ได้ β และความเร็วสูงกว่า</p>
+      <p class="en-only" style="font-size:.92rem;color:var(--text-light);margin-top:.6rem;">
+        The physics is identical — just <strong>swap the doping types and flip every voltage</strong>. NPN is preferred in general use because electrons move faster than holes, giving higher β and speed.</p>
+
+      <!-- 4.8 ออกแบบไม่ให้พึ่ง β -->
+      <div class="section-subtitle"><span class="th-only">8. ต้องต่อวงจรให้ "พอดี" กับทรานซิสเตอร์ไหม?</span><span class="en-only">8. Must the circuit be "matched" to the transistor?</span></div>
+      <p class="th-only">ต้อง — แต่ <strong>"พอดี" ไม่ได้แปลว่าออกแบบให้ตรงกับค่า β เป๊ะๆ</strong> ตรงกันข้ามเลย: <strong>วงจรที่ดีต้องออกแบบให้ผลลัพธ์ไม่ขึ้นกับ β</strong>
+        เพราะ β เชื่อถือไม่ได้ — เบอร์เดียวกันคนละล็อตอาจได้ 100 กับ 300 แถมยังเปลี่ยนตามอุณหภูมิและระดับกระแสอีก ถ้าคำนวณโดยยึด β = 100 เป๊ะ แล้วบังเอิญได้ตัวที่ β = 250 มา วงจรจะเพี้ยนทันที</p>
+      <p class="en-only">Yes — but <strong>"matched" does not mean designed around an exact β</strong>. Quite the opposite: <strong>a good circuit is designed so the result does not depend on β</strong>,
+        because β is unreliable. Two parts with the same number can be 100 and 300, and the value drifts with temperature and current. Design for exactly β = 100, get a β = 250 part, and the circuit misbehaves.</p>
+      <div class="grid-2">
+        <div>
+          <div class="section-subtitle" style="margin-top:0;"><span class="th-only">🔘 ใช้เป็นสวิตช์ → อัด I<sub>B</sub> เกินไว้</span><span class="en-only">🔘 As a switch → deliberately overdrive</span></div>
+          <p class="th-only" style="font-size:.92rem;">คำนวณ I<sub>B</sub> จาก <strong>β ต่ำสุด</strong>ในดาต้าชีต แล้ว<strong>คูณเผื่ออีก 5–10 เท่า</strong> —
+            ถ้าได้ตัวที่ β สูงกว่ามา มันก็แค่อิ่มตัวเหมือนเดิม ไม่เสียหาย → <strong>วงจรทำงานเหมือนกันหมดทุกตัว ไม่ต้องคัดของ</strong></p>
+          <p class="en-only" style="font-size:.92rem;">Compute I<sub>B</sub> from the <strong>minimum β</strong> in the datasheet, then <strong>multiply by 5–10×</strong>.
+            A higher-β part simply saturates just the same — no harm → <strong>every part works identically; no hand-picking needed</strong>.</p>
+        </div>
+        <div>
+          <div class="section-subtitle" style="margin-top:0;"><span class="th-only">📈 ใช้ขยายสัญญาณ → ใส่ R<sub>E</sub></span><span class="en-only">📈 As an amplifier → add R<sub>E</sub></span></div>
+          <p class="th-only" style="font-size:.92rem;">เทคนิค <strong>emitter degeneration</strong>: ใส่ตัวต้านทานที่ขาอีมิตเตอร์ แล้วอัตราขยายจะกลายเป็น ≈ <strong>R<sub>C</sub> / R<sub>E</sub></strong>
+            ซึ่ง<strong>ไม่มี β อยู่ในสูตรเลย</strong> — เท่ากับใช้ตัวต้านทาน 2 ตัวที่คุมค่าได้แม่น มาแทน β ที่เอาแน่นอนไม่ได้ (แลกกับอัตราขยายที่ลดลงบ้าง แต่คุ้มมาก)</p>
+          <p class="en-only" style="font-size:.92rem;"><strong>Emitter degeneration</strong>: add a resistor at the emitter and the gain becomes ≈ <strong>R<sub>C</sub> / R<sub>E</sub></strong>,
+            with <strong>no β in the formula at all</strong> — two precise resistors replace an unpredictable β. You trade away some gain for a circuit that actually behaves.</p>
+        </div>
+      </div>
+      <p class="th-only" style="margin-top:.5rem;">สิ่งที่ต้อง <strong>"ต่อให้พอดี" จริงๆ คือขีดจำกัดในดาต้าชีต</strong> — เกินเมื่อไหร่คือพัง:</p>
+      <p class="en-only" style="margin-top:.5rem;">What you truly must <strong>match are the datasheet limits</strong> — exceed them and the part dies:</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th><span class="th-only">ต้องเช็ค</span><span class="en-only">Check</span></th>
+              <th><span class="th-only">ความหมาย</span><span class="en-only">Meaning</span></th>
+              <th><span class="th-only">ตัวอย่าง 2N2222</span><span class="en-only">2N2222 example</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>I<sub>C(max)</sub></strong></td>
+              <td><span class="th-only">กระแสคอลเลกเตอร์สูงสุดที่ทนได้</span><span class="en-only">maximum collector current</span></td>
+              <td><span class="th-only">~600–800 mA → ขับมอเตอร์ 2A ไม่ได้ ต้องเปลี่ยนเบอร์</span><span class="en-only">~600–800 mA → can't drive a 2A motor; pick another part</span></td>
+            </tr>
+            <tr>
+              <td><strong>V<sub>CEO(max)</sub></strong></td>
+              <td><span class="th-only">แรงดันคร่อม C-E สูงสุด</span><span class="en-only">maximum C-E voltage</span></td>
+              <td><span class="th-only">~40V → ห้ามเอาไปใช้กับไฟ 220V เด็ดขาด</span><span class="en-only">~40V → never put it on 220V mains</span></td>
+            </tr>
+            <tr>
+              <td><strong>P<sub>D(max)</sub></strong></td>
+              <td><span class="th-only">กำลังสูญเสียสูงสุด (V<sub>CE</sub> × I<sub>C</sub>)</span><span class="en-only">max power dissipation (V<sub>CE</sub> × I<sub>C</sub>)</span></td>
+              <td><span class="th-only">~500 mW (ไม่มีฮีตซิงก์)</span><span class="en-only">~500 mW without a heatsink</span></td>
+            </tr>
+            <tr>
+              <td><strong>I<sub>B(max)</sub></strong></td>
+              <td><span class="th-only">กระแสเบสสูงสุด</span><span class="en-only">maximum base current</span></td>
+              <td><span class="th-only">ต้องมี R<sub>B</sub> เสมอ — ห้ามป้อนแรงดันเข้าขา B ตรงๆ</span><span class="en-only">always use R<sub>B</sub> — never drive the base with a bare voltage</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info-box th-only">
+        🔑 <strong>สรุป:</strong> ออกแบบให้อยู่<strong>ในขีดจำกัด</strong>ของทรานซิสเตอร์ (ต้องเป๊ะ) แต่ออกแบบให้<strong>ไม่ต้องพึ่งพา β</strong> ของมัน (ต้องยืดหยุ่น)
+      </div>
+      <div class="info-box en-only">
+        🔑 <strong>Rule of thumb:</strong> design strictly <strong>inside the transistor's limits</strong>, but design so you <strong>never depend on its β</strong>.
+      </div>
+
+      <!-- 4.9 ตัวอย่างคำนวณ -->
+      <div class="section-subtitle"><span class="th-only">9. ตัวอย่างคำนวณ: ใช้ไมโครคอนโทรลเลอร์ 5V ขับ LED</span><span class="en-only">9. Worked example: a 5V microcontroller driving an LED</span></div>
+      <div class="info-box th-only" style="background:var(--bg);border-color:var(--border);border-left-color:var(--secondary);">
+        <strong>โจทย์:</strong> V<sub>CC</sub> = 5V • LED สีแดง V<sub>f</sub> = 2V • ต้องการ I<sub>C</sub> = 20mA • ใช้ 2N2222 (β ต่ำสุด ≈ 100) • ขา MCU จ่าย 5V<br><br>
+        <strong>① หา R<sub>C</sub> (ตัวจำกัดกระแส LED)</strong> — ตอน ON ทรานซิสเตอร์อิ่มตัว V<sub>CE</sub> ≈ 0.2V<br>
+        R<sub>C</sub> = (5 − 2 − 0.2) / 0.02 = <strong>140 Ω</strong> → ใช้ค่ามาตรฐาน <strong>150 Ω</strong><br><br>
+        <strong>② หา I<sub>B</sub> ขั้นต่ำ</strong> — I<sub>B(min)</sub> = I<sub>C</sub> / β = 20mA / 100 = <strong>0.2 mA</strong><br><br>
+        <strong>③ เผื่อให้อิ่มตัวแน่ๆ (overdrive ×10)</strong> — เพราะ β ไม่แน่นอน ถ้าป้อนแค่พอดีจะไปค้างอยู่ย่าน Active ทำให้ V<sub>CE</sub> สูงและร้อน<br>
+        I<sub>B</sub> = 0.2mA × 10 = <strong>2 mA</strong><br><br>
+        <strong>④ หา R<sub>B</sub></strong> — R<sub>B</sub> = (V<sub>MCU</sub> − V<sub>BE</sub>) / I<sub>B</sub> = (5 − 0.7) / 0.002 = 2,150 Ω → ใช้ <strong>2.2 kΩ</strong>
+      </div>
+      <div class="info-box en-only" style="background:var(--bg);border-color:var(--border);border-left-color:var(--secondary);">
+        <strong>Given:</strong> V<sub>CC</sub> = 5V • red LED V<sub>f</sub> = 2V • target I<sub>C</sub> = 20mA • 2N2222 (worst-case β ≈ 100) • MCU pin drives 5V<br><br>
+        <strong>① Find R<sub>C</sub></strong> — when ON the transistor is saturated, V<sub>CE</sub> ≈ 0.2V<br>
+        R<sub>C</sub> = (5 − 2 − 0.2) / 0.02 = <strong>140 Ω</strong> → use the standard <strong>150 Ω</strong><br><br>
+        <strong>② Minimum base current</strong> — I<sub>B(min)</sub> = I<sub>C</sub> / β = 20mA / 100 = <strong>0.2 mA</strong><br><br>
+        <strong>③ Overdrive ×10 to guarantee saturation</strong> — β varies, so driving the bare minimum leaves it stuck in the active region: high V<sub>CE</sub>, hot transistor<br>
+        I<sub>B</sub> = 0.2mA × 10 = <strong>2 mA</strong><br><br>
+        <strong>④ Find R<sub>B</sub></strong> — R<sub>B</sub> = (V<sub>MCU</sub> − V<sub>BE</sub>) / I<sub>B</sub> = (5 − 0.7) / 0.002 = 2,150 Ω → use <strong>2.2 kΩ</strong>
+      </div>
+
+      <!-- 4.7 ข้อควรระวัง -->
+      <div class="warn-box th-only">
+        <strong>⚠ ข้อควรระวังที่มักพลาด</strong>
+        <ul class="flow-list" style="margin-top:.5rem;">
+          <li><strong>ห้ามต่อขา B เข้าแรงดันตรงๆ โดยไม่มี R<sub>B</sub></strong> — รอยต่อ B-E คือไดโอด แรงดันเกิน 0.7V เพียงนิดเดียวกระแสจะพุ่งจนพัง</li>
+          <li><strong>β ไม่ใช่ค่าคงที่</strong> — เปลี่ยนตาม I<sub>C</sub>, V<sub>CE</sub> และอุณหภูมิ; datasheet ให้ช่วงกว้าง (เช่น 100–300) ให้ออกแบบด้วยค่า<strong>ต่ำสุด</strong>เสมอ</li>
+          <li><strong>V<sub>BE</sub> ลดลง ~2 mV ต่อ 1°C ที่ร้อนขึ้น</strong> — เป็นเหตุของ thermal runaway ในวงจรขยายกำลัง จึงต้องมี R ที่ขา E ช่วยเสถียร</li>
+          <li><strong>ใช้เป็นสวิตช์ ต้องขับให้อิ่มตัว</strong> (overdrive 5–10 เท่า) ไม่งั้น V<sub>CE</sub> ค้างสูง → กำลังสูญ P = V<sub>CE</sub>×I<sub>C</sub> ทำให้ร้อน</li>
+          <li><strong>ขับโหลดที่เป็นขดลวด (รีเลย์/มอเตอร์) ต้องใส่ไดโอด flyback</strong> คร่อมโหลดเสมอ ไม่งั้นแรงดันย้อนตอนตัดไฟจะเจาะทรานซิสเตอร์</li>
+        </ul>
+      </div>
+      <div class="warn-box en-only">
+        <strong>⚠ Common mistakes</strong>
+        <ul class="flow-list" style="margin-top:.5rem;">
+          <li><strong>Never tie the base straight to a voltage without R<sub>B</sub></strong> — B-E is a diode; a little over 0.7V and the current runs away and destroys it</li>
+          <li><strong>β is not a constant</strong> — it varies with I<sub>C</sub>, V<sub>CE</sub> and temperature. Datasheets quote a wide range (e.g. 100–300); always design with the <strong>minimum</strong></li>
+          <li><strong>V<sub>BE</sub> drops ~2 mV per °C</strong> of heating — the root of thermal runaway in power stages, which is why an emitter resistor is used to stabilise the bias</li>
+          <li><strong>As a switch, drive it hard into saturation</strong> (5–10× overdrive), otherwise V<sub>CE</sub> stays high and P = V<sub>CE</sub>×I<sub>C</sub> cooks the device</li>
+          <li><strong>Driving an inductive load (relay/motor) always needs a flyback diode</strong> across the load, or the turn-off kickback will punch through the transistor</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4B: Interactive real circuit, step by step -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">⚡ ทดลอง: วงจรจริงทีละขั้น (5V → R<sub>B</sub> → NPN → LED)</span><span class="en-only">⚡ Interactive: a real circuit, step by step (5V → R<sub>B</sub> → NPN → LED)</span></div>
+    <div class="card" style="padding:1.25rem;">
+      <p class="th-only" style="margin:0 0 .8rem;font-size:.92rem;color:var(--text-light);">
+        คราวนี้มาดู<strong>วงจรจริง</strong>กันบ้าง — ไมโครคอนโทรลเลอร์ 5V สั่งให้ทรานซิสเตอร์ NPN จุด LED
+        <strong>คลิกขั้นที่ 1–6</strong> เพื่อไล่ดูตั้งแต่ไฟเข้า, ทำไมต้องมี R<sub>B</sub> ก่อนขา B, กระแสไหลทางไหน, ไปจนถึงแรงดันที่แต่ละขา
+        และกด <strong>ปุ่ม HIGH/LOW</strong> เพื่อเปิด-ปิดอินพุตเทียบดูระหว่างย่าน Cut-off กับ Saturation ได้ตลอดเวลา
+      </p>
+      <p class="en-only" style="margin:0 0 .8rem;font-size:.92rem;color:var(--text-light);">
+        Now the <strong>real circuit</strong> — a 5V microcontroller telling an NPN transistor to light an LED.
+        <strong>Click steps 1–6</strong> to follow the power in, why R<sub>B</sub> sits before the base, where the current actually flows, and the voltage on every pin.
+        Hit the <strong>HIGH/LOW button</strong> any time to switch the input and compare cut-off with saturation.
+      </p>
+
+      <div class="bs-wrap" id="bjt-circuit">
+        <div class="bs-tabs">
+          <button class="bs-tab" data-step="1"><span class="bs-n">1</span><span class="th-only">ไฟเข้า &amp; กราวด์</span><span class="en-only">Power &amp; ground</span></button>
+          <button class="bs-tab" data-step="2"><span class="bs-n">2</span><span class="th-only">ทำไมต้องมี R<sub>B</sub></span><span class="en-only">Why R<sub>B</sub>?</span></button>
+          <button class="bs-tab" data-step="3"><span class="bs-n">3</span><span class="th-only">กระแสเบส I<sub>B</sub></span><span class="en-only">Base current I<sub>B</sub></span></button>
+          <button class="bs-tab" data-step="4"><span class="bs-n">4</span><span class="th-only">กระแสหลัก I<sub>C</sub></span><span class="en-only">Main current I<sub>C</sub></span></button>
+          <button class="bs-tab" data-step="5"><span class="bs-n">5</span><span class="th-only">ทำไมต้องมี R<sub>C</sub></span><span class="en-only">Why R<sub>C</sub>?</span></button>
+          <button class="bs-tab" data-step="6"><span class="bs-n">6</span><span class="th-only">แรงดันแต่ละขา</span><span class="en-only">Pin voltages</span></button>
+        </div>
+
+        <canvas id="bc-canvas" class="bs-canvas" style="aspect-ratio:720/360;"></canvas>
+
+        <div class="bs-nav">
+          <button id="bc-prev" class="bs-navbtn">◀ <span class="th-only">ก่อนหน้า</span><span class="en-only">Prev</span></button>
+          <button id="bc-play" class="bs-navbtn"><span class="th-only">▶ เล่นอัตโนมัติ</span><span class="en-only">▶ Auto-play</span></button>
+          <button id="bc-input" class="bs-navbtn">
+            <span class="bc-hi"><span class="th-only">🟢 อินพุต: HIGH (5V)</span><span class="en-only">🟢 Input: HIGH (5V)</span></span>
+            <span class="bc-lo"><span class="th-only">⚪ อินพุต: LOW (0V)</span><span class="en-only">⚪ Input: LOW (0V)</span></span>
+          </button>
+          <button id="bc-next" class="bs-navbtn"><span class="th-only">ถัดไป</span><span class="en-only">Next</span> ▶</button>
+        </div>
+
+        <div class="bs-desc" data-step="1">
+          <p class="th-only"><strong>ขั้นที่ 1 — ไฟเข้าและกราวด์ (จุดที่คนเข้าใจผิดบ่อยที่สุด):</strong>
+            แบตเตอรี่ 5V มี 2 ขั้ว — ขั้วบวกไปเป็น <strong>รางไฟ +5V</strong> (เส้นบน) และขั้วลบไปเป็น <strong>กราวด์ 0V</strong> (เส้นล่าง)
+            <br>ใน NPN เรา<strong>ต่อขา E ลงกราวด์</strong> ดังนั้น <strong>E คือขาที่ลบที่สุด ไม่ใช่บวก</strong> ส่วนขา C ต่อขึ้นไปหา +5V จึงบวกที่สุด
+            <br>กฎที่ต้องจำ: <strong>V<sub>C</sub> &gt; V<sub>B</sub> &gt; V<sub>E</sub></strong> เสมอสำหรับ NPN
+            <br><span style="color:var(--text-light);">ลูกศรที่ขา E ชี้ออก = ทิศ<strong>กระแสสมมติ</strong>ไหลออกทาง E (กระแสไหลจาก + ไป −) ส่วน<strong>อิเล็กตรอนวิ่งสวนทาง</strong> คือเข้าทาง E — อย่าสับสนสองอันนี้</span></p>
+          <p class="en-only"><strong>Step 1 — power and ground (the most misunderstood part):</strong>
+            the 5V battery has two terminals — positive becomes the <strong>+5V rail</strong> (top) and negative becomes <strong>ground, 0V</strong> (bottom).
+            <br>In an NPN we <strong>tie E to ground</strong>, so <strong>E is the most negative pin, not the positive one</strong>. C goes up to +5V, so it is the most positive.
+            <br>The rule: <strong>V<sub>C</sub> &gt; V<sub>B</sub> &gt; V<sub>E</sub></strong> for every NPN.
+            <br><span style="color:var(--text-light);">The emitter arrow points out = <strong>conventional current</strong> leaves via E (current runs + → −), while <strong>electrons travel the opposite way</strong>, entering at E. Don't mix the two up.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="2">
+          <p class="th-only"><strong>ขั้นที่ 2 — ทำไมต้องมี R<sub>B</sub> ก่อนขา B:</strong> เพราะรอยต่อ B-E <strong>คือไดโอดตัวหนึ่ง</strong>
+            เมื่อแรงดันถึง ~0.7V มันจะนำกระแส และไดโอด<strong>ไม่จำกัดกระแสให้ตัวเอง</strong> — ถ้าเอาขา B ต่อตรงเข้า 5V กระแสจะพุ่งสูงมาก ทรานซิสเตอร์ (และขาไมโครฯ) พังทันที
+            <br><strong>R<sub>B</sub> จึงเป็นตัวกำหนดว่าจะให้ I<sub>B</sub> ไหลเท่าไหร่:</strong>
+            <br>I<sub>B</sub> = (V<sub>IN</sub> − V<sub>BE</sub>) / R<sub>B</sub> = (5 − 0.7) / 2,200 ≈ <strong>1.95 mA</strong>
+            <br><span style="color:var(--text-light);">สังเกตว่าแรงดันส่วนเกิน 4.3V ไปตกคร่อม R<sub>B</sub> ทั้งหมด เหลือคร่อม B-E แค่ 0.7V เท่านั้น (ไดโอดคุมแรงดันตัวเองไว้)</span></p>
+          <p class="en-only"><strong>Step 2 — why R<sub>B</sub> must sit before the base:</strong> the B-E junction <strong>is a diode</strong>.
+            Past ~0.7V it conducts, and a diode <strong>does not limit its own current</strong> — wire the base straight to 5V and the current explodes, destroying the transistor (and the MCU pin).
+            <br><strong>R<sub>B</sub> is what sets I<sub>B</sub>:</strong>
+            <br>I<sub>B</sub> = (V<sub>IN</sub> − V<sub>BE</sub>) / R<sub>B</sub> = (5 − 0.7) / 2,200 ≈ <strong>1.95 mA</strong>
+            <br><span style="color:var(--text-light);">Note the surplus 4.3V is dropped entirely across R<sub>B</sub>; only 0.7V ever appears across B-E — the diode clamps itself there.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="3">
+          <p class="th-only"><strong>ขั้นที่ 3 — วงจรควบคุม (จุดส้ม):</strong> กระแสเบสไหลครบวง
+            <strong>ขาไมโครฯ 5V → R<sub>B</sub> → เข้าขา B → ออกขา E → ลงกราวด์ → กลับไปที่ไมโครฯ</strong>
+            <br>กระแสนี้เล็กมาก (≈ 2 mA) ขาไมโครฯ จ่ายไหวสบายๆ — <strong>นี่คือ "มือที่หมุนก๊อกน้ำ"</strong>
+            <br><span style="color:var(--text-light);">สังเกตว่าไมโครฯ กับแบตเตอรี่ <strong>ต้องใช้กราวด์ร่วมกัน (common ground)</strong> ไม่งั้นกระแสเบสไม่มีทางไหลกลับ วงจรจะไม่ทำงาน — เป็นข้อผิดพลาดคลาสสิกตอนต่อวงจรจริง</span></p>
+          <p class="en-only"><strong>Step 3 — the control loop (orange dots):</strong> the base current completes its circuit:
+            <strong>MCU 5V → R<sub>B</sub> → into B → out of E → ground → back to the MCU</strong>.
+            <br>It is tiny (≈ 2 mA), easily supplied by an MCU pin — <strong>this is "the hand turning the tap"</strong>.
+            <br><span style="color:var(--text-light);">Notice the MCU and the battery <strong>must share a common ground</strong>, otherwise the base current has no return path and nothing works — a classic beginner's wiring mistake.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="4">
+          <p class="th-only"><strong>ขั้นที่ 4 — วงจรกำลัง (จุดเขียว): LED ติด!</strong> พอ B-E นำกระแส ทรานซิสเตอร์ก็เปิด "วาล์ว" ระหว่าง C กับ E
+            กระแสหลักจึงไหล <strong>+5V → R<sub>C</sub> → LED → เข้าขา C → ออกขา E → ลงกราวด์</strong>
+            <br>สังเกตว่า <strong>กระแสก้อนนี้ไม่ได้ผ่านขา B และไม่ได้มาจากไมโครฯ เลย</strong> — พลังงานมาจากแบตเตอรี่ 5V ล้วนๆ ไมโครฯ แค่สั่งเปิด
+            <br><strong>β อยาก</strong>ให้ I<sub>C</sub> = 100 × 1.95mA = <strong>195 mA</strong> แต่วงจร (R<sub>C</sub> + LED) <strong>ยอมให้ไหลได้แค่ ≈ 18.7 mA</strong>
+            → กระแสตัน ทรานซิสเตอร์จึง<strong>อิ่มตัว (Saturation)</strong> V<sub>CE</sub> เหลือ 0.2V = ทำตัวเป็นสวิตช์ที่ปิดสนิท</p>
+          <p class="en-only"><strong>Step 4 — the power loop (green dots): the LED lights up!</strong> Once B-E conducts, the transistor opens the "valve" between C and E,
+            so the main current flows <strong>+5V → R<sub>C</sub> → LED → into C → out of E → ground</strong>.
+            <br>Notice this current <strong>never passes through the base and never comes from the MCU</strong> — the energy is all from the 5V battery. The MCU merely gives the order.
+            <br><strong>β wants</strong> I<sub>C</sub> = 100 × 1.95mA = <strong>195 mA</strong>, but the circuit (R<sub>C</sub> + LED) <strong>only allows ≈ 18.7 mA</strong>
+            → the current clamps and the transistor <strong>saturates</strong>: V<sub>CE</sub> drops to 0.2V, behaving as a fully closed switch.</p>
+        </div>
+
+        <div class="bs-desc" data-step="5">
+          <p class="th-only"><strong>ขั้นที่ 5 — ทำไมต้องมี R<sub>C</sub>:</strong> LED ก็คือไดโอดอีกตัว — <strong>มันไม่จำกัดกระแสให้ตัวเองเหมือนกัน</strong>
+            ถ้าต่อ LED ตรงเข้า 5V โดยไม่มี R<sub>C</sub> กระแสจะพุ่งเป็นหลายร้อย mA แล้ว <strong>LED จะไหม้ทันที</strong>
+            <br>คำนวณค่า R<sub>C</sub> จากแรงดันที่เหลือหลังหัก LED และ V<sub>CE(sat)</sub>:
+            <br>R<sub>C</sub> = (5 − 2 − 0.2) / 0.019 ≈ <strong>150 Ω</strong>
+            <br><span style="color:var(--text-light);">หลักการเดียวกับ R<sub>B</sub> เป๊ะ — <strong>เจอไดโอด (หรือ LED) เมื่อไหร่ ต้องมีตัวต้านทานจำกัดกระแสเสมอ</strong></span></p>
+          <p class="en-only"><strong>Step 5 — why R<sub>C</sub> is needed:</strong> an LED is just another diode — <strong>it does not limit its own current either</strong>.
+            Connect it straight across 5V with no R<sub>C</sub> and hundreds of mA will rush through: <strong>the LED burns out instantly</strong>.
+            <br>Size R<sub>C</sub> from what is left after the LED and V<sub>CE(sat)</sub>:
+            <br>R<sub>C</sub> = (5 − 2 − 0.2) / 0.019 ≈ <strong>150 Ω</strong>
+            <br><span style="color:var(--text-light);">Exactly the same principle as R<sub>B</sub> — <strong>wherever there is a diode or LED, there must be a current-limiting resistor</strong>.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="6">
+          <p class="th-only"><strong>ขั้นที่ 6 — แรงดันแต่ละขา (กดปุ่ม HIGH/LOW เทียบดู):</strong></p>
+          <p class="en-only"><strong>Step 6 — pin voltages (toggle HIGH / LOW to compare):</strong></p>
+          <div class="table-wrap" style="margin-top:.6rem;">
+            <table>
+              <thead><tr><th></th><th>V<sub>E</sub></th><th>V<sub>B</sub></th><th>V<sub>C</sub></th><th class="th-only">LED</th><th class="en-only">LED</th><th class="th-only">ย่าน</th><th class="en-only">Region</th></tr></thead>
+              <tbody>
+                <tr><td><strong class="th-only">อินพุต LOW (0V)</strong><strong class="en-only">Input LOW (0V)</strong></td><td>0 V</td><td>0 V</td><td><strong>5 V</strong></td><td><span class="th-only">ดับ</span><span class="en-only">off</span></td><td><strong>Cut-off</strong></td></tr>
+                <tr><td><strong class="th-only">อินพุต HIGH (5V)</strong><strong class="en-only">Input HIGH (5V)</strong></td><td>0 V</td><td>0.7 V</td><td><strong>0.2 V</strong></td><td><span class="th-only">ติด</span><span class="en-only">on</span></td><td><strong>Saturation</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="th-only" style="margin-top:.7rem;">💡 <strong>สังเกตจุดสำคัญ:</strong> ตอนอิ่มตัว <strong>V<sub>C</sub> (0.2V) ต่ำกว่า V<sub>B</sub> (0.7V)</strong>
+            — แปลว่ารอยต่อ B-C กลายเป็น<strong>ไบอัสตรง</strong>ไปแล้ว ตรงกับตารางเงื่อนไขไบอัสในหัวข้อก่อนหน้าพอดี
+            <br>และ V<sub>E</sub> = 0V เสมอ เพราะต่อกราวด์อยู่ — <strong>E คือขาลบสุดของ NPN ตลอดเวลา</strong></p>
+          <p class="en-only" style="margin-top:.7rem;">💡 <strong>Key observation:</strong> in saturation <strong>V<sub>C</sub> (0.2V) is below V<sub>B</sub> (0.7V)</strong>
+            — meaning the B-C junction has become <strong>forward biased</strong>, exactly as the bias table above predicts.
+            <br>And V<sub>E</sub> stays 0V because it is tied to ground — <strong>E is always the most negative pin of an NPN</strong>.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -377,6 +954,8 @@
 </footer>
 <script>const CURRENT_PAGE='transistor';</script>
 <script src="js/nav.js"></script>
+<script src="js/bjt-steps.js"></script>
+<script src="js/bjt-circuit.js"></script>
 <script src="js/transistor-sim.js"></script>
 </body>
 </html>
