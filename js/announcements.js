@@ -14,6 +14,14 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'breadboard-avalanche-2026-07-15', date:'2026-07-15', type:'update',
+    th:'เบรดบอร์ด: เพิ่มโหมด Avalanche ให้ทรานซิสเตอร์ NPN (ติ๊กช่อง "Avalanche" + ตั้ง V_BR) → ต่อกับ R–C ได้วงจรออสซิลเลเตอร์ไฟกระพริบเอง พร้อมตัวอย่างสำเร็จรูปในปุ่มสุ่มตัวอย่าง',
+    en:'Breadboard: NPN transistors now have an Avalanche mode (tick "Avalanche" + set V_BR) → pair with an R–C for a self-blinking relaxation oscillator, plus a ready-made example in the randomizer',
+    href:'breadboard.html?c=eyJ2IjoxLCJlbnYiOnsidCI6MjUsImwiOjUwLCJ2ciI6NTB9LCJjb21wcyI6W3sidCI6ImJhdHRlcnkiLCJhIjoiVFAxIiwiYiI6IlROMSIsInYiOjl9LHsidCI6InJlc2lzdG9yIiwiYSI6IlRQMiIsImIiOiJ0YTUiLCJ2IjoxMDAwfSx7InQiOiJ0cmFuc2lzdG9yIiwiYSI6InRjMTAiLCJiIjoidGM1IiwiZyI6InRhOCIsInR0IjoibnBuIiwiYXYiOjEsInZiciI6OCwiYmV0YSI6MTAwfSx7InQiOiJsZWQiLCJhIjoidGQxMCIsImIiOiJ0ZDEzIiwiYyI6InJlZCIsInZmIjoxLjh9LHsidCI6ImNhcCIsImEiOiJ0ZTUiLCJiIjoidGUxMyIsInYiOjAuMDAwNDd9LHsidCI6IndpcmUiLCJhIjoidGExMyIsImIiOiJUTjEzIiwiYyI6ImdyZWVuIn1dfQ' },
+  { id:'transistor-bjt-deep-dive-2026-07-15', date:'2026-07-15', type:'update',
+    th:'ขยายบทเรียนทรานซิสเตอร์ + เพิ่มภาพจำลองโต้ตอบ 2 ตัว: "ภายในทรานซิสเตอร์ทีละขั้น 1–5" (อิเล็กตรอนวิ่งในภาพตัดขวาง) และ "วงจรจริงทีละขั้น 1–6" (5V → R_B → NPN → LED, กด HIGH/LOW เทียบ Cut-off กับ Saturation)',
+    en:'Expanded Transistor lesson + two new interactive sims: "Inside the BJT, steps 1–5" (electrons crossing the cross-section) and "A real circuit, steps 1–6" (5V → R_B → NPN → LED, toggle HIGH/LOW to compare cut-off and saturation)',
+    href:'transistor.html' },
   { id:'worksheet-current-journey-2026-07-13', date:'2026-07-13', type:'download',
     th:'ใบงานใหม่: เสริมขั้นสูง — การเดินทางของกระแสไฟ (Capacitive Dropper, เรียงกระแส/เรกูเลต, IR 38kHz) (PDF)',
     en:'New worksheet: Advanced — The Journey of Current (capacitive dropper, rectify/regulate, IR 38kHz) (PDF)',

@@ -133,6 +133,18 @@ var BJT_VBE = 0.7,        // base-emitter turn-on (forward drop)
     BJT_VCE_SAT = 0.2,    // collector-emitter saturation voltage
     BJT_RBE = 35,         // B-E on-resistance (companion)
     BJT_RSAT = 6;         // C-E resistance in saturation
+// avalanche / relaxation-oscillator mode for a BJT (c.av === true, base ignored). Off = open;
+// once |Vce| reaches the breakdown voltage V_BR it "fires" into a low-resistance state that dumps
+// whatever charge is on the collector node, then extinguishes when its current falls below the
+// holding current. That voltage-trigger + current-hold hysteresis, fed by an RC, is a relaxation
+// oscillator → a self-blinking LED flasher. The latch (t._av) is memory: it flips at most once per
+// committed transient step (not inside the region loop), so the solver stays stable.
+var AV_VBR_OPTIONS = [5, 6, 8, 10, 12],
+    AV_VBR_DEFAULT = 8,   // breakdown/trigger voltage (V) — editable per device
+    AV_RON = 300,         // fired-state C-E resistance (companion) — small enough to flash brightly,
+                          // large enough that the peak dump current clears the holding current
+    AV_IHOLD = 0.012,     // holding current: extinguishes once |I| drops below this (A)
+    AV_GOFF = 1e-12;      // off-state leakage — tiny so the collector floats to ~0 (defines |Vce| = Vcap)
 // MOSFET square-law model (educational): all in device coords (Vth = magnitude)
 //   triode  (Vds < Vov):  Id = k·(Vov·Vds − ½Vds²)
 //   sat     (Vds ≥ Vov):  Id = ½·k·Vov²·(1 + λ·Vds)        where Vov = Vgs − Vth
@@ -146,6 +158,7 @@ var OPTO_VF = 1.1,        // input IR-LED forward drop
     CTR_OPTIONS = [50, 100, 200, 300],
     CTR_DEFAULT = 100;
 function transKind(c){ return (TRANSISTOR_TYPES[c.tt] || TRANSISTOR_TYPES.npn).kind; }
+function isAval(c){ return c.type === 'transistor' && c.av && transKind(c) === 'bjt'; }   // avalanche/relaxation mode
 function transSign(c){ return (c.tt === 'pnp' || c.tt === 'pmos') ? -1 : 1; }
 function pinNames(c){ return transKind(c) === 'fet' ? ['G', 'D', 'S'] : ['B', 'C', 'E']; }
 // drain current + small-signal derivatives at a device operating point (vgs, vds)
@@ -581,9 +594,16 @@ function renderEditor(){
     } else {
       ctrl += '<label style="margin-left:.6rem">β</label><select id="bb-ed-beta">' +
         BETA_OPTIONS.map(function(v){ return '<option value="' + v + '"' + (v === c.beta ? ' selected' : '') + '>' + v + '</option>'; }).join('') + '</select>';
+      // avalanche oscillator mode (BJT only): base ignored → RC relaxation flasher
+      ctrl += '<label style="margin-left:.8rem" title="' + (en ? 'Avalanche relaxation oscillator (ignores base) — pair with an RC to self-flash' : 'ออสซิลเลเตอร์แบบ Avalanche (ไม่ใช้ขาเบส) — ต่อกับ RC แล้วกระพริบเอง') + '">' +
+        '<input type="checkbox" id="bb-ed-av"' + (c.av ? ' checked' : '') + '> Avalanche</label>';
+      if (c.av){
+        ctrl += '<label style="margin-left:.4rem">V<sub>BR</sub></label><select id="bb-ed-vbr">' +
+          AV_VBR_OPTIONS.map(function(v){ return '<option value="' + v + '"' + (v === (c.vbr || AV_VBR_DEFAULT) ? ' selected' : '') + '>' + v + ' V</option>'; }).join('') + '</select>';
+      }
     }
     if (c.results && c.results.region){
-      var rg = { cutoff:{th:'Cut-off (ตัด)',en:'Cut-off'}, active:{th:'Active (ขยาย)',en:'Active'}, sat:{th:'Saturation (อิ่มตัว)',en:'Saturation'}, on:{th:'ON (นำกระแส)',en:'ON'}, triode:{th:'Triode/โอห์มมิก (สวิตช์)',en:'Triode (ohmic)'}, satfet:{th:'Saturation/อิ่มตัว (ขยาย)',en:'Saturation (active)'} }[c.results.region];
+      var rg = { cutoff:{th:'Cut-off (ตัด)',en:'Cut-off'}, active:{th:'Active (ขยาย)',en:'Active'}, sat:{th:'Saturation (อิ่มตัว)',en:'Saturation'}, on:{th:'ON (นำกระแส)',en:'ON'}, triode:{th:'Triode/โอห์มมิก (สวิตช์)',en:'Triode (ohmic)'}, satfet:{th:'Saturation/อิ่มตัว (ขยาย)',en:'Saturation (active)'}, avon:{th:'Avalanche: นำกระแส (แฟลช)',en:'Avalanche: firing'}, avoff:{th:'Avalanche: กำลังประจุ (รอ)',en:'Avalanche: charging'} }[c.results.region];
       ctrl += '<span style="margin-left:.6rem;color:var(--text-light);font-weight:600">' + (rg ? (en ? rg.en : rg.th) : '') + '</span>';
     }
   } else if (c.type === 'opto'){
@@ -622,11 +642,13 @@ function renderEditor(){
   on('bb-ed-ind', 'change', function(){ c.value = +this.value; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-tt', 'change', function(){
     c.tt = this.value;
-    if (transKind(c) === 'fet'){ if (c.vth == null) c.vth = transVth; delete c.beta; }
+    if (transKind(c) === 'fet'){ if (c.vth == null) c.vth = transVth; delete c.beta; delete c.av; delete c.vbr; }
     else { if (c.beta == null) c.beta = transBeta; delete c.vth; }
     rebuild(); renderEditor();   // re-render so β/Vth control swaps
   });
   on('bb-ed-beta', 'change', function(){ c.beta = +this.value; rebuild(); refreshEditorTitle(c); });
+  on('bb-ed-av', 'change', function(){ c.av = this.checked; if (c.av && c.vbr == null) c.vbr = AV_VBR_DEFAULT; c._av = 0; restartTransient(); renderEditor(); });
+  on('bb-ed-vbr', 'change', function(){ c.vbr = +this.value; c._av = 0; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-ctr', 'change', function(){ c.ctr = +this.value; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-vth', 'change', function(){ c.vth = +this.value; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-pot', 'change', function(){ c.value = +this.value; rebuild(); renderEditor(); });
@@ -813,6 +835,7 @@ function solveCircuit(h, commit){
   // BJT: t._rg ∈ {0 cutoff,1 active,2 sat}. MOSFET: Newton operating point (t._vgs/_vds) + region string
   transistors.forEach(function(t){
     if (transKind(t) === 'fet'){ t._vgs = 0; t._vds = 0; t._mreg = 'cutoff'; } else t._rg = 0;
+    if (t._av == null) t._av = 0;   // avalanche latch persists across steps — only default it, never reset here
   });
   // opto: _don = input-LED state (0 off / 1 forward), _rg = output region (0 cutoff / 1 active / 2 sat)
   optos.forEach(function(o){ o._don = 0; o._rg = 0; });
@@ -873,6 +896,12 @@ function solveCircuit(h, commit){
         stampG(iC, iE, m.gds + 1e-9);          // output conductance gds (+ tiny gmin)
         stampVCCS(iC, iE, iB, iE, m.gm);       // transconductance gm·(Vg−Vs) flows D→S
         stampI(iC, iE, -s * Ieq);              // companion current source
+        return;
+      }
+      // avalanche/relaxation mode: base ignored; C–E is either open or a fired low-R clamp
+      if (isAval(t)){
+        if (t._av === 1) stampG(iC, iE, 1 / AV_RON);   // fired → dump path
+        else stampG(iC, iE, AV_GOFF);                  // armed → open (collector free to float low)
         return;
       }
       // BJT large-signal companion
@@ -948,6 +977,7 @@ function solveCircuit(h, commit){
     // transistor region selection (junction-based, mirrors the diode toggling)
     transistors.forEach(function(t){
       var s = transSign(t);
+      if (isAval(t)) return;   // avalanche latch is updated once per committed step (below), not in this loop
       if (transKind(t) === 'fet'){
         // Newton step: re-linearize about the freshly solved operating point until it stops moving
         var nvgs = s * (V(sn(t.g)) - V(sn(t.b)));    // gate − source (device coords)
@@ -1031,6 +1061,17 @@ function solveCircuit(h, commit){
     var vC = Vof(sn(t.a)), vE = Vof(sn(t.b)), vB = Vof(sn(t.g));
     var vce = s * (vC - vE);             // collector-emitter (drain-source) voltage
     var Imain = 0, Ib = 0, region;
+    if (isAval(t)){
+      var vd = vC - vE, vbr = t.vbr || AV_VBR_DEFAULT;
+      var fired = t._av === 1;                            // the state this solve actually used
+      var Idev = fired ? vd / AV_RON : 0;                 // signed C→E current through the fired clamp
+      t.results = { V:vd, I:Idev, on:fired, region:fired ? 'avon' : 'avoff', Vce:vd, Ib:0, Ic:Math.abs(Idev) };
+      if (commit){                                        // advance the hysteretic latch for the next step
+        if (!fired){ if (Math.abs(vd) >= vbr) t._av = 1; }          // charge reached V_BR → fire
+        else if (Math.abs(Idev) < AV_IHOLD) t._av = 0;             // dump current spent → extinguish
+      }
+      return;
+    }
     if (transKind(t) === 'fet'){
       var m = mosfetModel(s * (vB - vE), vce, t.vth || VTH_DEFAULT);   // evaluate at the solved point
       region = m.region; Imain = m.Id;              // drain current D→S (device coords, ≥0)
@@ -1241,7 +1282,7 @@ function diodeSymbol(g, x1, x2, triFill, barColor, variant){
   }
 }
 
-function regionShort(r){ return r === 'cutoff' ? 'OFF' : r === 'active' ? 'ACT' : r === 'sat' || r === 'satfet' ? 'SAT' : r === 'triode' ? 'OHM' : r === 'on' ? 'ON' : ''; }
+function regionShort(r){ return r === 'cutoff' ? 'OFF' : r === 'active' ? 'ACT' : r === 'sat' || r === 'satfet' ? 'SAT' : r === 'triode' ? 'OHM' : r === 'on' ? 'ON' : r === 'avon' ? 'FIRE' : r === 'avoff' ? 'ARM' : ''; }
 
 // 3-pin transistor: body circle at the centroid + colour-coded leads to each pin
 function drawTransistor(c){
@@ -1294,7 +1335,7 @@ function drawTransistor(c){
     else       g.appendChild(el('polygon', { points:(cx - 5) + ',' + (cy + 3) + ' ' + (cx) + ',' + (cy + 2) + ' ' + (cx) + ',' + (cy + 8), fill:st.border }));
   }
 
-  var lbl = st[isEN() ? 'en' : 'th'] + (c.results && c.results.region ? ' · ' + regionShort(c.results.region) : '');
+  var lbl = (c.av ? 'AV·' : '') + st[isEN() ? 'en' : 'th'] + (c.results && c.results.region ? ' · ' + regionShort(c.results.region) : '');
   var tl = txt(cx, cy - R - 6, lbl, 'bb-lbl', st.border); tl.setAttribute('font-weight', '700');
   g.appendChild(tl);
 
@@ -1594,7 +1635,7 @@ function trackedComp(){
 function trackedSignal(c){ return c.type === 'ind' ? (c.results ? c.results.I : 0) : (c.results ? c.results.V : 0); }
 
 function restartTransient(){
-  comps.forEach(function(c){ if (c.type === 'cap') c._vPrev = 0; if (c.type === 'ind') c._iPrev = 0; });
+  comps.forEach(function(c){ if (c.type === 'cap') c._vPrev = 0; if (c.type === 'ind') c._iPrev = 0; if (c.av) c._av = 0; });
   simTime = 0; graphHist = []; renderAcc = 0;
   rebuild();
 }
@@ -1770,6 +1811,7 @@ function compName(c, en){
   if (c.type === 'opto') return (en ? 'Optocoupler (CTR ' : 'ออปโตคัปเปลอร์ (CTR ') + (c.ctr || CTR_DEFAULT) + '%)';
   if (c.type === 'transistor'){
     var ts = TRANSISTOR_TYPES[c.tt] || TRANSISTOR_TYPES.npn;
+    if (isAval(c)) return ts[en ? 'en' : 'th'] + (en ? ' avalanche (V_BR ' : ' avalanche (V_BR ') + (c.vbr || AV_VBR_DEFAULT) + 'V)';
     return ts[en ? 'en' : 'th'] + (transKind(c) === 'fet' ? ' (Vth ' + (c.vth || transVth) + 'V)' : ' (β' + (c.beta || transBeta) + ')');
   }
   return en ? 'Jumper' : 'จัมเปอร์';
@@ -2405,6 +2447,20 @@ var EXAMPLES = [
       place('wire', 'te9', 'tf9', { color:'blue' });
       // smoothing cap across OUT+ ↔ OUT− (top half)
       place('cap', 'td9', 'td13', { value:100e-6, _vPrev:0 });
+    } },
+  { th:'ไฟกระพริบ Avalanche (ทรานซิสเตอร์โหมด Avalanche + RC → ดูกราฟฟันเลื่อย)', en:'Avalanche LED flasher (avalanche-mode transistor + RC → watch the sawtooth graph)', build:function(){
+      // relaxation oscillator: R charges C toward Vcc; when Vc hits V_BR the transistor fires,
+      // dumps the cap through the LED (flash), then extinguishes and the cycle repeats. base is left floating.
+      setExampleBatt(9);
+      place('battery', 'TP2', 'TN2', { value:9 });
+      place('wire', 'TP5', 'tc5', { color:'red' });                 // + rail ↓ col5 (Vcc)
+      place('resistor', 'ta5', 'ta9', { value:1500 });              // R charges the cap node (col9)
+      place('cap', 'tb9', 'tb13', { value:470e-6, _vPrev:0 });      // C: col9 → col13
+      place('wire', 'tc13', 'TN13', { color:'black' });             // col13 → − rail (gnd)
+      // collector (col15) → LED → gnd; emitter = cap node (col9); base (col12) floats
+      place('led', 'te15', 'te19', { color:'red', vf:1.8 });        // anode col15 = collector, cathode col19
+      place('wire', 'tb19', 'TN19', { color:'black' });             // col19 → − rail (gnd)
+      place('transistor', 'td15', 'td9', { g:'td12', tt:'npn', av:true, vbr:8, beta:100 });   // C=col15, E=col9, B=col12(float)
     } }
 ];
 
@@ -2456,6 +2512,7 @@ function serializeCircuit(){
       if (c.tt) o.tt = c.tt;
       if (c.beta != null) o.beta = c.beta;
       if (c.vth != null) o.vth = c.vth;
+      if (c.av){ o.av = 1; if (c.vbr != null) o.vbr = c.vbr; }
       if (c.vp != null) o.vp = c.vp;
       if (c.freq != null) o.f = c.freq;
       if (c.offset != null) o.off = c.offset;
@@ -2488,6 +2545,7 @@ function applyCircuit(data){
     if (o.tt) props.tt = o.tt;
     if (o.beta != null) props.beta = o.beta;
     if (o.vth != null) props.vth = o.vth;
+    if (o.av){ props.av = true; if (o.vbr != null) props.vbr = o.vbr; props._av = 0; }
     if (o.vp != null) props.vp = o.vp;
     if (o.f != null) props.freq = o.f;
     if (o.off != null) props.offset = o.off;
