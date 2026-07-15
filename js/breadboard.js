@@ -2016,9 +2016,30 @@ function selectTool(t){
 }
 
 // ── "Add component" dropdown ──
-function openCompMenu(){  var m = $('bb-comp-menu'), t = $('bb-comp-trigger'); if (m) m.classList.add('open'); if (t) t.setAttribute('aria-expanded', 'true'); }
+function openCompMenu(){  closeExampleMenu(); var m = $('bb-comp-menu'), t = $('bb-comp-trigger'); if (m) m.classList.add('open'); if (t) t.setAttribute('aria-expanded', 'true'); }
 function closeCompMenu(){ var m = $('bb-comp-menu'), t = $('bb-comp-trigger'); if (m) m.classList.remove('open'); if (t) t.setAttribute('aria-expanded', 'false'); }
 function toggleCompMenu(){ var m = $('bb-comp-menu'); if (m && m.classList.contains('open')) closeCompMenu(); else openCompMenu(); }
+
+// ── "Examples" dropdown — one item per EXAMPLES entry (+ a Random item on top) ──
+function openExampleMenu(){  closeCompMenu(); var m = $('bb-example-menu'), t = $('bb-example-trigger'); if (m) m.classList.add('open'); if (t) t.setAttribute('aria-expanded', 'true'); }
+function closeExampleMenu(){ var m = $('bb-example-menu'), t = $('bb-example-trigger'); if (m) m.classList.remove('open'); if (t) t.setAttribute('aria-expanded', 'false'); }
+function toggleExampleMenu(){ var m = $('bb-example-menu'); if (m && m.classList.contains('open')) closeExampleMenu(); else openExampleMenu(); }
+function buildExampleMenu(){
+  var m = $('bb-example-menu'); if (!m) return;
+  var html = '<button class="bb-dd-item" data-ex="rand" role="menuitem"><span class="ti">🎲</span>' +
+             '<span class="th-only">สุ่มตัวอย่าง</span><span class="en-only">Random example</span></button>';
+  EXAMPLES.forEach(function(ex, i){
+    html += '<button class="bb-dd-item" data-ex="' + i + '" role="menuitem"><span class="ti">' + (i + 1) + '</span>' +
+            '<span class="th-only">' + ex.th + '</span><span class="en-only">' + ex.en + '</span></button>';
+  });
+  m.innerHTML = html;
+  m.querySelectorAll('.bb-dd-item[data-ex]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      closeExampleMenu();
+      if (btn.dataset.ex === 'rand') loadExample(); else loadExampleByIndex(+btn.dataset.ex);
+    });
+  });
+}
 function updateCompTrigger(){
   var trig = $('bb-comp-trigger'); if (!trig) return;
   var isComp = COMP_TOOLS.indexOf(tool) >= 0;
@@ -2131,7 +2152,10 @@ function initControls(){
   document.querySelectorAll('.bb-mm[data-mm]').forEach(function(btn){
     btn.addEventListener('click', function(){ meterMode = btn.dataset.mm; resetMeter(); setActiveMode(); updateMeter(); });
   });
-  $('bb-example').addEventListener('click', loadExample);
+  // "Examples" dropdown: trigger toggles the menu; items load a specific (or random) example
+  buildExampleMenu();
+  $('bb-example-trigger').addEventListener('click', function(e){ e.stopPropagation(); toggleExampleMenu(); });
+  document.addEventListener('click', function(e){ if (!e.target.closest('#bb-example-dropdown')) closeExampleMenu(); });
   // save / load / share
   $('bb-storage').addEventListener('click', openStorageModal);
   $('bb-share').addEventListener('click', shareLink);
@@ -2465,18 +2489,21 @@ var EXAMPLES = [
 ];
 
 var lastExampleIdx = -1;
-function loadExample(){
+function loadExampleByIndex(i){
+  if (i < 0 || i >= EXAMPLES.length) return;
   comps = []; occupied = {}; pendingHole = null; pendingHole2 = null; pendingHole3 = null; selectedId = null; hideHL(); resetMeter();
   simTime = 0; graphHist = []; graphComp = null; renderEditor();
-  // pick a random example, avoiding an immediate repeat
-  var i = Math.floor(Math.random() * EXAMPLES.length);
-  if (EXAMPLES.length > 1 && i === lastExampleIdx) i = (i + 1) % EXAMPLES.length;
   lastExampleIdx = i;
   var ex = EXAMPLES[i];
   ex.build();
   rebuild();
   setHint((isEN() ? '📋 Example: ' + ex.en + ' — tap a part to edit, or use the multimeter.'
                   : '📋 ตัวอย่าง: ' + ex.th + ' — คลิกอุปกรณ์เพื่อแก้ไข หรือใช้มัลติมิเตอร์'));
+}
+function loadExample(){   // random pick, avoiding an immediate repeat
+  var i = Math.floor(Math.random() * EXAMPLES.length);
+  if (EXAMPLES.length > 1 && i === lastExampleIdx) i = (i + 1) % EXAMPLES.length;
+  loadExampleByIndex(i);
 }
 function place(type, a, b, props){
   // guard: rail holes on every 6th column don't exist (visual gap) — bail loudly instead of corrupting the board

@@ -14,6 +14,10 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'breadboard-example-menu-2026-07-15', date:'2026-07-15', type:'update',
+    th:'เบรดบอร์ด: เปลี่ยนปุ่มสุ่มตัวอย่างเป็นเมนู "ตัวอย่าง" เลือกได้ทีละวงจรจากรายการทั้ง 16 แบบ (หรือกดสุ่มบนสุดก็ได้)',
+    en:'Breadboard: the random button is now an "Examples" menu — pick any of the 16 circuits by name (or hit Random at the top)',
+    href:'breadboard.html' },
   { id:'breadboard-avalanche-2026-07-15', date:'2026-07-15', type:'update',
     th:'เบรดบอร์ด: เพิ่มโหมด Avalanche ให้ทรานซิสเตอร์ NPN (ติ๊กช่อง "Avalanche" + ตั้ง V_BR) → ต่อกับ R–C ได้วงจรออสซิลเลเตอร์ไฟกระพริบเอง พร้อมตัวอย่างสำเร็จรูปในปุ่มสุ่มตัวอย่าง',
     en:'Breadboard: NPN transistors now have an Avalanche mode (tick "Avalanche" + set V_BR) → pair with an R–C for a self-blinking relaxation oscillator, plus a ready-made example in the randomizer',

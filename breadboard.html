@@ -33,8 +33,12 @@
 .bb-dd-trigger { gap:.45rem; }
 .bb-dd-caret { font-size:.7rem; opacity:.8; }
 .bb-dd-menu { position:absolute; top:calc(100% + 6px); left:0; z-index:30; display:none; flex-direction:column; gap:.15rem;
-  min-width:200px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:.4rem; box-shadow:0 10px 28px rgba(0,0,0,.18); }
+  min-width:200px; max-height:min(64vh,440px); overflow-y:auto; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:.4rem; box-shadow:0 10px 28px rgba(0,0,0,.18); }
 .bb-dd-menu.open { display:flex; }
+#bb-example-menu { min-width:min(360px,86vw); }
+#bb-example-menu .bb-dd-item { align-items:flex-start; line-height:1.35; font-weight:500; white-space:normal; }
+#bb-example-menu .bb-dd-item .ti { font-size:.8rem; font-weight:700; color:var(--text-light); flex:0 0 1.5rem; margin-top:.1rem; }
+#bb-example-menu .bb-dd-item.active .ti { color:#fff; }
 .bb-dd-item { display:flex; align-items:center; gap:.6rem; width:100%; text-align:left;
   padding:.5rem .6rem; border:none; background:none; border-radius:8px; cursor:pointer;
   font-family:inherit; font-size:.9rem; font-weight:600; color:var(--text); }
@@ -223,7 +227,14 @@
       <button class="bb-tool" data-tool="meter"><span class="ti">📟</span><span class="th-only">มัลติมิเตอร์</span><span class="en-only">Multimeter</span></button>
       <span class="bb-sep"></span>
       <button class="bb-tool danger" data-tool="delete"><span class="ti">🗑</span><span class="th-only">ลบ</span><span class="en-only">Delete</span></button>
-      <button class="bb-tool" id="bb-example" title="สุ่มตัวอย่างวงจร / Random example circuit"><span class="ti">🎲</span><span class="th-only">สุ่มตัวอย่าง</span><span class="en-only">Random example</span></button>
+      <div class="bb-dropdown" id="bb-example-dropdown">
+        <button class="bb-tool bb-dd-trigger" id="bb-example-trigger" type="button" aria-haspopup="true" aria-expanded="false" title="เลือกวงจรตัวอย่าง / Pick an example circuit">
+          <span class="ti">📋</span>
+          <span class="bb-dd-label"><span class="th-only">ตัวอย่าง</span><span class="en-only">Examples</span></span>
+          <span class="bb-dd-caret">▾</span>
+        </button>
+        <div class="bb-dd-menu" id="bb-example-menu" role="menu"></div>
+      </div>
       <button class="bb-tool" id="bb-clear"><span class="ti">♻</span><span class="th-only">ล้างทั้งหมด</span><span class="en-only">Clear all</span></button>
     </div>
 
