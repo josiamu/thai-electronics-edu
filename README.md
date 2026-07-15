@@ -164,7 +164,6 @@ git push
 ├── js/simulation.js        — Circuit simulator logic
 ├── js/oscilloscope.js      — Interactive I-V curve simulator
 ├── js/osc-reader.js        — Scope reading trainer
-├── js/transistor-sim.js    — BJT switch simulator
 ├── js/bjt-steps.js         — Interactive step-by-step: how a BJT works (5 clickable steps, animated cross-section)
 ├── js/bjt-circuit.js       — Interactive step-by-step: a real 5V circuit (R_B → NPN → LED + R_C, 6 steps, HIGH/LOW toggle)
 ├── js/signal-gen-sim.js    — Waveform generator
