@@ -2602,14 +2602,31 @@ function shareLink(){
     );
   } else window.prompt(isEN() ? 'Copy this link:' : 'คัดลอกลิงก์นี้:', url);
 }
+// a bad ?c= is almost always a link truncated by a chat/mail client mid-paste
+function badLinkHint(){
+  setHint('<b style="color:#dc2626">' + (isEN()
+    ? '⚠️ Broken circuit link — nothing was loaded. The link was probably cut short when it was copied; ask the sender for a fresh one.'
+    : '⚠️ ลิงก์วงจรเสียหาย — โหลดวงจรไม่ได้ ลิงก์น่าจะถูกตัดตอนคัดลอก ลองขอลิงก์ใหม่อีกครั้ง') + '</b>');
+}
 function loadFromURL(){
+  var m = location.search.match(/[?&]c=([^&]+)/);
+  if (!m) return false;
+  var data;
   try {
-    var m = location.search.match(/[?&]c=([^&]+)/);
-    if (!m) return false;
-    var data = JSON.parse(b64dec(decodeURIComponent(m[1])));
-    if (data && data.comps){ applyCircuit(data); setHint(isEN() ? '🔗 Loaded a shared circuit.' : '🔗 โหลดวงจรจากลิงก์แล้ว'); return true; }
-  } catch (err){ console.warn('share link parse failed', err); }
-  return false;
+    data = JSON.parse(b64dec(decodeURIComponent(m[1])));
+  } catch (err){
+    console.warn('share link parse failed', err);
+    badLinkHint();
+    return false;
+  }
+  if (!data || !Array.isArray(data.comps)){
+    console.warn('share link has no component list', data);
+    badLinkHint();
+    return false;
+  }
+  applyCircuit(data);
+  setHint(isEN() ? '🔗 Loaded a shared circuit.' : '🔗 โหลดวงจรจากลิงก์แล้ว');
+  return true;
 }
 
 // ── localStorage named saves ──
