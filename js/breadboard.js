@@ -129,7 +129,6 @@ var BETA_DEFAULT = 100, VTH_DEFAULT = 2;
 // large-signal model constants (educational; values chosen for stable region detection)
 var BJT_VBE = 0.7,        // base-emitter turn-on (forward drop)
     BJT_VBE_ON = 0.6,     // B-E junction "on" threshold for region detection
-    BJT_VBC_ON = 0.45,    // B-C junction "on" → saturation
     BJT_VCE_SAT = 0.2,    // collector-emitter saturation voltage
     BJT_RBE = 35,         // B-E on-resistance (companion)
     BJT_RSAT = 6;         // C-E resistance in saturation
@@ -989,9 +988,21 @@ function solveCircuit(h, commit){
         t._vgs = nvgs; t._vds = nvds; t._mreg = m.region;
         return;
       }
+      // Saturation is detected from current, not from a B-C junction threshold: the sat companion
+      // settles at Vce = BJT_VCE_SAT + BJT_RSAT·Ic, so a "Vb − Vc > 0.45" test rejects its own
+      // model's answer once Ic passes ~13 mA and the loop ping-pongs sat↔active until MAXIT.
+      // Same hysteresis the optocoupler below uses: leave sat only when the clamp would pass more
+      // than the base drive allows; enter it when the collector has collapsed to the clamp.
       var vbe = s * (V(sn(t.g)) - V(sn(t.b)));       // base − emitter
-      var vbc = s * (V(sn(t.g)) - V(sn(t.a)));       // base − collector
-      var nr = vbe < BJT_VBE_ON ? 0 : (vbc > BJT_VBC_ON ? 2 : 1);
+      var nr;
+      if (vbe < BJT_VBE_ON) nr = 0;
+      else {
+        var ib = Math.max(0, (vbe - BJT_VBE) / BJT_RBE);
+        var icmax = (t.beta || BETA_DEFAULT) * ib;   // most the base can command
+        var vce = s * (V(sn(t.a)) - V(sn(t.b)));
+        if (t._rg === 2) nr = ((vce - BJT_VCE_SAT) / BJT_RSAT > icmax + 1e-9) ? 1 : 2;
+        else nr = (vce < BJT_VCE_SAT - 1e-3) ? 2 : 1;
+      }
       if (nr !== t._rg){ t._rg = nr; changed = true; }
     });
     // optocoupler: input-LED on/off toggling + output-region selection
