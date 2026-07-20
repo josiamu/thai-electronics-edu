@@ -222,6 +222,7 @@
           <button class="bb-dd-item" data-tool="transistor" role="menuitem"><span class="ti">Q</span><span class="th-only">ทรานซิสเตอร์</span><span class="en-only">Transistor</span></button>
           <button class="bb-dd-item" data-tool="pot" role="menuitem"><span class="ti">⊿</span><span class="th-only">โพเทนชิโอมิเตอร์</span><span class="en-only">Potentiometer</span></button>
           <button class="bb-dd-item" data-tool="opto" role="menuitem"><span class="ti">⧉</span><span class="th-only">ออปโตคัปเปลอร์</span><span class="en-only">Optocoupler</span></button>
+          <button class="bb-dd-item" data-tool="relay" role="menuitem"><span class="ti">🧲</span><span class="th-only">รีเลย์</span><span class="en-only">Relay</span></button>
         </div>
       </div>
       <button class="bb-tool" data-tool="meter"><span class="ti">📟</span><span class="th-only">มัลติมิเตอร์</span><span class="en-only">Multimeter</span></button>
@@ -429,6 +430,12 @@
         <span style="color:var(--text-light);font-weight:400;">
           <span class="th-only">4 ขา: A–K (LED ฝั่งเข้า) → แสง → C–E (โฟโตทรานซิสเตอร์) · I<sub>C</sub> = CTR × I<sub>F</sub> · สองฝั่งแยกกันทางไฟฟ้า</span>
           <span class="en-only">4 pins: A–K (input LED) → light → C–E (phototransistor) · I<sub>C</sub> = CTR × I<sub>F</sub> · both sides electrically isolated</span>
+        </span>
+      </div>
+      <div class="bb-valrow" id="bb-val-relay">
+        <span style="color:var(--text-light);font-weight:400;">
+          <span class="th-only">5 ขา: คอยล์ + / − → COM / NO / NC · จ่ายไฟคอยล์ถึง ~3V คอยล์ดูด → COM ต่อ NO (ปกติต่อ NC) · SPDT</span>
+          <span class="en-only">5 pins: coil + / − → COM / NO / NC · energize the coil (~3V) and COM switches to NO (rests on NC) · SPDT</span>
         </span>
       </div>
       <div class="bb-valrow" id="bb-val-meter">

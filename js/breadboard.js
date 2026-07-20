@@ -156,6 +156,17 @@ var OPTO_VF = 1.1,        // input IR-LED forward drop
     OPTO_RD = 14,         // input LED on-resistance (companion)
     CTR_OPTIONS = [50, 100, 200, 300],
     CTR_DEFAULT = 100;
+// relay (SPDT electromechanical) — 5-terminal: coil (a=+, b=−) magnetically drives a single-pole
+// double-throw contact set (g=COM, h=NO, k=NC). Simplified DC model: the coil is a fixed resistor;
+// once the coil voltage reaches the pull-in threshold the armature latches "energized" (COM→NO),
+// releasing back to COM→NC only when the voltage falls below the lower drop-out level (hysteresis,
+// same latch idea as the avalanche BJT). A closed contact is a near-0 Ω conductance stamped inside
+// the nonlinear loop (not a union-find join) because its state depends on the solved coil voltage.
+var RELAY_RCOIL = 200,     // coil resistance (Ω)
+    RELAY_VPULL = 3.0,     // pull-in coil voltage — energize at/above this
+    RELAY_VDROP = 1.2,     // drop-out coil voltage — release below this (VPULL>VDROP ⇒ hysteresis)
+    RELAY_RON   = 0.05,    // closed-contact resistance (Ω) — effectively a short
+    RELAY_GOFF  = 1e-9;    // open-contact leakage conductance (S)
 function transKind(c){ return (TRANSISTOR_TYPES[c.tt] || TRANSISTOR_TYPES.npn).kind; }
 function isAval(c){ return c.type === 'transistor' && c.av && transKind(c) === 'bjt'; }   // avalanche/relaxation mode
 function transSign(c){ return (c.tt === 'pnp' || c.tt === 'pmos') ? -1 : 1; }
@@ -180,7 +191,8 @@ var nextId = 1;
 var tool = null;         // armed tool: battery|resistor|led|diode|wire|switch|cap|ind|transistor|delete|null
 var pendingHole = null;  // first clicked hole id (awaiting second)
 var pendingHole2 = null; // second clicked hole id (3/4-pin parts: awaiting third)
-var pendingHole3 = null; // third clicked hole id (4-pin opto only: awaiting fourth)
+var pendingHole3 = null; // third clicked hole id (4-pin opto / 5-pin relay: awaiting fourth)
+var pendingHole4 = null; // fourth clicked hole id (5-pin relay only: awaiting fifth)
 var selectedId = null;   // currently selected component (for the edit panel)
 var batteryV = 9;
 var resVal = 330;
@@ -224,7 +236,7 @@ var actx = null;            // lazily-created AudioContext for the continuity be
 function $(id){ return document.getElementById(id); }
 var svg = $('bb-svg');
 svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
-var gBoard, gHoles, gComps, gElec, gProbe, hlEl, hlEl2, hlEl3;
+var gBoard, gHoles, gComps, gElec, gProbe, hlEl, hlEl2, hlEl3, hlEl4;
 
 // ════════════════════════════ SVG HELPERS ════════════════════════════
 function el(tag, attrs){
@@ -253,6 +265,8 @@ function buildBoard(){
   svg.appendChild(hlEl2);
   hlEl3 = el('circle', { class:'bb-pin-hl', r:R_HOLE + 4, style:'display:none' });
   svg.appendChild(hlEl3);
+  hlEl4 = el('circle', { class:'bb-pin-hl', r:R_HOLE + 4, style:'display:none' });
+  svg.appendChild(hlEl4);
 
   var left = X0 - 30, right = colX(COLS) + 30, fullW = right - left;
 
@@ -345,15 +359,19 @@ var TYPE_LABEL = {
   ac:      { th:'แหล่งจ่าย AC', en:'AC source' },
   transistor:{ th:'ทรานซิสเตอร์', en:'Transistor' },
   pot:       { th:'โพเทนชิโอมิเตอร์', en:'Potentiometer' },
-  opto:      { th:'ออปโตคัปเปลอร์', en:'Optocoupler' }
+  opto:      { th:'ออปโตคัปเปลอร์', en:'Optocoupler' },
+  relay:     { th:'รีเลย์', en:'Relay' }
 };
 
 // 3-pin parts use a third hole c.g (base/gate, or wiper) in addition to a/b;
-// the 4-pin optocoupler adds a fourth hole c.h (emitter; g = collector)
+// the 4-pin optocoupler adds a fourth hole c.h (emitter; g = collector);
+// the 5-pin relay adds a fifth hole c.k (coil a/b, g = COM, h = NO, k = NC)
 function isThreePin(c){ return c.type === 'transistor' || c.type === 'pot'; }
 function isThreePinTool(t){ return t === 'transistor' || t === 'pot'; }
 function isFourPin(c){ return c.type === 'opto'; }
-function compNodes(c){ return isFourPin(c) ? [c.a, c.b, c.g, c.h] : isThreePin(c) ? [c.a, c.b, c.g] : [c.a, c.b]; }
+function isFivePin(c){ return c.type === 'relay'; }
+function isFivePinTool(t){ return t === 'relay'; }
+function compNodes(c){ return isFivePin(c) ? [c.a, c.b, c.g, c.h, c.k] : isFourPin(c) ? [c.a, c.b, c.g, c.h] : isThreePin(c) ? [c.a, c.b, c.g] : [c.a, c.b]; }
 // potentiometer: total R split by the global VR knob into R1 (end a→wiper) and R2 (wiper→end b)
 function potR(c){
   var total = c.value || potVal, k = Math.max(0, Math.min(1, env.vrPos / 100));
@@ -381,6 +399,15 @@ function refreshHint(){
     return;
   }
   var lbl = TYPE_LABEL[tool][isEN() ? 'en' : 'th'];
+  if (tool === 'relay'){        // 5-pin placement, step-by-step
+    var rnames = isEN() ? ['Coil + (A)', 'Coil − (B)', 'COM (common)', 'NO (normally-open)', 'NC (normally-closed)']
+                        : ['ขา + ของคอยล์', 'ขา − ของคอยล์', 'COM (ขั้วร่วม)', 'NO (ปกติเปิด)', 'NC (ปกติปิด)'];
+    var rstep = pendingHole == null ? 0 : pendingHole2 == null ? 1 : pendingHole3 == null ? 2 : pendingHole4 == null ? 3 : 4;
+    setHint((isEN() ? 'Placing <b>' + lbl + '</b>: click the <b>' + rnames[rstep] + '</b> hole'
+                    : 'กำลังวาง <b>' + lbl + '</b>: คลิกรู <b>' + rnames[rstep] + '</b>') +
+            ' (' + (rstep + 1) + '/5)');
+    return;
+  }
   if (tool === 'opto'){         // 4-pin placement, step-by-step
     var onames = isEN() ? ['LED Anode A (+)', 'LED Cathode K (−)', 'Collector C', 'Emitter E']
                         : ['ขา A ของ LED (+)', 'ขา K ของ LED (−)', 'ขา C (คอลเลกเตอร์)', 'ขา E (อิมิตเตอร์)'];
@@ -415,6 +442,19 @@ function refreshHint(){
 function onHoleClick(id){
   if (tool === 'meter'){ meterClickHole(id); return; }
   if (tool === 'delete' || !tool) return;
+
+  // 5-pin relay: collect five holes in order (coil+, coil−, COM, NO, NC)
+  if (tool === 'relay'){
+    if (id === pendingHole || id === pendingHole2 || id === pendingHole3 || id === pendingHole4){ flashHint(isEN() ? 'Pick a different hole.' : 'เลือกรูอื่น'); return; }
+    if (occupied[id]){ flashHint(isEN() ? 'That hole is already used.' : 'รูนี้มีขาอุปกรณ์อยู่แล้ว'); return; }
+    if (pendingHole == null){ pendingHole = id; showHL(id); refreshHint(); return; }
+    if (pendingHole2 == null){ pendingHole2 = id; showHL2(id); refreshHint(); return; }
+    if (pendingHole3 == null){ pendingHole3 = id; showHL3(id); refreshHint(); return; }
+    if (pendingHole4 == null){ pendingHole4 = id; showHL4(id); refreshHint(); return; }
+    placeRelay(pendingHole, pendingHole2, pendingHole3, pendingHole4, id);
+    pendingHole = pendingHole2 = pendingHole3 = pendingHole4 = null; hideHL(); refreshHint();
+    return;
+  }
 
   // 4-pin optocoupler: collect four holes in order (A, K, C, E)
   if (tool === 'opto'){
@@ -500,6 +540,15 @@ function placeOpto(an, ka, coll, emit){
   var c = { id:nextId++, type:'opto', a:an, b:ka, g:coll, h:emit, ctr:optoCtr };
   comps.push(c);
   occupied[an] = c.id; occupied[ka] = c.id; occupied[coll] = c.id; occupied[emit] = c.id;
+  selectedId = c.id;
+  rebuild(); renderEditor();
+}
+
+// 5-pin relay: coil a = +, b = −; g = COM, h = NO, k = NC
+function placeRelay(coilP, coilN, com, no, nc){
+  var c = { id:nextId++, type:'relay', a:coilP, b:coilN, g:com, h:no, k:nc, _en:0 };
+  comps.push(c);
+  [coilP, coilN, com, no, nc].forEach(function(hh){ occupied[hh] = c.id; });
   selectedId = c.id;
   rebuild(); renderEditor();
 }
@@ -613,6 +662,12 @@ function renderEditor(){
               (c.results.region ? ' · ' + regionShort(c.results.region) : '') + '</span>';
     }
     ctrl += '<span style="margin-left:.6rem;color:var(--text-light);font-weight:400">' + (en ? '(flip ± swaps the LED legs A/K)' : '(สลับขั้ว = สลับขา A/K ของ LED)') + '</span>';
+  } else if (c.type === 'relay'){
+    var ren = c.results && c.results.en;
+    ctrl = '<label>' + (en ? 'State' : 'สถานะ') + '</label><span style="font-weight:700;color:' + (ren ? '#2563eb' : '#94a3b8') + '">' +
+           (ren ? (en ? 'ENERGIZED (COM→NO)' : 'จ่ายไฟคอยล์ (COM→NO)') : (en ? 'de-energized (COM→NC)' : 'ยังไม่จ่ายไฟ (COM→NC)')) + '</span>' +
+           '<span style="margin-left:.6rem;color:var(--text-light);font-weight:600">' + (en ? 'coil ' : 'คอยล์ ') + fmtV(Math.abs((c.results && c.results.Vcoil) || 0)) + ' / ' + fmtI((c.results && c.results.I) || 0) + '</span>' +
+           '<span style="margin-left:.6rem;color:var(--text-light);font-weight:400">' + (en ? '(SPDT · pull-in ≈ ' + RELAY_VPULL + ' V, coil ' + RELAY_RCOIL + ' Ω)' : '(SPDT · ดึงเข้าที่ ≈ ' + RELAY_VPULL + ' V, คอยล์ ' + RELAY_RCOIL + ' Ω)') + '</span>';
   }
   var polar = (c.type === 'led' || c.type === 'diode' || c.type === 'battery' || c.type === 'ac' || c.type === 'opto');
   var flip = polar ? '<button class="bb-ed-btn" id="bb-ed-flip">🔄 ' + (en ? 'Flip ±' : 'สลับขั้ว') + '</button>' : '';
@@ -681,11 +736,12 @@ function nearestHole(x, y){
   for (var id in holes){ var h = holes[id], d = (h.x - x) * (h.x - x) + (h.y - y) * (h.y - y); if (d < bd){ bd = d; best = id; } }
   return best;
 }
-function setCompHoles(c, na, nb, ng, nh){
+function setCompHoles(c, na, nb, ng, nh, nk){
   compNodes(c).forEach(function(h){ delete occupied[h]; });
   c.a = na; c.b = nb; occupied[na] = c.id; occupied[nb] = c.id;
   if (ng != null){ c.g = ng; occupied[ng] = c.id; }
   if (nh != null){ c.h = nh; occupied[nh] = c.id; }
+  if (nk != null){ c.k = nk; occupied[nk] = c.id; }
 }
 
 function startDrag(ev, c){
@@ -708,19 +764,24 @@ function onPointerMove(ev){
   if (!nb || nb === na) return;                                  // b lands off-grid → invalid drop
   if (occupied[na] && occupied[na] !== c.id) return;
   if (occupied[nb] && occupied[nb] !== c.id) return;
-  var ng = null, nh = null;
-  if (isThreePin(c) || isFourPin(c)){                            // third pin must also land on a free hole
+  var ng = null, nh = null, nk = null;
+  if (isThreePin(c) || isFourPin(c) || isFivePin(c)){            // third pin must also land on a free hole
     ng = holeAt[hkey(holes[c.g].x + dx, holes[c.g].y + dy)];
     if (!ng || ng === na || ng === nb) return;
     if (occupied[ng] && occupied[ng] !== c.id) return;
   }
-  if (isFourPin(c)){                                             // fourth pin (opto emitter) too
+  if (isFourPin(c) || isFivePin(c)){                            // fourth pin (opto emitter / relay NO) too
     nh = holeAt[hkey(holes[c.h].x + dx, holes[c.h].y + dy)];
     if (!nh || nh === na || nh === nb || nh === ng) return;
     if (occupied[nh] && occupied[nh] !== c.id) return;
   }
+  if (isFivePin(c)){                                             // fifth pin (relay NC) too
+    nk = holeAt[hkey(holes[c.k].x + dx, holes[c.k].y + dy)];
+    if (!nk || nk === na || nk === nb || nk === ng || nk === nh) return;
+    if (occupied[nk] && occupied[nk] !== c.id) return;
+  }
   dragMoved = true;
-  setCompHoles(c, na, nb, ng, nh);
+  setCompHoles(c, na, nb, ng, nh, nk);
   selectedId = c.id;
   rebuild();
 }
@@ -738,7 +799,8 @@ function onPointerUp(){
 function showHL(id){ var h = holes[id]; hlEl.setAttribute('cx', h.x); hlEl.setAttribute('cy', h.y); hlEl.style.display = ''; }
 function showHL2(id){ var h = holes[id]; hlEl2.setAttribute('cx', h.x); hlEl2.setAttribute('cy', h.y); hlEl2.style.display = ''; }
 function showHL3(id){ var h = holes[id]; hlEl3.setAttribute('cx', h.x); hlEl3.setAttribute('cy', h.y); hlEl3.style.display = ''; }
-function hideHL(){ hlEl.style.display = 'none'; if (hlEl2) hlEl2.style.display = 'none'; if (hlEl3) hlEl3.style.display = 'none'; }
+function showHL4(id){ var h = holes[id]; hlEl4.setAttribute('cx', h.x); hlEl4.setAttribute('cy', h.y); hlEl4.style.display = ''; }
+function hideHL(){ hlEl.style.display = 'none'; if (hlEl2) hlEl2.style.display = 'none'; if (hlEl3) hlEl3.style.display = 'none'; if (hlEl4) hlEl4.style.display = 'none'; }
 
 var hintTimer = null;
 function flashHint(msg){
@@ -794,7 +856,8 @@ function solveCircuit(h, commit){
   var transistors = comps.filter(function(c){ return c.type === 'transistor'; });
   var pots        = comps.filter(function(c){ return c.type === 'pot'; });
   var optos       = comps.filter(function(c){ return c.type === 'opto'; });
-  var branches    = comps.filter(function(c){ return c.type !== 'wire' && c.type !== 'battery' && c.type !== 'ac' && c.type !== 'switch' && c.type !== 'transistor' && c.type !== 'pot' && c.type !== 'opto'; });
+  var relays      = comps.filter(function(c){ return c.type === 'relay'; });
+  var branches    = comps.filter(function(c){ return c.type !== 'wire' && c.type !== 'battery' && c.type !== 'ac' && c.type !== 'switch' && c.type !== 'transistor' && c.type !== 'pot' && c.type !== 'opto' && c.type !== 'relay'; });
   var wires       = comps.filter(function(c){ return c.type === 'wire'; });
   // a closed switch behaves like a jumper (0 Ω); an open one is ignored entirely
   var joins       = wires.concat(comps.filter(function(c){ return c.type === 'switch' && c.closed; }));
@@ -838,6 +901,8 @@ function solveCircuit(h, commit){
   });
   // opto: _don = input-LED state (0 off / 1 forward), _rg = output region (0 cutoff / 1 active / 2 sat)
   optos.forEach(function(o){ o._don = 0; o._rg = 0; });
+  // relay: _en = armature latch (0 released / 1 energized) — persists across steps for hysteresis, like _av
+  relays.forEach(function(r){ if (r._en == null) r._en = 0; });
   var sol = null, iter, MAXIT = 80;
 
   for (iter = 0; iter < MAXIT; iter++){
@@ -933,6 +998,15 @@ function solveCircuit(h, commit){
       } else stampG(iC, iE, 1e-9);   // dark → output open
     });
 
+    // relays: coil (a→b) = fixed resistor; SPDT contact (COM=g) closes onto NO=h when energized,
+    // else onto NC=k. A closed contact is a near-short conductance; an open one is tiny leakage.
+    relays.forEach(function(r){
+      stampG(gi(sn(r.a)), gi(sn(r.b)), 1 / RELAY_RCOIL);
+      var iCOM = gi(sn(r.g)), iNO = gi(sn(r.h)), iNC = gi(sn(r.k));
+      stampG(iCOM, iNO, r._en === 1 ? 1 / RELAY_RON : RELAY_GOFF);
+      stampG(iCOM, iNC, r._en === 1 ? RELAY_GOFF : 1 / RELAY_RON);
+    });
+
     // potentiometers (linear): two resistors R1 (end a→wiper) and R2 (wiper→end b)
     pots.forEach(function(p){
       var pr = potR(p);
@@ -1018,6 +1092,12 @@ function solveCircuit(h, commit){
       else if (o._rg === 2) nro = ((vce - BJT_VCE_SAT) / BJT_RSAT > icmax + 1e-9) ? 1 : 2;  // clamp passing more than the light allows → back to active
       else nro = (vce < BJT_VCE_SAT - 1e-3) ? 2 : 1;                                        // collector collapsed → saturated
       if (nro !== o._rg){ o._rg = nro; changed = true; }
+    });
+    // relay armature: pull in at/above VPULL, release below VDROP (hysteresis latch)
+    relays.forEach(function(r){
+      var vcoil = Math.abs(V(sn(r.a)) - V(sn(r.b)));
+      var ne = r._en === 1 ? (vcoil < RELAY_VDROP ? 0 : 1) : (vcoil >= RELAY_VPULL ? 1 : 0);
+      if (ne !== r._en){ r._en = ne; changed = true; }
     });
     if (!changed) break;
   }
@@ -1110,6 +1190,16 @@ function solveCircuit(h, commit){
     if (IF > 0.03) warnings.push({ t:'warn', th:'กระแส LED ฝั่งเข้าของออปโตสูงเกิน (' + fmtI(IF) + ') — ต้องมี R จำกัดกระแส', en:'Optocoupler input-LED current too high (' + fmtI(IF) + ') — add a series resistor' });
   });
 
+  // relays — coil voltage/current + energized state + which contact is carrying current
+  relays.forEach(function(r){
+    var vcoil = Vof(sn(r.a)) - Vof(sn(r.b)), Icoil = vcoil / RELAY_RCOIL;
+    var en = r._en === 1;
+    var conNode = en ? sn(r.h) : sn(r.k);                 // the currently-closed throw (NO or NC)
+    var Icon = (Vof(sn(r.g)) - Vof(conNode)) / RELAY_RON; // current through the closed contact
+    r.results = { V:vcoil, I:Icoil, on:(Math.abs(Icoil) > 1e-6 || Math.abs(Icon) > 1e-6),
+                  en:en, Vcoil:vcoil, Icoil:Icoil, Icon:Icon };
+  });
+
   // potentiometers — report the divider voltage + the current in each leg
   pots.forEach(function(p){
     var pr = potR(p), va = Vof(sn(p.a)), vw = Vof(sn(p.g)), vb = Vof(sn(p.b));
@@ -1149,7 +1239,7 @@ function rebuild(){
 
   // draw components
   while (gComps.firstChild) gComps.removeChild(gComps.firstChild);
-  ledGlows = []; optoGlows = [];
+  ledGlows = []; optoGlows = []; relayGlows = [];
   comps.forEach(drawComp);
 
   rebuildElectrons();
@@ -1163,6 +1253,7 @@ function drawComp(c){
   if (c.type === 'pot'){ drawPot(c); return; }
   if (c.type === 'ac'){ drawAC(c); return; }
   if (c.type === 'opto'){ drawOpto(c); return; }
+  if (c.type === 'relay'){ drawRelay(c); return; }
   var A = holes[c.a], B = holes[c.b];
   var dx = B.x - A.x, dy = B.y - A.y;
   var len = Math.sqrt(dx * dx + dy * dy);
@@ -1463,6 +1554,66 @@ function drawOpto(c){
   gComps.appendChild(g);
 }
 
+// 5-pin relay: body box at the centroid with a coil symbol (left) + a pivoting SPDT armature
+// (right) that swings COM→NO when energized / COM→NC when released. Coil (+/−), COM, NO, NC leads
+// fan out to their holes. The armature + coil colour update every frame via relayGlows.
+function drawRelay(c){
+  var A = holes[c.a], B = holes[c.b], COM = holes[c.g], NO = holes[c.h], NC = holes[c.k];
+  var cx = (A.x + B.x + COM.x + NO.x + NC.x) / 5, cy = (A.y + B.y + COM.y + NO.y + NC.y) / 5;
+  var en = !!(c.results && c.results.en), flow = !!(c.results && c.results.on);
+  var bd = '#7c3aed';
+  var g = el('g', { class:'bb-comp-hit' });
+  g.addEventListener('pointerdown', function(ev){ startDrag(ev, c); });
+
+  if (c.id === selectedId)
+    g.appendChild(el('rect', { x:cx - 34, y:cy - 26, width:68, height:52, rx:8, fill:'rgba(245,158,11,0.10)', stroke:'#f59e0b', 'stroke-width':2, 'stroke-dasharray':'5 3' }));
+
+  // leads from each pin hole toward the body + pin letters
+  var pins = [
+    { h:A,   name:'+',   col:'#ef4444' },
+    { h:B,   name:'−',   col:'#3b82f6' },
+    { h:COM, name:'COM', col:'#334155' },
+    { h:NO,  name:'NO',  col:'#16a34a' },
+    { h:NC,  name:'NC',  col:'#ca8a04' }
+  ];
+  pins.forEach(function(p){
+    var angp = Math.atan2(p.h.y - cy, p.h.x - cx);
+    g.appendChild(el('line', { x1:p.h.x, y1:p.h.y, x2:cx + Math.cos(angp) * 26, y2:cy + Math.sin(angp) * 17,
+      stroke:flow ? p.col : '#94a3b8', 'stroke-width':2.4, 'stroke-linecap':'round' }));
+    g.appendChild(el('circle', { cx:p.h.x, cy:p.h.y, r:2.6, fill:flow ? p.col : '#64748b' }));
+    var t = txt(p.h.x + Math.cos(angp) * 12, p.h.y + Math.sin(angp) * 12 + 3, p.name, 'bb-lbl', p.col);
+    t.setAttribute('font-weight', '800'); t.setAttribute('font-size', '8');
+    g.appendChild(t);
+  });
+
+  // body box
+  g.appendChild(el('rect', { x:cx - 26, y:cy - 17, width:52, height:34, rx:6, fill:'var(--card)', stroke:bd, 'stroke-width':2.2 }));
+
+  // coil symbol (left) — humps; energized = blue/magnetized, released = grey
+  var coilCol = en ? '#2563eb' : '#94a3b8';
+  var coilX = cx - 20, humps = el('path', {
+    d:'M ' + coilX + ' ' + (cy - 9) + ' q 7 3 0 6 q 7 3 0 6 q 7 3 0 6',
+    fill:'none', stroke:coilCol, 'stroke-width':2 });
+  g.appendChild(humps);
+  g.appendChild(el('line', { x1:coilX, y1:cy - 9, x2:coilX, y2:cy + 9, stroke:coilCol, 'stroke-width':1, opacity:0.5 }));
+
+  // SPDT contacts (right): pivot at COM, throws NO (upper) / NC (lower)
+  var pvX = cx + 2, pvY = cy, noX = cx + 20, noY = cy - 8, ncX = cx + 20, ncY = cy + 8;
+  g.appendChild(el('circle', { cx:noX, cy:noY, r:2.3, fill:'#16a34a' }));   // NO terminal
+  g.appendChild(el('circle', { cx:ncX, cy:ncY, r:2.3, fill:'#ca8a04' }));   // NC terminal
+  g.appendChild(el('circle', { cx:pvX, cy:pvY, r:2.6, fill:'#334155' }));   // COM pivot
+  var arm = el('line', { x1:pvX, y1:pvY, x2:(en ? noX : ncX), y2:(en ? noY : ncY),
+    stroke:'#334155', 'stroke-width':2.4, 'stroke-linecap':'round' });
+  g.appendChild(arm);
+
+  var lbl = 'RELAY · ' + (en ? (isEN() ? 'ON' : 'ทำงาน') : (isEN() ? 'OFF' : 'พัก'));
+  var tl = txt(cx, cy - 23, lbl, 'bb-lbl', bd); tl.setAttribute('font-weight', '700');
+  g.appendChild(tl);
+
+  relayGlows.push({ c:c, arm:arm, humps:humps, noX:noX, noY:noY, ncX:ncX, ncY:ncY, pvX:pvX, pvY:pvY });
+  gComps.appendChild(g);
+}
+
 // distinctive mark for each sensor / special resistor (drawn over the body)
 function drawRAccent(g, type, x1, x2, len){
   var cx = len / 2, col = '#334155';
@@ -1526,6 +1677,7 @@ function resistorHeat(c){
 var elecDots = [];   // {el, a, b, dir, speed, f}
 var ledGlows = [];   // {c, halo, tri, bar, arrows} — restyled every transient frame so LEDs dim smoothly
 var optoGlows = [];  // {c, halo, arrows} — same idea for the optocoupler's input-LED glow + light arrows
+var relayGlows = []; // {c, arm, humps, ...} — armature/coil restyled every frame as the relay energizes
 
 // update LED visuals from the latest brightness without redrawing the whole board
 function updateLeds(){
@@ -1545,6 +1697,12 @@ function updateLeds(){
     O.halo.setAttribute('r', (6 + 10 * ob).toFixed(1));
     O.arrows.forEach(function(a){ a.setAttribute(a.tagName === 'polygon' ? 'fill' : 'stroke', olit ? '#f59e0b' : '#cbd5e1'); });
   }
+  for (var r = 0; r < relayGlows.length; r++){
+    var R = relayGlows[r], ren = !!(R.c.results && R.c.results.en);
+    R.arm.setAttribute('x2', ren ? R.noX : R.ncX);
+    R.arm.setAttribute('y2', ren ? R.noY : R.ncY);
+    R.humps.setAttribute('stroke', ren ? '#2563eb' : '#94a3b8');
+  }
 }
 function rebuildElectrons(){
   while (gElec.firstChild) gElec.removeChild(gElec.firstChild);
@@ -1560,6 +1718,21 @@ function rebuildElectrons(){
           var sd = el('circle', { class:'bb-elec', r:3.2, filter:'url(#bb-glow)' });
           gElec.appendChild(sd);
           elecDots.push({ el:sd, a:seg[0], b:seg[1], dir:sdir, speed:sspeed, f:q / 2 });
+        }
+      });
+      return;
+    }
+    if (c.type === 'relay'){          // coil current (a→b) + the closed contact (COM→NO or COM→NC)
+      var segs = [[c.a, c.b, c.results.Icoil]];
+      var conB = c.results.en ? c.h : c.k;
+      segs.push([c.g, conB, c.results.Icon]);
+      segs.forEach(function(seg){
+        var Is = Math.abs(seg[2]); if (Is < 1e-5) return;
+        var sdir = seg[2] >= 0 ? 1 : -1, sspeed = Math.max(0.12, Math.min(0.9, Is * 18));
+        for (var q = 0; q < 3; q++){
+          var rd = el('circle', { class:'bb-elec', r:3.2, filter:'url(#bb-glow)' });
+          gElec.appendChild(rd);
+          elecDots.push({ el:rd, a:seg[0], b:seg[1], dir:sdir, speed:sspeed, f:q / 3 });
         }
       });
       return;
@@ -1820,6 +1993,7 @@ function compName(c, en){
   if (c.type === 'ind') return 'L ' + fmtL(c.value);
   if (c.type === 'pot') return (en ? 'Pot ' : 'POT ') + fmtR(c.value || potVal);
   if (c.type === 'opto') return (en ? 'Optocoupler (CTR ' : 'ออปโตคัปเปลอร์ (CTR ') + (c.ctr || CTR_DEFAULT) + '%)';
+  if (c.type === 'relay') return (en ? 'Relay (SPDT)' : 'รีเลย์ (SPDT)');
   if (c.type === 'transistor'){
     var ts = TRANSISTOR_TYPES[c.tt] || TRANSISTOR_TYPES.npn;
     if (isAval(c)) return ts[en ? 'en' : 'th'] + (en ? ' avalanche (V_BR ' : ' avalanche (V_BR ') + (c.vbr || AV_VBR_DEFAULT) + 'V)';
@@ -2004,12 +2178,12 @@ function beep(){
 }
 
 // ════════════════════════════ TOOLBAR / CONTROLS ════════════════════════════
-var VALROWS = ['battery','ac','resistor','diode','wire','switch','cap','ind','transistor','pot','opto','meter'];
-var COMP_TOOLS = ['battery','ac','resistor','diode','wire','switch','cap','ind','transistor','pot','opto'];   // live inside the "Add component" dropdown
+var VALROWS = ['battery','ac','resistor','diode','wire','switch','cap','ind','transistor','pot','opto','relay','meter'];
+var COMP_TOOLS = ['battery','ac','resistor','diode','wire','switch','cap','ind','transistor','pot','opto','relay'];   // live inside the "Add component" dropdown
 function selectTool(t){
   // toggle off if same
   tool = (tool === t) ? null : t;
-  pendingHole = null; pendingHole2 = null; pendingHole3 = null; hideHL();
+  pendingHole = null; pendingHole2 = null; pendingHole3 = null; pendingHole4 = null; hideHL();
   document.querySelectorAll('.bb-tool[data-tool]').forEach(function(btn){
     btn.classList.toggle('active', btn.dataset.tool === tool);
   });
@@ -2151,7 +2325,7 @@ function initControls(){
   });
   document.addEventListener('click', function(e){ if (!e.target.closest('#bb-comp-dropdown')) closeCompMenu(); });
   $('bb-clear').addEventListener('click', function(){
-    comps = []; occupied = {}; pendingHole = null; pendingHole2 = null; pendingHole3 = null; selectedId = null; hideHL(); resetMeter();
+    comps = []; occupied = {}; pendingHole = null; pendingHole2 = null; pendingHole3 = null; pendingHole4 = null; selectedId = null; hideHL(); resetMeter();
     simTime = 0; graphHist = []; graphComp = null;
     // reset the environment panel to defaults
     env.temp = 25; $('bb-temp').value = 25; $('bb-temp-out').textContent = '25 °C';
@@ -2216,7 +2390,7 @@ function initControls(){
   document.addEventListener('keydown', function(e){
     if (e.key !== 'Escape') return;
     closeCompMenu(); closeStorageModal();
-    if (pendingHole != null || pendingHole2 != null || pendingHole3 != null){ pendingHole = null; pendingHole2 = null; pendingHole3 = null; hideHL(); refreshHint(); }
+    if (pendingHole != null || pendingHole2 != null || pendingHole3 != null || pendingHole4 != null){ pendingHole = null; pendingHole2 = null; pendingHole3 = null; pendingHole4 = null; hideHL(); refreshHint(); }
   });
   // re-render text on language change (trigger label re-renders via th-only/en-only spans)
   document.addEventListener('langchange', function(){
@@ -2496,13 +2670,39 @@ var EXAMPLES = [
       place('led', 'te15', 'te19', { color:'red', vf:1.8 });        // anode col15 = collector, cathode col19
       place('wire', 'tb19', 'TN19', { color:'black' });             // col19 → − rail (gnd)
       place('transistor', 'td15', 'td9', { g:'td12', tt:'npn', av:true, vbr:8, beta:100 });   // C=col15, E=col9, B=col12(float)
+    } },
+  { th:'รีเลย์ขับด้วยทรานซิสเตอร์ + ออปโตแยกวงจร + ไดโอดกันย้อน (ปิดสวิตช์ → รีเลย์ทำงาน → LED ติด)', en:'Opto-isolated, transistor-driven relay + flyback diode (close the switch → relay pulls in → LED lights)', build:function(){
+      // Full driver chain: the bottom battery + switch drives the opto input LED → the isolated
+      // phototransistor turns on the NPN → the NPN sinks the relay coil (top battery) → the relay
+      // energizes → COM→NO lights the red LED. The diode across the coil is the flyback (freewheeling)
+      // diode — reverse-biased and idle in steady state, it catches the coil's back-EMF at turn-off.
+      setExampleBatt(9);
+      place('battery', 'BP1', 'BN1', { value:9 });                             // bottom battery (input/control side)
+      place('resistor', 'td11', 'td16', { value:1000 });                       // opto emitter → NPN base (Rb)
+      place('transistor', 'tc13', 'tc19', { g:'tc16', tt:'npn', beta:100 });   // C=col13, E=col19, B=col16
+      place('wire', 'ta19', 'TN19', { color:'green' });                        // NPN emitter → − rail (top)
+      place('battery', 'TP1', 'TN1', { value:9 });                             // top battery (relay + load side)
+      place('wire', 'tf22', 'td22', { color:'green' });                        // relay NO (col22) → top col22
+      place('resistor', 'tc22', 'tc24', { value:1000 });                       // NO branch series R
+      place('led', 'td24', 'td27', { color:'red', vf:1.8 });                   // load LED (lit when relay is on)
+      place('wire', 'ta27', 'TN27', { color:'green' });                        // LED → − rail (top)
+      place('switch', 'BP2', 'th2', { closed:false });                         // input switch (starts open)
+      place('resistor', 'tg2', 'tg8', { value:330 });                          // opto input series R
+      place('opto', 'tf8', 'tf11', { g:'te8', h:'te11', ctr:100 });            // A/K on the bottom, C/E on top
+      place('wire', 'tg11', 'BN11', { color:'green' });                        // opto K → − rail (bottom)
+      place('relay', 'tj16', 'tj18', { g:'tj20', h:'tj22', k:'tj24' });        // coil col16→col18 · COM20 NO22 NC24
+      place('wire', 'TP2', 'td8', { color:'red' });                            // + rail (top) → opto collector
+      place('wire', 'te13', 'ti18', { color:'green' });                        // NPN collector → coil− (col18)
+      place('wire', 'ti16', 'TP10', { color:'red' });                          // coil+ (col16) → + rail (top)
+      place('wire', 'TP17', 'th20', { color:'red' });                          // + rail (top) → relay COM (red = positive)
+      place('diode', 'tf18', 'tf16', { variant:'silicon', vf:0.7, rd:8 });     // flyback diode across the coil
     } }
 ];
 
 var lastExampleIdx = -1;
 function loadExampleByIndex(i){
   if (i < 0 || i >= EXAMPLES.length) return;
-  comps = []; occupied = {}; pendingHole = null; pendingHole2 = null; pendingHole3 = null; selectedId = null; hideHL(); resetMeter();
+  comps = []; occupied = {}; pendingHole = null; pendingHole2 = null; pendingHole3 = null; pendingHole4 = null; selectedId = null; hideHL(); resetMeter();
   simTime = 0; graphHist = []; graphComp = null; renderEditor();
   lastExampleIdx = i;
   var ex = EXAMPLES[i];
@@ -2521,11 +2721,13 @@ function place(type, a, b, props){
   if (!holes[a] || !holes[b]){ console.warn('place(): unknown hole', !holes[a] ? a : b, '— skipped', type); return; }
   if (props && props.g != null && !holes[props.g]){ console.warn('place(): unknown hole', props.g, '— skipped', type); return; }
   if (props && props.h != null && !holes[props.h]){ console.warn('place(): unknown hole', props.h, '— skipped', type); return; }
+  if (props && props.k != null && !holes[props.k]){ console.warn('place(): unknown hole', props.k, '— skipped', type); return; }
   var c = { id:nextId++, type:type, a:a, b:b };
   for (var k in props) c[k] = props[k];
   comps.push(c); occupied[a] = c.id; occupied[b] = c.id;
   if (c.g != null) occupied[c.g] = c.id;
   if (c.h != null) occupied[c.h] = c.id;
+  if (c.k != null) occupied[c.k] = c.id;
 }
 
 // ════════════════════════════ SAVE / LOAD / SHARE ════════════════════════════
@@ -2539,6 +2741,7 @@ function serializeCircuit(){
       var o = { t: c.type, a: c.a, b: c.b };
       if (c.g != null) o.g = c.g;
       if (c.h != null) o.h = c.h;
+      if (c.k != null) o.k = c.k;
       if (c.ctr != null) o.ctr = c.ctr;
       if (c.value != null) o.v = c.value;
       if (c.color) o.c = c.color;
@@ -2560,7 +2763,7 @@ function serializeCircuit(){
   };
 }
 function applyCircuit(data){
-  comps = []; occupied = {}; pendingHole = null; pendingHole2 = null; pendingHole3 = null; selectedId = null; hideHL(); resetMeter();
+  comps = []; occupied = {}; pendingHole = null; pendingHole2 = null; pendingHole3 = null; pendingHole4 = null; selectedId = null; hideHL(); resetMeter();
   simTime = 0; graphHist = []; graphComp = null; renderEditor();
   if (data && data.env){
     var e = data.env;
@@ -2572,6 +2775,8 @@ function applyCircuit(data){
     var props = {};
     if (o.g != null) props.g = o.g;
     if (o.h != null) props.h = o.h;
+    if (o.k != null) props.k = o.k;
+    if (o.t === 'relay') props._en = 0;
     if (o.ctr != null) props.ctr = o.ctr;
     if (o.v != null) props.value = o.v;
     if (o.c) props.color = o.c;
