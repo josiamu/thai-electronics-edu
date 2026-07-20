@@ -130,36 +130,80 @@
         <div class="info-box">
           <strong class="th-only">⚪ ยังไม่ป้อนไฟคอยล์ (De-energized)</strong>
           <strong class="en-only">⚪ Coil OFF (De-energized)</strong>
-          <p class="th-only" style="margin:0.4rem 0 0;">สปริงดึงคานไว้ → <strong>COM ต่อกับ NC</strong> (Normally Closed = ปกติปิด)<br>วงจรฝั่ง NO เปิดอยู่</p>
-          <p class="en-only" style="margin:0.4rem 0 0;">The spring holds the lever → <strong>COM connects to NC</strong> (Normally Closed).<br>The NO side is open.</p>
+          <p class="th-only" style="margin:0.4rem 0 0;">สปริงดึงคานไว้ → <strong>COM แตะอยู่กับ NC</strong> (NC = "ปกติต่อไฟไว้")<br>ฝั่ง NO ยังไม่ต่อถึงกัน</p>
+          <p class="en-only" style="margin:0.4rem 0 0;">The spring holds the lever → <strong>COM touches NC</strong> (NC = "normally connected").<br>The NO side is not connected.</p>
         </div>
         <div class="info-box">
           <strong class="th-only">🔵 ป้อนไฟคอยล์แล้ว (Energized)</strong>
           <strong class="en-only">🔵 Coil ON (Energized)</strong>
-          <p class="th-only" style="margin:0.4rem 0 0;">แม่เหล็กดูดคาน → <strong>COM ย้ายมาต่อกับ NO</strong> (Normally Open = ปกติเปิด)<br>วงจรฝั่ง NC เปิดออก</p>
-          <p class="en-only" style="margin:0.4rem 0 0;">The magnet pulls the lever → <strong>COM switches to NO</strong> (Normally Open).<br>The NC side opens.</p>
+          <p class="th-only" style="margin:0.4rem 0 0;">แม่เหล็กดูดคาน → <strong>COM ย้ายมาแตะ NO</strong> (NO = "ปกติไม่ต่อ พอป้อนไฟจึงต่อ")<br>ฝั่ง NC หลุดออก หยุดต่อ</p>
+          <p class="en-only" style="margin:0.4rem 0 0;">The magnet pulls the lever → <strong>COM switches to NO</strong> (NO = "normally not connected; connects when powered").<br>The NC side is now disconnected.</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 3. รูปแบบหน้าสัมผัส -->
+  <!-- 3. เข้าใจ COM / NO / NC -->
   <div class="section">
-    <div class="section-title"><span class="th-only">รูปแบบหน้าสัมผัส (Pole &amp; Throw)</span><span class="en-only">Contact Forms (Pole &amp; Throw)</span></div>
+    <div class="section-title"><span class="th-only">หัวใจของรีเลย์: ขา COM / NO / NC</span><span class="en-only">The Heart of a Relay: COM / NO / NC</span></div>
     <div class="card">
+      <p class="th-only" style="margin-top:0;">ฝั่งสวิตช์ของรีเลย์ (แบบที่พบบ่อยสุด) มี <strong>3 ขา</strong> เข้าใจ 3 ขานี้ก็เข้าใจรีเลย์ทั้งตัว วิธีจำที่ง่ายที่สุดคือ <strong>ดูตอนรีเลย์ "พัก" (ยังไม่ป้อนไฟคอยล์) ว่าขานั้นแตะกับ COM อยู่หรือเปล่า</strong></p>
+      <p class="en-only" style="margin-top:0;">The switch side of a relay (the most common kind) has <strong>3 pins</strong>. Understand these 3 and you understand the whole relay. The easiest trick: <strong>at rest (coil off), does this pin touch COM or not?</strong></p>
+
+      <div class="grid-2" style="margin-top:0.4rem;">
+        <div class="info-box">
+          <strong class="th-only">COM — ขั้วร่วม (ทางเข้า)</strong>
+          <strong class="en-only">COM — Common (the input)</strong>
+          <p class="th-only" style="margin:0.4rem 0 0;">เส้นทางหลักที่ไฟวิ่งเข้ามา แล้วคานภายใน "สลับ" ให้ออกไปทาง NO หรือ NC ทีละทาง (ไม่มีทางต่อทั้งคู่พร้อมกัน)</p>
+          <p class="en-only" style="margin:0.4rem 0 0;">The main wire power comes in on. The internal lever routes it out to either NO or NC — one at a time, never both.</p>
+        </div>
+        <div class="info-box">
+          <strong class="th-only">NC = ปกติแตะ COM • NO = ปกติไม่แตะ</strong>
+          <strong class="en-only">NC = touches COM at rest • NO = doesn't</strong>
+          <p class="th-only" style="margin:0.4rem 0 0;"><strong>NC</strong> (Normally Closed) แตะ COM ตั้งแต่ยังไม่ป้อนไฟ<br><strong>NO</strong> (Normally Open) ยังไม่แตะ ต้องป้อนไฟคอยล์ก่อนจึงจะแตะ</p>
+          <p class="en-only" style="margin:0.4rem 0 0;"><strong>NC</strong> (Normally Closed) already touches COM.<br><strong>NO</strong> (Normally Open) touches only after the coil is powered.</p>
+        </div>
+      </div>
+
+      <table style="margin-top:0.8rem;">
+        <tr>
+          <th><span class="th-only">สถานะคอยล์</span><span class="en-only">Coil</span></th>
+          <th><span class="th-only">COM ต่อกับ</span><span class="en-only">COM connects to</span></th>
+          <th><span class="th-only">เกิดอะไรขึ้น</span><span class="en-only">Result</span></th>
+        </tr>
+        <tr>
+          <td><span class="th-only">⚪ OFF (พัก)</span><span class="en-only">⚪ OFF (rest)</span></td>
+          <td><strong>NC</strong></td>
+          <td><span class="th-only">โหลดที่ต่อกับ NC ทำงาน &nbsp;/&nbsp; โหลดที่ NO ดับ</span><span class="en-only">Load on NC is ON&nbsp;/&nbsp;load on NO is OFF</span></td>
+        </tr>
+        <tr>
+          <td><span class="th-only">🔵 ON (ป้อนไฟคอยล์)</span><span class="en-only">🔵 ON (energized)</span></td>
+          <td><strong>NO</strong></td>
+          <td><span class="th-only">โหลดที่ต่อกับ NO ทำงาน &nbsp;/&nbsp; โหลดที่ NC ดับ</span><span class="en-only">Load on NO is ON&nbsp;/&nbsp;load on NC is OFF</span></td>
+        </tr>
+      </table>
+
+      <div class="info-box" style="margin-top:0.8rem;border-left-color:#f59e0b;">
+        <strong class="th-only">⚠️ กับดักคำว่า "เปิด / ปิด" — คนพลาดกันบ่อยมาก!</strong>
+        <strong class="en-only">⚠️ The "open / closed" trap — a very common mix-up!</strong>
+        <p class="th-only" style="margin:0.4rem 0 0;">ในวงจรไฟฟ้า คำว่า <strong>Closed = ต่อถึงกัน ไฟไหลผ่านได้</strong> (เหมือนสวิตช์ไฟที่กด "ติด") ส่วน <strong>Open = ขาด ไฟไม่ไหล</strong> — ตรงข้ามกับ "ปิดประตู" ในภาษาพูด! ดังนั้น <strong>Normally Closed = ปกติต่อไฟไว้</strong> ไม่ใช่ "ปกติปิดกั้น" อย่างที่ชื่อชวนให้เข้าใจผิด</p>
+        <p class="en-only" style="margin:0.4rem 0 0;">In circuits, <strong>Closed = connected, current flows</strong> (like a light switch turned ON), and <strong>Open = broken, no current</strong> — the opposite of "closing a door"! So <strong>Normally Closed = normally conducting</strong>, not "normally blocking."</p>
+      </div>
+
+      <!-- Pole & Throw -->
+      <h3 class="th-only" style="margin-top:1.3rem;">แล้วชื่อ SPST / SPDT / DPDT ล่ะ?</h3>
+      <h3 class="en-only" style="margin-top:1.3rem;">What about SPST / SPDT / DPDT?</h3>
+      <p class="th-only" style="margin-top:0;">เป็นแค่ชื่อบอกว่ารีเลย์ตัวนั้น "สลับได้กี่วงจร" และ "แต่ละวงจรไปได้กี่ทาง"</p>
+      <p class="en-only" style="margin-top:0;">These names just tell you how many circuits a relay switches, and how many ways each can go.</p>
       <div class="grid-2">
         <div>
           <ul class="content-list th-only">
-            <li><strong>Pole (ขั้ว):</strong> จำนวนวงจรที่สลับได้พร้อมกัน (กี่ COM)</li>
-            <li><strong>Throw (ทาง):</strong> จำนวนตำแหน่งที่ COM ต่อไปได้ (1 = NO อย่างเดียว, 2 = NO+NC)</li>
-            <li><strong>NO</strong> (Normally Open) = ปกติเปิด ป้อนไฟคอยล์จึงปิด</li>
-            <li><strong>NC</strong> (Normally Closed) = ปกติปิด ป้อนไฟคอยล์จึงเปิด</li>
+            <li><strong>Pole (ขั้ว):</strong> สลับได้กี่วงจรพร้อมกัน = มี COM กี่ชุด</li>
+            <li><strong>Throw (ทาง):</strong> COM ไปได้กี่ปลายทาง (1 = NO อย่างเดียว, 2 = NO + NC)</li>
           </ul>
           <ul class="content-list en-only">
-            <li><strong>Pole:</strong> how many circuits are switched at once (number of COMs)</li>
-            <li><strong>Throw:</strong> how many positions COM can connect to (1 = NO only, 2 = NO+NC)</li>
-            <li><strong>NO</strong> (Normally Open) = open until the coil is energized</li>
-            <li><strong>NC</strong> (Normally Closed) = closed until the coil is energized</li>
+            <li><strong>Pole:</strong> how many circuits switch together = how many COMs</li>
+            <li><strong>Throw:</strong> how many destinations COM has (1 = NO only, 2 = NO + NC)</li>
           </ul>
         </div>
         <div>
@@ -168,15 +212,91 @@
               <th><span class="th-only">แบบ</span><span class="en-only">Type</span></th>
               <th><span class="th-only">ความหมาย</span><span class="en-only">Meaning</span></th>
             </tr>
-            <tr><td><strong>SPST</strong></td><td><span class="th-only">1 ขั้ว 1 ทาง (เปิด-ปิด ON/OFF)</span><span class="en-only">1 pole, 1 throw (simple ON/OFF)</span></td></tr>
-            <tr><td><strong>SPDT</strong></td><td><span class="th-only">1 ขั้ว 2 ทาง (COM + NO + NC) — พบบ่อยสุด</span><span class="en-only">1 pole, 2 throw (COM + NO + NC) — most common</span></td></tr>
-            <tr><td><strong>DPDT</strong></td><td><span class="th-only">2 ขั้ว 2 ทาง (สลับ 2 วงจรพร้อมกัน)</span><span class="en-only">2 pole, 2 throw (switches two circuits together)</span></td></tr>
+            <tr><td><strong>SPST</strong></td><td><span class="th-only">1 ขั้ว 1 ทาง — แค่เปิด/ปิด (มี NO อย่างเดียว)</span><span class="en-only">1 pole, 1 throw — plain ON/OFF (NO only)</span></td></tr>
+            <tr><td><strong>SPDT</strong></td><td><span class="th-only">1 ขั้ว 2 ทาง — มีครบ COM + NO + NC (พบบ่อยสุด)</span><span class="en-only">1 pole, 2 throw — full COM + NO + NC (most common)</span></td></tr>
+            <tr><td><strong>DPDT</strong></td><td><span class="th-only">2 ขั้ว 2 ทาง — เหมือน SPDT สองชุดในตัวเดียว</span><span class="en-only">2 pole, 2 throw — two SPDTs in one</span></td></tr>
           </table>
-          <div class="info-box" style="margin-top:0.6rem;font-size:0.85rem;">
-            <span class="th-only">📌 รีเลย์ทั่วไปบนบอร์ด Arduino มักเป็น <strong>SPDT</strong> — มีครบ COM / NO / NC ให้เลือกใช้</span>
-            <span class="en-only">📌 The common relay on Arduino boards is usually <strong>SPDT</strong> — it has COM / NO / NC available.</span>
-          </div>
         </div>
+      </div>
+      <div class="info-box" style="margin-top:0.6rem;font-size:0.9rem;">
+        <span class="th-only">📌 รีเลย์บนบอร์ด Arduino ส่วนใหญ่เป็น <strong>SPDT</strong> — มี COM / NO / NC ครบ เริ่มหัดจากตัวนี้ได้เลย</span>
+        <span class="en-only">📌 Most Arduino relay modules are <strong>SPDT</strong> — COM / NO / NC all available. Start with this one.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3b. รีเลย์ในคาบเรียน: OMRON MY4 / PYF14A-E -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">🧪 รีเลย์ที่ใช้ทดสอบในคาบ: OMRON MY4 + ซ็อกเก็ต PYFZ-14-E (14 ขา)</span><span class="en-only">🧪 The Relay We Test in Class: OMRON MY4 + PYFZ-14-E Socket (14 pins)</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>PYFZ-14-E</strong> (หรือ PYF14A-E) คือ <strong>ซ็อกเก็ต (ฐานเสียบ) 14 ขา</strong> ไม่ใช่ตัวรีเลย์ — ตัวรีเลย์ที่เสียบลงไปคือตระกูล <strong>MY4 / LY4</strong></li>
+            <li>MY4 เป็นแบบ <strong>4PDT</strong> = มี <strong>4 ชุดหน้าสัมผัส</strong> (4 poles) แต่ละชุดมี COM / NO / NC ครบ</li>
+            <li>นับขา: 4 ชุด × 3 = 12 ขาหน้าสัมผัส <strong>+ คอยล์ 2 ขา = 14 ขา</strong></li>
+            <li>ทั้ง 4 ชุดสลับ <strong>พร้อมกัน</strong> เมื่อป้อนไฟคอยล์ (energize) ครั้งเดียว</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li><strong>PYFZ-14-E</strong> (or PYF14A-E) is the <strong>14-pin socket (base)</strong>, not the relay itself — the relay that plugs in is the <strong>MY4 / LY4</strong> family.</li>
+            <li>MY4 is <strong>4PDT</strong> = <strong>4 contact sets</strong> (4 poles), each with its own COM / NO / NC.</li>
+            <li>Pin count: 4 sets × 3 = 12 contact pins <strong>+ 2 coil pins = 14</strong>.</li>
+            <li>All 4 sets switch <strong>together</strong> from a single coil energize.</li>
+          </ul>
+        </div>
+        <figure style="text-align:center;margin:0;">
+          <img src="img/relay-socket-pyfz14e.png" alt="OMRON PYFZ-14-E 14-pin relay socket" style="max-width:100%;height:auto;border-radius:var(--radius);box-shadow:var(--shadow);">
+          <figcaption style="margin-top:0.4rem;font-size:0.85rem;color:var(--text-light);">
+            <span class="th-only">ซ็อกเก็ต OMRON PYFZ-14-E (14 ขา) สำหรับรีเลย์ MY4 / LY4</span>
+            <span class="en-only">OMRON PYFZ-14-E 14-pin socket for MY4 / LY4 relays</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <h3 class="th-only" style="margin-top:1rem;">ผังขา (เลขขาบนซ็อกเก็ต)</h3>
+      <h3 class="en-only" style="margin-top:1rem;">Pin map (numbers on the socket)</h3>
+      <table>
+        <tr>
+          <th><span class="th-only">ชุดหน้าสัมผัส</span><span class="en-only">Contact set</span></th>
+          <th><span class="th-only">NC <small>(ปกติต่อ)</small></span><span class="en-only">NC <small>(closed at rest)</small></span></th>
+          <th><span class="th-only">COM <small>(ขั้วร่วม / ทางเข้า)</small></span><span class="en-only">COM <small>(common / input)</small></span></th>
+          <th><span class="th-only">NO <small>(ปกติไม่ต่อ)</small></span><span class="en-only">NO <small>(open at rest)</small></span></th>
+        </tr>
+        <tr><td><strong>ชุดที่ 1 (Pole 1)</strong></td><td>1</td><td>9</td><td>5</td></tr>
+        <tr><td><strong>ชุดที่ 2 (Pole 2)</strong></td><td>2</td><td>10</td><td>6</td></tr>
+        <tr><td><strong>ชุดที่ 3 (Pole 3)</strong></td><td>3</td><td>11</td><td>7</td></tr>
+        <tr><td><strong>ชุดที่ 4 (Pole 4)</strong></td><td>4</td><td>12</td><td>8</td></tr>
+        <tr style="background:var(--bg);"><td colspan="4"><strong class="th-only">⚡ คอยล์ (ป้อนไฟ / Energize):</strong><strong class="en-only">⚡ Coil (Energize):</strong> &nbsp;<span class="th-only">ขา <strong>13</strong> และ <strong>14</strong></span><span class="en-only">pins <strong>13</strong> and <strong>14</strong></span></td></tr>
+      </table>
+
+      <div class="grid-2" style="margin-top:0.8rem;">
+        <div class="info-box">
+          <strong class="th-only">✅ วิธีจำง่ายๆ</strong>
+          <strong class="en-only">✅ Easy way to remember</strong>
+          <ul class="content-list th-only" style="margin:0.4rem 0 0;">
+            <li>ขา <strong>1–4</strong> = NC ทั้งหมด</li>
+            <li>ขา <strong>5–8</strong> = NO ทั้งหมด</li>
+            <li>ขา <strong>9–12</strong> = COM ทั้งหมด</li>
+            <li>ขา <strong>13–14</strong> = คอยล์ (ป้อนไฟตรงนี้)</li>
+          </ul>
+          <ul class="content-list en-only" style="margin:0.4rem 0 0;">
+            <li>Pins <strong>1–4</strong> = all NC</li>
+            <li>Pins <strong>5–8</strong> = all NO</li>
+            <li>Pins <strong>9–12</strong> = all COM</li>
+            <li>Pins <strong>13–14</strong> = coil (energize here)</li>
+          </ul>
+        </div>
+        <div class="info-box" style="border-left-color:#f59e0b;">
+          <strong class="th-only">⚠️ ก่อนต่อจริง เช็คก่อนเสมอ</strong>
+          <strong class="en-only">⚠️ Always verify before wiring</strong>
+          <p class="th-only" style="margin:0.4rem 0 0;">เลขขาด้านบนเป็น <strong>ผังมาตรฐานของรีเลย์ 4PDT (MY4/LY4)</strong> — ควรเทียบกับ <strong>ผังที่พิมพ์อยู่ข้างตัวรีเลย์และบนซ็อกเก็ต</strong> อีกครั้ง แล้วยืนยันด้วยมัลติมิเตอร์ (โหมด Ω หาคอยล์ + continuity หา NC/NO) ตามหัวข้อถัดๆ ไป</p>
+          <p class="en-only" style="margin:0.4rem 0 0;">The numbers above are the <strong>standard 4PDT (MY4/LY4) layout</strong> — always cross-check the <strong>diagram printed on the relay body and socket</strong>, then confirm with a multimeter (Ω to find the coil, continuity to find NC/NO) as shown in the sections below.</p>
+        </div>
+      </div>
+
+      <div class="info-box" style="margin-top:0.6rem;">
+        <span class="th-only">🔌 คอยล์ขา 13–14 ของ MY4 รุ่นธรรมดา <strong>ไม่มีขั้ว</strong> (ป้อน DC สลับได้) — แต่พอต่อ <strong>ไดโอดกันย้อน</strong> คร่อมคอยล์แล้ว ทั้งชุดจะกลายเป็นมีขั้วทันที ต้องวางแถบคาดของไดโอดให้ชี้ไปด้านไฟ <strong>บวก</strong> ของคอยล์ (ถ้าเป็นรุ่นมีไฟ LED ในตัว เช่น MY4N-D2 คอยล์จะมีขั้ว +/− อยู่แล้ว)</span>
+        <span class="en-only">🔌 The MY4 coil (pins 13–14, plain version) has <strong>no polarity</strong> (DC either way) — but once you add a <strong>flyback diode</strong> across it, the whole thing becomes polarity-sensitive: point the diode's band toward the <strong>positive</strong> coil pin. (Indicator versions like MY4N-D2 already have a polarized +/− coil.)</span>
       </div>
     </div>
   </div>
