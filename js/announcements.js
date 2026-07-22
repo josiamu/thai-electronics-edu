@@ -14,6 +14,14 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'worksheet-oscillator-2026-07-22', date:'2026-07-22', type:'download',
+    th:'ใบงานใหม่: ใบความรู้ที่ 7 — ผ่าโครงสร้างวงจรกำเนิดความถี่ (ออสซิลเลเตอร์ • รูปคลื่นและการวิเคราะห์) (PDF)',
+    en:'New worksheet: Sheet 7 — Inside Oscillator Circuits (oscillators • waveforms & analysis) (PDF)',
+    href:'downloads.html', cat:'worksheet', file:'pdf/worksheet/ใบความรู้ที่ 7 ผ่าโครงสร้างวงจรกำเนิดความถี่.pdf' },
+  { id:'worksheet-nameplate-2026-07-22', date:'2026-07-22', type:'download',
+    th:'ใบงานใหม่: ใบงานที่ 1 — สัมผัสแรก: ถอดรหัสเนมเพลทและป้ายบอกค่าเครื่องใช้ไฟฟ้า (PDF)',
+    en:'New worksheet: Sheet 1 — First Contact: Decoding Appliance Nameplates & Rating Labels (PDF)',
+    href:'downloads.html', cat:'worksheet', file:'pdf/worksheet/📝 ใบงานที่ 1 สัมผัสแรก. ถอดรหัสเนมเพลทและป.pdf' },
   { id:'breadboard-relay-2026-07-20', date:'2026-07-20', type:'update',
     th:'เบรดบอร์ด: เพิ่มรีเลย์ SPDT (5 ขา — คอยล์ + COM/NO/NC) วางเองได้ จ่ายไฟคอยล์ถึงระดับดึงเข้าแล้วหน้าสัมผัสสลับ COM→NO เอง พร้อมตัวอย่างออปโต→ทรานซิสเตอร์ขับคอยล์รีเลย์ + ไดโอดกันย้อน (flyback)',
     en:'Breadboard: added an SPDT relay (5 pins — coil + COM/NO/NC) — energize the coil past pull-in and the contact flips COM→NO, with a ready-made opto→transistor coil-driver example + flyback diode',
