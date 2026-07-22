@@ -2696,6 +2696,35 @@ var EXAMPLES = [
       place('wire', 'ti16', 'TP10', { color:'red' });                          // coil+ (col16) → + rail (top)
       place('wire', 'TP17', 'th20', { color:'red' });                          // + rail (top) → relay COM (red = positive)
       place('diode', 'tf18', 'tf16', { variant:'silicon', vf:0.7, rd:8 });     // flyback diode across the coil
+    } },
+  { th:'รีเลย์ SPDT สลับ LED แดง↔เขียว (NC/NO) — 3V ผ่านทรานซิสเตอร์ขับคอยล์ 9V', en:'SPDT relay swaps red↔green LED (NC/NO) — 3V control, transistor-driven 9V coil', build:function(){
+      // Two separate supplies: a 3 V control battery on the bottom rails drives the NPN base through Rb,
+      // a 9 V battery on the top rails feeds the coil and the contacts. The two grounds are tied together
+      // at the emitter (a breadboard NPN switch needs a common ground). Switch open → coil off → COM rests
+      // on NC → red LED lights. Switch closed → NPN sinks the coil → COM flips to NO → green LED lights.
+      setExampleBatt(9);
+      place('battery', 'TP1', 'TN1', { value:9 });                             // top rails — coil + contact side
+      place('battery', 'BP1', 'BN1', { value:3 });                             // bottom rails — control side
+      place('wire', 'ti8', 'BP7', { color:'red' });                            // + rail (bottom) → switch
+      place('switch', 'th11', 'th8', { closed:false });                        // control switch (starts open)
+      place('resistor', 'te11', 'tg11', { value:1000 });                       // Rb — bridges the gap to the base
+      place('transistor', 'td9', 'td13', { g:'tb11', tt:'npn', beta:100 });    // C=col9, E=col13, B=col11
+      place('wire', 'ta13', 'TN13', { color:'green' });                        // emitter → − rail (top)
+      place('wire', 'te13', 'BN13', { color:'green' });                        // emitter → − rail (bottom) = common ground
+      place('wire', 'TP15', 'td17', { color:'red' });                          // + rail (top) → coil+
+      place('relay', 'te17', 'te19', { g:'te21', h:'te23', k:'te25' });        // coil col17→col19 · COM21 NO23 NC25
+      place('diode', 'ta19', 'ta17', { variant:'silicon', vf:0.7, rd:8 });     // flyback diode across the coil
+      place('wire', 'tc19', 'tc9', { color:'blue' });                          // coil− → NPN collector
+      place('wire', 'TP21', 'tc21', { color:'red' });                          // + rail (top) → relay COM
+      // NC branch (left half) — lit while the relay is at rest
+      place('resistor', 'td25', 'td27', { value:1000 });
+      place('led', 'tc27', 'tc29', { color:'red', vf:1.8 });
+      // NO branch (right half) — lit while the relay is energized
+      place('wire', 'td23', 'tf25', { color:'blue' });                         // NO (col23) → across the gap
+      place('resistor', 'tg25', 'tg27', { value:1000 });
+      place('led', 'th27', 'th29', { color:'green', vf:2.1 });
+      place('wire', 'te29', 'tf29', { color:'green' });                        // join both halves at col29
+      place('wire', 'tb29', 'TN29', { color:'green' });                        // → − rail (top)
     } }
 ];
 

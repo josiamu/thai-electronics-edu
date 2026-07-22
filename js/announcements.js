@@ -14,6 +14,10 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'breadboard-relay-nc-no-2026-07-22', date:'2026-07-22', type:'update',
+    th:'เบรดบอร์ด: เพิ่มตัวอย่างใหม่ "รีเลย์ SPDT สลับ LED แดง↔เขียว (NC/NO)" — 3V ผ่านทรานซิสเตอร์ขับคอยล์ 9V สลับสวิตช์แล้วดูหน้าสัมผัสย้ายจาก NC ไป NO',
+    en:'Breadboard: new example "SPDT relay swaps red↔green LED (NC/NO)" — a 3V control side drives the 9V coil through an NPN; flip the switch and watch the contact move from NC to NO',
+    href:'breadboard.html' },
   { id:'worksheet-oscillator-2026-07-22', date:'2026-07-22', type:'download',
     th:'ใบงานใหม่: ใบความรู้ที่ 7 — ผ่าโครงสร้างวงจรกำเนิดความถี่ (ออสซิลเลเตอร์ • รูปคลื่นและการวิเคราะห์) (PDF)',
     en:'New worksheet: Sheet 7 — Inside Oscillator Circuits (oscillators • waveforms & analysis) (PDF)',
