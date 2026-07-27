@@ -217,6 +217,7 @@ function solveRelayLab(comps, wireKeys){
   var termPos = {}, termEls = {};
   var curExample = null;     // id ตัวอย่างปัจจุบัน (null = ผู้ใช้แก้เอง → แผนภาพไม่พร้อม)
   var view = 'panel';        // panel | schematic
+  var selected = null;       // {kind:'wire',wire} | {kind:'node',key} | {kind:'comp',comp} — สำหรับไฮไลต์กระพริบไล่วงจร
 
   /* terminal id → node key (จุด + ของแหล่งจ่าย 4 จุด = โหนดเดียวกัน) */
   function keyOf(tid){
@@ -224,6 +225,51 @@ function solveRelayLab(comps, wireKeys){
     if (tid.indexOf('SUP:-') === 0) return 'SUP:-';
     return tid;
   }
+
+  /* ---- selection / highlight (ไล่วงจร) ---- */
+  function tidLabel(tid){
+    if (keyOf(tid) === 'SUP:+') return '+24V';
+    if (keyOf(tid) === 'SUP:-') return '0V';
+    var p = tid.split(':');
+    return p[0] + ' ขา ' + p[1];
+  }
+  function tidLabelEn(tid){
+    if (keyOf(tid) === 'SUP:+') return '+24V';
+    if (keyOf(tid) === 'SUP:-') return '0V';
+    var p = tid.split(':');
+    return p[0] + ' pin ' + p[1];
+  }
+  function wireOnNode(w, key){ return keyOf(w.a) === key || keyOf(w.b) === key; }
+  function wireOnComp(w, id){ return w.a.indexOf(id + ':') === 0 || w.b.indexOf(id + ':') === 0; }
+  function isWireHi(w){
+    if (!selected) return false;
+    if (selected.kind === 'wire') return w === selected.wire;
+    if (selected.kind === 'node') return wireOnNode(w, selected.key);
+    if (selected.kind === 'comp') return wireOnComp(w, selected.comp.id);
+    return false;
+  }
+  function isTermHi(tid){
+    if (!selected) return false;
+    if (selected.kind === 'wire') return tid === selected.wire.a || tid === selected.wire.b;
+    if (selected.kind === 'node') return keyOf(tid) === selected.key;
+    if (selected.kind === 'comp') return tid.indexOf(selected.comp.id + ':') === 0;
+    return false;
+  }
+  function clearSelection(){ if (selected){ selected = null; defaultHint(); } }
+  function selectWire(w){
+    selected = { kind: 'wire', wire: w };
+    hint('สายที่เลือก (กระพริบ): ' + tidLabel(w.a) + ' → ' + tidLabel(w.b) + ' • คลิกที่ว่างเพื่อยกเลิก',
+         'Selected wire (blinking): ' + tidLabelEn(w.a) + ' → ' + tidLabelEn(w.b) + ' • click empty space to clear');
+  }
+  function selectNode(key){
+    selected = { kind: 'node', key: key };
+    var n = wires.filter(function(w){ return wireOnNode(w, key); }).length;
+    var lbl = key === 'SUP:+' ? '+24V' : key === 'SUP:-' ? '0V' : tidLabel(key);
+    var lblEn = key === 'SUP:+' ? '+24V' : key === 'SUP:-' ? '0V' : tidLabelEn(key);
+    hint('โหนด ' + lbl + ': มีสายต่ออยู่ ' + n + ' เส้น (กระพริบทั้งหมด = จุดที่ถึงกันทางไฟฟ้า) • คลิกที่ว่างเพื่อยกเลิก',
+         'Node ' + lblEn + ': ' + n + ' wire(s) attached (all blinking = electrically the same point) • click empty space to clear');
+  }
+  function selectComp(c){ selected = { kind: 'comp', comp: c }; }
 
   /* ---- svg helpers ---- */
   function el(tag, attrs, parent){
@@ -278,8 +324,8 @@ function solveRelayLab(comps, wireKeys){
     } else if (mode === 'delete'){
       hint('โหมดลบ: คลิกสายหรืออุปกรณ์ที่ต้องการลบ', 'Delete mode: click a wire or component to remove it');
     } else {
-      hint('เพิ่มอุปกรณ์จากปุ่มด้านบน • คลิกสวิตช์เพื่อเปิด/ปิด • กด "เดินสาย" แล้วคลิกจุดต่อ ● สองจุด',
-           'Add parts with the buttons above • click a switch to toggle it • press "Wire" then click two terminals ●');
+      hint('คลิก "สาย" / "จุดต่อ ●" / "ตัวอุปกรณ์" เพื่อไฮไลต์กระพริบไล่วงจร • คลิกสวิตช์เพื่อเปิด/ปิด • กด "เดินสาย" เพื่อต่อสายเอง',
+           'Click a wire / terminal ● / component to blink-highlight it for tracing • click a switch to toggle • press "Wire" to add jumpers');
     }
   }
 
@@ -314,7 +360,7 @@ function solveRelayLab(comps, wireKeys){
     } else if (mode === 'delete'){
       hint('คลิกที่ "เส้นสาย" เพื่อลบสาย หรือคลิกตัวอุปกรณ์เพื่อลบอุปกรณ์', 'Click the wire itself to delete it, or the component body to delete the part');
     } else {
-      hint('กดปุ่ม "🖊 เดินสาย" ก่อน แล้วค่อยคลิกจุดต่อ', 'Press "🖊 Wire" first, then click terminals');
+      selectNode(keyOf(tid));   // โหมดปกติ: ไฮไลต์ทุกสายที่ต่อโหนดนี้
     }
   }
 
@@ -495,7 +541,7 @@ function solveRelayLab(comps, wireKeys){
       var d = wirePath(w.a, w.b, i);
       if (!d) return;
       var g = el('g', {}, gWire);
-      el('path', { d: d, 'class': 'rly-wirehalo' }, g);                                   // ขอบสีพื้น (ฮาโล) ให้สายเด่นเหนืออุปกรณ์
+      w._haloEl = el('path', { d: d, 'class': 'rly-wirehalo' }, g);                        // ขอบสีพื้น (ฮาโล) ให้สายเด่นเหนืออุปกรณ์
       w._pathEl = el('path', { d: d, 'class': 'rly-wire', stroke: WIRE_COLORS[w.color] || '#888' }, g);
       // จุดปลายสาย (eyelet) ช่วยให้เห็นว่าสายเสียบที่จุดไหน
       var p1 = termPos[w.a], p2 = termPos[w.b], col = WIRE_COLORS[w.color] || '#888';
@@ -506,7 +552,8 @@ function solveRelayLab(comps, wireKeys){
       w._dotEls = [];
       hit.addEventListener('click', function(ev){
         ev.stopPropagation();
-        if (mode === 'delete'){ wires.splice(wires.indexOf(w), 1); curExample = null; renderAll(); }
+        if (mode === 'delete'){ wires.splice(wires.indexOf(w), 1); curExample = null; clearSelection(); renderAll(); }
+        else if (mode === 'normal'){ selectWire(w); }
       });
     });
   }
@@ -524,20 +571,26 @@ function solveRelayLab(comps, wireKeys){
       requestSolve();
       return;
     }
-    if (!lastRes) return;
-    var r = lastRes.comps[c.id];
+    selectComp(c);   // ไฮไลต์สายทั้งหมดที่ต่อกับอุปกรณ์นี้
+    var r = lastRes && lastRes.comps[c.id];
+    var tail = ' • สายที่ต่อกระพริบอยู่', tailEn = ' • its wires are blinking';
     if (c.t === 'lamp' && r){
-      hint(c.id + ': กระแส ' + fmtmA(r.i) + (r.bright > 0.05 ? ' — ติด' : ' — ดับ'),
-           c.id + ': current ' + fmtmA(r.i) + (r.bright > 0.05 ? ' — lit' : ' — off'));
+      hint(c.id + ': กระแส ' + fmtmA(r.i) + (r.bright > 0.05 ? ' — ติด' : ' — ดับ') + tail,
+           c.id + ': current ' + fmtmA(r.i) + (r.bright > 0.05 ? ' — lit' : ' — off') + tailEn);
+    } else if (c.t === 'buzzer' && r){
+      hint(c.id + ': ' + (r.on ? 'ดัง' : 'เงียบ') + ' (' + fmtmA(r.i) + ')' + tail,
+           c.id + ': ' + (r.on ? 'sounding' : 'silent') + ' (' + fmtmA(r.i) + ')' + tailEn);
     } else if (c.t === 'relay' && r){
       hint(c.id + ': คอยล์ ' + Math.abs(r.vcoil).toFixed(1) + 'V (' + fmtmA(r.icoil) + ') — ' +
-             (r.en ? 'ทำงาน: COM ต่อกับ NO' : 'ไม่ทำงาน: COM ต่อกับ NC'),
+             (r.en ? 'ทำงาน: COM ต่อกับ NO' : 'ไม่ทำงาน: COM ต่อกับ NC') + tail,
            c.id + ': coil ' + Math.abs(r.vcoil).toFixed(1) + 'V (' + fmtmA(r.icoil) + ') — ' +
-             (r.en ? 'energized: COM → NO' : 'released: COM → NC'));
+             (r.en ? 'energized: COM → NO' : 'released: COM → NC') + tailEn);
+    } else {
+      hint(c.id + ' — เลือกแล้ว' + tail, c.id + ' — selected' + tailEn);
     }
   }
   function removeComp(c){
-    curExample = null;
+    curExample = null; selected = null;
     if (c.t === 'relay') relaySlots[c.slot] = null; else botSlots[c.slot] = null;
     comps.splice(comps.indexOf(c), 1);
     wires = wires.filter(function(w){
@@ -679,7 +732,7 @@ function solveRelayLab(comps, wireKeys){
   }
 
   /* ---- animation loop ---- */
-  var lastT = 0;
+  var lastT = 0, hiTermsPrev = [];
   function frame(ts){
     var dt = Math.min(0.05, (ts - lastT) / 1000 || 0.016);
     lastT = ts;
@@ -717,6 +770,35 @@ function solveRelayLab(comps, wireKeys){
         el('circle', { cx: pt.x, cy: pt.y, r: 3.2, 'class': 'rly-dot' }, gDot);
       }
     });
+    // ---- selection highlight (กระพริบไล่วงจร) — ใช้ inline style เพื่อชนะ CSS ----
+    var blink = (0.35 + 0.65 * Math.abs(Math.sin(ts / 240)));
+    wires.forEach(function(w){
+      if (!w._haloEl) return;
+      if (selected && isWireHi(w)){
+        w._haloEl.style.stroke = '#f59e0b';
+        w._haloEl.style.strokeWidth = '12';
+        w._haloEl.style.opacity = blink.toFixed(2);
+        w._pathEl.style.strokeWidth = '4.8';
+      } else {
+        w._haloEl.style.stroke = '';
+        w._haloEl.style.strokeWidth = '';
+        w._haloEl.style.opacity = '';
+        w._pathEl.style.strokeWidth = '';
+      }
+    });
+    hiTermsPrev.forEach(function(tid){ var te = termEls[tid]; if (te){ te.setAttribute('r', '7'); te.style.fill = ''; te.style.stroke = ''; } });
+    hiTermsPrev = [];
+    if (selected){
+      for (var tid in termEls){
+        if (isTermHi(tid)){
+          var te = termEls[tid];
+          te.setAttribute('r', (7 + 2.5 * blink).toFixed(1));
+          te.style.fill = '#f59e0b';
+          te.style.stroke = '#d97706';
+          hiTermsPrev.push(tid);
+        }
+      }
+    }
     requestAnimationFrame(frame);
   }
 
@@ -858,6 +940,7 @@ function solveRelayLab(comps, wireKeys){
     resetBoard();
     ex.build();
     curExample = ex.id;
+    selected = null;
     setMode('normal');
     renderAll();
     hint(ex.hintTh, ex.hintEn);
@@ -866,7 +949,7 @@ function solveRelayLab(comps, wireKeys){
 
   function clearAll(){
     resetBoard();
-    curExample = null;
+    curExample = null; selected = null;
     setMode('normal');
     renderAll();
   }
@@ -999,6 +1082,7 @@ function solveRelayLab(comps, wireKeys){
     mode = m;
     if (pendingTid && termEls[pendingTid]) termEls[pendingTid].classList.remove('pending');
     pendingTid = null;
+    selected = null;
     document.getElementById('rly-wire-btn').classList.toggle('active', m === 'wire');
     document.getElementById('rly-del-btn').classList.toggle('active', m === 'delete');
     svg.setAttribute('class', m === 'wire' ? 'rly-mode-wire' : m === 'delete' ? 'rly-mode-del' : '');
@@ -1035,9 +1119,11 @@ function solveRelayLab(comps, wireKeys){
   syncExOptions();
   exSel.addEventListener('change', function(){ loadExampleById(exSel.value); });
   window.addEventListener('langchange', function(){ syncExOptions(); if (view === 'schematic') drawSchematic(); });
+  svg.addEventListener('click', function(){ clearSelection(); });   // คลิกที่ว่าง = ยกเลิกการเลือก
   document.addEventListener('keydown', function(ev){
     if (ev.key === 'Escape'){
       if (pendingTid){ if (termEls[pendingTid]) termEls[pendingTid].classList.remove('pending'); pendingTid = null; defaultHint(); }
+      else if (selected){ clearSelection(); }
       else if (mode !== 'normal') setMode('normal');
     }
   });
