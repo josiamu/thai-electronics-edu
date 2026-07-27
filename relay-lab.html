@@ -68,6 +68,22 @@
 .rly-dot { fill: #fb923c; stroke: #fff7ed; stroke-width: 0.6; }
 .rly-clickable { cursor: pointer; }
 
+/* push button */
+.rly-btn-collar { fill: var(--bg); stroke: var(--border); stroke-width: 2; }
+.rly-btn-cap { stroke-width: 2.5; fill-opacity: 0.85; cursor: pointer; transition: r 0.06s, fill-opacity 0.06s; }
+.rly-btn-cap.down { r: 17; fill-opacity: 1; }
+/* buzzer */
+.rly-buzz { fill: var(--card); stroke: #d97706; stroke-width: 3; cursor: pointer; }
+.rly-buzzwave { fill: none; stroke: #d97706; stroke-width: 2.5; stroke-linecap: round; }
+
+/* schematic (ladder) */
+#rly-sch { display: block; min-width: 560px; width: 100%; height: auto; }
+.rly-schlbl { fill: var(--text); font-family: inherit; font-size: 12px; }
+.rly-schnote { fill: var(--text-light, #64748b); font-family: inherit; font-size: 14px; }
+.rly-toolbar-2 { margin-top: -0.15rem; }
+.rly-toollabel { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+.rly-sel-wide { min-width: 15rem; max-width: 100%; }
+
 /* pinout table */
 .rly-pintable { border-collapse: collapse; width: 100%; max-width: 460px; font-size: 0.92rem; }
 .rly-pintable th, .rly-pintable td { border: 1px solid var(--border); padding: 0.4rem 0.7rem; text-align: center; }
@@ -140,6 +156,13 @@
         <button class="rly-btn" id="rly-add-relay" type="button">➕ MY4</button>
         <button class="rly-btn" id="rly-add-switch" type="button">➕ <span class="th-only">สวิตช์</span><span class="en-only">Switch</span></button>
         <span class="rly-group">
+          <button class="rly-btn" id="rly-add-button" type="button">➕ <span class="th-only">ปุ่มกด</span><span class="en-only">Button</span></button>
+          <select class="rly-sel" id="rly-button-type" aria-label="Button type">
+            <option value="no">🟢 NO</option>
+            <option value="nc">🔴 NC</option>
+          </select>
+        </span>
+        <span class="rly-group">
           <button class="rly-btn" id="rly-add-lamp" type="button">➕ <span class="th-only">ไฟแสดง</span><span class="en-only">Lamp</span></button>
           <select class="rly-sel" id="rly-lamp-color" aria-label="Lamp color">
             <option value="red">🔴</option>
@@ -147,6 +170,7 @@
             <option value="yellow">🟡</option>
           </select>
         </span>
+        <button class="rly-btn" id="rly-add-buzzer" type="button">➕ <span class="th-only">บัซเซอร์</span><span class="en-only">Buzzer</span></button>
         <span class="rly-group">
           <button class="rly-btn" id="rly-wire-btn" type="button">🖊 <span class="th-only">เดินสาย</span><span class="en-only">Wire</span></button>
           <select class="rly-sel" id="rly-wire-color" aria-label="Wire color">
@@ -159,11 +183,20 @@
           </select>
         </span>
         <button class="rly-btn danger" id="rly-del-btn" type="button">🗑 <span class="th-only">ลบ</span><span class="en-only">Delete</span></button>
-        <button class="rly-btn" id="rly-example-btn" type="button">💡 <span class="th-only">ตัวอย่าง</span><span class="en-only">Example</span></button>
         <button class="rly-btn" id="rly-clear-btn" type="button">🧹 <span class="th-only">ล้างแผง</span><span class="en-only">Clear</span></button>
       </div>
-      <div class="rly-svgbox">
+      <div class="rly-toolbar rly-toolbar-2">
+        <span class="rly-group">
+          <span class="rly-toollabel">💡 <span class="th-only">ตัวอย่าง</span><span class="en-only">Example</span></span>
+          <select class="rly-sel rly-sel-wide" id="rly-example-sel" aria-label="Example circuit"></select>
+        </span>
+        <button class="rly-btn" id="rly-view-btn" type="button"><span class="th-only">🔀 ดูแผนภาพ</span><span class="en-only">🔀 Schematic</span></button>
+      </div>
+      <div class="rly-svgbox" id="rly-panel-box">
         <svg id="rly-svg" viewBox="0 0 1000 620" role="img" aria-label="Relay control panel"></svg>
+      </div>
+      <div class="rly-svgbox" id="rly-sch-box" hidden>
+        <svg id="rly-sch" viewBox="0 0 700 400" role="img" aria-label="Ladder schematic"></svg>
       </div>
       <div class="rly-hint" id="rly-hint"></div>
       <div class="rly-legend">
@@ -181,16 +214,16 @@
     <h2 class="section-title en-only">Try This</h2>
     <div class="card">
       <ol class="th-only">
-        <li>กด <strong>💡 ตัวอย่าง</strong> แล้วคลิกสวิตช์ S1 — ดูไฟย้ายจากเขียว (NC) ไปแดง (NO) พร้อมเสียง "แต๊ก" ของรีเลย์</li>
-        <li>คลิกตัวรีเลย์ K1 เพื่อดูแรงดัน/กระแสคอยล์ และสถานะหน้าสัมผัส</li>
-        <li>เพิ่ม MY4 ตัวที่สอง แล้วลองต่อ "รีเลย์ต่อรีเลย์": ใช้หน้าสัมผัส NO ของ K1 (ขา 9→5) จ่ายไฟให้คอยล์ K2 (ขา 13-14) — เปิดสวิตช์ตัวเดียว รีเลย์ทำงานต่อกันเป็นทอดๆ</li>
-        <li>ลองต่อหน้าสัมผัส 2 ชุดของรีเลย์ตัวเดียวคุมไฟ 2 ดวงพร้อมกัน — นี่คือจุดเด่นของ 4PDT!</li>
+        <li>เลือกจากเมนู <strong>💡 ตัวอย่าง</strong> — มี 6 วงจร: พื้นฐาน, วงจรล็อกตัวเอง START/STOP, อินเตอร์ล็อก, ลอจิก AND/OR, สลับไฟ NC/NO, และสัญญาณเตือน+ปุ่มรับทราบ</li>
+        <li>ลองตัวอย่าง <strong>"วงจรล็อกตัวเอง"</strong> — กดปุ่มเขียว START แป๊บเดียวแล้วปล่อย ไฟยังติดค้าง (รีเลย์ล็อกตัวเองผ่านหน้าสัมผัส NO) จนกดปุ่มแดง STOP</li>
+        <li>กดปุ่ม <strong>🔀 ดูแผนภาพ</strong> เพื่อสลับดูวงจรเดียวกันในรูปแบบ Ladder Diagram — เส้นสีเขียวคือทางที่มีกระแสไหลจริงตามสถานะปัจจุบัน</li>
+        <li>คลิกตัวรีเลย์/ไฟ (โหมดปกติ) เพื่ออ่านค่าแรงดัน/กระแส และลองต่อวงจรเองด้วยปุ่มเพิ่มอุปกรณ์ + เดินสาย</li>
       </ol>
       <ol class="en-only">
-        <li>Press <strong>💡 Example</strong> and click switch S1 — watch the light move from green (NC) to red (NO) with the relay's click</li>
-        <li>Click relay K1 to read its coil voltage/current and contact state</li>
-        <li>Add a second MY4 and chain them: use K1's NO contact (pins 9→5) to power K2's coil (13-14) — one switch, relays firing in sequence</li>
-        <li>Use two contact sets of one relay to control two lamps at once — that's what 4PDT is for!</li>
+        <li>Pick from the <strong>💡 Example</strong> menu — 6 circuits: basic, self-holding START/STOP, interlock, AND/OR logic, NC/NO swap, and alarm + acknowledge</li>
+        <li>Try <strong>"self-holding"</strong> — tap the green START button briefly and release; the lamp stays on (the relay seals itself in via its NO contact) until you press red STOP</li>
+        <li>Press <strong>🔀 Schematic</strong> to see the same circuit as a ladder diagram — green lines show where current actually flows in the present state</li>
+        <li>Click a relay/lamp (normal mode) to read its voltage/current, and build your own circuits with the add-part buttons + wiring</li>
       </ol>
     </div>
   </div>
