@@ -486,16 +486,18 @@ function solveRelayLab(comps, wireKeys){
     el('rect', { x: x0, y: y0, width: BSLOT.w, height: BSLOT.h, rx: 10, 'class': 'rly-socket' }, g);
     txt(x0 + 55, y0 + 20, c.id, 'rly-txt rly-bold', 'middle', g, 12);
     txt(x0 + 55, y0 + 100, isNC ? 'NC · STOP' : 'NO · START', 'rly-pin rly-bold', 'middle', g, 9);
-    // ปลอกปุ่ม + หัวกด
-    el('circle', { cx: x0 + 55, cy: y0 + 58, r: 27, 'class': 'rly-btn-collar' }, g);
-    c._capEl = el('circle', { cx: x0 + 55, cy: y0 + 58, r: 21, 'class': 'rly-btn-cap rly-clickable', fill: capCol }, g);
-    c._capEl.style.stroke = capCol;
-    el('path', { d: 'M ' + (x0 + 44) + ' ' + (y0 + 79) + ' L ' + (x0 + 35) + ' ' + (y0 + 140) +
-                 ' M ' + (x0 + 66) + ' ' + (y0 + 79) + ' L ' + (x0 + 75) + ' ' + (y0 + 140), 'class': 'rly-lead' }, g);
+    // ตัวเรือนสี่เหลี่ยม (housing) + หัวกดกลมนูน 3D — ให้ต่างจากไฟกลมชัดเจน
+    var cx = x0 + 55, cy = y0 + 54;
+    el('rect', { x: cx - 27, y: cy - 27, width: 54, height: 54, rx: 10, 'class': 'rly-btn-housing' }, g);
+    el('rect', { x: cx - 21, y: cy - 21, width: 42, height: 42, rx: 8, 'class': 'rly-btn-recess' }, g);
+    c._capEl = el('circle', { cx: cx, cy: cy, r: 17, 'class': 'rly-btn-cap rly-clickable', fill: capCol }, g);
+    c._capHi = el('ellipse', { cx: cx, cy: cy - 6, rx: 9, ry: 4.5, 'class': 'rly-btn-hi', 'pointer-events': 'none' }, g);
+    el('path', { d: 'M ' + (cx - 12) + ' ' + (y0 + 82) + ' L ' + (x0 + 35) + ' ' + (y0 + 140) +
+                 ' M ' + (cx + 12) + ' ' + (y0 + 82) + ' L ' + (x0 + 75) + ' ' + (y0 + 140), 'class': 'rly-lead' }, g);
     addTerm(c.id + ':a', x0 + 35, y0 + 140, g);
     addTerm(c.id + ':b', x0 + 75, y0 + 140, g);
-    function press(ev){ ev.preventDefault(); ev.stopPropagation(); if (mode !== 'normal'){ onCompClick(c); return; } if (!c.pressed){ c.pressed = true; c._capEl.classList.add('down'); requestSolve(); } }
-    function release(){ if (c.pressed){ c.pressed = false; if (c._capEl) c._capEl.classList.remove('down'); requestSolve(); } }
+    function press(ev){ ev.preventDefault(); ev.stopPropagation(); if (mode !== 'normal'){ onCompClick(c); return; } if (!c.pressed){ c.pressed = true; c._capEl.classList.add('down'); if (c._capHi) c._capHi.style.opacity = '0'; requestSolve(); } }
+    function release(){ if (c.pressed){ c.pressed = false; if (c._capEl) c._capEl.classList.remove('down'); if (c._capHi) c._capHi.style.opacity = ''; requestSolve(); } }
     c._capEl.addEventListener('pointerdown', press);
     c._capEl.addEventListener('pointerup', release);
     c._capEl.addEventListener('pointerleave', release);

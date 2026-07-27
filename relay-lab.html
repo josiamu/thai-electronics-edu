@@ -74,10 +74,12 @@
 .rly-dot { fill: #fb923c; stroke: #fff7ed; stroke-width: 0.6; }
 .rly-clickable { cursor: pointer; }
 
-/* push button */
-.rly-btn-collar { fill: var(--bg); stroke: var(--border); stroke-width: 2; }
-.rly-btn-cap { stroke-width: 2.5; fill-opacity: 0.85; cursor: pointer; transition: r 0.06s, fill-opacity 0.06s; }
-.rly-btn-cap.down { r: 17; fill-opacity: 1; }
+/* push button — ตัวเรือนสี่เหลี่ยม + หัวกดกลมนูน (ให้ต่างจากไฟกลม) */
+.rly-btn-housing { fill: #64748b; stroke: #475569; stroke-width: 1.5; }
+.rly-btn-recess { fill: #1e293b; stroke: #0f172a; stroke-width: 1; }
+.rly-btn-cap { stroke: rgba(0,0,0,0.35); stroke-width: 1.5; fill-opacity: 1; cursor: pointer; transition: r 0.06s; }
+.rly-btn-cap.down { r: 13.5; }
+.rly-btn-hi { fill: #ffffff; opacity: 0.45; }
 /* buzzer */
 .rly-buzz { fill: var(--card); stroke: #d97706; stroke-width: 3; cursor: pointer; }
 .rly-buzzwave { fill: none; stroke: #d97706; stroke-width: 2.5; stroke-linecap: round; }
