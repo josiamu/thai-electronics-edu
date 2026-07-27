@@ -371,11 +371,13 @@ function solveRelayLab(comps, wireKeys){
         addTerm(c.id + ':' + (r.base + j), cols[j - 1], r.y, g, String(r.base + j));
       }
     });
-    // coil 13-14
+    // coil 13-14 (ขั้ว: 14 = + / 13 = −)
     var coilY = y0 + 230;
     txt(x0 + 30, coilY + 4, 'Coil', 'rly-pin rly-bold', 'end', g);
     addTerm(c.id + ':13', x0 + 85, coilY, g, '13');
     addTerm(c.id + ':14', x0 + 140, coilY, g, '14');
+    txt(x0 + 68, coilY + 5, '−', 'rly-sup-n rly-bold', 'middle', g, 17);  // ขา 13 = ลบ
+    txt(x0 + 157, coilY + 5, '+', 'rly-sup-p rly-bold', 'middle', g, 17); // ขา 14 = บวก
     var p = 'M ' + (x0 + 94) + ' ' + coilY;
     for (var a = 0; a < 4; a++) p += ' a 5 6 0 0 1 10 0';
     el('path', { d: p, 'class': 'rly-coilsym' }, g);
@@ -741,7 +743,7 @@ function solveRelayLab(comps, wireKeys){
       hintEn: 'Turn S1 on → K1 coil energizes → NO contact (9→5) closes → red lamp lights',
       build: function(){
         var K1 = mkRelay(0), S1 = mkSwitch(0), L1 = mkLamp(1, 'red');
-        W('SUP:+0', S1 + ':a', 'red'); W(S1 + ':b', K1 + ':13', 'orange'); W(K1 + ':14', 'SUP:-0', 'black');
+        W('SUP:+0', S1 + ':a', 'red'); W(S1 + ':b', K1 + ':14', 'orange'); W(K1 + ':13', 'SUP:-0', 'black');
         W('SUP:+1', K1 + ':9', 'red'); W(K1 + ':5', L1 + ':a', 'blue'); W(L1 + ':b', 'SUP:-1', 'black');
       },
       ladder: function(){ return [
@@ -756,10 +758,10 @@ function solveRelayLab(comps, wireKeys){
       hintEn: 'Tap green START → K1 seals itself in through its own NO contact → stays on • press red STOP to drop it',
       build: function(){
         var K1 = mkRelay(0), Bs = mkButton(0, 'no'), Bp = mkButton(1, 'nc'), L1 = mkLamp(2, 'green');
-        // เส้นคอยล์: SUP+ → STOP(NC) → node → START(NO) → coil13 ; seal-in: node → COM1(9), NO1(5) → coil13
+        // เส้นคอยล์: SUP+ → STOP(NC) → node → START(NO) → coil14(+) ; seal-in: node → COM1(9), NO1(5) → coil14
         W('SUP:+0', Bp + ':a', 'red'); W(Bp + ':b', Bs + ':a', 'orange');
-        W(Bs + ':b', K1 + ':13', 'orange'); W(K1 + ':14', 'SUP:-0', 'black');
-        W(Bp + ':b', K1 + ':9', 'blue'); W(K1 + ':5', K1 + ':13', 'blue');       // seal-in NO1 ขนานกับ START
+        W(Bs + ':b', K1 + ':14', 'orange'); W(K1 + ':13', 'SUP:-0', 'black');
+        W(Bp + ':b', K1 + ':9', 'blue'); W(K1 + ':5', K1 + ':14', 'blue');       // seal-in NO1 ขนานกับ START
         // ไฟ RUN: SUP+ → COM2(10), NO2(6) → L1
         W('SUP:+1', K1 + ':10', 'red'); W(K1 + ':6', L1 + ':a', 'green'); W(L1 + ':b', 'SUP:-1', 'black');
       },
@@ -775,10 +777,10 @@ function solveRelayLab(comps, wireKeys){
       hintEn: 'Turn S1 → K1 wins and blocks K2 via cross-wired NC contacts • first one latches out the other',
       build: function(){
         var K1 = mkRelay(0), K2 = mkRelay(1), S1 = mkSwitch(0), S2 = mkSwitch(1), L1 = mkLamp(2, 'red'), L2 = mkLamp(3, 'green');
-        // K1 coil ผ่าน NC ของ K2
-        W('SUP:+0', S1 + ':a', 'red'); W(S1 + ':b', K2 + ':9', 'orange'); W(K2 + ':1', K1 + ':13', 'orange'); W(K1 + ':14', 'SUP:-0', 'black');
+        // K1 coil ผ่าน NC ของ K2 (ป้อน + ที่ขา 14, − ที่ขา 13)
+        W('SUP:+0', S1 + ':a', 'red'); W(S1 + ':b', K2 + ':9', 'orange'); W(K2 + ':1', K1 + ':14', 'orange'); W(K1 + ':13', 'SUP:-0', 'black');
         // K2 coil ผ่าน NC ของ K1
-        W('SUP:+1', S2 + ':a', 'red'); W(S2 + ':b', K1 + ':9', 'blue'); W(K1 + ':1', K2 + ':13', 'blue'); W(K2 + ':14', 'SUP:-1', 'black');
+        W('SUP:+1', S2 + ':a', 'red'); W(S2 + ':b', K1 + ':9', 'blue'); W(K1 + ':1', K2 + ':14', 'blue'); W(K2 + ':13', 'SUP:-1', 'black');
         // ไฟบอกสถานะ
         W('SUP:+2', K1 + ':10', 'red'); W(K1 + ':6', L1 + ':a', 'red'); W(L1 + ':b', 'SUP:-2', 'black');
         W('SUP:+3', K2 + ':10', 'green'); W(K2 + ':6', L2 + ':a', 'green'); W(L2 + ':b', 'SUP:-3', 'black');
@@ -815,7 +817,7 @@ function solveRelayLab(comps, wireKeys){
       hintEn: 'Switch off = green (NC pin 1) lit • switch on = K1 energizes, light moves to red (NO pin 5)',
       build: function(){
         var K1 = mkRelay(0), S1 = mkSwitch(0), L1 = mkLamp(1, 'red'), L2 = mkLamp(2, 'green');
-        W('SUP:+0', S1 + ':a', 'red'); W(S1 + ':b', K1 + ':13', 'orange'); W(K1 + ':14', 'SUP:-0', 'black');
+        W('SUP:+0', S1 + ':a', 'red'); W(S1 + ':b', K1 + ':14', 'orange'); W(K1 + ':13', 'SUP:-0', 'black');
         W('SUP:+1', K1 + ':9', 'red'); W(K1 + ':5', L1 + ':a', 'blue'); W(L1 + ':b', 'SUP:-1', 'black');
         W(K1 + ':1', L2 + ':a', 'green'); W(L2 + ':b', 'SUP:-2', 'black');
       },
@@ -838,9 +840,9 @@ function solveRelayLab(comps, wireKeys){
         W(S1 + ':b', L1 + ':a', 'orange'); W(L1 + ':b', 'SUP:-0', 'black');
         // บัซเซอร์: เหตุ → COM1(9) → NC1(1) → Z1  (K1 ทำงาน = NC เปิด = เงียบ)
         W(S1 + ':b', K1 + ':9', 'orange'); W(K1 + ':1', Z1 + ':a', 'yellow'); W(Z1 + ':b', 'SUP:-1', 'black');
-        // ล็อก ACK: เหตุ → ACK(NO) → coil13 ; seal COM2(10)→NO2(6)→coil13
-        W(S1 + ':b', Ba + ':a', 'blue'); W(Ba + ':b', K1 + ':13', 'blue');
-        W(S1 + ':b', K1 + ':10', 'green'); W(K1 + ':6', K1 + ':13', 'green'); W(K1 + ':14', 'SUP:-2', 'black');
+        // ล็อก ACK: เหตุ → ACK(NO) → coil14(+) ; seal COM2(10)→NO2(6)→coil14 ; coil13(−) → 0V
+        W(S1 + ':b', Ba + ':a', 'blue'); W(Ba + ':b', K1 + ':14', 'blue');
+        W(S1 + ':b', K1 + ':10', 'green'); W(K1 + ':6', K1 + ':14', 'green'); W(K1 + ':13', 'SUP:-2', 'black');
       },
       ladder: function(){ return [
         { el: [{ k: 'no', c: 'S1', lbl: 'S1' }], load: { t: 'lamp', c: 'L1', color: 'red' } },
