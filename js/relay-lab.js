@@ -196,10 +196,14 @@ function solveRelayLab(comps, wireKeys){
   var hintEl = document.getElementById('rly-hint');
 
   /* ---- layout ---- */
-  var VBH = 620;
+  var VBW = 1080, VBH = 620;
   var SUP_Y = 30, SUP_H = 58;
-  var RSLOT = { y: 108, h: 248, w: 225, x0: 30, gap: 245, max: 4 };
-  var BSLOT = { y: 384, h: 185, w: 110, x0: 30, gap: 120, max: 8 };
+  var RSLOT = { y: 108, h: 248, w: 225, x0: 70, gap: 245, max: 4 };
+  var BSLOT = { y: 384, h: 185, w: 110, x0: 70, gap: 120, max: 8 };
+  // รางไฟด้านข้าง: +24V ซ้าย / 0V ขวา — จุดต่อทุกแถว ทำให้อุปกรณ์ดึงไฟจากจุดใกล้ตัว
+  var LRAIL = { x: 42, bx: 30, by: 118, bw: 24, bh: 452 };
+  var RRAIL = { x: 1062, bx: 1050, by: 118, bw: 24, bh: 452 };
+  var RAIL_YS = [150, 215, 280, 345, 420, 475, 530];
   var LAMP_COLORS = { red: '#ef4444', green: '#22c55e', yellow: '#eab308' };
   var WIRE_COLORS = { red: '#ef4444', black: '#556070', blue: '#3b82f6', green: '#22c55e', yellow: '#eab308', orange: '#f97316' };
   var LIVE = '#f97316', DEAD = '#94a3b8';
@@ -364,18 +368,28 @@ function solveRelayLab(comps, wireKeys){
     }
   }
 
-  /* ---- draw: supply ---- */
+  /* ---- draw: supply (แถบบน + รางไฟสองข้าง) ---- */
   function drawSupply(){
     var g = el('g', {}, gComp);
     var warn = lastRes && lastRes.shorted;
-    el('rect', { x: 40, y: SUP_Y, width: 390, height: SUP_H, rx: 10, 'class': 'rly-body' + (warn ? ' rly-warnbox' : '') , id: 'rly-supbox-p'}, g);
-    el('rect', { x: 560, y: SUP_Y, width: 390, height: SUP_H, rx: 10, 'class': 'rly-body' + (warn ? ' rly-warnbox' : ''), id: 'rly-supbox-n' }, g);
-    txt(75, SUP_Y + 36, '+24V', 'rly-txt rly-sup-p', 'middle', g, 15);
-    txt(595, SUP_Y + 36, '0V', 'rly-txt rly-sup-n', 'middle', g, 15);
-    biTxt(235, SUP_Y - 8, 'แหล่งจ่ายไฟ 24VDC', '24VDC power supply', 'rly-pin', 'middle', g, 10);
+    // แถบแหล่งจ่ายด้านบน
+    el('rect', { x: 80, y: SUP_Y, width: 390, height: SUP_H, rx: 10, 'class': 'rly-body' + (warn ? ' rly-warnbox' : ''), id: 'rly-supbox-p' }, g);
+    el('rect', { x: 610, y: SUP_Y, width: 390, height: SUP_H, rx: 10, 'class': 'rly-body' + (warn ? ' rly-warnbox' : ''), id: 'rly-supbox-n' }, g);
+    txt(115, SUP_Y + 36, '+24V', 'rly-txt rly-sup-p', 'middle', g, 15);
+    txt(645, SUP_Y + 36, '0V', 'rly-txt rly-sup-n', 'middle', g, 15);
+    biTxt(285, SUP_Y - 8, 'แหล่งจ่ายไฟ 24VDC', '24VDC power supply', 'rly-pin', 'middle', g, 10);
     var i;
-    for (i = 0; i < 4; i++) addTerm('SUP:+' + i, 150 + i * 70, SUP_Y + 34, g);
-    for (i = 0; i < 4; i++) addTerm('SUP:-' + i, 640 + i * 70, SUP_Y + 34, g);
+    for (i = 0; i < 4; i++) addTerm('SUP:+' + i, 190 + i * 70, SUP_Y + 34, g);
+    for (i = 0; i < 4; i++) addTerm('SUP:-' + i, 700 + i * 70, SUP_Y + 34, g);
+    // รางไฟด้านข้าง (จุดต่อทุกแถว = โหนด SUP:+ / SUP:− เดิม ผ่าน keyOf)
+    el('rect', { x: LRAIL.bx, y: LRAIL.by, width: LRAIL.bw, height: LRAIL.bh, rx: 8, 'class': 'rly-rail rly-rail-p' + (warn ? ' rly-warnbox' : ''), id: 'rly-supbox-lp' }, g);
+    el('rect', { x: RRAIL.bx, y: RRAIL.by, width: RRAIL.bw, height: RRAIL.bh, rx: 8, 'class': 'rly-rail rly-rail-n' + (warn ? ' rly-warnbox' : ''), id: 'rly-supbox-rn' }, g);
+    txt(LRAIL.x, LRAIL.by - 7, '+24V', 'rly-sup-p rly-bold', 'middle', g, 11);
+    txt(RRAIL.x, RRAIL.by - 7, '0V', 'rly-sup-n rly-bold', 'middle', g, 11);
+    RAIL_YS.forEach(function(yy, idx){
+      addTerm('SUP:+L' + idx, LRAIL.x, yy, g);
+      addTerm('SUP:-R' + idx, RRAIL.x, yy, g);
+    });
   }
 
   /* ---- draw: MY4 relay ---- */
@@ -670,10 +684,13 @@ function solveRelayLab(comps, wireKeys){
       }
     });
     buzzSound(anyBuzz);
+    var warn = lastRes && lastRes.shorted;
     var pb = document.getElementById('rly-supbox-p'), nb = document.getElementById('rly-supbox-n');
-    var cls = 'rly-body' + (lastRes && lastRes.shorted ? ' rly-warnbox' : '');
-    if (pb) pb.setAttribute('class', cls);
-    if (nb) nb.setAttribute('class', cls);
+    if (pb) pb.setAttribute('class', 'rly-body' + (warn ? ' rly-warnbox' : ''));
+    if (nb) nb.setAttribute('class', 'rly-body' + (warn ? ' rly-warnbox' : ''));
+    var lp = document.getElementById('rly-supbox-lp'), rn = document.getElementById('rly-supbox-rn');
+    if (lp) lp.setAttribute('class', 'rly-rail rly-rail-p' + (warn ? ' rly-warnbox' : ''));
+    if (rn) rn.setAttribute('class', 'rly-rail rly-rail-n' + (warn ? ' rly-warnbox' : ''));
     if (view === 'schematic') drawSchematic();
   }
 
@@ -825,8 +842,8 @@ function solveRelayLab(comps, wireKeys){
       hintEn: 'Turn S1 on → K1 coil energizes → NO contact (9→5) closes → red lamp lights',
       build: function(){
         var K1 = mkRelay(0), S1 = mkSwitch(0), L1 = mkLamp(1, 'red');
-        W('SUP:+0', S1 + ':a', 'red'); W(S1 + ':b', K1 + ':14', 'orange'); W(K1 + ':13', 'SUP:-0', 'black');
-        W('SUP:+1', K1 + ':9', 'red'); W(K1 + ':5', L1 + ':a', 'blue'); W(L1 + ':b', 'SUP:-1', 'black');
+        W('SUP:+L6', S1 + ':a', 'red'); W(S1 + ':b', K1 + ':14', 'orange'); W(K1 + ':13', 'SUP:-R3', 'black');
+        W('SUP:+L2', K1 + ':9', 'red'); W(K1 + ':5', L1 + ':a', 'blue'); W(L1 + ':b', 'SUP:-R6', 'black');
       },
       ladder: function(){ return [
         { el: [{ k: 'no', c: 'S1', lbl: 'S1' }], load: { t: 'coil', c: 'K1' } },
@@ -840,12 +857,12 @@ function solveRelayLab(comps, wireKeys){
       hintEn: 'Tap green START → K1 seals itself in through its own NO contact → stays on • press red STOP to drop it',
       build: function(){
         var K1 = mkRelay(0), Bs = mkButton(0, 'no'), Bp = mkButton(1, 'nc'), L1 = mkLamp(2, 'green');
-        // เส้นคอยล์: SUP+ → STOP(NC) → node → START(NO) → coil14(+) ; seal-in: node → COM1(9), NO1(5) → coil14
-        W('SUP:+0', Bp + ':a', 'red'); W(Bp + ':b', Bs + ':a', 'orange');
-        W(Bs + ':b', K1 + ':14', 'orange'); W(K1 + ':13', 'SUP:-0', 'black');
+        // เส้นคอยล์: +24V → STOP(NC) → node → START(NO) → coil14(+) ; seal-in: node → COM1(9), NO1(5) → coil14
+        W('SUP:+L6', Bp + ':a', 'red'); W(Bp + ':b', Bs + ':a', 'orange');
+        W(Bs + ':b', K1 + ':14', 'orange'); W(K1 + ':13', 'SUP:-R3', 'black');
         W(Bp + ':b', K1 + ':9', 'blue'); W(K1 + ':5', K1 + ':14', 'blue');       // seal-in NO1 ขนานกับ START
-        // ไฟ RUN: SUP+ → COM2(10), NO2(6) → L1
-        W('SUP:+1', K1 + ':10', 'red'); W(K1 + ':6', L1 + ':a', 'green'); W(L1 + ':b', 'SUP:-1', 'black');
+        // ไฟ RUN: +24V → COM2(10), NO2(6) → L1
+        W('SUP:+L2', K1 + ':10', 'red'); W(K1 + ':6', L1 + ':a', 'green'); W(L1 + ':b', 'SUP:-R6', 'black');
       },
       ladder: function(){ return [
         { el: [{ k: 'nc', c: 'B2', lbl: 'STOP' }, { k: 'no', c: 'B1', lbl: 'START', par: { k: 'no', c: 'K1', lbl: 'K1' } }], load: { t: 'coil', c: 'K1' } },
@@ -860,12 +877,12 @@ function solveRelayLab(comps, wireKeys){
       build: function(){
         var K1 = mkRelay(0), K2 = mkRelay(1), S1 = mkSwitch(0), S2 = mkSwitch(1), L1 = mkLamp(2, 'red'), L2 = mkLamp(3, 'green');
         // K1 coil ผ่าน NC ของ K2 (ป้อน + ที่ขา 14, − ที่ขา 13)
-        W('SUP:+0', S1 + ':a', 'red'); W(S1 + ':b', K2 + ':9', 'orange'); W(K2 + ':1', K1 + ':14', 'orange'); W(K1 + ':13', 'SUP:-0', 'black');
+        W('SUP:+L6', S1 + ':a', 'red'); W(S1 + ':b', K2 + ':9', 'orange'); W(K2 + ':1', K1 + ':14', 'orange'); W(K1 + ':13', 'SUP:-R3', 'black');
         // K2 coil ผ่าน NC ของ K1
-        W('SUP:+1', S2 + ':a', 'red'); W(S2 + ':b', K1 + ':9', 'blue'); W(K1 + ':1', K2 + ':14', 'blue'); W(K2 + ':13', 'SUP:-1', 'black');
+        W('SUP:+L5', S2 + ':a', 'red'); W(S2 + ':b', K1 + ':9', 'blue'); W(K1 + ':1', K2 + ':14', 'blue'); W(K2 + ':13', 'SUP:-R4', 'black');
         // ไฟบอกสถานะ
-        W('SUP:+2', K1 + ':10', 'red'); W(K1 + ':6', L1 + ':a', 'red'); W(L1 + ':b', 'SUP:-2', 'black');
-        W('SUP:+3', K2 + ':10', 'green'); W(K2 + ':6', L2 + ':a', 'green'); W(L2 + ':b', 'SUP:-3', 'black');
+        W('SUP:+L2', K1 + ':10', 'red'); W(K1 + ':6', L1 + ':a', 'red'); W(L1 + ':b', 'SUP:-R6', 'black');
+        W('SUP:+L3', K2 + ':10', 'green'); W(K2 + ':6', L2 + ':a', 'green'); W(L2 + ':b', 'SUP:-R5', 'black');
       },
       ladder: function(){ return [
         { el: [{ k: 'no', c: 'S1', lbl: 'S1' }, { k: 'nc', c: 'K2', lbl: 'K2' }], load: { t: 'coil', c: 'K1' } },
@@ -882,10 +899,10 @@ function solveRelayLab(comps, wireKeys){
       build: function(){
         var S1 = mkSwitch(0), S2 = mkSwitch(1), S3 = mkSwitch(2), S4 = mkSwitch(3), L1 = mkLamp(4, 'red'), L2 = mkLamp(5, 'green');
         // AND: อนุกรม
-        W('SUP:+0', S1 + ':a', 'red'); W(S1 + ':b', S2 + ':a', 'orange'); W(S2 + ':b', L1 + ':a', 'orange'); W(L1 + ':b', 'SUP:-0', 'black');
+        W('SUP:+L6', S1 + ':a', 'red'); W(S1 + ':b', S2 + ':a', 'orange'); W(S2 + ':b', L1 + ':a', 'orange'); W(L1 + ':b', 'SUP:-R6', 'black');
         // OR: ขนาน
-        W('SUP:+1', S3 + ':a', 'red'); W('SUP:+2', S4 + ':a', 'red');
-        W(S3 + ':b', L2 + ':a', 'green'); W(S4 + ':b', L2 + ':a', 'green'); W(L2 + ':b', 'SUP:-1', 'black');
+        W('SUP:+L5', S3 + ':a', 'red'); W('SUP:+L5', S4 + ':a', 'red');
+        W(S3 + ':b', L2 + ':a', 'green'); W(S4 + ':b', L2 + ':a', 'green'); W(L2 + ':b', 'SUP:-R5', 'black');
       },
       ladder: function(){ return [
         { el: [{ k: 'no', c: 'S1', lbl: 'S1' }, { k: 'no', c: 'S2', lbl: 'S2' }], load: { t: 'lamp', c: 'L1', color: 'red' }, tag: 'AND' },
@@ -899,9 +916,9 @@ function solveRelayLab(comps, wireKeys){
       hintEn: 'Switch off = green (NC pin 1) lit • switch on = K1 energizes, light moves to red (NO pin 5)',
       build: function(){
         var K1 = mkRelay(0), S1 = mkSwitch(0), L1 = mkLamp(1, 'red'), L2 = mkLamp(2, 'green');
-        W('SUP:+0', S1 + ':a', 'red'); W(S1 + ':b', K1 + ':14', 'orange'); W(K1 + ':13', 'SUP:-0', 'black');
-        W('SUP:+1', K1 + ':9', 'red'); W(K1 + ':5', L1 + ':a', 'blue'); W(L1 + ':b', 'SUP:-1', 'black');
-        W(K1 + ':1', L2 + ':a', 'green'); W(L2 + ':b', 'SUP:-2', 'black');
+        W('SUP:+L6', S1 + ':a', 'red'); W(S1 + ':b', K1 + ':14', 'orange'); W(K1 + ':13', 'SUP:-R3', 'black');
+        W('SUP:+L2', K1 + ':9', 'red'); W(K1 + ':5', L1 + ':a', 'blue'); W(L1 + ':b', 'SUP:-R6', 'black');
+        W(K1 + ':1', L2 + ':a', 'green'); W(L2 + ':b', 'SUP:-R5', 'black');
       },
       ladder: function(){ return [
         { el: [{ k: 'no', c: 'S1', lbl: 'S1' }], load: { t: 'coil', c: 'K1' } },
@@ -917,14 +934,14 @@ function solveRelayLab(comps, wireKeys){
       build: function(){
         var K1 = mkRelay(0), S1 = mkSwitch(0), Ba = mkButton(1, 'no'), L1 = mkLamp(2, 'red'), Z1 = mkBuzz(3);
         // node เหตุ = S1:b
-        W('SUP:+0', S1 + ':a', 'red');
+        W('SUP:+L6', S1 + ':a', 'red');
         // ไฟเตือน: เหตุ → L1
-        W(S1 + ':b', L1 + ':a', 'orange'); W(L1 + ':b', 'SUP:-0', 'black');
+        W(S1 + ':b', L1 + ':a', 'orange'); W(L1 + ':b', 'SUP:-R6', 'black');
         // บัซเซอร์: เหตุ → COM1(9) → NC1(1) → Z1  (K1 ทำงาน = NC เปิด = เงียบ)
-        W(S1 + ':b', K1 + ':9', 'orange'); W(K1 + ':1', Z1 + ':a', 'yellow'); W(Z1 + ':b', 'SUP:-1', 'black');
+        W(S1 + ':b', K1 + ':9', 'orange'); W(K1 + ':1', Z1 + ':a', 'yellow'); W(Z1 + ':b', 'SUP:-R5', 'black');
         // ล็อก ACK: เหตุ → ACK(NO) → coil14(+) ; seal COM2(10)→NO2(6)→coil14 ; coil13(−) → 0V
         W(S1 + ':b', Ba + ':a', 'blue'); W(Ba + ':b', K1 + ':14', 'blue');
-        W(S1 + ':b', K1 + ':10', 'green'); W(K1 + ':6', K1 + ':14', 'green'); W(K1 + ':13', 'SUP:-2', 'black');
+        W(S1 + ':b', K1 + ':10', 'green'); W(K1 + ':6', K1 + ':14', 'green'); W(K1 + ':13', 'SUP:-R3', 'black');
       },
       ladder: function(){ return [
         { el: [{ k: 'no', c: 'S1', lbl: 'S1' }], load: { t: 'lamp', c: 'L1', color: 'red' } },
