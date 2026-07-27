@@ -973,6 +973,132 @@ function solveRelayLab(comps, wireKeys){
     renderAll();
   }
 
+  /* ---- persistence: แชร์ลิงก์ (?c=) + บันทึก/โหลด (localStorage) ---- */
+  var SAVE_KEY = 'rly-saves';
+  var modal = document.getElementById('rly-modal');
+  function isEn(){ return document.documentElement.lang === 'en'; }
+  function b64urlEncode(str){ return btoa(unescape(encodeURIComponent(str))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+  function b64urlDecode(s){ s = s.replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; return decodeURIComponent(escape(atob(s))); }
+
+  function serializeCircuit(){
+    return {
+      v: 1,
+      comps: comps.map(function(c){
+        var o = { id: c.id, t: c.t, slot: c.slot };
+        if (c.t === 'switch') o.on = !!c.on;
+        else if (c.t === 'button') o.tt = c.tt;
+        else if (c.t === 'lamp') o.color = c.color;
+        return o;
+      }),
+      wires: wires.map(function(w){ return { a: w.a, b: w.b, c: w.color }; })
+    };
+  }
+  function loadCircuit(data){
+    if (!data || !Array.isArray(data.comps) || !Array.isArray(data.wires)) return false;
+    var ok = data.comps.every(function(o){
+      return o && typeof o.id === 'string' && ['relay', 'switch', 'button', 'lamp', 'buzzer'].indexOf(o.t) >= 0 && typeof o.slot === 'number';
+    }) && data.wires.every(function(w){ return w && typeof w.a === 'string' && typeof w.b === 'string'; });
+    if (!ok) return false;
+    resetBoard();
+    data.comps.forEach(function(o){
+      var c = { id: o.id, t: o.t, slot: o.slot };
+      if (o.t === 'relay'){ c._en = false; c._dispA = 0; if (o.slot >= 0 && o.slot < relaySlots.length) relaySlots[o.slot] = c; }
+      else if (o.slot >= 0 && o.slot < botSlots.length) botSlots[o.slot] = c;
+      if (o.t === 'switch') c.on = !!o.on;
+      else if (o.t === 'button'){ c.tt = o.tt === 'nc' ? 'nc' : 'no'; c.pressed = false; }
+      else if (o.t === 'lamp') c.color = o.color || 'red';
+      comps.push(c);
+      var pfx = String(o.id).charAt(0), num = parseInt(String(o.id).slice(1), 10) || 0;
+      if (pfx === 'K') nextK = Math.max(nextK, num + 1);
+      else if (pfx === 'S') nextS = Math.max(nextS, num + 1);
+      else if (pfx === 'B') nextB = Math.max(nextB, num + 1);
+      else if (pfx === 'L') nextL = Math.max(nextL, num + 1);
+      else if (pfx === 'Z') nextZ = Math.max(nextZ, num + 1);
+    });
+    wires = data.wires.map(function(w){ return { a: String(w.a), b: String(w.b), color: w.c || 'black', _off: 0 }; });
+    curExample = null; selected = null;
+    return true;
+  }
+
+  function shareLink(){
+    var url = location.origin + location.pathname + '?c=' + b64urlEncode(JSON.stringify(serializeCircuit()));
+    history.replaceState(null, '', url);
+    var inBar = 'ลิงก์อยู่ในแถบที่อยู่แล้ว — คัดลอกเพื่อแชร์', inBarEn = 'The link is in the address bar — copy it to share';
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(
+        function(){ hint('คัดลอกลิงก์วงจรแล้ว! วางเพื่อแชร์ (อยู่ในแถบที่อยู่ด้วย)', 'Circuit link copied! Paste to share (also in the address bar)'); },
+        function(){ hint(inBar, inBarEn); });
+    } else { hint(inBar, inBarEn); }
+  }
+
+  function getSaves(){ try { return JSON.parse(localStorage.getItem(SAVE_KEY) || '{}'); } catch (e){ return {}; } }
+  function setSaves(o){ try { localStorage.setItem(SAVE_KEY, JSON.stringify(o)); } catch (e){} }
+  function openModal(){ modal.hidden = false; }
+  function closeModal(){ modal.hidden = true; }
+  function renderSaveList(container){
+    var saves = getSaves(), names = Object.keys(saves).sort(), en = isEn();
+    container.innerHTML = '';
+    if (!names.length){
+      var e = document.createElement('div'); e.className = 'rly-modal-empty';
+      e.textContent = en ? 'No saved circuits yet' : 'ยังไม่มีวงจรที่บันทึกไว้';
+      container.appendChild(e); return;
+    }
+    var ul = document.createElement('ul'); ul.className = 'rly-savelist';
+    names.forEach(function(name){
+      var li = document.createElement('li');
+      var sp = document.createElement('span'); sp.textContent = name; li.appendChild(sp);
+      var lb = document.createElement('button'); lb.className = 'rly-btn'; lb.type = 'button'; lb.textContent = en ? 'Load' : 'โหลด';
+      lb.addEventListener('click', function(){
+        if (loadCircuit(saves[name])){ setMode('normal'); renderAll(); closeModal(); hint('โหลดวงจร "' + name + '" แล้ว', 'Loaded circuit "' + name + '"'); }
+      });
+      var db = document.createElement('button'); db.className = 'rly-btn rly-sv-del'; db.type = 'button'; db.textContent = '🗑';
+      db.addEventListener('click', function(){ var s = getSaves(); delete s[name]; setSaves(s); renderSaveList(container); });
+      li.appendChild(lb); li.appendChild(db); ul.appendChild(li);
+    });
+    container.appendChild(ul);
+  }
+  function showSaveModal(){
+    var en = isEn();
+    document.getElementById('rly-modal-title').textContent = en ? 'Save circuit' : 'บันทึกวงจร';
+    var body = document.getElementById('rly-modal-body'); body.innerHTML = '';
+    var row = document.createElement('div'); row.className = 'rly-save-row';
+    var inp = document.createElement('input'); inp.type = 'text'; inp.maxLength = 40; inp.placeholder = en ? 'Name this circuit…' : 'ตั้งชื่อวงจร…';
+    var btn = document.createElement('button'); btn.className = 'rly-btn active'; btn.type = 'button'; btn.textContent = en ? 'Save' : 'บันทึก';
+    row.appendChild(inp); row.appendChild(btn); body.appendChild(row);
+    var listWrap = document.createElement('div'); body.appendChild(listWrap);
+    function save(){
+      var name = inp.value.trim(); if (!name){ inp.focus(); return; }
+      var saves = getSaves(); saves[name] = serializeCircuit(); setSaves(saves);
+      inp.value = ''; renderSaveList(listWrap);
+      hint('บันทึกวงจร "' + name + '" แล้ว', 'Saved circuit "' + name + '"');
+    }
+    btn.addEventListener('click', save);
+    inp.addEventListener('keydown', function(e){ if (e.key === 'Enter') save(); });
+    renderSaveList(listWrap); openModal(); inp.focus();
+  }
+  function showLoadModal(){
+    document.getElementById('rly-modal-title').textContent = isEn() ? 'Load circuit' : 'โหลดวงจร';
+    var body = document.getElementById('rly-modal-body'); body.innerHTML = '';
+    renderSaveList(body); openModal();
+  }
+
+  function loadFromURL(){
+    if (typeof location === 'undefined' || !location.search) return false;
+    var m = /[?&]c=([^&]+)/.exec(location.search);
+    if (!m) return false;
+    var data = null;
+    try { data = JSON.parse(b64urlDecode(m[1])); } catch (e){ data = null; }
+    if (data && loadCircuit(data)){
+      setMode('normal'); renderAll();
+      hint('โหลดวงจรจากลิงก์ที่แชร์แล้ว — แก้ไข/ทดลองต่อได้เลย', 'Loaded the shared circuit from the link — edit or experiment away');
+      return true;
+    }
+    // ลิงก์เสีย: ห้ามล้มเงียบ — แจ้งเตือน + แสดงตัวอย่างแทน
+    loadExampleById('basic');
+    hint('⚠ ลิงก์วงจรไม่ถูกต้องหรือเสียหาย — แสดงวงจรตัวอย่างแทน', '⚠ The circuit link is invalid or corrupted — showing an example instead', true);
+    return true;
+  }
+
   /* ---- schematic (ladder) view ---- */
   var schSvg = document.getElementById('rly-sch');
   var SCH_LIVE = '#16a34a', SCH_DEAD = '#94a3b8';
@@ -1120,6 +1246,11 @@ function solveRelayLab(comps, wireKeys){
   document.getElementById('rly-del-btn').addEventListener('click', function(){ setMode(mode === 'delete' ? 'normal' : 'delete'); });
   document.getElementById('rly-clear-btn').addEventListener('click', clearAll);
   document.getElementById('rly-view-btn').addEventListener('click', function(){ setView(view === 'panel' ? 'schematic' : 'panel'); });
+  document.getElementById('rly-save-btn').addEventListener('click', showSaveModal);
+  document.getElementById('rly-load-btn').addEventListener('click', showLoadModal);
+  document.getElementById('rly-share-btn').addEventListener('click', shareLink);
+  document.getElementById('rly-modal-x').addEventListener('click', closeModal);
+  modal.addEventListener('click', function(e){ if (e.target === modal) closeModal(); });
   var exSel = document.getElementById('rly-example-sel');
   EX.forEach(function(ex, i){
     var o = document.createElement('option');
@@ -1148,7 +1279,7 @@ function solveRelayLab(comps, wireKeys){
   });
 
   /* ---- init ---- */
-  loadExampleById('basic');
-  exSel.value = 'basic';
+  if (!loadFromURL()){ loadExampleById('basic'); exSel.value = 'basic'; }
+  window.addEventListener('keydown', function(ev){ if (ev.key === 'Escape' && !modal.hidden) closeModal(); });
   requestAnimationFrame(frame);
 })();

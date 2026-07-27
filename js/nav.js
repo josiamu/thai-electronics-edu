@@ -54,6 +54,7 @@ const NAV_PRACTICE = [
 const NAV_TOOLS = [
   { id: 'simulation', href: 'simulation.html', label_th: '🔬 จำลองวงจร', label_en: '🔬 Circuit Sim' },
   { id: 'breadboard', href: 'breadboard.html', label_th: '🔧 ทดลองบนเบรดบอร์ด', label_en: '🔧 Breadboard Lab' },
+  { id: 'relay-lab', href: 'relay-lab.html', label_th: '🎛 ห้องแล็บรีเลย์ MY4', label_en: '🎛 Relay Lab (MY4)' },
   { id: 'formulas', href: 'formulas.html', label_th: '📐 สูตรสรุป', label_en: '📐 Formulas' },
   { id: 'tools', href: 'tools.html', label_th: '🧮 เครื่องคิดเลข', label_en: '🧮 Calculators' },
 ];
@@ -272,7 +273,7 @@ const NAV_RESOURCES = [
 
   // ── บรรทัด "ครอบคลุมเนื้อหาจาก N หัวข้อ": เติมเข้า footer ทุกหน้าอัตโนมัติ (bilingual) ──
   // แหล่งความจริงเดียว — แก้เลขที่ TOPIC_COUNT ที่เดียว ทุกหน้าอัปเดตพร้อมกัน (อย่า hardcode ในแต่ละหน้า)
-  const TOPIC_COUNT = 30;
+  const TOPIC_COUNT = 31;
   const pageFooter = document.querySelector('footer');
   if (pageFooter && !pageFooter.querySelector('.footer-topics')) {
     const topics = document.createElement('div');

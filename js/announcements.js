@@ -14,6 +14,10 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'relay-lab-2026-07-27', date:'2026-07-27', type:'lesson',
+    th:'เครื่องมือใหม่: ห้องแล็บวงจรรีเลย์ MY4 — ต่อวงจรควบคุม 24VDC ด้วยรีเลย์ 4PDT + ปุ่มกด/ไฟ/บัซเซอร์ เดินสายเอง มีตัวอย่าง self-holding/interlock/AND-OR + มุมมองแผนภาพ Ladder',
+    en:'New tool: MY4 Relay Control Lab — wire 24VDC control circuits with 4PDT relays + buttons/lamps/buzzer, with self-holding/interlock/AND-OR examples and a ladder-diagram view',
+    href:'relay-lab.html' },
   { id:'worksheet-mosfet-power-2026-07-27', date:'2026-07-27', type:'download',
     th:'ใบความรู้ใหม่: ผ่าโครงสร้าง MOSFET สวิตช์กำลังสูง — เกต/เดรน/ซอร์ส, R_DS(on), การสวิตช์โหลดกำลังสูง (PDF)',
     en:'New knowledge sheet: Inside the Power MOSFET Switch — gate/drain/source, R_DS(on), high-power load switching (PDF)',

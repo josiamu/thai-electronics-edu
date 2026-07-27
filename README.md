@@ -73,6 +73,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 |---|---|---|
 | `simulation.html` | จำลองวงจร (อนุกรม/ขนาน/ผสม) | Circuit simulator |
 | `breadboard.html` | ทดลองบนเบรดบอร์ดเสมือน + มัลติมิเตอร์ (ตัวต้านทานแถบสีจริง, LED หรี่ตามกระแส, ทรานซิสเตอร์ NPN/PNP/MOSFET + โหมด avalanche (ไฟกระพริบ relaxation oscillator), โพเทนชิโอมิเตอร์ 3 ขา, ออปโตคัปเปลอร์ 4 ขา, รีเลย์ SPDT 5 ขา, แหล่งจ่าย AC, กราฟ transient) | Virtual breadboard lab + multimeter (real colour-coded resistors, current-proportional LEDs, NPN/PNP/MOSFET transistors + avalanche relaxation-oscillator mode, 3-pin potentiometer, 4-pin optocoupler, SPDT relay, AC source, transient graph) |
+| `relay-lab.html` | ห้องแล็บวงจรควบคุมรีเลย์ MY4 (4PDT 24VDC + ปุ่มกด/ไฟ/บัซเซอร์, รางไฟลดสายพันกัน, คลิกไฮไลต์ไล่วงจร, 6 ตัวอย่าง self-holding/interlock/AND-OR, มุมมองแผนภาพ Ladder, บันทึก/แชร์ลิงก์) | MY4 relay control lab (4PDT 24VDC + buttons/lamps/buzzer, power rails, click-to-trace highlight, 6 self-holding/interlock/AND-OR examples, ladder view, save/share) |
 | `formulas.html` | สูตรสรุป + พิมพ์ PDF | Formula summary + print |
 | `tools.html` | เครื่องคิดเลขเชิงโต้ตอบ 7 ตัว | 7 interactive calculators |
 | `quiz.html` | แบบทดสอบ 84 ข้อ 13 หมวด | 84-question quiz, 13 categories |
@@ -87,10 +88,9 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | 1 | 🎮 **Resistor Color Code Game** | เกม drill แบบเร็ว — สุ่มแถบสีให้ทายค่าความต้านทาน มีคะแนนและจับเวลา เล่นซ้ำได้ |
 | 2 | ↩️ **Undo / Redo บนเบรดบอร์ด** | ย้อน/ทำซ้ำการวาง–ลบอุปกรณ์ (Ctrl+Z / Ctrl+Y) |
 | 3 | 🎯 **โจทย์/ภารกิจบนเบรดบอร์ด** | การ์ดเป้าหมาย เช่น "ทำให้ LED ติด" / "แบ่งแรงดันให้ได้ ~5V" พร้อมระบบตรวจอัตโนมัติ |
-| 4 | 🎛 **Relay Control Lab (OMRON MY4)** | หน้าใหม่ `relay-lab.html` — แผงฝึกวงจรควบคุมรีเลย์ 24VDC: MY4 (4PDT, 14 ขา ตามผังจริง 13-14/COM 9-12/NC 1-4/NO 5-8) หลายตัว + สวิตช์/ปุ่มกด NO-NC/ไฟแสดง/บัซเซอร์ + ลากสายจัมเปอร์เอง, ตัวอย่าง self-holding · interlock · AND-OR, มุมมองแผงจริง ↔ แผนภาพ (แผนอนุมัติแล้ว — รอลงมือ) |
 
 > ✅ **เสร็จแล้ว (เคยอยู่ใน roadmap):** บทลอจิกเกต (`logic-gates.html`), ไอซี 555 (`555.html`),
-> ออปแอมป์ (`op-amp.html`) — ทั้งหมดมี sim เชิงโต้ตอบครบแล้ว
+> ออปแอมป์ (`op-amp.html`), **ห้องแล็บวงจรรีเลย์ MY4 (`relay-lab.html`)** — ทั้งหมดมี sim เชิงโต้ตอบครบแล้ว
 
 ---
 
@@ -177,13 +177,14 @@ git push
 ├── js/opto-sim.js          — Optocoupler simulator (IF/CTR/RL → IC, Vout, saturation)
 ├── js/announcements.js     — Home-page "latest news/updates" box (data-driven, dismissible, bilingual)
 ├── js/breadboard.js        — Virtual breadboard lab (MNA solver + transistors + multimeter)
+├── js/relay-lab.js         — MY4 relay control lab (DC nodal solver + power rails + ladder view + save/share)
 ├── index.html           — Home page
 │   ├── electricity.html / ohm.html                 — Fundamentals
 │   ├── resistor.html / diode.html / transistor.html / ic.html / 555.html / op-amp.html / logic-gates.html / relay.html
 │   │   capacitor.html / inductor.html / optoelectronics.html / power-supply.html   — Components
 │   ├── multimeter.html / signal-generator.html / oscilloscope.html  — Measurement
 │   ├── soldering.html / home-wiring.html           — Practical
-│   ├── simulation.html / breadboard.html           — Interactive labs
+│   ├── simulation.html / breadboard.html / relay-lab.html   — Interactive labs
 │   └── formulas.html / tools.html / quiz.html / downloads.html      — Tools & resources
 ├── CLAUDE.md / AGENTS.md — Developer notes (kept in sync)
 ├── LICENSE              — CC BY-NC 4.0 (+ note carving out third-party PDFs)

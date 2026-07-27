@@ -58,6 +58,7 @@ website/
 ├── signal-generator.html — บทที่ 11: คลื่น 4 แบบ, โครงสร้าง 7 ส่วน, พารามิเตอร์สำคัญ (f/T, Vpp/Vp/Vrms, Duty, Offset) + Interactive Waveform Generator (canvas)
 ├── simulation.html     — จำลองวงจร 3 แบบ (Series/Parallel/Mixed) + วิธีคำนวณ real-time + LED toggle
 ├── breadboard.html     — ทดลองบนเบรดบอร์ด (400-point): เลือก/วางอุปกรณ์ R (คงที่/VR/NTC/PTC/LDR/VDR)/ไดโอด+LED (ซิลิคอน/เจอร์เมเนียม/ชอตต์กี/ซีเนอร์/TVS กันไฟกระชาก/LED รวมเป็น list เดียว)/จัมเปอร์ (เลือกสีได้ — แดง/เขียว/น้ำเงิน/…)/สวิตช์/แบตเตอรี่/แหล่งจ่าย AC (ไซน์ Vp/f/offset)/ตัวเก็บประจุ/ตัวเหนี่ยวนำ/ทรานซิสเตอร์ (NPN/PNP/N-MOSFET/P-MOSFET — วาง 3 ขา)/โพเทนชิโอมิเตอร์ 3 ขา (แบ่งแรงดัน)/ออปโตคัปเปลอร์ 4 ขา (A-K → แสง → C-E, IC=CTR·IF, สองฝั่งแยกกันทางไฟฟ้า)/รีเลย์ SPDT 5 ขา (คอยล์ + COM/NO/NC — จ่ายไฟคอยล์ถึงระดับดึงเข้าแล้วสลับ COM→NO, hysteresis) เอง, มัลติมิเตอร์เสมือน (V/I/Ω/diode-test/continuity), แผงสภาพแวดล้อม (อุณหภูมิ/แสง/VR knob), แผง Transient (กราฟ V/I ตามเวลา + speed + restart + τ; รองรับ AC/RC/เรียงกระแส), คลิกแก้ไข + ลาก-ย้ายอุปกรณ์, คำนวณวงจรจริง (MNA + transient + ทรานซิสเตอร์ Cut-off/Active/Saturation), LED ติด/ดับ, electron animation, บันทึก/โหลดวงจร (localStorage) + แชร์ลิงก์ (URL `?c=`)
+├── relay-lab.html      — ห้องแล็บวงจรควบคุมรีเลย์ OMRON MY4 (CURRENT_PAGE='relay-lab', แยกจาก breadboard): แผง SVG 24VDC + รีเลย์ MY4 4PDT (14 ขา — คอยล์ 14(+)/13(−), ชุด n: COM 8+n/NO 4+n/NC n) + สวิตช์/ปุ่มกด NO-NC (momentary START/STOP, ตัวเรือนสี่เหลี่ยม)/ไฟแสดง/บัซเซอร์ (WebAudio) เดินสายจัมเปอร์เอง; รางไฟด้านข้าง +24V (ซ้าย)/0V (ขวา) จุดต่อทุกแถวลดสายพันกัน; คลิกสาย/จุดต่อ/อุปกรณ์ = ไฮไลต์กระพริบไล่วงจร; เมนู 6 ตัวอย่าง (basic/latch(self-holding)/interlock/AND-OR/swap/alarm+ack) + มุมมองแผนภาพ Ladder (ไฮไลต์เส้นมีไฟจริง); บันทึก/โหลด (localStorage `rly-saves`) + แชร์ลิงก์ `?c=` (js/relay-lab.js — engine nodal-analysis DC pure ทดสอบ Node ได้ถึง `/* ===== END ENGINE`)
 ├── formulas.html       — สูตรสรุป + print-friendly
 ├── tools.html          — เครื่องคิดเลข 7 ตัว (4-band + 5-band มีชื่อไทย-อังกฤษครบ)
 ├── quiz.html           — แบบทดสอบ 84 ข้อ 13 หมวด — มีข้อสอบ EN ครบทุกข้อ
@@ -86,7 +87,7 @@ website/
   <script src="nav.js"></script>
 </body>
 ```
-CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor`, `ic`, `timer555`, `opamp`, `logic`, `relay`, `opto`, `capacitor`, `inductor`, `power-supply`, `multimeter`, `soldering`, `home-wiring`, `oscilloscope`, `signal-generator`, `simulation`, `breadboard`, `formulas`, `tools`, `quiz`, `downloads`
+CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor`, `ic`, `timer555`, `opamp`, `logic`, `relay`, `opto`, `capacitor`, `inductor`, `power-supply`, `multimeter`, `soldering`, `home-wiring`, `oscilloscope`, `signal-generator`, `simulation`, `breadboard`, `relay-lab`, `formulas`, `tools`, `quiz`, `downloads`
 
 ### ระบบ 2 ภาษา (Bilingual System)
 - CSS ใน style.css:
@@ -106,7 +107,7 @@ CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor
 - NAV_LESSON_GROUPS → mega menu "บทเรียน / Lessons" แบ่ง 4 กลุ่ม: พื้นฐานไฟฟ้า, อุปกรณ์อิเล็กทรอนิกส์, วงจรรวมและดิจิทัล (ic/timer555/opamp/logic), เครื่องมือวัดและทดสอบ
 - บน desktop แสดง mega menu 4 คอลัมน์ (`.nav-mega-menu` ใน style.css = `repeat(4,...)` width 900px); บน mobile กลุ่มบทเรียนเป็น accordion เปิดทีละกลุ่ม
 - NAV_PRACTICE (soldering, home-wiring) → dropdown "งานปฏิบัติ / Practical"
-- NAV_TOOLS (simulation, breadboard, formulas, tools) → dropdown "เครื่องมือ ▼" / "Tools ▼"
+- NAV_TOOLS (simulation, breadboard, relay-lab, formulas, tools) → dropdown "เครื่องมือ ▼" / "Tools ▼"
 - NAV_RESOURCES (quiz, downloads) → dropdown "คลังการเรียนรู้ / Resources"
 - Dark mode: `[data-theme="dark"]` บน `<html>`, บันทึกใน localStorage key `theme`
 - Lang toggle: ปุ่ม TH / EN ใน nav bar ทุกหน้า

@@ -91,6 +91,22 @@
 .rly-toolbar-2 { margin-top: -0.15rem; }
 .rly-toollabel { font-size: 0.9rem; font-weight: 600; color: var(--text); }
 .rly-sel-wide { min-width: 15rem; max-width: 100%; }
+.rly-tb-spacer { flex: 1 1 auto; min-width: 0.5rem; }
+
+/* modal บันทึก/โหลด */
+.rly-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 300; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+.rly-modal[hidden] { display: none; }
+.rly-modal-box { background: var(--card); border-radius: 14px; width: 100%; max-width: 460px; max-height: 80vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+.rly-modal-head { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); }
+.rly-modal-title { flex: 1; font-weight: 700; }
+.rly-modal-body { padding: 0.9rem 1rem; overflow-y: auto; }
+.rly-save-row { display: flex; gap: 0.5rem; margin-bottom: 0.9rem; }
+.rly-save-row input { flex: 1; padding: 0.45rem 0.6rem; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 0.92rem; background: var(--bg); color: var(--text); }
+.rly-savelist { list-style: none; padding: 0; margin: 0; }
+.rly-savelist li { display: flex; align-items: center; gap: 0.5rem; padding: 0.45rem 0; border-top: 1px solid var(--border); }
+.rly-savelist li span { flex: 1; font-size: 0.92rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rly-savelist .rly-sv-del { color: #dc2626; border-color: #dc2626; }
+.rly-modal-empty { color: var(--text-light, #64748b); font-size: 0.9rem; text-align: center; padding: 0.6rem 0; }
 
 /* pinout table */
 .rly-pintable { border-collapse: collapse; width: 100%; max-width: 460px; font-size: 0.92rem; }
@@ -199,12 +215,26 @@
           <select class="rly-sel rly-sel-wide" id="rly-example-sel" aria-label="Example circuit"></select>
         </span>
         <button class="rly-btn" id="rly-view-btn" type="button"><span class="th-only">🔀 ดูแผนภาพ</span><span class="en-only">🔀 Schematic</span></button>
+        <span class="rly-tb-spacer"></span>
+        <button class="rly-btn" id="rly-save-btn" type="button">💾 <span class="th-only">บันทึก</span><span class="en-only">Save</span></button>
+        <button class="rly-btn" id="rly-load-btn" type="button">📂 <span class="th-only">โหลด</span><span class="en-only">Load</span></button>
+        <button class="rly-btn" id="rly-share-btn" type="button">🔗 <span class="th-only">แชร์ลิงก์</span><span class="en-only">Share</span></button>
       </div>
       <div class="rly-svgbox" id="rly-panel-box">
         <svg id="rly-svg" viewBox="0 0 1080 620" role="img" aria-label="Relay control panel"></svg>
       </div>
       <div class="rly-svgbox" id="rly-sch-box" hidden>
         <svg id="rly-sch" viewBox="0 0 700 400" role="img" aria-label="Ladder schematic"></svg>
+      </div>
+      <!-- modal บันทึก/โหลด -->
+      <div class="rly-modal" id="rly-modal" hidden>
+        <div class="rly-modal-box">
+          <div class="rly-modal-head">
+            <span class="rly-modal-title" id="rly-modal-title"></span>
+            <button class="rly-btn" id="rly-modal-x" type="button" aria-label="Close">✕</button>
+          </div>
+          <div class="rly-modal-body" id="rly-modal-body"></div>
+        </div>
       </div>
       <div class="rly-hint" id="rly-hint"></div>
       <div class="rly-legend">
