@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="ห้องแล็บวงจรรีเลย์ MY4 | สื่อการเรียนการสอน" data-title-en="MY4 Relay Control Lab | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ห้องแล็บวงจรรีเลย์ MY4 | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* ===== Relay Control Lab (.rly-*) ===== */
+.rly-toolbar { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-bottom: 0.75rem; }
+.rly-btn {
+  background: var(--card); color: var(--text); border: 1.5px solid var(--border); border-radius: 10px;
+  padding: 0.42rem 0.85rem; font-size: 0.9rem; font-family: inherit; font-weight: 600; cursor: pointer;
+  transition: all 0.15s;
+}
+.rly-btn:hover { border-color: var(--primary); color: var(--primary); }
+.rly-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+.rly-btn.danger.active { background: #dc2626; border-color: #dc2626; }
+.rly-sel {
+  background: var(--card); color: var(--text); border: 1.5px solid var(--border); border-radius: 10px;
+  padding: 0.4rem 0.4rem; font-size: 0.9rem; font-family: inherit; cursor: pointer;
+}
+.rly-group { display: inline-flex; gap: 0.3rem; align-items: center; }
+.rly-svgbox { overflow-x: auto; border: 1.5px solid var(--border); border-radius: 12px; background: var(--bg); }
+#rly-svg { display: block; min-width: 900px; width: 100%; height: auto; }
+#rly-svg.rly-mode-wire { cursor: crosshair; }
+#rly-svg.rly-mode-del { cursor: not-allowed; }
+.rly-hint {
+  margin-top: 0.7rem; padding: 0.55rem 0.9rem; border-radius: 10px; font-size: 0.92rem;
+  background: var(--bg); border: 1px dashed var(--border); color: var(--text); min-height: 2.4em;
+}
+.rly-hint-warn { color: #dc2626; border-color: #dc2626; font-weight: 700; }
+.rly-legend { margin-top: 0.5rem; font-size: 0.82rem; color: var(--text-light, #64748b); }
+
+/* SVG element styles */
+.rly-txt { fill: var(--text); font-family: inherit; font-size: 11px; }
+.rly-pin { fill: var(--text-light, #64748b); font-family: inherit; font-size: 9px; }
+.rly-bold { font-weight: 700; }
+.rly-body { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+.rly-warnbox { stroke: #dc2626; stroke-width: 3; }
+.rly-socket { fill: var(--bg); stroke: var(--border); stroke-width: 1.5; }
+.rly-ghost { fill: none; stroke: var(--border); stroke-width: 1.5; stroke-dasharray: 7 5; opacity: 0.55; cursor: pointer; }
+.rly-ghost:hover { opacity: 1; stroke: var(--primary); }
+.rly-ghosttxt { fill: var(--text-light, #94a3b8); font-family: inherit; opacity: 0.7; pointer-events: none; }
+.rly-term { fill: #cbd5e1; stroke: #64748b; stroke-width: 1.5; cursor: pointer; transition: r 0.1s; }
+.rly-term:hover { fill: #93c5fd; stroke: var(--primary); r: 9; }
+.rly-term.pending { fill: #f97316; stroke: #ea580c; animation: rlyPulse 0.7s infinite alternate; }
+@keyframes rlyPulse { from { r: 7; } to { r: 10; } }
+.rly-sup-p { fill: #dc2626; font-weight: 700; }
+.rly-sup-n { fill: #2563eb; font-weight: 700; }
+.rly-ind { fill: #7c2d12; stroke: #9a3412; stroke-width: 1; }
+.rly-ind.on { fill: #fb923c; stroke: #f97316; }
+.rly-gdot { fill: var(--text-light, #64748b); }
+.rly-arm { stroke: var(--text); stroke-width: 2.5; stroke-linecap: round; }
+.rly-coilsym { fill: none; stroke: var(--text-light, #64748b); stroke-width: 1.5; }
+.rly-swbody { fill: #94a3b8; stroke: #64748b; stroke-width: 1.5; cursor: pointer; transition: fill 0.15s; }
+.rly-swbody.on { fill: #22c55e; stroke: #16a34a; }
+.rly-swknob { fill: #f8fafc; stroke: #94a3b8; stroke-width: 1.5; }
+.rly-lampring { fill: var(--card); stroke-width: 3; cursor: pointer; }
+.rly-lead { fill: none; stroke: var(--text-light, #94a3b8); stroke-width: 1.5; }
+.rly-wire { fill: none; stroke-width: 3.5; stroke-linecap: round; opacity: 0.9; }
+.rly-wirehit { fill: none; stroke: #000; stroke-opacity: 0; stroke-width: 13; cursor: pointer; }
+.rly-mode-del .rly-wirehit:hover { stroke-opacity: 0.12; }
+.rly-dot { fill: #fb923c; stroke: #fff7ed; stroke-width: 0.6; }
+.rly-clickable { cursor: pointer; }
+
+/* pinout table */
+.rly-pintable { border-collapse: collapse; width: 100%; max-width: 460px; font-size: 0.92rem; }
+.rly-pintable th, .rly-pintable td { border: 1px solid var(--border); padding: 0.4rem 0.7rem; text-align: center; }
+.rly-pintable th { background: var(--bg); }
+@media (max-width: 640px) { .rly-btn, .rly-sel { font-size: 0.82rem; } }
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🎛</div>
+    <div>
+      <h1 class="th-only">ห้องแล็บวงจรรีเลย์ — OMRON MY4</h1>
+      <h1 class="en-only">Relay Control Lab — OMRON MY4</h1>
+      <p class="th-only">ต่อวงจรควบคุม 24VDC ด้วยรีเลย์ 4 หน้าสัมผัสบนแผงเสมือน — เดินสายเอง เห็นกระแสวิ่งจริง</p>
+      <p class="en-only">Wire real 24VDC control circuits with 4-pole relays on a virtual panel — run your own jumpers and watch the current flow</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- รู้จัก MY4 -->
+  <div class="section">
+    <h2 class="section-title th-only">รู้จัก OMRON MY4</h2>
+    <h2 class="section-title en-only">Meet the OMRON MY4</h2>
+    <div class="card">
+      <p class="th-only">
+        <strong>MY4</strong> คือรีเลย์ขนาดเล็กแบบ <strong>4PDT</strong> — มีหน้าสัมผัสสลับ (COM–NC–NO) ถึง
+        <strong>4 ชุด</strong> ที่ขยับพร้อมกันด้วยคอยล์เดียว ตัวที่ใช้ในแล็บนี้เป็นรุ่นคอยล์
+        <strong>24VDC</strong> (~650Ω) เสียบบนซ็อกเก็ต 14 ขา
+      </p>
+      <p class="en-only">
+        The <strong>MY4</strong> is a miniature <strong>4PDT</strong> relay — <strong>four</strong> changeover
+        contact sets (COM–NC–NO) that all move together on a single coil. This lab uses the
+        <strong>24VDC</strong> coil version (~650Ω) on a 14-pin socket.
+      </p>
+      <table class="rly-pintable">
+        <tr>
+          <th class="th-only">ชุดหน้าสัมผัส</th><th class="en-only">Contact set</th>
+          <th>COM</th><th>NO</th><th>NC</th>
+        </tr>
+        <tr><td>1</td><td>9</td><td>5</td><td>1</td></tr>
+        <tr><td>2</td><td>10</td><td>6</td><td>2</td></tr>
+        <tr><td>3</td><td>11</td><td>7</td><td>3</td></tr>
+        <tr><td>4</td><td>12</td><td>8</td><td>4</td></tr>
+        <tr>
+          <td class="th-only"><strong>คอยล์</strong></td><td class="en-only"><strong>Coil</strong></td>
+          <td colspan="3"><strong>13 — 14</strong></td>
+        </tr>
+      </table>
+      <p style="margin-top:0.8rem">
+        <span class="th-only">💡 จำง่ายๆ: ชุดที่ <em>n</em> → COM = ขา 8+<em>n</em>, NO = ขา 4+<em>n</em>, NC = ขา <em>n</em> •
+          คอยล์ไม่มีขั้ว (รุ่นมาตรฐาน) • ดึงเข้าเมื่อคอยล์ได้ ≥ ~16.8V และปล่อยเมื่อต่ำกว่า ~2.4V (hysteresis)</span>
+        <span class="en-only">💡 Easy rule: set <em>n</em> → COM = pin 8+<em>n</em>, NO = pin 4+<em>n</em>, NC = pin <em>n</em> •
+          the coil has no polarity (standard model) • pulls in at ≥ ~16.8V and releases below ~2.4V (hysteresis)</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- แผงทดลอง -->
+  <div class="section">
+    <h2 class="section-title th-only">แผงทดลอง</h2>
+    <h2 class="section-title en-only">The Panel</h2>
+    <div class="card">
+      <div class="rly-toolbar">
+        <button class="rly-btn" id="rly-add-relay" type="button">➕ MY4</button>
+        <button class="rly-btn" id="rly-add-switch" type="button">➕ <span class="th-only">สวิตช์</span><span class="en-only">Switch</span></button>
+        <span class="rly-group">
+          <button class="rly-btn" id="rly-add-lamp" type="button">➕ <span class="th-only">ไฟแสดง</span><span class="en-only">Lamp</span></button>
+          <select class="rly-sel" id="rly-lamp-color" aria-label="Lamp color">
+            <option value="red">🔴</option>
+            <option value="green">🟢</option>
+            <option value="yellow">🟡</option>
+          </select>
+        </span>
+        <span class="rly-group">
+          <button class="rly-btn" id="rly-wire-btn" type="button">🖊 <span class="th-only">เดินสาย</span><span class="en-only">Wire</span></button>
+          <select class="rly-sel" id="rly-wire-color" aria-label="Wire color">
+            <option value="red">🟥</option>
+            <option value="black">⬛</option>
+            <option value="blue">🟦</option>
+            <option value="green">🟩</option>
+            <option value="yellow">🟨</option>
+            <option value="orange">🟧</option>
+          </select>
+        </span>
+        <button class="rly-btn danger" id="rly-del-btn" type="button">🗑 <span class="th-only">ลบ</span><span class="en-only">Delete</span></button>
+        <button class="rly-btn" id="rly-example-btn" type="button">💡 <span class="th-only">ตัวอย่าง</span><span class="en-only">Example</span></button>
+        <button class="rly-btn" id="rly-clear-btn" type="button">🧹 <span class="th-only">ล้างแผง</span><span class="en-only">Clear</span></button>
+      </div>
+      <div class="rly-svgbox">
+        <svg id="rly-svg" viewBox="0 0 1000 620" role="img" aria-label="Relay control panel"></svg>
+      </div>
+      <div class="rly-hint" id="rly-hint"></div>
+      <div class="rly-legend">
+        <span class="th-only">🟠 จุดส้มที่วิ่ง = ทิศทาง "กระแสสมมติ" (+ → −) • จุดต่อ ● หนึ่งจุดรับได้หลายสาย •
+          คลิกตัวอุปกรณ์ (โหมดปกติ) เพื่อดูค่ากระแส/สถานะ</span>
+        <span class="en-only">🟠 moving orange dots = conventional current (+ → −) • one terminal ● accepts multiple wires •
+          click a component (normal mode) to read its current/state</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ลองทำดู -->
+  <div class="section">
+    <h2 class="section-title th-only">ลองทำดู</h2>
+    <h2 class="section-title en-only">Try This</h2>
+    <div class="card">
+      <ol class="th-only">
+        <li>กด <strong>💡 ตัวอย่าง</strong> แล้วคลิกสวิตช์ S1 — ดูไฟย้ายจากเขียว (NC) ไปแดง (NO) พร้อมเสียง "แต๊ก" ของรีเลย์</li>
+        <li>คลิกตัวรีเลย์ K1 เพื่อดูแรงดัน/กระแสคอยล์ และสถานะหน้าสัมผัส</li>
+        <li>เพิ่ม MY4 ตัวที่สอง แล้วลองต่อ "รีเลย์ต่อรีเลย์": ใช้หน้าสัมผัส NO ของ K1 (ขา 9→5) จ่ายไฟให้คอยล์ K2 (ขา 13-14) — เปิดสวิตช์ตัวเดียว รีเลย์ทำงานต่อกันเป็นทอดๆ</li>
+        <li>ลองต่อหน้าสัมผัส 2 ชุดของรีเลย์ตัวเดียวคุมไฟ 2 ดวงพร้อมกัน — นี่คือจุดเด่นของ 4PDT!</li>
+      </ol>
+      <ol class="en-only">
+        <li>Press <strong>💡 Example</strong> and click switch S1 — watch the light move from green (NC) to red (NO) with the relay's click</li>
+        <li>Click relay K1 to read its coil voltage/current and contact state</li>
+        <li>Add a second MY4 and chain them: use K1's NO contact (pins 9→5) to power K2's coil (13-14) — one switch, relays firing in sequence</li>
+        <li>Use two contact sets of one relay to control two lamps at once — that's what 4PDT is for!</li>
+      </ol>
+    </div>
+  </div>
+
+</div>
+
+<!-- คำเตือนการใช้งาน -->
+</main>
+
+<footer>
+  <strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong>
+  <strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong>
+</footer>
+<script>const CURRENT_PAGE='relay-lab';</script>
+<script src="js/nav.js"></script>
+<script src="js/relay-lab.js"></script>
+</body>
+</html>
