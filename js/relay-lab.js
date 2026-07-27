@@ -247,9 +247,11 @@ function solveRelayLab(comps, wireKeys){
   var defs = el('defs', {}, svg);
   var flt = el('filter', { id: 'rlyGlow', x: '-80%', y: '-80%', width: '260%', height: '260%' }, defs);
   el('feGaussianBlur', { stdDeviation: 6 }, flt);
+  // ลำดับเลเยอร์ (ล่าง→บน): โครงช่องว่าง → ตัวอุปกรณ์ → สาย (หน้าอุปกรณ์) → จุดต่อ+เลขขา → จุดกระแส
   var gGhost = el('g', {}, svg);
-  var gWire = el('g', {}, svg);
   var gComp = el('g', {}, svg);
+  var gWire = el('g', {}, svg);
+  var gTerm = el('g', {}, svg);
   var gDot = el('g', { 'pointer-events': 'none' }, svg);
 
   /* ---- hint ---- */
@@ -281,13 +283,17 @@ function solveRelayLab(comps, wireKeys){
     }
   }
 
-  /* ---- terminals ---- */
+  /* ---- terminals (วาดในเลเยอร์บนสุด gTerm เสมอ → อยู่หน้าสายตลอด) ---- */
   function addTerm(tid, x, y, parent, pinLabel){
     termPos[tid] = { x: x, y: y };
-    var c = el('circle', { cx: x, cy: y, r: 7, 'class': 'rly-term', 'data-tid': tid }, parent);
+    if (pinLabel !== undefined){
+      // แผ่นรองเลขขา + ตัวเลข (พื้นทึบกันสายบัง)
+      el('circle', { cx: x, cy: y + 17, r: 7.5, 'class': 'rly-pinbg' }, gTerm);
+      txt(x, y + 20, pinLabel, 'rly-pin', 'middle', gTerm);
+    }
+    var c = el('circle', { cx: x, cy: y, r: 7, 'class': 'rly-term', 'data-tid': tid }, gTerm);
     termEls[tid] = c;
     c.addEventListener('click', function(ev){ ev.stopPropagation(); onTermClick(tid); });
-    if (pinLabel !== undefined) txt(x, y + 17, pinLabel, 'rly-pin', 'middle', parent);
     return c;
   }
   function onTermClick(tid){
@@ -475,9 +481,10 @@ function solveRelayLab(comps, wireKeys){
     var p1 = termPos[a], p2 = termPos[b];
     if (!p1 || !p2) return null;
     var dist = Math.hypot(p2.x - p1.x, p2.y - p1.y);
-    var sag = Math.min(110, 26 + dist * 0.10) + (i % 3) * 13;
-    sag = Math.min(sag, VBH - 16 - Math.max(p1.y, p2.y));
-    if (sag < 12) sag = 12;
+    // สายออกจากจุดต่อแนวดิ่งสั้นๆ แล้วโค้งเนียนไปอีกจุด — ห้อยน้อยลง อ่านง่ายขึ้น
+    var sag = Math.min(46, 16 + dist * 0.05) + (i % 4) * 6;
+    sag = Math.min(sag, VBH - 14 - Math.max(p1.y, p2.y));
+    if (sag < 10) sag = 10;
     return 'M ' + p1.x + ' ' + p1.y +
            ' C ' + p1.x + ' ' + (p1.y + sag) + ', ' + p2.x + ' ' + (p2.y + sag) + ', ' + p2.x + ' ' + p2.y;
   }
@@ -486,7 +493,12 @@ function solveRelayLab(comps, wireKeys){
       var d = wirePath(w.a, w.b, i);
       if (!d) return;
       var g = el('g', {}, gWire);
+      el('path', { d: d, 'class': 'rly-wirehalo' }, g);                                   // ขอบสีพื้น (ฮาโล) ให้สายเด่นเหนืออุปกรณ์
       w._pathEl = el('path', { d: d, 'class': 'rly-wire', stroke: WIRE_COLORS[w.color] || '#888' }, g);
+      // จุดปลายสาย (eyelet) ช่วยให้เห็นว่าสายเสียบที่จุดไหน
+      var p1 = termPos[w.a], p2 = termPos[w.b], col = WIRE_COLORS[w.color] || '#888';
+      el('circle', { cx: p1.x, cy: p1.y, r: 4, fill: col, 'class': 'rly-wire-end' }, g);
+      el('circle', { cx: p2.x, cy: p2.y, r: 4, fill: col, 'class': 'rly-wire-end' }, g);
       var hit = el('path', { d: d, 'class': 'rly-wirehit' }, g);
       w._len = w._pathEl.getTotalLength();
       w._dotEls = [];
@@ -612,7 +624,7 @@ function solveRelayLab(comps, wireKeys){
 
   /* ---- full re-render ---- */
   function renderAll(){
-    gGhost.innerHTML = ''; gWire.innerHTML = ''; gComp.innerHTML = ''; gDot.innerHTML = '';
+    gGhost.innerHTML = ''; gWire.innerHTML = ''; gComp.innerHTML = ''; gTerm.innerHTML = ''; gDot.innerHTML = '';
     termPos = {}; termEls = {}; pendingTid = null;
     drawSupply();
     comps.forEach(function(c){
