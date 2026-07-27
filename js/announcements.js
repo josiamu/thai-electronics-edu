@@ -14,6 +14,14 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'worksheet-mosfet-power-2026-07-27', date:'2026-07-27', type:'download',
+    th:'ใบความรู้ใหม่: ผ่าโครงสร้าง MOSFET สวิตช์กำลังสูง — เกต/เดรน/ซอร์ส, R_DS(on), การสวิตช์โหลดกำลังสูง (PDF)',
+    en:'New knowledge sheet: Inside the Power MOSFET Switch — gate/drain/source, R_DS(on), high-power load switching (PDF)',
+    href:'downloads.html', cat:'worksheet', file:'pdf/worksheet/ใบความรู้ที่  ผ่าโครงสร้าง MOSFET สวิตช์กำลังสูง.pdf' },
+  { id:'worksheet-scr-triac-2026-07-27', date:'2026-07-27', type:'download',
+    th:'ใบความรู้ใหม่ 2 ไฟล์: SCR (ไทริสเตอร์ — เกต/แอโนด/แคโทด, การจุดชนวน) และ TRIAC (ควบคุมไฟ AC สองทิศทาง, หรี่ไฟ/ควบคุมมอเตอร์) (PDF)',
+    en:'Two new knowledge sheets: SCR (thyristor — gate/anode/cathode, triggering) and TRIAC (bidirectional AC control, dimmer/motor control) (PDF)',
+    href:'downloads.html', cat:'worksheet', file:'pdf/worksheet/ใบความรู้ SCR.pdf' },
   { id:'breadboard-relay-nc-no-2026-07-22', date:'2026-07-22', type:'update',
     th:'เบรดบอร์ด: เพิ่มตัวอย่างใหม่ "รีเลย์ SPDT สลับ LED แดง↔เขียว (NC/NO)" — 3V ผ่านทรานซิสเตอร์ขับคอยล์ 9V สลับสวิตช์แล้วดูหน้าสัมผัสย้ายจาก NC ไป NO',
     en:'Breadboard: new example "SPDT relay swaps red↔green LED (NC/NO)" — a 3V control side drives the 9V coil through an NPN; flip the switch and watch the contact move from NC to NO',

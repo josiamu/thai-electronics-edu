@@ -20,7 +20,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | 🔬 **เครื่องมือจำลองเชิงโต้ตอบ** | เบรดบอร์ดเสมือน, ออสซิลโลสโคป, BJT switch, เครื่องกำเนิดสัญญาณ, แหล่งจ่ายไฟ, เรียงกระแส AC→DC, ออปโตคัปเปลอร์, จำลองวงจร |
 | 🧮 **7 เครื่องคิดเลข** | รหัสสี, โอห์ม, กำลัง, พลังงาน, อนุกรม/ขนาน, แปลงหน่วย |
 | 📝 **แบบทดสอบ 84 ข้อ** | 13 หมวด, สุ่มข้อ, บันทึกคะแนนสูงสุด — มีทั้ง TH และ EN |
-| 📥 **PDF 37 ไฟล์** | ดาวน์โหลดใบเนื้อหา + ใบงานประกอบการเรียน |
+| 📥 **PDF 40 ไฟล์** | ดาวน์โหลดใบเนื้อหา + ใบงานประกอบการเรียน |
 | 🖨️ **Print-friendly** | หน้าสูตรสรุปพิมพ์ออกกระดาษ A4 ได้เลย |
 
 ---
@@ -76,7 +76,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | `formulas.html` | สูตรสรุป + พิมพ์ PDF | Formula summary + print |
 | `tools.html` | เครื่องคิดเลขเชิงโต้ตอบ 7 ตัว | 7 interactive calculators |
 | `quiz.html` | แบบทดสอบ 84 ข้อ 13 หมวด | 84-question quiz, 13 categories |
-| `downloads.html` | ดาวน์โหลด PDF 37 ไฟล์ | Download 37 PDF files |
+| `downloads.html` | ดาวน์โหลด PDF 40 ไฟล์ | Download 40 PDF files |
 
 ---
 
