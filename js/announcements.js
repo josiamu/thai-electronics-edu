@@ -14,6 +14,10 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'relay-lab-terminal-2026-07-28', date:'2026-07-28', type:'update',
+    th:'ห้องแล็บรีเลย์: เพิ่ม "จุดพักไฟ" (เทอร์มินอลบล็อก) TB-1…TB-10 จุดละ 4 รูที่ถึงกันหมด — พักสายที่ต้องแตกหลายทางแทนการยัดสายซ้อนที่ขาอุปกรณ์ พร้อมหัวข้ออธิบายว่ามันคืออะไรและทำไมตู้คอนโทรลจริงต้องมี',
+    en:'Relay Lab: new terminal block TB-1…TB-10 (4 interconnected holes each) — park branching wires there instead of stacking them on a device pin, plus a section on what it is and why real panels need one',
+    href:'relay-lab.html' },
   { id:'relay-lab-2026-07-27', date:'2026-07-27', type:'lesson',
     th:'เครื่องมือใหม่: ห้องแล็บวงจรรีเลย์ MY4 — ต่อวงจรควบคุม 24VDC ด้วยรีเลย์ 4PDT + ปุ่มกด/ไฟ/บัซเซอร์ เดินสายเอง มีตัวอย่าง self-holding/interlock/AND-OR + มุมมองแผนภาพ Ladder',
     en:'New tool: MY4 Relay Control Lab — wire 24VDC control circuits with 4PDT relays + buttons/lamps/buzzer, with self-holding/interlock/AND-OR examples and a ladder-diagram view',

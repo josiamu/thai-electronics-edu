@@ -46,6 +46,10 @@
 .rly-rail-n { fill: #3b82f6; fill-opacity: 0.14; stroke: #3b82f6; }
 .rly-warnbox { stroke: #dc2626; stroke-width: 3; }
 .rly-socket { fill: var(--bg); stroke: var(--border); stroke-width: 1.5; }
+/* จุดพักไฟ (terminal block) */
+.rly-tb-rail { fill: var(--bg); stroke: var(--border); stroke-width: 1.5; }
+.rly-tb-block { fill: var(--card); stroke: #94a3b8; stroke-width: 1.5; }
+.rly-tb-bus { stroke: #b45309; stroke-width: 5; stroke-linecap: round; opacity: 0.75; }
 .rly-ghost { fill: none; stroke: var(--border); stroke-width: 1.5; stroke-dasharray: 7 5; opacity: 0.55; cursor: pointer; }
 .rly-ghost:hover { opacity: 1; stroke: var(--primary); }
 .rly-ghosttxt { fill: var(--text-light, #94a3b8); font-family: inherit; opacity: 0.7; pointer-events: none; }
@@ -171,6 +175,45 @@
     </div>
   </div>
 
+  <!-- จุดพักไฟ -->
+  <div class="section">
+    <h2 class="section-title th-only">จุดพักไฟ (เทอร์มินอลบล็อก) คืออะไร</h2>
+    <h2 class="section-title en-only">What is a Terminal Block?</h2>
+    <div class="card">
+      <p class="th-only">
+        <strong>จุดพักไฟ</strong> หรือ <strong>เทอร์มินอลบล็อก (Terminal Block)</strong> — ที่ร้านไฟฟ้าเรียกกันหลายชื่อ:
+        เทอร์มินอลสตริป, ขั้วต่อสายไฟ, "เทอร์มินอล 12 ช่อง", หรือแบบรางปีกนก (DIN rail) ในตู้คอนโทรล
+        ข้างในแต่ละ "จุด" มีแผ่นทองเหลือง 1 ชิ้นที่เชื่อม<strong>ทุกรูในจุดนั้นถึงกันหมด</strong>
+        ส่วนจุดที่อยู่ติดกันถูกแผ่นกั้นแยกออกจากกัน — ไม่ถึงกัน (ถ้าอยากให้ถึงกันต้องใส่ "หวี" จัมเปอร์คร่อม)
+      </p>
+      <p class="en-only">
+        A <strong>terminal block</strong> (terminal strip, barrier strip, or DIN-rail terminal in a control panel)
+        holds one brass plate per terminal, tying <strong>every hole of that terminal together</strong>.
+        Neighbouring terminals are separated by barriers and stay isolated — bridge them with a jumper comb if you want them common.
+      </p>
+      <p class="th-only"><strong>ทำไมตู้คอนโทรลจริงต้องมี</strong></p>
+      <p class="en-only"><strong>Why real panels always have one</strong></p>
+      <ol class="th-only">
+        <li><strong>ห้ามยัดสายหลายเส้นเข้าสกรูตัวเดียว</strong> — ขา COM ของรีเลย์มีรูเดียว แต่วงจรล็อกตัวเองต้องแตกไป 3 ทาง จึงลากมาพักที่เทอร์มินอลแล้วค่อยแตกออก</li>
+        <li><strong>เป็นจุดวัดไฟ</strong> — เอาโพรบมัลติมิเตอร์จิ้มที่จุดพักได้เลย ไม่ต้องรื้ออุปกรณ์</li>
+        <li><strong>แยกสายในตู้ ↔ สายนอกตู้</strong> — ปุ่มกด/ไฟหน้าตู้ และมอเตอร์ข้างนอก มาจบที่เทอร์มินอล เปลี่ยนอุปกรณ์ทีหลังได้โดยไม่ต้องรื้อวงจรในตู้</li>
+        <li><strong>ทำเลขสายได้</strong> — ติดเลขที่จุดพัก (TB-1, TB-2, …) แล้วไล่วงจรตามแบบได้ง่าย</li>
+      </ol>
+      <ol class="en-only">
+        <li><strong>Never stack many wires under one screw</strong> — a relay COM pin has a single hole, but a self-holding circuit needs three branches, so the wire lands on a terminal and fans out from there</li>
+        <li><strong>A built-in test point</strong> — probe the terminal with a multimeter without disturbing any device</li>
+        <li><strong>Splits panel wiring from field wiring</strong> — door buttons/lamps and outside motors all end at the block, so parts can be swapped without touching the panel circuit</li>
+        <li><strong>Enables wire numbering</strong> — label the terminals (TB-1, TB-2, …) and tracing against the drawing becomes easy</li>
+      </ol>
+      <p style="margin-top:0.8rem">
+        <span class="th-only">💡 ทางไฟฟ้าแล้วจุดพักไฟ "ไม่ทำอะไรเลย" — มันไม่ใช่โหลด ไม่กินแรงดัน เป็นแค่จุดที่สายหลายเส้นมาเจอกัน
+          ลองเปิดตัวอย่าง <strong>"วงจรล็อกตัวเอง"</strong> แล้วคลิกที่จุด TB-1 ดู — ทุกสายที่ถึงกันทางไฟฟ้าจะกระพริบพร้อมกัน</span>
+        <span class="en-only">💡 Electrically a terminal block does <em>nothing</em> — it is not a load and drops no voltage; it is just where several wires meet.
+          Open the <strong>self-holding</strong> example and click terminal TB-1 — every wire on that same node blinks together.</span>
+      </p>
+    </div>
+  </div>
+
   <!-- แผงทดลอง -->
   <div class="section">
     <h2 class="section-title th-only">แผงทดลอง</h2>
@@ -221,7 +264,7 @@
         <button class="rly-btn" id="rly-share-btn" type="button">🔗 <span class="th-only">แชร์ลิงก์</span><span class="en-only">Share</span></button>
       </div>
       <div class="rly-svgbox" id="rly-panel-box">
-        <svg id="rly-svg" viewBox="0 0 1080 620" role="img" aria-label="Relay control panel"></svg>
+        <svg id="rly-svg" viewBox="0 0 1080 704" role="img" aria-label="Relay control panel"></svg>
       </div>
       <div class="rly-svgbox" id="rly-sch-box" hidden>
         <svg id="rly-sch" viewBox="0 0 700 400" role="img" aria-label="Ladder schematic"></svg>
@@ -239,9 +282,11 @@
       <div class="rly-hint" id="rly-hint"></div>
       <div class="rly-legend">
         <span class="th-only">🔴 รางซ้าย = +24V, 🔵 รางขวา = 0V — มีจุดต่อไฟทุกแถว ดึงไฟจากจุดใกล้อุปกรณ์ได้เลย สายจะได้ไม่พันกัน •
+          🟫 แถบล่าง = <strong>จุดพักไฟ TB-1…TB-10</strong> จุดละ 4 รูที่ถึงกันหมด (คนละจุด = แยกจากกัน) — ใช้พักสายที่ต้องแตกไปหลายทาง •
           🟠 จุดส้มที่วิ่ง = ทิศทาง "กระแสสมมติ" (+ → −) • จุดต่อ ● หนึ่งจุดรับได้หลายสาย •
           <strong>คลิกสาย/จุดต่อ/อุปกรณ์ → ไฮไลต์กระพริบเพื่อไล่วงจร</strong> (คลิกจุดต่อ = เห็นทุกสายที่ถึงกันทางไฟฟ้า) • คลิกที่ว่าง/Esc = ยกเลิก</span>
         <span class="en-only">🔴 left rail = +24V, 🔵 right rail = 0V — power taps on every row, grab power from the nearest point to keep wires untangled •
+          🟫 bottom strip = <strong>terminal block TB-1…TB-10</strong>, 4 interconnected holes per terminal (separate terminals stay isolated) — park any wire that has to branch •
           🟠 moving orange dots = conventional current (+ → −) • one terminal ● accepts multiple wires •
           <strong>click a wire/terminal/part → blink-highlight to trace</strong> (clicking a terminal shows every wire on the same node) • click empty/Esc to clear</span>
       </div>
@@ -256,12 +301,16 @@
       <ol class="th-only">
         <li>เลือกจากเมนู <strong>💡 ตัวอย่าง</strong> — มี 6 วงจร: พื้นฐาน, วงจรล็อกตัวเอง START/STOP, อินเตอร์ล็อก, ลอจิก AND/OR, สลับไฟ NC/NO, และสัญญาณเตือน+ปุ่มรับทราบ</li>
         <li>ลองตัวอย่าง <strong>"วงจรล็อกตัวเอง"</strong> — กดปุ่มเขียว START แป๊บเดียวแล้วปล่อย ไฟยังติดค้าง (รีเลย์ล็อกตัวเองผ่านหน้าสัมผัส NO) จนกดปุ่มแดง STOP</li>
+        <li>คลิกที่จุด <strong>TB-1</strong> บนแถบจุดพักไฟด้านล่าง — สายทุกเส้นที่ต่ออยู่จุดเดียวกันจะกระพริบพร้อมกัน เพราะทั้งหมดเป็น "จุดเดียวกัน" ทางไฟฟ้า</li>
+        <li>ลองต่อวงจรเองโดย<strong>พักสายที่ต้องแตกหลายทางไว้ที่เทอร์มินอล</strong> แทนการยัดสายซ้อนกันที่ขาอุปกรณ์ — จะไล่วงจรง่ายขึ้นมาก</li>
         <li>กดปุ่ม <strong>🔀 ดูแผนภาพ</strong> เพื่อสลับดูวงจรเดียวกันในรูปแบบ Ladder Diagram — เส้นสีเขียวคือทางที่มีกระแสไหลจริงตามสถานะปัจจุบัน</li>
         <li>คลิกตัวรีเลย์/ไฟ (โหมดปกติ) เพื่ออ่านค่าแรงดัน/กระแส และลองต่อวงจรเองด้วยปุ่มเพิ่มอุปกรณ์ + เดินสาย</li>
       </ol>
       <ol class="en-only">
         <li>Pick from the <strong>💡 Example</strong> menu — 6 circuits: basic, self-holding START/STOP, interlock, AND/OR logic, NC/NO swap, and alarm + acknowledge</li>
         <li>Try <strong>"self-holding"</strong> — tap the green START button briefly and release; the lamp stays on (the relay seals itself in via its NO contact) until you press red STOP</li>
+        <li>Click terminal <strong>TB-1</strong> on the block along the bottom — every wire landing on it blinks at once, because they are all electrically one point</li>
+        <li>Build your own circuit and <strong>park any branching wire on a terminal</strong> instead of stacking wires on a device pin — tracing gets far easier</li>
         <li>Press <strong>🔀 Schematic</strong> to see the same circuit as a ladder diagram — green lines show where current actually flows in the present state</li>
         <li>Click a relay/lamp (normal mode) to read its voltage/current, and build your own circuits with the add-part buttons + wiring</li>
       </ol>

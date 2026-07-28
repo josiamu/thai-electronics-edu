@@ -4,6 +4,7 @@
  * เฟส 3: ปุ่มกด momentary NO/NC (c.pressed) + บัซเซอร์ (WebAudio เสียงต่อเนื่อง)
  * เฟส 4: เมนูตัวอย่าง 6 วงจร (EX[] → build()+ladder) — พื้นฐาน/self-holding/interlock/AND-OR/สลับไฟ/บัซเซอร์แจ้งเตือน
  * เฟส 5: มุมมองแผนภาพ (ladder) — สลับ "แผงจริง ↔ แผนภาพ", ไฮไลต์เส้น/หน้าสัมผัสที่มีไฟตามผลจริง (เฉพาะวงจรตัวอย่าง)
+ * เฟส 7: จุดพักไฟ (terminal block) TB-1…TB-10 จุดละ 4 รู — รูในจุดเดียวกัน = โหนดเดียว (keyOf), คนละจุด = แยกกัน
  *
  * โครงไฟล์:
  *   ส่วน ENGINE เป็น pure JS (ไม่มี DOM) — ทดสอบใน Node ได้โดยตัดไฟล์ถึงบรรทัด END ENGINE
@@ -91,6 +92,9 @@ function solveRelayLab(comps, wireKeys){
     return idx[key];
   }
   comps.forEach(function(c){ rlyPins(c).forEach(function(p){ nid(c.id + ':' + p); }); });
+  // จุดพักไฟ (terminal block) ไม่ใช่อุปกรณ์ — โหนดของมันโผล่มาทางสายเท่านั้น
+  // ต้องจองดัชนีให้ครบ "ก่อน" ตรึงขนาดเมทริกซ์ ไม่งั้น nid() ในลูปสายจะคืนดัชนีเกินขอบ A/B
+  wireKeys.forEach(function(w){ nid(w.a); nid(w.b); });
 
   var n = nNodes;
   var relays = comps.filter(function(c){ return c.t === 'relay'; });
@@ -196,7 +200,7 @@ function solveRelayLab(comps, wireKeys){
   var hintEl = document.getElementById('rly-hint');
 
   /* ---- layout ---- */
-  var VBW = 1080, VBH = 620;
+  var VBW = 1080, VBH = 704;
   var SUP_Y = 30, SUP_H = 58;
   var RSLOT = { y: 108, h: 248, w: 225, x0: 70, gap: 245, max: 4 };
   var BSLOT = { y: 384, h: 185, w: 110, x0: 70, gap: 120, max: 8 };
@@ -204,6 +208,9 @@ function solveRelayLab(comps, wireKeys){
   var LRAIL = { x: 42, bx: 30, by: 118, bw: 24, bh: 452 };
   var RRAIL = { x: 1062, bx: 1050, by: 118, bw: 24, bh: 452 };
   var RAIL_YS = [150, 215, 280, 345, 420, 475, 530];
+  // จุดพักไฟ (terminal block): 12 จุด × 3 รู — รูในจุดเดียวกันถึงกันหมด, คนละจุด = คนละโหนด
+  var TB = { n: 10, holes: 4, x0: 96, gap: 94, y: 592, h: 80, bw: 76, termY: 620, hgap: 19 };
+  function tbX(p){ return TB.x0 + p * TB.gap; }
   var LAMP_COLORS = { red: '#ef4444', green: '#22c55e', yellow: '#eab308' };
   var WIRE_COLORS = { red: '#ef4444', black: '#556070', blue: '#3b82f6', green: '#22c55e', yellow: '#eab308', orange: '#f97316' };
   var LIVE = '#f97316', DEAD = '#94a3b8';
@@ -223,23 +230,29 @@ function solveRelayLab(comps, wireKeys){
   var view = 'panel';        // panel | schematic
   var selected = null;       // {kind:'wire',wire} | {kind:'node',key} | {kind:'comp',comp} — สำหรับไฮไลต์กระพริบไล่วงจร
 
-  /* terminal id → node key (จุด + ของแหล่งจ่าย 4 จุด = โหนดเดียวกัน) */
+  /* terminal id → node key
+     - จุด + / − ของแหล่งจ่ายทุกจุด = โหนดเดียวกัน
+     - รูทั้ง 3 ของจุดพักไฟจุดเดียวกัน (TB:p:h) = โหนดเดียวกัน (TB:p) เหมือนแผ่นทองเหลืองในตัวจริง */
   function keyOf(tid){
     if (tid.indexOf('SUP:+') === 0) return 'SUP:+';
     if (tid.indexOf('SUP:-') === 0) return 'SUP:-';
+    if (tid.indexOf('TB:') === 0) return tid.split(':').slice(0, 2).join(':');
     return tid;
   }
+  function tbNum(key){ return parseInt(key.split(':')[1], 10) + 1; }   // TB:0 → 1
 
   /* ---- selection / highlight (ไล่วงจร) ---- */
   function tidLabel(tid){
     if (keyOf(tid) === 'SUP:+') return '+24V';
     if (keyOf(tid) === 'SUP:-') return '0V';
+    if (tid.indexOf('TB:') === 0) return 'จุดพักไฟ TB-' + tbNum(tid);
     var p = tid.split(':');
     return p[0] + ' ขา ' + p[1];
   }
   function tidLabelEn(tid){
     if (keyOf(tid) === 'SUP:+') return '+24V';
     if (keyOf(tid) === 'SUP:-') return '0V';
+    if (tid.indexOf('TB:') === 0) return 'terminal TB-' + tbNum(tid);
     var p = tid.split(':');
     return p[0] + ' pin ' + p[1];
   }
@@ -297,11 +310,13 @@ function solveRelayLab(comps, wireKeys){
   var defs = el('defs', {}, svg);
   var flt = el('filter', { id: 'rlyGlow', x: '-80%', y: '-80%', width: '260%', height: '260%' }, defs);
   el('feGaussianBlur', { stdDeviation: 6 }, flt);
-  // ลำดับเลเยอร์ (ล่าง→บน): โครงช่องว่าง → ตัวอุปกรณ์ → สาย (หน้าอุปกรณ์) → จุดต่อ+เลขขา → จุดกระแส
+  // ลำดับเลเยอร์ (ล่าง→บน): โครงช่องว่าง → ตัวอุปกรณ์ → สาย (หน้าอุปกรณ์) → จุดต่อ+เลขขา → หัวปุ่มกด → จุดกระแส
   var gGhost = el('g', {}, svg);
   var gComp = el('g', {}, svg);
   var gWire = el('g', {}, svg);
   var gTerm = el('g', {}, svg);
+  // หัวปุ่มกดต้องอยู่เหนือสาย ไม่งั้นแถบรับคลิกของสายที่พาดผ่านจะกินคลิกไปหมด กดปุ่มไม่ได้
+  var gTop = el('g', {}, svg);
   var gDot = el('g', { 'pointer-events': 'none' }, svg);
 
   /* ---- hint ---- */
@@ -392,6 +407,29 @@ function solveRelayLab(comps, wireKeys){
     });
   }
 
+  /* ---- draw: จุดพักไฟ / terminal block ----
+     12 จุดแยกกัน จุดละ 3 รู — แผ่นทองเหลืองในจุดเดียวกันเชื่อมทั้ง 3 รูถึงกัน (= โหนดเดียว)
+     ใช้เป็นที่ "พัก" สายที่ต้องแตกไปหลายทาง แทนการยัดสายซ้อนกันที่ขาอุปกรณ์ */
+  function drawTerminalBlock(){
+    var g = el('g', {}, gComp);
+    var x1 = tbX(0) - TB.bw / 2 - 8, x2 = tbX(TB.n - 1) + TB.bw / 2 + 8;
+    el('rect', { x: x1, y: TB.y, width: x2 - x1, height: TB.h, rx: 8, 'class': 'rly-tb-rail' }, g);
+    biTxt(x1 + 4, TB.y - 8, 'จุดพักไฟ (เทอร์มินอลบล็อก) — รูในจุดเดียวกันถึงกันหมด • คนละจุด = แยกจากกัน',
+          'Terminal block — the holes in one terminal are all connected • different terminals are isolated',
+          'rly-pin', 'start', g, 10);
+    for (var p = 0; p < TB.n; p++){
+      var cx = tbX(p);
+      el('rect', { x: cx - TB.bw / 2, y: TB.y + 8, width: TB.bw, height: TB.h - 16, rx: 5, 'class': 'rly-tb-block' }, g);
+      // แผ่นทองเหลืองเชื่อมทุกรูในจุดเดียวกัน (บอกสายตาว่าถึงกันทางไฟฟ้า)
+      var half = (TB.holes - 1) / 2 * TB.hgap;
+      el('line', { x1: cx - half, y1: TB.termY, x2: cx + half, y2: TB.termY, 'class': 'rly-tb-bus' }, g);
+      txt(cx, TB.y + TB.h - 14, 'TB-' + (p + 1), 'rly-pin rly-bold', 'middle', g, 10);
+      for (var h = 0; h < TB.holes; h++){
+        addTerm('TB:' + p + ':' + h, cx + (h - (TB.holes - 1) / 2) * TB.hgap, TB.termY, g);
+      }
+    }
+  }
+
   /* ---- draw: MY4 relay ---- */
   function relayColX(x0){ return [x0 + 58, x0 + 103, x0 + 148, x0 + 193]; }
   function drawRelay(c){
@@ -450,8 +488,9 @@ function solveRelayLab(comps, wireKeys){
     var g = el('g', {}, gComp);
     el('rect', { x: x0, y: y0, width: BSLOT.w, height: BSLOT.h, rx: 10, 'class': 'rly-socket' }, g);
     txt(x0 + 55, y0 + 20, c.id, 'rly-txt rly-bold', 'middle', g, 12);
-    c._bodyEl = el('rect', { x: x0 + 23, y: y0 + 32, width: 64, height: 34, rx: 17, 'class': 'rly-swbody rly-clickable' }, g);
-    c._knob = el('circle', { cx: x0 + 70, cy: y0 + 49, r: 12, 'class': 'rly-swknob', 'pointer-events': 'none' }, g);
+    // ตัวสวิตช์อยู่เลเยอร์บนสุดเช่นเดียวกับหัวปุ่มกด — สายที่พาดผ่านต้องไม่กินคลิก
+    c._bodyEl = el('rect', { x: x0 + 23, y: y0 + 32, width: 64, height: 34, rx: 17, 'class': 'rly-swbody rly-clickable' }, gTop);
+    c._knob = el('circle', { cx: x0 + 70, cy: y0 + 49, r: 12, 'class': 'rly-swknob', 'pointer-events': 'none' }, gTop);
     c._stateTx = txt(x0 + 55, y0 + 84, 'OFF', 'rly-pin rly-bold', 'middle', g, 10);
     el('path', { d: 'M ' + (x0 + 40) + ' ' + (y0 + 66) + ' L ' + (x0 + 35) + ' ' + (y0 + 140) +
                  ' M ' + (x0 + 70) + ' ' + (y0 + 66) + ' L ' + (x0 + 75) + ' ' + (y0 + 140), 'class': 'rly-lead' }, g);
@@ -487,11 +526,12 @@ function solveRelayLab(comps, wireKeys){
     txt(x0 + 55, y0 + 20, c.id, 'rly-txt rly-bold', 'middle', g, 12);
     txt(x0 + 55, y0 + 100, isNC ? 'NC · STOP' : 'NO · START', 'rly-pin rly-bold', 'middle', g, 9);
     // ตัวเรือนสี่เหลี่ยม (housing) + หัวกดกลมนูน 3D — ให้ต่างจากไฟกลมชัดเจน
+    // วาดในเลเยอร์บนสุด (gTop) เพื่อให้กดได้แม้มีสายพาดผ่านหน้าปุ่ม
     var cx = x0 + 55, cy = y0 + 54;
-    el('rect', { x: cx - 27, y: cy - 27, width: 54, height: 54, rx: 10, 'class': 'rly-btn-housing' }, g);
-    el('rect', { x: cx - 21, y: cy - 21, width: 42, height: 42, rx: 8, 'class': 'rly-btn-recess' }, g);
-    c._capEl = el('circle', { cx: cx, cy: cy, r: 17, 'class': 'rly-btn-cap rly-clickable', fill: capCol }, g);
-    c._capHi = el('ellipse', { cx: cx, cy: cy - 6, rx: 9, ry: 4.5, 'class': 'rly-btn-hi', 'pointer-events': 'none' }, g);
+    el('rect', { x: cx - 27, y: cy - 27, width: 54, height: 54, rx: 10, 'class': 'rly-btn-housing' }, gTop);
+    el('rect', { x: cx - 21, y: cy - 21, width: 42, height: 42, rx: 8, 'class': 'rly-btn-recess' }, gTop);
+    c._capEl = el('circle', { cx: cx, cy: cy, r: 17, 'class': 'rly-btn-cap rly-clickable', fill: capCol }, gTop);
+    c._capHi = el('ellipse', { cx: cx, cy: cy - 6, rx: 9, ry: 4.5, 'class': 'rly-btn-hi', 'pointer-events': 'none' }, gTop);
     el('path', { d: 'M ' + (cx - 12) + ' ' + (y0 + 82) + ' L ' + (x0 + 35) + ' ' + (y0 + 140) +
                  ' M ' + (cx + 12) + ' ' + (y0 + 82) + ' L ' + (x0 + 75) + ' ' + (y0 + 140), 'class': 'rly-lead' }, g);
     addTerm(c.id + ':a', x0 + 35, y0 + 140, g);
@@ -698,9 +738,10 @@ function solveRelayLab(comps, wireKeys){
 
   /* ---- full re-render ---- */
   function renderAll(){
-    gGhost.innerHTML = ''; gWire.innerHTML = ''; gComp.innerHTML = ''; gTerm.innerHTML = ''; gDot.innerHTML = '';
+    gGhost.innerHTML = ''; gWire.innerHTML = ''; gComp.innerHTML = ''; gTerm.innerHTML = ''; gTop.innerHTML = ''; gDot.innerHTML = '';
     termPos = {}; termEls = {}; pendingTid = null;
     drawSupply();
+    drawTerminalBlock();
     comps.forEach(function(c){
       if (c.t === 'relay') drawRelay(c);
       else if (c.t === 'switch') drawSwitch(c);
@@ -855,14 +896,16 @@ function solveRelayLab(comps, wireKeys){
     { id: 'latch',
       th: 'วงจรล็อกตัวเอง START/STOP (self-holding)',
       en: 'Self-holding START/STOP circuit',
-      hintTh: 'กดปุ่มเขียว START ค้างแล้วปล่อย → K1 ล็อกตัวเองผ่านหน้าสัมผัส NO (seal-in) → ไฟติดค้าง • กดปุ่มแดง STOP เพื่อตัด',
-      hintEn: 'Tap green START → K1 seals itself in through its own NO contact → stays on • press red STOP to drop it',
+      hintTh: 'กดปุ่มเขียว START ค้างแล้วปล่อย → K1 ล็อกตัวเองผ่านหน้าสัมผัส NO (seal-in) → ไฟติดค้าง • กดปุ่มแดง STOP เพื่อตัด • สังเกตจุดพักไฟ TB-1/TB-2 คือจุดที่สายแตกไปหลายทาง',
+      hintEn: 'Tap green START → K1 seals itself in through its own NO contact → stays on • press red STOP to drop it • note how TB-1/TB-2 are where wires branch',
       build: function(){
         var K1 = mkRelay(0), Bs = mkButton(0, 'no'), Bp = mkButton(1, 'nc'), L1 = mkLamp(2, 'green');
-        // เส้นคอยล์: +24V → STOP(NC) → node → START(NO) → coil14(+) ; seal-in: node → COM1(9), NO1(5) → coil14
-        W('SUP:+L6', Bp + ':a', 'red'); W(Bp + ':b', Bs + ':a', 'orange');
-        W(Bs + ':b', K1 + ':14', 'orange'); W(K1 + ':13', 'SUP:-R3', 'black');
-        W(Bp + ':b', K1 + ':9', 'blue'); W(K1 + ':5', K1 + ':14', 'blue');       // seal-in NO1 ขนานกับ START
+        // เส้นคอยล์เดินผ่านจุดพักไฟแบบตู้จริง — จุดที่แตกสายหลายทางมาพักที่เทอร์มินอล ไม่ยัดซ้อนที่ขาอุปกรณ์
+        // TB-1 = จุดหลัง STOP (แตกไป START + COM1) ; TB-2 = จุดเข้าคอยล์ (START ขนานกับ NO1 seal-in)
+        W('SUP:+L6', Bp + ':a', 'red'); W(Bp + ':b', 'TB:0:0', 'orange');
+        W('TB:0:1', Bs + ':a', 'orange'); W('TB:0:2', K1 + ':9', 'blue');
+        W(Bs + ':b', 'TB:1:0', 'orange'); W(K1 + ':5', 'TB:1:1', 'blue');        // seal-in NO1 ขนานกับ START
+        W('TB:1:2', K1 + ':14', 'orange'); W(K1 + ':13', 'SUP:-R3', 'black');
         // ไฟ RUN: +24V → COM2(10), NO2(6) → L1
         W('SUP:+L2', K1 + ':10', 'red'); W(K1 + ':6', L1 + ':a', 'green'); W(L1 + ':b', 'SUP:-R6', 'black');
       },
@@ -931,19 +974,22 @@ function solveRelayLab(comps, wireKeys){
     { id: 'alarm',
       th: 'สัญญาณเตือน + ปุ่มรับทราบ (silence)',
       en: 'Alarm buzzer + acknowledge (silence)',
-      hintTh: 'เปิด S1 (จำลองเหตุ) → บัซเซอร์ดัง + ไฟแดงติด • กด ACK → K1 ล็อกตัวเองตัดเสียงบัซเซอร์ (ไฟยังติด) • ปิด S1 เพื่อรีเซ็ต',
-      hintEn: 'Turn S1 (fault) → buzzer + red lamp on • press ACK → K1 latches and silences the buzzer (lamp stays) • turn S1 off to reset',
+      hintTh: 'เปิด S1 (จำลองเหตุ) → บัซเซอร์ดัง + ไฟแดงติด • กด ACK → K1 ล็อกตัวเองตัดเสียงบัซเซอร์ (ไฟยังติด) • ปิด S1 เพื่อรีเซ็ต • สาย "เส้นเหตุ" แตกไป 4 ทาง จึงพักที่ TB-1/TB-2 (คร่อมถึงกันด้วยจัมเปอร์สั้น)',
+      hintEn: 'Turn S1 (fault) → buzzer + red lamp on • press ACK → K1 latches and silences the buzzer (lamp stays) • turn S1 off to reset • the fault line branches 4 ways, so it lands on TB-1/TB-2 (bridged by a short link)',
       build: function(){
         var K1 = mkRelay(0), S1 = mkSwitch(0), Ba = mkButton(1, 'no'), L1 = mkLamp(2, 'red'), Z1 = mkBuzz(3);
-        // node เหตุ = S1:b
+        // "เส้นเหตุ" พักที่ TB-1 แล้วคร่อมไป TB-2 (จุดเดียวรับไม่พอ 4 ทาง — ตู้จริงใช้หวีคร่อม/จัมเปอร์สั้น)
         W('SUP:+L6', S1 + ':a', 'red');
+        W(S1 + ':b', 'TB:0:0', 'orange');
+        W('TB:0:3', 'TB:1:0', 'orange');                                    // จัมเปอร์คร่อม TB-1 ↔ TB-2
         // ไฟเตือน: เหตุ → L1
-        W(S1 + ':b', L1 + ':a', 'orange'); W(L1 + ':b', 'SUP:-R6', 'black');
+        W('TB:0:1', L1 + ':a', 'orange'); W(L1 + ':b', 'SUP:-R6', 'black');
         // บัซเซอร์: เหตุ → COM1(9) → NC1(1) → Z1  (K1 ทำงาน = NC เปิด = เงียบ)
-        W(S1 + ':b', K1 + ':9', 'orange'); W(K1 + ':1', Z1 + ':a', 'yellow'); W(Z1 + ':b', 'SUP:-R5', 'black');
-        // ล็อก ACK: เหตุ → ACK(NO) → coil14(+) ; seal COM2(10)→NO2(6)→coil14 ; coil13(−) → 0V
-        W(S1 + ':b', Ba + ':a', 'blue'); W(Ba + ':b', K1 + ':14', 'blue');
-        W(S1 + ':b', K1 + ':10', 'green'); W(K1 + ':6', K1 + ':14', 'green'); W(K1 + ':13', 'SUP:-R3', 'black');
+        W('TB:0:2', K1 + ':9', 'orange'); W(K1 + ':1', Z1 + ':a', 'yellow'); W(Z1 + ':b', 'SUP:-R5', 'black');
+        // ล็อก ACK: เหตุ → ACK(NO) → TB-3 → coil14(+) ; seal COM2(10)→NO2(6) → TB-3 ; coil13(−) → 0V
+        W('TB:1:1', Ba + ':a', 'blue'); W(Ba + ':b', 'TB:2:0', 'blue');
+        W('TB:1:2', K1 + ':10', 'green'); W(K1 + ':6', 'TB:2:1', 'green');
+        W('TB:2:3', K1 + ':14', 'orange'); W(K1 + ':13', 'SUP:-R3', 'black');
       },
       ladder: function(){ return [
         { el: [{ k: 'no', c: 'S1', lbl: 'S1' }], load: { t: 'lamp', c: 'L1', color: 'red' } },
