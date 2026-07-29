@@ -37,6 +37,8 @@ var RLY = {
   LAMP_IFULL: 0.02,  // กระแสที่ถือว่าสว่างเต็ม
   R_BUZZ: 480,       // บัซเซอร์ 24V ≈ 50mA
   BUZZ_VON: 12,      // แรงดันคร่อมบัซเซอร์ที่ถือว่าดัง (V)
+  R_MOTOR: 120,      // มอเตอร์ 24VDC ≈ 200mA (โหลดกำลัง)
+  MOTOR_VON: 12,     // แรงดันที่ถือว่ามอเตอร์เริ่มหมุน (V) — ทิศตามขั้วที่ป้อน
   SHORT_I: 2,        // กระแสแหล่งจ่ายเกินนี้ = ลัดวงจร (A)
   MAXIT: 25          // รอบสูงสุดของลูปสลับหน้าสัมผัส
 };
@@ -48,7 +50,7 @@ function rlyBtnClosed(c){ return c.tt === 'nc' ? !c.pressed : !!c.pressed; }
 function rlyPins(c){
   if (c.t === 'supply') return ['+', '-'];
   if (c.t === 'relay'){ var a = []; for (var i = 1; i <= 14; i++) a.push(String(i)); return a; }
-  return ['a', 'b']; // switch, lamp
+  return ['a', 'b']; // switch, lamp, buzzer, motor
 }
 
 /* Gaussian elimination + partial pivoting (in-place บน A,B) */
@@ -125,6 +127,8 @@ function solveRelayLab(comps, wireKeys){
         addG(k('a'), k('b'), 1 / RLY.R_LAMP);
       } else if (c.t === 'buzzer'){
         addG(k('a'), k('b'), 1 / RLY.R_BUZZ);
+      } else if (c.t === 'motor'){
+        addG(k('a'), k('b'), 1 / RLY.R_MOTOR);
       } else if (c.t === 'relay'){
         var en = tent[relays.indexOf(c)];
         addG(k('13'), k('14'), 1 / RLY.R_COIL);
@@ -173,6 +177,11 @@ function solveRelayLab(comps, wireKeys){
     } else if (c.t === 'buzzer'){
       var ib = (vp('a') - vp('b')) / RLY.R_BUZZ;
       out.comps[c.id] = { i: ib, on: Math.abs(vp('a') - vp('b')) >= RLY.BUZZ_VON };
+    } else if (c.t === 'motor'){
+      // ทิศหมุนตามขั้วแรงดันที่ป้อน: a บวกกว่า b = หมุนหน้า (FWD), กลับขั้ว = ถอยหลัง (REV)
+      var vm = vp('a') - vp('b'), runM = Math.abs(vm) >= RLY.MOTOR_VON;
+      out.comps[c.id] = { i: vm / RLY.R_MOTOR, v: vm, run: runM,
+                          dir: runM ? (vm > 0 ? 1 : -1) : 0, speed: Math.min(1, Math.abs(vm) / RLY.VSUP) };
     } else if (c.t === 'relay'){
       var vc2 = vp('13') - vp('14');
       var r = { vcoil: vc2, icoil: vc2 / RLY.R_COIL, en: c._en, sets: [] };
@@ -221,7 +230,7 @@ function solveRelayLab(comps, wireKeys){
   var wires = [];            // {a:tid, b:tid, color}
   var relaySlots = [null, null, null, null];
   var botSlots = [null, null, null, null, null, null, null, null];
-  var nextK = 1, nextS = 1, nextL = 1, nextB = 1, nextZ = 1;
+  var nextK = 1, nextS = 1, nextL = 1, nextB = 1, nextZ = 1, nextM = 1;
   var mode = 'normal';       // normal | wire | delete
   var pendingTid = null;
   var lastRes = null;
@@ -599,6 +608,29 @@ function solveRelayLab(comps, wireKeys){
     addTerm(c.id + ':b', x0 + 75, y0 + 140, g);
   }
 
+  /* ---- draw: motor (โหลดกำลัง — ทิศหมุนตามขั้วไฟ) ---- */
+  function drawMotor(c){
+    var x0 = BSLOT.x0 + c.slot * BSLOT.gap, y0 = BSLOT.y;
+    var g = el('g', {}, gComp);
+    el('rect', { x: x0, y: y0, width: BSLOT.w, height: BSLOT.h, rx: 10, 'class': 'rly-socket' }, g);
+    txt(x0 + 55, y0 + 20, c.id, 'rly-txt rly-bold', 'middle', g, 12);
+    var cx = x0 + 55, cy = y0 + 58;
+    c._glowEl = el('circle', { cx: cx, cy: cy, r: 28, fill: '#38bdf8', filter: 'url(#rlyGlow)', opacity: 0 }, g);
+    el('circle', { cx: cx, cy: cy, r: 24, 'class': 'rly-motor rly-clickable' }, g)
+      .addEventListener('click', function(ev){ ev.stopPropagation(); onCompClick(c); });
+    // โรเตอร์: แถบหมุนรอบแกน (หมุนตามทิศกระแส) + ตัวอักษร M
+    c._rotEl = el('g', { 'pointer-events': 'none' }, g);
+    el('line', { x1: cx - 15, y1: cy, x2: cx + 15, y2: cy, 'class': 'rly-motor-rotor' }, c._rotEl);
+    el('circle', { cx: cx, cy: cy, r: 4, 'class': 'rly-motor-hub' }, c._rotEl);
+    c._rotCx = cx; c._rotCy = cy; c._ang = 0;
+    el('rect', { x: cx - 30, y: y0 + 86, width: 60, height: 14, rx: 4, 'class': 'rly-pinbg' }, g);
+    c._dirTx = txt(cx, y0 + 96, 'หยุด', 'rly-pin rly-bold', 'middle', g, 10);
+    el('path', { d: 'M ' + (cx - 12) + ' ' + (y0 + 80) + ' L ' + (x0 + 35) + ' ' + (y0 + 140) +
+                 ' M ' + (cx + 12) + ' ' + (y0 + 80) + ' L ' + (x0 + 75) + ' ' + (y0 + 140), 'class': 'rly-lead' }, g);
+    addTerm(c.id + ':a', x0 + 35, y0 + 140, g);
+    addTerm(c.id + ':b', x0 + 75, y0 + 140, g);
+  }
+
   /* ---- ghost slots ---- */
   function drawGhosts(){
     var i;
@@ -672,6 +704,11 @@ function solveRelayLab(comps, wireKeys){
     } else if (c.t === 'buzzer' && r){
       hint(c.id + ': ' + (r.on ? 'ดัง' : 'เงียบ') + ' (' + fmtmA(r.i) + ')' + tail,
            c.id + ': ' + (r.on ? 'sounding' : 'silent') + ' (' + fmtmA(r.i) + ')' + tailEn);
+    } else if (c.t === 'motor' && r){
+      var dth = !r.run ? 'หยุด' : r.dir > 0 ? 'หมุนเดินหน้า (a เป็นบวก)' : 'หมุนถอยหลัง (b เป็นบวก)';
+      var den = !r.run ? 'stopped' : r.dir > 0 ? 'running forward (a positive)' : 'running in reverse (b positive)';
+      hint(c.id + ': ' + dth + ' — ' + Math.abs(r.v).toFixed(1) + 'V, ' + fmtmA(r.i) + tail,
+           c.id + ': ' + den + ' — ' + Math.abs(r.v).toFixed(1) + 'V, ' + fmtmA(r.i) + tailEn);
     } else if (c.t === 'relay' && r){
       hint(c.id + ': คอยล์ ' + Math.abs(r.vcoil).toFixed(1) + 'V (' + fmtmA(r.icoil) + ') — ' +
              (r.en ? 'ทำงาน: COM ต่อกับ NO' : 'ไม่ทำงาน: COM ต่อกับ NC') + tail,
@@ -729,6 +766,13 @@ function solveRelayLab(comps, wireKeys){
     var c = { id: 'Z' + (nextZ++), t: 'buzzer', slot: s };
     botSlots[s] = c; comps.push(c); renderAll();
   }
+  function addMotor(){
+    var s = freeSlot(botSlots);
+    if (s < 0){ botFull(); return; }
+    curExample = null;
+    var c = { id: 'M' + (nextM++), t: 'motor', slot: s };
+    botSlots[s] = c; comps.push(c); renderAll();
+  }
 
   /* ---- solve + visuals ---- */
   function requestSolve(){
@@ -756,6 +800,13 @@ function solveRelayLab(comps, wireKeys){
         if (on) anyBuzz = true;
         c._glowEl.setAttribute('opacity', on ? 0.8 : 0);
         c._waveEl.setAttribute('opacity', on ? 1 : 0);
+      } else if (c.t === 'motor' && c._glowEl){
+        var run = r && r.run;
+        c._glowEl.setAttribute('opacity', run ? 0.45 : 0);
+        c._dirTx.textContent = !run ? (isEn() ? 'stopped' : 'หยุด')
+                                    : r.dir > 0 ? (isEn() ? 'FWD ▶' : 'เดินหน้า ▶')
+                                                : (isEn() ? 'REV ◀' : 'ถอยหลัง ◀');
+        c._dirTx.setAttribute('class', 'rly-pin rly-bold' + (run ? ' rly-motor-lbl' : ''));
       }
     });
     buzzSound(anyBuzz);
@@ -781,6 +832,7 @@ function solveRelayLab(comps, wireKeys){
       else if (c.t === 'lamp') drawLamp(c);
       else if (c.t === 'button') drawButton(c);
       else if (c.t === 'buzzer') drawBuzzer(c);
+      else if (c.t === 'motor') drawMotor(c);
     });
     drawGhosts();
     drawWires();
@@ -844,6 +896,14 @@ function solveRelayLab(comps, wireKeys){
         c._indEl.setAttribute('class', 'rly-ind' + (c._dispA > 0.5 ? ' on' : ''));
       }
     });
+    // มอเตอร์: หมุนโรเตอร์ตามทิศ/ความเร็วจริง
+    comps.forEach(function(c){
+      if (c.t !== 'motor' || !c._rotEl) return;
+      var r = lastRes && lastRes.comps[c.id];
+      if (!r || !r.run) return;
+      c._ang = (c._ang + r.dir * (240 + 480 * r.speed) * dt) % 360;
+      c._rotEl.setAttribute('transform', 'rotate(' + c._ang.toFixed(1) + ' ' + c._rotCx + ' ' + c._rotCy + ')');
+    });
     // buzzer wave pulse
     comps.forEach(function(c){
       if (c.t === 'buzzer' && c._waveEl && parseFloat(c._waveEl.getAttribute('opacity')) > 0){
@@ -900,13 +960,14 @@ function solveRelayLab(comps, wireKeys){
     comps = []; wires = [];
     relaySlots = [null, null, null, null];
     botSlots = [null, null, null, null, null, null, null, null];
-    nextK = 1; nextS = 1; nextL = 1; nextB = 1; nextZ = 1;
+    nextK = 1; nextS = 1; nextL = 1; nextB = 1; nextZ = 1; nextM = 1;
   }
   function mkRelay(slot){ var c = { id: 'K' + (nextK++), t: 'relay', slot: slot, _en: false, _dispA: 0 }; relaySlots[slot] = c; comps.push(c); return c.id; }
   function mkSwitch(slot){ var c = { id: 'S' + (nextS++), t: 'switch', slot: slot, on: false }; botSlots[slot] = c; comps.push(c); return c.id; }
   function mkButton(slot, tt){ var c = { id: 'B' + (nextB++), t: 'button', tt: tt, slot: slot, pressed: false }; botSlots[slot] = c; comps.push(c); return c.id; }
   function mkLamp(slot, color){ var c = { id: 'L' + (nextL++), t: 'lamp', slot: slot, color: color }; botSlots[slot] = c; comps.push(c); return c.id; }
   function mkBuzz(slot){ var c = { id: 'Z' + (nextZ++), t: 'buzzer', slot: slot }; botSlots[slot] = c; comps.push(c); return c.id; }
+  function mkMotor(slot){ var c = { id: 'M' + (nextM++), t: 'motor', slot: slot }; botSlots[slot] = c; comps.push(c); return c.id; }
   function W(a, b, color){ wires.push({ a: a, b: b, color: color, _off: 0 }); }
 
   /* หน้าสัมผัสชุด n: COM=8+n, NO=4+n, NC=n */
@@ -1028,6 +1089,82 @@ function solveRelayLab(comps, wireKeys){
         { el: [{ k: 'no', c: 'S1', lbl: 'S1' }], load: { t: 'lamp', c: 'L1', color: 'red' } },
         { el: [{ k: 'no', c: 'S1', lbl: 'S1' }, { k: 'nc', c: 'K1', lbl: 'K1' }], load: { t: 'buzz', c: 'Z1' } },
         { el: [{ k: 'no', c: 'S1', lbl: 'S1' }, { k: 'no', c: 'B1', lbl: 'ACK', par: { k: 'no', c: 'K1', lbl: 'K1' } }], load: { t: 'coil', c: 'K1' } }
+      ]; } },
+
+    { id: 'failsafe-ok',
+      th: 'fail-safe ✔ STOP แบบ NC (สายขาด = หยุดเอง)',
+      en: 'Fail-safe ✔ NC STOP button (broken wire = it stops)',
+      hintTh: 'กด START → มอเตอร์เดินค้าง, กด STOP → หยุด • ทดลองความปลอดภัย: กดปุ่ม "ลบ" แล้วคลิกสายเส้นใดก็ได้ที่ต่อกับปุ่ม STOP → มอเตอร์ต้องหยุดทันทีเอง นี่คือ fail-safe',
+      hintEn: 'Press START → the motor runs and seals in, press STOP → it drops out • safety test: hit "Delete" and remove either wire on the STOP button → the motor must stop by itself. That is fail-safe',
+      build: function(){
+        var K1 = mkRelay(0), Bs = mkButton(0, 'no'), Bp = mkButton(1, 'nc'), M1 = mkMotor(2);
+        // +24 → STOP(NC) → TB-1 → [START ∥ seal NO1] → TB-2 → coil
+        W('SUP:+L6', Bp + ':a', 'red'); W(Bp + ':b', 'TB:0:0', 'orange');
+        W('TB:0:1', Bs + ':a', 'orange'); W('TB:0:2', K1 + ':9', 'blue');
+        W(Bs + ':b', 'TB:1:0', 'orange'); W(K1 + ':5', 'TB:1:1', 'blue');
+        W('TB:1:2', K1 + ':14', 'orange'); W(K1 + ':13', 'SUP:-R3', 'black');
+        // มอเตอร์ผ่านหน้าสัมผัส NO ชุด 2
+        W('SUP:+L2', K1 + ':10', 'red'); W(K1 + ':6', M1 + ':a', 'green'); W(M1 + ':b', 'SUP:-R6', 'black');
+      },
+      ladder: function(){ return [
+        { el: [{ k: 'nc', c: 'B2', lbl: 'STOP' }, { k: 'no', c: 'B1', lbl: 'START', par: { k: 'no', c: 'K1', lbl: 'K1' } }], load: { t: 'coil', c: 'K1' } },
+        { el: [{ k: 'no', c: 'K1', lbl: 'K1' }], load: { t: 'motor', c: 'M1' } }
+      ]; } },
+
+    { id: 'failsafe-bad',
+      th: 'fail-safe ✘ STOP แบบ NO ผ่านรีเลย์ (สายขาด = หยุดไม่ได้)',
+      en: 'Fail-safe ✘ NO stop through a relay (broken wire = cannot stop)',
+      hintTh: 'วงจรนี้ "ดูเหมือนใช้ได้": กด START เดิน, กด STOP หยุด (K2 ทำงานแล้วเปิด NC ตัดคอยล์ K1) • แต่ลบสายที่ปุ่ม STOP แล้วกด STOP ดู → มอเตอร์ไม่ยอมหยุด เพราะการหยุดต้องพึ่งสายที่ยังดีอยู่ ต่างจาก NC ที่สายขาดแล้วตัดเอง',
+      hintEn: 'This looks fine: START runs, STOP stops (K2 pulls in and its NC breaks the K1 coil) • but delete a wire on the STOP button and press STOP → the motor keeps running, because stopping depends on an intact wire. An NC stop breaks the circuit by itself',
+      build: function(){
+        var K1 = mkRelay(0), K2 = mkRelay(1), Bs = mkButton(0, 'no'), Bp = mkButton(1, 'no'), M1 = mkMotor(2);
+        // คอยล์ K1 ป้อนผ่าน NC ของ K2 (K2 = รีเลย์ "สั่งหยุด")
+        W('SUP:+L6', K2 + ':9', 'red'); W(K2 + ':1', 'TB:0:0', 'orange');
+        W('TB:0:1', Bs + ':a', 'orange'); W('TB:0:2', K1 + ':9', 'blue');
+        W(Bs + ':b', 'TB:1:0', 'orange'); W(K1 + ':5', 'TB:1:1', 'blue');
+        W('TB:1:2', K1 + ':14', 'orange'); W(K1 + ':13', 'SUP:-R3', 'black');
+        // ปุ่ม STOP แบบ NO → คอยล์ K2
+        W('SUP:+L4', Bp + ':a', 'red'); W(Bp + ':b', K2 + ':14', 'yellow'); W(K2 + ':13', 'SUP:-R4', 'black');
+        // มอเตอร์
+        W('SUP:+L2', K1 + ':10', 'red'); W(K1 + ':6', M1 + ':a', 'green'); W(M1 + ':b', 'SUP:-R6', 'black');
+      },
+      ladder: function(){ return [
+        { el: [{ k: 'nc', c: 'K2', lbl: 'K2' }, { k: 'no', c: 'B1', lbl: 'START', par: { k: 'no', c: 'K1', lbl: 'K1' } }], load: { t: 'coil', c: 'K1' } },
+        { el: [{ k: 'no', c: 'B2', lbl: 'STOP' }], load: { t: 'coil', c: 'K2' } },
+        { el: [{ k: 'no', c: 'K1', lbl: 'K1' }], load: { t: 'motor', c: 'M1' } }
+      ]; } },
+
+    { id: 'fwdrev',
+      th: 'กลับทางหมุนมอเตอร์ (FWD/REV) + อินเตอร์ล็อก',
+      en: 'Motor forward/reverse with interlock',
+      hintTh: 'กด FWD (เขียว) → K1 ล็อกตัวเอง มอเตอร์เดินหน้า • กด REV (น้ำเงิน/แดง) ระหว่างเดินหน้า → ไม่มีอะไรเกิดขึ้น เพราะ NC ของ K1 ล็อกไว้ • กด STOP ก่อนแล้วค่อยกด REV → มอเตอร์กลับทาง (K2 สลับขั้วที่มอเตอร์) • ถ้าไม่มีอินเตอร์ล็อกและทั้งคู่ดูดพร้อมกัน = +24V เจอ 0V เต็มๆ = ลัดวงจร',
+      hintEn: 'Press FWD (green) → K1 seals in and the motor runs forward • press REV while running → nothing happens: K1 NC locks it out • press STOP first, then REV → the motor reverses (K2 swaps the motor polarity) • without the interlock, both closing at once would tie +24V straight to 0V = short',
+      build: function(){
+        var K1 = mkRelay(0), K2 = mkRelay(1),
+            Bf = mkButton(0, 'no'), Br = mkButton(1, 'no'), Bp = mkButton(2, 'nc'), M1 = mkMotor(3);
+        // สาย control ร่วม: +24 → STOP(NC) → TB-1
+        W('SUP:+L6', Bp + ':a', 'red'); W(Bp + ':b', 'TB:0:0', 'orange');
+        // K1 (FWD): TB-1 → [FWD ∥ seal NO1] → TB-2 → NC2 ของ K2 → coil K1
+        W('TB:0:1', Bf + ':a', 'orange'); W('TB:0:2', K1 + ':9', 'green');
+        W(Bf + ':b', 'TB:1:0', 'orange'); W(K1 + ':5', 'TB:1:1', 'green');
+        W('TB:1:2', K2 + ':10', 'orange'); W(K2 + ':2', K1 + ':14', 'orange'); W(K1 + ':13', 'SUP:-R3', 'black');
+        // TB-1 เต็ม 4 รูแล้ว → คร่อมไป TB-4 (โหนดเดียวกัน) เพื่อแตกสายฝั่ง REV ต่อ
+        W('TB:0:3', 'TB:3:0', 'orange');
+        // K2 (REV): TB-4 → [REV ∥ seal NO1] → TB-3 → NC2 ของ K1 → coil K2
+        W('TB:3:1', Br + ':a', 'blue'); W('TB:3:2', K2 + ':9', 'blue');
+        W(Br + ':b', 'TB:2:0', 'blue'); W(K2 + ':5', 'TB:2:1', 'blue');
+        W('TB:2:2', K1 + ':10', 'blue'); W(K1 + ':2', K2 + ':14', 'blue'); W(K2 + ':13', 'SUP:-R4', 'black');
+        // มอเตอร์: K1 ป้อน a=+24 b=0V (เดินหน้า) • K2 ป้อนกลับขั้ว a=0V b=+24 (ถอยหลัง)
+        W('SUP:+L1', K1 + ':11', 'red'); W(K1 + ':7', M1 + ':a', 'green');
+        W('SUP:-R1', K1 + ':12', 'black'); W(K1 + ':8', M1 + ':b', 'green');
+        W('SUP:-R2', K2 + ':11', 'black'); W(K2 + ':7', M1 + ':a', 'yellow');
+        W('SUP:+L0', K2 + ':12', 'red'); W(K2 + ':8', M1 + ':b', 'yellow');
+      },
+      ladder: function(){ return [
+        { el: [{ k: 'nc', c: 'B3', lbl: 'STOP' }, { k: 'no', c: 'B1', lbl: 'FWD', par: { k: 'no', c: 'K1', lbl: 'K1' } }, { k: 'nc', c: 'K2', lbl: 'K2' }], load: { t: 'coil', c: 'K1' } },
+        { el: [{ k: 'nc', c: 'B3', lbl: 'STOP' }, { k: 'no', c: 'B2', lbl: 'REV', par: { k: 'no', c: 'K2', lbl: 'K2' } }, { k: 'nc', c: 'K1', lbl: 'K1' }], load: { t: 'coil', c: 'K2' } },
+        { el: [{ k: 'no', c: 'K1', lbl: 'K1' }], load: { t: 'motor', c: 'M1', dir: 1 }, tag: 'FWD' },
+        { el: [{ k: 'no', c: 'K2', lbl: 'K2' }], load: { t: 'motor', c: 'M1', dir: -1 }, tag: 'REV' }
       ]; } }
   ];
 
@@ -1150,6 +1287,24 @@ function solveRelayLab(comps, wireKeys){
           th: 'ปิด S1 เหลือ S2 → คราวนี้ K2 ทำงานได้ (L2 ติด), K1 ดับ', en: 'Drop S1, keep S2 → now K2 may work (L2 lit), K1 off' },
         { set: {}, expect: { K1: false, K2: false },
           th: 'ปิดทั้งคู่ → ดับหมด', en: 'Both off → all off' }
+      ] },
+    { id: 'mFwdRev',
+      th: '7. กลับทางหมุนมอเตอร์ (FWD/REV) + อินเตอร์ล็อก',
+      en: '7. Motor forward/reverse with interlock',
+      goalTh: 'B1=FWD, B2=REV (กดแล้วต้องล็อกตัวเองเดินค้าง), B3=STOP • มอเตอร์ M1 ต้องกลับทางหมุนได้ และห้ามกด REV แล้วสลับทางทันทีขณะกำลังเดินหน้า (ต้องกด STOP ก่อน) — ใช้หน้าสัมผัส NC ไขว้กันล็อก',
+      goalEn: 'B1=FWD, B2=REV (each must seal in), B3=STOP • motor M1 must run both ways, and pressing REV while running forward must do nothing (STOP first) — lock them out with cross-wired NC contacts',
+      parts: [{ t: 'relay', id: 'K1' }, { t: 'relay', id: 'K2' },
+              { t: 'button', tt: 'no', id: 'B1' }, { t: 'button', tt: 'no', id: 'B2' }, { t: 'button', tt: 'nc', id: 'B3' },
+              { t: 'motor', id: 'M1' }],
+      steps: [
+        { set: {}, expect: { M1: 'stop' }, th: 'ยังไม่กดอะไร → มอเตอร์หยุด', en: 'Nothing pressed → motor stopped' },
+        { set: { B1: 1 }, expect: { K1: true, M1: 'fwd' }, th: 'กด FWD (B1) → เดินหน้า', en: 'Press FWD (B1) → runs forward' },
+        { set: {}, expect: { K1: true, M1: 'fwd' }, th: 'ปล่อยปุ่ม → ต้องเดินหน้าค้าง (ล็อกตัวเอง)', en: 'Release → must keep running forward (seal-in)' },
+        { set: { B2: 1 }, expect: { K2: false, M1: 'fwd' }, th: 'กด REV ขณะเดินหน้า → ต้องไม่มีอะไรเปลี่ยน (อินเตอร์ล็อก)', en: 'Press REV while running forward → nothing may change (interlock)' },
+        { set: { B3: 1 }, expect: { K1: false, K2: false, M1: 'stop' }, th: 'กด STOP → หยุดทั้งหมด', en: 'Press STOP → everything stops' },
+        { set: { B2: 1 }, expect: { K2: true, M1: 'rev' }, th: 'กด REV หลังหยุดแล้ว → หมุนถอยหลัง', en: 'Press REV after stopping → runs in reverse' },
+        { set: {}, expect: { K2: true, M1: 'rev' }, th: 'ปล่อยปุ่ม → ถอยหลังค้าง', en: 'Release → keeps running in reverse' },
+        { set: { B3: 1 }, expect: { M1: 'stop' }, th: 'กด STOP → หยุด', en: 'Press STOP → stops' }
       ] }
   ];
 
@@ -1169,16 +1324,23 @@ function solveRelayLab(comps, wireKeys){
   }
 
   /* อุปกรณ์ตัวนี้ "ทำงาน" อยู่ไหม (ไฟติด / บัซเซอร์ดัง / รีเลย์ดึงเข้า) */
+  /* มอเตอร์คืน 'fwd'/'rev'/'stop' (โจทย์ต้องเขียน expect เป็นสตริง), ที่เหลือคืน true/false */
   function compActive(id, res){
     var c = compById(id), r = res.comps[id];
     if (!c || !r) return false;
     if (c.t === 'lamp') return r.bright > 0.15;
     if (c.t === 'buzzer') return !!r.on;
     if (c.t === 'relay') return !!r.en;
+    if (c.t === 'motor') return r.dir > 0 ? 'fwd' : r.dir < 0 ? 'rev' : 'stop';
     return false;
   }
   function stateWord(id, on, en){
     var c = compById(id);
+    if (c && c.t === 'motor'){
+      if (on === 'fwd') return en ? 'running forward' : 'หมุนเดินหน้า';
+      if (on === 'rev') return en ? 'running in reverse' : 'หมุนถอยหลัง';
+      return en ? 'stopped' : 'หยุด';
+    }
     if (c && c.t === 'lamp') return en ? (on ? 'lit' : 'off') : (on ? 'ติด' : 'ดับ');
     if (c && c.t === 'buzzer') return en ? (on ? 'sounding' : 'silent') : (on ? 'ดัง' : 'เงียบ');
     return en ? (on ? 'energized' : 'off') : (on ? 'ทำงาน' : 'ไม่ทำงาน');
@@ -1227,8 +1389,9 @@ function solveRelayLab(comps, wireKeys){
       if (res.shorted) shorted = true;
       var bad = [];
       for (var id in st.expect){
-        var got = compActive(id, res);
-        if (got !== !!st.expect[id]) bad.push({ id: id, got: got });
+        var got = compActive(id, res), want = st.expect[id];
+        var okId = typeof want === 'string' ? got === want : got === !!want;
+        if (!okId) bad.push({ id: id, got: got });
       }
       if (bad.length) allOk = false;
       out.lines.push({
@@ -1262,6 +1425,7 @@ function solveRelayLab(comps, wireKeys){
       var cth = { red: 'แดง', green: 'เขียว', yellow: 'เหลือง' }[p.color] || p.color;
       return en ? (p.color + ' lamp') : ('ไฟ' + cth);
     }
+    if (p.t === 'motor') return en ? 'motor' : 'มอเตอร์';
     return en ? 'buzzer' : 'บัซเซอร์';
   }
   function renderMission(res){
@@ -1312,6 +1476,7 @@ function solveRelayLab(comps, wireKeys){
       else if (p.t === 'button') mkButton(freeSlot(botSlots), p.tt);
       else if (p.t === 'lamp') mkLamp(freeSlot(botSlots), p.color);
       else if (p.t === 'buzzer') mkBuzz(freeSlot(botSlots));
+      else if (p.t === 'motor') mkMotor(freeSlot(botSlots));
     });
     setMode('normal');
     renderAll();
@@ -1349,7 +1514,7 @@ function solveRelayLab(comps, wireKeys){
   function loadCircuit(data){
     if (!data || !Array.isArray(data.comps) || !Array.isArray(data.wires)) return false;
     var ok = data.comps.every(function(o){
-      return o && typeof o.id === 'string' && ['relay', 'switch', 'button', 'lamp', 'buzzer'].indexOf(o.t) >= 0 && typeof o.slot === 'number';
+      return o && typeof o.id === 'string' && ['relay', 'switch', 'button', 'lamp', 'buzzer', 'motor'].indexOf(o.t) >= 0 && typeof o.slot === 'number';
     }) && data.wires.every(function(w){ return w && typeof w.a === 'string' && typeof w.b === 'string'; });
     if (!ok) return false;
     resetBoard();
@@ -1471,6 +1636,7 @@ function solveRelayLab(comps, wireKeys){
     if (load.t === 'coil') return !!r.en;
     if (load.t === 'lamp') return r.bright > 0.05;
     if (load.t === 'buzz') return !!r.on;
+    if (load.t === 'motor') return !!r.run && (!load.dir || r.dir === load.dir);
     return false;
   }
   function sline(x1, y1, x2, y2, live, parent){
@@ -1508,6 +1674,13 @@ function solveRelayLab(comps, wireKeys){
       el('line', { x1: cx - 10, y1: cy + 10, x2: cx + 10, y2: cy - 10, stroke: col, 'stroke-width': 1.5 }, parent);
       var t2 = el('text', { x: cx + 26, y: cy + 5, 'text-anchor': 'start', 'class': 'rly-schlbl' }, parent);
       t2.textContent = load.c;
+    } else if (load.t === 'motor'){
+      col = live ? '#0284c7' : SCH_DEAD;
+      el('circle', { cx: cx, cy: cy, r: 15, fill: live ? '#bae6fd' : 'none', stroke: col, 'stroke-width': 3 }, parent);
+      var tm = el('text', { x: cx, y: cy + 5, 'text-anchor': 'middle', 'class': 'rly-schlbl rly-bold', fill: col }, parent);
+      tm.textContent = 'M';
+      var tm2 = el('text', { x: cx + 26, y: cy + 5, 'text-anchor': 'start', 'class': 'rly-schlbl' }, parent);
+      tm2.textContent = load.c;
     } else { // buzz
       col = live ? '#d97706' : SCH_DEAD;
       el('path', { d: 'M ' + (cx - 14) + ' ' + (cy - 12) + ' h 20 l 8 -6 v 36 l -8 -6 h -20 z', fill: live ? '#fde68a' : 'none', stroke: col, 'stroke-width': 3, 'stroke-linejoin': 'round' }, parent);
@@ -1595,6 +1768,7 @@ function solveRelayLab(comps, wireKeys){
     setMode('normal'); addLamp(document.getElementById('rly-lamp-color').value);
   });
   document.getElementById('rly-add-buzzer').addEventListener('click', function(){ setMode('normal'); addBuzzer(); });
+  document.getElementById('rly-add-motor').addEventListener('click', function(){ setMode('normal'); addMotor(); });
   document.getElementById('rly-wire-btn').addEventListener('click', function(){ setMode(mode === 'wire' ? 'normal' : 'wire'); });
   document.getElementById('rly-del-btn').addEventListener('click', function(){ setMode(mode === 'delete' ? 'normal' : 'delete'); });
   document.getElementById('rly-clear-btn').addEventListener('click', clearAll);

@@ -122,6 +122,11 @@
 .rly-btn-cap { stroke: rgba(0,0,0,0.35); stroke-width: 1.5; fill-opacity: 1; cursor: pointer; transition: r 0.06s; }
 .rly-btn-cap.down { r: 13.5; }
 .rly-btn-hi { fill: #ffffff; opacity: 0.45; }
+/* motor (โหลดกำลัง — ทิศหมุนตามขั้ว) */
+.rly-motor { fill: var(--card); stroke: #0284c7; stroke-width: 3; cursor: pointer; }
+.rly-motor-rotor { stroke: #0284c7; stroke-width: 4; stroke-linecap: round; }
+.rly-motor-hub { fill: #0284c7; }
+.rly-motor-lbl { fill: #0284c7; }
 /* buzzer */
 .rly-buzz { fill: var(--card); stroke: #d97706; stroke-width: 3; cursor: pointer; }
 .rly-buzzwave { fill: none; stroke: #d97706; stroke-width: 2.5; stroke-linecap: round; }
@@ -256,6 +261,106 @@
     </div>
   </div>
 
+  <!-- fail-safe: ทำไม STOP ต้องเป็น NC -->
+  <div class="section">
+    <h2 class="section-title th-only">ทำไมปุ่ม STOP / ปุ่มฉุกเฉิน ต้องเป็น NC เสมอ</h2>
+    <h2 class="section-title en-only">Why STOP / E-Stop Buttons Are Always NC</h2>
+    <div class="card">
+      <p class="th-only">
+        ปุ่ม START ใช้หน้าสัมผัส <strong>NO</strong> (กดแล้วต่อ) — ถูกต้องแล้ว เพราะถ้าสายขาด ผลคือ "สั่งเดินไม่ได้" ซึ่งไม่อันตราย
+        แต่ปุ่ม <strong>STOP และปุ่มหยุดฉุกเฉิน (E-Stop) ต้องเป็น NC</strong> (ปกติต่อ กดแล้วตัด) เสมอ
+        เพราะมันต่อ<strong>อนุกรม</strong>อยู่ในเส้นคอยล์ — อะไรก็ตามที่ทำให้เส้นนั้นขาด (สายหลุด หน้าสัมผัสไหม้ ขั้วคลาย สายโดนหนูกัด)
+        จะให้ผลเหมือน "มีคนกดปุ่มหยุด" คือเครื่องหยุดเอง นี่คือหลัก <strong>fail-safe</strong>: ความเสียหายต้องพาระบบไปสู่สถานะปลอดภัย
+      </p>
+      <p class="en-only">
+        A START button uses an <strong>NO</strong> contact — that is correct, because a broken wire only means "cannot start", which is harmless.
+        But a <strong>STOP button and an emergency stop must always be NC</strong> (closed at rest, opens when pressed).
+        It sits <strong>in series</strong> with the coil line, so anything that breaks that line — a wire pulled loose, a burnt contact,
+        a loose terminal, a chewed cable — has the same effect as someone pressing STOP: the machine stops by itself.
+        That is the <strong>fail-safe</strong> principle: a fault must drive the system towards the safe state.
+      </p>
+      <p class="th-only"><strong>ลองพิสูจน์เองในแผงด้านล่าง</strong> — มีตัวอย่างให้เทียบกัน 2 วงจร ทำงานเหมือนกันเป๊ะตอนทุกอย่างปกติ</p>
+      <p class="en-only"><strong>Prove it yourself on the panel below</strong> — two examples behave identically while everything is intact</p>
+      <ol class="th-only">
+        <li>เปิดตัวอย่าง <strong>"fail-safe ✔ STOP แบบ NC"</strong> → กด START (มอเตอร์เดินค้าง) → กดปุ่ม <strong>🗑 ลบ</strong> แล้วคลิกสายเส้นใดก็ได้ที่ต่อกับปุ่ม STOP → <strong>มอเตอร์หยุดทันทีเอง</strong> = ปลอดภัย</li>
+        <li>เปิดตัวอย่าง <strong>"fail-safe ✘ STOP แบบ NO ผ่านรีเลย์"</strong> → กด START → กด STOP ก็หยุดได้ปกติ ดูเหมือนใช้งานได้ • แต่ลองกด START ใหม่ แล้วลบสายที่ปุ่ม STOP → คราวนี้ <strong>กด STOP เท่าไรมอเตอร์ก็ไม่หยุด</strong> เพราะการหยุดต้องอาศัยสายที่ยังดีอยู่</li>
+        <li>สรุป: อย่าออกแบบให้ "การหยุด" ต้องพึ่งอุปกรณ์หรือสายที่ยังทำงานได้ — ให้การหยุดเกิดจาก<strong>การขาดวงจร</strong>แทน</li>
+      </ol>
+      <ol class="en-only">
+        <li>Open <strong>"Fail-safe ✔ NC STOP"</strong> → press START (the motor seals in) → hit <strong>🗑 Delete</strong> and click any wire on the STOP button → <strong>the motor stops instantly by itself</strong> = safe</li>
+        <li>Open <strong>"Fail-safe ✘ NO stop through a relay"</strong> → START runs, STOP stops, it looks perfectly fine • now start it again and delete a wire on the STOP button → <strong>pressing STOP no longer stops anything</strong>, because stopping relies on an intact wire</li>
+        <li>Rule: never make "stopping" depend on something still working — make stopping happen through <strong>a broken circuit</strong> instead</li>
+      </ol>
+      <p style="margin-top:0.8rem">
+        <span class="th-only">⚠ ของจริงเพิ่มอีกชั้น: ปุ่ม E-Stop ต้องเป็นแบบ <strong>หัวเห็ดกดค้าง-บิดปลด</strong> (ปลดล็อกเองไม่ได้), หน้าสัมผัสเป็นแบบ
+          <strong>บังคับเปิด (positive-opening)</strong> คือถึงหน้าสัมผัสเชื่อมติดกันก็ยังถูกก้านดันให้แยกออก และวงจรความปลอดภัยจริงมักใช้ 2 ช่องทางคู่กัน (dual-channel)</span>
+        <span class="en-only">⚠ Real installations add more: an E-Stop must be a <strong>latching mushroom head</strong> (it cannot reset itself), its contacts must be
+          <strong>positive-opening</strong> (the plunger forces them apart even if they have welded shut), and real safety circuits are usually dual-channel</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- flyback / snubber -->
+  <div class="section">
+    <h2 class="section-title th-only">ไดโอดกันย้อน (Flyback) และ RC Snubber คร่อมคอยล์</h2>
+    <h2 class="section-title en-only">Flyback Diode &amp; RC Snubber Across the Coil</h2>
+    <div class="card">
+      <p class="th-only">
+        คอยล์รีเลย์คือ<strong>ตัวเหนี่ยวนำ</strong> — กระแสในตัวเหนี่ยวนำเปลี่ยนทันทีไม่ได้ พอเราตัดไฟคอยล์ (สวิตช์/ทรานซิสเตอร์เปิดวงจร)
+        กระแสที่ยังไหลอยู่ถูกบังคับให้หยุดเร็วมาก คอยล์จึงสร้างแรงดันย้อนกลับพุ่งขึ้นได้ถึง<strong>หลายร้อยโวลต์</strong>
+        (v = L·di/dt) ผลคือหน้าสัมผัสสวิตช์เกิดอาร์ก ไหม้ดำ อายุสั้นลง และถ้าขับด้วยทรานซิสเตอร์/MOSFET ก็พังได้ในพริบตา
+      </p>
+      <p class="en-only">
+        A relay coil is an <strong>inductor</strong> — its current cannot change instantly. When you cut the coil supply (a switch or transistor opens),
+        the still-flowing current is forced to stop very fast, so the coil throws back a spike of <strong>hundreds of volts</strong> (v = L·di/dt).
+        That arcs and blackens switch contacts, shortening their life, and it destroys a driving transistor or MOSFET almost immediately.
+      </p>
+      <div style="display:flex;gap:1.2rem;flex-wrap:wrap;align-items:flex-start;margin:0.6rem 0 0.2rem">
+        <svg viewBox="0 0 260 150" width="260" style="max-width:100%">
+          <text x="130" y="14" text-anchor="middle" font-size="11" fill="currentColor" font-weight="700">DC coil → flyback diode</text>
+          <line x1="30" y1="40" x2="30" y2="120" stroke="#dc2626" stroke-width="2"/>
+          <line x1="230" y1="40" x2="230" y2="120" stroke="#2563eb" stroke-width="2"/>
+          <text x="30" y="34" text-anchor="middle" font-size="10" fill="#dc2626">+24V</text>
+          <text x="230" y="34" text-anchor="middle" font-size="10" fill="#2563eb">0V</text>
+          <line x1="30" y1="60" x2="95" y2="60" stroke="currentColor" stroke-width="2"/>
+          <rect x="95" y="46" width="60" height="28" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>
+          <text x="125" y="64" text-anchor="middle" font-size="11" fill="currentColor">coil</text>
+          <line x1="155" y1="60" x2="230" y2="60" stroke="currentColor" stroke-width="2"/>
+          <line x1="95" y1="60" x2="95" y2="105" stroke="#16a34a" stroke-width="2"/>
+          <line x1="155" y1="60" x2="155" y2="105" stroke="#16a34a" stroke-width="2"/>
+          <line x1="95" y1="105" x2="112" y2="105" stroke="#16a34a" stroke-width="2"/>
+          <line x1="128" y1="105" x2="155" y2="105" stroke="#16a34a" stroke-width="2"/>
+          <polygon points="128,96 128,114 112,105" fill="none" stroke="#16a34a" stroke-width="2" stroke-linejoin="round"/>
+          <line x1="112" y1="95" x2="112" y2="115" stroke="#16a34a" stroke-width="3"/>
+          <circle cx="95" cy="60" r="3" fill="#16a34a"/><circle cx="155" cy="60" r="3" fill="#16a34a"/>
+          <text x="125" y="136" text-anchor="middle" font-size="10" fill="#16a34a">1N4007 — แถบคาดชี้ไปฝั่ง +</text>
+        </svg>
+        <div style="flex:1 1 16rem;min-width:14rem">
+          <ul class="th-only" style="margin:0">
+            <li><strong>คอยล์ DC → ใช้ไดโอด</strong> ต่อ<strong>กลับขั้ว</strong>คร่อมคอยล์ (แถบคาดชี้ไปด้าน +) ปกติไม่นำกระแส แต่ตอนตัดไฟมันเปิดทางให้กระแสวนในคอยล์จนหมดพลังงาน — แรงดันย้อนถูกจำกัดเหลือ ~0.7V</li>
+            <li><strong>คอยล์ AC → ใช้ RC snubber</strong> (เช่น 100Ω + 0.1µF ต่ออนุกรมแล้วคร่อมคอยล์) เพราะไดโอดใช้กับ AC ไม่ได้ • หรือใช้ MOV/varistor</li>
+            <li><strong>ผลข้างเคียง:</strong> ไดโอดทำให้รีเลย์<strong>ปล่อยช้าลง</strong> (หน่วงเป็นมิลลิวินาที) ถ้าต้องการให้ตัดไว ให้ใส่ซีเนอร์อนุกรมกับไดโอด</li>
+            <li>ตำแหน่งที่ถูก: ต่อ<strong>ชิดคอยล์ที่สุด</strong> ไม่ใช่ที่ปลายสายอีกฝั่งของตู้</li>
+          </ul>
+          <ul class="en-only" style="margin:0">
+            <li><strong>DC coil → use a diode</strong> across the coil, <strong>reverse-biased</strong> (band towards +). It conducts nothing normally, but at switch-off it lets the coil current circulate until the energy is gone — the kickback is clamped to ~0.7V</li>
+            <li><strong>AC coil → use an RC snubber</strong> (e.g. 100Ω + 0.1µF in series across the coil), since a diode cannot work on AC • an MOV/varistor also works</li>
+            <li><strong>Side effect:</strong> the diode makes the relay <strong>release more slowly</strong> (milliseconds). If you need fast drop-out, put a zener in series with the diode</li>
+            <li>Fit it <strong>as close to the coil as possible</strong>, not at the far end of the cable</li>
+          </ul>
+        </div>
+      </div>
+      <p style="margin-top:0.8rem">
+        <span class="th-only">📌 หมายเหตุ: แผงจำลองหน้านี้คำนวณแบบ <strong>DC สถานะคงตัว</strong> จึงยังไม่จำลองแรงดันพุ่งตอนตัดไฟ — จึงยังไม่มีไดโอดให้วางบนแผงนี้
+          อยากเห็นของจริงให้ไปที่ <a href="breadboard.html">หน้าเบรดบอร์ด</a> (มีตัวอย่างออปโต → ทรานซิสเตอร์ขับคอยล์รีเลย์ พร้อมไดโอด flyback ให้ต่อเอง)
+          และอ่านทฤษฎีเพิ่มที่ <a href="relay.html">บทรีเลย์</a></span>
+        <span class="en-only">📌 Note: this panel solves the circuit as <strong>steady-state DC</strong>, so the switch-off spike is not simulated and there is no diode part here.
+          To see it in action use the <a href="breadboard.html">breadboard page</a> (it has an opto → transistor relay-coil driver example with a flyback diode),
+          and read the theory in the <a href="relay.html">relay lesson</a></span>
+      </p>
+    </div>
+  </div>
+
   <!-- แผงทดลอง -->
   <div class="section">
     <h2 class="section-title th-only">แผงทดลอง</h2>
@@ -282,6 +387,7 @@
             </select>
           </span>
           <button class="rly-btn" id="rly-add-buzzer" type="button"><span class="th-only">บัซเซอร์</span><span class="en-only">Buzzer</span></button>
+          <button class="rly-btn" id="rly-add-motor" type="button"><span class="th-only">มอเตอร์</span><span class="en-only">Motor</span></button>
         </span>
         <span class="rly-toolgroup">
           <span class="rly-toolgroup-title">🖊 <span class="th-only">เดินสาย/แก้ไข</span><span class="en-only">Wire &amp; edit</span></span>
@@ -360,8 +466,8 @@
     <h2 class="section-title en-only">Try This</h2>
     <div class="card">
       <ol class="th-only">
-        <li><strong>🎯 ภารกิจ — ต่อเองแล้วให้ระบบตรวจให้</strong> มี 6 โจทย์ไล่ระดับ (คุมไฟด้วย NO → สลับ NC/NO → ล็อกตัวเอง → AND → OR → อินเตอร์ล็อก) กด <strong>เตรียมอุปกรณ์</strong> เพื่อวางอุปกรณ์ที่ต้องใช้ เดินสายเอง แล้วกด <strong>ตรวจคำตอบ</strong> — ระบบจะบิด/กดสวิตช์แทนคุณทีละขั้นแล้วบอกว่าขั้นไหนผ่าน/ไม่ผ่าน และได้ผลอะไรแทน</li>
-        <li>เลือกจากเมนู <strong>💡 ตัวอย่าง</strong> — มี 6 วงจร: พื้นฐาน, วงจรล็อกตัวเอง START/STOP, อินเตอร์ล็อก, ลอจิก AND/OR, สลับไฟ NC/NO, และสัญญาณเตือน+ปุ่มรับทราบ (ติดตรงไหนให้เปิดตัวอย่างดูเป็นแนวทางได้)</li>
+        <li><strong>🎯 ภารกิจ — ต่อเองแล้วให้ระบบตรวจให้</strong> มี 7 โจทย์ไล่ระดับ (คุมไฟด้วย NO → สลับ NC/NO → ล็อกตัวเอง → AND → OR → อินเตอร์ล็อก → กลับทางหมุนมอเตอร์) กด <strong>เตรียมอุปกรณ์</strong> เพื่อวางอุปกรณ์ที่ต้องใช้ เดินสายเอง แล้วกด <strong>ตรวจคำตอบ</strong> — ระบบจะบิด/กดสวิตช์แทนคุณทีละขั้นแล้วบอกว่าขั้นไหนผ่าน/ไม่ผ่าน และได้ผลอะไรแทน</li>
+        <li>เลือกจากเมนู <strong>💡 ตัวอย่าง</strong> — มี 9 วงจร: พื้นฐาน, วงจรล็อกตัวเอง START/STOP, อินเตอร์ล็อก, ลอจิก AND/OR, สลับไฟ NC/NO, สัญญาณเตือน+ปุ่มรับทราบ, fail-safe แบบ NC ✔ / แบบ NO ✘ (ไว้ทดลองตัดสาย) และกลับทางหมุนมอเตอร์ FWD/REV (ติดตรงไหนให้เปิดตัวอย่างดูเป็นแนวทางได้)</li>
         <li>ลองตัวอย่าง <strong>"วงจรล็อกตัวเอง"</strong> — กดปุ่มเขียว START แป๊บเดียวแล้วปล่อย ไฟยังติดค้าง (รีเลย์ล็อกตัวเองผ่านหน้าสัมผัส NO) จนกดปุ่มแดง STOP</li>
         <li>คลิกที่จุด <strong>TB-1</strong> บนแถบจุดพักไฟด้านล่าง — สายทุกเส้นที่ต่ออยู่จุดเดียวกันจะกระพริบพร้อมกัน เพราะทั้งหมดเป็น "จุดเดียวกัน" ทางไฟฟ้า</li>
         <li>ลองต่อวงจรเองโดย<strong>พักสายที่ต้องแตกหลายทางไว้ที่เทอร์มินอล</strong> แทนการยัดสายซ้อนกันที่ขาอุปกรณ์ — จะไล่วงจรง่ายขึ้นมาก</li>
@@ -369,8 +475,8 @@
         <li>คลิกตัวรีเลย์/ไฟ (โหมดปกติ) เพื่ออ่านค่าแรงดัน/กระแส และลองต่อวงจรเองด้วยปุ่มเพิ่มอุปกรณ์ + เดินสาย</li>
       </ol>
       <ol class="en-only">
-        <li><strong>🎯 Missions — build it yourself and get it graded.</strong> Six graded tasks (NO contact → NC/NO swap → self-holding → AND → OR → interlock). Press <strong>Set up parts</strong> to place what you need, wire it yourself, then press <strong>Check</strong> — the lab flips the switches for you step by step and reports which steps pass, which fail, and what happened instead</li>
-        <li>Pick from the <strong>💡 Example</strong> menu — 6 circuits: basic, self-holding START/STOP, interlock, AND/OR logic, NC/NO swap, and alarm + acknowledge (open one as a reference if you get stuck)</li>
+        <li><strong>🎯 Missions — build it yourself and get it graded.</strong> Seven graded tasks (NO contact → NC/NO swap → self-holding → AND → OR → interlock → motor forward/reverse). Press <strong>Set up parts</strong> to place what you need, wire it yourself, then press <strong>Check</strong> — the lab flips the switches for you step by step and reports which steps pass, which fail, and what happened instead</li>
+        <li>Pick from the <strong>💡 Example</strong> menu — 9 circuits: basic, self-holding START/STOP, interlock, AND/OR logic, NC/NO swap, alarm + acknowledge, fail-safe NC ✔ / NO ✘ (for the wire-cut test) and motor forward/reverse (open one as a reference if you get stuck)</li>
         <li>Try <strong>"self-holding"</strong> — tap the green START button briefly and release; the lamp stays on (the relay seals itself in via its NO contact) until you press red STOP</li>
         <li>Click terminal <strong>TB-1</strong> on the block along the bottom — every wire landing on it blinks at once, because they are all electrically one point</li>
         <li>Build your own circuit and <strong>park any branching wire on a terminal</strong> instead of stacking wires on a device pin — tracing gets far easier</li>

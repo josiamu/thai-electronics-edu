@@ -14,6 +14,10 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'relay-lab-failsafe-motor-2026-07-29', date:'2026-07-29', type:'update',
+    th:'ห้องแล็บรีเลย์: เพิ่มหัวข้อ "ทำไมปุ่ม STOP ต้องเป็น NC เสมอ" (fail-safe) พร้อมตัวอย่างให้ลองตัดสายเทียบ NC ✔ กับ NO ✘, หัวข้อไดโอด flyback/RC snubber คร่อมคอยล์ และ **มอเตอร์ 24VDC** วางบนแผงได้ พร้อมตัวอย่าง+ภารกิจวงจรกลับทางหมุน FWD/REV + อินเตอร์ล็อก',
+    en:'Relay Lab: new sections on why a STOP button must be NC (fail-safe, with a wire-cut experiment comparing NC ✔ vs NO ✘) and on flyback diodes / RC snubbers across the coil, plus a **24VDC motor** part with a forward/reverse interlock example and mission',
+    href:'relay-lab.html' },
   { id:'relay-lab-missions-2026-07-29', date:'2026-07-29', type:'update',
     th:'ห้องแล็บรีเลย์: เพิ่ม "🎯 ภารกิจ" 6 โจทย์ไล่ระดับ (คุมไฟด้วย NO → สลับ NC/NO → ล็อกตัวเอง START/STOP → AND → OR → อินเตอร์ล็อก) กดเตรียมอุปกรณ์ เดินสายเอง แล้วกดตรวจคำตอบ — ระบบบิด/กดสวิตช์แทนคุณทีละขั้นแล้วบอกว่าขั้นไหนผ่านหรือไม่ผ่าน',
     en:'Relay Lab: new "🎯 Missions" — 6 graded tasks (NO contact → NC/NO swap → self-holding START/STOP → AND → OR → interlock). Set up the parts, wire it yourself, then press Check: the lab flips the switches for you step by step and reports what passed and what did not',
