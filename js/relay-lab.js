@@ -482,21 +482,57 @@ function solveRelayLab(comps, wireKeys){
     body.addEventListener('click', function(ev){ ev.stopPropagation(); onCompClick(c); });
   }
 
-  /* ---- draw: switch ---- */
+  /* ---- draw: switch (โยกแบบ rocker บนแผงจริง) ---- */
+  // รูปทรงหน้าโยก: ด้านที่ "กดจม" สั้นกว่า ด้านที่ "ยกขึ้น" สูงกว่า → เห็นการเอียงชัด
+  // เก็บเป็น offset จากจุดกึ่งกลาง แล้วสะท้อนซ้าย-ขวาตามสถานะ ON/OFF (ON = ฝั่ง I จม)
+  var SW_FACE_DN = [[-22, -9], [-2, -16], [-2, 16], [-22, 9]];   // ฝั่งที่จม (อยู่ในเงา)
+  var SW_FACE_UP = [[-2, -16], [22, -13], [22, 13], [-2, 16]];   // ฝั่งที่ยกขึ้น (รับแสง)
+  var SW_GLOSS   = [[0, -14], [20, -11], [20, -6], [0, -9]];     // แถบแสงบนฝั่งที่ยกขึ้น
+  function swPts(pts, cx, cy, mirror){
+    return pts.map(function(p){ return (cx + (mirror ? -p[0] : p[0])) + ',' + (cy + p[1]); }).join(' ');
+  }
+  function setSwitchState(c){
+    if (!c._faceDn) return;
+    var on = !!c.on;
+    // ON → ฝั่งซ้าย (I) จม / OFF → ฝั่งขวา (O) จม
+    c._faceDn.setAttribute('points', swPts(SW_FACE_DN, c._cx, c._cy, !on));
+    c._faceUp.setAttribute('points', swPts(SW_FACE_UP, c._cx, c._cy, !on));
+    c._gloss.setAttribute('points', swPts(SW_GLOSS, c._cx, c._cy, !on));
+    c._faceDn.setAttribute('class', 'rly-sw-face-dn rly-clickable' + (on ? ' on' : ''));
+    c._faceUp.setAttribute('class', 'rly-sw-face-up rly-clickable' + (on ? ' on' : ''));
+    c._markI.setAttribute('class', 'rly-sw-mark' + (on ? ' sunk' : ' up'));
+    c._markO.setAttribute('class', 'rly-sw-mark' + (on ? ' up' : ' sunk'));
+    c._stateTx.textContent = on ? 'ON' : 'OFF';
+    c._stateTx.setAttribute('class', 'rly-pin rly-bold' + (on ? ' rly-sw-lbl-on' : ''));
+  }
   function drawSwitch(c){
     var x0 = BSLOT.x0 + c.slot * BSLOT.gap, y0 = BSLOT.y;
     var g = el('g', {}, gComp);
     el('rect', { x: x0, y: y0, width: BSLOT.w, height: BSLOT.h, rx: 10, 'class': 'rly-socket' }, g);
     txt(x0 + 55, y0 + 20, c.id, 'rly-txt rly-bold', 'middle', g, 12);
+    var cx = x0 + 55, cy = y0 + 52;
+    c._cx = cx; c._cy = cy;
     // ตัวสวิตช์อยู่เลเยอร์บนสุดเช่นเดียวกับหัวปุ่มกด — สายที่พาดผ่านต้องไม่กินคลิก
-    c._bodyEl = el('rect', { x: x0 + 23, y: y0 + 32, width: 64, height: 34, rx: 17, 'class': 'rly-swbody rly-clickable' }, gTop);
-    c._knob = el('circle', { cx: x0 + 70, cy: y0 + 49, r: 12, 'class': 'rly-swknob', 'pointer-events': 'none' }, gTop);
-    c._stateTx = txt(x0 + 55, y0 + 84, 'OFF', 'rly-pin rly-bold', 'middle', g, 10);
-    el('path', { d: 'M ' + (x0 + 40) + ' ' + (y0 + 66) + ' L ' + (x0 + 35) + ' ' + (y0 + 140) +
-                 ' M ' + (x0 + 70) + ' ' + (y0 + 66) + ' L ' + (x0 + 75) + ' ' + (y0 + 140), 'class': 'rly-lead' }, g);
+    var sg = el('g', {}, gTop);
+    el('rect', { x: cx - 31, y: cy - 24, width: 62, height: 48, rx: 9, 'class': 'rly-sw-housing' }, sg);
+    el('rect', { x: cx - 25, y: cy - 18, width: 50, height: 36, rx: 5, 'class': 'rly-sw-recess' }, sg);
+    c._faceDn = el('polygon', { points: '', 'class': 'rly-sw-face-dn rly-clickable' }, sg);
+    c._faceUp = el('polygon', { points: '', 'class': 'rly-sw-face-up rly-clickable' }, sg);
+    c._gloss = el('polygon', { points: '', 'class': 'rly-sw-gloss', 'pointer-events': 'none' }, sg);
+    c._markI = txt(cx - 13, cy + 4, 'I', 'rly-sw-mark', 'middle', sg, 11);
+    c._markO = txt(cx + 13, cy + 4, 'O', 'rly-sw-mark', 'middle', sg, 11);
+    c._markI.setAttribute('pointer-events', 'none');
+    c._markO.setAttribute('pointer-events', 'none');
+    el('rect', { x: cx - 18, y: y0 + 82, width: 36, height: 14, rx: 4, 'class': 'rly-pinbg' }, g);
+    c._stateTx = txt(cx, y0 + 92, 'OFF', 'rly-pin rly-bold', 'middle', g, 10);
+    el('path', { d: 'M ' + (cx - 12) + ' ' + (y0 + 76) + ' L ' + (x0 + 35) + ' ' + (y0 + 140) +
+                 ' M ' + (cx + 12) + ' ' + (y0 + 76) + ' L ' + (x0 + 75) + ' ' + (y0 + 140), 'class': 'rly-lead' }, g);
     addTerm(c.id + ':a', x0 + 35, y0 + 140, g);
     addTerm(c.id + ':b', x0 + 75, y0 + 140, g);
-    c._bodyEl.addEventListener('click', function(ev){ ev.stopPropagation(); onCompClick(c); });
+    function click(ev){ ev.stopPropagation(); onCompClick(c); }
+    c._faceDn.addEventListener('click', click);
+    c._faceUp.addEventListener('click', click);
+    setSwitchState(c);
   }
 
   /* ---- draw: lamp ---- */
@@ -713,11 +749,8 @@ function solveRelayLab(comps, wireKeys){
       if (c.t === 'lamp' && c._glowEl && r){
         c._glowEl.setAttribute('opacity', (r.bright * 0.85).toFixed(3));
         c._innerEl.setAttribute('opacity', (0.18 + r.bright * 0.82).toFixed(3));
-      } else if (c.t === 'switch' && c._bodyEl){
-        c._bodyEl.setAttribute('class', 'rly-swbody rly-clickable' + (c.on ? ' on' : ''));
-        var bx = parseFloat(c._bodyEl.getAttribute('x'));
-        c._knob.setAttribute('cx', c.on ? bx + 17 : bx + 47);
-        c._stateTx.textContent = c.on ? 'ON' : 'OFF';
+      } else if (c.t === 'switch'){
+        setSwitchState(c);
       } else if (c.t === 'buzzer' && c._glowEl){
         var on = r && r.on;
         if (on) anyBuzz = true;
