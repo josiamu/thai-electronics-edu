@@ -1347,7 +1347,8 @@ function solveRelayLab(comps, wireKeys){
   }
   syncExOptions();
   exSel.addEventListener('change', function(){ loadExampleById(exSel.value); });
-  window.addEventListener('langchange', function(){ syncExOptions(); if (view === 'schematic') drawSchematic(); });
+  // nav.js ยิง langchange ที่ document (ไม่ bubble) — ต้องดักที่ document ไม่ใช่ window
+  document.addEventListener('langchange', function(){ syncExOptions(); if (view === 'schematic') drawSchematic(); });
   svg.addEventListener('click', function(){ clearSelection(); });   // คลิกที่ว่าง = ยกเลิกการเลือก
   document.addEventListener('keydown', function(ev){
     if (ev.key === 'Escape'){

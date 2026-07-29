@@ -15,7 +15,7 @@
 .rly-btn {
   background: var(--card); color: var(--text); border: 1.5px solid var(--border); border-radius: 10px;
   padding: 0.42rem 0.85rem; font-size: 0.9rem; font-family: inherit; font-weight: 600; cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.15s; white-space: nowrap; flex: 0 0 auto;
 }
 .rly-btn:hover { border-color: var(--primary); color: var(--primary); }
 .rly-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
@@ -25,6 +25,20 @@
   padding: 0.4rem 0.4rem; font-size: 0.9rem; font-family: inherit; cursor: pointer;
 }
 .rly-group { display: inline-flex; gap: 0.3rem; align-items: center; }
+/* กลุ่มเครื่องมือ — มีป้ายกำกับ ให้รู้ว่าปุ่มไหนอยู่หมวดไหน */
+.rly-toolgroup {
+  display: inline-flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; flex: 0 0 auto;
+  padding: 0.35rem 0.55rem; border: 1.5px dashed var(--border); border-radius: 12px; background: var(--bg);
+}
+.rly-toolgroup-title {
+  font-size: 0.78rem; font-weight: 700; color: var(--text-light, #64748b); white-space: nowrap;
+  padding-right: 0.45rem; border-right: 1.5px solid var(--border);
+}
+/* ปุ่ม + ตัวเลือกของมันเอง ติดกันเป็นชิ้นเดียว → รู้ทันทีว่าสี/ชนิดนี้เป็นของอุปกรณ์ตัวไหน */
+.rly-combo { display: inline-flex; align-items: stretch; }
+.rly-combo .rly-btn { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.rly-combo .rly-sel { border-top-left-radius: 0; border-bottom-left-radius: 0; border-left: 1.5px solid var(--border); }
+.rly-combo:hover .rly-btn, .rly-combo:hover .rly-sel { border-color: var(--primary); }
 .rly-svgbox { overflow-x: auto; border: 1.5px solid var(--border); border-radius: 12px; background: var(--bg); }
 #rly-svg { display: block; min-width: 1000px; width: 100%; height: auto; }
 #rly-svg.rly-mode-wire { cursor: crosshair; }
@@ -102,9 +116,8 @@
 .rly-schlbl { fill: var(--text); font-family: inherit; font-size: 12px; }
 .rly-schnote { fill: var(--text-light, #64748b); font-family: inherit; font-size: 14px; }
 .rly-toolbar-2 { margin-top: -0.15rem; }
-.rly-toollabel { font-size: 0.9rem; font-weight: 600; color: var(--text); }
-.rly-sel-wide { min-width: 15rem; max-width: 100%; }
-.rly-tb-spacer { flex: 1 1 auto; min-width: 0.5rem; }
+.rly-sel-wide { width: 20rem; max-width: 100%; min-width: 0; flex: 0 1 auto; }
+.rly-tb-right { margin-left: auto; }
 
 /* modal บันทึก/โหลด */
 .rly-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 300; display: flex; align-items: center; justify-content: center; padding: 1rem; }
@@ -125,6 +138,11 @@
 .rly-pintable { border-collapse: collapse; width: 100%; max-width: 460px; font-size: 0.92rem; }
 .rly-pintable th, .rly-pintable td { border: 1px solid var(--border); padding: 0.4rem 0.7rem; text-align: center; }
 .rly-pintable th { background: var(--bg); }
+@media (max-width: 760px) {
+  /* จอแคบ: ให้กลุ่มยุบตัว + ปุ่มขึ้นบรรทัดใหม่ในกลุ่มแทนการล้นออกนอกการ์ด */
+  .rly-toolgroup { flex: 0 1 auto; }
+  .rly-tb-right { margin-left: 0; }
+}
 @media (max-width: 640px) { .rly-btn, .rly-sel { font-size: 0.82rem; } }
 </style>
 </head>
@@ -229,48 +247,56 @@
     <h2 class="section-title en-only">The Panel</h2>
     <div class="card">
       <div class="rly-toolbar">
-        <button class="rly-btn" id="rly-add-relay" type="button">➕ MY4</button>
-        <button class="rly-btn" id="rly-add-switch" type="button">➕ <span class="th-only">สวิตช์</span><span class="en-only">Switch</span></button>
-        <span class="rly-group">
-          <button class="rly-btn" id="rly-add-button" type="button">➕ <span class="th-only">ปุ่มกด</span><span class="en-only">Button</span></button>
-          <select class="rly-sel" id="rly-button-type" aria-label="Button type">
-            <option value="no">🟢 NO</option>
-            <option value="nc">🔴 NC</option>
-          </select>
+        <span class="rly-toolgroup">
+          <span class="rly-toolgroup-title">➕ <span class="th-only">วางอุปกรณ์</span><span class="en-only">Add part</span></span>
+          <button class="rly-btn" id="rly-add-relay" type="button">MY4</button>
+          <button class="rly-btn" id="rly-add-switch" type="button"><span class="th-only">สวิตช์</span><span class="en-only">Switch</span></button>
+          <span class="rly-combo">
+            <button class="rly-btn" id="rly-add-button" type="button"><span class="th-only">ปุ่มกด</span><span class="en-only">Button</span></button>
+            <select class="rly-sel" id="rly-button-type" aria-label="Button type / ชนิดปุ่มกด">
+              <option value="no">🟢 NO <span class="th-only">ปกติเปิด</span> open</option>
+              <option value="nc">🔴 NC <span class="th-only">ปกติปิด</span> closed</option>
+            </select>
+          </span>
+          <span class="rly-combo">
+            <button class="rly-btn" id="rly-add-lamp" type="button"><span class="th-only">ไฟแสดง</span><span class="en-only">Lamp</span></button>
+            <select class="rly-sel" id="rly-lamp-color" aria-label="Lamp colour / สีไฟแสดง">
+              <option value="red">🔴 <span class="th-only">แดง</span> Red</option>
+              <option value="green">🟢 <span class="th-only">เขียว</span> Green</option>
+              <option value="yellow">🟡 <span class="th-only">เหลือง</span> Yellow</option>
+            </select>
+          </span>
+          <button class="rly-btn" id="rly-add-buzzer" type="button"><span class="th-only">บัซเซอร์</span><span class="en-only">Buzzer</span></button>
         </span>
-        <span class="rly-group">
-          <button class="rly-btn" id="rly-add-lamp" type="button">➕ <span class="th-only">ไฟแสดง</span><span class="en-only">Lamp</span></button>
-          <select class="rly-sel" id="rly-lamp-color" aria-label="Lamp color">
-            <option value="red">🔴</option>
-            <option value="green">🟢</option>
-            <option value="yellow">🟡</option>
-          </select>
+        <span class="rly-toolgroup">
+          <span class="rly-toolgroup-title">🖊 <span class="th-only">เดินสาย/แก้ไข</span><span class="en-only">Wire &amp; edit</span></span>
+          <span class="rly-combo">
+            <button class="rly-btn" id="rly-wire-btn" type="button"><span class="th-only">เดินสาย</span><span class="en-only">Wire</span></button>
+            <select class="rly-sel" id="rly-wire-color" aria-label="Wire colour / สีสายไฟ">
+              <option value="red">🟥 <span class="th-only">แดง</span> Red</option>
+              <option value="black">⬛ <span class="th-only">ดำ</span> Black</option>
+              <option value="blue">🟦 <span class="th-only">น้ำเงิน</span> Blue</option>
+              <option value="green">🟩 <span class="th-only">เขียว</span> Green</option>
+              <option value="yellow">🟨 <span class="th-only">เหลือง</span> Yellow</option>
+              <option value="orange">🟧 <span class="th-only">ส้ม</span> Orange</option>
+            </select>
+          </span>
+          <button class="rly-btn danger" id="rly-del-btn" type="button">🗑 <span class="th-only">ลบ</span><span class="en-only">Delete</span></button>
+          <button class="rly-btn" id="rly-clear-btn" type="button">🧹 <span class="th-only">ล้างแผง</span><span class="en-only">Clear</span></button>
         </span>
-        <button class="rly-btn" id="rly-add-buzzer" type="button">➕ <span class="th-only">บัซเซอร์</span><span class="en-only">Buzzer</span></button>
-        <span class="rly-group">
-          <button class="rly-btn" id="rly-wire-btn" type="button">🖊 <span class="th-only">เดินสาย</span><span class="en-only">Wire</span></button>
-          <select class="rly-sel" id="rly-wire-color" aria-label="Wire color">
-            <option value="red">🟥</option>
-            <option value="black">⬛</option>
-            <option value="blue">🟦</option>
-            <option value="green">🟩</option>
-            <option value="yellow">🟨</option>
-            <option value="orange">🟧</option>
-          </select>
-        </span>
-        <button class="rly-btn danger" id="rly-del-btn" type="button">🗑 <span class="th-only">ลบ</span><span class="en-only">Delete</span></button>
-        <button class="rly-btn" id="rly-clear-btn" type="button">🧹 <span class="th-only">ล้างแผง</span><span class="en-only">Clear</span></button>
       </div>
       <div class="rly-toolbar rly-toolbar-2">
-        <span class="rly-group">
-          <span class="rly-toollabel">💡 <span class="th-only">ตัวอย่าง</span><span class="en-only">Example</span></span>
+        <span class="rly-toolgroup">
+          <span class="rly-toolgroup-title">💡 <span class="th-only">ตัวอย่าง</span><span class="en-only">Examples</span></span>
           <select class="rly-sel rly-sel-wide" id="rly-example-sel" aria-label="Example circuit"></select>
         </span>
         <button class="rly-btn" id="rly-view-btn" type="button"><span class="th-only">🔀 ดูแผนภาพ</span><span class="en-only">🔀 Schematic</span></button>
-        <span class="rly-tb-spacer"></span>
-        <button class="rly-btn" id="rly-save-btn" type="button">💾 <span class="th-only">บันทึก</span><span class="en-only">Save</span></button>
-        <button class="rly-btn" id="rly-load-btn" type="button">📂 <span class="th-only">โหลด</span><span class="en-only">Load</span></button>
-        <button class="rly-btn" id="rly-share-btn" type="button">🔗 <span class="th-only">แชร์ลิงก์</span><span class="en-only">Share</span></button>
+        <span class="rly-toolgroup rly-tb-right">
+          <span class="rly-toolgroup-title"><span class="th-only">วงจรของฉัน</span><span class="en-only">My circuit</span></span>
+          <button class="rly-btn" id="rly-save-btn" type="button">💾 <span class="th-only">บันทึก</span><span class="en-only">Save</span></button>
+          <button class="rly-btn" id="rly-load-btn" type="button">📂 <span class="th-only">โหลด</span><span class="en-only">Load</span></button>
+          <button class="rly-btn" id="rly-share-btn" type="button">🔗 <span class="th-only">แชร์ลิงก์</span><span class="en-only">Share</span></button>
+        </span>
       </div>
       <div class="rly-svgbox" id="rly-panel-box">
         <svg id="rly-svg" viewBox="0 0 1080 704" role="img" aria-label="Relay control panel"></svg>
