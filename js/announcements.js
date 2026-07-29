@@ -14,6 +14,10 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'relay-lab-missions-2026-07-29', date:'2026-07-29', type:'update',
+    th:'ห้องแล็บรีเลย์: เพิ่ม "🎯 ภารกิจ" 6 โจทย์ไล่ระดับ (คุมไฟด้วย NO → สลับ NC/NO → ล็อกตัวเอง START/STOP → AND → OR → อินเตอร์ล็อก) กดเตรียมอุปกรณ์ เดินสายเอง แล้วกดตรวจคำตอบ — ระบบบิด/กดสวิตช์แทนคุณทีละขั้นแล้วบอกว่าขั้นไหนผ่านหรือไม่ผ่าน',
+    en:'Relay Lab: new "🎯 Missions" — 6 graded tasks (NO contact → NC/NO swap → self-holding START/STOP → AND → OR → interlock). Set up the parts, wire it yourself, then press Check: the lab flips the switches for you step by step and reports what passed and what did not',
+    href:'relay-lab.html' },
   { id:'relay-lab-terminal-2026-07-28', date:'2026-07-28', type:'update',
     th:'ห้องแล็บรีเลย์: เพิ่ม "จุดพักไฟ" (เทอร์มินอลบล็อก) TB-1…TB-10 จุดละ 4 รูที่ถึงกันหมด — พักสายที่ต้องแตกหลายทางแทนการยัดสายซ้อนที่ขาอุปกรณ์ พร้อมหัวข้ออธิบายว่ามันคืออะไรและทำไมตู้คอนโทรลจริงต้องมี',
     en:'Relay Lab: new terminal block TB-1…TB-10 (4 interconnected holes each) — park branching wires there instead of stacking them on a device pin, plus a section on what it is and why real panels need one',

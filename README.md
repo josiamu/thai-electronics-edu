@@ -73,7 +73,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 |---|---|---|
 | `simulation.html` | จำลองวงจร (อนุกรม/ขนาน/ผสม) | Circuit simulator |
 | `breadboard.html` | ทดลองบนเบรดบอร์ดเสมือน + มัลติมิเตอร์ (ตัวต้านทานแถบสีจริง, LED หรี่ตามกระแส, ทรานซิสเตอร์ NPN/PNP/MOSFET + โหมด avalanche (ไฟกระพริบ relaxation oscillator), โพเทนชิโอมิเตอร์ 3 ขา, ออปโตคัปเปลอร์ 4 ขา, รีเลย์ SPDT 5 ขา, แหล่งจ่าย AC, กราฟ transient) | Virtual breadboard lab + multimeter (real colour-coded resistors, current-proportional LEDs, NPN/PNP/MOSFET transistors + avalanche relaxation-oscillator mode, 3-pin potentiometer, 4-pin optocoupler, SPDT relay, AC source, transient graph) |
-| `relay-lab.html` | ห้องแล็บวงจรควบคุมรีเลย์ MY4 (4PDT 24VDC + ปุ่มกด/ไฟ/บัซเซอร์, รางไฟ + จุดพักไฟ TB-1…TB-10 ลดสายพันกัน, คลิกไฮไลต์ไล่วงจร, 6 ตัวอย่าง self-holding/interlock/AND-OR, มุมมองแผนภาพ Ladder, บันทึก/แชร์ลิงก์) | MY4 relay control lab (4PDT 24VDC + buttons/lamps/buzzer, power rails + TB-1…TB-10 terminal block, click-to-trace highlight, 6 self-holding/interlock/AND-OR examples, ladder view, save/share) |
+| `relay-lab.html` | ห้องแล็บวงจรควบคุมรีเลย์ MY4 (4PDT 24VDC + ปุ่มกด/ไฟ/บัซเซอร์, รางไฟ + จุดพักไฟ TB-1…TB-10 ลดสายพันกัน, คลิกไฮไลต์ไล่วงจร, 🎯 ภารกิจ 6 ข้อพร้อมตรวจคำตอบอัตโนมัติ, 6 ตัวอย่าง self-holding/interlock/AND-OR, มุมมองแผนภาพ Ladder, บันทึก/แชร์ลิงก์) | MY4 relay control lab (4PDT 24VDC + buttons/lamps/buzzer, power rails + TB-1…TB-10 terminal block, click-to-trace highlight, 6 auto-graded missions, 6 self-holding/interlock/AND-OR examples, ladder view, save/share) |
 | `formulas.html` | สูตรสรุป + พิมพ์ PDF | Formula summary + print |
 | `tools.html` | เครื่องคิดเลขเชิงโต้ตอบ 7 ตัว | 7 interactive calculators |
 | `quiz.html` | แบบทดสอบ 84 ข้อ 13 หมวด | 84-question quiz, 13 categories |
@@ -177,7 +177,7 @@ git push
 ├── js/opto-sim.js          — Optocoupler simulator (IF/CTR/RL → IC, Vout, saturation)
 ├── js/announcements.js     — Home-page "latest news/updates" box (data-driven, dismissible, bilingual)
 ├── js/breadboard.js        — Virtual breadboard lab (MNA solver + transistors + multimeter)
-├── js/relay-lab.js         — MY4 relay control lab (DC nodal solver + power rails + terminal block + ladder view + save/share)
+├── js/relay-lab.js         — MY4 relay control lab (DC nodal solver + power rails + terminal block + ladder view + auto-graded missions + save/share)
 ├── index.html           — Home page
 │   ├── electricity.html / ohm.html                 — Fundamentals
 │   ├── resistor.html / diode.html / transistor.html / ic.html / 555.html / op-amp.html / logic-gates.html / relay.html

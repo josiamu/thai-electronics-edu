@@ -1045,6 +1045,280 @@ function solveRelayLab(comps, wireKeys){
   }
   function curExObj(){ for (var i = 0; i < EX.length; i++) if (EX[i].id === curExample) return EX[i]; return null; }
 
+  /* ===== ภารกิจ (mission) + ตรวจคำตอบอัตโนมัติ =====
+   * ตัวตรวจ "กด/บิดสวิตช์แทนผู้เรียน" แล้วเรียก solver ซ้ำทีละขั้น จึงตรวจพฤติกรรมได้จริง
+   * (รวมวงจรที่มีความจำอย่าง self-holding เพราะ latch _en ของรีเลย์เดินต่อข้ามขั้น)
+   * parts เรียงตามลำดับที่ mk* สร้าง id → id ในโจทย์ (K1/S1/L1…) ตรงกับที่ปุ่ม "เตรียมอุปกรณ์" วางให้
+   */
+  var MISSIONS = [
+    { id: 'mNO',
+      th: '1. คุมไฟด้วยหน้าสัมผัส NO',
+      en: '1. Switch a lamp through an NO contact',
+      goalTh: 'ต่อให้ S1 สั่งคอยล์ K1 และให้ไฟแดง L1 ติดผ่านหน้าสัมผัส NO ของ K1 (ห้ามต่อ L1 กับสวิตช์ตรงๆ)',
+      goalEn: 'Wire S1 to drive the K1 coil, and light red lamp L1 through a K1 NO contact (do not wire L1 straight to the switch)',
+      parts: [{ t: 'relay', id: 'K1' }, { t: 'switch', id: 'S1' }, { t: 'lamp', color: 'red', id: 'L1' }],
+      links: [{ th: 'ไฟ L1 ต้องต่ออยู่กับขา NO ของ K1 (ขา 5–8)', en: 'Lamp L1 must land on a K1 NO pin (5–8)',
+                from: 'L1', to: 'K1', pins: ['5', '6', '7', '8'] }],
+      steps: [
+        { set: {}, expect: { K1: false, L1: false },
+          th: 'S1 ปิด (OFF) → K1 ไม่ทำงาน และ L1 ต้องดับ', en: 'S1 off → K1 de-energized and L1 off' },
+        { set: { S1: 1 }, expect: { K1: true, L1: true },
+          th: 'S1 เปิด (ON) → K1 ทำงาน และ L1 ต้องติด', en: 'S1 on → K1 energized and L1 lit' },
+        { set: {}, expect: { K1: false, L1: false },
+          th: 'ปิด S1 อีกครั้ง → ทุกอย่างต้องกลับไปดับ', en: 'S1 off again → everything back off' }
+      ] },
+    { id: 'mSwap',
+      th: '2. สลับไฟเขียว↔แดง ด้วย NC/NO',
+      en: '2. Swap green↔red with NC/NO',
+      goalTh: 'ยังไม่ทำงาน (K1 ไม่ทำงาน) ให้ไฟเขียว L2 ติด • พอ S1 สั่ง K1 ทำงาน ไฟต้องย้ายไปที่แดง L1 และเขียวดับ',
+      goalEn: 'While K1 is off the green lamp L2 is lit • when S1 energizes K1 the light must move to red L1 and green goes out',
+      parts: [{ t: 'relay', id: 'K1' }, { t: 'switch', id: 'S1' },
+              { t: 'lamp', color: 'red', id: 'L1' }, { t: 'lamp', color: 'green', id: 'L2' }],
+      steps: [
+        { set: {}, expect: { L1: false, L2: true },
+          th: 'S1 ปิด → เขียว L2 ติด, แดง L1 ดับ', en: 'S1 off → green L2 lit, red L1 off' },
+        { set: { S1: 1 }, expect: { K1: true, L1: true, L2: false },
+          th: 'S1 เปิด → K1 ทำงาน, แดง L1 ติด, เขียว L2 ดับ', en: 'S1 on → K1 energized, red L1 lit, green L2 off' },
+        { set: {}, expect: { L1: false, L2: true },
+          th: 'S1 ปิด → กลับมาเขียวติดเหมือนเดิม', en: 'S1 off → back to green' }
+      ] },
+    { id: 'mLatch',
+      th: '3. วงจรล็อกตัวเอง START / STOP',
+      en: '3. Self-holding START / STOP',
+      goalTh: 'กดปุ่มเขียว B1 (START) แล้วปล่อย ไฟ L1 ต้องติดค้าง • กดปุ่มแดง B2 (STOP) แล้วต้องดับและไม่ติดกลับเอง',
+      goalEn: 'Tap green B1 (START) and release — lamp L1 must stay on • press red B2 (STOP) and it must drop out and stay off',
+      parts: [{ t: 'relay', id: 'K1' }, { t: 'button', tt: 'no', id: 'B1' }, { t: 'button', tt: 'nc', id: 'B2' },
+              { t: 'lamp', color: 'red', id: 'L1' }],
+      steps: [
+        { set: {}, expect: { K1: false, L1: false },
+          th: 'ยังไม่กดอะไร → ทุกอย่างดับ', en: 'Nothing pressed → all off' },
+        { set: { B1: 1 }, expect: { K1: true, L1: true },
+          th: 'กด START (B1) ค้างไว้ → K1 ทำงาน, L1 ติด', en: 'Hold START (B1) → K1 energized, L1 lit' },
+        { set: {}, expect: { K1: true, L1: true },
+          th: 'ปล่อย START → ต้องยังติดค้าง (นี่คือหัวใจของวงจรล็อกตัวเอง)', en: 'Release START → must stay on (this is the seal-in)' },
+        { set: { B2: 1 }, expect: { K1: false, L1: false },
+          th: 'กด STOP (B2) → ต้องดับ', en: 'Press STOP (B2) → must drop out' },
+        { set: {}, expect: { K1: false, L1: false },
+          th: 'ปล่อย STOP → ต้องยังดับ (ห้ามติดกลับเอง)', en: 'Release STOP → must stay off (no self-restart)' }
+      ] },
+    { id: 'mAnd',
+      th: '4. ลอจิก AND (ต้องครบทั้งสองสวิตช์)',
+      en: '4. AND logic (needs both switches)',
+      goalTh: 'ไฟ L1 ติดก็ต่อเมื่อ S1 และ S2 เปิดพร้อมกันเท่านั้น โดยให้ K1 เป็นตัวขับไฟผ่านหน้าสัมผัส NO',
+      goalEn: 'Lamp L1 lights only when S1 AND S2 are both on, with K1 driving the lamp through an NO contact',
+      parts: [{ t: 'relay', id: 'K1' }, { t: 'switch', id: 'S1' }, { t: 'switch', id: 'S2' },
+              { t: 'lamp', color: 'red', id: 'L1' }],
+      links: [{ th: 'ไฟ L1 ต้องต่ออยู่กับขา NO ของ K1 (ขา 5–8)', en: 'Lamp L1 must land on a K1 NO pin (5–8)',
+                from: 'L1', to: 'K1', pins: ['5', '6', '7', '8'] }],
+      steps: [
+        { set: {}, expect: { L1: false }, th: 'S1=ปิด S2=ปิด → ดับ', en: 'S1 off, S2 off → off' },
+        { set: { S1: 1 }, expect: { L1: false }, th: 'S1=เปิด S2=ปิด → ต้องยังดับ', en: 'S1 on, S2 off → still off' },
+        { set: { S2: 1 }, expect: { L1: false }, th: 'S1=ปิด S2=เปิด → ต้องยังดับ', en: 'S1 off, S2 on → still off' },
+        { set: { S1: 1, S2: 1 }, expect: { K1: true, L1: true }, th: 'เปิดทั้งคู่ → ติด', en: 'Both on → lit' }
+      ] },
+    { id: 'mOr',
+      th: '5. ลอจิก OR (ตัวใดตัวหนึ่งก็พอ)',
+      en: '5. OR logic (either switch)',
+      goalTh: 'ไฟ L1 ติดเมื่อ S1 หรือ S2 เปิด (ตัวใดตัวหนึ่งหรือทั้งคู่) โดยขับผ่านหน้าสัมผัส NO ของ K1',
+      goalEn: 'Lamp L1 lights when S1 or S2 is on (either or both), driven through a K1 NO contact',
+      parts: [{ t: 'relay', id: 'K1' }, { t: 'switch', id: 'S1' }, { t: 'switch', id: 'S2' },
+              { t: 'lamp', color: 'red', id: 'L1' }],
+      links: [{ th: 'ไฟ L1 ต้องต่ออยู่กับขา NO ของ K1 (ขา 5–8)', en: 'Lamp L1 must land on a K1 NO pin (5–8)',
+                from: 'L1', to: 'K1', pins: ['5', '6', '7', '8'] }],
+      steps: [
+        { set: {}, expect: { L1: false }, th: 'ปิดทั้งคู่ → ดับ', en: 'Both off → off' },
+        { set: { S1: 1 }, expect: { L1: true }, th: 'เปิดเฉพาะ S1 → ติด', en: 'Only S1 on → lit' },
+        { set: { S2: 1 }, expect: { L1: true }, th: 'เปิดเฉพาะ S2 → ติด', en: 'Only S2 on → lit' },
+        { set: { S1: 1, S2: 1 }, expect: { L1: true }, th: 'เปิดทั้งคู่ → ติด', en: 'Both on → lit' },
+        { set: {}, expect: { L1: false }, th: 'ปิดทั้งคู่ → ดับ', en: 'Both off → off' }
+      ] },
+    { id: 'mInter',
+      th: '6. อินเตอร์ล็อก: ห้ามทำงานพร้อมกัน',
+      en: '6. Interlock: never both at once',
+      goalTh: 'K1 กับ K2 ต้องไม่ทำงานพร้อมกัน — ใครมาก่อนได้ก่อน และล็อกอีกตัวไว้ (ใช้หน้าสัมผัส NC ไขว้กัน) โดย L1 ตาม K1 และ L2 ตาม K2',
+      goalEn: 'K1 and K2 must never be on together — first come, first served, each locking the other out via cross-wired NC contacts, with L1 following K1 and L2 following K2',
+      parts: [{ t: 'relay', id: 'K1' }, { t: 'relay', id: 'K2' }, { t: 'switch', id: 'S1' }, { t: 'switch', id: 'S2' },
+              { t: 'lamp', color: 'red', id: 'L1' }, { t: 'lamp', color: 'green', id: 'L2' }],
+      steps: [
+        { set: {}, expect: { K1: false, K2: false, L1: false, L2: false },
+          th: 'ปิดทั้งคู่ → ดับหมด', en: 'Both off → all off' },
+        { set: { S1: 1 }, expect: { K1: true, K2: false, L1: true, L2: false },
+          th: 'เปิด S1 ก่อน → K1 ทำงาน (L1 ติด), K2 ต้องไม่ทำงาน', en: 'S1 first → K1 on (L1 lit), K2 must stay off' },
+        { set: { S1: 1, S2: 1 }, expect: { K1: true, K2: false, L2: false },
+          th: 'เปิด S2 เพิ่มทั้งที่ K1 ทำงานอยู่ → K2 ต้องถูกล็อกไว้ (L2 ดับ)', en: 'Add S2 while K1 is on → K2 must stay locked out (L2 off)' },
+        { set: { S2: 1 }, expect: { K1: false, K2: true, L1: false, L2: true },
+          th: 'ปิด S1 เหลือ S2 → คราวนี้ K2 ทำงานได้ (L2 ติด), K1 ดับ', en: 'Drop S1, keep S2 → now K2 may work (L2 lit), K1 off' },
+        { set: {}, expect: { K1: false, K2: false },
+          th: 'ปิดทั้งคู่ → ดับหมด', en: 'Both off → all off' }
+      ] }
+  ];
+
+  function missionById(id){ for (var i = 0; i < MISSIONS.length; i++) if (MISSIONS[i].id === id) return MISSIONS[i]; return null; }
+  function compById(id){ for (var i = 0; i < comps.length; i++) if (comps[i].id === id) return comps[i]; return null; }
+
+  /* union-find เฉพาะสายจัมเปอร์ — ใช้ตรวจว่าปลายสองจุดเป็นโหนดเดียวกันไหม */
+  function wireNodes(){
+    var par = {};
+    function find(k){
+      if (par[k] === undefined) par[k] = k;
+      while (par[k] !== k){ par[k] = par[par[k]]; k = par[k]; }
+      return k;
+    }
+    wires.forEach(function(w){ var a = find(keyOf(w.a)), b = find(keyOf(w.b)); if (a !== b) par[a] = b; });
+    return { same: function(a, b){ return find(a) === find(b); } };
+  }
+
+  /* อุปกรณ์ตัวนี้ "ทำงาน" อยู่ไหม (ไฟติด / บัซเซอร์ดัง / รีเลย์ดึงเข้า) */
+  function compActive(id, res){
+    var c = compById(id), r = res.comps[id];
+    if (!c || !r) return false;
+    if (c.t === 'lamp') return r.bright > 0.15;
+    if (c.t === 'buzzer') return !!r.on;
+    if (c.t === 'relay') return !!r.en;
+    return false;
+  }
+  function stateWord(id, on, en){
+    var c = compById(id);
+    if (c && c.t === 'lamp') return en ? (on ? 'lit' : 'off') : (on ? 'ติด' : 'ดับ');
+    if (c && c.t === 'buzzer') return en ? (on ? 'sounding' : 'silent') : (on ? 'ดัง' : 'เงียบ');
+    return en ? (on ? 'energized' : 'off') : (on ? 'ทำงาน' : 'ไม่ทำงาน');
+  }
+
+  /* ตรวจภารกิจ: ไล่กดสวิตช์/ปุ่มตามสคริปต์แล้ว solve ทีละขั้น จากนั้นคืนสถานะเดิมให้ผู้เรียน */
+  function gradeMission(m){
+    var out = { ok: false, blocked: null, blockedEn: null, lines: [] };
+    var miss = m.parts.filter(function(p){
+      var c = compById(p.id);
+      return !c || c.t !== p.t || (p.color && c.color !== p.color) || (p.tt && c.tt !== p.tt);
+    });
+    if (miss.length){
+      out.blocked = 'ยังไม่มีอุปกรณ์ครบ (ขาด ' + miss.map(function(p){ return p.id; }).join(', ') + ') — กดปุ่ม "เตรียมอุปกรณ์" แล้วเดินสายเอง';
+      out.blockedEn = 'Parts are missing (' + miss.map(function(p){ return p.id; }).join(', ') + ') — press "Set up parts", then do the wiring';
+      return out;
+    }
+    if (!wires.length){
+      out.blocked = 'ยังไม่ได้เดินสายเลย — กด "เดินสาย" แล้วคลิกจุดต่อทีละคู่';
+      out.blockedEn = 'Nothing is wired yet — press "Wire", then click terminals in pairs';
+      return out;
+    }
+    // เงื่อนไขเชิงโครงสร้าง (เช่น ไฟต้องผ่านหน้าสัมผัส ไม่ใช่ต่อสวิตช์ตรงๆ)
+    var nf = wireNodes(), i, j;
+    for (i = 0; i < (m.links || []).length; i++){
+      var lk = m.links[i], hit = false;
+      ['a', 'b'].forEach(function(p){
+        lk.pins.forEach(function(pin){ if (nf.same(lk.from + ':' + p, lk.to + ':' + pin)) hit = true; });
+      });
+      if (!hit){ out.blocked = lk.th; out.blockedEn = lk.en; return out; }
+    }
+
+    var snap = comps.map(function(c){ return { c: c, on: !!c.on, pressed: !!c.pressed, en: !!c._en }; });
+    comps.forEach(function(c){ c.on = false; c.pressed = false; if (c.t === 'relay') c._en = false; });
+    function sim(){
+      return solveRelayLab([SUPC].concat(comps), wires.map(function(w){ return { a: keyOf(w.a), b: keyOf(w.b) }; }));
+    }
+    sim();  // ตั้งต้นให้นิ่งก่อนเริ่มไล่ขั้น
+    var allOk = true, shorted = false;
+    m.steps.forEach(function(st){
+      comps.forEach(function(c){
+        if (c.t === 'switch') c.on = !!(st.set && st.set[c.id]);
+        else if (c.t === 'button') c.pressed = !!(st.set && st.set[c.id]);
+      });
+      var res = sim();
+      if (res.shorted) shorted = true;
+      var bad = [];
+      for (var id in st.expect){
+        var got = compActive(id, res);
+        if (got !== !!st.expect[id]) bad.push({ id: id, got: got });
+      }
+      if (bad.length) allOk = false;
+      out.lines.push({
+        ok: !bad.length, th: st.th, en: st.en,
+        gotTh: bad.map(function(b){ return b.id + ' ' + stateWord(b.id, b.got, false); }).join(', '),
+        gotEn: bad.map(function(b){ return b.id + ' ' + stateWord(b.id, b.got, true); }).join(', ')
+      });
+    });
+    snap.forEach(function(s){ s.c.on = s.on; s.c.pressed = s.pressed; if (s.c.t === 'relay') s.c._en = s.en; });
+    requestSolve();
+    out.ok = allOk && !shorted;
+    out.shorted = shorted;
+    return out;
+  }
+
+  /* ---- UI ของภารกิจ ---- */
+  var misSel = document.getElementById('rly-mission-sel');
+  var misBox = document.getElementById('rly-mission');
+  var curMission = null;
+  function biSpan(parent, th, en, cls){
+    var a = document.createElement('span'); a.className = 'th-only' + (cls ? ' ' + cls : ''); a.textContent = th;
+    var b = document.createElement('span'); b.className = 'en-only' + (cls ? ' ' + cls : ''); b.textContent = en;
+    parent.appendChild(a); parent.appendChild(b);
+    return parent;
+  }
+  function partWord(p, en){
+    if (p.t === 'relay') return en ? 'relay' : 'รีเลย์';
+    if (p.t === 'switch') return en ? 'switch' : 'สวิตช์';
+    if (p.t === 'button') return (en ? 'button ' : 'ปุ่มกด ') + (p.tt === 'nc' ? 'NC' : 'NO');
+    if (p.t === 'lamp'){
+      var cth = { red: 'แดง', green: 'เขียว', yellow: 'เหลือง' }[p.color] || p.color;
+      return en ? (p.color + ' lamp') : ('ไฟ' + cth);
+    }
+    return en ? 'buzzer' : 'บัซเซอร์';
+  }
+  function renderMission(res){
+    if (!misBox) return;
+    misBox.innerHTML = '';
+    if (!curMission){ misBox.hidden = true; return; }
+    misBox.hidden = false;
+    var m = curMission;
+    var goal = document.createElement('div');
+    goal.className = 'rly-mis-goal';
+    biSpan(goal, '🎯 ' + m.goalTh, '🎯 ' + m.goalEn);
+    misBox.appendChild(goal);
+    var parts = document.createElement('div');
+    parts.className = 'rly-mis-parts';
+    biSpan(parts,
+      'อุปกรณ์ที่ใช้: ' + m.parts.map(function(p){ return p.id + ' (' + partWord(p, false) + ')'; }).join(' • '),
+      'Parts: ' + m.parts.map(function(p){ return p.id + ' (' + partWord(p, true) + ')'; }).join(' • '));
+    misBox.appendChild(parts);
+    if (!res) return;
+    if (res.blocked){
+      var warn = document.createElement('div');
+      warn.className = 'rly-mis-line bad';
+      biSpan(warn, '✗ ' + res.blocked, '✗ ' + res.blockedEn);
+      misBox.appendChild(warn);
+      return;
+    }
+    res.lines.forEach(function(l){
+      var d = document.createElement('div');
+      d.className = 'rly-mis-line ' + (l.ok ? 'good' : 'bad');
+      biSpan(d, (l.ok ? '✓ ' : '✗ ') + l.th + (l.ok ? '' : ' — แต่ได้: ' + l.gotTh),
+                (l.ok ? '✓ ' : '✗ ') + l.en + (l.ok ? '' : ' — got: ' + l.gotEn));
+      misBox.appendChild(d);
+    });
+    var sum = document.createElement('div');
+    sum.className = 'rly-mis-verdict ' + (res.ok ? 'good' : 'bad');
+    if (res.ok) biSpan(sum, '🎉 ผ่านทุกขั้น! วงจรทำงานถูกต้องตามโจทย์', '🎉 All steps passed! The circuit behaves exactly as asked');
+    else if (res.shorted) biSpan(sum, '⚠ ยังไม่ผ่าน — และมีจุดลัดวงจรระหว่างทดสอบ ลองไล่สายที่ต่อคร่อม +24V กับ 0V',
+                                     '⚠ Not passed — and a short circuit appeared during the test; look for a wire bridging +24V and 0V');
+    else biSpan(sum, '⚠ ยังไม่ผ่าน — ดูขั้นที่ ✗ แล้วแก้สายอีกที', '⚠ Not passed yet — check the ✗ steps and rework the wiring');
+    misBox.appendChild(sum);
+  }
+  function prepareMission(m){
+    resetBoard();
+    curExample = null; selected = null;
+    m.parts.forEach(function(p){
+      if (p.t === 'relay') mkRelay(freeSlot(relaySlots));
+      else if (p.t === 'switch') mkSwitch(freeSlot(botSlots));
+      else if (p.t === 'button') mkButton(freeSlot(botSlots), p.tt);
+      else if (p.t === 'lamp') mkLamp(freeSlot(botSlots), p.color);
+      else if (p.t === 'buzzer') mkBuzz(freeSlot(botSlots));
+    });
+    setMode('normal');
+    renderAll();
+    hint('วางอุปกรณ์ให้แล้ว — เดินสายเองตามโจทย์ แล้วกด "ตรวจคำตอบ"',
+         'Parts are on the panel — wire them up to meet the goal, then press "Check"');
+  }
+
   function clearAll(){
     resetBoard();
     curExample = null; selected = null;
@@ -1339,14 +1613,37 @@ function solveRelayLab(comps, wireKeys){
     o.textContent = (i + 1) + '. ' + ex.th;
     exSel.appendChild(o);
   });
-  function syncExOptions(){
+  MISSIONS.forEach(function(m){
+    var o = document.createElement('option');
+    o.value = m.id;
+    o.setAttribute('data-th', m.th);
+    o.setAttribute('data-en', m.en);
+    o.textContent = m.th;
+    misSel.appendChild(o);
+  });
+  function syncBiOptions(sel){
     var en = document.documentElement.lang === 'en';
-    Array.prototype.forEach.call(exSel.options, function(o){
+    Array.prototype.forEach.call(sel.options, function(o){
       if (o.getAttribute('data-th')) o.textContent = en ? o.getAttribute('data-en') : o.getAttribute('data-th');
     });
   }
+  function syncExOptions(){ syncBiOptions(exSel); syncBiOptions(misSel); }
   syncExOptions();
   exSel.addEventListener('change', function(){ loadExampleById(exSel.value); });
+  misSel.addEventListener('change', function(){
+    curMission = missionById(misSel.value);
+    document.getElementById('rly-mission-prep').disabled = !curMission;
+    document.getElementById('rly-mission-check').disabled = !curMission;
+    renderMission(null);
+    if (curMission) hint('อ่านโจทย์แล้วกด "เตรียมอุปกรณ์" เพื่อวางอุปกรณ์ที่ต้องใช้ (ล้างแผงปัจจุบัน) จากนั้นเดินสายเอง',
+                         'Read the goal, then press "Set up parts" to place what you need (this clears the panel) and wire it yourself');
+  });
+  document.getElementById('rly-mission-prep').addEventListener('click', function(){
+    if (curMission){ prepareMission(curMission); renderMission(null); }
+  });
+  document.getElementById('rly-mission-check').addEventListener('click', function(){
+    if (curMission) renderMission(gradeMission(curMission));
+  });
   // nav.js ยิง langchange ที่ document (ไม่ bubble) — ต้องดักที่ document ไม่ใช่ window
   document.addEventListener('langchange', function(){ syncExOptions(); if (view === 'schematic') drawSchematic(); });
   svg.addEventListener('click', function(){ clearSelection(); });   // คลิกที่ว่าง = ยกเลิกการเลือก

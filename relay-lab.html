@@ -48,6 +48,21 @@
   background: var(--bg); border: 1px dashed var(--border); color: var(--text); min-height: 2.4em;
 }
 .rly-hint-warn { color: #dc2626; border-color: #dc2626; font-weight: 700; }
+/* แผงภารกิจ + ผลตรวจ */
+.rly-mission { margin: 0 0 0.75rem; padding: 0.7rem 0.9rem; border: 1.5px solid var(--border); border-left: 5px solid var(--primary); border-radius: 10px; background: var(--bg); }
+.rly-mission[hidden] { display: none; }
+.rly-mis-goal { font-weight: 700; font-size: 0.95rem; line-height: 1.55; }
+.rly-mis-parts { margin-top: 0.3rem; font-size: 0.86rem; color: var(--text-light, #64748b); }
+.rly-mis-line { margin-top: 0.35rem; font-size: 0.9rem; line-height: 1.5; padding-left: 0.2rem; }
+.rly-mis-line.good { color: #15803d; }
+.rly-mis-line.bad { color: #dc2626; }
+.rly-mis-verdict { margin-top: 0.6rem; padding: 0.45rem 0.7rem; border-radius: 8px; font-weight: 700; font-size: 0.92rem; }
+.rly-mis-verdict.good { background: rgba(34,197,94,0.14); color: #15803d; }
+.rly-mis-verdict.bad { background: rgba(220,38,38,0.12); color: #dc2626; }
+[data-theme="dark"] .rly-mis-line.good, [data-theme="dark"] .rly-mis-verdict.good { color: #4ade80; }
+[data-theme="dark"] .rly-mis-line.bad, [data-theme="dark"] .rly-mis-verdict.bad { color: #f87171; }
+.rly-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.rly-btn.active:disabled { background: var(--card); border-color: var(--border); color: var(--text); }
 .rly-legend { margin-top: 0.5rem; font-size: 0.82rem; color: var(--text-light, #64748b); }
 
 /* SVG element styles */
@@ -298,6 +313,17 @@
           <button class="rly-btn" id="rly-share-btn" type="button">🔗 <span class="th-only">แชร์ลิงก์</span><span class="en-only">Share</span></button>
         </span>
       </div>
+      <div class="rly-toolbar rly-toolbar-2">
+        <span class="rly-toolgroup">
+          <span class="rly-toolgroup-title">🎯 <span class="th-only">ภารกิจ</span><span class="en-only">Mission</span></span>
+          <select class="rly-sel rly-sel-wide" id="rly-mission-sel" aria-label="Mission">
+            <option value="">— <span class="th-only">เลือกภารกิจ</span> pick a mission —</option>
+          </select>
+          <button class="rly-btn" id="rly-mission-prep" type="button" disabled>🧰 <span class="th-only">เตรียมอุปกรณ์</span><span class="en-only">Set up parts</span></button>
+          <button class="rly-btn active" id="rly-mission-check" type="button" disabled>✅ <span class="th-only">ตรวจคำตอบ</span><span class="en-only">Check</span></button>
+        </span>
+      </div>
+      <div class="rly-mission" id="rly-mission" hidden></div>
       <div class="rly-svgbox" id="rly-panel-box">
         <svg id="rly-svg" viewBox="0 0 1080 704" role="img" aria-label="Relay control panel"></svg>
       </div>
@@ -334,7 +360,8 @@
     <h2 class="section-title en-only">Try This</h2>
     <div class="card">
       <ol class="th-only">
-        <li>เลือกจากเมนู <strong>💡 ตัวอย่าง</strong> — มี 6 วงจร: พื้นฐาน, วงจรล็อกตัวเอง START/STOP, อินเตอร์ล็อก, ลอจิก AND/OR, สลับไฟ NC/NO, และสัญญาณเตือน+ปุ่มรับทราบ</li>
+        <li><strong>🎯 ภารกิจ — ต่อเองแล้วให้ระบบตรวจให้</strong> มี 6 โจทย์ไล่ระดับ (คุมไฟด้วย NO → สลับ NC/NO → ล็อกตัวเอง → AND → OR → อินเตอร์ล็อก) กด <strong>เตรียมอุปกรณ์</strong> เพื่อวางอุปกรณ์ที่ต้องใช้ เดินสายเอง แล้วกด <strong>ตรวจคำตอบ</strong> — ระบบจะบิด/กดสวิตช์แทนคุณทีละขั้นแล้วบอกว่าขั้นไหนผ่าน/ไม่ผ่าน และได้ผลอะไรแทน</li>
+        <li>เลือกจากเมนู <strong>💡 ตัวอย่าง</strong> — มี 6 วงจร: พื้นฐาน, วงจรล็อกตัวเอง START/STOP, อินเตอร์ล็อก, ลอจิก AND/OR, สลับไฟ NC/NO, และสัญญาณเตือน+ปุ่มรับทราบ (ติดตรงไหนให้เปิดตัวอย่างดูเป็นแนวทางได้)</li>
         <li>ลองตัวอย่าง <strong>"วงจรล็อกตัวเอง"</strong> — กดปุ่มเขียว START แป๊บเดียวแล้วปล่อย ไฟยังติดค้าง (รีเลย์ล็อกตัวเองผ่านหน้าสัมผัส NO) จนกดปุ่มแดง STOP</li>
         <li>คลิกที่จุด <strong>TB-1</strong> บนแถบจุดพักไฟด้านล่าง — สายทุกเส้นที่ต่ออยู่จุดเดียวกันจะกระพริบพร้อมกัน เพราะทั้งหมดเป็น "จุดเดียวกัน" ทางไฟฟ้า</li>
         <li>ลองต่อวงจรเองโดย<strong>พักสายที่ต้องแตกหลายทางไว้ที่เทอร์มินอล</strong> แทนการยัดสายซ้อนกันที่ขาอุปกรณ์ — จะไล่วงจรง่ายขึ้นมาก</li>
@@ -342,7 +369,8 @@
         <li>คลิกตัวรีเลย์/ไฟ (โหมดปกติ) เพื่ออ่านค่าแรงดัน/กระแส และลองต่อวงจรเองด้วยปุ่มเพิ่มอุปกรณ์ + เดินสาย</li>
       </ol>
       <ol class="en-only">
-        <li>Pick from the <strong>💡 Example</strong> menu — 6 circuits: basic, self-holding START/STOP, interlock, AND/OR logic, NC/NO swap, and alarm + acknowledge</li>
+        <li><strong>🎯 Missions — build it yourself and get it graded.</strong> Six graded tasks (NO contact → NC/NO swap → self-holding → AND → OR → interlock). Press <strong>Set up parts</strong> to place what you need, wire it yourself, then press <strong>Check</strong> — the lab flips the switches for you step by step and reports which steps pass, which fail, and what happened instead</li>
+        <li>Pick from the <strong>💡 Example</strong> menu — 6 circuits: basic, self-holding START/STOP, interlock, AND/OR logic, NC/NO swap, and alarm + acknowledge (open one as a reference if you get stuck)</li>
         <li>Try <strong>"self-holding"</strong> — tap the green START button briefly and release; the lamp stays on (the relay seals itself in via its NO contact) until you press red STOP</li>
         <li>Click terminal <strong>TB-1</strong> on the block along the bottom — every wire landing on it blinks at once, because they are all electrically one point</li>
         <li>Build your own circuit and <strong>park any branching wire on a terminal</strong> instead of stacking wires on a device pin — tracing gets far easier</li>
