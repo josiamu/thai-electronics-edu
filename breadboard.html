@@ -221,6 +221,7 @@
           <button class="bb-dd-item" data-tool="cap" role="menuitem"><span class="ti">‖</span><span class="th-only">ตัวเก็บประจุ</span><span class="en-only">Capacitor</span></button>
           <button class="bb-dd-item" data-tool="ind" role="menuitem"><span class="ti">◠◠</span><span class="th-only">ตัวเหนี่ยวนำ</span><span class="en-only">Inductor</span></button>
           <button class="bb-dd-item" data-tool="transistor" role="menuitem"><span class="ti">Q</span><span class="th-only">ทรานซิสเตอร์</span><span class="en-only">Transistor</span></button>
+          <button class="bb-dd-item" data-tool="scr" role="menuitem"><span class="ti">🔺</span><span class="th-only">SCR / ไทรแอก</span><span class="en-only">SCR / TRIAC</span></button>
           <button class="bb-dd-item" data-tool="pot" role="menuitem"><span class="ti">⊿</span><span class="th-only">โพเทนชิโอมิเตอร์</span><span class="en-only">Potentiometer</span></button>
           <button class="bb-dd-item" data-tool="opto" role="menuitem"><span class="ti">⧉</span><span class="th-only">ออปโตคัปเปลอร์</span><span class="en-only">Optocoupler</span></button>
           <button class="bb-dd-item" data-tool="relay" role="menuitem"><span class="ti">🧲</span><span class="th-only">รีเลย์</span><span class="en-only">Relay</span></button>
@@ -409,6 +410,28 @@
           </select>
         </span>
         <span id="bb-trans-hint" style="color:var(--text-light);font-weight:400;"></span>
+      </div>
+      <div class="bb-valrow" id="bb-val-scr">
+        <label><span class="th-only">ชนิด</span><span class="en-only">Type</span></label>
+        <select id="bb-scr-type">
+          <option value="scr">SCR · BT151</option>
+          <option value="triac">TRIAC · BT136</option>
+        </select>
+        <label title="กระแสเกตที่ใช้จุดชนวน / gate trigger current">I<sub>GT</sub></label>
+        <select id="bb-scr-igt">
+          <option value="0.0002">0.2 mA</option>
+          <option value="0.001" selected>1 mA</option>
+          <option value="0.005">5 mA</option>
+          <option value="0.015">15 mA</option>
+        </select>
+        <label title="กระแสต่ำสุดที่ยังนำกระแสอยู่ได้ / holding current">I<sub>H</sub></label>
+        <select id="bb-scr-ih">
+          <option value="0.001">1 mA</option>
+          <option value="0.005" selected>5 mA</option>
+          <option value="0.01">10 mA</option>
+          <option value="0.02">20 mA</option>
+        </select>
+        <span id="bb-scr-hint" style="color:var(--text-light);font-weight:400;"></span>
       </div>
       <div class="bb-valrow" id="bb-val-pot">
         <label><span class="th-only">ค่ารวม</span><span class="en-only">Total R</span></label>

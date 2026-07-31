@@ -167,6 +167,30 @@ var RELAY_RCOIL = 200,     // coil resistance (Ω)
     RELAY_VDROP = 1.2,     // drop-out coil voltage — release below this (VPULL>VDROP ⇒ hysteresis)
     RELAY_RON   = 0.05,    // closed-contact resistance (Ω) — effectively a short
     RELAY_GOFF  = 1e-9;    // open-contact leakage conductance (S)
+// thyristors (SCR / TRIAC) — 3-terminal latching switches. a = anode/MT2, b = cathode/MT1, g = gate.
+// Model: the gate-cathode junction is a plain diode companion (so gate current is real and the
+// meter can read it), and the main path is a latch (_lat) that is NOT a function of the present
+// voltages alone: gate current ≥ I_GT fires it, and it only lets go when the main current falls
+// below the holding current I_H — a zero crossing, an opened switch, or a removed load.
+// A TRIAC is the same device made bidirectional (it latches in whichever direction it was fired).
+var SCR_TYPES = {
+  scr:   { th:'SCR', en:'SCR', ref:'BT151', border:'#b45309', pins:['A', 'K', 'G'] },
+  triac: { th:'ไทรแอก', en:'TRIAC', ref:'BT136', border:'#7c3aed', pins:['MT2', 'MT1', 'G'] }
+};
+var SCR_VT   = 1.0,        // on-state drop A→K (three junctions ⇒ more than a diode)
+    SCR_RON  = 6,          // on-state series resistance (companion)
+    SCR_GOFF = 1e-11,      // blocking leakage
+    SCR_VGT  = 0.7,        // gate-cathode junction drop
+    SCR_RGT  = 25,         // gate-cathode on-resistance (companion)
+    IGT_OPTIONS = [0.2e-3, 1e-3, 5e-3, 15e-3],   // gate trigger current (A)
+    IGT_DEFAULT = 1e-3,
+    IH_OPTIONS  = [1e-3, 5e-3, 10e-3, 20e-3],    // holding current (A)
+    IH_DEFAULT  = 5e-3;
+function scrStyle(c){ return SCR_TYPES[c.st] || SCR_TYPES.scr; }
+function isTriac(c){ return c.st === 'triac'; }
+function scrIgt(c){ return c.igt != null ? c.igt : IGT_DEFAULT; }
+function scrIh(c){ return c.ih != null ? c.ih : IH_DEFAULT; }
+function fmtA(i){ return i >= 1e-3 ? (i * 1e3) + ' mA' : (i * 1e6) + ' µA'; }
 function transKind(c){ return (TRANSISTOR_TYPES[c.tt] || TRANSISTOR_TYPES.npn).kind; }
 function isAval(c){ return c.type === 'transistor' && c.av && transKind(c) === 'bjt'; }   // avalanche/relaxation mode
 function transSign(c){ return (c.tt === 'pnp' || c.tt === 'pmos') ? -1 : 1; }
@@ -209,6 +233,8 @@ var transType = 'npn';                        // npn | pnp | nmos | pmos — nex
 var transBeta = BETA_DEFAULT, transVth = VTH_DEFAULT;
 var potVal = 10000;                           // total resistance of the next potentiometer placed
 var optoCtr = CTR_DEFAULT;                    // CTR (%) of the next optocoupler placed
+var scrType = 'scr';                          // scr | triac — next thyristor placed
+var scrIgtSel = IGT_DEFAULT, scrIhSel = IH_DEFAULT;
 var env = { temp:25, light:50, vrPos:50 };   // shared sensor environment
 
 // transient simulation
@@ -359,6 +385,7 @@ var TYPE_LABEL = {
   ind:     { th:'ตัวเหนี่ยวนำ', en:'Inductor' },
   ac:      { th:'แหล่งจ่าย AC', en:'AC source' },
   transistor:{ th:'ทรานซิสเตอร์', en:'Transistor' },
+  scr:       { th:'SCR / ไทรแอก', en:'SCR / TRIAC' },
   pot:       { th:'โพเทนชิโอมิเตอร์', en:'Potentiometer' },
   opto:      { th:'ออปโตคัปเปลอร์', en:'Optocoupler' },
   relay:     { th:'รีเลย์', en:'Relay' }
@@ -370,8 +397,8 @@ var TYPE_LABEL = {
 // contact family: a closed contact is a 0 Ω jumper. 'switch' latches (tap = toggle);
 // 'button' is momentary NO — closed only while the pointer is held down on it (press = on, release = off)
 function isSwitchy(c){ return c.type === 'switch' || c.type === 'button'; }
-function isThreePin(c){ return c.type === 'transistor' || c.type === 'pot'; }
-function isThreePinTool(t){ return t === 'transistor' || t === 'pot'; }
+function isThreePin(c){ return c.type === 'transistor' || c.type === 'pot' || c.type === 'scr'; }
+function isThreePinTool(t){ return t === 'transistor' || t === 'pot' || t === 'scr'; }
 function isFourPin(c){ return c.type === 'opto'; }
 function isFivePin(c){ return c.type === 'relay'; }
 function isFivePinTool(t){ return t === 'relay'; }
@@ -424,6 +451,10 @@ function refreshHint(){
   if (isThreePinTool(tool)){    // 3-pin placement, step-by-step
     var names = tool === 'pot'
       ? (isEN() ? ['End 1', 'Wiper', 'End 2'] : ['ปลาย 1', 'ตัวปัด (wiper)', 'ปลาย 2'])
+      : tool === 'scr'
+        ? (scrType === 'triac'
+            ? (isEN() ? ['MT2', 'MT1', 'Gate'] : ['ขา MT2', 'ขา MT1', 'ขา G (เกต)'])
+            : (isEN() ? ['Anode (A)', 'Cathode (K)', 'Gate (G)'] : ['ขา A (แอโนด)', 'ขา K (แคโทด)', 'ขา G (เกต)']))
       : transKind({ tt: transType }) === 'fet'
         ? ['Gate', 'Drain', 'Source']
         : (isEN() ? ['Base', 'Collector', 'Emitter'] : ['ขา B (เบส)', 'ขา C (คอลเลกเตอร์)', 'ขา E (อิมิตเตอร์)']);
@@ -482,7 +513,9 @@ function onHoleClick(id){
     if (occupied[id]){ flashHint(isEN() ? 'That hole is already used.' : 'รูนี้มีขาอุปกรณ์อยู่แล้ว'); return; }
     if (pendingHole2 == null){ pendingHole2 = id; showHL2(id); refreshHint(); return; }
     // third click → place. transistor: base/gate, collector/drain, emitter/source. pot: end1, wiper, end2.
+    // scr/triac: anode(MT2), cathode(MT1), gate.
     if (tool === 'pot') placePot(pendingHole, pendingHole2, id);
+    else if (tool === 'scr') placeScr(pendingHole, pendingHole2, id);
     else placeTransistor(pendingHole, pendingHole2, id);
     pendingHole = pendingHole2 = null; hideHL(); refreshHint();
     return;
@@ -536,6 +569,17 @@ function placeTransistor(base, coll, emit){
   if (transKind(c) === 'fet') c.vth = transVth; else c.beta = transBeta;
   comps.push(c);
   occupied[coll] = c.id; occupied[emit] = c.id; occupied[base] = c.id;
+  selectedId = c.id;
+  rebuild(); renderEditor();
+}
+
+// 3-pin thyristor: a = anode (MT2), b = cathode (MT1), g = gate. _lat = latch state
+// (0 blocking / +1 conducting a→b / −1 conducting b→a, TRIAC only) and persists across solves.
+function placeScr(anode, cathode, gate){
+  var c = { id:nextId++, type:'scr', st:scrType, a:anode, b:cathode, g:gate,
+            igt:scrIgtSel, ih:scrIhSel, _lat:0 };
+  comps.push(c);
+  occupied[anode] = c.id; occupied[cathode] = c.id; occupied[gate] = c.id;
   selectedId = c.id;
   rebuild(); renderEditor();
 }
@@ -665,6 +709,20 @@ function renderEditor(){
       var rg = { cutoff:{th:'Cut-off (ตัด)',en:'Cut-off'}, active:{th:'Active (ขยาย)',en:'Active'}, sat:{th:'Saturation (อิ่มตัว)',en:'Saturation'}, on:{th:'ON (นำกระแส)',en:'ON'}, triode:{th:'Triode/โอห์มมิก (สวิตช์)',en:'Triode (ohmic)'}, satfet:{th:'Saturation/อิ่มตัว (ขยาย)',en:'Saturation (active)'}, avon:{th:'Avalanche: นำกระแส (แฟลช)',en:'Avalanche: firing'}, avoff:{th:'Avalanche: กำลังประจุ (รอ)',en:'Avalanche: charging'} }[c.results.region];
       ctrl += '<span style="margin-left:.6rem;color:var(--text-light);font-weight:600">' + (rg ? (en ? rg.en : rg.th) : '') + '</span>';
     }
+  } else if (c.type === 'scr'){
+    var lat = c.results && c.results.lat;
+    ctrl = '<label>' + (en ? 'Type' : 'ชนิด') + '</label><select id="bb-ed-st">' +
+      Object.keys(SCR_TYPES).map(function(k){ return '<option value="' + k + '"' + (k === (c.st || 'scr') ? ' selected' : '') + '>' + SCR_TYPES[k][en ? 'en' : 'th'] + '</option>'; }).join('') + '</select>' +
+      '<label style="margin-left:.6rem" title="' + (en ? 'gate current needed to fire it' : 'กระแสเกตที่ใช้จุดชนวน') + '">I<sub>GT</sub></label><select id="bb-ed-igt">' +
+      IGT_OPTIONS.map(function(v){ return '<option value="' + v + '"' + (v === scrIgt(c) ? ' selected' : '') + '>' + fmtA(v) + '</option>'; }).join('') + '</select>' +
+      '<label style="margin-left:.6rem" title="' + (en ? 'below this current it stops conducting' : 'ต่ำกว่ากระแสนี้แล้วจะหยุดนำกระแส') + '">I<sub>H</sub></label><select id="bb-ed-ih">' +
+      IH_OPTIONS.map(function(v){ return '<option value="' + v + '"' + (v === scrIh(c) ? ' selected' : '') + '>' + fmtA(v) + '</option>'; }).join('') + '</select>' +
+      '<span style="margin-left:.6rem;font-weight:700;color:' + (lat ? '#b45309' : '#94a3b8') + '">' +
+        (lat ? (en ? 'LATCHED (conducting' + (lat < 0 ? ' ←' : ' →') + ')' : 'จุดชนวนแล้ว — นำกระแสค้าง' + (lat < 0 ? ' (ทิศย้อน)' : ''))
+             : (en ? 'blocking' : 'กั้นไฟ อยู่รอจุดชนวน')) + '</span>' +
+      (c.results ? '<span style="margin-left:.6rem;color:var(--text-light);font-weight:600">I<sub>G</sub> ' + fmtI(c.results.Ig || 0) + ' · I ' + fmtI(c.results.I || 0) + '</span>' : '') +
+      '<span style="margin-left:.6rem;color:var(--text-light);font-weight:400">' +
+      (en ? '(the gate cannot switch it off — drop the current below I' : '(เกตสั่งให้ดับไม่ได้ — ต้องทำให้กระแสต่ำกว่า I') + '<sub>H</sub>)</span>';
   } else if (c.type === 'opto'){
     ctrl = '<label>CTR</label><select id="bb-ed-ctr">' +
       CTR_OPTIONS.map(function(v){ return '<option value="' + v + '"' + (v === (c.ctr || CTR_DEFAULT) ? ' selected' : '') + '>' + v + '%</option>'; }).join('') + '</select>';
@@ -717,6 +775,9 @@ function renderEditor(){
   on('bb-ed-av', 'change', function(){ c.av = this.checked; if (c.av && c.vbr == null) c.vbr = AV_VBR_DEFAULT; c._av = 0; restartTransient(); renderEditor(); });
   on('bb-ed-vbr', 'change', function(){ c.vbr = +this.value; c._av = 0; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-ctr', 'change', function(){ c.ctr = +this.value; rebuild(); refreshEditorTitle(c); });
+  on('bb-ed-st', 'change', function(){ c.st = this.value; c._lat = 0; rebuild(); renderEditor(); });
+  on('bb-ed-igt', 'change', function(){ c.igt = +this.value; rebuild(); renderEditor(); });
+  on('bb-ed-ih', 'change', function(){ c.ih = +this.value; rebuild(); renderEditor(); });
   on('bb-ed-vth', 'change', function(){ c.vth = +this.value; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-pot', 'change', function(){ c.value = +this.value; rebuild(); renderEditor(); });
   on('bb-ed-wcolor', 'change', function(){ c.color = this.value; rebuild(); refreshEditorTitle(c); });
@@ -919,7 +980,8 @@ function solveCircuit(h, commit){
   var pots        = comps.filter(function(c){ return c.type === 'pot'; });
   var optos       = comps.filter(function(c){ return c.type === 'opto'; });
   var relays      = comps.filter(function(c){ return c.type === 'relay'; });
-  var branches    = comps.filter(function(c){ return c.type !== 'wire' && c.type !== 'battery' && c.type !== 'ac' && !isSwitchy(c) && c.type !== 'transistor' && c.type !== 'pot' && c.type !== 'opto' && c.type !== 'relay'; });
+  var scrs        = comps.filter(function(c){ return c.type === 'scr'; });
+  var branches    = comps.filter(function(c){ return c.type !== 'wire' && c.type !== 'battery' && c.type !== 'ac' && !isSwitchy(c) && c.type !== 'transistor' && c.type !== 'pot' && c.type !== 'opto' && c.type !== 'relay' && c.type !== 'scr'; });
   var wires       = comps.filter(function(c){ return c.type === 'wire'; });
   // a closed switch / held pushbutton behaves like a jumper (0 Ω); an open one is ignored entirely
   var joins       = wires.concat(comps.filter(function(c){ return isSwitchy(c) && c.closed; }));
@@ -965,6 +1027,12 @@ function solveCircuit(h, commit){
   optos.forEach(function(o){ o._don = 0; o._rg = 0; });
   // relay: _en = armature latch (0 released / 1 energized) — persists across steps for hysteresis, like _av
   relays.forEach(function(r){ if (r._en == null) r._en = 0; });
+  // thyristor: _lat = latch (0 blocking / ±1 conducting) — persists across solves, like the relay armature.
+  // _gon = gate-cathode junction state (0 off / ±1 conducting), re-solved each time like a diode.
+  // _latMoved caps the latch at ONE transition per solve: firing and dropping out depend on different
+  // quantities (gate current vs main current), so letting both flip freely inside the loop can ping-pong
+  // until MAXIT — and this solver accepts whatever the last iteration produced.
+  scrs.forEach(function(t){ if (t._lat == null) t._lat = 0; t._gon = 0; t._latMoved = false; });
   var sol = null, iter, MAXIT = 80;
 
   for (iter = 0; iter < MAXIT; iter++){
@@ -1069,6 +1137,20 @@ function solveCircuit(h, commit){
       stampG(iCOM, iNC, r._en === 1 ? RELAY_GOFF : 1 / RELAY_RON);
     });
 
+    // thyristors: gate-cathode junction (g→b) as a diode companion + the main path (a→b), which is
+    // either blocking leakage or a fired clamp (SCR_VT in series with SCR_RON) in the latched direction.
+    scrs.forEach(function(t){
+      var iA = gi(sn(t.a)), iK = gi(sn(t.b)), iG = gi(sn(t.g));
+      var gg = 1 / SCR_RGT;
+      if (t._gon > 0){ stampG(iG, iK, gg); stampI(iG, iK, gg * SCR_VGT); }
+      else if (t._gon < 0){ stampG(iG, iK, gg); stampI(iG, iK, -gg * SCR_VGT); }   // TRIAC: gate fires either polarity
+      else stampG(iG, iK, 1e-9);
+      if (t._lat === 0){ stampG(iA, iK, SCR_GOFF); return; }
+      var gm = 1 / SCR_RON;
+      stampG(iA, iK, gm);
+      stampI(iA, iK, t._lat > 0 ? gm * SCR_VT : -gm * SCR_VT);
+    });
+
     // potentiometers (linear): two resistors R1 (end a→wiper) and R2 (wiper→end b)
     pots.forEach(function(p){
       var pr = potR(p);
@@ -1155,11 +1237,40 @@ function solveCircuit(h, commit){
       else nro = (vce < BJT_VCE_SAT - 1e-3) ? 2 : 1;                                        // collector collapsed → saturated
       if (nro !== o._rg){ o._rg = nro; changed = true; }
     });
+    // thyristor gate-cathode junction — a plain diode, toggled like the ones above
+    scrs.forEach(function(t){
+      var vg = V(sn(t.g)) - V(sn(t.b));                     // gate − cathode
+      var ng = vg > SCR_VGT ? 1 : (isTriac(t) && vg < -SCR_VGT) ? -1 : 0;
+      if (ng !== t._gon){ t._gon = ng; changed = true; }
+    });
     // relay armature: pull in at/above VPULL, release below VDROP (hysteresis latch)
     relays.forEach(function(r){
       var vcoil = Math.abs(V(sn(r.a)) - V(sn(r.b)));
       var ne = r._en === 1 ? (vcoil < RELAY_VDROP ? 0 : 1) : (vcoil >= RELAY_VPULL ? 1 : 0);
       if (ne !== r._en){ r._en = ne; changed = true; }
+    });
+    // Thyristor latch — decided only once everything else has settled for this iteration. Judging it
+    // mid-flight is wrong: a series diode still sitting in its reset state makes the main current read
+    // as zero, and the device would drop out on the way to the answer. Firing and dropping out also
+    // depend on different quantities (gate current vs main current), so allow at most ONE transition
+    // per solve (_latMoved) — otherwise the two rules can ping-pong until MAXIT, and this solver
+    // accepts whatever the last iteration produced.
+    if (!changed) scrs.forEach(function(t){
+      if (t._latMoved) return;
+      var vak = V(sn(t.a)) - V(sn(t.b));
+      if (t._lat === 0){
+        var vg2 = V(sn(t.g)) - V(sn(t.b));
+        var ig = t._gon !== 0 ? (Math.abs(vg2) - SCR_VGT) / SCR_RGT : 0;
+        if (ig < scrIgt(t)) return;                          // not enough gate drive to fire
+        // fire in whichever direction the main terminals are biased (a TRIAC latches either way)
+        if (vak > SCR_VT){ t._lat = 1; t._latMoved = true; changed = true; }
+        else if (isTriac(t) && vak < -SCR_VT){ t._lat = -1; t._latMoved = true; changed = true; }
+        return;
+      }
+      var iMain = (vak - t._lat * SCR_VT) / SCR_RON;         // signed current through the fired clamp
+      if (Math.abs(iMain) < scrIh(t) || iMain * t._lat < 0){  // below the holding current, or reversed
+        t._lat = 0; t._latMoved = true; changed = true;
+      }
     });
     if (!changed) break;
   }
@@ -1262,6 +1373,16 @@ function solveCircuit(h, commit){
                   en:en, Vcoil:vcoil, Icoil:Icoil, Icon:Icon };
   });
 
+  // thyristors — main-terminal voltage/current, gate current and the latch state
+  scrs.forEach(function(t){
+    var vak = Vof(sn(t.a)) - Vof(sn(t.b)), vg = Vof(sn(t.g)) - Vof(sn(t.b));
+    var Ig = t._gon !== 0 ? (Math.abs(vg) - SCR_VGT) / SCR_RGT : 0;
+    var I = t._lat !== 0 ? (vak - t._lat * SCR_VT) / SCR_RON : 0;
+    t.results = { V:vak, I:I, on:t._lat !== 0, region:t._lat !== 0 ? 'on' : 'cutoff',
+                  Ig:Ig, Vak:vak, lat:t._lat };
+    if (Ig > 0.05) warnings.push({ t:'warn', th:'กระแสเกตสูงเกินไป (' + fmtI(Ig) + ') — ต้องมี R จำกัดกระแสที่ขาเกต', en:'Gate current too high (' + fmtI(Ig) + ') — add a series resistor at the gate' });
+  });
+
   // potentiometers — report the divider voltage + the current in each leg
   pots.forEach(function(p){
     var pr = potR(p), va = Vof(sn(p.a)), vw = Vof(sn(p.g)), vb = Vof(sn(p.b));
@@ -1312,6 +1433,7 @@ function rebuild(){
 
 function drawComp(c){
   if (c.type === 'transistor'){ drawTransistor(c); return; }
+  if (c.type === 'scr'){ drawScr(c); return; }
   if (c.type === 'pot'){ drawPot(c); return; }
   if (c.type === 'ac'){ drawAC(c); return; }
   if (c.type === 'opto'){ drawOpto(c); return; }
@@ -1521,6 +1643,55 @@ function drawTransistor(c){
 
   var lbl = (c.av ? 'AV·' : '') + st[isEN() ? 'en' : 'th'] + (c.results && c.results.region ? ' · ' + regionShort(c.results.region) : '');
   var tl = txt(cx, cy - R - 6, lbl, 'bb-lbl', st.border); tl.setAttribute('font-weight', '700');
+  g.appendChild(tl);
+
+  gComps.appendChild(g);
+}
+
+// 3-pin thyristor: body circle at the centroid + colour-coded leads, glowing while latched
+function drawScr(c){
+  var A = holes[c.a], K = holes[c.b], Gp = holes[c.g];   // a = anode/MT2, b = cathode/MT1, g = gate
+  var st = scrStyle(c), on = !!(c.results && c.results.on);
+  var cx = (A.x + K.x + Gp.x) / 3, cy = (A.y + K.y + Gp.y) / 3, R = 15;
+
+  var g = el('g', { class:'bb-comp-hit' });
+  g.addEventListener('pointerdown', function(ev){ startDrag(ev, c); });
+
+  if (c.id === selectedId)
+    g.appendChild(el('circle', { cx:cx, cy:cy, r:R + 7, fill:'rgba(245,158,11,0.10)', stroke:'#f59e0b', 'stroke-width':2, 'stroke-dasharray':'5 3' }));
+  if (on)   // latched → the body glows, so "it is still on" is visible at a glance
+    g.appendChild(el('circle', { cx:cx, cy:cy, r:R + 5, fill:'rgba(245,158,11,0.28)' }));
+
+  var pins = [
+    { h:A,  name:st.pins[0], col:'#ef4444' },   // anode / MT2
+    { h:K,  name:st.pins[1], col:'#3b82f6' },   // cathode / MT1
+    { h:Gp, name:st.pins[2], col:'#f59e0b' }    // gate
+  ];
+  pins.forEach(function(p){
+    var ang = Math.atan2(p.h.y - cy, p.h.x - cx);
+    g.appendChild(el('line', { x1:p.h.x, y1:p.h.y, x2:cx + Math.cos(ang) * R, y2:cy + Math.sin(ang) * R,
+      stroke:on ? p.col : '#94a3b8', 'stroke-width':2.4, 'stroke-linecap':'round' }));
+    g.appendChild(el('circle', { cx:p.h.x, cy:p.h.y, r:2.6, fill:on ? p.col : '#64748b' }));
+    var t = txt(p.h.x + Math.cos(ang) * 13, p.h.y + Math.sin(ang) * 13 + 3, p.name, 'bb-lbl', p.col);
+    t.setAttribute('font-weight', '800'); t.setAttribute('font-size', '9');
+    g.appendChild(t);
+  });
+
+  g.appendChild(el('circle', { cx:cx, cy:cy, r:R, fill:'var(--card)', stroke:st.border, 'stroke-width':2.2 }));
+  // glyph: SCR = one triangle + bar (a gated diode); TRIAC = two triangles back to back
+  if (isTriac(c)){
+    g.appendChild(el('polygon', { points:(cx - 7) + ',' + (cy - 8) + ' ' + (cx + 1) + ',' + (cy - 8) + ' ' + (cx - 3) + ',' + cy, fill:st.border }));
+    g.appendChild(el('polygon', { points:(cx - 1) + ',' + (cy + 8) + ' ' + (cx + 7) + ',' + (cy + 8) + ' ' + (cx + 3) + ',' + cy, fill:st.border }));
+    g.appendChild(el('line', { x1:cx - 9, y1:cy, x2:cx + 9, y2:cy, stroke:st.border, 'stroke-width':1.6 }));
+  } else {
+    g.appendChild(el('polygon', { points:(cx - 7) + ',' + (cy - 7) + ' ' + (cx + 7) + ',' + (cy - 7) + ' ' + cx + ',' + (cy + 3), fill:st.border }));
+    g.appendChild(el('line', { x1:cx - 8, y1:cy + 3, x2:cx + 8, y2:cy + 3, stroke:st.border, 'stroke-width':2.2 }));
+    g.appendChild(el('line', { x1:cx + 8, y1:cy + 3, x2:cx + 8, y2:cy + 8, stroke:st.border, 'stroke-width':1.6 }));   // gate stub
+  }
+
+  var lbl = st[isEN() ? 'en' : 'th'] + ' · ' + (on ? (isEN() ? 'ON' : 'นำกระแส') : (isEN() ? 'blocking' : 'กั้นไฟ'));
+  var tl = txt(cx, cy - R - 6, lbl, 'bb-lbl', on ? '#b45309' : st.border);
+  tl.setAttribute('font-weight', '700');
   g.appendChild(tl);
 
   gComps.appendChild(g);
@@ -1838,6 +2009,15 @@ function rebuildElectrons(){
         elecDots.push({ el:bd, a:c.g, b:c.b, dir:ds, speed:bspeed, f:kb / 2 });
       }
     }
+    // thyristor: the generic a→b dots above are the main current; add the (small) gate current g→b
+    if (c.type === 'scr' && c.results.Ig > 1e-6){
+      var gspeed = Math.max(0.1, Math.min(0.7, c.results.Ig * 60));
+      for (var kg = 0; kg < 2; kg++){
+        var gd2 = el('circle', { class:'bb-elec', r:2.4, filter:'url(#bb-glow)' });
+        gElec.appendChild(gd2);
+        elecDots.push({ el:gd2, a:c.g, b:c.b, dir:1, speed:gspeed, f:kg / 2 });
+      }
+    }
     // opto: also animate the isolated output current along C→E (the generic a→b dots above cover the input LED)
     if (c.type === 'opto' && c.results.Ic > 1e-5){
       var ospeed = Math.max(0.12, Math.min(0.9, c.results.Ic * 18));
@@ -1901,7 +2081,7 @@ function trackedComp(){
 function trackedSignal(c){ return c.type === 'ind' ? (c.results ? c.results.I : 0) : (c.results ? c.results.V : 0); }
 
 function restartTransient(){
-  comps.forEach(function(c){ if (c.type === 'cap') c._vPrev = 0; if (c.type === 'ind') c._iPrev = 0; if (c.av) c._av = 0; });
+  comps.forEach(function(c){ if (c.type === 'cap') c._vPrev = 0; if (c.type === 'ind') c._iPrev = 0; if (c.av) c._av = 0; if (c.type === 'scr') c._lat = 0; if (c.type === 'relay') c._en = 0; });
   simTime = 0; graphHist = []; renderAcc = 0;
   rebuild();
 }
@@ -2031,6 +2211,10 @@ function renderReadout(res){
       } else if (c.type === 'transistor' || c.type === 'opto'){
         var rg = c.results && c.results.region, conduct = rg && rg !== 'cutoff';
         st = '<span class="bb-dot" style="background:' + (conduct ? '#16a34a' : '#94a3b8') + '"></span>' + (regionShort(rg) || '—');
+      } else if (c.type === 'scr'){
+        var lit = c.results && c.results.lat;
+        st = '<span class="bb-dot" style="background:' + (lit ? '#b45309' : '#94a3b8') + '"></span>' +
+             (lit ? (en ? 'LATCHED' : 'นำกระแส') : (en ? 'blocking' : 'กั้นไฟ'));
       }
       rows += '<tr><td class="nm">' + nm + (st ? ' ' + st : '') + '</td>' +
               '<td class="v">' + (c.results ? fmtV(Math.abs(c.results.V)) : '—') + '</td>' +
@@ -2047,7 +2231,9 @@ function renderReadout(res){
     ws.forEach(function(w){ var key = w.th; if (!seen[key]){ seen[key] = 1; dedup.push(w); } });
     warn.innerHTML = dedup.map(function(w){ return '<div class="w">⚠ ' + (en ? w.en : w.th) + '</div>'; }).join('');
   } else if (measurable.length && res && res.ok){
-    var anyOn = comps.some(function(c){ return c.results && c.results.on && c.type !== 'battery'; });
+    // a closed switch/button reports on = "contacts closed", which is not the same as carrying
+    // current — don't let it claim the circuit is conducting when nothing is flowing
+    var anyOn = comps.some(function(c){ return c.results && c.results.on && c.type !== 'battery' && !isSwitchy(c); });
     warn.innerHTML = anyOn
       ? '<div class="ok">✓ ' + (en ? 'Circuit is conducting.' : 'วงจรทำงาน มีกระแสไหล') + '</div>'
       : '<div class="ok" style="background:rgba(100,116,139,.12);color:var(--text-light)">○ ' + (en ? 'No current flowing yet — complete the loop.' : 'ยังไม่มีกระแส — ต่อวงจรให้ครบลูป') + '</div>';
@@ -2079,6 +2265,7 @@ function compName(c, en){
   if (c.type === 'pot') return (en ? 'Pot ' : 'POT ') + fmtR(c.value || potVal);
   if (c.type === 'opto') return (en ? 'Optocoupler (CTR ' : 'ออปโตคัปเปลอร์ (CTR ') + (c.ctr || CTR_DEFAULT) + '%)';
   if (c.type === 'relay') return (en ? 'Relay (SPDT)' : 'รีเลย์ (SPDT)');
+  if (c.type === 'scr') return scrStyle(c)[en ? 'en' : 'th'] + ' (I' + (en ? 'H ' : 'H ') + fmtA(scrIh(c)) + ')';
   if (c.type === 'transistor'){
     var ts = TRANSISTOR_TYPES[c.tt] || TRANSISTOR_TYPES.npn;
     if (isAval(c)) return ts[en ? 'en' : 'th'] + (en ? ' avalanche (V_BR ' : ' avalanche (V_BR ') + (c.vbr || AV_VBR_DEFAULT) + 'V)';
@@ -2225,6 +2412,10 @@ function updateMeter(){
       if (meterRev) return lcd('OL', P('กลับขั้ว', 'reversed'));
       return lcd(OPTO_VF.toFixed(2), 'V');
     }
+    if (c.type === 'scr'){    // the only junction a meter can read is gate-cathode
+      if (meterRev && !isTriac(c)) return lcd('OL', P('กลับขั้ว', 'reversed'));
+      return lcd(SCR_VGT.toFixed(2), P('V (ขา G-K)', 'V (G-K)'));
+    }
     if (c.type === 'wire') return lcd('≈ 0.00', 'V');               // short → ~0 V drop
     if (isSwitchy(c)) return lcd(c.closed ? '≈ 0.00' : 'OL', c.closed ? 'V' : P('เปิด', 'open'));
     return lcd(P('ใช้กับไดโอด/LED', 'Use on a diode/LED'), '', true);
@@ -2245,6 +2436,7 @@ function updateMeter(){
   if (c.type === 'vdr') return lcd(P('ไม่เชิงเส้น', 'non-linear'), '', true);
   if (c.type === 'diode' || c.type === 'led') return lcd(P('รอยต่อ PN', 'PN junction'), '', true);
   if (c.type === 'opto') return lcd(P('เช็คด้วยโหมดไดโอด ▷|', 'use diode test ▷|'), '', true);
+  if (c.type === 'scr') return lcd(c.results && c.results.lat ? '≈ 6' : '∞', 'Ω');
   if (c.type === 'cap') return lcd(P('เก็บประจุ (Xc)', 'capacitive (Xc)'), '', true);
   if (c.type === 'ind') return lcd(P('≈ 0 Ω (ขดลวด)', '≈ 0 Ω (coil)'), '', true);
   return lcd('—', '', true);
@@ -2263,8 +2455,8 @@ function beep(){
 }
 
 // ════════════════════════════ TOOLBAR / CONTROLS ════════════════════════════
-var VALROWS = ['battery','ac','resistor','diode','wire','switch','button','cap','ind','transistor','pot','opto','relay','meter'];
-var COMP_TOOLS = ['battery','ac','resistor','diode','wire','switch','button','cap','ind','transistor','pot','opto','relay'];   // live inside the "Add component" dropdown
+var VALROWS = ['battery','ac','resistor','diode','wire','switch','button','cap','ind','transistor','scr','pot','opto','relay','meter'];
+var COMP_TOOLS = ['battery','ac','resistor','diode','wire','switch','button','cap','ind','transistor','scr','pot','opto','relay'];   // live inside the "Add component" dropdown
 function selectTool(t){
   // toggle off if same
   tool = (tool === t) ? null : t;
@@ -2280,6 +2472,7 @@ function selectTool(t){
   if (tool === 'resistor') updateResControls();
   if (tool === 'diode') updateDiodeControls();
   if (tool === 'transistor') updateTransistorControls();
+  if (tool === 'scr') updateScrControls();
   if (tool === 'meter'){ selectedId = null; renderEditor(); resetMeter(); setActiveMode(); updateMeter(); }
   else resetMeter();
   refreshHint();
@@ -2356,6 +2549,18 @@ function updateTransistorControls(){
   };
   var h = hints[transType] || hints.npn;
   var hint = $('bb-trans-hint');
+  if (hint) hint.innerHTML = '<span class="th-only">' + h.th + '</span><span class="en-only">' + h.en + '</span>';
+}
+
+function updateScrControls(){
+  var hints = {
+    scr:   { th:'SCR: ยิงกระแสเข้าเกตแวบเดียว → นำกระแส A→K แล้ว<b>ค้าง</b> เกตสั่งดับไม่ได้ ต้องทำให้กระแสต่ำกว่า I<sub>H</sub> (ปิดสวิตช์/ตัดโหลด)',
+             en:'SCR: one pulse of gate current latches it on (A→K) and it <b>stays</b> on — the gate cannot switch it off; drop the current below I<sub>H</sub> instead' },
+    triac: { th:'ไทรแอก: นำกระแสได้ทั้งสองทิศ จุดชนวนได้ทั้งเกตบวก/ลบ — ต่อกับแหล่งจ่าย AC แล้วจะดับเองทุกครึ่งคลื่นที่จุดตัดศูนย์',
+             en:'TRIAC: conducts both ways and fires on either gate polarity — on an AC source it self-commutates at every zero crossing' }
+  };
+  var h = hints[scrType] || hints.scr;
+  var hint = $('bb-scr-hint');
   if (hint) hint.innerHTML = '<span class="th-only">' + h.th + '</span><span class="en-only">' + h.en + '</span>';
 }
 
@@ -2454,6 +2659,9 @@ function initControls(){
   $('bb-trans-beta').addEventListener('change', function(){ transBeta = +this.value; });
   $('bb-trans-vth').addEventListener('change', function(){ transVth = +this.value; });
   $('bb-pot-val').addEventListener('change', function(){ potVal = +this.value; });
+  $('bb-scr-type').addEventListener('change', function(){ scrType = this.value; updateScrControls(); refreshHint(); });
+  $('bb-scr-igt').addEventListener('change', function(){ scrIgtSel = +this.value; });
+  $('bb-scr-ih').addEventListener('change', function(){ scrIhSel = +this.value; });
   $('bb-opto-ctr').addEventListener('change', function(){ optoCtr = +this.value; });
   $('bb-ac-vp').addEventListener('input', function(){ acVp = +this.value; $('bb-ac-vp-out').textContent = acVp + ' V'; });
   $('bb-ac-freq').addEventListener('change', function(){ acFreq = +this.value; });
@@ -2629,6 +2837,32 @@ var EXAMPLES = [
       place('resistor', 'tb9', 'tb13', { value:330 });
       place('led', 'ta13', 'ta17', { color:'green', vf:2.1 });
       place('wire', 'tc17', 'TN17', { color:'black' });
+    } },
+  { th:'SCR ล็อกตัว — กดปุ่มยิงเกตแวบเดียว LED ติดค้าง, สับสวิตช์ตัดกระแสจึงดับ', en:'SCR latch — one tap on the gate button lights the LED for good; only opening the switch resets it', build:function(){
+      setExampleBatt(9);
+      place('battery', 'TP2', 'TN2', { value:9 });
+      place('wire', 'TP5', 'tc5', { color:'red' });                  // + rail ↓ col5
+      place('switch', 'ta5', 'ta9', { closed:true });                // anode-path switch = the only way to reset it
+      place('resistor', 'tb9', 'tb13', { value:330 });
+      place('led', 'ta13', 'ta17', { color:'red', vf:1.8 });         // load: cathode lands on the anode column
+      // thyristor: anode col17, cathode col21, gate col19
+      place('scr', 'tb17', 'ta21', { g:'tb19', st:'scr', igt:1e-3, ih:5e-3, _lat:0 });
+      place('wire', 'tc21', 'TN21', { color:'black' });              // cathode → − rail
+      // gate drive taps the rail BEFORE the switch: press = fire (I_G ≈ 3.8 mA), release changes nothing
+      place('button', 'te5', 'te11', { closed:false });
+      place('resistor', 'td11', 'td19', { value:2200 });
+    } },
+  { th:'ไทรแอกกับไฟ AC — LED สองสีสลับกันติด (นำกระแสสองทิศ) และดับเองทุกจุดตัดศูนย์', en:'TRIAC on AC — two LEDs alternate (it conducts both ways) and it self-commutates at every zero crossing', build:function(){
+      place('ac', 'TP2', 'TN2', { vp:12, freq:2, offset:0 });
+      place('wire', 'TP5', 'tc5', { color:'red' });                  // source + ↓ col5
+      place('resistor', 'ta5', 'ta9', { value:470 });
+      // anti-parallel LEDs: red conducts on one half, green on the other
+      place('led', 'tb9', 'tb13', { color:'red', vf:1.8 });
+      place('led', 'tc13', 'tc9', { color:'green', vf:2.1 });
+      // triac: MT2 col13, MT1 col17, gate col15 — gate fed from MT2 through 4.7 kΩ (≈2.4 mA)
+      place('scr', 'ta13', 'ta17', { g:'tb15', st:'triac', igt:1e-3, ih:5e-3, _lat:0 });
+      place('resistor', 'td13', 'td15', { value:4700 });
+      place('wire', 'tb17', 'TN17', { color:'black' });              // MT1 → − rail
     } },
   { th:'VR แบบ 2 ขา (rheostat) หรี่ไฟ LED (ปรับลูกบิดในแผงสภาพแวดล้อม)', en:'Variable resistor (2-pin rheostat) dimming an LED', build:function(){
       setExampleBatt(9);
@@ -2876,6 +3110,9 @@ function serializeCircuit(){
       if (c.rd != null) o.rd = c.rd;
       if (c.vc != null) o.vc = c.vc;
       if (c.tt) o.tt = c.tt;
+      if (c.st) o.st = c.st;
+      if (c.igt != null) o.igt = c.igt;
+      if (c.ih != null) o.ih = c.ih;
       if (c.beta != null) o.beta = c.beta;
       if (c.vth != null) o.vth = c.vth;
       if (c.av){ o.av = 1; if (c.vbr != null) o.vbr = c.vbr; }
@@ -2911,6 +3148,10 @@ function applyCircuit(data){
     if (o.rd != null) props.rd = o.rd;
     if (o.vc != null) props.vc = o.vc;
     if (o.tt) props.tt = o.tt;
+    if (o.st) props.st = o.st;
+    if (o.igt != null) props.igt = o.igt;
+    if (o.ih != null) props.ih = o.ih;
+    if (o.t === 'scr') props._lat = 0;   // a reloaded thyristor always starts blocking
     if (o.beta != null) props.beta = o.beta;
     if (o.vth != null) props.vth = o.vth;
     if (o.av){ props.av = true; if (o.vbr != null) props.vbr = o.vbr; props._av = 0; }
