@@ -14,6 +14,10 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'breadboard-pushbutton-2026-07-31', date:'2026-07-31', type:'update',
+    th:'เบรดบอร์ดจำลอง: เพิ่ม <b>ปุ่มกด</b> (แบบ NO — ปกติเปิด) กดค้างวงจรต่อ ปล่อยแล้วตัดทันที ต่างจากสวิตช์ที่ค้างสถานะไว้ พร้อมตัวอย่างวงจร "ปุ่มกดควบคุม LED" ให้ลองกดเล่นได้เลย',
+    en:'Breadboard lab: new <b>pushbutton</b> part (momentary NO) — hold it to close the circuit, let go and it cuts off immediately, unlike the latching switch. Comes with a "pushbutton-controlled LED" example',
+    href:'breadboard.html' },
   { id:'relay-lab-failsafe-motor-2026-07-29', date:'2026-07-29', type:'update',
     th:'ห้องแล็บรีเลย์: เพิ่มหัวข้อ "ทำไมปุ่ม STOP ต้องเป็น NC เสมอ" (fail-safe) พร้อมตัวอย่างให้ลองตัดสายเทียบ NC ✔ กับ NO ✘, หัวข้อไดโอด flyback/RC snubber คร่อมคอยล์ และ **มอเตอร์ 24VDC** วางบนแผงได้ พร้อมตัวอย่าง+ภารกิจวงจรกลับทางหมุน FWD/REV + อินเตอร์ล็อก',
     en:'Relay Lab: new sections on why a STOP button must be NC (fail-safe, with a wire-cut experiment comparing NC ✔ vs NO ✘) and on flyback diodes / RC snubbers across the coil, plus a **24VDC motor** part with a forward/reverse interlock example and mission',

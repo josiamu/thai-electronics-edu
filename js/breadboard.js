@@ -188,7 +188,7 @@ var holeAt = {};         // "x_y" -> id (reverse lookup for drag snapping)
 var comps = [];          // {id,type,a,b,value,vf,color,results,segs}
 var occupied = {};       // holeId -> compId (one pin per hole)
 var nextId = 1;
-var tool = null;         // armed tool: battery|resistor|led|diode|wire|switch|cap|ind|transistor|delete|null
+var tool = null;         // armed tool: battery|resistor|led|diode|wire|switch|button|cap|ind|transistor|delete|null
 var pendingHole = null;  // first clicked hole id (awaiting second)
 var pendingHole2 = null; // second clicked hole id (3/4-pin parts: awaiting third)
 var pendingHole3 = null; // third clicked hole id (4-pin opto / 5-pin relay: awaiting fourth)
@@ -354,6 +354,7 @@ var TYPE_LABEL = {
   diode:   { th:'ไดโอด / LED', en:'Diode / LED' },
   wire:    { th:'จัมเปอร์', en:'Jumper' },
   switch:  { th:'สวิตช์', en:'Switch' },
+  button:  { th:'ปุ่มกด', en:'Pushbutton' },
   cap:     { th:'ตัวเก็บประจุ', en:'Capacitor' },
   ind:     { th:'ตัวเหนี่ยวนำ', en:'Inductor' },
   ac:      { th:'แหล่งจ่าย AC', en:'AC source' },
@@ -366,6 +367,9 @@ var TYPE_LABEL = {
 // 3-pin parts use a third hole c.g (base/gate, or wiper) in addition to a/b;
 // the 4-pin optocoupler adds a fourth hole c.h (emitter; g = collector);
 // the 5-pin relay adds a fifth hole c.k (coil a/b, g = COM, h = NO, k = NC)
+// contact family: a closed contact is a 0 Ω jumper. 'switch' latches (tap = toggle);
+// 'button' is momentary NO — closed only while the pointer is held down on it (press = on, release = off)
+function isSwitchy(c){ return c.type === 'switch' || c.type === 'button'; }
 function isThreePin(c){ return c.type === 'transistor' || c.type === 'pot'; }
 function isThreePinTool(t){ return t === 'transistor' || t === 'pot'; }
 function isFourPin(c){ return c.type === 'opto'; }
@@ -518,6 +522,7 @@ function placeComp(type, a, b){
   if (type === 'battery') c.value = batteryV;
   if (type === 'ac'){ c.vp = acVp; c.freq = acFreq; c.offset = acOffset; }
   if (type === 'switch') c.closed = true;   // starts closed (conducting)
+  if (type === 'button') c.closed = false;  // momentary: rests open, conducts only while held
   if (type === 'cap'){ c.value = capVal; c._vPrev = 0; }
   if (type === 'ind'){ c.value = indVal; c._iPrev = 0; }
   comps.push(c);
@@ -568,6 +573,7 @@ function deleteComp(id){
     return true;
   });
   if (selectedId === id) selectedId = null;
+  Object.keys(pressedBtns).forEach(function(k){ if (pressedBtns[k].id === id) delete pressedBtns[k]; });
   rebuild();
   renderEditor();
 }
@@ -621,6 +627,11 @@ function renderEditor(){
   } else if (c.type === 'switch'){
     ctrl = '<label>' + (en ? 'State' : 'สถานะ') + '</label><span style="font-weight:700;color:' + (c.closed ? '#16a34a' : '#94a3b8') + '">' +
            (c.closed ? (en ? 'ON (closed)' : 'ปิด (ต่อวงจร)') : (en ? 'OFF (open)' : 'เปิด (ตัดวงจร)')) + '</span>';
+  } else if (c.type === 'button'){
+    ctrl = '<label>' + (en ? 'State' : 'สถานะ') + '</label><span style="font-weight:700;color:' + (c.closed ? '#16a34a' : '#94a3b8') + '">' +
+           (c.closed ? (en ? 'PRESSED (closed)' : 'กดอยู่ (ต่อวงจร)') : (en ? 'released (open)' : 'ปล่อยอยู่ (ตัดวงจร)')) + '</span>' +
+           '<span style="margin-left:.6rem;color:var(--text-light);font-weight:400">' +
+           (en ? '(momentary NO — hold it down to conduct, release to cut off)' : '(ปุ่มกดแบบ NO — กดค้างจึงจะต่อวงจร ปล่อยแล้วตัดทันที)') + '</span>';
   } else if (c.type === 'cap'){
     ctrl = '<label>' + (en ? 'Capacitance' : 'ค่า C') + '</label><select id="bb-ed-cap">' +
       CAP_OPTIONS.map(function(F){ return '<option value="' + F + '"' + (F === c.value ? ' selected' : '') + '>' + fmtC(F) + '</option>'; }).join('') + '</select>';
@@ -672,11 +683,13 @@ function renderEditor(){
   var polar = (c.type === 'led' || c.type === 'diode' || c.type === 'battery' || c.type === 'ac' || c.type === 'opto');
   var flip = polar ? '<button class="bb-ed-btn" id="bb-ed-flip">🔄 ' + (en ? 'Flip ±' : 'สลับขั้ว') + '</button>' : '';
   var toggle = c.type === 'switch' ? '<button class="bb-ed-btn" id="bb-ed-toggle">⎍ ' + (en ? 'Toggle' : 'เปิด/ปิด') + '</button>' : '';
+  // pushbutton: a hold-to-press button here mirrors pressing the part on the board
+  var hold = c.type === 'button' ? '<button class="bb-ed-btn" id="bb-ed-hold">⏺ ' + (en ? 'Press &amp; hold' : 'กดค้าง') + '</button>' : '';
 
   box.innerHTML =
     '<div class="bb-ed-title" id="bb-ed-title">' + edTitle(c, en) + '</div>' +
     (ctrl ? '<div class="bb-ed-row">' + ctrl + '</div>' : '') +
-    '<div class="bb-ed-row bb-ed-actions">' + toggle + flip +
+    '<div class="bb-ed-row bb-ed-actions">' + toggle + hold + flip +
       '<button class="bb-ed-btn danger" id="bb-ed-del">🗑 ' + (en ? 'Delete' : 'ลบ') + '</button>' +
       '<button class="bb-ed-btn" id="bb-ed-close">✕ ' + (en ? 'Close' : 'ปิด') + '</button></div>';
   box.style.display = '';
@@ -713,6 +726,13 @@ function renderEditor(){
   on('bb-ed-acoff', 'input', function(){ c.offset = +this.value; var o = $('bb-ed-acoff-out'); if (o) o.textContent = c.offset + ' V'; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-flip', 'click', function(){ var t = c.a; c.a = c.b; c.b = t; rebuild(); });
   on('bb-ed-toggle', 'click', function(){ c.closed = !c.closed; rebuild(); renderEditor(); });
+  // press on pointerdown; the document-level pointerup handler releases it (works even if the
+  // editor re-renders mid-press, and covers the pointer leaving the button before release)
+  on('bb-ed-hold', 'pointerdown', function(ev){
+    if (ev.preventDefault) ev.preventDefault();
+    freePointer(ev);            // renderEditor() below replaces this very button
+    pressBtn(c, ev);
+  });
   on('bb-ed-del', 'click', function(){ deleteComp(c.id); });
   on('bb-ed-close', 'click', function(){ selectedId = null; rebuild(); renderEditor(); });
 }
@@ -722,6 +742,7 @@ function refreshEditorTitle(c){ var t = $('bb-ed-title'); if (t) t.textContent =
 
 // ════════════════════════════ DRAG TO MOVE ════════════════════════════
 var dragComp = null, dragGrab = null, dragMoved = false;
+var pressedBtns = {};     // pointerId -> pushbutton held down by that pointer (multi-touch safe)
 var clickShift = false;   // was Shift held on the last hole/part click (meter span-extend)
 
 function svgCoords(e){
@@ -744,10 +765,47 @@ function setCompHoles(c, na, nb, ng, nh, nk){
   if (nk != null){ c.k = nk; occupied[nk] = c.id; }
 }
 
+// pressing a pushbutton redraws the board, which detaches the element that holds the implicit
+// touch pointer-capture — its pointerup would then never reach document and the button would
+// stick down. Hand the capture back first so the release always lands.
+function freePointer(ev){
+  try {
+    var t = ev && ev.target;
+    if (t && t.hasPointerCapture && ev.pointerId != null && t.hasPointerCapture(ev.pointerId)) t.releasePointerCapture(ev.pointerId);
+  } catch (e) {}
+}
+// momentary pushbutton: close it now; the pointerup that ends THIS pointer opens it again.
+// keyed per pointer so two fingers on two buttons can't lose track of each other.
+function pidOf(ev){ return (ev && ev.pointerId != null) ? String(ev.pointerId) : 'kb'; }
+function pressBtn(c, ev){
+  if (!c || c.type !== 'button') return;
+  var pid = pidOf(ev);
+  if (pressedBtns[pid] === c) return;
+  pressedBtns[pid] = c;
+  if (c.closed) return;                    // already held down by another pointer
+  c.closed = true;
+  rebuild();
+  if (selectedId === c.id) renderEditor();
+}
+// with an event: release only that pointer's button. without: release everything (blur / reset).
+function releaseBtn(ev){
+  var pid = ev ? pidOf(ev) : null, released = false;
+  Object.keys(pressedBtns).forEach(function(k){
+    if (pid !== null && k !== pid) return;
+    var c = pressedBtns[k];
+    delete pressedBtns[k];
+    var stillHeld = Object.keys(pressedBtns).some(function(k2){ return pressedBtns[k2] === c; });
+    if (!stillHeld && c.closed){ c.closed = false; released = true; }
+  });
+  return released;
+}
+
 function startDrag(ev, c){
   if (ev.button != null && ev.button !== 0) return;   // primary button / touch only
   ev.stopPropagation(); if (ev.preventDefault) ev.preventDefault();
   dragComp = c; dragMoved = false;
+  // a pushbutton acts on press (not on release) — but not while the meter/delete tool is armed
+  if (c.type === 'button' && tool !== 'meter' && tool !== 'delete'){ freePointer(ev); pressBtn(c, ev); }
   clickShift = !!(ev && ev.shiftKey);
   var p = svgCoords(ev);
   dragGrab = p ? { ox: holes[c.a].x - p.x, oy: holes[c.a].y - p.y } : { ox:0, oy:0 };
@@ -785,15 +843,19 @@ function onPointerMove(ev){
   selectedId = c.id;
   rebuild();
 }
-function onPointerUp(){
-  if (!dragComp) return;
+function onPointerUp(ev){
+  var wasPressed = releaseBtn(ev);       // a held pushbutton opens the moment its pointer lifts
+  if (!dragComp){
+    if (wasPressed){ rebuild(); renderEditor(); }
+    return;
+  }
   var c = dragComp; dragComp = null;
   if (!dragMoved){                       // it was a tap, not a drag
     if (tool === 'meter') meterClickComp(c);
     else if (tool === 'delete') deleteComp(c.id);
     else if (c.type === 'switch'){ c.closed = !c.closed; selectComp(c.id); }
-    else selectComp(c.id);
-  } else { selectedId = c.id; renderEditor(); }
+    else selectComp(c.id);               // pushbuttons land here too (already released above)
+  } else { selectedId = c.id; if (wasPressed) rebuild(); renderEditor(); }
 }
 
 function showHL(id){ var h = holes[id]; hlEl.setAttribute('cx', h.x); hlEl.setAttribute('cy', h.y); hlEl.style.display = ''; }
@@ -857,12 +919,12 @@ function solveCircuit(h, commit){
   var pots        = comps.filter(function(c){ return c.type === 'pot'; });
   var optos       = comps.filter(function(c){ return c.type === 'opto'; });
   var relays      = comps.filter(function(c){ return c.type === 'relay'; });
-  var branches    = comps.filter(function(c){ return c.type !== 'wire' && c.type !== 'battery' && c.type !== 'ac' && c.type !== 'switch' && c.type !== 'transistor' && c.type !== 'pot' && c.type !== 'opto' && c.type !== 'relay'; });
+  var branches    = comps.filter(function(c){ return c.type !== 'wire' && c.type !== 'battery' && c.type !== 'ac' && !isSwitchy(c) && c.type !== 'transistor' && c.type !== 'pot' && c.type !== 'opto' && c.type !== 'relay'; });
   var wires       = comps.filter(function(c){ return c.type === 'wire'; });
-  // a closed switch behaves like a jumper (0 Ω); an open one is ignored entirely
-  var joins       = wires.concat(comps.filter(function(c){ return c.type === 'switch' && c.closed; }));
+  // a closed switch / held pushbutton behaves like a jumper (0 Ω); an open one is ignored entirely
+  var joins       = wires.concat(comps.filter(function(c){ return isSwitchy(c) && c.closed; }));
 
-  // supernodes via union-find (wires/closed switches merge nodes) — built first so the
+  // supernodes via union-find (wires/closed contacts merge nodes) — built first so the
   // multimeter probe can test continuity even before a battery is added
   var uf = UF();
   comps.forEach(function(c){ compNodes(c).forEach(function(h){ uf.add(holes[h].node); }); });
@@ -1144,7 +1206,7 @@ function solveCircuit(h, commit){
     if (Math.abs(I) > 0.8) warnings.push({ t:'warn', th:'กระแสจากแหล่งจ่ายสูงมาก (' + fmtI(Math.abs(I)) + ') — อาจลัดวงจร!', en:'Very high source current (' + fmtI(Math.abs(I)) + ') — possible short circuit!' });
   });
   wires.forEach(function(c){ c.results = { V:0, I:0, on:false }; });
-  comps.filter(function(c){ return c.type === 'switch'; }).forEach(function(c){ c.results = { V:0, I:0, on:c.closed }; });
+  comps.filter(isSwitchy).forEach(function(c){ c.results = { V:0, I:0, on:c.closed }; });
 
   // transistors — report Vce/Vds across a→b and the collector/drain current
   transistors.forEach(function(t){
@@ -1271,6 +1333,26 @@ function drawComp(c){
 
   if (c.id === selectedId)   // highlight box behind the body (drawn for all non-wire parts)
     g.appendChild(el('rect', { x:-4, y:-16, width:len + 8, height:32, rx:6, fill:'rgba(245,158,11,0.10)', stroke:'#f59e0b', 'stroke-width':2, 'stroke-dasharray':'5 3' }));
+
+  if (c.type === 'button'){
+    // tactile pushbutton: square body + round cap that sinks in (and turns green) while held
+    var pr = c.closed;
+    var pw = Math.min(30, len * 0.6), px = (len - pw) / 2, px2 = px + pw, pcx = px + pw / 2;
+    g.appendChild(el('line', { class:'bb-comp-lead', x1:0, y1:0, x2:px, y2:0 }));
+    g.appendChild(el('line', { class:'bb-comp-lead', x1:px2, y1:0, x2:len, y2:0 }));
+    g.appendChild(el('circle', { cx:px, cy:0, r:2.6, fill:'#475569' }));
+    g.appendChild(el('circle', { cx:px2, cy:0, r:2.6, fill:'#475569' }));
+    // body
+    g.appendChild(el('rect', { x:px, y:-9, width:pw, height:18, rx:3,
+      fill:pr ? '#dcfce7' : '#f1f5f9', stroke:pr ? '#16a34a' : '#94a3b8', 'stroke-width':1.8 }));
+    // cap — smaller + darker when pressed, so the travel reads at a glance
+    g.appendChild(el('circle', { cx:pcx, cy:0, r:pr ? 4.6 : 6,
+      fill:pr ? '#16a34a' : '#ef4444', stroke:'#334155', 'stroke-width':1 }));
+    if (!pr) g.appendChild(el('circle', { cx:pcx - 1.6, cy:-1.6, r:1.5, fill:'#fff', opacity:'0.45' }));   // highlight
+    gComps.appendChild(uprightText(len / 2, A.x, A.y, ang, -16,
+      pr ? (isEN() ? 'PRESSED' : 'กดอยู่') : (isEN() ? 'PUSH' : 'ปุ่มกด'), pr ? '#16a34a' : '#94a3b8'));
+    gComps.appendChild(g); return;
+  }
 
   if (c.type === 'switch'){
     // slide switch: housing tints + knob slides to the ON (left) / OFF (right) side
@@ -1708,7 +1790,7 @@ function rebuildElectrons(){
   while (gElec.firstChild) gElec.removeChild(gElec.firstChild);
   elecDots = [];
   comps.forEach(function(c){
-    if (c.type === 'wire' || c.type === 'battery' || c.type === 'ac' || c.type === 'switch') return;
+    if (c.type === 'wire' || c.type === 'battery' || c.type === 'ac' || isSwitchy(c)) return;
     if (!c.results || !c.results.on) return;
     if (c.type === 'pot'){            // two legs: end a → wiper, wiper → end b
       [[c.a, c.g, c.results.Ia], [c.g, c.b, c.results.Ib]].forEach(function(seg){
@@ -1857,7 +1939,7 @@ function tauOf(target){
   comps.forEach(function(c){ uf.add(holes[c.a].node); uf.add(holes[c.b].node); });
   // for the DC-ish Thevenin view: batteries shorted, inductors shorted, other caps open
   comps.forEach(function(c){
-    if (c.type === 'wire' || (c.type === 'switch' && c.closed) || c.type === 'battery' || c.type === 'ac' || (c.type === 'ind' && c !== target))
+    if (c.type === 'wire' || (isSwitchy(c) && c.closed) || c.type === 'battery' || c.type === 'ac' || (c.type === 'ind' && c !== target))
       uf.union(holes[c.a].node, holes[c.b].node);
   });
   function sn(h){ return uf.find(holes[h].node); }
@@ -1942,8 +2024,10 @@ function renderReadout(res){
       if (c.type === 'led'){
         var lit = c.results && c.results.on;
         st = '<span class="bb-dot" style="background:' + (lit ? LED_COLORS[c.color].fill : '#94a3b8') + '"></span>' + (lit ? (en ? 'ON' : 'ติด') : (en ? 'off' : 'ดับ'));
-      } else if (c.type === 'switch'){
-        st = '<span class="bb-dot" style="background:' + (c.closed ? '#16a34a' : '#94a3b8') + '"></span>' + (c.closed ? (en ? 'ON' : 'ปิด') : (en ? 'OFF' : 'เปิด'));
+      } else if (isSwitchy(c)){
+        var onTxt = c.type === 'button' ? (en ? 'PRESSED' : 'กดอยู่') : (en ? 'ON' : 'ปิด');
+        var offTxt = c.type === 'button' ? (en ? 'released' : 'ปล่อย') : (en ? 'OFF' : 'เปิด');
+        st = '<span class="bb-dot" style="background:' + (c.closed ? '#16a34a' : '#94a3b8') + '"></span>' + (c.closed ? onTxt : offTxt);
       } else if (c.type === 'transistor' || c.type === 'opto'){
         var rg = c.results && c.results.region, conduct = rg && rg !== 'cutoff';
         st = '<span class="bb-dot" style="background:' + (conduct ? '#16a34a' : '#94a3b8') + '"></span>' + (regionShort(rg) || '—');
@@ -1989,6 +2073,7 @@ function compName(c, en){
   }
   if (c.type === 'led') return (en ? 'LED ' : 'LED ') + LED_COLORS[c.color][en ? 'en' : 'th'];
   if (c.type === 'switch') return en ? 'Switch' : 'สวิตช์';
+  if (c.type === 'button') return en ? 'Pushbutton' : 'ปุ่มกด';
   if (c.type === 'cap') return 'C ' + fmtC(c.value);
   if (c.type === 'ind') return 'L ' + fmtL(c.value);
   if (c.type === 'pot') return (en ? 'Pot ' : 'POT ') + fmtR(c.value || potVal);
@@ -2141,13 +2226,13 @@ function updateMeter(){
       return lcd(OPTO_VF.toFixed(2), 'V');
     }
     if (c.type === 'wire') return lcd('≈ 0.00', 'V');               // short → ~0 V drop
-    if (c.type === 'switch') return lcd(c.closed ? '≈ 0.00' : 'OL', c.closed ? 'V' : P('เปิด', 'open'));
+    if (isSwitchy(c)) return lcd(c.closed ? '≈ 0.00' : 'OL', c.closed ? 'V' : P('เปิด', 'open'));
     return lcd(P('ใช้กับไดโอด/LED', 'Use on a diode/LED'), '', true);
   }
   if (meterMode === 'i'){
     setTip('คลิกอุปกรณ์เพื่อวัดกระแสที่ไหลผ่าน', 'Click a part to read the current through it');
     if (!c) return lcd(P('คลิกอุปกรณ์', 'Tap a part'), '', true);
-    if (c.type === 'wire' || c.type === 'switch') return lcd(P('ผ่านตัวนำ ≈ 0', 'through conductor'), '', true);
+    if (c.type === 'wire' || isSwitchy(c)) return lcd(P('ผ่านตัวนำ ≈ 0', 'through conductor'), '', true);
     return lcd(fmtI(c.results ? c.results.I : 0), '');
   }
   // resistance
@@ -2155,7 +2240,7 @@ function updateMeter(){
   if (!c) return lcd(P('คลิกอุปกรณ์', 'Tap a part'), '', true);
   if (RFAM[c.type]) return lcd(fmtR(Math.round(effR(c))), '');
   if (c.type === 'pot') return lcd(fmtR(Math.round(potR(c).total)), '');   // end-to-end resistance
-  if (c.type === 'switch') return lcd(c.closed ? '≈ 0' : '∞', 'Ω');
+  if (isSwitchy(c)) return lcd(c.closed ? '≈ 0' : '∞', 'Ω');
   if (c.type === 'wire') return lcd('≈ 0', 'Ω');
   if (c.type === 'vdr') return lcd(P('ไม่เชิงเส้น', 'non-linear'), '', true);
   if (c.type === 'diode' || c.type === 'led') return lcd(P('รอยต่อ PN', 'PN junction'), '', true);
@@ -2178,8 +2263,8 @@ function beep(){
 }
 
 // ════════════════════════════ TOOLBAR / CONTROLS ════════════════════════════
-var VALROWS = ['battery','ac','resistor','diode','wire','switch','cap','ind','transistor','pot','opto','relay','meter'];
-var COMP_TOOLS = ['battery','ac','resistor','diode','wire','switch','cap','ind','transistor','pot','opto','relay'];   // live inside the "Add component" dropdown
+var VALROWS = ['battery','ac','resistor','diode','wire','switch','button','cap','ind','transistor','pot','opto','relay','meter'];
+var COMP_TOOLS = ['battery','ac','resistor','diode','wire','switch','button','cap','ind','transistor','pot','opto','relay'];   // live inside the "Add component" dropdown
 function selectTool(t){
   // toggle off if same
   tool = (tool === t) ? null : t;
@@ -2325,7 +2410,7 @@ function initControls(){
   });
   document.addEventListener('click', function(e){ if (!e.target.closest('#bb-comp-dropdown')) closeCompMenu(); });
   $('bb-clear').addEventListener('click', function(){
-    comps = []; occupied = {}; pendingHole = null; pendingHole2 = null; pendingHole3 = null; pendingHole4 = null; selectedId = null; hideHL(); resetMeter();
+    comps = []; occupied = {}; pendingHole = null; pendingHole2 = null; pendingHole3 = null; pendingHole4 = null; selectedId = null; pressedBtns = {}; hideHL(); resetMeter();
     simTime = 0; graphHist = []; graphComp = null;
     // reset the environment panel to defaults
     env.temp = 25; $('bb-temp').value = 25; $('bb-temp-out').textContent = '25 °C';
@@ -2386,6 +2471,8 @@ function initControls(){
   document.addEventListener('pointermove', onPointerMove);
   document.addEventListener('pointerup', onPointerUp);
   document.addEventListener('pointercancel', onPointerUp);
+  // safety net: never leave a pushbutton held if the page loses the pointer entirely
+  window.addEventListener('blur', function(){ if (releaseBtn()){ rebuild(); renderEditor(); } });
   // cancel pending placement / close the component menu with Escape
   document.addEventListener('keydown', function(e){
     if (e.key !== 'Escape') return;
@@ -2532,6 +2619,15 @@ var EXAMPLES = [
       place('switch', 'ta5', 'ta9', { closed:true });
       place('resistor', 'tb9', 'tb13', { value:330 });
       place('led', 'ta13', 'ta17', { color:'yellow', vf:2.0 });
+      place('wire', 'tc17', 'TN17', { color:'black' });
+    } },
+  { th:'ปุ่มกดควบคุม LED (กดค้างติด — ปล่อยดับ)', en:'Pushbutton-controlled LED (hold to light — release to cut off)', build:function(){
+      setExampleBatt(9);
+      place('battery', 'TP2', 'TN2', { value:9 });
+      place('wire', 'TP5', 'tc5', { color:'red' });
+      place('button', 'ta5', 'ta9', { closed:false });          // momentary NO — press and hold it
+      place('resistor', 'tb9', 'tb13', { value:330 });
+      place('led', 'ta13', 'ta17', { color:'green', vf:2.1 });
       place('wire', 'tc17', 'TN17', { color:'black' });
     } },
   { th:'VR แบบ 2 ขา (rheostat) หรี่ไฟ LED (ปรับลูกบิดในแผงสภาพแวดล้อม)', en:'Variable resistor (2-pin rheostat) dimming an LED', build:function(){
@@ -2731,7 +2827,7 @@ var EXAMPLES = [
 var lastExampleIdx = -1;
 function loadExampleByIndex(i){
   if (i < 0 || i >= EXAMPLES.length) return;
-  comps = []; occupied = {}; pendingHole = null; pendingHole2 = null; pendingHole3 = null; pendingHole4 = null; selectedId = null; hideHL(); resetMeter();
+  comps = []; occupied = {}; pendingHole = null; pendingHole2 = null; pendingHole3 = null; pendingHole4 = null; selectedId = null; pressedBtns = {}; hideHL(); resetMeter();
   simTime = 0; graphHist = []; graphComp = null; renderEditor();
   lastExampleIdx = i;
   var ex = EXAMPLES[i];
@@ -2786,13 +2882,13 @@ function serializeCircuit(){
       if (c.vp != null) o.vp = c.vp;
       if (c.freq != null) o.f = c.freq;
       if (c.offset != null) o.off = c.offset;
-      if (c.type === 'switch') o.cl = c.closed ? 1 : 0;
+      if (c.type === 'switch') o.cl = c.closed ? 1 : 0;   // a pushbutton always reloads released
       return o;
     })
   };
 }
 function applyCircuit(data){
-  comps = []; occupied = {}; pendingHole = null; pendingHole2 = null; pendingHole3 = null; pendingHole4 = null; selectedId = null; hideHL(); resetMeter();
+  comps = []; occupied = {}; pendingHole = null; pendingHole2 = null; pendingHole3 = null; pendingHole4 = null; selectedId = null; pressedBtns = {}; hideHL(); resetMeter();
   simTime = 0; graphHist = []; graphComp = null; renderEditor();
   if (data && data.env){
     var e = data.env;
@@ -2822,6 +2918,7 @@ function applyCircuit(data){
     if (o.f != null) props.freq = o.f;
     if (o.off != null) props.offset = o.off;
     if (o.t === 'switch') props.closed = o.cl !== 0;
+    if (o.t === 'button') props.closed = false;   // momentary — never restored pressed
     if (o.t === 'cap') props._vPrev = 0;
     if (o.t === 'ind') props._iPrev = 0;
     place(o.t, o.a, o.b, props);
