@@ -45,7 +45,6 @@ website/
 ├── power-supply.html   — แหล่งจ่ายไฟ: 4 ขั้น (หม้อแปลง→เรียงกระแส→กรอง→เรกูเลต), block diagram, สูตร ripple, 78xx/zener, linear vs switching, safety + Interactive Power Supply sim (canvas)
 ├── multimeter.html     — บทที่ 6
 ├── soldering.html      — บทที่ 7
-├── ac-circuit.html     — บทที่ 8
 ├── diode.html          — บทที่ 9: PN Junction, I-V Curve, LED Vf by color, Rectifier Circuit + Interactive AC→DC Rectifier Lab (canvas, js/rectifier-lab.js)
 ├── transistor.html     — BJT (NPN/PNP) + MOSFET: สัญลักษณ์, 3 ย่าน (Cut-off/Active/Saturation), สูตร β/IC/IE, เช็คด้วยมัลติมิเตอร์, เบอร์ยอดนิยม + ซิมทีละขั้นโต้ตอบได้ 2 ตัว: "ภายในทรานซิสเตอร์ 1–5" (bjt-steps.js) และ "วงจรจริงทีละขั้น 1–6" (bjt-circuit.js)
 ├── thyristor.html      — ไทริสเตอร์ SCR/TRIAC/DIAC (CURRENT_PAGE='thyristor'): ตารางเทียบ 3 ตัว, โครงสร้าง PNPN 4 ชั้น + สัญลักษณ์ SVG (A/K/G), แบบจำลอง 2 ทรานซิสเตอร์อธิบายการล็อกตัว (latch), 3 สภาวะ (forward blocking/conducting/reverse blocking), I_L vs I_H, ทำไม AC ถึงดับเองที่จุดตัดศูนย์, phase control + สูตร Vrms + Interactive Dimmer sim (canvas, js/scr-sim.js), TRIAC/DIAC + วงจรดิมเมอร์ R-C+DIAC+TRIAC (SVG), สเปค (V_DRM/V_RRM, I_GT, I_H, dv/dt) + เบอร์ยอดนิยม (BT136/BTA16/BT151/MCR100-6/DB3), การใช้งาน (ดิมเมอร์/SSR/ครอว์บาร์/soft starter), เช็คด้วยมัลติมิเตอร์ 3 ขั้น + ทดสอบ latch ด้วยแบต+LED, ความปลอดภัยไฟบ้าน (ตัวถัง = MT2 มีไฟ, snubber, ห้ามใช้กับ LED ที่ไม่ dimmable)
@@ -131,7 +130,7 @@ CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor
 ### หน้าหลัก index.html — โครงสร้างตาม navbar
 | กลุ่ม | หน้า | สี card |
 |---|---|---|
-| 📚 พื้นฐานไฟฟ้า | electricity, ohm, ac-circuit | `topic-card-blue` |
+| 📚 พื้นฐานไฟฟ้า | electricity, ohm | `topic-card-blue` |
 | 📚 อุปกรณ์อิเล็กทรอนิกส์ | resistor, diode, capacitor, transistor, thyristor, inductor, relay, opto, power-supply | `topic-card-blue` |
 | 📚 วงจรรวมและดิจิทัล | ic, timer555, opamp, logic | `topic-card-blue` |
 | 📚 เครื่องมือวัดและทดสอบ | multimeter, signal-generator, oscilloscope | `topic-card-blue` |
