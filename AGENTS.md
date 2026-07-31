@@ -34,6 +34,7 @@ website/
 ├── js/opamp-sim.js     — Interactive Op-Amp amplifier (canvas, mode inverting/non-inverting + Rin/Rf/Vin sliders → closed-loop gain, draws input sine + amplified output clipped at ±Vsat=12V, readouts gain/Vout/clip)
 ├── js/logic-sim.js     — Interactive Logic Gate (canvas, <select> gate + toggle A/B buttons → draws gate symbol w/ state-coloured wires + output LED, builds & highlights truth table; listens to langchange)
 ├── js/opto-sim.js      — Interactive Optocoupler (canvas: LED เรืองแสง + จุดโฟตอนข้าม isolation gap + โฟโตทรานซิสเตอร์ + แถบ Vout; sliders IF 0–20mA / CTR 50–300% / RL 0.1–10kΩ, Vcc=5V คงที่ → readouts IC, Vout, CTR×IF, สถานะ OFF/ACTIVE/SAT — สอน saturation drive margin)
+├── js/scr-sim.js       — Interactive Phase-Control Dimmer ในหน้า thyristor.html (canvas #scr-canvas: คลื่นแหล่งจ่าย AC เส้นประ + แถบเขียวช่วงนำกระแส + แรงดันคร่อมโหลดสีส้ม + เส้นแดงจุดชนวน α + หลอดไฟที่สว่างตาม %กำลัง; ปุ่มโหมด SCR (ครึ่งคลื่น) / TRIAC (เต็มคลื่น) + sliders α 0–180° / Vrms 12–240V / โหลด 50–1500Ω → readouts Vrms คร่อมโหลด, กำลัง, %ของเต็มกำลัง (SCR ที่ α=0 ได้ 50% เพราะใช้แค่ครึ่งคลื่น), มุมนำกระแส; สูตร Vrms = Vs·√[(π−α+sin2α/2)/π] (TRIAC) หรือ /2π (SCR))
 ├── js/announcements.js — กล่อง "ข่าวสาร/อัปเดตล่าสุด" บนหน้าแรก (data-driven: array ANNOUNCEMENTS {id,date,type:lesson/download/update,th,en,href,expires?,cat?,file?} → render เข้า #announcements ใน index.html, bilingual th-only/en-only, ป้าย "ใหม่" เมื่อ date ≤30 วัน, auto-expire: หายเองเมื่อเลย ANN_MAX_AGE_DAYS (=3) วันจาก date หรือเลย expires (ถ้าใส่ override อายุ default), ปิดได้รายอัน เก็บใน localStorage key `ann-dismissed`, download-type แนบ cat/file เป็น query ให้ downloads.html กรอง/ไฮไลต์ให้เอง)
 ├── index.html          — หน้าหลัก (CURRENT_PAGE='home') — กลุ่มตรงกับ navbar: บทเรียน / งานปฏิบัติ / เครื่องมือ / คลังการเรียนรู้ + กล่องข่าวสาร (#announcements → announcements.js)
 ├── electricity.html    — บทที่ 1
@@ -47,6 +48,7 @@ website/
 ├── ac-circuit.html     — บทที่ 8
 ├── diode.html          — บทที่ 9: PN Junction, I-V Curve, LED Vf by color, Rectifier Circuit + Interactive AC→DC Rectifier Lab (canvas, js/rectifier-lab.js)
 ├── transistor.html     — BJT (NPN/PNP) + MOSFET: สัญลักษณ์, 3 ย่าน (Cut-off/Active/Saturation), สูตร β/IC/IE, เช็คด้วยมัลติมิเตอร์, เบอร์ยอดนิยม + ซิมทีละขั้นโต้ตอบได้ 2 ตัว: "ภายในทรานซิสเตอร์ 1–5" (bjt-steps.js) และ "วงจรจริงทีละขั้น 1–6" (bjt-circuit.js)
+├── thyristor.html      — ไทริสเตอร์ SCR/TRIAC/DIAC (CURRENT_PAGE='thyristor'): ตารางเทียบ 3 ตัว, โครงสร้าง PNPN 4 ชั้น + สัญลักษณ์ SVG (A/K/G), แบบจำลอง 2 ทรานซิสเตอร์อธิบายการล็อกตัว (latch), 3 สภาวะ (forward blocking/conducting/reverse blocking), I_L vs I_H, ทำไม AC ถึงดับเองที่จุดตัดศูนย์, phase control + สูตร Vrms + Interactive Dimmer sim (canvas, js/scr-sim.js), TRIAC/DIAC + วงจรดิมเมอร์ R-C+DIAC+TRIAC (SVG), สเปค (V_DRM/V_RRM, I_GT, I_H, dv/dt) + เบอร์ยอดนิยม (BT136/BTA16/BT151/MCR100-6/DB3), การใช้งาน (ดิมเมอร์/SSR/ครอว์บาร์/soft starter), เช็คด้วยมัลติมิเตอร์ 3 ขั้น + ทดสอบ latch ด้วยแบต+LED, ความปลอดภัยไฟบ้าน (ตัวถัง = MT2 มีไฟ, snubber, ห้ามใช้กับ LED ที่ไม่ dimmable)
 ├── ic.html             — IC วงจรรวมเบื้องต้น: IC คืออะไร/ทำไมต้องรวม, ระดับการรวม (SSI→VLSI), แพ็กเกจ (DIP/SOIC/QFP/BGA), นับขา+หา Pin 1 (notch/dot, SVG DIP-8), อนาล็อก vs ดิจิทัล vs mixed-signal, อ่าน datasheet, IC ยอดนิยม (555/op-amp/7805/74xx/ATmega), ESD/การจับ (SVG, ไม่มี sim)
 ├── 555.html            — IC ตั้งเวลา 555: คืออะไร+ทำไมชื่อ 555, ขา 8 ขา (SVG DIP-8 pinout), โหมด Astable vs Monostable, สูตร t_HIGH/t_LOW/f/Duty (astable) + T=1.1RC (monostable), การใช้งาน, ทิป (RESET→Vcc, CTRL 10nF) + Interactive Astable sim (canvas)
 ├── op-amp.html         — ออปแอมป์: สัญลักษณ์ +/− (SVG), กฎทอง (V+=V−, ไม่มีกระแสเข้าขา), comparator (open loop), inverting (−Rf/Rin) / non-inverting (1+Rf/Rin) / buffer + วงจร SVG, ใช้งานจริง, เบอร์ยอดนิยม (741/LM358/LM324/TL07x) + ทิป (dual/single supply, rail-to-rail, slew) + Interactive amplifier sim (canvas, gain+clipping)
@@ -61,7 +63,7 @@ website/
 ├── relay-lab.html      — ห้องแล็บวงจรควบคุมรีเลย์ OMRON MY4 (CURRENT_PAGE='relay-lab', แยกจาก breadboard): แผง SVG 24VDC + รีเลย์ MY4 4PDT (14 ขา — คอยล์ 14(+)/13(−), ชุด n: COM 8+n/NO 4+n/NC n) + สวิตช์/ปุ่มกด NO-NC (momentary START/STOP, ตัวเรือนสี่เหลี่ยม)/ไฟแสดง/บัซเซอร์ (WebAudio)/**มอเตอร์ 24VDC** (type 'motor', R 120Ω — ทิศหมุนตามขั้วแรงดันที่ป้อน: results {v,i,run,dir,speed}, dir>0 เดินหน้า / dir<0 ถอยหลัง, โรเตอร์หมุนใน frame loop; ladder รองรับ load {t:'motor',dir}) เดินสายจัมเปอร์เอง; รางไฟด้านข้าง +24V (ซ้าย)/0V (ขวา) จุดต่อทุกแถวลดสายพันกัน; **จุดพักไฟ (terminal block) TB-1…TB-10 แถวล่าง จุดละ 4 รู** — รูในจุดเดียวกันเป็นโหนดเดียว (รวมใน `keyOf`: `TB:p:h` → `TB:p`) คนละจุดแยกจากกัน, ใช้พักสายที่ต้องแตกหลายทางแทนการยัดสายซ้อนที่ขาอุปกรณ์ (ตัวอย่าง latch/alarm เดินผ่าน TB แล้ว); จุดพักไฟไม่ใช่อุปกรณ์ — โหนดโผล่มาทางสายเท่านั้น solver จึงต้องจอง nid() ของปลายสายทุกเส้น **ก่อน** ตรึงขนาดเมทริกซ์; หัวปุ่มกด/ตัวสวิตช์วาดในเลเยอร์ `gTop` เหนือเลเยอร์สาย ไม่งั้นแถบรับคลิกของสายที่พาดผ่านจะกินคลิกจนกดปุ่มไม่ได้; คลิกสาย/จุดต่อ/อุปกรณ์ = ไฮไลต์กระพริบไล่วงจร; เมนู 9 ตัวอย่าง (basic/latch(self-holding)/interlock/AND-OR/swap/alarm+ack/**failsafe-ok (STOP แบบ NC) / failsafe-bad (STOP แบบ NO ผ่านรีเลย์ — ลบสายปุ่ม STOP แล้วหยุดไม่ได้) / fwdrev (กลับทางหมุนมอเตอร์ + อินเตอร์ล็อก)**) + มุมมองแผนภาพ Ladder (ไฮไลต์เส้นมีไฟจริง); **🎯 โหมดภารกิจ (MISSIONS 7 ข้อ: mNO/mSwap/mLatch/mAnd/mOr/mInter/mFwdRev — expect ของมอเตอร์เขียนเป็นสตริง 'fwd'/'rev'/'stop')** — ปุ่ม "เตรียมอุปกรณ์" (prepareMission → resetBoard + mk* ตามลำดับ parts จึงได้ id K1/S1/L1… ตรงกับโจทย์) + ปุ่ม "ตรวจคำตอบ" (gradeMission: เช็คอุปกรณ์ครบ → เช็คโครงสร้าง links ด้วย union-find บนสาย (เช่น L1 ต้องอยู่โหนดเดียวกับขา NO 5–8 ของ K1) → snapshot สถานะ → ไล่ set สวิตช์/ปุ่มทีละ step แล้วเรียก solveRelayLab ซ้ำ (latch `_en` เดินต่อข้าม step จึงตรวจ self-holding ได้) → คืนสถานะเดิม + requestSolve) แสดงผลราย step ✓/✗ ใน `#rly-mission`; บันทึก/โหลด (localStorage `rly-saves`) + แชร์ลิงก์ `?c=` (js/relay-lab.js — engine nodal-analysis DC pure ทดสอบ Node ได้ถึง `/* ===== END ENGINE`)
 ├── formulas.html       — สูตรสรุป + print-friendly
 ├── tools.html          — เครื่องคิดเลข 7 ตัว (4-band + 5-band มีชื่อไทย-อังกฤษครบ)
-├── quiz.html           — แบบทดสอบ 84 ข้อ 13 หมวด — มีข้อสอบ EN ครบทุกข้อ
+├── quiz.html           — แบบทดสอบ 92 ข้อ 14 หมวด — มีข้อสอบ EN ครบทุกข้อ
 ├── downloads.html      — ดาวน์โหลด PDF 40 ไฟล์ (มีหัวข้อ "ใบงาน" → pdf/worksheet/) + toolbar ค้นหา/กรองหมวด (sticky: #dl-search + #dl-chips, sections มี data-cat)
 ├── pdf/                — ไฟล์ PDF ภาษาไทย (~24 MB) — สื่อจากหลายแหล่ง ไม่อยู่ใต้ CC (ดู LICENSE)
 └── LICENSE             — CC BY-NC 4.0 (คลุมเฉพาะเนื้อหา/โค้ดต้นฉบับ; PDF แยกออกตาม NOTICE ในไฟล์)
@@ -87,7 +89,7 @@ website/
   <script src="nav.js"></script>
 </body>
 ```
-CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor`, `ic`, `timer555`, `opamp`, `logic`, `relay`, `opto`, `capacitor`, `inductor`, `power-supply`, `multimeter`, `soldering`, `home-wiring`, `oscilloscope`, `signal-generator`, `simulation`, `breadboard`, `relay-lab`, `formulas`, `tools`, `quiz`, `downloads`
+CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor`, `thyristor`, `ic`, `timer555`, `opamp`, `logic`, `relay`, `opto`, `capacitor`, `inductor`, `power-supply`, `multimeter`, `soldering`, `home-wiring`, `oscilloscope`, `signal-generator`, `simulation`, `breadboard`, `relay-lab`, `formulas`, `tools`, `quiz`, `downloads`
 
 ### ระบบ 2 ภาษา (Bilingual System)
 - CSS ใน style.css:
@@ -130,7 +132,7 @@ CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor
 | กลุ่ม | หน้า | สี card |
 |---|---|---|
 | 📚 พื้นฐานไฟฟ้า | electricity, ohm, ac-circuit | `topic-card-blue` |
-| 📚 อุปกรณ์อิเล็กทรอนิกส์ | resistor, diode, capacitor, transistor, inductor, relay, opto, power-supply | `topic-card-blue` |
+| 📚 อุปกรณ์อิเล็กทรอนิกส์ | resistor, diode, capacitor, transistor, thyristor, inductor, relay, opto, power-supply | `topic-card-blue` |
 | 📚 วงจรรวมและดิจิทัล | ic, timer555, opamp, logic | `topic-card-blue` |
 | 📚 เครื่องมือวัดและทดสอบ | multimeter, signal-generator, oscilloscope | `topic-card-blue` |
 | 🧰 งานปฏิบัติ | soldering, home-wiring | `topic-card-teal` |

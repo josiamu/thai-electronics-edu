@@ -42,6 +42,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | ไดโอด | Diode | `diode.html` |
 | ตัวเก็บประจุ | Capacitor | `capacitor.html` |
 | ทรานซิสเตอร์ | Transistor (BJT/MOSFET) | `transistor.html` |
+| ไทริสเตอร์ SCR/TRIAC/DIAC | Thyristors (SCR/TRIAC/DIAC) | `thyristor.html` |
 | ตัวเหนี่ยวนำและหม้อแปลง | Inductor & Transformer | `inductor.html` |
 | รีเลย์ | Relay | `relay.html` |
 | ออปโตอิเล็กทรอนิกส์ | Optoelectronics | `optoelectronics.html` |
@@ -76,7 +77,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | `relay-lab.html` | ห้องแล็บวงจรควบคุมรีเลย์ MY4 (4PDT 24VDC + ปุ่มกด/ไฟ/บัซเซอร์, รางไฟ + จุดพักไฟ TB-1…TB-10 ลดสายพันกัน, คลิกไฮไลต์ไล่วงจร, 🎯 ภารกิจ 7 ข้อพร้อมตรวจคำตอบอัตโนมัติ, 9 ตัวอย่าง self-holding/interlock/AND-OR/fail-safe NC/กลับทางหมุนมอเตอร์, มุมมองแผนภาพ Ladder, บันทึก/แชร์ลิงก์) | MY4 relay control lab (4PDT 24VDC + buttons/lamps/buzzer, power rails + TB-1…TB-10 terminal block, click-to-trace highlight, 7 auto-graded missions, 9 examples incl. fail-safe NC and motor forward/reverse, ladder view, save/share) |
 | `formulas.html` | สูตรสรุป + พิมพ์ PDF | Formula summary + print |
 | `tools.html` | เครื่องคิดเลขเชิงโต้ตอบ 7 ตัว | 7 interactive calculators |
-| `quiz.html` | แบบทดสอบ 84 ข้อ 13 หมวด | 84-question quiz, 13 categories |
+| `quiz.html` | แบบทดสอบ 92 ข้อ 14 หมวด | 92-question quiz, 14 categories |
 | `downloads.html` | ดาวน์โหลด PDF 40 ไฟล์ | Download 40 PDF files |
 
 ---
@@ -90,7 +91,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | 3 | 🎯 **โจทย์/ภารกิจบนเบรดบอร์ด** | การ์ดเป้าหมาย เช่น "ทำให้ LED ติด" / "แบ่งแรงดันให้ได้ ~5V" พร้อมระบบตรวจอัตโนมัติ |
 
 > ✅ **เสร็จแล้ว (เคยอยู่ใน roadmap):** บทลอจิกเกต (`logic-gates.html`), ไอซี 555 (`555.html`),
-> ออปแอมป์ (`op-amp.html`), **ห้องแล็บวงจรรีเลย์ MY4 (`relay-lab.html`)** — ทั้งหมดมี sim เชิงโต้ตอบครบแล้ว
+> ออปแอมป์ (`op-amp.html`), **ห้องแล็บวงจรรีเลย์ MY4 (`relay-lab.html`)**, **ไทริสเตอร์ SCR/TRIAC/DIAC (`thyristor.html`)** — ทั้งหมดมี sim เชิงโต้ตอบครบแล้ว
 
 ---
 
@@ -177,10 +178,11 @@ git push
 ├── js/opto-sim.js          — Optocoupler simulator (IF/CTR/RL → IC, Vout, saturation)
 ├── js/announcements.js     — Home-page "latest news/updates" box (data-driven, dismissible, bilingual)
 ├── js/breadboard.js        — Virtual breadboard lab (MNA solver + transistors + multimeter)
+├── js/scr-sim.js           — Phase-control dimmer sim (SCR/TRIAC firing angle)
 ├── js/relay-lab.js         — MY4 relay control lab (DC nodal solver + power rails + terminal block + ladder view + auto-graded missions + save/share)
 ├── index.html           — Home page
 │   ├── electricity.html / ohm.html                 — Fundamentals
-│   ├── resistor.html / diode.html / transistor.html / ic.html / 555.html / op-amp.html / logic-gates.html / relay.html
+│   ├── resistor.html / diode.html / transistor.html / thyristor.html / ic.html / 555.html / op-amp.html / logic-gates.html / relay.html
 │   │   capacitor.html / inductor.html / optoelectronics.html / power-supply.html   — Components
 │   ├── multimeter.html / signal-generator.html / oscilloscope.html  — Measurement
 │   ├── soldering.html / home-wiring.html           — Practical

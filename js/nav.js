@@ -17,6 +17,7 @@ const NAV_LESSON_GROUPS = [
       { id: 'diode', href: 'diode.html', label_th: '💡 ไดโอด', label_en: '💡 Diode' },
       { id: 'capacitor', href: 'capacitor.html', label_th: '🔋 ตัวเก็บประจุ', label_en: '🔋 Capacitor' },
       { id: 'transistor', href: 'transistor.html', label_th: '🎚️ ทรานซิสเตอร์', label_en: '🎚️ Transistor' },
+      { id: 'thyristor', href: 'thyristor.html', label_th: '🔺 ไทริสเตอร์ SCR/TRIAC', label_en: '🔺 Thyristors (SCR/TRIAC)' },
       { id: 'inductor', href: 'inductor.html', label_th: '🌀 ตัวเหนี่ยวนำ', label_en: '🌀 Inductor' },
       { id: 'relay', href: 'relay.html', label_th: '🧲 รีเลย์', label_en: '🧲 Relay' },
       { id: 'opto', href: 'optoelectronics.html', label_th: '🔦 ออปโตอิเล็กทรอนิกส์', label_en: '🔦 Optoelectronics' },
@@ -273,7 +274,7 @@ const NAV_RESOURCES = [
 
   // ── บรรทัด "ครอบคลุมเนื้อหาจาก N หัวข้อ": เติมเข้า footer ทุกหน้าอัตโนมัติ (bilingual) ──
   // แหล่งความจริงเดียว — แก้เลขที่ TOPIC_COUNT ที่เดียว ทุกหน้าอัปเดตพร้อมกัน (อย่า hardcode ในแต่ละหน้า)
-  const TOPIC_COUNT = 31;
+  const TOPIC_COUNT = 32;
   const pageFooter = document.querySelector('footer');
   if (pageFooter && !pageFooter.querySelector('.footer-topics')) {
     const topics = document.createElement('div');

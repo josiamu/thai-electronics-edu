@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="ไทริสเตอร์ SCR / TRIAC / DIAC | สื่อการเรียนการสอน" data-title-en="Thyristors: SCR / TRIAC / DIAC | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ไทริสเตอร์ SCR / TRIAC / DIAC | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.sim-wrap { display:grid; grid-template-columns:1fr 285px; gap:1.25rem; align-items:start; }
+@media (max-width:860px){ .sim-wrap{ grid-template-columns:1fr; } }
+.sim-screen { width:100%; height:auto; display:block; border-radius:12px; background:#0b1220; border:1px solid var(--border); }
+.sim-panel { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:.9rem 1rem; }
+.sim-ctrl { margin-bottom:.9rem; }
+.sim-ctrl-row { display:flex; justify-content:space-between; align-items:center; font-size:.84rem; font-weight:600; margin-bottom:.25rem; }
+.sim-ctrl-row span { color:var(--primary); font-size:.9rem; }
+.sim-ctrl input[type=range] { width:100%; cursor:pointer; accent-color:var(--primary); }
+.sim-readout { display:grid; grid-template-columns:1fr 1fr; gap:.45rem; margin-top:.4rem; }
+.sim-rb { background:var(--bg); border:1px solid var(--border); border-radius:9px; padding:.45rem .6rem; text-align:center; }
+.sim-rl { font-size:.72rem; color:var(--text-light); margin-bottom:.12rem; }
+.sim-rv { font-size:1.02rem; font-weight:700; color:var(--text); }
+.sim-modes { display:flex; gap:.4rem; margin-bottom:.9rem; }
+.sim-modes button { flex:1; padding:.45rem .3rem; font-family:inherit; font-size:.85rem; font-weight:600; cursor:pointer;
+  border:1px solid var(--border); background:var(--bg); color:var(--text); border-radius:9px; }
+.sim-modes button.active { background:var(--primary); border-color:var(--primary); color:#fff; }
+.pin-tbl td { vertical-align:top; }   /* header keeps the site-wide th style (primary bg, white text) */
+.sym-fig { text-align:center; }
+.sym-fig svg { max-width:100%; height:auto; font-family:inherit; font-size:11px; }
+.sym-cap { font-size:.85rem; color:var(--text-light); margin-top:.35rem; }
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🔺</div>
+    <div>
+      <h1 class="th-only">ไทริสเตอร์ — SCR / TRIAC / DIAC</h1>
+      <h1 class="en-only">Thyristors — SCR / TRIAC / DIAC</h1>
+      <p class="th-only">สวิตช์กำลังที่ทริกแล้วค้าง • กระแสโฮลดิ้ง • ควบคุมกำลังไฟ AC ด้วยมุมจุดชนวน + ซิมดิมเมอร์โต้ตอบ</p>
+      <p class="en-only">Latching power switches • holding current • AC phase control + a live dimmer sim</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">วัตถุประสงค์การเรียนรู้</span><span class="en-only">Learning Objectives</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li>อธิบายโครงสร้าง 4 ชั้น PNPN และขา A / K / G ของ SCR ได้</li>
+        <li>อธิบายได้ว่าทำไม SCR <strong>ทริกให้ติดได้ แต่สั่งให้ดับด้วยเกตไม่ได้</strong> (การล็อกตัว/latching)</li>
+        <li>บอกความหมายของ <strong>กระแสโฮลดิ้ง I<sub>H</sub></strong> และวิธีทำให้ SCR หยุดนำกระแสได้</li>
+        <li>อธิบายหลักการ <strong>ควบคุมกำลังด้วยมุมจุดชนวน (phase control)</strong> และคำนวณ V<sub>rms</sub>/กำลังของโหลดได้</li>
+        <li>แยกความต่างของ <strong>SCR / TRIAC / DIAC</strong> และเลือกใช้ให้ถูกงานได้</li>
+        <li>ตรวจสอบ SCR เบื้องต้นด้วยมัลติมิเตอร์ และรู้ข้อควรระวังด้านความปลอดภัยของวงจรไฟบ้าน</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>Describe the 4-layer PNPN structure and the A / K / G terminals of an SCR</li>
+        <li>Explain why an SCR <strong>can be turned on by the gate but never turned off by it</strong> (latching)</li>
+        <li>State what <strong>holding current I<sub>H</sub></strong> means and how to make an SCR stop conducting</li>
+        <li>Explain <strong>phase control</strong> and calculate the load V<sub>rms</sub> / power from the firing angle</li>
+        <li>Tell <strong>SCR / TRIAC / DIAC</strong> apart and pick the right one for a job</li>
+        <li>Test an SCR with a multimeter and respect the safety rules for mains-connected circuits</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 1. ไทริสเตอร์คืออะไร -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ไทริสเตอร์คืออะไร?</span><span class="en-only">What is a Thyristor?</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>สวิตช์อิเล็กทรอนิกส์กำลังสูง</strong> ที่ทำจากสารกึ่งตัวนำ <strong>4 ชั้น (PNPN)</strong> — ไม่มีชิ้นส่วนเคลื่อนที่ ไม่มีหน้าสัมผัสให้ไหม้เหมือนรีเลย์</li>
+            <li>สั่งงานด้วย <strong>พัลส์สั้นๆ ที่ขาเกต</strong> แล้ว <strong>ค้างนำกระแสเอง</strong> โดยไม่ต้องจ่ายเกตต่อ (ต่างจากทรานซิสเตอร์ที่ต้องป้อนเบส/เกตค้างไว้)</li>
+            <li>ทนกระแสและแรงดันสูงมาก — ใช้คุมโหลดไฟบ้าน 220V ได้โดยตรง</li>
+            <li>สลับสถานะเร็วมากและเงียบสนิท เหมาะกับงานที่ต้องสวิตช์ซ้ำๆ ตลอดเวลา</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li>A <strong>high-power electronic switch</strong> built from <strong>four semiconductor layers (PNPN)</strong> — no moving parts, no contacts to burn like a relay</li>
+            <li>Fired by a <strong>short gate pulse</strong>, then it <strong>stays on by itself</strong> with no further gate drive (unlike a transistor, which needs its base/gate held)</li>
+            <li>Handles very high current and voltage — it can switch a 220 V mains load directly</li>
+            <li>Switches fast and silently, ideal where the load is switched over and over</li>
+          </ul>
+        </div>
+        <div class="info-box">
+          <strong class="th-only">💡 ต่างจากรีเลย์และทรานซิสเตอร์อย่างไร</strong>
+          <strong class="en-only">💡 How it differs from relays and transistors</strong>
+          <p class="th-only" style="margin:.4rem 0 0;"><strong>รีเลย์</strong> = สวิตช์กล ต้องจ่ายไฟคอยล์ค้างไว้ มีเสียง มีอายุหน้าสัมผัส<br>
+          <strong>ทรานซิสเตอร์</strong> = ต้องป้อนกระแสเบส/แรงดันเกตค้างไว้ตลอดเวลาที่ต้องการให้นำกระแส<br>
+          <strong>ไทริสเตอร์</strong> = จุดชนวนแวบเดียวแล้วค้าง แต่แลกมาด้วยข้อจำกัด — <em>สั่งให้ดับด้วยเกตไม่ได้</em></p>
+          <p class="en-only" style="margin:.4rem 0 0;"><strong>Relay</strong> = mechanical, needs the coil energised the whole time, audible, contacts wear out<br>
+          <strong>Transistor</strong> = needs base current / gate voltage held for as long as it must conduct<br>
+          <strong>Thyristor</strong> = one quick trigger and it latches — at the price of one big limitation: <em>the gate cannot turn it off</em></p>
+        </div>
+      </div>
+
+      <div style="overflow-x:auto;margin-top:1rem;">
+        <table class="pin-tbl">
+          <thead>
+            <tr>
+              <th><span class="th-only">อุปกรณ์</span><span class="en-only">Device</span></th>
+              <th><span class="th-only">ขา</span><span class="en-only">Terminals</span></th>
+              <th><span class="th-only">นำกระแส</span><span class="en-only">Conducts</span></th>
+              <th><span class="th-only">จุดชนวน</span><span class="en-only">Triggered by</span></th>
+              <th><span class="th-only">ใช้ทำอะไร</span><span class="en-only">Typical use</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>SCR</strong><br><span class="sym-cap th-only">(Silicon Controlled Rectifier)</span><span class="sym-cap en-only">(Silicon Controlled Rectifier)</span></td>
+              <td>A, K, G</td>
+              <td><span class="th-only"><strong>ทิศเดียว</strong> (A→K) ครึ่งคลื่น</span><span class="en-only"><strong>One direction</strong> (A→K), half-wave</span></td>
+              <td><span class="th-only">กระแสเข้าเกต I<sub>G</sub></span><span class="en-only">Gate current I<sub>G</sub></span></td>
+              <td><span class="th-only">คุมกำลัง DC, เรียงกระแสแบบคุมได้, ครอว์บาร์</span><span class="en-only">DC power control, controlled rectifier, crowbar</span></td>
+            </tr>
+            <tr>
+              <td><strong>TRIAC</strong></td>
+              <td>MT1, MT2, G</td>
+              <td><span class="th-only"><strong>สองทิศ</strong> เต็มคลื่น AC</span><span class="en-only"><strong>Both directions</strong>, full-wave AC</span></td>
+              <td><span class="th-only">กระแสเกต (บวกหรือลบก็ได้)</span><span class="en-only">Gate current (either polarity)</span></td>
+              <td><span class="th-only">ดิมเมอร์, คุมความเร็วพัดลม, ฮีตเตอร์</span><span class="en-only">Dimmers, fan speed, heaters</span></td>
+            </tr>
+            <tr>
+              <td><strong>DIAC</strong></td>
+              <td><span class="th-only">2 ขา (ไม่มีเกต)</span><span class="en-only">2 terminals (no gate)</span></td>
+              <td><span class="th-only"><strong>สองทิศ</strong></span><span class="en-only"><strong>Both directions</strong></span></td>
+              <td><span class="th-only">แรงดันถึงจุดเบรกโอเวอร์ V<sub>BO</sub> ≈ 30 V</span><span class="en-only">Voltage reaching breakover V<sub>BO</sub> ≈ 30 V</span></td>
+              <td><span class="th-only">สร้างพัลส์จุดชนวนให้ TRIAC (ในดิมเมอร์)</span><span class="en-only">Generating the trigger pulse for a TRIAC (in dimmers)</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info-box" style="margin-top:.9rem;">
+        <span class="th-only">🔗 SCR คือ "ไดโอดที่สั่งได้" — ถ้ายังไม่แม่นเรื่องไดโอดนำกระแสทิศเดียวและการเรียงกระแส ทบทวนบท <strong>ไดโอด</strong> ก่อน แล้วบทนี้จะง่ายขึ้นมาก</span>
+        <span class="en-only">🔗 An SCR is a "diode you can command" — if one-way conduction and rectification aren't solid yet, review the <strong>Diode</strong> lesson first and this one gets much easier.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. โครงสร้าง SCR -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">โครงสร้างและสัญลักษณ์ของ SCR</span><span class="en-only">SCR Structure &amp; Symbol</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div class="sym-fig">
+          <svg viewBox="0 0 240 210" role="img" aria-label="SCR symbol and PNPN structure">
+            <!-- symbol -->
+            <g stroke="var(--text)" stroke-width="2" fill="none">
+              <line x1="70" y1="18" x2="70" y2="72"/>
+              <polygon points="45,72 95,72 70,116" fill="var(--primary)" fill-opacity="0.15"/>
+              <line x1="42" y1="116" x2="98" y2="116"/>
+              <line x1="70" y1="116" x2="70" y2="176"/>
+              <line x1="45" y1="116" x2="22" y2="134"/>
+              <line x1="22" y1="134" x2="6" y2="134"/>
+            </g>
+            <text x="70" y="12" text-anchor="middle" fill="var(--text)" font-weight="700">A</text>
+            <text x="70" y="192" text-anchor="middle" fill="var(--text)" font-weight="700">K</text>
+            <text x="4" y="150" text-anchor="start" fill="var(--secondary)" font-weight="700">G</text>
+            <!-- PNPN stack -->
+            <g>
+              <rect x="150" y="24" width="66" height="34" fill="#fca5a5" stroke="var(--text)" stroke-width="1.5"/>
+              <rect x="150" y="58" width="66" height="34" fill="#93c5fd" stroke="var(--text)" stroke-width="1.5"/>
+              <rect x="150" y="92" width="66" height="34" fill="#fca5a5" stroke="var(--text)" stroke-width="1.5"/>
+              <rect x="150" y="126" width="66" height="34" fill="#93c5fd" stroke="var(--text)" stroke-width="1.5"/>
+              <text x="183" y="46" text-anchor="middle" font-weight="700" fill="#7f1d1d">P</text>
+              <text x="183" y="80" text-anchor="middle" font-weight="700" fill="#1e3a8a">N</text>
+              <text x="183" y="114" text-anchor="middle" font-weight="700" fill="#7f1d1d">P</text>
+              <text x="183" y="148" text-anchor="middle" font-weight="700" fill="#1e3a8a">N</text>
+              <line x1="183" y1="24" x2="183" y2="10" stroke="var(--text)" stroke-width="2"/>
+              <line x1="183" y1="160" x2="183" y2="176" stroke="var(--text)" stroke-width="2"/>
+              <line x1="150" y1="109" x2="128" y2="109" stroke="var(--secondary)" stroke-width="2"/>
+              <text x="183" y="8" text-anchor="middle" fill="var(--text)" font-weight="700">A</text>
+              <text x="183" y="192" text-anchor="middle" fill="var(--text)" font-weight="700">K</text>
+              <text x="124" y="113" text-anchor="end" fill="var(--secondary)" font-weight="700">G</text>
+            </g>
+          </svg>
+          <div class="sym-cap"><span class="th-only">สัญลักษณ์ = ไดโอดที่มีขาเกตเพิ่มมา • โครงสร้างจริง = 4 ชั้น P-N-P-N (3 รอยต่อ)</span><span class="en-only">Symbol = a diode with a gate added • real structure = four P-N-P-N layers (3 junctions)</span></div>
+        </div>
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>A (Anode)</strong> — ขั้วบวก กระแสไหลเข้า</li>
+            <li><strong>K (Cathode)</strong> — ขั้วลบ กระแสไหลออก</li>
+            <li><strong>G (Gate)</strong> — ขาสั่งงาน ป้อนกระแสเล็กๆ เพื่อจุดชนวน (โดยเทียบกับขา K)</li>
+            <li>กระแสเกตที่ใช้จุดชนวนมัก <strong>ไม่กี่มิลลิแอมป์</strong> แต่ควบคุมกระแสโหลดได้ <strong>หลายแอมป์</strong> — อัตราขยายกำลังสูงมาก</li>
+            <li>ทิศทางเดียวเท่านั้น: <strong>A ต้องบวกกว่า K</strong> จึงจะนำกระแสได้ ถ้าป้อนกลับทางจะกั้นเหมือนไดโอด</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li><strong>A (Anode)</strong> — positive terminal, current flows in</li>
+            <li><strong>K (Cathode)</strong> — negative terminal, current flows out</li>
+            <li><strong>G (Gate)</strong> — control terminal, a small current here fires the device (measured with respect to K)</li>
+            <li>The gate trigger current is typically <strong>a few milliamps</strong>, yet it controls <strong>several amps</strong> of load current — a huge power gain</li>
+            <li>One direction only: <strong>A must be positive with respect to K</strong> to conduct; reversed, it blocks like a diode</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. ทำไมถึงค้าง -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ทำไมจุดชนวนแล้ว "ค้าง"? — แบบจำลอง 2 ทรานซิสเตอร์</span><span class="en-only">Why It Latches — the Two-Transistor Model</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div class="sym-fig">
+          <svg viewBox="0 0 260 210" role="img" aria-label="Two-transistor model of an SCR">
+            <g stroke="var(--text)" stroke-width="2" fill="none">
+              <!-- anode rail -->
+              <line x1="130" y1="12" x2="130" y2="34"/>
+              <line x1="70" y1="34" x2="190" y2="34"/>
+              <line x1="70" y1="34" x2="70" y2="58"/>
+              <!-- PNP body -->
+              <circle cx="70" cy="80" r="22"/>
+              <!-- NPN body -->
+              <circle cx="190" cy="130" r="22"/>
+              <line x1="190" y1="34" x2="190" y2="108"/>
+              <!-- cross coupling -->
+              <line x1="70" y1="102" x2="70" y2="130"/>
+              <line x1="70" y1="130" x2="168" y2="130"/>
+              <line x1="190" y1="152" x2="190" y2="176"/>
+              <line x1="130" y1="176" x2="190" y2="176"/>
+              <line x1="130" y1="176" x2="130" y2="196"/>
+              <line x1="92" y1="80" x2="212" y2="80"/>
+              <line x1="212" y1="80" x2="212" y2="130"/>
+            </g>
+            <g stroke="var(--secondary)" stroke-width="2" fill="none">
+              <line x1="168" y1="130" x2="168" y2="130"/>
+              <line x1="70" y1="130" x2="30" y2="130"/>
+              <line x1="30" y1="130" x2="12" y2="130"/>
+            </g>
+            <text x="130" y="8" text-anchor="middle" fill="var(--text)" font-weight="700">A</text>
+            <text x="130" y="207" text-anchor="middle" fill="var(--text)" font-weight="700">K</text>
+            <text x="10" y="146" text-anchor="start" fill="var(--secondary)" font-weight="700">G</text>
+            <text x="70" y="84" text-anchor="middle" fill="var(--text)" font-weight="700">PNP</text>
+            <text x="190" y="134" text-anchor="middle" fill="var(--text)" font-weight="700">NPN</text>
+            <text x="228" y="106" text-anchor="middle" fill="var(--text-light)" font-size="10">I<tspan baseline-shift="sub">C</tspan>→I<tspan baseline-shift="sub">B</tspan></text>
+          </svg>
+          <div class="sym-cap"><span class="th-only">คอลเลกเตอร์ของแต่ละตัว = เบสของอีกตัว → ป้อนกลับบวก</span><span class="en-only">Each collector feeds the other's base → positive feedback</span></div>
+        </div>
+        <div>
+          <ul class="content-list th-only">
+            <li>มอง SCR เป็น <strong>PNP + NPN ต่อป้อนกลับกัน</strong>: คอลเลกเตอร์ของตัวหนึ่งเป็นเบสของอีกตัว</li>
+            <li>ยิงกระแสเข้าเกต → NPN นำ → ดึงกระแสเบสของ PNP → PNP นำ → <strong>ป้อนกระแสเบสกลับให้ NPN อีก</strong></li>
+            <li>เกิด <strong>ป้อนกลับบวก (positive feedback)</strong> — ทั้งคู่ดันกันเองจนอิ่มตัวในเวลาไมโครวินาที</li>
+            <li>เมื่อวงจรเลี้ยงตัวเองได้แล้ว <strong>ถอดกระแสเกตออกก็ยังนำกระแสต่อ</strong> — นี่คือการล็อกตัว (latch)</li>
+            <li>ตอนนำกระแส แรงดันตกคร่อม A-K เหลือประมาณ <strong>1–1.5 V</strong> (สูงกว่าไดโอดเล็กน้อย เพราะมี 3 รอยต่อ)</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li>Think of an SCR as a <strong>PNP and an NPN cross-coupled</strong>: each transistor's collector is the other's base</li>
+            <li>Inject gate current → the NPN conducts → it pulls the PNP's base current → the PNP conducts → <strong>which feeds the NPN's base again</strong></li>
+            <li>That is <strong>positive feedback</strong> — the pair drives itself into saturation within microseconds</li>
+            <li>Once self-sustaining, <strong>removing the gate current changes nothing</strong> — it stays on. That is the latch</li>
+            <li>While conducting, the A-K drop is about <strong>1–1.5 V</strong> (a bit more than a diode, since there are three junctions)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="warn-box" style="margin-top:.9rem;">
+        <strong class="th-only">⚠ กฎเหล็กของ SCR</strong>
+        <strong class="en-only">⚠ The iron rule of the SCR</strong>
+        <p class="th-only" style="margin:.35rem 0 0;">เกต <strong>สั่งให้ติดได้ แต่สั่งให้ดับไม่ได้</strong> — จะดับได้ทางเดียวคือทำให้กระแสที่ไหลผ่านลดต่ำกว่า <strong>กระแสโฮลดิ้ง I<sub>H</sub></strong> เช่น ตัดวงจร กดสวิตช์ลัด A-K หรือรอให้ไฟ AC ผ่านจุดตัดศูนย์เอง</p>
+        <p class="en-only" style="margin:.35rem 0 0;">The gate <strong>can turn it on but never off</strong>. The only way off is to drop the current through it below the <strong>holding current I<sub>H</sub></strong>: break the circuit, short A-K momentarily, or let the AC waveform cross zero on its own.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. สภาวะการทำงาน -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">สภาวะการทำงาน 3 แบบ</span><span class="en-only">The Three Operating States</span></div>
+    <div class="card">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <strong class="th-only">กั้นไปหน้า (Forward blocking) — A บวกกว่า K แต่ยังไม่จุดชนวน</strong>
+            <strong class="en-only">Forward blocking — A positive, not yet fired</strong>
+            <p class="th-only" style="margin:.3rem 0 0;">ยังไม่นำกระแส เหมือนสวิตช์เปิด มีแต่กระแสรั่วเล็กน้อย รอสัญญาณที่เกต (ถ้าแรงดันสูงเกิน V<sub>BO</sub> มันจะติดเองโดยไม่ต้องใช้เกต — สภาวะที่ปกติ<em>ไม่</em>ต้องการ)</p>
+            <p class="en-only" style="margin:.3rem 0 0;">Not conducting — like an open switch with only leakage current, waiting for the gate. (If the voltage exceeds V<sub>BO</sub> it fires on its own without a gate signal — normally <em>not</em> what you want.)</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <strong class="th-only">นำกระแส (Forward conducting) — จุดชนวนแล้วค้าง</strong>
+            <strong class="en-only">Forward conducting — fired and latched</strong>
+            <p class="th-only" style="margin:.3rem 0 0;">ป้อน I<sub>G</sub> ถึงค่า I<sub>GT</sub> → นำกระแสทันทีและค้างเอง แรงดันตก ~1–1.5 V กระแสถูกจำกัดด้วยโหลดเท่านั้น <strong>ต้องมีโหลดจำกัดกระแสเสมอ</strong></p>
+            <p class="en-only" style="margin:.3rem 0 0;">Feed I<sub>G</sub> up to I<sub>GT</sub> → it conducts immediately and stays on, dropping ~1–1.5 V. Current is limited only by the load, so <strong>a current-limiting load is mandatory</strong></p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <strong class="th-only">กั้นย้อนกลับ (Reverse blocking) — A ลบกว่า K</strong>
+            <strong class="en-only">Reverse blocking — A negative</strong>
+            <p class="th-only" style="margin:.3rem 0 0;">กั้นเหมือนไดโอดกลับทาง จุดชนวนอย่างไรก็ไม่ติด และถ้าเกินพิกัด V<sub>RRM</sub> จะพังถาวร</p>
+            <p class="en-only" style="margin:.3rem 0 0;">Blocks like a reverse-biased diode; no gate signal can fire it, and exceeding the V<sub>RRM</sub> rating destroys it permanently</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top:.6rem;">
+        <div class="info-box">
+          <strong class="th-only">🔑 ศัพท์กระแสที่ต้องแยกให้ออก</strong>
+          <strong class="en-only">🔑 Two currents not to confuse</strong>
+          <ul class="content-list th-only" style="margin:.4rem 0 0;">
+            <li><strong>I<sub>L</sub> (Latching current)</strong> — กระแสต่ำสุดที่ต้องไหล<em>ตอนจุดชนวน</em> เพื่อให้ล็อกตัวติด (ถ้าโหลดกินกระแสน้อยเกินไป ยิงเกตแล้วก็ยังไม่ติด)</li>
+            <li><strong>I<sub>H</sub> (Holding current)</strong> — กระแสต่ำสุดที่ต้องมี<em>เพื่อคงสภาพนำกระแส</em> ต่ำกว่านี้เมื่อไรก็ดับ ค่าปกติไม่กี่ mA และ I<sub>L</sub> มักมากกว่า I<sub>H</sub> ประมาณ 2–3 เท่า</li>
+          </ul>
+          <ul class="content-list en-only" style="margin:.4rem 0 0;">
+            <li><strong>I<sub>L</sub> (latching current)</strong> — the minimum current that must flow <em>at the moment of firing</em> for the latch to take hold (fire the gate into too light a load and it simply won't stay on)</li>
+            <li><strong>I<sub>H</sub> (holding current)</strong> — the minimum current needed <em>to stay</em> conducting; below it the device turns off. Usually a few mA, with I<sub>L</sub> roughly 2–3× I<sub>H</sub></li>
+          </ul>
+        </div>
+        <div class="info-box">
+          <strong class="th-only">⚡ ทำไมมันเข้ากับไฟ AC ได้ดี</strong>
+          <strong class="en-only">⚡ Why AC suits it so well</strong>
+          <p class="th-only" style="margin:.4rem 0 0;">ไฟ AC ผ่าน <strong>จุดตัดศูนย์ (zero crossing)</strong> ทุกๆ ครึ่งคาบ (50 Hz → ทุก 10 ms) กระแสจึงตกลงต่ำกว่า I<sub>H</sub> เองอัตโนมัติ → SCR/TRIAC <strong>ดับเองทุกครึ่งคลื่น</strong> แล้วเราค่อยเลือกว่าจะจุดชนวนใหม่ตอนไหน นี่คือหัวใจของการควบคุมกำลังแบบมุมจุดชนวน<br>
+          ส่วนไฟ DC ไม่มีจุดตัดศูนย์ — จุดชนวนแล้วค้างยาว ต้องมีวงจรดับ (commutation) มาช่วย</p>
+          <p class="en-only" style="margin:.4rem 0 0;">AC passes through a <strong>zero crossing</strong> every half cycle (50 Hz → every 10 ms), so the current falls below I<sub>H</sub> by itself → the SCR/TRIAC <strong>turns off every half cycle</strong> and we choose when to fire it again. That is exactly what phase control exploits.<br>
+          DC has no zero crossing — once fired it stays on until a commutation circuit forces it off.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Phase control + sim -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ควบคุมกำลังด้วยมุมจุดชนวน (Phase Control)</span><span class="en-only">Phase Control</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li>แทนที่จะหรี่ไฟด้วยตัวต้านทาน (ซึ่งเผาพลังงานทิ้งเป็นความร้อน) เรา <strong>เลือกจุดชนวนช้า-เร็ว</strong> ในแต่ละครึ่งคลื่น</li>
+            <li><strong>มุมจุดชนวน α (firing angle)</strong> = ชนวนช้าไปกี่องศาหลังจุดตัดศูนย์ — α น้อย = สว่าง/แรง, α มาก = หรี่/เบา</li>
+            <li>ช่วงที่ยังไม่จุดชนวน อุปกรณ์กั้นไฟไว้ (แทบไม่มีกระแส = แทบไม่ร้อน) ช่วงนำกระแสก็ตกคร่อมแค่ ~1 V → <strong>ประสิทธิภาพสูงมาก</strong></li>
+            <li>ราคาที่ต้องจ่าย: การตัดคลื่นกลางคันทำให้เกิด <strong>ฮาร์มอนิกและสัญญาณรบกวน (EMI)</strong> จึงต้องมีตัวกรอง (choke + C) ในดิมเมอร์จริง</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li>Instead of dimming with a resistor (which burns the energy as heat), we <strong>choose how late to fire</strong> in each half cycle</li>
+            <li>The <strong>firing angle α</strong> is how many degrees after the zero crossing we trigger — small α = bright/strong, large α = dim/weak</li>
+            <li>Before firing, the device blocks (almost no current, almost no heat); while conducting it drops only ~1 V → <strong>very high efficiency</strong></li>
+            <li>The price: chopping the waveform generates <strong>harmonics and EMI</strong>, so real dimmers include a filter (choke + capacitor)</li>
+          </ul>
+          <div class="formula-box">
+            <div class="formula">V<sub>rms</sub>(SCR) = V<sub>s</sub> · √[ (π − α + sin2α/2) / 2π ]</div>
+            <div class="formula" style="margin-top:.4rem;">V<sub>rms</sub>(TRIAC) = V<sub>s</sub> · √[ (π − α + sin2α/2) / π ]</div>
+            <div style="font-size:.85rem;color:var(--text-light);margin-top:.5rem;">
+              <span class="th-only">α เป็นเรเดียน • P = V<sub>rms</sub>² / R</span>
+              <span class="en-only">α in radians • P = V<sub>rms</sub>² / R</span>
+            </div>
+          </div>
+        </div>
+        <div class="info-box">
+          <strong class="th-only">🔍 ลองสังเกตในซิมด้านล่าง</strong>
+          <strong class="en-only">🔍 Things to try in the sim below</strong>
+          <ul class="content-list th-only" style="margin:.4rem 0 0;">
+            <li>เลื่อน α จาก 0° → 180° แล้วดูว่ากำลังไฟ<strong>ไม่ได้ลดเป็นเส้นตรง</strong>ตามมุม</li>
+            <li>ที่ <strong>α = 90°</strong> TRIAC ให้กำลังเหลือ <strong>50%</strong> พอดี (ครึ่งหนึ่งของพื้นที่ใต้กราฟกำลัง)</li>
+            <li>สลับ SCR ↔ TRIAC ที่ α เดิม → SCR ได้กำลัง<strong>ครึ่งเดียว</strong>ของ TRIAC เสมอ เพราะใช้แค่ครึ่งคลื่นบวก</li>
+            <li>สังเกตว่ากระแสหยุดที่จุดตัดศูนย์เสมอ ไม่ว่าจะจุดชนวนตอนไหน</li>
+          </ul>
+          <ul class="content-list en-only" style="margin:.4rem 0 0;">
+            <li>Sweep α from 0° to 180° and notice the power <strong>does not fall linearly</strong> with angle</li>
+            <li>At <strong>α = 90°</strong> a TRIAC delivers exactly <strong>50%</strong> power</li>
+            <li>Switch SCR ↔ TRIAC at the same α → the SCR always gives <strong>half</strong> the TRIAC's power, since it only uses the positive half cycles</li>
+            <li>Note that conduction always ends at the zero crossing, no matter when it was fired</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3 style="margin:1.2rem 0 .6rem;font-size:1.05rem;">
+        <span class="th-only">🎛️ ซิมดิมเมอร์ — ลองปรับมุมจุดชนวน</span>
+        <span class="en-only">🎛️ Dimmer sim — try the firing angle</span>
+      </h3>
+      <div class="sim-wrap">
+        <canvas id="scr-canvas" class="sim-screen" width="520" height="300" aria-label="Phase control waveform"></canvas>
+        <div class="sim-panel">
+          <div class="sim-modes">
+            <button id="scr-mode-scr" class="active" type="button">SCR</button>
+            <button id="scr-mode-triac" type="button">TRIAC</button>
+          </div>
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="scr-angle"><span class="th-only">มุมจุดชนวน α</span><span class="en-only">Firing angle α</span></label>
+              <span id="scr-angle-val">45°</span>
+            </div>
+            <input type="range" id="scr-angle" min="0" max="180" step="1" value="45">
+          </div>
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="scr-vs"><span class="th-only">แรงดันแหล่งจ่าย (rms)</span><span class="en-only">Source voltage (rms)</span></label>
+              <span id="scr-vs-val">220 V</span>
+            </div>
+            <input type="range" id="scr-vs" min="12" max="240" step="4" value="220">
+          </div>
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="scr-load"><span class="th-only">โหลด (ความต้านทาน)</span><span class="en-only">Load resistance</span></label>
+              <span id="scr-load-val">484 Ω</span>
+            </div>
+            <input type="range" id="scr-load" min="50" max="1500" step="2" value="484">
+          </div>
+          <div class="sim-readout">
+            <div class="sim-rb">
+              <div class="sim-rl"><span class="th-only">V คร่อมโหลด</span><span class="en-only">Load V<sub>rms</sub></span></div>
+              <div class="sim-rv" id="scr-out-v">—</div>
+            </div>
+            <div class="sim-rb">
+              <div class="sim-rl"><span class="th-only">กำลังไฟ</span><span class="en-only">Power</span></div>
+              <div class="sim-rv" id="scr-out-p">—</div>
+            </div>
+            <div class="sim-rb">
+              <div class="sim-rl"><span class="th-only">% ของเต็มกำลัง</span><span class="en-only">% of full power</span></div>
+              <div class="sim-rv" id="scr-out-pct">—</div>
+            </div>
+            <div class="sim-rb">
+              <div class="sim-rl"><span class="th-only">มุมนำกระแส</span><span class="en-only">Conduction angle</span></div>
+              <div class="sim-rv" id="scr-out-cond">—</div>
+            </div>
+          </div>
+          <div style="font-size:.78rem;color:var(--text-light);margin-top:.6rem;">
+            <span class="th-only">โหลด 484 Ω ≈ หลอดไส้ 100 W ที่ 220 V • ความถี่ 50 Hz</span>
+            <span class="en-only">484 Ω ≈ a 100 W incandescent lamp at 220 V • 50 Hz</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. TRIAC & DIAC -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">TRIAC และ DIAC</span><span class="en-only">TRIAC &amp; DIAC</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div class="sym-fig">
+          <svg viewBox="0 0 260 200" role="img" aria-label="TRIAC and DIAC symbols">
+            <!-- TRIAC -->
+            <g stroke="var(--text)" stroke-width="2" fill="none">
+              <line x1="80" y1="14" x2="80" y2="42"/>
+              <line x1="55" y1="42" x2="105" y2="42"/>
+              <line x1="55" y1="42" x2="55" y2="148"/>
+              <line x1="105" y1="42" x2="105" y2="148"/>
+              <line x1="55" y1="148" x2="105" y2="148"/>
+              <line x1="80" y1="148" x2="80" y2="176"/>
+              <polygon points="41,66 69,66 55,94" fill="var(--primary)" fill-opacity="0.15"/>
+              <line x1="38" y1="94" x2="72" y2="94"/>
+              <polygon points="91,124 119,124 105,96" fill="var(--primary)" fill-opacity="0.15"/>
+              <line x1="88" y1="96" x2="122" y2="96"/>
+              <line x1="55" y1="130" x2="26" y2="130"/>
+            </g>
+            <text x="80" y="10" text-anchor="middle" fill="var(--text)" font-weight="700">MT2</text>
+            <text x="80" y="192" text-anchor="middle" fill="var(--text)" font-weight="700">MT1</text>
+            <text x="24" y="134" text-anchor="end" fill="var(--secondary)" font-weight="700">G</text>
+            <!-- DIAC -->
+            <g stroke="var(--text)" stroke-width="2" fill="none">
+              <line x1="200" y1="14" x2="200" y2="60"/>
+              <polygon points="176,60 224,60 200,102" fill="var(--accent)" fill-opacity="0.18"/>
+              <polygon points="176,144 224,144 200,102" fill="var(--accent)" fill-opacity="0.18"/>
+              <line x1="200" y1="144" x2="200" y2="176"/>
+            </g>
+            <text x="200" y="10" text-anchor="middle" fill="var(--text)" font-weight="700">MT2</text>
+            <text x="200" y="192" text-anchor="middle" fill="var(--text)" font-weight="700">MT1</text>
+            <text x="236" y="106" text-anchor="start" fill="var(--text-light)" font-size="10">V<tspan baseline-shift="sub">BO</tspan>≈30V</text>
+          </svg>
+          <div class="sym-cap"><span class="th-only">TRIAC = SCR สองตัวต่อกลับทางกัน + เกตร่วม • DIAC = สองทิศ ไม่มีเกต</span><span class="en-only">TRIAC = two SCRs back-to-back with a shared gate • DIAC = bidirectional, no gate</span></div>
+        </div>
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>TRIAC</strong> นำกระแสได้ทั้งสองทิศ จึงคุมไฟ AC ได้<strong>เต็มคลื่น</strong> ด้วยตัวเดียว (ถ้าใช้ SCR ต้องใช้ 2 ตัวต่อกลับทาง)</li>
+            <li>ขาเรียกว่า <strong>MT1 / MT2</strong> (Main Terminal) ไม่ใช่ A/K เพราะไม่มีขั้วตายตัว — เกตอ้างอิงกับ MT1 เสมอ</li>
+            <li>จุดชนวนได้ทั้งกระแสเกตบวกและลบ แต่ความไวไม่เท่ากันในแต่ละควอดแรนต์ (โหมด I⁺, III⁻ ไวที่สุด นิยมใช้)</li>
+            <li><strong>DIAC</strong> ไม่มีเกต — มันจะ "แตก" นำกระแสเองเมื่อแรงดันคร่อมถึง <strong>V<sub>BO</sub> ≈ 30 V</strong> ทั้งสองทิศ</li>
+            <li>คู่หูคลาสสิก: <strong>R-C หน่วงเฟส → DIAC → เกตของ TRIAC</strong> ให้พัลส์คมๆ ที่มุมเดียวกันทุกครึ่งคลื่น (สมมาตร ไฟไม่กระพริบ)</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li>A <strong>TRIAC</strong> conducts both ways, so one device gives <strong>full-wave</strong> AC control (with SCRs you'd need two, back to back)</li>
+            <li>Its terminals are <strong>MT1 / MT2</strong> (main terminals), not A/K, because neither is fixed as positive — the gate is always referenced to MT1</li>
+            <li>It fires on positive or negative gate current, though sensitivity differs per quadrant (I⁺ and III⁻ are the most sensitive and most used)</li>
+            <li>A <strong>DIAC</strong> has no gate — it simply breaks over and conducts once the voltage across it reaches <strong>V<sub>BO</sub> ≈ 30 V</strong>, in either direction</li>
+            <li>The classic pair: <strong>an R-C phase shifter → DIAC → TRIAC gate</strong>, giving a sharp pulse at the same angle every half cycle (symmetrical, so the lamp doesn't flicker)</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3 style="margin:1.2rem 0 .6rem;font-size:1.05rem;">
+        <span class="th-only">วงจรดิมเมอร์จริง (R-C + DIAC + TRIAC)</span>
+        <span class="en-only">A real dimmer circuit (R-C + DIAC + TRIAC)</span>
+      </h3>
+      <div class="sym-fig">
+        <svg viewBox="0 0 560 230" role="img" aria-label="TRIAC dimmer circuit">
+          <g stroke="var(--text)" stroke-width="2" fill="none">
+            <!-- outer loop -->
+            <line x1="60" y1="40" x2="230" y2="40"/>
+            <line x1="290" y1="40" x2="470" y2="40"/>
+            <line x1="470" y1="40" x2="470" y2="82"/>
+            <line x1="470" y1="148" x2="470" y2="196"/>
+            <line x1="470" y1="196" x2="60" y2="196"/>
+            <line x1="60" y1="40" x2="60" y2="88"/>
+            <line x1="60" y1="140" x2="60" y2="196"/>
+            <!-- AC source -->
+            <circle cx="60" cy="114" r="26"/>
+            <path d="M46 114 q7 -12 14 0 q7 12 14 0" stroke-width="2"/>
+            <!-- lamp -->
+            <circle cx="260" cy="40" r="22"/>
+            <line x1="245" y1="25" x2="275" y2="55"/>
+            <line x1="275" y1="25" x2="245" y2="55"/>
+            <!-- triac block -->
+            <rect x="440" y="82" width="60" height="66" rx="6"/>
+            <!-- gate branch: pot + cap + diac -->
+            <line x1="350" y1="40" x2="350" y2="66"/>
+            <rect x="334" y="66" width="32" height="40" rx="4"/>
+            <line x1="350" y1="106" x2="350" y2="126"/>
+            <line x1="350" y1="126" x2="440" y2="126"/>
+            <line x1="350" y1="126" x2="350" y2="146"/>
+            <line x1="330" y1="146" x2="370" y2="146"/>
+            <line x1="330" y1="158" x2="370" y2="158"/>
+            <line x1="350" y1="158" x2="350" y2="196"/>
+            <!-- diac in gate lead -->
+            <polygon points="392,116 392,136 412,126" fill="var(--accent)" fill-opacity="0.2"/>
+            <polygon points="424,116 424,136 404,126" fill="var(--accent)" fill-opacity="0.2"/>
+            <!-- pot arrow -->
+            <line x1="374" y1="100" x2="352" y2="86" stroke="var(--secondary)"/>
+          </g>
+          <text x="60" y="118" text-anchor="middle" fill="var(--text-light)" font-size="10">AC</text>
+          <text class="th-only" x="260" y="82" text-anchor="middle" fill="var(--text)" font-size="11" font-weight="600">โหลด (หลอดไฟ)</text>
+          <text class="en-only" x="260" y="82" text-anchor="middle" fill="var(--text)" font-size="11" font-weight="600">Load (lamp)</text>
+          <text x="470" y="172" text-anchor="middle" fill="var(--text)" font-size="11" font-weight="700">TRIAC</text>
+          <text x="504" y="90" text-anchor="start" fill="var(--text-light)" font-size="10">MT2</text>
+          <text x="504" y="148" text-anchor="start" fill="var(--text-light)" font-size="10">MT1</text>
+          <text x="386" y="112" text-anchor="middle" fill="var(--accent)" font-size="10" font-weight="700">DIAC</text>
+          <text x="326" y="90" text-anchor="end" fill="var(--text)" font-size="11">R<tspan baseline-shift="sub">VR</tspan></text>
+          <text x="326" y="158" text-anchor="end" fill="var(--text)" font-size="11">C</text>
+        </svg>
+        <div class="sym-cap">
+          <span class="th-only">หมุน R<sub>VR</sub> → เปลี่ยนเวลาชาร์จ C → C ถึง 30 V ช้า/เร็ว → DIAC แตกและยิงเกต TRIAC ที่มุม α ต่างกัน = หรี่ไฟ</span>
+          <span class="en-only">Turning R<sub>VR</sub> changes how fast C charges → C reaches 30 V sooner or later → the DIAC breaks over and fires the TRIAC gate at a different angle α = dimming</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. สเปคและเบอร์ -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">สเปคที่ต้องดู และเบอร์ยอดนิยม</span><span class="en-only">Key Ratings &amp; Common Part Numbers</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <ul class="content-list th-only">
+          <li><strong>V<sub>DRM</sub> / V<sub>RRM</sub></strong> — แรงดันสูงสุดที่กั้นได้ไปหน้า/ย้อนกลับ ไฟบ้าน 220V (ยอด ≈ 311V) ควรเลือก <strong>≥ 400–600 V</strong></li>
+          <li><strong>I<sub>T(RMS)</sub></strong> — กระแสโหลดต่อเนื่องสูงสุด เลือกเผื่ออย่างน้อย 2 เท่าของโหลดจริง</li>
+          <li><strong>I<sub>GT</sub> / V<sub>GT</sub></strong> — กระแส/แรงดันเกตที่ใช้จุดชนวน (ตัวไวใช้ &lt; 1 mA, ตัวกำลังใหญ่หลายสิบ mA)</li>
+          <li><strong>I<sub>H</sub></strong> — กระแสโฮลดิ้ง สำคัญมากถ้าโหลดกินกระแสน้อย</li>
+          <li><strong>dv/dt</strong> — ถ้าแรงดันพุ่งเร็วเกินไป อาจ<strong>ติดเองโดยไม่ได้สั่ง</strong> (false triggering) → แก้ด้วย RC snubber</li>
+          <li><strong>di/dt</strong> — กระแสพุ่งเร็วเกินทำให้จุดร้อนเฉพาะที่และพังได้ → ใส่ตัวเหนี่ยวนำเล็กๆ ช่วย</li>
+        </ul>
+        <ul class="content-list en-only">
+          <li><strong>V<sub>DRM</sub> / V<sub>RRM</sub></strong> — maximum forward/reverse blocking voltage. For 220 V mains (peak ≈ 311 V) choose <strong>≥ 400–600 V</strong></li>
+          <li><strong>I<sub>T(RMS)</sub></strong> — maximum continuous load current; allow at least 2× the real load</li>
+          <li><strong>I<sub>GT</sub> / V<sub>GT</sub></strong> — gate current/voltage needed to fire (sensitive parts &lt; 1 mA, big power parts tens of mA)</li>
+          <li><strong>I<sub>H</sub></strong> — holding current, critical when the load draws little current</li>
+          <li><strong>dv/dt</strong> — too fast a voltage rise can <strong>fire it without any gate signal</strong> (false triggering) → fix with an RC snubber</li>
+          <li><strong>di/dt</strong> — too fast a current rise causes local hot spots and failure → a small series inductor helps</li>
+        </ul>
+      </div>
+      <div style="overflow-x:auto;margin-top:1rem;">
+        <table class="pin-tbl">
+          <thead>
+            <tr>
+              <th><span class="th-only">เบอร์</span><span class="en-only">Part</span></th>
+              <th><span class="th-only">ชนิด</span><span class="en-only">Type</span></th>
+              <th><span class="th-only">พิกัดคร่าวๆ</span><span class="en-only">Rough rating</span></th>
+              <th><span class="th-only">งานที่เจอบ่อย</span><span class="en-only">Where you meet it</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>MCR100-6 / C106</td><td>SCR</td><td>0.8–4 A, 400–600 V</td><td><span class="th-only">วงจรเล็ก, ครอว์บาร์, ของเล่นอิเล็กทรอนิกส์</span><span class="en-only">Small circuits, crowbars, hobby projects</span></td></tr>
+            <tr><td>BT151 / TYN612</td><td>SCR</td><td>12 A, 600 V</td><td><span class="th-only">คุมกำลัง, ชาร์จเจอร์, เครื่องเชื่อม</span><span class="en-only">Power control, chargers, welders</span></td></tr>
+            <tr><td>BT136</td><td>TRIAC</td><td>4 A, 600 V</td><td><span class="th-only">ดิมเมอร์, พัดลม, เครื่องใช้ในบ้าน</span><span class="en-only">Dimmers, fans, home appliances</span></td></tr>
+            <tr><td>BTA16 / BTA41</td><td>TRIAC</td><td>16–41 A, 600–800 V</td><td><span class="th-only">ฮีตเตอร์, มอเตอร์ใหญ่, เตาไฟฟ้า</span><span class="en-only">Heaters, larger motors, cookers</span></td></tr>
+            <tr><td>DB3</td><td>DIAC</td><td>V<sub>BO</sub> ≈ 32 V</td><td><span class="th-only">จุดชนวน TRIAC ในดิมเมอร์เกือบทุกตัว</span><span class="en-only">Triggering the TRIAC in nearly every dimmer</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info-box" style="margin-top:.9rem;">
+        <span class="th-only">🔗 <strong>BTA</strong> รุ่นที่ลงท้ายแบบนี้มักเป็นแบบ <em>ตัวถังฉนวน (isolated tab)</em> — ยึดฮีตซิงก์ได้โดยไม่ต้องใช้แผ่นไมกา สะดวกและปลอดภัยกว่า</span>
+        <span class="en-only">🔗 <strong>BTA</strong>-suffix parts usually have an <em>isolated tab</em> — they bolt straight to a heatsink without a mica washer, which is both easier and safer.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. การใช้งานจริง -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">การใช้งานจริง</span><span class="en-only">Real-World Uses</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <ul class="content-list th-only">
+          <li><strong>ดิมเมอร์หลอดไฟ</strong> — TRIAC + DIAC ตามวงจรด้านบน</li>
+          <li><strong>คุมความเร็วพัดลม/สว่าน</strong> — ปรับกำลังที่ป้อนมอเตอร์แบบไม่เผาทิ้ง</li>
+          <li><strong>คุมอุณหภูมิฮีตเตอร์/เตารีด</strong> — สั่งจ่ายกำลังเป็นสัดส่วน</li>
+          <li><strong>ครอว์บาร์ (Crowbar)</strong> — ป้องกันแรงดันเกิน: ซีเนอร์ตรวจจับ → ยิงเกต SCR → ลัดวงจรจนฟิวส์ขาด รักษาโหลดไว้</li>
+        </ul>
+        <ul class="content-list en-only">
+          <li><strong>Lamp dimmers</strong> — TRIAC + DIAC exactly as shown above</li>
+          <li><strong>Fan / drill speed control</strong> — proportion the power to the motor without burning it off as heat</li>
+          <li><strong>Heater and iron temperature control</strong> — deliver power proportionally</li>
+          <li><strong>Crowbar protection</strong> — a zener detects overvoltage → fires an SCR → shorts the rail until the fuse blows, saving the load</li>
+        </ul>
+        <ul class="content-list th-only">
+          <li><strong>SSR (Solid State Relay)</strong> — ข้างในคือ TRIAC/SCR + ออปโตคัปเปลอร์ แยกวงจรควบคุมออกจากไฟบ้าน</li>
+          <li><strong>วงจรจุดระเบิด/แฟลช</strong> — ปล่อยประจุจาก C ก้อนใหญ่เข้าหลอดแฟลชในพริบตา</li>
+          <li><strong>เรียงกระแสแบบคุมได้</strong> — ปรับแรงดัน DC ขาออกในเครื่องชาร์จแบตเตอรี่/เครื่องเชื่อม</li>
+          <li><strong>สตาร์ทมอเตอร์แบบนุ่ม (Soft starter)</strong> — ค่อยๆ ลดมุมจุดชนวนตอนออกตัว ลดกระแสกระชาก</li>
+        </ul>
+        <ul class="content-list en-only">
+          <li><strong>Solid State Relays</strong> — inside is a TRIAC/SCR plus an optocoupler isolating the control side from the mains</li>
+          <li><strong>Ignition / photo-flash circuits</strong> — dumping a big capacitor into a flash tube in an instant</li>
+          <li><strong>Controlled rectifiers</strong> — adjusting the DC output in battery chargers and welders</li>
+          <li><strong>Soft starters</strong> — ramping the firing angle down on start-up to limit inrush current</li>
+        </ul>
+      </div>
+      <div class="info-box" style="margin-top:.6rem;">
+        <span class="th-only">🔗 SSR คือการเอา <strong>ออปโตคัปเปลอร์</strong> (บท <strong>ออปโตอิเล็กทรอนิกส์</strong>) มาต่อกับ TRIAC — เทียบกับ <strong>รีเลย์</strong> กลไกแล้ว SSR เงียบ ไม่มีหน้าสัมผัสสึก สลับได้เร็วมาก แต่ต้องระบายความร้อนและมีกระแสรั่วเล็กน้อย</span>
+        <span class="en-only">🔗 An SSR is an <strong>optocoupler</strong> (see the <strong>Optoelectronics</strong> lesson) driving a TRIAC — versus a mechanical <strong>relay</strong> it is silent, has no contacts to wear and switches very fast, but it needs heatsinking and leaks a little current.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. วัดและทดสอบ -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ตรวจสอบ SCR ด้วยมัลติมิเตอร์</span><span class="en-only">Testing an SCR with a Multimeter</span></div>
+    <div class="card">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <strong class="th-only">วัดรอยต่อเกต-แคโทด (G-K) ด้วยโหมดไดโอด</strong>
+            <strong class="en-only">Check the gate-cathode junction (G-K) in diode mode</strong>
+            <p class="th-only" style="margin:.3rem 0 0;">ควรอ่านได้เหมือนไดโอด (~0.6–0.8 V) ทางหนึ่ง และ OL อีกทางหนึ่ง ถ้าอ่าน 0 V ทั้งสองทาง = <strong>ลัดวงจร (พัง)</strong></p>
+            <p class="en-only" style="margin:.3rem 0 0;">You should read a diode drop (~0.6–0.8 V) one way and OL the other. Zero both ways means a <strong>shorted (dead) device</strong></p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <strong class="th-only">วัด A-K ทั้งสองทิศ</strong>
+            <strong class="en-only">Check A-K in both directions</strong>
+            <p class="th-only" style="margin:.3rem 0 0;">ต้องอ่าน <strong>OL (ความต้านทานสูง) ทั้งสองทิศ</strong> เพราะยังไม่ได้จุดชนวน ถ้านำกระแสอยู่แล้ว = พัง</p>
+            <p class="en-only" style="margin:.3rem 0 0;">Both directions must read <strong>OL (high resistance)</strong> since it hasn't been fired. If it already conducts, it's faulty</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <strong class="th-only">ทดสอบการล็อกตัว (ทดสอบจริงที่สนุกที่สุด)</strong>
+            <strong class="en-only">Test the latch (the fun one)</strong>
+            <p class="th-only" style="margin:.3rem 0 0;">ต่อแบตเตอรี่ 9 V → ตัวต้านทาน 330 Ω → LED → ขา A, ส่วนขา K ลงลบ<br>
+            แตะสายจาก A มาที่ <strong>G</strong> ชั่วขณะ → LED <strong>ติดค้าง</strong> แม้ปล่อยมือแล้ว = ล็อกตัวได้ปกติ<br>
+            จากนั้น <strong>ถอดสายที่ A ออกวูบเดียว</strong> → LED ดับและไม่ติดเอง = กระแสต่ำกว่า I<sub>H</sub> แล้วดับจริง</p>
+            <p class="en-only" style="margin:.3rem 0 0;">Wire 9 V → 330 Ω → LED → anode, with the cathode to the negative rail.<br>
+            Briefly touch a wire from A to <strong>G</strong> → the LED <strong>stays lit</strong> after you let go = the latch works.<br>
+            Then <strong>break the anode lead for an instant</strong> → the LED goes out and stays out = current fell below I<sub>H</sub></p>
+          </div>
+        </div>
+      </div>
+      <div class="warn-box">
+        <span class="th-only">⚠ มัลติมิเตอร์บางรุ่นจ่ายกระแสในโหมดไดโอดน้อยกว่า I<sub>H</sub> ของ SCR ตัวใหญ่ ทำให้ "จุดชนวนแล้วไม่ค้าง" ทั้งที่อุปกรณ์ดี — กรณีนี้ต้องทดสอบด้วยแบตเตอรี่ + หลอด/LED ตามข้อ 3 เท่านั้น</span>
+        <span class="en-only">⚠ Some meters supply less current in diode mode than a big SCR's I<sub>H</sub>, so a perfectly good device "fires but won't latch". In that case only the battery + lamp/LED test in step 3 is conclusive.</span>
+      </div>
+      <div class="info-box">
+        <span class="th-only">🔗 ทบทวนการใช้โหมดไดโอดและอ่านค่าให้ถูกได้ในบท <strong>มัลติมิเตอร์</strong> — และลองเล่นวงจรจุดชนวนแบบเดียวกันได้ในหน้า <strong>ทดลองบนเบรดบอร์ด</strong></span>
+        <span class="en-only">🔗 Review diode mode and how to read it in the <strong>Multimeter</strong> lesson — and try a similar latching circuit in the <strong>Breadboard lab</strong>.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. ความปลอดภัย -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ความปลอดภัยและข้อควรระวัง</span><span class="en-only">Safety &amp; Cautions</span></div>
+    <div class="card">
+      <div class="warn-box">
+        <strong class="th-only">⚠ วงจรดิมเมอร์ต่อกับไฟบ้านโดยตรง — ไม่มีการแยกทางไฟฟ้า</strong>
+        <strong class="en-only">⚠ Dimmer circuits sit directly on the mains — there is no isolation</strong>
+        <p class="th-only" style="margin:.35rem 0 0;">ทุกจุดในวงจร รวมทั้งลูกบิด R<sub>VR</sub> และขาของ TRIAC <strong>มีศักย์ไฟบ้านเต็มๆ</strong> ห้ามจับขณะจ่ายไฟ ห้ามวัดด้วยสโคปที่กราวด์ต่อดินโดยตรง (ต้องใช้หม้อแปลงแยกหรือโพรบดิฟเฟอเรนเชียล) — ฝึกกับแหล่งจ่ายแรงดันต่ำก่อนเสมอ</p>
+        <p class="en-only" style="margin:.35rem 0 0;">Every node — the R<sub>VR</sub> knob and the TRIAC tab included — is <strong>at full mains potential</strong>. Never touch it powered, and never probe it with an earth-referenced oscilloscope (use an isolation transformer or a differential probe). Practise on a low-voltage supply first.</p>
+      </div>
+      <ul class="content-list th-only">
+        <li><strong>ตัวถัง TRIAC/SCR มักต่อกับ MT2/Anode</strong> — ยึดฮีตซิงก์ตรงๆ = ฮีตซิงก์มีไฟ ต้องใช้แผ่นฉนวนหรือเลือกรุ่นตัวถังฉนวน (BTA)</li>
+        <li><strong>ต้องมีฮีตซิงก์</strong> เมื่อกระแสสูง: กำลังสูญ ≈ V<sub>T</sub> (~1.2 V) × I เช่น 10 A → ~12 W ร้อนพอตัว</li>
+        <li>ใส่ <strong>RC snubber</strong> (เช่น 100 Ω + 0.1 µF) คร่อม MT1-MT2 เมื่อขับโหลดเหนี่ยวนำ (มอเตอร์/หม้อแปลง) กัน dv/dt ทำให้ติดเอง</li>
+        <li><strong>อย่าใช้ดิมเมอร์ TRIAC กับหลอด LED/ฟลูออเรสเซนต์ที่ไม่ระบุว่า "dimmable"</strong> — จะกระพริบ ฮัม หรือพังทั้งคู่</li>
+        <li>โหลดกินกระแสน้อยเกิน I<sub>H</sub> จะทำให้ไฟ <strong>กระพริบถี่ๆ</strong> (จุดชนวนแล้วหลุด) — เป็นอาการคลาสสิกของดิมเมอร์เก่ากับหลอด LED</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li><strong>The tab is usually connected to MT2/anode</strong> — bolting it straight to a heatsink makes the heatsink live; use an insulating pad or an isolated-tab part (BTA)</li>
+        <li><strong>Heatsink it</strong> at higher currents: dissipation ≈ V<sub>T</sub> (~1.2 V) × I, so 10 A means ~12 W of heat</li>
+        <li>Add an <strong>RC snubber</strong> (e.g. 100 Ω + 0.1 µF) across MT1-MT2 for inductive loads (motors, transformers) so dv/dt can't false-trigger it</li>
+        <li><strong>Don't use a TRIAC dimmer on LED or fluorescent lamps that aren't marked "dimmable"</strong> — expect flicker, hum, or a dead lamp and dimmer</li>
+        <li>A load drawing less than I<sub>H</sub> makes the light <strong>flicker rapidly</strong> (fires, then drops out) — the classic old-dimmer-with-LED-bulb symptom</li>
+      </ul>
+      <div class="info-box">
+        <span class="th-only">🔗 เรื่องสาย L/N/G, การรั่วลงดิน และเครื่องตัดไฟ อยู่ในบท <strong>ระบบไฟฟ้าในบ้าน</strong> — อ่านก่อนแตะวงจรที่ต่อไฟบ้านจริง</span>
+        <span class="en-only">🔗 L/N/G wiring, earth leakage and RCDs are covered in the <strong>Home Wiring</strong> lesson — read it before touching any mains-connected circuit.</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
+<script>const CURRENT_PAGE='thyristor';</script>
+<script src="js/nav.js"></script>
+<script src="js/scr-sim.js"></script>
+</body>
+</html>
