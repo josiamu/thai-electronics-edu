@@ -14,6 +14,10 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'breadboard-diac-dimmer-2026-07-31', date:'2026-07-31', type:'update',
+    th:'เบรดบอร์ดจำลอง: เพิ่ม <b>ไดแอก (DIAC)</b> ครบตระกูลไทริสเตอร์ — 2 ขา ไม่มีเกต แตกเองเมื่อแรงดันถึง ±V<sub>BO</sub> พร้อมตัวอย่าง <b>วงจรดิมเมอร์จริง RC → ไดแอก → เกตไทรแอก</b> ที่หมุนลูกบิด VR แล้วจังหวะจุดชนวนเลื่อนและไฟหรี่ลงจริง',
+    en:'Breadboard lab: the <b>DIAC</b> completes the thyristor family — 2 pins, no gate, it breaks over by itself at ±V<sub>BO</sub>. Comes with a <b>real dimmer example (RC → DIAC → TRIAC gate)</b> where turning the VR knob shifts the firing point and visibly dims the load',
+    href:'breadboard.html' },
   { id:'breadboard-scr-triac-2026-07-31', date:'2026-07-31', type:'update',
     th:'เบรดบอร์ดจำลอง: เพิ่ม <b>SCR และไทรแอก</b> (3 ขา A-K-G) — ยิงกระแสเข้าเกตแวบเดียวแล้ว<b>ล็อกตัวค้าง</b> เกตสั่งดับไม่ได้ ต้องตัดกระแสให้ต่ำกว่า I<sub>H</sub> พร้อมตัวอย่าง 2 วงจร: ปุ่มกดยิงเกต LED ติดค้าง และไทรแอกกับไฟ AC ที่ LED สองสีสลับกันติด',
     en:'Breadboard lab: new <b>SCR and TRIAC</b> parts (3 pins, A-K-G) — one pulse of gate current <b>latches</b> them on; the gate cannot switch them off, only dropping the current below I<sub>H</sub> can. Two examples included: a pushbutton-fired LED latch and a TRIAC on AC alternating two LEDs',

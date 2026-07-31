@@ -184,7 +184,9 @@ var RELAY_RCOIL = 200,     // coil resistance (Ω)
 // A TRIAC is the same device made bidirectional (it latches in whichever direction it was fired).
 var SCR_TYPES = {
   scr:   { th:'SCR', en:'SCR', ref:'BT151', border:'#b45309', pins:['A', 'K', 'G'] },
-  triac: { th:'ไทรแอก', en:'TRIAC', ref:'BT136', border:'#7c3aed', pins:['MT2', 'MT1', 'G'] }
+  triac: { th:'ไทรแอก', en:'TRIAC', ref:'BT136', border:'#7c3aed', pins:['MT2', 'MT1', 'G'] },
+  // the DIAC is the odd one out: 2 pins, no gate — it is placed as type 'diac'
+  diac:  { th:'ไดแอก', en:'DIAC', ref:'DB3', border:'#0891b2', pins:['MT2', 'MT1'] }
 };
 var SCR_VT   = 1.0,        // on-state drop A→K (three junctions ⇒ more than a diode)
     SCR_RON  = 6,          // on-state series resistance (companion)
@@ -195,6 +197,18 @@ var SCR_VT   = 1.0,        // on-state drop A→K (three junctions ⇒ more than
     IGT_DEFAULT = 1e-3,
     IH_OPTIONS  = [1e-3, 5e-3, 10e-3, 20e-3],    // holding current (A)
     IH_DEFAULT  = 5e-3;
+// DIAC — a gateless bidirectional latch: it blocks both ways until the voltage across it reaches
+// ±V_BO, then breaks over to a markedly lower on-state voltage (the "breakback", ~5 V for a DB3)
+// and holds until the current falls below I_H. That collapse is what dumps a sharp pulse into a
+// TRIAC gate in a dimmer, so it is modelled as a latch like the SCR, not as a symmetric clamp.
+var DIAC_VBO_OPTIONS = [8, 12, 20, 28, 32],   // breakover voltage (V) — DB3 is 32 V
+    DIAC_VBO_DEFAULT = 32,
+    DIAC_DV   = 5,      // breakback: on-state voltage = V_BO − DIAC_DV
+    DIAC_RON  = 20,     // on-state series resistance (companion)
+    DIAC_IH   = 2e-4,   // holding current (A) — small, DIACs let go at a fraction of a mA
+    DIAC_GOFF = 1e-11;  // blocking leakage
+function diacVbo(c){ return c.vbo != null ? c.vbo : DIAC_VBO_DEFAULT; }
+function diacVt(c){ return Math.max(1, diacVbo(c) - DIAC_DV); }   // conducting drop after breakover
 function scrStyle(c){ return SCR_TYPES[c.st] || SCR_TYPES.scr; }
 function isTriac(c){ return c.st === 'triac'; }
 function scrIgt(c){ return c.igt != null ? c.igt : IGT_DEFAULT; }
@@ -245,6 +259,7 @@ var potVal = 10000;                           // total resistance of the next po
 var optoCtr = CTR_DEFAULT;                    // CTR (%) of the next optocoupler placed
 var scrType = 'scr';                          // scr | triac — next thyristor placed
 var scrIgtSel = IGT_DEFAULT, scrIhSel = IH_DEFAULT;
+var diacVboSel = DIAC_VBO_DEFAULT;             // breakover voltage of the next DIAC placed
 var env = { temp:25, light:50, vrPos:50 };   // shared sensor environment
 
 // transient simulation
@@ -395,7 +410,8 @@ var TYPE_LABEL = {
   ind:     { th:'ตัวเหนี่ยวนำ', en:'Inductor' },
   ac:      { th:'แหล่งจ่าย AC', en:'AC source' },
   transistor:{ th:'ทรานซิสเตอร์', en:'Transistor' },
-  scr:       { th:'SCR / ไทรแอก', en:'SCR / TRIAC' },
+  scr:       { th:'SCR / ไทรแอก / ไดแอก', en:'SCR / TRIAC / DIAC' },
+  diac:      { th:'ไดแอก', en:'DIAC' },
   pot:       { th:'โพเทนชิโอมิเตอร์', en:'Potentiometer' },
   opto:      { th:'ออปโตคัปเปลอร์', en:'Optocoupler' },
   relay:     { th:'รีเลย์', en:'Relay' }
@@ -408,7 +424,7 @@ var TYPE_LABEL = {
 // 'button' is momentary NO — closed only while the pointer is held down on it (press = on, release = off)
 function isSwitchy(c){ return c.type === 'switch' || c.type === 'button'; }
 function isThreePin(c){ return c.type === 'transistor' || c.type === 'pot' || c.type === 'scr'; }
-function isThreePinTool(t){ return t === 'transistor' || t === 'pot' || t === 'scr'; }
+function isThreePinTool(t){ return t === 'transistor' || t === 'pot' || (t === 'scr' && scrType !== 'diac'); }
 function isFourPin(c){ return c.type === 'opto'; }
 function isFivePin(c){ return c.type === 'relay'; }
 function isFivePinTool(t){ return t === 'relay'; }
@@ -543,6 +559,7 @@ function onHoleClick(id){
   if (occupied[id]){ flashHint(isEN() ? 'That hole is already used.' : 'รูนี้มีขาอุปกรณ์อยู่แล้ว'); return; }
   var placeType = tool === 'resistor' ? resSubtype
                 : tool === 'diode'    ? (diodeKind === 'led' ? 'led' : 'diode')
+                : tool === 'scr'      ? 'diac'      // the 3-pin subtypes never reach here
                 : tool;
   placeComp(placeType, pendingHole, id);
   pendingHole = null;
@@ -566,6 +583,7 @@ function placeComp(type, a, b){
   if (type === 'ac'){ c.vp = acVp; c.freq = acFreq; c.offset = acOffset; }
   if (type === 'switch') c.closed = true;   // starts closed (conducting)
   if (type === 'button'){ c.closed = false; c.color = buttonColor; }   // momentary: rests open, conducts only while held
+  if (type === 'diac'){ c.vbo = diacVboSel; c._lat = 0; }
   if (type === 'cap'){ c.value = capVal; c._vPrev = 0; }
   if (type === 'ind'){ c.value = indVal; c._iPrev = 0; }
   comps.push(c);
@@ -735,6 +753,14 @@ function renderEditor(){
       (c.results ? '<span style="margin-left:.6rem;color:var(--text-light);font-weight:600">I<sub>G</sub> ' + fmtI(c.results.Ig || 0) + ' · I ' + fmtI(c.results.I || 0) + '</span>' : '') +
       '<span style="margin-left:.6rem;color:var(--text-light);font-weight:400">' +
       (en ? '(the gate cannot switch it off — drop the current below I' : '(เกตสั่งให้ดับไม่ได้ — ต้องทำให้กระแสต่ำกว่า I') + '<sub>H</sub>)</span>';
+  } else if (c.type === 'diac'){
+    var dlat = c.results && c.results.lat;
+    ctrl = '<label>V<sub>BO</sub></label><select id="bb-ed-vbo">' +
+      DIAC_VBO_OPTIONS.map(function(v){ return '<option value="' + v + '"' + (v === diacVbo(c) ? ' selected' : '') + '>' + v + ' V</option>'; }).join('') + '</select>' +
+      '<span style="margin-left:.6rem;font-weight:700;color:' + (dlat ? '#0e7490' : '#94a3b8') + '">' +
+        (dlat ? (en ? 'BROKEN OVER (conducting)' : 'แตกแล้ว — นำกระแส') : (en ? 'blocking both ways' : 'กั้นไฟทั้งสองทิศ')) + '</span>' +
+      '<span style="margin-left:.6rem;color:var(--text-light);font-weight:400">' +
+      (en ? '(no gate — it fires by itself at ±V_BO, then drops to ' : '(ไม่มีเกต — แตกเองเมื่อแรงดันถึง ±V_BO แล้วแรงดันตกเหลือ ') + diacVt(c) + ' V)</span>';
   } else if (c.type === 'opto'){
     ctrl = '<label>CTR</label><select id="bb-ed-ctr">' +
       CTR_OPTIONS.map(function(v){ return '<option value="' + v + '"' + (v === (c.ctr || CTR_DEFAULT) ? ' selected' : '') + '>' + v + '%</option>'; }).join('') + '</select>';
@@ -790,6 +816,7 @@ function renderEditor(){
   on('bb-ed-st', 'change', function(){ c.st = this.value; c._lat = 0; rebuild(); renderEditor(); });
   on('bb-ed-igt', 'change', function(){ c.igt = +this.value; rebuild(); renderEditor(); });
   on('bb-ed-ih', 'change', function(){ c.ih = +this.value; rebuild(); renderEditor(); });
+  on('bb-ed-vbo', 'change', function(){ c.vbo = +this.value; c._lat = 0; rebuild(); renderEditor(); });
   on('bb-ed-vth', 'change', function(){ c.vth = +this.value; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-pot', 'change', function(){ c.value = +this.value; rebuild(); renderEditor(); });
   on('bb-ed-wcolor', 'change', function(){ c.color = this.value; rebuild(); refreshEditorTitle(c); });
@@ -994,7 +1021,8 @@ function solveCircuit(h, commit){
   var optos       = comps.filter(function(c){ return c.type === 'opto'; });
   var relays      = comps.filter(function(c){ return c.type === 'relay'; });
   var scrs        = comps.filter(function(c){ return c.type === 'scr'; });
-  var branches    = comps.filter(function(c){ return c.type !== 'wire' && c.type !== 'battery' && c.type !== 'ac' && !isSwitchy(c) && c.type !== 'transistor' && c.type !== 'pot' && c.type !== 'opto' && c.type !== 'relay' && c.type !== 'scr'; });
+  var diacs       = comps.filter(function(c){ return c.type === 'diac'; });
+  var branches    = comps.filter(function(c){ return c.type !== 'wire' && c.type !== 'battery' && c.type !== 'ac' && !isSwitchy(c) && c.type !== 'transistor' && c.type !== 'pot' && c.type !== 'opto' && c.type !== 'relay' && c.type !== 'scr' && c.type !== 'diac'; });
   var wires       = comps.filter(function(c){ return c.type === 'wire'; });
   // a closed switch / held pushbutton behaves like a jumper (0 Ω); an open one is ignored entirely
   var joins       = wires.concat(comps.filter(function(c){ return isSwitchy(c) && c.closed; }));
@@ -1046,6 +1074,7 @@ function solveCircuit(h, commit){
   // quantities (gate current vs main current), so letting both flip freely inside the loop can ping-pong
   // until MAXIT — and this solver accepts whatever the last iteration produced.
   scrs.forEach(function(t){ if (t._lat == null) t._lat = 0; t._gon = 0; t._latMoved = false; });
+  diacs.forEach(function(d){ if (d._lat == null) d._lat = 0; d._latMoved = false; });
   var sol = null, iter, MAXIT = 80;
 
   for (iter = 0; iter < MAXIT; iter++){
@@ -1162,6 +1191,15 @@ function solveCircuit(h, commit){
       var gm = 1 / SCR_RON;
       stampG(iA, iK, gm);
       stampI(iA, iK, t._lat > 0 ? gm * SCR_VT : -gm * SCR_VT);
+    });
+
+    // DIACs: blocking leakage, or (once broken over) a clamp at the breakback voltage
+    diacs.forEach(function(d){
+      var i = gi(sn(d.a)), j = gi(sn(d.b));
+      if (d._lat === 0){ stampG(i, j, DIAC_GOFF); return; }
+      var gd2 = 1 / DIAC_RON, vt = diacVt(d);
+      stampG(i, j, gd2);
+      stampI(i, j, d._lat > 0 ? gd2 * vt : -gd2 * vt);
     });
 
     // potentiometers (linear): two resistors R1 (end a→wiper) and R2 (wiper→end b)
@@ -1285,6 +1323,18 @@ function solveCircuit(h, commit){
         t._lat = 0; t._latMoved = true; changed = true;
       }
     });
+    // DIAC latch — same rules as the thyristor above, but triggered by voltage instead of a gate
+    if (!changed) diacs.forEach(function(d){
+      if (d._latMoved) return;
+      var v = V(sn(d.a)) - V(sn(d.b)), vbo = diacVbo(d);
+      if (d._lat === 0){
+        if (v >= vbo){ d._lat = 1; d._latMoved = true; changed = true; }
+        else if (v <= -vbo){ d._lat = -1; d._latMoved = true; changed = true; }
+        return;
+      }
+      var id = (v - d._lat * diacVt(d)) / DIAC_RON;
+      if (Math.abs(id) < DIAC_IH || id * d._lat < 0){ d._lat = 0; d._latMoved = true; changed = true; }
+    });
     if (!changed) break;
   }
 
@@ -1396,6 +1446,13 @@ function solveCircuit(h, commit){
     if (Ig > 0.05) warnings.push({ t:'warn', th:'กระแสเกตสูงเกินไป (' + fmtI(Ig) + ') — ต้องมี R จำกัดกระแสที่ขาเกต', en:'Gate current too high (' + fmtI(Ig) + ') — add a series resistor at the gate' });
   });
 
+  // DIACs — voltage across, current through, and whether it has broken over
+  diacs.forEach(function(d){
+    var v = Vof(sn(d.a)) - Vof(sn(d.b));
+    var I = d._lat !== 0 ? (v - d._lat * diacVt(d)) / DIAC_RON : 0;
+    d.results = { V:v, I:I, on:d._lat !== 0, region:d._lat !== 0 ? 'on' : 'cutoff', lat:d._lat };
+  });
+
   // potentiometers — report the divider voltage + the current in each leg
   pots.forEach(function(p){
     var pr = potR(p), va = Vof(sn(p.a)), vw = Vof(sn(p.g)), vb = Vof(sn(p.b));
@@ -1403,9 +1460,15 @@ function solveCircuit(h, commit){
     p.results = { V:va - vb, I:Ia, on:(Math.abs(Ia) > 1e-6 || Math.abs(Ib2) > 1e-6), Ia:Ia, Ib:Ib2, Vw:vw, r1:pr.r1, r2:pr.r2 };
   });
 
-  // reverse-biased LED hint
+  // reverse-biased LED hint — unless another diode/LED sits anti-parallel across the same pair of
+  // nodes, in which case being reverse-biased half the time is the whole point (AC indicators, TRIAC demos)
   comps.filter(function(c){ return c.type === 'led'; }).forEach(function(c){
-    if (!c.results.on && c.results.V < -0.3) warnings.push({ t:'warn', th:'LED ต่อกลับขั้ว — สลับขา + / − จึงจะติด', en:'LED is reverse-connected — swap its + / − legs to light it' });
+    if (c.results.on || c.results.V >= -0.3) return;
+    var na = sn(c.a), nb = sn(c.b);
+    var antiparallel = comps.some(function(d){
+      return d !== c && (d.type === 'led' || d.type === 'diode') && sn(d.a) === nb && sn(d.b) === na;
+    });
+    if (!antiparallel) warnings.push({ t:'warn', th:'LED ต่อกลับขั้ว — สลับขา + / − จึงจะติด', en:'LED is reverse-connected — swap its + / − legs to light it' });
   });
 
   // expose solved node voltages to the multimeter probe
@@ -1487,6 +1550,22 @@ function drawComp(c){
     if (!pr) g.appendChild(el('circle', { cx:pcx - 1.6, cy:-1.6, r:1.5, fill:'#fff', opacity:'0.45' }));   // highlight
     gComps.appendChild(uprightText(len / 2, A.x, A.y, ang, -16,
       pr ? (isEN() ? 'PRESSED' : 'กดอยู่') : (isEN() ? 'PUSH' : 'ปุ่มกด'), pr ? '#16a34a' : '#94a3b8'));
+    gComps.appendChild(g); return;
+  }
+
+  if (c.type === 'diac'){
+    // DIAC: the classic bowtie (two triangles tip to tip), no gate — glows once broken over
+    var don = !!(c.results && c.results.on);
+    var col = SCR_TYPES.diac.border, dw = Math.min(26, len * 0.5), dx = (len - dw) / 2, dcx = dx + dw / 2;
+    g.appendChild(el('line', { class:'bb-comp-lead', x1:0, y1:0, x2:dx, y2:0 }));
+    g.appendChild(el('line', { class:'bb-comp-lead', x1:dx + dw, y1:0, x2:len, y2:0 }));
+    if (don) g.appendChild(el('circle', { cx:dcx, cy:0, r:13, fill:'rgba(8,145,178,0.25)' }));
+    g.appendChild(el('polygon', { points:dx + ',-9 ' + dx + ',9 ' + dcx + ',0',
+      fill:don ? col : 'var(--card)', stroke:col, 'stroke-width':1.8 }));
+    g.appendChild(el('polygon', { points:(dx + dw) + ',-9 ' + (dx + dw) + ',9 ' + dcx + ',0',
+      fill:don ? col : 'var(--card)', stroke:col, 'stroke-width':1.8 }));
+    gComps.appendChild(uprightText(len / 2, A.x, A.y, ang, -15,
+      'DIAC ' + diacVbo(c) + 'V' + (don ? (isEN() ? ' · ON' : ' · นำกระแส') : ''), don ? '#0e7490' : col));
     gComps.appendChild(g); return;
   }
 
@@ -2095,7 +2174,7 @@ function trackedComp(){
 function trackedSignal(c){ return c.type === 'ind' ? (c.results ? c.results.I : 0) : (c.results ? c.results.V : 0); }
 
 function restartTransient(){
-  comps.forEach(function(c){ if (c.type === 'cap') c._vPrev = 0; if (c.type === 'ind') c._iPrev = 0; if (c.av) c._av = 0; if (c.type === 'scr') c._lat = 0; if (c.type === 'relay') c._en = 0; });
+  comps.forEach(function(c){ if (c.type === 'cap') c._vPrev = 0; if (c.type === 'ind') c._iPrev = 0; if (c.av) c._av = 0; if (c.type === 'scr' || c.type === 'diac') c._lat = 0; if (c.type === 'relay') c._en = 0; });
   simTime = 0; graphHist = []; renderAcc = 0;
   rebuild();
 }
@@ -2225,7 +2304,7 @@ function renderReadout(res){
       } else if (c.type === 'transistor' || c.type === 'opto'){
         var rg = c.results && c.results.region, conduct = rg && rg !== 'cutoff';
         st = '<span class="bb-dot" style="background:' + (conduct ? '#16a34a' : '#94a3b8') + '"></span>' + (regionShort(rg) || '—');
-      } else if (c.type === 'scr'){
+      } else if (c.type === 'scr' || c.type === 'diac'){
         var lit = c.results && c.results.lat;
         st = '<span class="bb-dot" style="background:' + (lit ? '#b45309' : '#94a3b8') + '"></span>' +
              (lit ? (en ? 'LATCHED' : 'นำกระแส') : (en ? 'blocking' : 'กั้นไฟ'));
@@ -2280,6 +2359,7 @@ function compName(c, en){
   if (c.type === 'opto') return (en ? 'Optocoupler (CTR ' : 'ออปโตคัปเปลอร์ (CTR ') + (c.ctr || CTR_DEFAULT) + '%)';
   if (c.type === 'relay') return (en ? 'Relay (SPDT)' : 'รีเลย์ (SPDT)');
   if (c.type === 'scr') return scrStyle(c)[en ? 'en' : 'th'] + ' (I' + (en ? 'H ' : 'H ') + fmtA(scrIh(c)) + ')';
+  if (c.type === 'diac') return (en ? 'DIAC ' : 'ไดแอก ') + diacVbo(c) + 'V';
   if (c.type === 'transistor'){
     var ts = TRANSISTOR_TYPES[c.tt] || TRANSISTOR_TYPES.npn;
     if (isAval(c)) return ts[en ? 'en' : 'th'] + (en ? ' avalanche (V_BR ' : ' avalanche (V_BR ') + (c.vbr || AV_VBR_DEFAULT) + 'V)';
@@ -2426,6 +2506,7 @@ function updateMeter(){
       if (meterRev) return lcd('OL', P('กลับขั้ว', 'reversed'));
       return lcd(OPTO_VF.toFixed(2), 'V');
     }
+    if (c.type === 'diac') return lcd('OL', P('เปิดทั้งสองทิศ (ปกติ)', 'open both ways (normal)'));
     if (c.type === 'scr'){    // the only junction a meter can read is gate-cathode
       if (meterRev && !isTriac(c)) return lcd('OL', P('กลับขั้ว', 'reversed'));
       return lcd(SCR_VGT.toFixed(2), P('V (ขา G-K)', 'V (G-K)'));
@@ -2451,6 +2532,7 @@ function updateMeter(){
   if (c.type === 'diode' || c.type === 'led') return lcd(P('รอยต่อ PN', 'PN junction'), '', true);
   if (c.type === 'opto') return lcd(P('เช็คด้วยโหมดไดโอด ▷|', 'use diode test ▷|'), '', true);
   if (c.type === 'scr') return lcd(c.results && c.results.lat ? '≈ 6' : '∞', 'Ω');
+  if (c.type === 'diac') return lcd('∞', 'Ω');   // a real DIAC reads open both ways — you cannot ohm-test it
   if (c.type === 'cap') return lcd(P('เก็บประจุ (Xc)', 'capacitive (Xc)'), '', true);
   if (c.type === 'ind') return lcd(P('≈ 0 Ω (ขดลวด)', '≈ 0 Ω (coil)'), '', true);
   return lcd('—', '', true);
@@ -2567,11 +2649,17 @@ function updateTransistorControls(){
 }
 
 function updateScrControls(){
+  var diac = scrType === 'diac';
+  var gw = $('bb-scr-gate-wrap'), vw = $('bb-scr-vbo-wrap');
+  if (gw) gw.style.display = diac ? 'none' : '';     // a DIAC has no gate to specify
+  if (vw) vw.style.display = diac ? '' : 'none';
   var hints = {
     scr:   { th:'SCR: ยิงกระแสเข้าเกตแวบเดียว → นำกระแส A→K แล้ว<b>ค้าง</b> เกตสั่งดับไม่ได้ ต้องทำให้กระแสต่ำกว่า I<sub>H</sub> (ปิดสวิตช์/ตัดโหลด)',
              en:'SCR: one pulse of gate current latches it on (A→K) and it <b>stays</b> on — the gate cannot switch it off; drop the current below I<sub>H</sub> instead' },
     triac: { th:'ไทรแอก: นำกระแสได้ทั้งสองทิศ จุดชนวนได้ทั้งเกตบวก/ลบ — ต่อกับแหล่งจ่าย AC แล้วจะดับเองทุกครึ่งคลื่นที่จุดตัดศูนย์',
-             en:'TRIAC: conducts both ways and fires on either gate polarity — on an AC source it self-commutates at every zero crossing' }
+             en:'TRIAC: conducts both ways and fires on either gate polarity — on an AC source it self-commutates at every zero crossing' },
+    diac:  { th:'ไดแอก: <b>2 ขา ไม่มีเกต</b> — กั้นไฟทั้งสองทิศจนแรงดันถึง ±V<sub>BO</sub> แล้ว "แตก" นำกระแสพร้อมแรงดันตกฮวบ ใช้ยิงพัลส์เข้าเกตไทรแอกในวงจรดิมเมอร์ (มัลติมิเตอร์วัดยังไงก็ขึ้น OL)',
+             en:'DIAC: <b>2 pins, no gate</b> — blocks both ways until ±V<sub>BO</sub>, then breaks over with a sharp voltage collapse. That pulse is what fires a TRIAC gate in a dimmer (a meter reads OL either way)' }
   };
   var h = hints[scrType] || hints.scr;
   var hint = $('bb-scr-hint');
@@ -2677,6 +2765,7 @@ function initControls(){
   $('bb-scr-type').addEventListener('change', function(){ scrType = this.value; updateScrControls(); refreshHint(); });
   $('bb-scr-igt').addEventListener('change', function(){ scrIgtSel = +this.value; });
   $('bb-scr-ih').addEventListener('change', function(){ scrIhSel = +this.value; });
+  $('bb-scr-vbo').addEventListener('change', function(){ diacVboSel = +this.value; });
   $('bb-opto-ctr').addEventListener('change', function(){ optoCtr = +this.value; });
   $('bb-ac-vp').addEventListener('input', function(){ acVp = +this.value; $('bb-ac-vp-out').textContent = acVp + ' V'; });
   $('bb-ac-freq').addEventListener('change', function(){ acFreq = +this.value; });
@@ -2895,6 +2984,23 @@ var EXAMPLES = [
       place('scr', 'ta13', 'ta17', { g:'tb15', st:'triac', igt:1e-3, ih:5e-3, _lat:0 });
       place('resistor', 'td13', 'td15', { value:4700 });
       place('wire', 'tb17', 'TN17', { color:'black' });              // MT1 → − rail
+    } },
+  { th:'ดิมเมอร์จริง: RC → ไดแอก → เกตไทรแอก (หมุนลูกบิด VR เพื่อเลื่อนจังหวะจุดชนวน)', en:'A real dimmer: RC → DIAC → TRIAC gate (turn the VR knob to shift the firing point)', build:function(){
+      env.vrPos = 40; renderVrKnob();
+      place('ac', 'TP1', 'TN1', { vp:24, freq:1, offset:0 });
+      place('wire', 'TP5', 'tc5', { color:'red' });                  // source + ↓ col5
+      place('resistor', 'ta5', 'ta9', { value:1000 });               // load limiter
+      // anti-parallel LEDs so both half cycles are visible
+      place('led', 'tb9', 'tb13', { color:'red', vf:1.8 });
+      place('led', 'tc13', 'tc9', { color:'green', vf:2.1 });
+      place('scr', 'ta13', 'ta17', { g:'tb15', st:'triac', igt:1e-3, ih:5e-3, _lat:0 });
+      place('wire', 'tb17', 'TN17', { color:'black' });              // MT1 → − rail
+      // phase-shift network: VR + C set how late the cap reaches the DIAC's V_BO each half cycle
+      place('vr', 'td9', 'td19', { value:10000 });
+      place('cap', 'te19', 'te23', { value:47e-6, _vPrev:0 });
+      place('wire', 'tc23', 'TN23', { color:'black' });
+      // the DIAC dumps the cap into the gate the instant it breaks over — that pulse fires the TRIAC
+      place('diac', 'tc19', 'tc15', { vbo:12, _lat:0 });
     } },
   { th:'VR แบบ 2 ขา (rheostat) หรี่ไฟ LED (ปรับลูกบิดในแผงสภาพแวดล้อม)', en:'Variable resistor (2-pin rheostat) dimming an LED', build:function(){
       setExampleBatt(9);
@@ -3143,6 +3249,7 @@ function serializeCircuit(){
       if (c.vc != null) o.vc = c.vc;
       if (c.tt) o.tt = c.tt;
       if (c.st) o.st = c.st;
+      if (c.vbo != null) o.vbo = c.vbo;
       if (c.igt != null) o.igt = c.igt;
       if (c.ih != null) o.ih = c.ih;
       if (c.beta != null) o.beta = c.beta;
@@ -3183,7 +3290,8 @@ function applyCircuit(data){
     if (o.st) props.st = o.st;
     if (o.igt != null) props.igt = o.igt;
     if (o.ih != null) props.ih = o.ih;
-    if (o.t === 'scr') props._lat = 0;   // a reloaded thyristor always starts blocking
+    if (o.vbo != null) props.vbo = o.vbo;
+    if (o.t === 'scr' || o.t === 'diac') props._lat = 0;   // a reloaded thyristor always starts blocking
     if (o.beta != null) props.beta = o.beta;
     if (o.vth != null) props.vth = o.vth;
     if (o.av){ props.av = true; if (o.vbr != null) props.vbr = o.vbr; props._av = 0; }

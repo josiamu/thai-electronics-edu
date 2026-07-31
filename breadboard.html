@@ -422,7 +422,19 @@
         <select id="bb-scr-type">
           <option value="scr">SCR · BT151</option>
           <option value="triac">TRIAC · BT136</option>
+          <option value="diac">DIAC · DB3</option>
         </select>
+        <span id="bb-scr-vbo-wrap" style="display:none;">
+          <label title="แรงดันเบรกโอเวอร์ / breakover voltage">V<sub>BO</sub></label>
+          <select id="bb-scr-vbo">
+            <option value="8">8 V</option>
+            <option value="12">12 V</option>
+            <option value="20">20 V</option>
+            <option value="28">28 V</option>
+            <option value="32" selected>32 V</option>
+          </select>
+        </span>
+        <span id="bb-scr-gate-wrap">
         <label title="กระแสเกตที่ใช้จุดชนวน / gate trigger current">I<sub>GT</sub></label>
         <select id="bb-scr-igt">
           <option value="0.0002">0.2 mA</option>
@@ -437,6 +449,7 @@
           <option value="0.01">10 mA</option>
           <option value="0.02">20 mA</option>
         </select>
+        </span>
         <span id="bb-scr-hint" style="color:var(--text-light);font-weight:400;"></span>
       </div>
       <div class="bb-valrow" id="bb-val-pot">
