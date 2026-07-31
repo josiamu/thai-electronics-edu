@@ -14,6 +14,10 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'breadboard-scr-triac-2026-07-31', date:'2026-07-31', type:'update',
+    th:'เบรดบอร์ดจำลอง: เพิ่ม <b>SCR และไทรแอก</b> (3 ขา A-K-G) — ยิงกระแสเข้าเกตแวบเดียวแล้ว<b>ล็อกตัวค้าง</b> เกตสั่งดับไม่ได้ ต้องตัดกระแสให้ต่ำกว่า I<sub>H</sub> พร้อมตัวอย่าง 2 วงจร: ปุ่มกดยิงเกต LED ติดค้าง และไทรแอกกับไฟ AC ที่ LED สองสีสลับกันติด',
+    en:'Breadboard lab: new <b>SCR and TRIAC</b> parts (3 pins, A-K-G) — one pulse of gate current <b>latches</b> them on; the gate cannot switch them off, only dropping the current below I<sub>H</sub> can. Two examples included: a pushbutton-fired LED latch and a TRIAC on AC alternating two LEDs',
+    href:'breadboard.html' },
   { id:'thyristor-lesson-2026-07-31', date:'2026-07-31', type:'lesson',
     th:'บทเรียนใหม่: <b>ไทริสเตอร์ SCR / TRIAC / DIAC</b> — สวิตช์กำลังที่ทริกแล้วค้าง, ทำไมเกตสั่งให้ดับไม่ได้, กระแสโฮลดิ้ง, วงจรดิมเมอร์ R-C+DIAC+TRIAC พร้อม <b>ซิมควบคุมมุมจุดชนวน</b> ให้ลองหรี่ไฟดูกำลังไฟเปลี่ยนจริง + ข้อสอบหมวดใหม่ 8 ข้อ',
     en:'New lesson: <b>Thyristors — SCR / TRIAC / DIAC</b> — latching power switches, why the gate cannot turn them off, holding current, the R-C+DIAC+TRIAC dimmer circuit, plus a <b>phase-control sim</b> where dimming visibly changes the delivered power, and 8 new quiz questions',
