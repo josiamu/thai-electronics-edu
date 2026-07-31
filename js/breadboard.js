@@ -102,6 +102,15 @@ var WIRE_COLORS = {
 };
 function wireHex(c){ return (WIRE_COLORS[c && c.color] || WIRE_COLORS.green).hex; }
 
+// pushbutton cap colours (cosmetic) — `dark` is the pressed shade, so the cap still reads as
+// "sunk in" whichever colour it is. Old saved buttons have no colour and fall back to red.
+var BTN_COLORS = {
+  green: { hex:'#22c55e', dark:'#15803d', th:'เขียว',   en:'Green' },
+  red:   { hex:'#ef4444', dark:'#b91c1c', th:'แดง',     en:'Red' },
+  blue:  { hex:'#3b82f6', dark:'#1d4ed8', th:'น้ำเงิน', en:'Blue' }
+};
+function btnColor(c){ return BTN_COLORS[c && c.color] || BTN_COLORS.red; }
+
 // reactive parts (transient simulation via Backward-Euler companion models)
 var CAP_OPTIONS = [1e-6, 10e-6, 47e-6, 100e-6, 220e-6, 470e-6, 1000e-6, 2200e-6];  // Farads
 var IND_OPTIONS = [1e-3, 10e-3, 100e-3, 0.5, 1, 5, 10];                            // Henries
@@ -224,6 +233,7 @@ var resSubtype = 'resistor';   // resistor | vr | ntc | ptc | ldr | vdr
 var vdrVc = 6;
 var ledColor = 'red';
 var wireColor = 'green';      // colour of the next jumper wire placed
+var buttonColor = 'red';      // cap colour of the next pushbutton placed
 var diodeKind = 'silicon';   // silicon | germanium | schottky | zener | led — picks what the diode tool places
 var zenerVz = 5.1;
 var capVal = CAP_DEFAULT, indVal = IND_DEFAULT;
@@ -555,7 +565,7 @@ function placeComp(type, a, b){
   if (type === 'battery') c.value = batteryV;
   if (type === 'ac'){ c.vp = acVp; c.freq = acFreq; c.offset = acOffset; }
   if (type === 'switch') c.closed = true;   // starts closed (conducting)
-  if (type === 'button') c.closed = false;  // momentary: rests open, conducts only while held
+  if (type === 'button'){ c.closed = false; c.color = buttonColor; }   // momentary: rests open, conducts only while held
   if (type === 'cap'){ c.value = capVal; c._vPrev = 0; }
   if (type === 'ind'){ c.value = indVal; c._iPrev = 0; }
   comps.push(c);
@@ -672,7 +682,9 @@ function renderEditor(){
     ctrl = '<label>' + (en ? 'State' : 'สถานะ') + '</label><span style="font-weight:700;color:' + (c.closed ? '#16a34a' : '#94a3b8') + '">' +
            (c.closed ? (en ? 'ON (closed)' : 'ปิด (ต่อวงจร)') : (en ? 'OFF (open)' : 'เปิด (ตัดวงจร)')) + '</span>';
   } else if (c.type === 'button'){
-    ctrl = '<label>' + (en ? 'State' : 'สถานะ') + '</label><span style="font-weight:700;color:' + (c.closed ? '#16a34a' : '#94a3b8') + '">' +
+    ctrl = '<label>' + (en ? 'Colour' : 'สี') + '</label><select id="bb-ed-bcolor">' +
+           Object.keys(BTN_COLORS).map(function(k){ return '<option value="' + k + '"' + ((c.color || 'red') === k ? ' selected' : '') + '>' + BTN_COLORS[k][en ? 'en' : 'th'] + '</option>'; }).join('') + '</select>' +
+           '<label style="margin-left:.6rem">' + (en ? 'State' : 'สถานะ') + '</label><span style="font-weight:700;color:' + (c.closed ? '#16a34a' : '#94a3b8') + '">' +
            (c.closed ? (en ? 'PRESSED (closed)' : 'กดอยู่ (ต่อวงจร)') : (en ? 'released (open)' : 'ปล่อยอยู่ (ตัดวงจร)')) + '</span>' +
            '<span style="margin-left:.6rem;color:var(--text-light);font-weight:400">' +
            (en ? '(momentary NO — hold it down to conduct, release to cut off)' : '(ปุ่มกดแบบ NO — กดค้างจึงจะต่อวงจร ปล่อยแล้วตัดทันที)') + '</span>';
@@ -781,6 +793,7 @@ function renderEditor(){
   on('bb-ed-vth', 'change', function(){ c.vth = +this.value; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-pot', 'change', function(){ c.value = +this.value; rebuild(); renderEditor(); });
   on('bb-ed-wcolor', 'change', function(){ c.color = this.value; rebuild(); refreshEditorTitle(c); });
+  on('bb-ed-bcolor', 'change', function(){ c.color = this.value; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-bv', 'input', function(){ c.value = +this.value; var o = $('bb-ed-bv-out'); if (o) o.textContent = c.value + ' V'; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-acvp', 'input', function(){ c.vp = +this.value; var o = $('bb-ed-acvp-out'); if (o) o.textContent = c.vp + ' V'; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-acf', 'change', function(){ c.freq = +this.value; rebuild(); refreshEditorTitle(c); });
@@ -1467,9 +1480,10 @@ function drawComp(c){
     // body
     g.appendChild(el('rect', { x:px, y:-9, width:pw, height:18, rx:3,
       fill:pr ? '#dcfce7' : '#f1f5f9', stroke:pr ? '#16a34a' : '#94a3b8', 'stroke-width':1.8 }));
-    // cap — smaller + darker when pressed, so the travel reads at a glance
+    // cap — smaller + darker when pressed, so the travel reads at a glance whatever the colour
+    var bc = btnColor(c);
     g.appendChild(el('circle', { cx:pcx, cy:0, r:pr ? 4.6 : 6,
-      fill:pr ? '#16a34a' : '#ef4444', stroke:'#334155', 'stroke-width':1 }));
+      fill:pr ? bc.dark : bc.hex, stroke:'#334155', 'stroke-width':1 }));
     if (!pr) g.appendChild(el('circle', { cx:pcx - 1.6, cy:-1.6, r:1.5, fill:'#fff', opacity:'0.45' }));   // highlight
     gComps.appendChild(uprightText(len / 2, A.x, A.y, ang, -16,
       pr ? (isEN() ? 'PRESSED' : 'กดอยู่') : (isEN() ? 'PUSH' : 'ปุ่มกด'), pr ? '#16a34a' : '#94a3b8'));
@@ -2651,6 +2665,7 @@ function initControls(){
   $('bb-res-vc').addEventListener('change', function(){ vdrVc = +this.value; });
   $('bb-led-color').addEventListener('change', function(){ ledColor = this.value; });
   $('bb-wire-color').addEventListener('change', function(){ wireColor = this.value; });
+  $('bb-btn-color').addEventListener('change', function(){ buttonColor = this.value; });
   $('bb-diode-type').addEventListener('change', function(){ diodeKind = this.value; updateDiodeControls(); });
   $('bb-diode-vz').addEventListener('change', function(){ zenerVz = +this.value; });
   $('bb-cap-val').addEventListener('change', function(){ capVal = +this.value; });
