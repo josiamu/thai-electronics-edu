@@ -2867,6 +2867,23 @@ var EXAMPLES = [
       place('button', 'te5', 'te11', { closed:false });
       place('resistor', 'td11', 'td19', { value:2200 });
     } },
+  { th:'SCR แบบ START / STOP — ปุ่มเขียวยิงเกตให้ติดค้าง, ปุ่มแดงลัดขา A-K เพื่อบังคับให้ดับ (commutation)', en:'SCR START / STOP — the green button fires the gate and it stays on; the red button shorts A-K to commutate it off', build:function(){
+      setExampleBatt(9);
+      place('battery', 'TP1', 'TN1', { value:9 });
+      // load path: + rail → 1 kΩ → LED → anode, cathode → − rail
+      place('wire', 'td23', 'TP23', { color:'red' });
+      place('resistor', 'te14', 'te23', { value:1000 });
+      place('led', 'td14', 'td11', { color:'red', vf:1.8 });
+      place('scr', 'tc11', 'tc9', { g:'tc13', st:'scr', igt:1e-3, ih:5e-3, _lat:0 });
+      place('wire', 'ta9', 'TN9', { color:'red' });
+      // START: + rail → button → 1 kΩ → gate (a tap is enough, it latches)
+      place('wire', 'ta19', 'TP19', { color:'green' });
+      place('button', 'tc16', 'tc19', { closed:false, color:'green' });
+      place('resistor', 'tb13', 'tb16', { value:1000 });
+      // STOP: shorts anode to cathode, so the current through the SCR itself falls below I_H —
+      // the load keeps running off the short while held, and it is off once you let go
+      place('button', 'te9', 'te11', { closed:false, color:'red' });
+    } },
   { th:'ไทรแอกกับไฟ AC — LED สองสีสลับกันติด (นำกระแสสองทิศ) และดับเองทุกจุดตัดศูนย์', en:'TRIAC on AC — two LEDs alternate (it conducts both ways) and it self-commutates at every zero crossing', build:function(){
       place('ac', 'TP2', 'TN2', { vp:12, freq:2, offset:0 });
       place('wire', 'TP5', 'tc5', { color:'red' });                  // source + ↓ col5
