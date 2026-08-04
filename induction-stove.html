@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="ซ่อมเตาแม่เหล็กไฟฟ้า | สื่อการเรียนการสอน" data-title-en="Induction Stove Repair | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ซ่อมเตาแม่เหล็กไฟฟ้า | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.ind-stages { display:grid; grid-template-columns:repeat(4,1fr); gap:.5rem; align-items:stretch; }
+@media (max-width:760px){ .ind-stages{ grid-template-columns:1fr 1fr; } }
+.ind-stage { background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:.85rem .6rem; text-align:center; position:relative; }
+.ind-stage .ind-num { display:inline-block; width:24px; height:24px; line-height:24px; border-radius:50%; background:var(--primary); color:#fff; font-weight:700; font-size:.82rem; margin-bottom:.4rem; }
+.ind-stage h4 { margin:.2rem 0 .35rem; font-size:.9rem; color:var(--primary-dark); }
+.ind-stage p { margin:0; font-size:.78rem; color:var(--text-light); }
+.ind-parts-tbl td.hi { font-weight:700; color:var(--primary-dark); white-space:nowrap; }
+.ind-fault { border:1px solid var(--border); border-radius:12px; padding:1rem 1.15rem; margin:0 0 1rem; border-left-width:5px; border-left-style:solid; }
+.ind-fault:last-child { margin-bottom:0; }
+.ind-fault-title { font-weight:700; margin-bottom:.4rem; display:block; }
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🔥</div>
+    <div>
+      <h1 class="th-only">ซ่อมเตาแม่เหล็กไฟฟ้า (Induction)</h1>
+      <h1 class="en-only">Induction Stove Repair</h1>
+      <p class="th-only">หลักการเหนี่ยวนำแม่เหล็กไฟฟ้า • บอร์ด IGBT • คลินิกวิเคราะห์อาการเสีย • กฎความปลอดภัยในการซ่อม</p>
+      <p class="en-only">Electromagnetic induction • IGBT power board • Fault-diagnosis clinic • Repair safety rules</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="card" style="border-left:4px solid #dc2626; display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+    <div style="font-size:1.6rem;">⚠️</div>
+    <div style="flex:1; min-width:220px;">
+      <strong class="th-only">บทนี้เกี่ยวข้องกับไฟแรงดันสูง (310V DC)</strong><strong class="en-only">This lesson involves high voltage (310V DC)</strong><br>
+      <span class="th-only">อ่านหัวข้อ "ความปลอดภัย" ท้ายบทให้เข้าใจก่อนลงมือแตะต้องบอร์ดจริง</span>
+      <span class="en-only">Read the "Safety" section at the end before touching a real board</span>
+    </div>
+    <a class="btn btn-green" href="downloads.html?cat=repair&amp;file=pdf%2Fworkshop%2F%E0%B8%95%E0%B8%A3%E0%B8%A7%E0%B8%88%E0%B9%80%E0%B8%8A%E0%B9%87%E0%B8%84_%E0%B9%80%E0%B8%95%E0%B8%B2%E0%B9%84%E0%B8%9F%E0%B8%9F%E0%B9%89%E0%B8%B2.pdf"><span class="th-only">เปิดหน้าดาวน์โหลด →</span><span class="en-only">Open Downloads →</span></a>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">วัตถุประสงค์การเรียนรู้</span><span class="en-only">Learning Objectives</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li>อธิบายหลักการเหนี่ยวนำแม่เหล็กไฟฟ้า (Electromagnetic Induction) ที่ทำให้ก้นหม้อร้อนได้ด้วยตัวเอง</li>
+        <li>บอกหน้าที่ของอะไหล่หัวใจหลักทั้ง 7 ชิ้นบนเมนบอร์ด</li>
+        <li>วิเคราะห์อาการเสียจากลักษณะที่พบเจอ แล้วโยงไปยังอะไหล่ต้นตอได้</li>
+        <li>ปฏิบัติตามกฎความปลอดภัยการคายประจุและการทดสอบด้วยปลั๊กอนุกรมก่อนซ่อมทุกครั้ง</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>Explain the electromagnetic induction that lets a pot heat itself</li>
+        <li>State what each of the 7 core parts on the main board does</li>
+        <li>Match observed symptoms to the likely faulty part</li>
+        <li>Follow the discharge and dim-bulb-tester safety rules before every repair</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 1. หลักการทำงาน -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">เตาแม่เหล็กไฟฟ้าทำงานอย่างไร?</span><span class="en-only">How Does Induction Work?</span></div>
+    <div class="card">
+      <p class="th-only">เตาแม่เหล็กไฟฟ้า (Induction Cooker) <strong>ไม่มีฮีตเตอร์เหมือนเตาไฟฟ้ายุคเก่า</strong> แต่ใช้หลักการทางฟิสิกส์ที่เรียกว่า <strong>การเหนี่ยวนำแม่เหล็กไฟฟ้า (Electromagnetic Induction)</strong> เปลี่ยนก้นหม้อให้กลายเป็นแหล่งกำเนิดความร้อนเสียเอง โดยผ่าน 4 ขั้นตอนจากปลั๊กไฟสู่ก้นหม้อ:</p>
+      <p class="en-only">An induction cooker <strong>has no heating element</strong> like an old-style electric stove. It uses <strong>electromagnetic induction</strong> to turn the pot's own base into the heat source, through 4 stages from the wall plug to the pot:</p>
+      <div class="ind-stages">
+        <div class="ind-stage">
+          <span class="ind-num">1</span>
+          <h4 class="th-only">แปลงไฟ (Rectification)</h4><h4 class="en-only">Rectification</h4>
+          <p class="th-only">220V AC 50Hz → ไดโอดบริดจ์ + LC Filter → 310V DC</p>
+          <p class="en-only">220V AC 50Hz → bridge rectifier + LC filter → 310V DC</p>
+        </div>
+        <div class="ind-stage">
+          <span class="ind-num">2</span>
+          <h4 class="th-only">สับสวิตช์ความถี่สูง</h4><h4 class="en-only">HF Switching</h4>
+          <p class="th-only">IGBT สับไฟ 310V ปิด-เปิดเร็ว 20–30 kHz</p>
+          <p class="en-only">IGBT switches the 310V on/off at 20–30 kHz</p>
+        </div>
+        <div class="ind-stage">
+          <span class="ind-num">3</span>
+          <h4 class="th-only">สร้างสนามแม่เหล็ก</h4><h4 class="en-only">Magnetic Field</h4>
+          <p class="th-only">กระแสความถี่สูงในขดลวดทองแดงสร้างสนามแม่เหล็กพุ่งขึ้น</p>
+          <p class="en-only">HF current in the copper coil radiates a field upward</p>
+        </div>
+        <div class="ind-stage">
+          <span class="ind-num">4</span>
+          <h4 class="th-only">Eddy Current &amp; ความร้อน</h4><h4 class="en-only">Eddy Current &amp; Heat</h4>
+          <p class="th-only">สนามเหนี่ยวนำกระแสไหลวนในก้นหม้อเหล็ก → เกิดความร้อน</p>
+          <p class="en-only">The field induces swirling current in the steel pot base → heat</p>
+        </div>
+      </div>
+      <div class="info-box" style="margin-top:1rem;">
+        <strong class="th-only">💡 วิชาช่างวิเคราะห์</strong><strong class="en-only">💡 Technician's insight</strong>
+        <p class="th-only" style="margin:.4rem 0 0">ทำไมใช้หม้ออะลูมิเนียมไม่ได้? เพราะอะลูมิเนียมมีความต้านทานไฟฟ้าต่ำมาก กระแสไหลวนจึงไม่เกิดความร้อน และมันไม่ยอมดูดซับสนามแม่เหล็ก ทำให้พลังงานตีกลับลงมาที่บอร์ด บอร์ดจึงจับได้ว่าผิดปกติและสั่งตัดการทำงาน (โชว์ Error ทันที)</p>
+        <p class="en-only" style="margin:.4rem 0 0">Why can't you use an aluminum pot? Aluminum's electrical resistance is far too low, so the swirling current produces no heat — and it barely absorbs the magnetic field at all. That energy bounces back into the board, which detects the mismatch and cuts power immediately (shows an Error)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. ถอดรหัส 7 ขุนพล -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">7 ส่วนประกอบหลักของเมนบอร์ด</span><span class="en-only">The 7 Core Parts of the Main Board</span></div>
+    <div class="card">
+      <p class="th-only">การจะซ่อมเตาได้ ช่างต้องรู้หน้าที่ของอะไหล่หัวใจหลักทั้ง 7 ส่วนก่อน:</p>
+      <p class="en-only">To repair the stove, first know what these 7 core parts do:</p>
+      <div style="overflow-x:auto;">
+      <table class="ind-parts-tbl">
+        <thead><tr>
+          <th style="width:2rem">#</th>
+          <th><span class="th-only">อะไหล่</span><span class="en-only">Part</span></th>
+          <th><span class="th-only">หน้าที่</span><span class="en-only">Role</span></th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td class="hi">Bridge Rectifier</td>
+            <td><span class="th-only">ไดโอด 4 ขา แปลงไฟ AC เป็น DC</span><span class="en-only">4 diodes converting AC to DC</span></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td class="hi"><span class="th-only">โช้ก + ตัวเก็บประจุ 5 µF 400V</span><span class="en-only">Filter Choke &amp; 5 µF 400V Cap</span></td>
+            <td><span class="th-only">โช้กกันสัญญาณรบกวน คาปาเก็บและกรองไฟให้เรียบที่ 310V DC (<strong>จุดที่มีไฟแรงสูงค้าง ต้องคายประจุก่อนซ่อมเสมอ</strong>)</span><span class="en-only">The choke filters noise, the capacitor stores &amp; smooths the DC at 310V (<strong>this point holds a lethal charge — always discharge before servicing</strong>)</span></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td class="hi">IGBT</td>
+            <td><span class="th-only">ทรานซิสเตอร์กำลังสูง เป็นสวิตช์สับไฟ 310V ด้วยความเร็วสูง</span><span class="en-only">High-power transistor, switches the 310V rail at high speed</span></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td class="hi">C-Resonance</td>
+            <td><span class="th-only">0.27/0.3 µF 1200V ทำงานคู่กับ IGBT เป็นวงจร Resonance — ถ้าค่าตัวนี้แห้ง IGBT จะระเบิดทันที</span><span class="en-only">0.27/0.3 µF 1200V, pairs with the IGBT as a resonant circuit — if it dries out, the IGBT blows instantly</span></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td class="hi"><span class="th-only">เซ็นเซอร์กระแส (CT)</span><span class="en-only">Current Transformer (CT)</span></td>
+            <td><span class="th-only">หม้อแปลงตัวเล็กตรวจจับกระแสไฟ 220V ขาเข้า คอยดูว่าใช้หม้อถูกไหมและตัดไฟเมื่อกระแสเกินขีดจำกัด</span><span class="en-only">A small transformer that senses the incoming 220V current — checks the pot is valid and cuts power on overcurrent</span></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td class="hi"><span class="th-only">ภาคจ่ายไฟต่ำ (Switching PSU)</span><span class="en-only">Switching Power Supply</span></td>
+            <td><span class="th-only">IC เช่น VIPer12A, AP8012 แปลง 310V เป็น 5V (เลี้ยง MCU) และ 18V (เลี้ยงพัดลม + วงจรขับเกต IGBT)</span><span class="en-only">ICs like VIPer12A / AP8012 convert 310V down to 5V (feeds the MCU) and 18V (feeds the fan &amp; the IGBT gate driver)</span></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td class="hi">Gate Driver</td>
+            <td><span class="th-only">ทรานซิสเตอร์คู่ (เช่น S8050/S8550) รับสัญญาณ 5V จาก MCU มาขยายเป็น 18V เพื่อเปิดประตูขา Gate ของ IGBT</span><span class="en-only">A transistor pair (e.g. S8050/S8550) amplifies the MCU's 5V signal to 18V to switch the IGBT's gate</span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. คลินิกช่างวิเคราะห์อาการเสีย -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">คลินิกวิเคราะห์อาการเสีย</span><span class="en-only">Fault-Diagnosis Clinic</span></div>
+    <div class="card">
+      <p class="th-only">เมื่อเจองานซ่อม ให้แยกแยะอาการ แล้วพุ่งเป้าตรวจเช็คตามแนวทางนี้:</p>
+      <p class="en-only">When a repair comes in, separate the symptom, then aim the check at the likely culprit:</p>
+
+      <div class="ind-fault" style="border-left-color:#dc2626;">
+        <span class="ind-fault-title th-only">🔴 อาการที่ 1: "เปิดไม่ติด เสียบไฟเงียบสนิท ฟิวส์ขาด/ดำปี๋/แตก"</span>
+        <span class="ind-fault-title en-only">🔴 Symptom 1: "Won't power on, dead silent, fuse blown/charred/cracked"</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> วงจรไฟกำลังสูงลัดวงจร (Short Circuit)</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> the high-power stage has shorted</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> ⚠️ ห้ามใส่ฟิวส์ใหม่ทันที! ให้ถอด <strong>IGBT</strong> และ <strong>ไดโอดบริดจ์</strong> ออกมาวัดนอกบอร์ด 90% ของอาการนี้คือ IGBT ช็อตทะลุก่อน แล้วดึงกระแสจนไดโอดบริดจ์ช็อตตามไฟบ้านจึงลัดวงจร</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> ⚠️ Don't just fit a new fuse! Remove the <strong>IGBT</strong> and <strong>bridge rectifier</strong> and test them off-board. 90% of the time the IGBT shorted through first, pulled excess current, and took the bridge rectifier with it, shorting the mains.</p>
+      </div>
+
+      <div class="ind-fault" style="border-left-color:#f59e0b;">
+        <span class="ind-fault-title th-only">🟠 อาการที่ 2: "เปิดไม่ติด ฟิวส์เมนไม่ขาด (กระจกใส)"</span>
+        <span class="ind-fault-title en-only">🟠 Symptom 2: "Won't power on, main fuse intact (glass still clear)"</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> สมองกลไม่มีไฟ 5V ไปเลี้ยง (ภาคจ่ายไฟต่ำ Switching เสีย)</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> the MCU has no 5V supply (switching PSU stage failed)</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> ให้เช็ค <strong>ตัวต้านทานฟิวส์ (R-Fuse 10Ω–22Ω)</strong> ที่จ่ายไฟเข้าไอซีสวิตชิ่ง หาก R ตัวนี้ขาด ให้ฟันธงเลยว่า <strong>ไอซีสวิตชิ่ง (VIPer12A/AP8012) ช็อตระเบิดไปแล้ว</strong> ต้องเปลี่ยนใหม่แพ็คคู่</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> check the <strong>fuse resistor (R-Fuse, 10Ω–22Ω)</strong> feeding the switching IC. If it's open, call it: the <strong>switching IC (VIPer12A/AP8012) has shorted out</strong> — replace both together</p>
+      </div>
+
+      <div class="ind-fault" style="border-left-color:#eab308;">
+        <span class="ind-fault-title th-only">🟡 อาการที่ 3: "เปิดติด สั่งงานได้ พัดลมหมุน… แต่เตาไม่ร้อน (ไม่กินกระแส / ไม่โชว์ Error)"</span>
+        <span class="ind-fault-title en-only">🟡 Symptom 3: "Powers on, fan spins... but it won't heat (no current draw, no Error)"</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> คำสั่งจาก MCU ไปไม่ถึงขา Gate ของ IGBT</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> the MCU's command never reaches the IGBT gate</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> เช็คเส้นทางขา Gate ของ IGBT! มักพบว่า <strong>R-Gate (10Ω–47Ω) ไหม้ขาด</strong> หรือ <strong>ซีเนอร์ไดโอด 18V ช็อตทะลุลงกราวด์</strong> ทำให้ไฟคำสั่งถูกดึงทิ้งหมด IGBT จึงไม่ยอมเปิดวาล์ว</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> trace the IGBT gate path. Commonly the <strong>gate resistor (10Ω–47Ω) has burned open</strong>, or the <strong>18V zener has shorted to ground</strong>, bleeding the drive signal away so the IGBT never turns on</p>
+      </div>
+
+      <div class="ind-fault" style="border-left-color:#dc2626;">
+        <span class="ind-fault-title th-only">💥 อาการที่ 4: อาการปราบเซียน "เปลี่ยน IGBT ปุ๊บ เสียบปลั๊กระเบิดตู้มทันที!"</span>
+        <span class="ind-fault-title en-only">💥 Symptom 4: The expert-humbler — "New IGBT in, plug it in, instant bang!"</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> ช่างเปลี่ยนอะไหล่ไม่ครบวงจร มีฆาตกรซ่อนอยู่</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> the part swap was incomplete — a hidden culprit remains</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> ก่อนใส่ IGBT ตัวใหม่ ให้เช็ค 4 กฎเหล็ก:</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> before fitting the new IGBT, check these 4 rules:</p>
+        <ul class="content-list th-only" style="margin-top:.3rem">
+          <li>ถอด C-Resonance (0.3 µF) มาวัดค่าความจุ ต้องไม่แห้งหรือลดลง</li>
+          <li>ทรานซิสเตอร์วงจร Gate Driver (8050/8550) ต้องไม่ช็อต</li>
+          <li>⚠️ จุดขี้ชะตา: ต้องเปิดเครื่องวัดไฟที่รูบัดกรีขา Gate บนบอร์ด (ตอนยังไม่ใส่ IGBT) ต้องได้แรงดัน <strong>0V เท่านั้น</strong> ห้ามมีไฟ 18V ค้างเด็ดขาด</li>
+          <li>ต้องทาซิลิโคนระบายความร้อนใหม่ทุกครั้ง</li>
+        </ul>
+        <ul class="content-list en-only" style="margin-top:.3rem">
+          <li>Desolder the C-Resonance (0.3 µF) and measure it — it must not have dried out or dropped in value</li>
+          <li>The Gate Driver transistors (8050/8550) must not be shorted</li>
+          <li>⚠️ The make-or-break check: with the IGBT still out, power up and probe the gate solder pad — it must read <strong>0V exactly</strong>. Any lingering 18V there is fatal to the new part.</li>
+          <li>Always re-apply fresh thermal silicone</li>
+        </ul>
+      </div>
+
+      <div class="ind-fault" style="border-left-color:#2563eb;">
+        <span class="ind-fault-title th-only">🔵 อาการที่ 5: "เปิดติด วางหม้อเหล็กแท้ๆ แต่เตาร้องติ๊ดๆ (โชว์ Error E0, E1 หาหม้อไม่เจอ)"</span>
+        <span class="ind-fault-title en-only">🔵 Symptom 5: "Powers on, a genuine steel pot is on it, but it beeps (Error E0, E1 — no pot detected)"</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> วงจรตรวจจับรูปคลื่น (Voltage Sync / Pan Detection) ตาบอด</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> the voltage-sync / pan-detection sensing circuit is "blind"</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> วงจรนี้ใช้ตัวต้านทานค่าสูง (240 kΩ–820 kΩ) ตัวอ้วนๆ หรือชิป SMD 3–4 ตัวต่ออนุกรมกัน ดึงไฟ 310V มาเข้า MCU อาการยอดฮิตคือ R พวกนี้ "ยืดค่า" (ความต้านทานเพิ่มสูงขึ้น) ทำให้ไฟส่งไปไม่ถึง MCU</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> this network is a chunky high-value resistor (240 kΩ–820 kΩ) or 3–4 SMD resistors in series, dividing the 310V rail down for the MCU. The classic failure is those resistors drifting <strong>up</strong> in value, so the signal never reaches the MCU.</p>
+        <p class="th-only" style="margin:.4rem 0 0; font-size:.85rem; color:var(--text-light);"><em>วิชาเซียน: วัด R ค่าสูงคาบอร์ด ถ้าได้ค่า "สูงกว่า" ตัวเลขบนตัวมัน แปลว่าพัง 100% เปลี่ยนได้เลย!</em></p>
+        <p class="en-only" style="margin:.4rem 0 0; font-size:.85rem; color:var(--text-light);"><em>Pro tip: measure the high-value resistor in-circuit — if it reads higher than its printed value, it's dead 100%, replace it.</em></p>
+      </div>
+
+      <div class="ind-fault" style="border-left-color:#16a34a;">
+        <span class="ind-fault-title th-only">🟢 อาการที่ 6: "ใช้งานไปสักพัก เตาตัด โชว์ Error E2, E3, E4, E5 (ปัญหาความร้อน)"</span>
+        <span class="ind-fault-title en-only">🟢 Symptom 6: "Runs fine for a while, then cuts out with Error E2, E3, E4, E5 (heat problems)"</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> ระบบระบายความร้อน หรือเซ็นเซอร์อุณหภูมิผิดปกติ</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> the cooling system or a temperature sensor is faulty</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> เช็คเซ็นเซอร์อุณหภูมิ (NTC 100 kΩ) ทั้งตรงกลางคอยล์ และที่ซิงค์ระบายความร้อน ว่าช็อตหรือสายขาดในหรือไม่; เช็คพัดลม 18V หมุนฝืด หมุนช้า หรือมีคราบน้ำมันเกาะหรือไม่</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> check the temperature sensors (NTC 100 kΩ) at the coil center and on the heatsink for shorts or internal breaks; check the 18V fan for a stiff or slow spin, or oil buildup</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. ความปลอดภัย -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">กฎเหล็กความปลอดภัยประจำโต๊ะซ่อม</span><span class="en-only">Safety &amp; Testing Rules</span></div>
+    <div class="card">
+      <div class="warn-box" style="border-left-color:#dc2626; background:#fef2f2;">
+        <strong class="th-only" style="color:#b91c1c">🔴 กฎการคายประจุ (Discharge Rule)</strong>
+        <strong class="en-only" style="color:#b91c1c">🔴 The Discharge Rule</strong>
+        <ol style="margin:.5rem 0 0 1.1rem; padding:0;">
+          <li class="th-only">ถอดปลั๊กทุกครั้งก่อนสัมผัสลายปริ้นท์บอร์ด</li><li class="en-only">Always unplug before touching the PCB traces</li>
+          <li class="th-only"><strong>ต้องใช้หลอดไฟไส้ 220V ต่อสายปากคีบ ไปคีบคร่อมตัวเก็บประจุ 5 µF 400V</strong> เพื่อดูดซับคายประจุไฟ 310V ทิ้งอย่างปลอดภัย</li><li class="en-only"><strong>Use a 220V incandescent bulb with alligator-clip leads across the 5 µF 400V capacitor</strong> to safely bleed off the 310V charge</li>
+          <li class="th-only">⚠️ ห้ามใช้ปลายไขควงขีดให้ช็อตดังเปรี๊ยะเด็ดขาด เพราะไฟจะกระชากกลับไปทำลาย MCU จนบอร์ดพังถาวร!</li><li class="en-only">⚠️ Never just short it with a screwdriver tip — the surge can slam back and destroy the MCU permanently!</li>
+        </ol>
+      </div>
+      <div class="warn-box" style="margin-top:1rem;">
+        <strong class="th-only">🟡 กฎปลั๊กไฟอนุกรม (Dim Bulb Tester Rule)</strong>
+        <strong class="en-only">🟡 The Dim Bulb Tester Rule</strong>
+        <ol style="margin:.5rem 0 0 1.1rem; padding:0;">
+          <li class="th-only">หลังเปลี่ยนอะไหล่เสร็จ ห้ามเสียบปลั๊กผนังบ้านตรงๆ ให้เสียบผ่านปลั๊กที่ต่ออนุกรมกับ "หลอดไฟไส้ 100W" เสมอ</li><li class="en-only">After swapping parts, never plug straight into the wall — always go through a plug wired in series with a "100W incandescent bulb"</li>
+          <li class="th-only"><strong>ถ้าบอร์ดปกติ:</strong> เสียบปลั๊กปุ๊บ หลอดไฟ 100W จะสว่างวาบ 1 วินาทีแล้วดับ พร้อมเสียงเตือน "ติ๊ด" (Standby พร้อมใช้งาน)</li><li class="en-only"><strong>If the board is healthy:</strong> the 100W bulb flashes bright for about 1 second then goes dim, with a "beep" (standby, ready to use)</li>
+          <li class="th-only"><strong>ถ้าบอร์ดยังช็อตอยู่:</strong> หลอดไฟ 100W จะสว่างจ้าค้างไว้ ช่วยเซฟไม่ให้อะไหล่และฟิวส์ระเบิดซ้ำ</li><li class="en-only"><strong>If the board is still shorted:</strong> the 100W bulb stays fully bright — this protects the new parts and fuse from blowing again</li>
+          <li class="th-only">⚠️ ข้อควรระวังขั้นเด็ดขาด: ปลั๊กอนุกรมมีไว้เทส "สแตนด์บาย" เท่านั้น! ห้ามเอาหม้อไปวางแล้วกดปุ่มต้มน้ำขณะผ่านปลั๊กอนุกรม เพราะไฟจะตกและเตาจะขึ้น Error ตัดการทำงาน (ถ้าจะเทสต้มน้ำจริง ต้องย้ายไปเสียบปลั๊กผนังบ้านตรงๆ)</li><li class="en-only">⚠️ Critical: the series-plug test is for standby only! Never put a pot on and try to boil water through it — the voltage sags and the stove throws an Error and cuts out. To test actual boiling, plug straight into the wall.</li>
+        </ol>
+      </div>
+      <p class="th-only" style="font-size:.88rem;color:var(--text-light); margin-top:1rem;">🔗 ทบทวนหลักการ IGBT และทรานซิสเตอร์กำลังในบท <a href="transistor.html"><strong>ทรานซิสเตอร์</strong></a> และการเรียงกระแสในบท <a href="diode.html"><strong>ไดโอด</strong></a></p>
+      <p class="en-only" style="font-size:.88rem;color:var(--text-light); margin-top:1rem;">🔗 Review IGBT and power-transistor basics in the <a href="transistor.html"><strong>Transistor</strong></a> lesson, and rectification in the <a href="diode.html"><strong>Diode</strong></a> lesson</p>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
+<script>const CURRENT_PAGE='repair-stove';</script>
+<script src="js/nav.js"></script>
+</body>
+</html>

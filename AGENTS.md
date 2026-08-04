@@ -57,13 +57,15 @@ website/
 ├── home-wiring.html    — บทเสริม: ระบบ L/N/G, แรงดันลอย (Ghost Voltage), ไฟรั่วจริง, Socket Tester, ความปลอดภัย
 ├── oscilloscope.html   — บทที่ 10: โครงสร้าง CRT, เทคนิคสำคัญ (Trigger/Probe ×1×10/Coupling), สูตร T/f/Vpp/Duty, ตัวอย่าง 4 โจทย์, Interactive Scope Reading Trainer (canvas), วงจร Octopus (Curve Tracer) + Interactive I-V Curve Simulator (canvas, 11 อุปกรณ์)
 ├── signal-generator.html — บทที่ 11: คลื่น 4 แบบ, โครงสร้าง 7 ส่วน, พารามิเตอร์สำคัญ (f/T, Vpp/Vp/Vrms, Duty, Offset) + Interactive Waveform Generator (canvas)
+├── fan-motor.html      — งานซ่อม: มอเตอร์พัดลมไฟฟ้า (CURRENT_PAGE='repair-fan') — ขดรัน/สตาร์ท/โช้ค (350Ω/400Ω/80Ω×2, SVG แผนภาพขดลวด), วัดขดลวดวินิจฉัยอาการ (ขาด/ช็อตรอบ/ปกติ), หาขั้วสาย R/S/1/2/3 ทั้งแบบ 5 สาย (รุ่นเก่า) และ 6 สาย (รุ่นใหม่ คาปาอยู่บนกระโหลก) ด้วยมัลติมิเตอร์ (ไม่มี sim)
+├── induction-stove.html — งานซ่อม: เตาแม่เหล็กไฟฟ้า (CURRENT_PAGE='repair-stove') — หลักการเหนี่ยวนำแม่เหล็กไฟฟ้า 4 ขั้นตอน (rectify→IGBT switching 20-30kHz→สนามแม่เหล็ก→eddy current), ตาราง 7 อะไหล่หลักบนบอร์ด (bridge rectifier/filter choke+cap/IGBT/C-resonance/CT/switching PSU/gate driver), คลินิกวิเคราะห์อาการเสีย 6 เคส (short/no-5V/gate ไม่ถึง IGBT/เปลี่ยน IGBT แล้วระเบิดซ้ำ/E0-E1 pan detect/E2-E5 ความร้อน), กฎความปลอดภัย (คายประจุ 310V ด้วยหลอดไฟ + ทดสอบผ่านปลั๊กอนุกรมหลอด 100W) (ไม่มี sim)
 ├── simulation.html     — จำลองวงจร 3 แบบ (Series/Parallel/Mixed) + วิธีคำนวณ real-time + LED toggle
 ├── breadboard.html     — ทดลองบนเบรดบอร์ด (400-point): เลือก/วางอุปกรณ์ R (คงที่/VR/NTC/PTC/LDR/VDR)/ไดโอด+LED (ซิลิคอน/เจอร์เมเนียม/ชอตต์กี/ซีเนอร์/TVS กันไฟกระชาก/LED รวมเป็น list เดียว)/จัมเปอร์ (เลือกสีได้ — แดง/เขียว/น้ำเงิน/…)/สวิตช์/ปุ่มกด (momentary NO — กดค้างวงจรต่อ ปล่อยแล้วตัด, หัวปุ่มเลือกได้ 3 สี)/แบตเตอรี่/แหล่งจ่าย AC (ไซน์ Vp/f/offset)/ตัวเก็บประจุ/ตัวเหนี่ยวนำ/ทรานซิสเตอร์ (NPN/PNP/N-MOSFET/P-MOSFET — วาง 3 ขา)/SCR กับไทรแอก 3 ขา (ยิงเกตแล้วล็อกตัว ดับเมื่อกระแสต่ำกว่า I_H)/ไดแอก 2 ขา (ไม่มีเกต แตกเองที่ ±V_BO — ใช้จุดชนวนไทรแอกในวงจรดิมเมอร์)/โพเทนชิโอมิเตอร์ 3 ขา (แบ่งแรงดัน)/ออปโตคัปเปลอร์ 4 ขา (A-K → แสง → C-E, IC=CTR·IF, สองฝั่งแยกกันทางไฟฟ้า)/รีเลย์ SPDT 5 ขา (คอยล์ + COM/NO/NC — จ่ายไฟคอยล์ถึงระดับดึงเข้าแล้วสลับ COM→NO, hysteresis) เอง, มัลติมิเตอร์เสมือน (V/I/Ω/diode-test/continuity), แผงสภาพแวดล้อม (อุณหภูมิ/แสง/VR knob), แผง Transient (กราฟ V/I ตามเวลา + speed + restart + τ; รองรับ AC/RC/เรียงกระแส), คลิกแก้ไข + ลาก-ย้ายอุปกรณ์, คำนวณวงจรจริง (MNA + transient + ทรานซิสเตอร์ Cut-off/Active/Saturation), LED ติด/ดับ, electron animation, บันทึก/โหลดวงจร (localStorage) + แชร์ลิงก์ (URL `?c=`)
 ├── relay-lab.html      — ห้องแล็บวงจรควบคุมรีเลย์ OMRON MY4 (CURRENT_PAGE='relay-lab', แยกจาก breadboard): แผง SVG 24VDC + รีเลย์ MY4 4PDT (14 ขา — คอยล์ 14(+)/13(−), ชุด n: COM 8+n/NO 4+n/NC n) + สวิตช์/ปุ่มกด NO-NC (momentary START/STOP, ตัวเรือนสี่เหลี่ยม)/ไฟแสดง/บัซเซอร์ (WebAudio)/**มอเตอร์ 24VDC** (type 'motor', R 120Ω — ทิศหมุนตามขั้วแรงดันที่ป้อน: results {v,i,run,dir,speed}, dir>0 เดินหน้า / dir<0 ถอยหลัง, โรเตอร์หมุนใน frame loop; ladder รองรับ load {t:'motor',dir}) เดินสายจัมเปอร์เอง; รางไฟด้านข้าง +24V (ซ้าย)/0V (ขวา) จุดต่อทุกแถวลดสายพันกัน; **จุดพักไฟ (terminal block) TB-1…TB-10 แถวล่าง จุดละ 4 รู** — รูในจุดเดียวกันเป็นโหนดเดียว (รวมใน `keyOf`: `TB:p:h` → `TB:p`) คนละจุดแยกจากกัน, ใช้พักสายที่ต้องแตกหลายทางแทนการยัดสายซ้อนที่ขาอุปกรณ์ (ตัวอย่าง latch/alarm เดินผ่าน TB แล้ว); จุดพักไฟไม่ใช่อุปกรณ์ — โหนดโผล่มาทางสายเท่านั้น solver จึงต้องจอง nid() ของปลายสายทุกเส้น **ก่อน** ตรึงขนาดเมทริกซ์; หัวปุ่มกด/ตัวสวิตช์วาดในเลเยอร์ `gTop` เหนือเลเยอร์สาย ไม่งั้นแถบรับคลิกของสายที่พาดผ่านจะกินคลิกจนกดปุ่มไม่ได้; คลิกสาย/จุดต่อ/อุปกรณ์ = ไฮไลต์กระพริบไล่วงจร; เมนู 9 ตัวอย่าง (basic/latch(self-holding)/interlock/AND-OR/swap/alarm+ack/**failsafe-ok (STOP แบบ NC) / failsafe-bad (STOP แบบ NO ผ่านรีเลย์ — ลบสายปุ่ม STOP แล้วหยุดไม่ได้) / fwdrev (กลับทางหมุนมอเตอร์ + อินเตอร์ล็อก)**) + มุมมองแผนภาพ Ladder (ไฮไลต์เส้นมีไฟจริง); **🎯 โหมดภารกิจ (MISSIONS 7 ข้อ: mNO/mSwap/mLatch/mAnd/mOr/mInter/mFwdRev — expect ของมอเตอร์เขียนเป็นสตริง 'fwd'/'rev'/'stop')** — ปุ่ม "เตรียมอุปกรณ์" (prepareMission → resetBoard + mk* ตามลำดับ parts จึงได้ id K1/S1/L1… ตรงกับโจทย์) + ปุ่ม "ตรวจคำตอบ" (gradeMission: เช็คอุปกรณ์ครบ → เช็คโครงสร้าง links ด้วย union-find บนสาย (เช่น L1 ต้องอยู่โหนดเดียวกับขา NO 5–8 ของ K1) → snapshot สถานะ → ไล่ set สวิตช์/ปุ่มทีละ step แล้วเรียก solveRelayLab ซ้ำ (latch `_en` เดินต่อข้าม step จึงตรวจ self-holding ได้) → คืนสถานะเดิม + requestSolve) แสดงผลราย step ✓/✗ ใน `#rly-mission`; บันทึก/โหลด (localStorage `rly-saves`) + แชร์ลิงก์ `?c=` (js/relay-lab.js — engine nodal-analysis DC pure ทดสอบ Node ได้ถึง `/* ===== END ENGINE`)
 ├── formulas.html       — สูตรสรุป + print-friendly
 ├── tools.html          — เครื่องคิดเลข 7 ตัว (4-band + 5-band มีชื่อไทย-อังกฤษครบ)
 ├── quiz.html           — แบบทดสอบ 92 ข้อ 14 หมวด — มีข้อสอบ EN ครบทุกข้อ
-├── downloads.html      — ดาวน์โหลด PDF 40 ไฟล์ (มีหัวข้อ "ใบงาน" → pdf/worksheet/) + toolbar ค้นหา/กรองหมวด (sticky: #dl-search + #dl-chips, sections มี data-cat)
+├── downloads.html      — ดาวน์โหลด PDF 41 ไฟล์ (มีหัวข้อ "ใบงาน" → pdf/worksheet/ + หัวข้อ "งานซ่อม" → pdf/workshop/) + toolbar ค้นหา/กรองหมวด (sticky: #dl-search + #dl-chips, sections มี data-cat)
 ├── pdf/                — ไฟล์ PDF ภาษาไทย (~24 MB) — สื่อจากหลายแหล่ง ไม่อยู่ใต้ CC (ดู LICENSE)
 └── LICENSE             — CC BY-NC 4.0 (คลุมเฉพาะเนื้อหา/โค้ดต้นฉบับ; PDF แยกออกตาม NOTICE ในไฟล์)
 ```
@@ -88,7 +90,7 @@ website/
   <script src="nav.js"></script>
 </body>
 ```
-CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor`, `thyristor`, `ic`, `timer555`, `opamp`, `logic`, `relay`, `opto`, `capacitor`, `inductor`, `power-supply`, `multimeter`, `soldering`, `home-wiring`, `oscilloscope`, `signal-generator`, `simulation`, `breadboard`, `relay-lab`, `formulas`, `tools`, `quiz`, `downloads`
+CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor`, `thyristor`, `ic`, `timer555`, `opamp`, `logic`, `relay`, `opto`, `capacitor`, `inductor`, `power-supply`, `multimeter`, `soldering`, `home-wiring`, `oscilloscope`, `signal-generator`, `repair-fan`, `repair-stove`, `simulation`, `breadboard`, `relay-lab`, `formulas`, `tools`, `quiz`, `downloads`
 
 ### ระบบ 2 ภาษา (Bilingual System)
 - CSS ใน style.css:
@@ -105,7 +107,7 @@ CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor
 - **หมายเหตุ:** `<span>` ใน `<option>` ของ `<select>` ไม่ถูก CSS hide — browser แสดงข้อความทั้งหมด ดังนั้น option ควรเขียนเป็น `0 — <span class="th-only">ดำ</span> Black` เพื่อให้แสดงทั้งไทย-อังกฤษเสมอ
 
 ### Navigation (nav.js)
-- NAV_LESSON_GROUPS → mega menu "บทเรียน / Lessons" แบ่ง 4 กลุ่ม: พื้นฐานไฟฟ้า, อุปกรณ์อิเล็กทรอนิกส์, วงจรรวมและดิจิทัล (ic/timer555/opamp/logic), เครื่องมือวัดและทดสอบ
+- NAV_LESSON_GROUPS → mega menu "บทเรียน / Lessons" แบ่ง 5 กลุ่ม: พื้นฐานไฟฟ้า, อุปกรณ์อิเล็กทรอนิกส์, วงจรรวมและดิจิทัล (ic/timer555/opamp/logic), เครื่องมือวัดและทดสอบ, งานซ่อมเครื่องใช้ไฟฟ้า (fan-motor/induction-stove — กลุ่มที่โตได้เรื่อยๆ ตามเครื่องใช้ไฟฟ้าที่เพิ่ม)
 - บน desktop แสดง mega menu 4 คอลัมน์ (`.nav-mega-menu` ใน style.css = `repeat(4,...)` width 900px); บน mobile กลุ่มบทเรียนเป็น accordion เปิดทีละกลุ่ม
 - NAV_PRACTICE (soldering, home-wiring) → dropdown "งานปฏิบัติ / Practical"
 - NAV_TOOLS (simulation, breadboard, relay-lab, formulas, tools) → dropdown "เครื่องมือ ▼" / "Tools ▼"
@@ -134,6 +136,7 @@ CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor
 | 📚 อุปกรณ์อิเล็กทรอนิกส์ | resistor, diode, capacitor, transistor, thyristor, inductor, relay, opto, power-supply | `topic-card-blue` |
 | 📚 วงจรรวมและดิจิทัล | ic, timer555, opamp, logic | `topic-card-blue` |
 | 📚 เครื่องมือวัดและทดสอบ | multimeter, signal-generator, oscilloscope | `topic-card-blue` |
+| 📚 งานซ่อมเครื่องใช้ไฟฟ้า | fan-motor, induction-stove | `topic-card-blue` |
 | 🧰 งานปฏิบัติ | soldering, home-wiring | `topic-card-teal` |
 | 🛠 เครื่องมือ | simulation, breadboard, formulas, tools | `topic-card-teal` |
 | 📚 คลังการเรียนรู้ | quiz, downloads | `topic-card-orange` / `topic-card-green` |

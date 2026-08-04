@@ -63,6 +63,12 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | เครื่องกำเนิดสัญญาณ | Signal Generator | `signal-generator.html` |
 | ออสซิลโลสโคป | Oscilloscope | `oscilloscope.html` |
 
+**งานซ่อมเครื่องใช้ไฟฟ้า / Appliance Repair**
+| ไทย | English | หน้า |
+|---|---|---|
+| มอเตอร์พัดลมไฟฟ้า | Electric Fan Motor | `fan-motor.html` |
+| เตาแม่เหล็กไฟฟ้า | Induction Stove | `induction-stove.html` |
+
 **งานปฏิบัติ / Practical**
 | ไทย | English | หน้า |
 |---|---|---|
@@ -78,7 +84,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | `formulas.html` | สูตรสรุป + พิมพ์ PDF | Formula summary + print |
 | `tools.html` | เครื่องคิดเลขเชิงโต้ตอบ 7 ตัว | 7 interactive calculators |
 | `quiz.html` | แบบทดสอบ 92 ข้อ 14 หมวด | 92-question quiz, 14 categories |
-| `downloads.html` | ดาวน์โหลด PDF 40 ไฟล์ | Download 40 PDF files |
+| `downloads.html` | ดาวน์โหลด PDF 41 ไฟล์ (รวมหัวข้อ "งานซ่อม") | Download 41 PDF files (incl. a "Repair" section) |
 
 ---
 

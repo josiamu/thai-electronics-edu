@@ -14,6 +14,14 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'lessons-repair-group-2026-08-04', date:'2026-08-04', type:'lesson',
+    th:'เปิดกลุ่มบทเรียนใหม่ <b>🛠️ งานซ่อมเครื่องใช้ไฟฟ้า</b> ในเมนูบทเรียน — เริ่มด้วย 2 บท: <b>มอเตอร์พัดลมไฟฟ้า</b> (โครงสร้างขดรัน/สตาร์ท/โช้ค, หาขั้วสาย R/S/1/2/3 ด้วยมัลติมิเตอร์ทั้งแบบ 5 สายและ 6 สาย) และ <b>เตาแม่เหล็กไฟฟ้า</b> (หลักการเหนี่ยวนำแม่เหล็กไฟฟ้า, อะไหล่บนบอร์ด IGBT, คลินิกวิเคราะห์อาการเสีย 6 เคส, กฎความปลอดภัยการคายประจุ)',
+    en:'New lesson group <b>🛠️ Appliance Repair</b> in the Lessons menu — starting with 2 chapters: <b>Electric Fan Motor</b> (run/start/choke winding structure, finding R/S/1/2/3 leads with a multimeter on both 5-wire and 6-wire fans) and <b>Induction Stove</b> (electromagnetic induction theory, the IGBT board&#39;s parts, a 6-case fault-diagnosis clinic, and discharge safety rules)',
+    href:'fan-motor.html' },
+  { id:'downloads-repair-2026-08-04', date:'2026-08-04', type:'download',
+    th:'เปิดหัวข้อใหม่ในหน้าดาวน์โหลด: <b>🛠️ งานซ่อม</b> — ไฟล์ตรวจเช็คมอเตอร์พัดลมไฟฟ้า (คาปาซิเตอร์รัน, สวิตช์ปรับความเร็ว) และตรวจเช็คเตาแม่เหล็กไฟฟ้า (IGBT, Resonance, รหัส Error) พร้อมวิธีไล่ซ่อม (PDF)',
+    en:'New "🛠️ Repair" section in downloads — files on checking an electric fan motor (capacitor-run, speed switch) and an induction stove (IGBT, resonance, error codes) with a troubleshooting walkthrough (PDF)',
+    href:'downloads.html', cat:'repair' },
   { id:'breadboard-mains-dimmer-2026-08-04', date:'2026-08-04', type:'update',
     th:'เบรดบอร์ดจำลอง: ตัวอย่างใหม่ <b>ดิมเมอร์ 50 Hz แบบวงจรจริง</b> — R จำกัด + โพเทนชิโอมิเตอร์ 3 ขา + ไดแอก → ไทรแอก → หลอดไส้ หมุนลูกบิดแล้วมุมจุดชนวนกวาด 21°–108° หลอดหรี่จากสว่างเต็มจนมืดสนิท พร้อมบทเรียนแฝง: ทำไม DB3 (32 V) ถึงใช้กับไฟ 24 V ไม่ได้ และทำไม<b>ห้าม</b>แก้ด้วยการใส่ DC offset — พร้อมกันนี้ได้<b>จัดเมนูตัวอย่างใหม่เป็น 8 หมวด</b> ไล่จากพื้นฐานไปหาไทริสเตอร์ ให้หาง่ายขึ้น',
     en:'Breadboard lab: a new <b>50 Hz mains-style dimmer</b> example — limiter R + 3-pin pot + DIAC → TRIAC → filament lamp. The knob sweeps the firing angle 21°–108°, taking the lamp from full brightness to dark, and it shows why a 32 V DB3 cannot work on a 24 V supply — and why adding a DC offset is the wrong fix. The example menu is also <b>reorganised into 8 groups</b>, from basics up to thyristors',
@@ -90,10 +98,6 @@ const ANNOUNCEMENTS = [
     th:'ใบงานใหม่: เสริมขั้นสูง — การเดินทางของกระแสไฟ (Capacitive Dropper, เรียงกระแส/เรกูเลต, IR 38kHz) (PDF)',
     en:'New worksheet: Advanced — The Journey of Current (capacitive dropper, rectify/regulate, IR 38kHz) (PDF)',
     href:'downloads.html', cat:'worksheet', file:'pdf/worksheet/ใบความรู้เสริมขั้นสูง การเดินทางของกระแสไฟ.pdf' },
-  { id:'worksheet-fan-motor-2026-07-13', date:'2026-07-13', type:'download',
-    th:'ใบงานใหม่: พื้นฐานการซ่อมและตรวจเช็คมอเตอร์พัดลมไฟฟ้า (มอเตอร์คาปาซิเตอร์รัน, สวิตช์ปรับความเร็ว) (PDF)',
-    en:'New worksheet: Fan Motor Repair & Testing Basics (capacitor-run motor, speed switch) (PDF)',
-    href:'downloads.html', cat:'worksheet', file:'pdf/worksheet/ใบความรู้ พื้นฐานการซ่อมและตรวจเช็คมอเตอร์พัดลมไฟฟ้า.pdf' },
   { id:'transistor-bjt-pdf-2026-07-13', date:'2026-07-13', type:'download',
     th:'ไฟล์ใหม่: ทรานซิสเตอร์ — โครงสร้าง BJT (เพิ่มเติม) — NPN/PNP, รอยต่อ P-N, ประวัติและหลักการ (PDF)',
     en:'New file: Transistor — BJT Structure (Part 2) — NPN/PNP, P-N junctions, history & principles (PDF)',

@@ -115,7 +115,7 @@ nav {
 /* mega panel anchors to the nav-menu's right edge (not the toggle) so a wide
    4-column menu grows leftward and never overflows the right viewport edge */
 .nav-dropdown-mega { position: static; }
-.nav-mega-menu { width: min(900px, calc(100vw - 2rem)); grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.65rem; padding: 0.8rem; left: auto; right: 0; }
+.nav-mega-menu { width: min(1080px, calc(100vw - 2rem)); grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.65rem; padding: 0.8rem; left: auto; right: 0; }
 .nav-dropdown.open .nav-mega-menu { display: grid; }
 .nav-mega-group { min-width: 0; padding: 0.25rem; }
 .nav-mega-group-toggle { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.45rem 0.65rem 0.6rem; border: 0; border-bottom: 2px solid var(--border); background: none; color: var(--primary-dark); font: inherit; font-size: 0.83rem; font-weight: 800; text-align: left; }

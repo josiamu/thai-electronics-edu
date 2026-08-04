@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="ซ่อมมอเตอร์พัดลมไฟฟ้า | สื่อการเรียนการสอน" data-title-en="Fan Motor Repair | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ซ่อมมอเตอร์พัดลมไฟฟ้า | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.fm-coil-tbl td.hi { font-weight:700; color:var(--primary-dark); }
+.fm-steps { counter-reset:fm-step; list-style:none; padding:0; margin:0; }
+.fm-steps > li { counter-increment:fm-step; position:relative; padding:0.55rem 0 0.55rem 2.4rem; border-bottom:1px solid var(--border); }
+.fm-steps > li:last-child { border-bottom:none; }
+.fm-steps > li::before { content:counter(fm-step); position:absolute; left:0; top:0.45rem; width:1.7rem; height:1.7rem; line-height:1.7rem; text-align:center; border-radius:50%; background:var(--primary); color:#fff; font-weight:700; font-size:0.85rem; }
+.fm-steps ol { margin:0.4rem 0 0.2rem 1.2rem; padding:0; }
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🌀</div>
+    <div>
+      <h1 class="th-only">ซ่อมมอเตอร์พัดลมไฟฟ้า</h1>
+      <h1 class="en-only">Electric Fan Motor Repair</h1>
+      <p class="th-only">มอเตอร์คาปาซิเตอร์รัน • ขดรัน/ขดสตาร์ท/ขดโช้ค • หาขั้วสายด้วยมัลติมิเตอร์ • ตรวจอาการเสีย</p>
+      <p class="en-only">Capacitor-run motor • Run/start/choke windings • Finding leads with a multimeter • Fault diagnosis</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="card" style="border-left:4px solid var(--secondary); display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+    <div style="font-size:2rem;">📥</div>
+    <div style="flex:1; min-width:220px;">
+      <strong class="th-only">อยากได้ไฟล์ PDF เก็บไว้อ่าน?</strong><strong class="en-only">Want the PDF to keep?</strong><br>
+      <span class="th-only">ใบความรู้ฉบับเต็มของบทนี้อยู่ในหมวด "งานซ่อม" ที่หน้าดาวน์โหลด</span>
+      <span class="en-only">The full worksheet for this lesson is in the "Repair" section of the downloads page</span>
+    </div>
+    <a class="btn btn-green" href="downloads.html?cat=repair&amp;file=pdf%2Fworkshop%2F%E0%B8%95%E0%B8%A3%E0%B8%A7%E0%B8%88%E0%B9%80%E0%B8%8A%E0%B9%87%E0%B8%84_%E0%B8%A1%E0%B8%AD%E0%B9%80%E0%B8%95%E0%B8%AD%E0%B8%A3%E0%B9%8C%E0%B8%9E%E0%B8%B1%E0%B8%94%E0%B8%A5%E0%B8%A1%E0%B9%84%E0%B8%9F%E0%B8%9F%E0%B9%89%E0%B8%B2.pdf"><span class="th-only">เปิดหน้าดาวน์โหลด →</span><span class="en-only">Open Downloads →</span></a>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">วัตถุประสงค์การเรียนรู้</span><span class="en-only">Learning Objectives</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li>บอกโครงสร้างขดลวด 3 ชุดในมอเตอร์พัดลม (ขดรัน / ขดสตาร์ท / ขดโช้ค) และหน้าที่ของแต่ละชุดได้</li>
+        <li>วัดค่าความต้านทานขดลวดด้วยมัลติมิเตอร์ และแปลผลว่าขดลวดขาด/ช็อตรอบ/ปกติได้</li>
+        <li>หาขั้วสาย R / S / 1 / 2 / 3 ของพัดลมทั้งแบบ 5 สายและ 6 สายได้ด้วยตัวเอง แม้ไม่ทราบสีสายเดิม</li>
+        <li>วิเคราะห์อาการเสียเบื้องต้นจากค่าที่วัดได้</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>Identify the 3 windings in a fan motor (run / start / choke) and what each one does</li>
+        <li>Measure winding resistance with a multimeter and interpret open / shorted / normal</li>
+        <li>Identify the R / S / 1 / 2 / 3 leads on both 5-wire and 6-wire fans without knowing the original wire colors</li>
+        <li>Diagnose basic faults from the readings</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 1. โครงสร้าง -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">มอเตอร์พัดลมคืออะไร</span><span class="en-only">What Kind of Motor Is It?</span></div>
+    <div class="card">
+      <p class="th-only">พัดลมไฟฟ้าในบ้านเกือบทั้งหมดใช้ <strong>มอเตอร์ไฟฟ้ากระแสสลับ 1 เฟส ชนิดคาปาซิเตอร์รันมอเตอร์ (Capacitor Run Motor)</strong> — อาศัยตัวเก็บประจุสร้างสนามแม่เหล็กหมุนให้มอเตอร์เริ่มหมุนและวิ่งต่อได้ ภายในมีขดลวด 3 ชุดพันอยู่ร่วมแกนเดียวกัน:</p>
+      <p class="en-only">Almost every household fan uses a <strong>single-phase capacitor-run AC motor</strong> — a capacitor creates a rotating magnetic field that starts and sustains the spin. Inside, three windings share the same core:</p>
+      <div class="table-scroll" style="overflow-x:auto;">
+      <table class="fm-coil-tbl">
+        <thead><tr>
+          <th><span class="th-only">ขดลวด</span><span class="en-only">Winding</span></th>
+          <th><span class="th-only">ค่าความต้านทานทั่วไป</span><span class="en-only">Typical Resistance</span></th>
+          <th><span class="th-only">หน้าที่</span><span class="en-only">Role</span></th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td class="hi"><span class="th-only">ขดรัน (Run)</span><span class="en-only">Run</span></td>
+            <td>~350 Ω</td>
+            <td><span class="th-only">ทำให้มอเตอร์หมุนต่อเนื่อง ทำงานตลอดเวลาที่พัดลมเปิด</span><span class="en-only">Keeps the motor spinning; energized the whole time the fan runs</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">ขดสตาร์ท (Start)</span><span class="en-only">Start</span></td>
+            <td>~400 Ω</td>
+            <td><span class="th-only">ให้แรงบิดเริ่มหมุน ลวดเล็กกว่าขดรัน ทำงานร่วมกับคาปาซิเตอร์</span><span class="en-only">Provides starting torque; thinner wire than the run winding, works with the capacitor</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">ขดโช้ค (Choke)</span><span class="en-only">Choke</span></td>
+            <td>~80 Ω × 2</td>
+            <td><span class="th-only">ลดแรงดันไปหน่วงความเร็ว แบ่งเป็น 2 ชุดเพื่อให้ได้ความเร็ว 3 ระดับ</span><span class="en-only">Drops voltage to slow the motor; split into 2 sections so the switch gives 3 speeds</span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+
+      <div style="text-align:center; margin-top:1.1rem;">
+        <svg viewBox="0 0 380 210" style="max-width:100%;height:auto;font-family:inherit;font-size:11px;" role="img" aria-label="Fan motor winding diagram">
+          <!-- common node C -->
+          <circle cx="330" cy="105" r="4" fill="var(--text)"/>
+          <text x="342" y="109" fill="var(--text)" font-weight="700">C</text>
+          <!-- run winding -->
+          <path d="M60,35 h30 q6,-10 12,0 q6,10 12,0 q6,-10 12,0 q6,10 12,0 q6,-10 12,0 q6,10 12,0 h30" fill="none" stroke="var(--primary)" stroke-width="2"/>
+          <line x1="228" y1="35" x2="330" y2="90" stroke="var(--primary)" stroke-width="1.5"/>
+          <text x="20" y="39" fill="var(--text)" font-weight="700">R</text>
+          <line x1="30" y1="35" x2="60" y2="35" stroke="var(--text)" stroke-width="1.5"/>
+          <text x="140" y="20" text-anchor="middle" fill="var(--primary)" font-weight="700">ขดรัน (Run) 350 Ω</text>
+          <!-- start winding -->
+          <path d="M60,105 h30 q6,-10 12,0 q6,10 12,0 q6,-10 12,0 q6,10 12,0 q6,-10 12,0 q6,10 12,0 h30" fill="none" stroke="#dc2626" stroke-width="2"/>
+          <line x1="228" y1="105" x2="330" y2="105" stroke="#dc2626" stroke-width="1.5"/>
+          <text x="20" y="109" fill="var(--text)" font-weight="700">S</text>
+          <line x1="30" y1="105" x2="60" y2="105" stroke="var(--text)" stroke-width="1.5"/>
+          <text x="140" y="90" text-anchor="middle" fill="#dc2626" font-weight="700">ขดสตาร์ท (Start) 400 Ω</text>
+          <!-- choke winding, two sections tapped 1/2/3 -->
+          <path d="M110,170 h20 q5,-9 10,0 q5,9 10,0 q5,-9 10,0 h20" fill="none" stroke="var(--secondary)" stroke-width="2"/>
+          <circle cx="200" cy="170" r="3" fill="var(--secondary)"/>
+          <path d="M200,170 h20 q5,-9 10,0 q5,9 10,0 q5,-9 10,0 h20" fill="none" stroke="var(--secondary)" stroke-width="2"/>
+          <line x1="290" y1="170" x2="330" y2="120" stroke="var(--secondary)" stroke-width="1.5"/>
+          <text x="155" y="155" text-anchor="middle" fill="var(--secondary)" font-weight="700" font-size="10">80 Ω</text>
+          <text x="245" y="155" text-anchor="middle" fill="var(--secondary)" font-weight="700" font-size="10">80 Ω</text>
+          <text x="200" y="196" text-anchor="middle" fill="var(--secondary)" font-weight="700">ขดโช้ค (Choke)</text>
+          <text x="30" y="174" fill="var(--text)" font-weight="700">3</text>
+          <line x1="40" y1="170" x2="110" y2="170" stroke="var(--text)" stroke-width="1.5"/>
+          <text x="30" y="145" fill="var(--text)" font-weight="700">2</text>
+          <line x1="40" y1="141" x2="200" y2="141" stroke="var(--text)" stroke-width="1.5" stroke-dasharray="2 2"/>
+          <line x1="200" y1="141" x2="200" y2="170" stroke="var(--text)" stroke-width="1.5" stroke-dasharray="2 2"/>
+          <text x="30" y="118" fill="var(--text)" font-weight="700">1</text>
+          <line x1="40" y1="114" x2="290" y2="114" stroke="var(--text)" stroke-width="1.5" stroke-dasharray="2 2"/>
+          <line x1="290" y1="114" x2="290" y2="170" stroke="var(--text)" stroke-width="1.5" stroke-dasharray="2 2"/>
+        </svg>
+        <p class="th-only" style="font-size:.85rem;color:var(--text-light);margin-top:.3rem">ปลายทั้งขดรัน ขดสตาร์ท และขดโช้ค มาบรรจบกันที่จุดร่วม <strong>C</strong> ภายในตัวมอเตอร์ (ต่ออนุกรมกันไว้แล้วจากโรงงาน) — วัดคร่อมปลายสาย R กับ S จะได้ค่าความต้านทานรวมสูงสุด ประมาณ 750 Ω</p>
+        <p class="en-only" style="font-size:.85rem;color:var(--text-light);margin-top:.3rem">The run, start, and choke windings all meet at a common point <strong>C</strong> inside the motor (factory-wired in series) — measuring across leads R and S gives the highest combined reading, around 750 Ω</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. วัดขดลวด -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">วัดค่าขดลวดเพื่อวินิจฉัยอาการเสีย</span><span class="en-only">Measuring Windings to Diagnose Faults</span></div>
+    <div class="card">
+      <p class="th-only">ตั้งมัลติมิเตอร์ไปที่โหมดวัดความต้านทาน แล้ววัดคร่อมแต่ละคู่ขา อาการเสียของขดลวดแบ่งได้ 3 แบบ:</p>
+      <p class="en-only">Set the multimeter to resistance mode and measure across each pair of leads. Winding faults fall into 3 patterns:</p>
+      <div class="grid-2">
+        <div class="info-box">
+          <strong class="th-only">✅ ขดลวดปกติ</strong><strong class="en-only">✅ Normal winding</strong>
+          <p class="th-only" style="margin:.4rem 0 0">วัดค่าได้ตามมาตรฐาน (ขดรัน ~350 Ω, ขดสตาร์ท ~400 Ω, ขดโช้คชุดละ ~80 Ω) ค่าอาจคลาดเคลื่อนได้บ้างตามขนาดลวดของแต่ละยี่ห้อ</p>
+          <p class="en-only" style="margin:.4rem 0 0">Reads close to spec (run ~350 Ω, start ~400 Ω, each choke section ~80 Ω). Values vary a little between brands depending on wire gauge.</p>
+        </div>
+        <div class="warn-box">
+          <strong class="th-only">⚠ ขดลวดขาด (Open)</strong><strong class="en-only">⚠ Open winding</strong>
+          <p class="th-only" style="margin:.4rem 0 0">เข็มมิเตอร์ไม่กระดิกขึ้นเลย (อนันต์ / OL) — ลวดขาดภายใน มักเกิดจากความร้อนสะสม</p>
+          <p class="en-only" style="margin:.4rem 0 0">The needle never moves (infinite / OL) — the wire has broken internally, often from heat build-up</p>
+        </div>
+        <div class="warn-box" style="border-left-color:#dc2626; background:#fef2f2;">
+          <strong class="th-only" style="color:#b91c1c">🔴 ขดลวดช็อตรอบ (Shorted turns)</strong><strong class="en-only" style="color:#b91c1c">🔴 Shorted turns</strong>
+          <p class="th-only" style="margin:.4rem 0 0">วัดค่าได้ 0 หรือน้อยกว่าปกติมาก (เช่น ต่ำกว่า 100 Ω) ฉนวนระหว่างรอบลวดเสื่อม ลัดวงจรกันเอง มอเตอร์จะร้อนจัดและกินกระแสสูงผิดปกติ</p>
+          <p class="en-only" style="margin:.4rem 0 0">Reads 0 or far below normal (e.g. under 100 Ω) — insulation between turns has failed and shorted internally; the motor runs hot and draws abnormally high current</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. ส่วนประกอบหลัก -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ส่วนประกอบหลักของวงจรพัดลม</span><span class="en-only">Main Parts of the Fan Circuit</span></div>
+    <div class="card">
+      <p class="th-only">ก่อนลงมือซ่อม ต้องรู้จักอุปกรณ์ที่เกี่ยวข้องกับวงจรไฟฟ้าของพัดลม ซึ่งมี 4 ส่วนหลัก ต่อเรียงกันจากปลั๊กไฟจนถึงขดลวด:</p>
+      <p class="en-only">Before repairing, know the 4 parts that make up the fan's electrical path, wired in sequence from the plug to the windings:</p>
+      <ol class="fm-steps">
+        <li><strong class="th-only">สายเสียบปลั๊กไฟ (AC Cord)</strong><strong class="en-only">AC Cord</strong> — <span class="th-only">นำไฟจากเต้ารับเข้าเครื่อง</span><span class="en-only">brings mains power into the unit</span></li>
+        <li><strong class="th-only">สวิตช์ควบคุมความเร็ว (Speed Switch)</strong><strong class="en-only">Speed Switch</strong> — <span class="th-only">เลือกว่าจะป้อนไฟผ่านขดโช้คมากหรือน้อย (ตำแหน่ง 1/2/3)</span><span class="en-only">selects how much choke winding is in the path (position 1/2/3)</span></li>
+        <li><strong class="th-only">คาปาซิเตอร์ (Capacitor)</strong><strong class="en-only">Capacitor</strong> — <span class="th-only">ต่อขนานอยู่ที่ขดสตาร์ท ช่วยสร้างแรงบิดเริ่มหมุน</span><span class="en-only">wired across the start winding, helps produce starting torque</span></li>
+        <li><strong class="th-only">มอเตอร์ (Motor)</strong><strong class="en-only">Motor</strong> — <span class="th-only">ขดลวด 3 ชุดตามหัวข้อก่อนหน้า</span><span class="en-only">the 3 windings covered above</span></li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 4. หาขั้วสาย 5 สาย -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">หาขั้วสาย — พัดลมรุ่นเก่า (5 สาย)</span><span class="en-only">Finding Leads — Older Fans (5 Wires)</span></div>
+    <div class="card">
+      <p class="th-only">พัดลมรุ่นเก่าสายไฟทั้ง 5 เส้น (R, S, 1, 2, 3) จะยาวเท่ากันหมด เพราะทุกเส้นร้อยลงมาต่อกับสวิตช์ที่ฐานพัดลม หากไม่ทราบขั้วสายเดิม ให้ไล่ตามขั้นตอนนี้:</p>
+      <p class="en-only">On older fans all 5 leads (R, S, 1, 2, 3) are the same length, since every one of them routes down to the switch at the base. If the original colors are unknown, work through these steps:</p>
+      <ol class="fm-steps">
+        <li>
+          <strong class="th-only">หาคู่สายคาปาซิเตอร์:</strong><strong class="en-only">Find the capacitor pair:</strong>
+          <span class="th-only">วัดความต้านทานทีละคู่จนหมด คู่ที่ได้ <strong>ค่าความต้านทานสูงที่สุด (ประมาณ 750 Ω)</strong> คือสายสำหรับต่อเข้าคาปาซิเตอร์ (คือคู่ R–S)</span>
+          <span class="en-only">Measure every possible pair. The pair with the <strong>highest reading (about 750 Ω)</strong> is the one that connects to the capacitor (this is the R–S pair)</span>
+          <p class="th-only" style="font-size:.85rem;color:var(--text-light);margin:.3rem 0 0"><em>วิเคราะห์อาการเสีย: หากเข็มไม่ขึ้นเลยแสดงว่าขดรันหรือขดสตาร์ทขาด</em></p>
+          <p class="en-only" style="font-size:.85rem;color:var(--text-light);margin:.3rem 0 0"><em>Fault check: if the needle never moves, the run or start winding is open</em></p>
+        </li>
+        <li>
+          <strong class="th-only">หาคู่สายสวิตช์ (1, 2, 3):</strong><strong class="en-only">Find the switch leads (1, 2, 3):</strong>
+          <span class="th-only">นำสายมิเตอร์เส้นหนึ่งจับที่สายคาปาซิเตอร์ (S) แล้วใช้มิเตอร์อีกเส้นไล่วัดปลายสายที่เหลือ 3 เส้น</span>
+          <span class="en-only">Hold one meter lead on the capacitor lead (S), then use the other to probe the remaining 3 leads</span>
+          <ol>
+            <li class="th-only">ค่าน้อยที่สุด 👉 ต่อสวิตช์เบอร์ 3 (แรงสุด)</li><li class="en-only">Lowest value 👉 wire to switch position 3 (fastest)</li>
+            <li class="th-only">ค่าปานกลาง 👉 ต่อสวิตช์เบอร์ 2</li><li class="en-only">Middle value 👉 switch position 2</li>
+            <li class="th-only">ค่ามากที่สุด 👉 ต่อสวิตช์เบอร์ 1 (เบาสุด)</li><li class="en-only">Highest value 👉 switch position 1 (slowest)</li>
+          </ol>
+        </li>
+        <li>
+          <strong class="th-only">หาจุดต่อสายนิวตรอน (N):</strong><strong class="en-only">Find the neutral lead (N):</strong>
+          <span class="th-only">นำสายมิเตอร์เส้นหนึ่งจับที่สายสวิตช์เบอร์ 3 อีกเส้นไล่วัดปลายสายคาปาซิเตอร์ทั้ง 2 เส้น ฝั่งที่วัดได้ความต้านทานน้อยกว่าคือปลายของขดรัน ให้นำสายนิวตรอน (N) จากปลั๊กไฟมาต่อที่จุดนี้</span>
+          <span class="en-only">Hold one lead on switch position 3, and probe both capacitor leads with the other. Whichever reads lower resistance is the run-winding end — connect the plug's neutral (N) there</span>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 5. หาขั้วสาย 6 สาย -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">หาขั้วสาย — พัดลมรุ่นปัจจุบัน (6 สาย)</span><span class="en-only">Finding Leads — Newer Fans (6 Wires)</span></div>
+    <div class="card">
+      <p class="th-only">พัดลมรุ่นใหม่นิยมติดตั้งคาปาซิเตอร์ไว้ด้านบนกระโหลกมอเตอร์เลย จึงมีสายสั้น 2 เส้นอยู่ด้านบน (ต่อคาปาซิเตอร์อยู่แล้ว) และมีสายยาว 4 เส้นร้อยลงมาที่ฐาน คือ นิวตรอน (N) 1 เส้น และสายเข้าสวิตช์ 3 เส้น</p>
+      <p class="en-only">Newer fans mount the capacitor right on top of the motor housing, so 2 short leads up top are already wired to it, leaving 4 long leads down to the base: 1 neutral (N) and 3 switch leads</p>
+      <ol class="fm-steps">
+        <li>
+          <strong class="th-only">หาจุดต่อสายนิวตรอน (N) และเช็คเทอร์โมฟิวส์:</strong><strong class="en-only">Find neutral (N) and check the thermal fuse:</strong>
+          <span class="th-only">นำสายสั้น 2 เส้นด้านบนมา พันต่อกลับรวมกันไว้ชั่วคราว ใช้มิเตอร์เส้นหนึ่งจับที่จุดนี้ แล้วไล่วัดสายยาวทั้ง 4 เส้น เส้นที่วัดได้ <strong>0 โอห์ม</strong> คือสายนิวตรอน (N)</span>
+          <span class="en-only">Twist the 2 short top leads together temporarily. Probe there with one meter lead and check all 4 long leads with the other — the one reading <strong>0 Ω</strong> is neutral (N)</span>
+          <p class="th-only" style="font-size:.85rem;color:var(--text-light);margin:.3rem 0 0"><em>วิเคราะห์อาการเสีย: หากวัดแล้วเข็มไม่ขึ้นเลย แสดงว่าเทอร์โมฟิวส์ขาด</em></p>
+          <p class="en-only" style="font-size:.85rem;color:var(--text-light);margin:.3rem 0 0"><em>Fault check: if nothing reads at all, the thermal fuse has blown</em></p>
+        </li>
+        <li>
+          <strong class="th-only">ต่อคาปาซิเตอร์:</strong><strong class="en-only">Reconnect the capacitor:</strong>
+          <span class="th-only">แกะสายสั้น 2 เส้นออกจากกัน แล้วนำไปต่อกับคาปาซิเตอร์ได้เลย</span>
+          <span class="en-only">Untwist the 2 short leads and wire them straight to the capacitor</span>
+          <p class="th-only" style="font-size:.85rem;color:var(--text-light);margin:.3rem 0 0"><em>หากวัดความต้านทานคู่สายสั้นนี้ควรได้ประมาณ 750 Ω หากเข็มไม่ขึ้นแสดงว่าขดลวดขาด</em></p>
+          <p class="en-only" style="font-size:.85rem;color:var(--text-light);margin:.3rem 0 0"><em>This pair should read about 750 Ω — if it reads nothing, a winding is open</em></p>
+        </li>
+        <li>
+          <strong class="th-only">หาคู่สายสวิตช์ (1, 2, 3):</strong><strong class="en-only">Find the switch leads (1, 2, 3):</strong>
+          <span class="th-only">นำสายมิเตอร์เส้นหนึ่งจับที่สายยาวนิวตรอน (N) อีกเส้นไล่วัดปลายสายยาวที่เหลือ 3 เส้น</span>
+          <span class="en-only">Hold one meter lead on the long neutral (N), and probe the remaining 3 long leads with the other</span>
+          <ol>
+            <li class="th-only">ค่าความต้านทานมากที่สุด 👉 ต่อสวิตช์เบอร์ 1 (หมุนช้าสุด)</li><li class="en-only">Highest reading 👉 switch position 1 (slowest)</li>
+            <li class="th-only">ค่าปานกลาง 👉 ต่อสวิตช์เบอร์ 2 (หมุนปานกลาง)</li><li class="en-only">Middle reading 👉 switch position 2 (medium)</li>
+            <li class="th-only">ค่าน้อยที่สุด 👉 ต่อสวิตช์เบอร์ 3 (หมุนเร็วสุด)</li><li class="en-only">Lowest reading 👉 switch position 3 (fastest)</li>
+          </ol>
+        </li>
+      </ol>
+      <div class="info-box" style="margin-top:1rem;">
+        <strong class="th-only">💡 สังเกต</strong><strong class="en-only">💡 Notice</strong>
+        <p class="th-only" style="margin:.4rem 0 0">ลำดับเบอร์สวิตช์กลับด้านกันระหว่างพัดลม 5 สายกับ 6 สาย เพราะจุดอ้างอิงในการวัดคนละจุด (แบบ 5 สายวัดจากฝั่ง S ส่วนแบบ 6 สายวัดจากฝั่ง N) — ให้ยึดหลักที่ว่า <strong>ค่าความต้านทานยิ่งมาก = ผ่านขดโช้คมาก = หมุนช้ากว่า</strong> เสมอ</p>
+        <p class="en-only" style="margin:.4rem 0 0">The switch-number order flips between the 5-wire and 6-wire methods because the reference point differs (5-wire measures from S, 6-wire from N) — the rule that never changes: <strong>more resistance = more choke winding in the path = slower spin</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. ข้อควรจำสำหรับช่างเทคนิค -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ข้อควรจำสำหรับช่างเทคนิค</span><span class="en-only">Technician Notes</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li><strong>การตั้งย่านวัด:</strong> ตั้งมัลติมิเตอร์แบบเข็มไปที่ย่าน X10 จะอ่านค่าได้สะดวกที่สุด (นำค่าบนหน้าปัดมาคูณ 10 จะได้ค่าโอห์มที่แท้จริง)</li>
+        <li><strong>ข้อยกเว้นเรื่องค่าโอห์ม:</strong> ค่าความต้านทานที่ระบุเป็นเพียงค่ามาตรฐาน หากเป็นมอเตอร์ขนาดใหญ่ที่ใช้ลวดเส้นใหญ่ขึ้น ค่าความต้านทานอาจต่ำลงได้โดยไม่ใช่อาการเสีย</li>
+        <li><strong>การฟันธงอาการช็อต:</strong> หากมอเตอร์ช็อตรอบ ค่าความต้านทานจะตกต่ำมากอย่างเห็นได้ชัด (เช่น เหลือต่ำกว่า 100 Ω) แต่หากวัดได้ค่าโอห์มสูงกว่าปกติมักจะไม่มีปัญหา เพราะผู้ผลิตอาจลดขนาดขดลวดเพื่อประหยัดต้นทุน</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li><strong>Meter range:</strong> on an analog multimeter, the X10 range is easiest to read (multiply the dial reading by 10 for the true ohm value)</li>
+        <li><strong>Ohm-value caveat:</strong> the stated resistances are just typical values — a larger motor with thicker wire can read lower without being faulty</li>
+        <li><strong>Calling a short:</strong> a shorted winding drops resistance dramatically and obviously (e.g. below 100 Ω); a reading higher than typical is usually not a fault — makers sometimes use thinner wire to cut cost</li>
+      </ul>
+      <p class="th-only" style="font-size:.88rem;color:var(--text-light); margin-top:1rem;">🔗 ทบทวนการตั้งย่านวัดความต้านทานในบท <a href="multimeter.html"><strong>เครื่องมือวัด</strong></a></p>
+      <p class="en-only" style="font-size:.88rem;color:var(--text-light); margin-top:1rem;">🔗 Review setting up resistance mode in the <a href="multimeter.html"><strong>Measuring Tools</strong></a> lesson</p>
+    </div>
+  </div>
+
+  <!-- 7. ความปลอดภัย -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ความปลอดภัยและข้อควรระวัง</span><span class="en-only">Safety &amp; Cautions</span></div>
+    <div class="card">
+      <div class="warn-box">
+        <strong class="th-only">⚠ ถอดปลั๊กก่อนวัดทุกครั้ง</strong>
+        <strong class="en-only">⚠ Always unplug before measuring</strong>
+        <p class="th-only" style="margin:0.4rem 0 0">การวัดความต้านทานต้องทำในสภาวะไม่มีไฟเลี้ยงวงจรเด็ดขาด มิฉะนั้นมัลติมิเตอร์อาจเสียหายและเป็นอันตรายต่อผู้วัด และให้คายประจุคาปาซิเตอร์ (ลัดขาทั้งสองด้วยตัวต้านทานหรือไขควงมีฉนวน) ก่อนสัมผัสทุกครั้ง</p>
+        <p class="en-only" style="margin:0.4rem 0 0">Resistance measurements must always be made with the circuit unpowered, or the meter can be damaged and the user injured. Discharge the capacitor (short its terminals through a resistor or an insulated screwdriver) before touching it.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
+<script>const CURRENT_PAGE='repair-fan';</script>
+<script src="js/nav.js"></script>
+</body>
+</html>
