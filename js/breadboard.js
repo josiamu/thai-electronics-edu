@@ -90,6 +90,41 @@ var LED_COLORS = {
   white:  { vf:3.2, fill:'#e2e8f0', glow:'#ffffff', th:'ขาว',     en:'White' }
 };
 
+// incandescent lamp (หลอดไส้) — a plain resistive load, but the filament has thermal inertia:
+// what you see is the AVERAGE power, not the instantaneous one. That is the whole point of a
+// phase-control dimmer — the TRIAC chops the AC waveform into slivers, yet the lamp glows steadily
+// and only its brightness follows the firing angle.
+// R here is the HOT (rated) resistance: R = V²/P. A real filament is ~10× lower when cold, which
+// is where switch-on inrush comes from — not modelled, it would only add a spike at t=0.
+var LAMP_SPECS = [
+  { v:3,  p:0.3 },     //  30 Ω · 100 mA
+  { v:6,  p:0.6 },     //  60 Ω · 100 mA
+  { v:12, p:1.2 },     // 120 Ω · 100 mA
+  { v:24, p:2.4 }      // 240 Ω · 100 mA
+];
+var LAMP_V_DEFAULT = 6, LAMP_P_DEFAULT = 0.6;
+var LAMP_TAU_DC = 0.15;      // filament thermal time constant with no AC on the board (s)
+function lampV(c){ return c.value || LAMP_V_DEFAULT; }
+function lampP(c){ return c.pw || LAMP_P_DEFAULT; }
+function lampR(c){ return Math.max(1, lampV(c) * lampV(c) / lampP(c)); }
+// thermal lag ≈ one AC period: fast enough to follow a knob turn, slow enough to smooth the chopping
+function lampTau(){ var f = maxACFreq(); return f > 0 ? Math.max(LAMP_TAU_DC, 1 / f) : LAMP_TAU_DC; }
+function lampBright(c){ return Math.max(0, Math.min(1, Math.sqrt((c._pAvg || 0) / lampP(c)))); }
+function lampPct(c){ return Math.round(100 * Math.min(1.5, (c._pAvg || 0) / lampP(c))); }
+// filament colour ramp: cold grey → dull red → orange → warm white, the way a real bulb heats up
+var LAMP_RAMP = [[0, 148,163,184], [0.06, 120,45,25], [0.3, 214,90,20], [0.65, 250,180,60], [1, 255,250,225]];
+function lampColor(b){
+  for (var i = 1; i < LAMP_RAMP.length; i++){
+    var p = LAMP_RAMP[i - 1], q = LAMP_RAMP[i];
+    if (b > q[0] && i < LAMP_RAMP.length - 1) continue;
+    var t = q[0] > p[0] ? Math.max(0, Math.min(1, (b - p[0]) / (q[0] - p[0]))) : 0;
+    return 'rgb(' + Math.round(p[1] + (q[1] - p[1]) * t) + ',' + Math.round(p[2] + (q[2] - p[2]) * t) +
+           ',' + Math.round(p[3] + (q[3] - p[3]) * t) + ')';
+  }
+  return '#94a3b8';
+}
+function lampSpecTxt(c){ return lampV(c) + 'V ' + lampP(c) + 'W'; }
+
 // jumper-wire colours (cosmetic only — all wires are still 0 Ω)
 var WIRE_COLORS = {
   green:  { hex:'#16a34a', th:'เขียว',   en:'Green' },
@@ -251,6 +286,7 @@ var buttonColor = 'red';      // cap colour of the next pushbutton placed
 var diodeKind = 'silicon';   // silicon | germanium | schottky | zener | led — picks what the diode tool places
 var zenerVz = 5.1;
 var capVal = CAP_DEFAULT, indVal = IND_DEFAULT;
+var lampIdx = 1;                              // index into LAMP_SPECS for the next lamp placed (6V 0.6W)
 var AC_FREQ_OPTIONS = [0.5, 1, 2, 5, 10, 50, 60];   // Hz
 var acVp = 5, acFreq = 1, acOffset = 0;       // amplitude / frequency / DC offset of the next AC source
 var transType = 'npn';                        // npn | pnp | nmos | pmos — next transistor placed
@@ -406,6 +442,7 @@ var TYPE_LABEL = {
   wire:    { th:'จัมเปอร์', en:'Jumper' },
   switch:  { th:'สวิตช์', en:'Switch' },
   button:  { th:'ปุ่มกด', en:'Pushbutton' },
+  lamp:    { th:'หลอดไส้', en:'Incandescent lamp' },
   cap:     { th:'ตัวเก็บประจุ', en:'Capacitor' },
   ind:     { th:'ตัวเหนี่ยวนำ', en:'Inductor' },
   ac:      { th:'แหล่งจ่าย AC', en:'AC source' },
@@ -584,6 +621,7 @@ function placeComp(type, a, b){
   if (type === 'switch') c.closed = true;   // starts closed (conducting)
   if (type === 'button'){ c.closed = false; c.color = buttonColor; }   // momentary: rests open, conducts only while held
   if (type === 'diac'){ c.vbo = diacVboSel; c._lat = 0; }
+  if (type === 'lamp'){ var ls = LAMP_SPECS[lampIdx] || LAMP_SPECS[1]; c.value = ls.v; c.pw = ls.p; c._pAvg = 0; }
   if (type === 'cap'){ c.value = capVal; c._vPrev = 0; }
   if (type === 'ind'){ c.value = indVal; c._iPrev = 0; }
   comps.push(c);
@@ -706,6 +744,17 @@ function renderEditor(){
            (c.closed ? (en ? 'PRESSED (closed)' : 'กดอยู่ (ต่อวงจร)') : (en ? 'released (open)' : 'ปล่อยอยู่ (ตัดวงจร)')) + '</span>' +
            '<span style="margin-left:.6rem;color:var(--text-light);font-weight:400">' +
            (en ? '(momentary NO — hold it down to conduct, release to cut off)' : '(ปุ่มกดแบบ NO — กดค้างจึงจะต่อวงจร ปล่อยแล้วตัดทันที)') + '</span>';
+  } else if (c.type === 'lamp'){
+    ctrl = '<label>' + (en ? 'Rating' : 'พิกัด') + '</label><select id="bb-ed-lamp">' +
+      LAMP_SPECS.map(function(s, i){
+        return '<option value="' + i + '"' + (s.v === lampV(c) && s.p === lampP(c) ? ' selected' : '') + '>' +
+               s.v + ' V · ' + s.p + ' W (' + Math.round(s.v * s.v / s.p) + ' Ω)</option>';
+      }).join('') + '</select>' +
+      '<span style="margin-left:.6rem;color:var(--text-light);font-weight:600">' +
+      (en ? 'P ' : 'กำลัง ') + ((c._pAvg || 0)).toFixed(2) + ' W · ' + lampPct(c) + '%</span>' +
+      '<span style="margin-left:.6rem;color:var(--text-light);font-weight:400">' +
+      (en ? '(resistive load — brightness follows the AVERAGE power, so a chopped AC waveform still glows steadily)'
+          : '(โหลดความต้านทาน — ความสว่างตามกำลังไฟฟ้า<b>เฉลี่ย</b> ไฟ AC ที่ถูกสับก็ยังสว่างนิ่ง ไม่กระพริบ)') + '</span>';
   } else if (c.type === 'cap'){
     ctrl = '<label>' + (en ? 'Capacitance' : 'ค่า C') + '</label><select id="bb-ed-cap">' +
       CAP_OPTIONS.map(function(F){ return '<option value="' + F + '"' + (F === c.value ? ' selected' : '') + '>' + fmtC(F) + '</option>'; }).join('') + '</select>';
@@ -803,6 +852,11 @@ function renderEditor(){
   on('bb-ed-vz', 'change', function(){ c.vz = +this.value; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-cap', 'change', function(){ c.value = +this.value; rebuild(); refreshEditorTitle(c); });
   on('bb-ed-ind', 'change', function(){ c.value = +this.value; rebuild(); refreshEditorTitle(c); });
+  on('bb-ed-lamp', 'change', function(){
+    var s = LAMP_SPECS[+this.value] || LAMP_SPECS[1];
+    c.value = s.v; c.pw = s.p; c._pAvg = 0;   // new filament → let it heat up again
+    rebuild(); refreshEditorTitle(c);
+  });
   on('bb-ed-tt', 'change', function(){
     c.tt = this.value;
     if (transKind(c) === 'fet'){ if (c.vth == null) c.vth = transVth; delete c.beta; delete c.av; delete c.vbr; }
@@ -1102,6 +1156,7 @@ function solveCircuit(h, commit){
     branches.forEach(function(c){
       var i = gi(sn(c.a)), j = gi(sn(c.b));
       if (RFAM[c.type]){ stampG(i, j, 1 / effR(c)); return; }
+      if (c.type === 'lamp'){ stampG(i, j, 1 / lampR(c)); return; }   // filament = fixed (hot) resistance
       if (c.type === 'cap'){   // Backward Euler: Geq = C/h in parallel with Ieq = (C/h)·Vprev
         var Gc = c.value / h; stampG(i, j, Gc); stampI(i, j, Gc * c._vPrev); return;
       }
@@ -1348,6 +1403,22 @@ function solveCircuit(h, commit){
   branches.forEach(function(c){
     var va = Vof(sn(c.a)), vb = Vof(sn(c.b)), vd = va - vb, I = 0;
     if (RFAM[c.type]){ var R = effR(c); I = vd / R; c.results = { V:vd, I:I, on:Math.abs(I) > 1e-6, R:R }; return; }
+    if (c.type === 'lamp'){
+      // brightness follows the filament's thermal state, not the instant power: _pAvg is a
+      // first-order lag on P. Advancing it only on committed steps keeps the display snapshot
+      // (commit=false) from double-counting; a purely static circuit has no steps, so there the
+      // filament is simply taken as already settled.
+      var Rl = lampR(c); I = vd / Rl;
+      var Pw = vd * vd / Rl;
+      if (commit) c._pAvg += (Pw - (c._pAvg || 0)) * (1 - Math.exp(-h / lampTau()));
+      else if (!hasAC() && !hasReactive()) c._pAvg = Pw;
+      var bl = lampBright(c);
+      c.results = { V:vd, I:I, on:Math.abs(I) > 1e-6, R:Rl, P:Pw, Pavg:c._pAvg, bright:bl, lit:bl > 0.02 };
+      if (c._pAvg > lampP(c) * 1.3)
+        warnings.push({ t:'warn', th:'หลอดไส้ทำงานเกินพิกัด (' + (c._pAvg).toFixed(2) + ' W จากพิกัด ' + lampP(c) + ' W) — ของจริงไส้จะขาด',
+                                  en:'Lamp is over its rating (' + (c._pAvg).toFixed(2) + ' W vs ' + lampP(c) + ' W) — a real filament would burn out' });
+      return;
+    }
     if (c.type === 'cap'){   // Ic = C/h·(Vnew − Vprev); advance Vprev only when committing a step
       I = (c.value / h) * (vd - c._vPrev);
       c.results = { V:vd, I:I, on:Math.abs(I) > 1e-6 };
@@ -1498,7 +1569,7 @@ function rebuild(){
 
   // draw components
   while (gComps.firstChild) gComps.removeChild(gComps.firstChild);
-  ledGlows = []; optoGlows = []; relayGlows = [];
+  ledGlows = []; optoGlows = []; relayGlows = []; lampGlows = [];
   comps.forEach(drawComp);
 
   rebuildElectrons();
@@ -1646,6 +1717,24 @@ function drawComp(c){
     var arr2 = el('line', { x1:len/2+8, y1:-5, x2:len/2+15, y2:-12, stroke:lit0?col.fill:'#cbd5e1', 'stroke-width':1.6, 'stroke-linecap':'round' });
     g.appendChild(arr1); g.appendChild(arr2);
     ledGlows.push({ c:c, halo:halo, core:core, tri:tri, bar:bar, arrows:[arr1, arr2] });
+  } else if (c.type === 'lamp'){
+    // incandescent bulb: glass envelope + filament zigzag, both heated by the averaged power
+    var lb = (c.results && c.results.bright) || 0, lm = len / 2;
+    var lhalo = el('circle', { cx:lm, cy:0, r:(11 + 18 * lb).toFixed(1), fill:'#fde68a', opacity:(0.85 * lb).toFixed(3), filter:'url(#bb-glow)' });
+    g.appendChild(lhalo);
+    var glass = el('circle', { cx:lm, cy:0, r:10, fill:lampColor(lb * 0.55), stroke:'#64748b', 'stroke-width':1.6, 'fill-opacity':'0.9' });
+    g.appendChild(glass);
+    // lead-in wires + filament (the zigzag is what actually glows)
+    g.appendChild(el('path', { d:'M ' + (lm - 10) + ' 0 L ' + (lm - 6) + ' 0 M ' + (lm + 6) + ' 0 L ' + (lm + 10) + ' 0',
+      stroke:'#64748b', 'stroke-width':1.2 }));
+    var fil = el('path', { d:'M ' + (lm - 6) + ' 0 L ' + (lm - 4) + ' -5 L ' + (lm - 1.3) + ' 5 L ' + (lm + 1.3) + ' -5 L ' + (lm + 4) + ' 5 L ' + (lm + 6) + ' 0',
+      fill:'none', stroke:lampColor(lb), 'stroke-width':1.8, 'stroke-linecap':'round', 'stroke-linejoin':'round' });
+    g.appendChild(fil);
+    var core = el('circle', { cx:lm, cy:0, r:(2 + 6 * lb).toFixed(1), fill:'#fffbeb', opacity:(0.85 * lb).toFixed(3), filter:'url(#bb-glow)' });
+    g.appendChild(core);
+    var llbl = uprightText(lm, A.x, A.y, ang, -18, '💡 ' + lampSpecTxt(c) + (lb > 0.02 ? ' · ' + lampPct(c) + '%' : ''), lb > 0.02 ? '#b45309' : '#94a3b8');
+    gComps.appendChild(llbl);
+    lampGlows.push({ c:c, halo:lhalo, glass:glass, fil:fil, core:core, lbl:llbl });
   } else if (c.type === 'cap'){
     // two parallel plates at the centre
     var cm = len / 2;
@@ -2024,6 +2113,7 @@ var elecDots = [];   // {el, a, b, dir, speed, f}
 var ledGlows = [];   // {c, halo, tri, bar, arrows} — restyled every transient frame so LEDs dim smoothly
 var optoGlows = [];  // {c, halo, arrows} — same idea for the optocoupler's input-LED glow + light arrows
 var relayGlows = []; // {c, arm, humps, ...} — armature/coil restyled every frame as the relay energizes
+var lampGlows = [];  // {c, halo, glass, fil, core, lbl} — the filament heats/cools smoothly, so it needs per-frame restyling too
 
 // update LED visuals from the latest brightness without redrawing the whole board
 function updateLeds(){
@@ -2042,6 +2132,17 @@ function updateLeds(){
     O.halo.setAttribute('opacity', (0.8 * ob).toFixed(3));
     O.halo.setAttribute('r', (6 + 10 * ob).toFixed(1));
     O.arrows.forEach(function(a){ a.setAttribute(a.tagName === 'polygon' ? 'fill' : 'stroke', olit ? '#f59e0b' : '#cbd5e1'); });
+  }
+  for (var L = 0; L < lampGlows.length; L++){
+    var P2 = lampGlows[L], pb = (P2.c.results && P2.c.results.bright) || 0;
+    P2.halo.setAttribute('opacity', (0.85 * pb).toFixed(3));
+    P2.halo.setAttribute('r', (11 + 18 * pb).toFixed(1));
+    P2.core.setAttribute('opacity', (0.85 * pb).toFixed(3));
+    P2.core.setAttribute('r', (2 + 6 * pb).toFixed(1));
+    P2.glass.setAttribute('fill', lampColor(pb * 0.55));
+    P2.fil.setAttribute('stroke', lampColor(pb));
+    P2.lbl.setAttribute('fill', pb > 0.02 ? '#b45309' : '#94a3b8');
+    P2.lbl.textContent = '💡 ' + lampSpecTxt(P2.c) + (pb > 0.02 ? ' · ' + lampPct(P2.c) + '%' : '');
   }
   for (var r = 0; r < relayGlows.length; r++){
     var R = relayGlows[r], ren = !!(R.c.results && R.c.results.en);
@@ -2174,7 +2275,7 @@ function trackedComp(){
 function trackedSignal(c){ return c.type === 'ind' ? (c.results ? c.results.I : 0) : (c.results ? c.results.V : 0); }
 
 function restartTransient(){
-  comps.forEach(function(c){ if (c.type === 'cap') c._vPrev = 0; if (c.type === 'ind') c._iPrev = 0; if (c.av) c._av = 0; if (c.type === 'scr' || c.type === 'diac') c._lat = 0; if (c.type === 'relay') c._en = 0; });
+  comps.forEach(function(c){ if (c.type === 'cap') c._vPrev = 0; if (c.type === 'ind') c._iPrev = 0; if (c.type === 'lamp') c._pAvg = 0; if (c.av) c._av = 0; if (c.type === 'scr' || c.type === 'diac') c._lat = 0; if (c.type === 'relay') c._en = 0; });
   simTime = 0; graphHist = []; renderAcc = 0;
   rebuild();
 }
@@ -2231,6 +2332,7 @@ function tauOf(target){
     if (c === target || c.type === 'cap') return;
     var i = gi(sn(c.a)), j = gi(sn(c.b));
     if (RFAM[c.type]){ stamp(i, j, 1 / effR(c)); return; }
+    if (c.type === 'lamp'){ stamp(i, j, 1 / lampR(c)); return; }
     if ((c.type === 'diode' || c.type === 'led') && c.results && c.results.on) stamp(i, j, 1 / diodeRd(c));
     else if (c.type === 'vdr' && c.results && c.results.on) stamp(i, j, 1 / VDR_RD);
   });
@@ -2297,6 +2399,10 @@ function renderReadout(res){
       if (c.type === 'led'){
         var lit = c.results && c.results.on;
         st = '<span class="bb-dot" style="background:' + (lit ? LED_COLORS[c.color].fill : '#94a3b8') + '"></span>' + (lit ? (en ? 'ON' : 'ติด') : (en ? 'off' : 'ดับ'));
+      } else if (c.type === 'lamp'){
+        var pb2 = (c.results && c.results.bright) || 0;
+        st = '<span class="bb-dot" style="background:' + (pb2 > 0.02 ? lampColor(pb2) : '#94a3b8') + '"></span>' +
+             (pb2 > 0.02 ? lampPct(c) + '%' : (en ? 'off' : 'ดับ'));
       } else if (isSwitchy(c)){
         var onTxt = c.type === 'button' ? (en ? 'PRESSED' : 'กดอยู่') : (en ? 'ON' : 'ปิด');
         var offTxt = c.type === 'button' ? (en ? 'released' : 'ปล่อย') : (en ? 'OFF' : 'เปิด');
@@ -2353,6 +2459,7 @@ function compName(c, en){
   if (c.type === 'led') return (en ? 'LED ' : 'LED ') + LED_COLORS[c.color][en ? 'en' : 'th'];
   if (c.type === 'switch') return en ? 'Switch' : 'สวิตช์';
   if (c.type === 'button') return en ? 'Pushbutton' : 'ปุ่มกด';
+  if (c.type === 'lamp') return (en ? 'Lamp ' : 'หลอดไส้ ') + lampSpecTxt(c) + ' (' + fmtR(Math.round(lampR(c))) + ')';
   if (c.type === 'cap') return 'C ' + fmtC(c.value);
   if (c.type === 'ind') return 'L ' + fmtL(c.value);
   if (c.type === 'pot') return (en ? 'Pot ' : 'POT ') + fmtR(c.value || potVal);
@@ -2525,6 +2632,8 @@ function updateMeter(){
   setTip('คลิกอุปกรณ์เพื่อวัดความต้านทาน (จริงต้องตัดไฟก่อนวัด)', 'Click a part to read resistance (real ohmmeters need power off)');
   if (!c) return lcd(P('คลิกอุปกรณ์', 'Tap a part'), '', true);
   if (RFAM[c.type]) return lcd(fmtR(Math.round(effR(c))), '');
+  // a cold filament really does measure ~1/10 of its hot resistance — that is the honest reading here
+  if (c.type === 'lamp') return lcd(fmtR(Math.round(lampR(c) / 10)), P('(ไส้เย็น)', '(cold)'));
   if (c.type === 'pot') return lcd(fmtR(Math.round(potR(c).total)), '');   // end-to-end resistance
   if (isSwitchy(c)) return lcd(c.closed ? '≈ 0' : '∞', 'Ω');
   if (c.type === 'wire') return lcd('≈ 0', 'Ω');
@@ -2551,8 +2660,8 @@ function beep(){
 }
 
 // ════════════════════════════ TOOLBAR / CONTROLS ════════════════════════════
-var VALROWS = ['battery','ac','resistor','diode','wire','switch','button','cap','ind','transistor','scr','pot','opto','relay','meter'];
-var COMP_TOOLS = ['battery','ac','resistor','diode','wire','switch','button','cap','ind','transistor','scr','pot','opto','relay'];   // live inside the "Add component" dropdown
+var VALROWS = ['battery','ac','resistor','diode','wire','switch','button','lamp','cap','ind','transistor','scr','pot','opto','relay','meter'];
+var COMP_TOOLS = ['battery','ac','resistor','diode','wire','switch','button','lamp','cap','ind','transistor','scr','pot','opto','relay'];   // live inside the "Add component" dropdown
 function selectTool(t){
   // toggle off if same
   tool = (tool === t) ? null : t;
@@ -2756,6 +2865,7 @@ function initControls(){
   $('bb-btn-color').addEventListener('change', function(){ buttonColor = this.value; });
   $('bb-diode-type').addEventListener('change', function(){ diodeKind = this.value; updateDiodeControls(); });
   $('bb-diode-vz').addEventListener('change', function(){ zenerVz = +this.value; });
+  $('bb-lamp-spec').addEventListener('change', function(){ lampIdx = +this.value; });
   $('bb-cap-val').addEventListener('change', function(){ capVal = +this.value; });
   $('bb-ind-val').addEventListener('change', function(){ indVal = +this.value; });
   $('bb-trans-type').addEventListener('change', function(){ transType = this.value; updateTransistorControls(); refreshHint(); });
@@ -2877,6 +2987,7 @@ function setExampleBatt(v){
 }
 
 var EXAMPLES = [
+  // ── พื้นฐาน: LED · สวิตช์ · ปุ่มกด · หลอดไส้  —  basics: LED, switch, pushbutton, filament lamp ──
   { th:'LED พื้นฐาน (แบต → R → LED)', en:'Basic LED (battery → R → LED)', build:function(){
       setExampleBatt(9);
       place('battery', 'TP2', 'TN2', { value:9 });
@@ -2885,6 +2996,7 @@ var EXAMPLES = [
       place('led', 'tb9', 'tb13', { color:'red', vf:1.8 });     // → LED (row b, shares col9)
       place('wire', 'tc13', 'TN13', { color:'black' });         // → − rail ↑ col13
     } },
+
   { th:'LED ขนาน 2 สี (แดง + เขียว)', en:'Two LEDs in parallel (red + green)', build:function(){
       setExampleBatt(9);
       place('battery', 'TP2', 'TN2', { value:9 });
@@ -2897,6 +3009,39 @@ var EXAMPLES = [
       place('led', 'td10', 'td13', { color:'green', vf:2.1 });
       place('wire', 'tc13', 'TN13', { color:'black' });         // − bus col13 ↑ rail
     } },
+
+  { th:'สวิตช์ควบคุม LED', en:'Switch-controlled LED', build:function(){
+      setExampleBatt(9);
+      place('battery', 'TP2', 'TN2', { value:9 });
+      place('wire', 'TP5', 'tc5', { color:'red' });
+      place('switch', 'ta5', 'ta9', { closed:true });
+      place('resistor', 'tb9', 'tb13', { value:330 });
+      place('led', 'ta13', 'ta17', { color:'yellow', vf:2.0 });
+      place('wire', 'tc17', 'TN17', { color:'black' });
+    } },
+
+  { th:'ปุ่มกดควบคุม LED (กดค้างติด — ปล่อยดับ)', en:'Pushbutton-controlled LED (hold to light — release to cut off)', build:function(){
+      setExampleBatt(9);
+      place('battery', 'TP2', 'TN2', { value:9 });
+      place('wire', 'TP5', 'tc5', { color:'red' });
+      place('button', 'ta5', 'ta9', { closed:false });          // momentary NO — press and hold it
+      place('resistor', 'tb9', 'tb13', { value:330 });
+      place('led', 'ta13', 'ta17', { color:'green', vf:2.1 });
+      place('wire', 'tc17', 'TN17', { color:'black' });
+    } },
+
+  { th:'หลอดไส้ต่อกับแบตเตอรี่ + สวิตช์ (ดูกำลังไฟฟ้าและความสว่างเทียบพิกัด)', en:'Incandescent lamp on a battery + switch (compare power and brightness against its rating)', build:function(){
+      // The simplest lamp circuit — the point is the readout: a 6 V bulb on 9 V burns far over
+      // its rating, and dropping the battery to 6 V brings it to exactly 100%.
+      setExampleBatt(6);
+      place('battery', 'TP2', 'TN2', { value:6 });
+      place('wire', 'TP5', 'tc5', { color:'red' });
+      place('switch', 'ta5', 'ta9', { closed:true });
+      place('lamp', 'tb9', 'tb15', { value:6, pw:0.6, _pAvg:0 });
+      place('wire', 'tc15', 'TN15', { color:'black' });
+    } },
+
+  // ── ไดโอดพิเศษ: ซีเนอร์ · TVS  —  special diodes: zener, TVS ──
   { th:'ซีเนอร์ควบคุมแรงดัน 12V → 5.1V', en:'Zener regulator 12V → 5.1V', build:function(){
       setExampleBatt(12);
       place('battery', 'TP2', 'TN2', { value:12 });
@@ -2910,6 +3055,7 @@ var EXAMPLES = [
       place('led', 'ta15', 'ta19', { color:'red', vf:1.8 });
       place('wire', 'tb19', 'TN19', { color:'black' });
     } },
+
   { th:'TVS หนีบไฟกระชาก (แหล่งจ่าย 12V → โหลดเห็นแค่ ~5V)', en:'TVS surge clamp (12V supply → load only sees ~5V)', build:function(){
       setExampleBatt(12);
       place('battery', 'TP2', 'TN2', { value:12 });
@@ -2924,84 +3070,8 @@ var EXAMPLES = [
       place('led', 'ta15', 'ta19', { color:'green', vf:2.1 });
       place('wire', 'tb19', 'TN19', { color:'black' });
     } },
-  { th:'สวิตช์ควบคุม LED', en:'Switch-controlled LED', build:function(){
-      setExampleBatt(9);
-      place('battery', 'TP2', 'TN2', { value:9 });
-      place('wire', 'TP5', 'tc5', { color:'red' });
-      place('switch', 'ta5', 'ta9', { closed:true });
-      place('resistor', 'tb9', 'tb13', { value:330 });
-      place('led', 'ta13', 'ta17', { color:'yellow', vf:2.0 });
-      place('wire', 'tc17', 'TN17', { color:'black' });
-    } },
-  { th:'ปุ่มกดควบคุม LED (กดค้างติด — ปล่อยดับ)', en:'Pushbutton-controlled LED (hold to light — release to cut off)', build:function(){
-      setExampleBatt(9);
-      place('battery', 'TP2', 'TN2', { value:9 });
-      place('wire', 'TP5', 'tc5', { color:'red' });
-      place('button', 'ta5', 'ta9', { closed:false });          // momentary NO — press and hold it
-      place('resistor', 'tb9', 'tb13', { value:330 });
-      place('led', 'ta13', 'ta17', { color:'green', vf:2.1 });
-      place('wire', 'tc17', 'TN17', { color:'black' });
-    } },
-  { th:'SCR ล็อกตัว — กดปุ่มยิงเกตแวบเดียว LED ติดค้าง, สับสวิตช์ตัดกระแสจึงดับ', en:'SCR latch — one tap on the gate button lights the LED for good; only opening the switch resets it', build:function(){
-      setExampleBatt(9);
-      place('battery', 'TP2', 'TN2', { value:9 });
-      place('wire', 'TP5', 'tc5', { color:'red' });                  // + rail ↓ col5
-      place('switch', 'ta5', 'ta9', { closed:true });                // anode-path switch = the only way to reset it
-      place('resistor', 'tb9', 'tb13', { value:330 });
-      place('led', 'ta13', 'ta17', { color:'red', vf:1.8 });         // load: cathode lands on the anode column
-      // thyristor: anode col17, cathode col21, gate col19
-      place('scr', 'tb17', 'ta21', { g:'tb19', st:'scr', igt:1e-3, ih:5e-3, _lat:0 });
-      place('wire', 'tc21', 'TN21', { color:'black' });              // cathode → − rail
-      // gate drive taps the rail BEFORE the switch: press = fire (I_G ≈ 3.8 mA), release changes nothing
-      place('button', 'te5', 'te11', { closed:false });
-      place('resistor', 'td11', 'td19', { value:2200 });
-    } },
-  { th:'SCR แบบ START / STOP — ปุ่มเขียวยิงเกตให้ติดค้าง, ปุ่มแดงลัดขา A-K เพื่อบังคับให้ดับ (commutation)', en:'SCR START / STOP — the green button fires the gate and it stays on; the red button shorts A-K to commutate it off', build:function(){
-      setExampleBatt(9);
-      place('battery', 'TP1', 'TN1', { value:9 });
-      // load path: + rail → 1 kΩ → LED → anode, cathode → − rail
-      place('wire', 'td23', 'TP23', { color:'red' });
-      place('resistor', 'te14', 'te23', { value:1000 });
-      place('led', 'td14', 'td11', { color:'red', vf:1.8 });
-      place('scr', 'tc11', 'tc9', { g:'tc13', st:'scr', igt:1e-3, ih:5e-3, _lat:0 });
-      place('wire', 'ta9', 'TN9', { color:'red' });
-      // START: + rail → button → 1 kΩ → gate (a tap is enough, it latches)
-      place('wire', 'ta19', 'TP19', { color:'green' });
-      place('button', 'tc16', 'tc19', { closed:false, color:'green' });
-      place('resistor', 'tb13', 'tb16', { value:1000 });
-      // STOP: shorts anode to cathode, so the current through the SCR itself falls below I_H —
-      // the load keeps running off the short while held, and it is off once you let go
-      place('button', 'te9', 'te11', { closed:false, color:'red' });
-    } },
-  { th:'ไทรแอกกับไฟ AC — LED สองสีสลับกันติด (นำกระแสสองทิศ) และดับเองทุกจุดตัดศูนย์', en:'TRIAC on AC — two LEDs alternate (it conducts both ways) and it self-commutates at every zero crossing', build:function(){
-      place('ac', 'TP2', 'TN2', { vp:12, freq:2, offset:0 });
-      place('wire', 'TP5', 'tc5', { color:'red' });                  // source + ↓ col5
-      place('resistor', 'ta5', 'ta9', { value:470 });
-      // anti-parallel LEDs: red conducts on one half, green on the other
-      place('led', 'tb9', 'tb13', { color:'red', vf:1.8 });
-      place('led', 'tc13', 'tc9', { color:'green', vf:2.1 });
-      // triac: MT2 col13, MT1 col17, gate col15 — gate fed from MT2 through 4.7 kΩ (≈2.4 mA)
-      place('scr', 'ta13', 'ta17', { g:'tb15', st:'triac', igt:1e-3, ih:5e-3, _lat:0 });
-      place('resistor', 'td13', 'td15', { value:4700 });
-      place('wire', 'tb17', 'TN17', { color:'black' });              // MT1 → − rail
-    } },
-  { th:'ดิมเมอร์จริง: RC → ไดแอก → เกตไทรแอก (หมุนลูกบิด VR เพื่อเลื่อนจังหวะจุดชนวน)', en:'A real dimmer: RC → DIAC → TRIAC gate (turn the VR knob to shift the firing point)', build:function(){
-      env.vrPos = 40; renderVrKnob();
-      place('ac', 'TP1', 'TN1', { vp:24, freq:1, offset:0 });
-      place('wire', 'TP5', 'tc5', { color:'red' });                  // source + ↓ col5
-      place('resistor', 'ta5', 'ta9', { value:1000 });               // load limiter
-      // anti-parallel LEDs so both half cycles are visible
-      place('led', 'tb9', 'tb13', { color:'red', vf:1.8 });
-      place('led', 'tc13', 'tc9', { color:'green', vf:2.1 });
-      place('scr', 'ta13', 'ta17', { g:'tb15', st:'triac', igt:1e-3, ih:5e-3, _lat:0 });
-      place('wire', 'tb17', 'TN17', { color:'black' });              // MT1 → − rail
-      // phase-shift network: VR + C set how late the cap reaches the DIAC's V_BO each half cycle
-      place('vr', 'td9', 'td19', { value:10000 });
-      place('cap', 'te19', 'te23', { value:47e-6, _vPrev:0 });
-      place('wire', 'tc23', 'TN23', { color:'black' });
-      // the DIAC dumps the cap into the gate the instant it breaks over — that pulse fires the TRIAC
-      place('diac', 'tc19', 'tc15', { vbo:12, _lat:0 });
-    } },
+
+  // ── ตัวต้านทานปรับค่า: VR 2 ขา · โพเทนชิโอมิเตอร์ 3 ขา  —  variable resistors ──
   { th:'VR แบบ 2 ขา (rheostat) หรี่ไฟ LED (ปรับลูกบิดในแผงสภาพแวดล้อม)', en:'Variable resistor (2-pin rheostat) dimming an LED', build:function(){
       setExampleBatt(9);
       place('battery', 'TP2', 'TN2', { value:9 });
@@ -3011,6 +3081,7 @@ var EXAMPLES = [
       place('led', 'ta13', 'ta17', { color:'blue', vf:3.0 });
       place('wire', 'tc17', 'TN17', { color:'black' });
     } },
+
   { th:'โพเทนชิโอมิเตอร์ 3 ขา หรี่ไฟ LED (แบ่งแรงดัน — หมุนลูกบิด VR)', en:'3-pin potentiometer LED dimmer (voltage divider — turn the VR knob)', build:function(){
       setExampleBatt(9);
       env.vrPos = 70; renderVrKnob();                          // start fairly bright; turn the knob down to dim
@@ -3022,6 +3093,8 @@ var EXAMPLES = [
       place('led', 'td14', 'td17', { color:'red', vf:1.8 });   // → LED
       place('wire', 'tc17', 'TN17', { color:'black' });        // → − rail
     } },
+
+  // ── ตัวเก็บประจุกับกราฟ transient  —  capacitors and the transient graph ──
   { th:'ชาร์จตัวเก็บประจุ RC (ดูกราฟ Transient)', en:'RC capacitor charging (watch the transient)', build:function(){
       setExampleBatt(9);
       place('battery', 'TP2', 'TN2', { value:9 });
@@ -3030,6 +3103,7 @@ var EXAMPLES = [
       place('cap', 'tb9', 'tb13', { value:470e-6, _vPrev:0 });
       place('wire', 'tc13', 'TN13', { color:'black' });
     } },
+
   { th:'ตัวเก็บประจุเลี้ยง LED — เปิดสวิตช์แล้วไฟค่อยๆ จาง', en:'Cap-backed LED — open the switch and it fades out', build:function(){
       setExampleBatt(9);
       place('battery', 'TP2', 'TN2', { value:9 });
@@ -3043,6 +3117,8 @@ var EXAMPLES = [
       place('led', 'ta17', 'ta21', { color:'red', vf:1.8 });
       place('wire', 'tb21', 'TN21', { color:'black' });
     } },
+
+  // ── ทรานซิสเตอร์: สวิตช์ · เซนเซอร์ · avalanche  —  transistors: switching, sensing, avalanche ──
   { th:'ทรานซิสเตอร์ NPN เป็นสวิตช์ LED (สลับสวิตช์ที่ขาเบส)', en:'NPN transistor as an LED switch (toggle the base switch)', build:function(){
       setExampleBatt(5);
       place('battery', 'TP2', 'TN2', { value:5 });
@@ -3056,6 +3132,7 @@ var EXAMPLES = [
       place('wire', 'TN19', 'td19', { color:'black' });         // − rail ↓ col19 (emitter)
       place('transistor', 'td15', 'te19', { g:'te13', tt:'npn', beta:100 });   // C=col15, E=col19, B=col13
     } },
+
   { th:'NPN ตรวจจับความมืด (LDR → ปรับสไลเดอร์แสง)', en:'NPN dark-detector (LDR → drag the light slider)', build:function(){
       setExampleBatt(5);
       place('battery', 'TP2', 'TN2', { value:5 });
@@ -3070,6 +3147,23 @@ var EXAMPLES = [
       place('wire', 'TN19', 'td19', { color:'black' });         // gnd ↓ col19 (emitter)
       place('transistor', 'td15', 'te19', { g:'tc9', tt:'npn', beta:100 });    // C=col15, E=col19, B=col9
     } },
+
+  { th:'ไฟกระพริบ Avalanche (ทรานซิสเตอร์โหมด Avalanche + RC → ดูกราฟฟันเลื่อย)', en:'Avalanche LED flasher (avalanche-mode transistor + RC → watch the sawtooth graph)', build:function(){
+      // relaxation oscillator: R charges C toward Vcc; when Vc hits V_BR the transistor fires,
+      // dumps the cap through the LED (flash), then extinguishes and the cycle repeats. base is left floating.
+      setExampleBatt(9);
+      place('battery', 'TP2', 'TN2', { value:9 });
+      place('wire', 'TP5', 'tc5', { color:'red' });                 // + rail ↓ col5 (Vcc)
+      place('resistor', 'ta5', 'ta9', { value:1500 });              // R charges the cap node (col9)
+      place('cap', 'tb9', 'tb13', { value:470e-6, _vPrev:0 });      // C: col9 → col13
+      place('wire', 'tc13', 'TN13', { color:'black' });             // col13 → − rail (gnd)
+      // collector (col15) → LED → gnd; emitter = cap node (col9); base (col12) floats
+      place('led', 'te15', 'te19', { color:'red', vf:1.8 });        // anode col15 = collector, cathode col19
+      place('wire', 'tb19', 'TN19', { color:'black' });             // col19 → − rail (gnd)
+      place('transistor', 'td15', 'td9', { g:'td12', tt:'npn', av:true, vbr:8, beta:100 });   // C=col15, E=col9, B=col12(float)
+    } },
+
+  // ── แยกวงจรและกำลัง: ออปโตคัปเปลอร์ · รีเลย์  —  isolation and power: optocoupler, relay ──
   { th:'ออปโตคัปเปลอร์แยกวงจร (2 แบตแยกกัน — สวิตช์ฝั่งบนคุม LED ฝั่งล่างผ่านแสง)', en:'Optocoupler isolation (two separate batteries — top switch drives the bottom LED via light)', build:function(){
       setExampleBatt(5);
       // input loop — TOP half, powered by battery 1 (top rails)
@@ -3087,58 +3181,7 @@ var EXAMPLES = [
       // the opto straddles the centre channel like a real DIP: LED pins on top, transistor pins below
       place('opto', 'ta13', 'ta15', { g:'tf17', h:'tf19', ctr:100 });   // A=col13(top), K=col15(top), C=col17(bottom), E=col19(bottom)
     } },
-  { th:'ตัวกรอง RC ความถี่ต่ำผ่าน (AC → R → C, ดูคลื่นในแผง Transient)', en:'RC low-pass filter (AC → R → C, watch the Transient panel)', build:function(){
-      place('ac', 'TP2', 'TN2', { vp:5, freq:1, offset:0 });
-      place('wire', 'TP5', 'tc5', { color:'red' });            // source + ↓ col5
-      place('resistor', 'ta5', 'ta9', { value:10000 });
-      place('cap', 'tb9', 'tb13', { value:10e-6, _vPrev:0 });  // output across C (col9)
-      place('wire', 'tc13', 'TN13', { color:'black' });        // C bottom → − rail
-    } },
-  { th:'เรียงกระแสครึ่งคลื่น + ตัวกรอง (AC → ไดโอด → C → โหลด)', en:'Half-wave rectifier + filter (AC → diode → C → load)', build:function(){
-      place('ac', 'TP2', 'TN2', { vp:6, freq:2, offset:0 });
-      place('wire', 'TP5', 'tc5', { color:'red' });            // source + ↓ col5
-      place('diode', 'ta5', 'ta9', { variant:'silicon', vf:0.7, rd:8 });   // rectify into col9
-      place('cap', 'tb9', 'tb13', { value:100e-6, _vPrev:0 });             // smoothing cap col9→col13
-      place('wire', 'tc13', 'TN13', { color:'black' });        // C bottom → − rail
-      place('resistor', 'td9', 'td15', { value:1000 });                    // load across the cap
-      place('wire', 'te15', 'TN15', { color:'black' });        // load → − rail
-    } },
-  { th:'เรียงกระแสเต็มคลื่นแบบบริดจ์ (AC → 4 ไดโอด → C → โหลด)', en:'Full-wave bridge rectifier (AC → 4 diodes → C → load)', build:function(){
-      // nodes: A = + rail (col5), B = − rail = ground (col17), OUT+ = col9, OUT− = col13.
-      // layout spans both halves — top rows a–e and bottom rows f–j are separate nodes,
-      // joined across the center gap by blue jumpers (te*↔tf*). D4 + load sit on the bottom half.
-      // solver grounds sources[0].b (= AC −), so B is 0 V and the DC output pair floats — never tie OUT− to the − rail (would short D4).
-      place('ac', 'TP2', 'TN2', { vp:6, freq:2, offset:0 });
-      place('wire', 'TP5', 'tb5', { color:'red' });            // + rail → node A (col5)
-      place('wire', 'TN17', 'ta17', { color:'black' });        // − rail → node B (col17)
-      // bridge (diode a=anode, b=cathode)
-      place('diode', 'ta5', 'ta9', { variant:'silicon', vf:0.7, rd:8 });    // D1: A → OUT+
-      place('diode', 'tb17', 'tb9', { variant:'silicon', vf:0.7, rd:8 });   // D2: B → OUT+
-      place('diode', 'tc13', 'tc5', { variant:'silicon', vf:0.7, rd:8 });   // D3: OUT− → A
-      place('diode', 'tg13', 'tg17', { variant:'silicon', vf:0.7, rd:8 });  // D4 (bottom half): OUT− → B
-      // load (bottom half) across OUT+ (col9) ↔ OUT− (col13)
-      place('resistor', 'th9', 'th13', { value:1000 });
-      // blue jumpers bridge top↔bottom for OUT−, B, OUT+
-      place('wire', 'te13', 'tf13', { color:'blue' });
-      place('wire', 'te17', 'tf17', { color:'blue' });
-      place('wire', 'te9', 'tf9', { color:'blue' });
-      // smoothing cap across OUT+ ↔ OUT− (top half)
-      place('cap', 'td9', 'td13', { value:100e-6, _vPrev:0 });
-    } },
-  { th:'ไฟกระพริบ Avalanche (ทรานซิสเตอร์โหมด Avalanche + RC → ดูกราฟฟันเลื่อย)', en:'Avalanche LED flasher (avalanche-mode transistor + RC → watch the sawtooth graph)', build:function(){
-      // relaxation oscillator: R charges C toward Vcc; when Vc hits V_BR the transistor fires,
-      // dumps the cap through the LED (flash), then extinguishes and the cycle repeats. base is left floating.
-      setExampleBatt(9);
-      place('battery', 'TP2', 'TN2', { value:9 });
-      place('wire', 'TP5', 'tc5', { color:'red' });                 // + rail ↓ col5 (Vcc)
-      place('resistor', 'ta5', 'ta9', { value:1500 });              // R charges the cap node (col9)
-      place('cap', 'tb9', 'tb13', { value:470e-6, _vPrev:0 });      // C: col9 → col13
-      place('wire', 'tc13', 'TN13', { color:'black' });             // col13 → − rail (gnd)
-      // collector (col15) → LED → gnd; emitter = cap node (col9); base (col12) floats
-      place('led', 'te15', 'te19', { color:'red', vf:1.8 });        // anode col15 = collector, cathode col19
-      place('wire', 'tb19', 'TN19', { color:'black' });             // col19 → − rail (gnd)
-      place('transistor', 'td15', 'td9', { g:'td12', tt:'npn', av:true, vbr:8, beta:100 });   // C=col15, E=col9, B=col12(float)
-    } },
+
   { th:'รีเลย์ขับด้วยทรานซิสเตอร์ + ออปโตแยกวงจร + ไดโอดกันย้อน (ปิดสวิตช์ → รีเลย์ทำงาน → LED ติด)', en:'Opto-isolated, transistor-driven relay + flyback diode (close the switch → relay pulls in → LED lights)', build:function(){
       // Full driver chain: the bottom battery + switch drives the opto input LED → the isolated
       // phototransistor turns on the NPN → the NPN sinks the relay coil (top battery) → the relay
@@ -3165,6 +3208,7 @@ var EXAMPLES = [
       place('wire', 'TP17', 'th20', { color:'red' });                          // + rail (top) → relay COM (red = positive)
       place('diode', 'tf18', 'tf16', { variant:'silicon', vf:0.7, rd:8 });     // flyback diode across the coil
     } },
+
   { th:'รีเลย์ SPDT สลับ LED แดง↔เขียว (NC/NO) — 3V ผ่านทรานซิสเตอร์ขับคอยล์ 9V', en:'SPDT relay swaps red↔green LED (NC/NO) — 3V control, transistor-driven 9V coil', build:function(){
       // Two separate supplies: a 3 V control battery on the bottom rails drives the NPN base through Rb,
       // a 9 V battery on the top rails feeds the coil and the contacts. The two grounds are tied together
@@ -3193,6 +3237,135 @@ var EXAMPLES = [
       place('led', 'th27', 'th29', { color:'green', vf:2.1 });
       place('wire', 'te29', 'tf29', { color:'green' });                        // join both halves at col29
       place('wire', 'tb29', 'TN29', { color:'green' });                        // → − rail (top)
+    } },
+
+  // ── ไฟ AC: ตัวกรอง · เรียงกระแส  —  AC: filtering and rectification ──
+  { th:'ตัวกรอง RC ความถี่ต่ำผ่าน (AC → R → C, ดูคลื่นในแผง Transient)', en:'RC low-pass filter (AC → R → C, watch the Transient panel)', build:function(){
+      place('ac', 'TP2', 'TN2', { vp:5, freq:1, offset:0 });
+      place('wire', 'TP5', 'tc5', { color:'red' });            // source + ↓ col5
+      place('resistor', 'ta5', 'ta9', { value:10000 });
+      place('cap', 'tb9', 'tb13', { value:10e-6, _vPrev:0 });  // output across C (col9)
+      place('wire', 'tc13', 'TN13', { color:'black' });        // C bottom → − rail
+    } },
+
+  { th:'เรียงกระแสครึ่งคลื่น + ตัวกรอง (AC → ไดโอด → C → โหลด)', en:'Half-wave rectifier + filter (AC → diode → C → load)', build:function(){
+      place('ac', 'TP2', 'TN2', { vp:6, freq:2, offset:0 });
+      place('wire', 'TP5', 'tc5', { color:'red' });            // source + ↓ col5
+      place('diode', 'ta5', 'ta9', { variant:'silicon', vf:0.7, rd:8 });   // rectify into col9
+      place('cap', 'tb9', 'tb13', { value:100e-6, _vPrev:0 });             // smoothing cap col9→col13
+      place('wire', 'tc13', 'TN13', { color:'black' });        // C bottom → − rail
+      place('resistor', 'td9', 'td15', { value:1000 });                    // load across the cap
+      place('wire', 'te15', 'TN15', { color:'black' });        // load → − rail
+    } },
+
+  { th:'เรียงกระแสเต็มคลื่นแบบบริดจ์ (AC → 4 ไดโอด → C → โหลด)', en:'Full-wave bridge rectifier (AC → 4 diodes → C → load)', build:function(){
+      // nodes: A = + rail (col5), B = − rail = ground (col17), OUT+ = col9, OUT− = col13.
+      // layout spans both halves — top rows a–e and bottom rows f–j are separate nodes,
+      // joined across the center gap by blue jumpers (te*↔tf*). D4 + load sit on the bottom half.
+      // solver grounds sources[0].b (= AC −), so B is 0 V and the DC output pair floats — never tie OUT− to the − rail (would short D4).
+      place('ac', 'TP2', 'TN2', { vp:6, freq:2, offset:0 });
+      place('wire', 'TP5', 'tb5', { color:'red' });            // + rail → node A (col5)
+      place('wire', 'TN17', 'ta17', { color:'black' });        // − rail → node B (col17)
+      // bridge (diode a=anode, b=cathode)
+      place('diode', 'ta5', 'ta9', { variant:'silicon', vf:0.7, rd:8 });    // D1: A → OUT+
+      place('diode', 'tb17', 'tb9', { variant:'silicon', vf:0.7, rd:8 });   // D2: B → OUT+
+      place('diode', 'tc13', 'tc5', { variant:'silicon', vf:0.7, rd:8 });   // D3: OUT− → A
+      place('diode', 'tg13', 'tg17', { variant:'silicon', vf:0.7, rd:8 });  // D4 (bottom half): OUT− → B
+      // load (bottom half) across OUT+ (col9) ↔ OUT− (col13)
+      place('resistor', 'th9', 'th13', { value:1000 });
+      // blue jumpers bridge top↔bottom for OUT−, B, OUT+
+      place('wire', 'te13', 'tf13', { color:'blue' });
+      place('wire', 'te17', 'tf17', { color:'blue' });
+      place('wire', 'te9', 'tf9', { color:'blue' });
+      // smoothing cap across OUT+ ↔ OUT− (top half)
+      place('cap', 'td9', 'td13', { value:100e-6, _vPrev:0 });
+    } },
+
+  // ── ไทริสเตอร์: SCR · ไทรแอก · ไดแอก · ดิมเมอร์  —  thyristors: SCR, TRIAC, DIAC, dimmers ──
+  { th:'SCR ล็อกตัว — กดปุ่มยิงเกตแวบเดียว LED ติดค้าง, สับสวิตช์ตัดกระแสจึงดับ', en:'SCR latch — one tap on the gate button lights the LED for good; only opening the switch resets it', build:function(){
+      setExampleBatt(9);
+      place('battery', 'TP2', 'TN2', { value:9 });
+      place('wire', 'TP5', 'tc5', { color:'red' });                  // + rail ↓ col5
+      place('switch', 'ta5', 'ta9', { closed:true });                // anode-path switch = the only way to reset it
+      place('resistor', 'tb9', 'tb13', { value:330 });
+      place('led', 'ta13', 'ta17', { color:'red', vf:1.8 });         // load: cathode lands on the anode column
+      // thyristor: anode col17, cathode col21, gate col19
+      place('scr', 'tb17', 'ta21', { g:'tb19', st:'scr', igt:1e-3, ih:5e-3, _lat:0 });
+      place('wire', 'tc21', 'TN21', { color:'black' });              // cathode → − rail
+      // gate drive taps the rail BEFORE the switch: press = fire (I_G ≈ 3.8 mA), release changes nothing
+      place('button', 'te5', 'te11', { closed:false });
+      place('resistor', 'td11', 'td19', { value:2200 });
+    } },
+
+  { th:'SCR แบบ START / STOP — ปุ่มเขียวยิงเกตให้ติดค้าง, ปุ่มแดงลัดขา A-K เพื่อบังคับให้ดับ (commutation)', en:'SCR START / STOP — the green button fires the gate and it stays on; the red button shorts A-K to commutate it off', build:function(){
+      setExampleBatt(9);
+      place('battery', 'TP1', 'TN1', { value:9 });
+      // load path: + rail → 1 kΩ → LED → anode, cathode → − rail
+      place('wire', 'td23', 'TP23', { color:'red' });
+      place('resistor', 'te14', 'te23', { value:1000 });
+      place('led', 'td14', 'td11', { color:'red', vf:1.8 });
+      place('scr', 'tc11', 'tc9', { g:'tc13', st:'scr', igt:1e-3, ih:5e-3, _lat:0 });
+      place('wire', 'ta9', 'TN9', { color:'red' });
+      // START: + rail → button → 1 kΩ → gate (a tap is enough, it latches)
+      place('wire', 'ta19', 'TP19', { color:'green' });
+      place('button', 'tc16', 'tc19', { closed:false, color:'green' });
+      place('resistor', 'tb13', 'tb16', { value:1000 });
+      // STOP: shorts anode to cathode, so the current through the SCR itself falls below I_H —
+      // the load keeps running off the short while held, and it is off once you let go
+      place('button', 'te9', 'te11', { closed:false, color:'red' });
+    } },
+
+  { th:'ไทรแอกกับไฟ AC — LED สองสีสลับกันติด (นำกระแสสองทิศ) และดับเองทุกจุดตัดศูนย์', en:'TRIAC on AC — two LEDs alternate (it conducts both ways) and it self-commutates at every zero crossing', build:function(){
+      place('ac', 'TP2', 'TN2', { vp:12, freq:2, offset:0 });
+      place('wire', 'TP5', 'tc5', { color:'red' });                  // source + ↓ col5
+      place('resistor', 'ta5', 'ta9', { value:470 });
+      // anti-parallel LEDs: red conducts on one half, green on the other
+      place('led', 'tb9', 'tb13', { color:'red', vf:1.8 });
+      place('led', 'tc13', 'tc9', { color:'green', vf:2.1 });
+      // triac: MT2 col13, MT1 col17, gate col15 — gate fed from MT2 through 4.7 kΩ (≈2.4 mA)
+      place('scr', 'ta13', 'ta17', { g:'tb15', st:'triac', igt:1e-3, ih:5e-3, _lat:0 });
+      place('resistor', 'td13', 'td15', { value:4700 });
+      place('wire', 'tb17', 'TN17', { color:'black' });              // MT1 → − rail
+    } },
+
+  { th:'ดิมเมอร์จริง: RC → ไดแอก → เกตไทรแอก (หมุนลูกบิด VR เพื่อเลื่อนจังหวะจุดชนวน)', en:'A real dimmer: RC → DIAC → TRIAC gate (turn the VR knob to shift the firing point)', build:function(){
+      env.vrPos = 40; renderVrKnob();
+      place('ac', 'TP1', 'TN1', { vp:24, freq:1, offset:0 });
+      place('wire', 'TP5', 'tc5', { color:'red' });                  // source + ↓ col5
+      place('resistor', 'ta5', 'ta9', { value:1000 });               // load limiter
+      // anti-parallel LEDs so both half cycles are visible
+      place('led', 'tb9', 'tb13', { color:'red', vf:1.8 });
+      place('led', 'tc13', 'tc9', { color:'green', vf:2.1 });
+      place('scr', 'ta13', 'ta17', { g:'tb15', st:'triac', igt:1e-3, ih:5e-3, _lat:0 });
+      place('wire', 'tb17', 'TN17', { color:'black' });              // MT1 → − rail
+      // phase-shift network: VR + C set how late the cap reaches the DIAC's V_BO each half cycle
+      place('vr', 'td9', 'td19', { value:10000 });
+      place('cap', 'te19', 'te23', { value:47e-6, _vPrev:0 });
+      place('wire', 'tc23', 'TN23', { color:'black' });
+      // the DIAC dumps the cap into the gate the instant it breaks over — that pulse fires the TRIAC
+      place('diac', 'tc19', 'tc15', { vbo:12, _lat:0 });
+    } },
+
+  { th:'ดิมเมอร์ 50 Hz แบบวงจรจริง: R จำกัด + โพเทนชิโอมิเตอร์ 3 ขา → ไดแอก → ไทรแอก → หลอดไส้',
+    en:'A 50 Hz mains-style dimmer: limiter R + 3-pin pot → DIAC → TRIAC → filament lamp', build:function(){
+      // The same phase-control idea, but at the real mains frequency and wired the way a dimmer
+      // module actually is: a fixed R in series with the pot (so the network can never go to 0 Ω),
+      // and a 3-pin potentiometer used as a rheostat off its wiper.
+      // At 50 Hz the classic 10 kΩ / 1 µF pair gives ωRC ≈ 3.2 — nearly a full 90° of phase shift,
+      // so the knob sweeps the firing angle 21°→108° (bright → nearly dark) across its whole travel.
+      // WATCH THE V_BO: a real DB3 breaks over at 32 V, which only works on 220 Vrms (311 V peak).
+      // On this 24 V source the cap could never reach 32 V, so the DIAC is an 8 V part here.
+      env.vrPos = 67; renderVrKnob();
+      place('ac', 'TP1', 'TN1', { vp:24, freq:50, offset:0 });        // no DC offset — real AC, so the TRIAC commutates off at every zero crossing
+      place('lamp', 'TP5', 'ta5', { value:24, pw:2.4, _pAvg:0 });     // the load: 24V 2.4W bulb (240 Ω), fed straight off the + rail
+      place('scr', 'tb5', 'tb4', { g:'tb6', st:'triac', igt:1e-3, ih:5e-3, _lat:0 });
+      place('wire', 'ta4', 'TN4', { color:'green' });                 // MT1 → − rail
+      // phase-shift network hung across the lamp+TRIAC: MT2 → R → pot wiper → C → MT1
+      place('resistor', 'tc5', 'tc1', { value:100 });                 // limiter: keeps the RC from going to zero at full knob
+      place('wire', 'te1', 'tg4', { color:'green' });                 // R → pot wiper (upper col 1 → lower col 4)
+      place('pot', 'ti1', 'ti7', { g:'ti4', value:10000 });           // wiper→end b is the working leg: knob up = less R = brighter
+      place('cap', 'tg7', 'te4', { value:1e-6, _vPrev:0 });           // timing cap, referenced to MT1
+      place('diac', 'td6', 'tf7', { vbo:8, _lat:0 });                 // cap top → TRIAC gate
     } }
 ];
 
@@ -3247,6 +3420,7 @@ function serializeCircuit(){
       if (c.vf != null) o.vf = c.vf;
       if (c.rd != null) o.rd = c.rd;
       if (c.vc != null) o.vc = c.vc;
+      if (c.pw != null) o.pw = c.pw;
       if (c.tt) o.tt = c.tt;
       if (c.st) o.st = c.st;
       if (c.vbo != null) o.vbo = c.vbo;
@@ -3300,6 +3474,8 @@ function applyCircuit(data){
     if (o.off != null) props.offset = o.off;
     if (o.t === 'switch') props.closed = o.cl !== 0;
     if (o.t === 'button') props.closed = false;   // momentary — never restored pressed
+    if (o.pw != null) props.pw = o.pw;
+    if (o.t === 'lamp') props._pAvg = 0;          // a reloaded lamp starts with a cold filament
     if (o.t === 'cap') props._vPrev = 0;
     if (o.t === 'ind') props._iPrev = 0;
     place(o.t, o.a, o.b, props);

@@ -218,6 +218,7 @@
           <button class="bb-dd-item" data-tool="wire" role="menuitem"><span class="ti">〜</span><span class="th-only">สายจัมเปอร์</span><span class="en-only">Jumper</span></button>
           <button class="bb-dd-item" data-tool="switch" role="menuitem"><span class="ti">⎍</span><span class="th-only">สวิตช์</span><span class="en-only">Switch</span></button>
           <button class="bb-dd-item" data-tool="button" role="menuitem"><span class="ti">⏺</span><span class="th-only">ปุ่มกด</span><span class="en-only">Pushbutton</span></button>
+          <button class="bb-dd-item" data-tool="lamp" role="menuitem"><span class="ti">💡</span><span class="th-only">หลอดไส้</span><span class="en-only">Incandescent lamp</span></button>
           <button class="bb-dd-item" data-tool="cap" role="menuitem"><span class="ti">‖</span><span class="th-only">ตัวเก็บประจุ</span><span class="en-only">Capacitor</span></button>
           <button class="bb-dd-item" data-tool="ind" role="menuitem"><span class="ti">◠◠</span><span class="th-only">ตัวเหนี่ยวนำ</span><span class="en-only">Inductor</span></button>
           <button class="bb-dd-item" data-tool="transistor" role="menuitem"><span class="ti">Q</span><span class="th-only">ทรานซิสเตอร์</span><span class="en-only">Transistor</span></button>
@@ -371,6 +372,19 @@
         <span style="color:var(--text-light);font-weight:400;">
           <span class="th-only">วางปุ่มกด (แบบ NO — ปกติเปิด) — <b>กดค้าง</b>ที่ปุ่มบนบอร์ดแล้ววงจรต่อ ปล่อยแล้วตัดทันที</span>
           <span class="en-only">Place a pushbutton (momentary NO) — <b>press and hold</b> it on the board to close the circuit; it opens the moment you let go</span>
+        </span>
+      </div>
+      <div class="bb-valrow" id="bb-val-lamp">
+        <label><span class="th-only">พิกัด</span><span class="en-only">Rating</span></label>
+        <select id="bb-lamp-spec">
+          <option value="0">3 V · 0.3 W (30 Ω)</option>
+          <option value="1" selected>6 V · 0.6 W (60 Ω)</option>
+          <option value="2">12 V · 1.2 W (120 Ω)</option>
+          <option value="3">24 V · 2.4 W (240 Ω)</option>
+        </select>
+        <span style="color:var(--text-light);font-weight:400;">
+          <span class="th-only">โหลดความต้านทาน (R = V²/P) — ไส้หลอดมีความหน่วงทางความร้อน จึงสว่างตามกำลังไฟฟ้า<b>เฉลี่ย</b> เหมาะกับทดสอบวงจรหรี่ไฟ (ไทรแอก/ไดแอก)</span>
+          <span class="en-only">Resistive load (R = V²/P) — the filament's thermal lag means brightness follows the <b>average</b> power, which is what makes a TRIAC/DIAC dimmer readable</span>
         </span>
       </div>
       <div class="bb-valrow" id="bb-val-cap">

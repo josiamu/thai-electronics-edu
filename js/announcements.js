@@ -14,6 +14,10 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'breadboard-mains-dimmer-2026-08-04', date:'2026-08-04', type:'update',
+    th:'เบรดบอร์ดจำลอง: ตัวอย่างใหม่ <b>ดิมเมอร์ 50 Hz แบบวงจรจริง</b> — R จำกัด + โพเทนชิโอมิเตอร์ 3 ขา + ไดแอก → ไทรแอก → หลอดไส้ หมุนลูกบิดแล้วมุมจุดชนวนกวาด 21°–108° หลอดหรี่จากสว่างเต็มจนมืดสนิท พร้อมบทเรียนแฝง: ทำไม DB3 (32 V) ถึงใช้กับไฟ 24 V ไม่ได้ และทำไม<b>ห้าม</b>แก้ด้วยการใส่ DC offset — พร้อมกันนี้ได้<b>จัดเมนูตัวอย่างใหม่เป็น 8 หมวด</b> ไล่จากพื้นฐานไปหาไทริสเตอร์ ให้หาง่ายขึ้น',
+    en:'Breadboard lab: a new <b>50 Hz mains-style dimmer</b> example — limiter R + 3-pin pot + DIAC → TRIAC → filament lamp. The knob sweeps the firing angle 21°–108°, taking the lamp from full brightness to dark, and it shows why a 32 V DB3 cannot work on a 24 V supply — and why adding a DC offset is the wrong fix. The example menu is also <b>reorganised into 8 groups</b>, from basics up to thyristors',
+    href:'breadboard.html' },
   { id:'breadboard-diac-dimmer-2026-07-31', date:'2026-07-31', type:'update',
     th:'เบรดบอร์ดจำลอง: เพิ่ม <b>ไดแอก (DIAC)</b> ครบตระกูลไทริสเตอร์ — 2 ขา ไม่มีเกต แตกเองเมื่อแรงดันถึง ±V<sub>BO</sub> พร้อมตัวอย่าง <b>วงจรดิมเมอร์จริง RC → ไดแอก → เกตไทรแอก</b> ที่หมุนลูกบิด VR แล้วจังหวะจุดชนวนเลื่อนและไฟหรี่ลงจริง',
     en:'Breadboard lab: the <b>DIAC</b> completes the thyristor family — 2 pins, no gate, it breaks over by itself at ±V<sub>BO</sub>. Comes with a <b>real dimmer example (RC → DIAC → TRIAC gate)</b> where turning the VR knob shifts the firing point and visibly dims the load',
