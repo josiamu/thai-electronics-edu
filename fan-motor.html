@@ -16,6 +16,58 @@
 .fm-steps > li:last-child { border-bottom:none; }
 .fm-steps > li::before { content:counter(fm-step); position:absolute; left:0; top:0.45rem; width:1.7rem; height:1.7rem; line-height:1.7rem; text-align:center; border-radius:50%; background:var(--primary); color:#fff; font-weight:700; font-size:0.85rem; }
 .fm-steps ol { margin:0.4rem 0 0.2rem 1.2rem; padding:0; }
+
+/* ---------- Interactive speed-switch simulator ---------- */
+#fan-motor-sim { --fms-amber:#f59e0b; }
+.fms-bar { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:.5rem; margin-bottom:.9rem; }
+.fms-btn { min-width:64px; padding:.45rem .9rem; border:2px solid var(--border); border-radius:12px; background:var(--card); color:var(--text); font-family:inherit; font-size:1.05rem; font-weight:700; line-height:1.25; cursor:pointer; transition:.18s; }
+.fms-btn:hover { border-color:var(--primary); transform:translateY(-1px); }
+.fms-btn small { display:block; font-size:.66rem; font-weight:500; opacity:.85; }
+.fms-btn-on { background:var(--primary); border-color:var(--primary); color:#fff; box-shadow:0 5px 16px rgba(37,99,235,.32); }
+#fms-canvas svg { width:100%; height:auto; font-family:inherit; }
+.fms-base path { fill:none; stroke:var(--border); stroke-width:6; stroke-linecap:round; stroke-linejoin:round; }
+.fms-coil { fill:none; stroke-width:3; stroke-linecap:round; }
+.fms-c-choke { stroke:var(--secondary); } .fms-c-run { stroke:var(--primary); } .fms-c-start { stroke:#dc2626; }
+.fms-c-choke-t { fill:var(--secondary); } .fms-c-run-t { fill:var(--primary); } .fms-c-start-t { fill:#dc2626; }
+.fms-c-run-f { fill:var(--primary); } .fms-c-start-f { fill:#dc2626; }
+.fms-live { fill:none; stroke:var(--fms-amber); stroke-width:7; stroke-linecap:round; stroke-linejoin:round; opacity:.38; transition:opacity .25s; }
+.fms-live-run { stroke:var(--primary); } .fms-live-start { stroke:#dc2626; }
+.fms-waiting { stroke-dasharray:9 8; opacity:.6; }
+.fms-src { fill:var(--card); stroke:var(--text-light); stroke-width:2; }
+.fms-sine { fill:none; stroke:var(--text); stroke-width:2; stroke-linecap:round; }
+.fms-box { fill:var(--card); stroke:var(--border); stroke-width:2; }
+.fms-pad rect { fill:var(--bg); stroke:var(--border); stroke-width:2; transition:.2s; }
+.fms-pad text { fill:var(--text); font-weight:700; font-size:15px; transition:.2s; }
+.fms-pad-on rect { fill:var(--fms-amber); stroke:var(--fms-amber); }
+.fms-pad-on text { fill:#fff; }
+.fms-lbl { fill:var(--text); font-weight:700; font-size:13px; }
+.fms-dim { fill:var(--text-light); font-weight:500; }
+.fms-val { font-size:11px; font-weight:700; fill:var(--text-light); }
+.fms-name { font-size:12.5px; font-weight:700; }
+.fms-tap { fill:var(--secondary); }
+.fms-dimfill { fill:var(--text-light); }
+.fms-node-ring { fill:var(--card); stroke:var(--border); stroke-width:1.5; }
+.fms-node { fill:var(--text); }
+.fms-cap { stroke:var(--text); stroke-width:3.5; stroke-linecap:round; }
+.fms-pivot { fill:var(--text); }
+.fms-wiper { fill:none; stroke:var(--text); stroke-width:5; stroke-linecap:round; transition:d .2s; }
+.fms-stator { fill:none; stroke:var(--border); stroke-width:2; stroke-dasharray:5 7; }
+.fms-blades path { fill:var(--accent); opacity:.9; }
+.fms-hub { fill:var(--text-light); }
+.fms-wind path { fill:none; stroke:var(--accent); stroke-width:2.5; stroke-linecap:round; }
+.fms-wind { transition:opacity .5s; }
+.fms-readout { display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center; margin-top:.6rem; }
+.fms-cell { flex:1 1 120px; max-width:180px; background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:.5rem .7rem; text-align:center; }
+.fms-cell b { display:block; font-size:1.1rem; color:var(--primary); }
+.fms-cell span { font-size:.72rem; color:var(--text-light); }
+.fms-meter { height:10px; border-radius:999px; background:var(--border); overflow:hidden; margin:.8rem auto 0; max-width:560px; }
+.fms-meter i { display:block; height:100%; border-radius:999px; background:linear-gradient(90deg,var(--secondary),var(--accent)); transition:width .5s; }
+.fms-desc { margin-top:.9rem; border-left:4px solid var(--primary); background:var(--bg); border-radius:0 10px 10px 0; padding:.7rem .95rem; }
+.fms-desc h4 { margin:0 0 .35rem; font-size:1rem; color:var(--primary); }
+.fms-desc p { margin:0 0 .4rem; }
+.fms-desc p:last-child { margin-bottom:0; }
+.fms-legend { display:flex; flex-wrap:wrap; gap:.9rem; justify-content:center; margin-top:.7rem; font-size:.78rem; color:var(--text-light); }
+.fms-legend i { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:.3rem; vertical-align:middle; }
 </style>
 </head>
 <body>
@@ -98,41 +150,84 @@
       </div>
 
       <div style="text-align:center; margin-top:1.1rem;">
-        <svg viewBox="0 0 380 210" style="max-width:100%;height:auto;font-family:inherit;font-size:11px;" role="img" aria-label="Fan motor winding diagram">
-          <!-- common node C -->
-          <circle cx="330" cy="105" r="4" fill="var(--text)"/>
-          <text x="342" y="109" fill="var(--text)" font-weight="700">C</text>
-          <!-- run winding -->
-          <path d="M60,35 h30 q6,-10 12,0 q6,10 12,0 q6,-10 12,0 q6,10 12,0 q6,-10 12,0 q6,10 12,0 h30" fill="none" stroke="var(--primary)" stroke-width="2"/>
-          <line x1="228" y1="35" x2="330" y2="90" stroke="var(--primary)" stroke-width="1.5"/>
-          <text x="20" y="39" fill="var(--text)" font-weight="700">R</text>
-          <line x1="30" y1="35" x2="60" y2="35" stroke="var(--text)" stroke-width="1.5"/>
-          <text x="140" y="20" text-anchor="middle" fill="var(--primary)" font-weight="700">ขดรัน (Run) 350 Ω</text>
-          <!-- start winding -->
-          <path d="M60,105 h30 q6,-10 12,0 q6,10 12,0 q6,-10 12,0 q6,10 12,0 q6,-10 12,0 q6,10 12,0 h30" fill="none" stroke="#dc2626" stroke-width="2"/>
-          <line x1="228" y1="105" x2="330" y2="105" stroke="#dc2626" stroke-width="1.5"/>
-          <text x="20" y="109" fill="var(--text)" font-weight="700">S</text>
-          <line x1="30" y1="105" x2="60" y2="105" stroke="var(--text)" stroke-width="1.5"/>
-          <text x="140" y="90" text-anchor="middle" fill="#dc2626" font-weight="700">ขดสตาร์ท (Start) 400 Ω</text>
-          <!-- choke winding, two sections tapped 1/2/3 -->
-          <path d="M110,170 h20 q5,-9 10,0 q5,9 10,0 q5,-9 10,0 h20" fill="none" stroke="var(--secondary)" stroke-width="2"/>
-          <circle cx="200" cy="170" r="3" fill="var(--secondary)"/>
-          <path d="M200,170 h20 q5,-9 10,0 q5,9 10,0 q5,-9 10,0 h20" fill="none" stroke="var(--secondary)" stroke-width="2"/>
-          <line x1="290" y1="170" x2="330" y2="120" stroke="var(--secondary)" stroke-width="1.5"/>
-          <text x="155" y="155" text-anchor="middle" fill="var(--secondary)" font-weight="700" font-size="10">80 Ω</text>
-          <text x="245" y="155" text-anchor="middle" fill="var(--secondary)" font-weight="700" font-size="10">80 Ω</text>
-          <text x="200" y="196" text-anchor="middle" fill="var(--secondary)" font-weight="700">ขดโช้ค (Choke)</text>
-          <text x="30" y="174" fill="var(--text)" font-weight="700">3</text>
-          <line x1="40" y1="170" x2="110" y2="170" stroke="var(--text)" stroke-width="1.5"/>
-          <text x="30" y="145" fill="var(--text)" font-weight="700">2</text>
-          <line x1="40" y1="141" x2="200" y2="141" stroke="var(--text)" stroke-width="1.5" stroke-dasharray="2 2"/>
-          <line x1="200" y1="141" x2="200" y2="170" stroke="var(--text)" stroke-width="1.5" stroke-dasharray="2 2"/>
-          <text x="30" y="118" fill="var(--text)" font-weight="700">1</text>
-          <line x1="40" y1="114" x2="290" y2="114" stroke="var(--text)" stroke-width="1.5" stroke-dasharray="2 2"/>
-          <line x1="290" y1="114" x2="290" y2="170" stroke="var(--text)" stroke-width="1.5" stroke-dasharray="2 2"/>
+        <svg viewBox="0 0 470 272" style="max-width:100%;height:auto;font-family:inherit;font-size:11px;" role="img" aria-label="Fan motor winding diagram">
+          <defs>
+            <marker id="fm-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+              <path d="M0,1 L9,5 L0,9 z" fill="var(--text-light)"/>
+            </marker>
+            <filter id="fm-soft" x="-30%" y="-30%" width="160%" height="160%">
+              <feDropShadow dx="0" dy="1.5" stdDeviation="1.6" flood-color="#0f172a" flood-opacity=".16"/>
+            </filter>
+          </defs>
+
+          <!-- speed direction arrow -->
+          <line x1="21" y1="222" x2="21" y2="134" stroke="var(--text-light)" stroke-width="1.4" marker-end="url(#fm-arrow)"/>
+          <text class="th-only" x="9" y="180" text-anchor="middle" fill="var(--text-light)" font-size="9" transform="rotate(-90 9 180)">เร็วขึ้น</text>
+          <text class="en-only" x="9" y="180" text-anchor="middle" fill="var(--text-light)" font-size="9" transform="rotate(-90 9 180)">faster</text>
+
+          <!-- terminal block -->
+          <rect x="30" y="24" width="40" height="212" rx="11" fill="var(--card)" stroke="var(--border)" stroke-width="1.5" filter="url(#fm-soft)"/>
+
+          <!-- ===== run winding ===== -->
+          <g stroke="var(--primary)" stroke-width="2.4" fill="none" stroke-linecap="round">
+            <path d="M70,44 h42 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 L405,120"/>
+          </g>
+          <circle cx="70" cy="44" r="4.5" fill="var(--primary)"/>
+          <text x="50" y="48" text-anchor="middle" fill="var(--primary)" font-weight="700" font-size="13">R</text>
+          <text class="th-only" x="192" y="26" text-anchor="middle" fill="var(--primary)" font-weight="700">ขดรัน (Run) · 350 Ω</text>
+          <text class="en-only" x="192" y="26" text-anchor="middle" fill="var(--primary)" font-weight="700">Run winding · 350 Ω</text>
+
+          <!-- ===== start winding ===== -->
+          <g stroke="#dc2626" stroke-width="2.4" fill="none" stroke-linecap="round">
+            <path d="M70,90 h42 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 L405,120"/>
+          </g>
+          <circle cx="70" cy="90" r="4.5" fill="#dc2626"/>
+          <text x="50" y="94" text-anchor="middle" fill="#dc2626" font-weight="700" font-size="13">S</text>
+          <text class="th-only" x="192" y="72" text-anchor="middle" fill="#dc2626" font-weight="700">ขดสตาร์ท (Start) · 400 Ω</text>
+          <text class="en-only" x="192" y="72" text-anchor="middle" fill="#dc2626" font-weight="700">Start winding · 400 Ω</text>
+
+          <!-- ===== choke winding (2 sections) + taps 1/2/3 ===== -->
+          <g stroke="var(--secondary)" stroke-width="2.4" fill="none" stroke-linecap="round">
+            <path d="M160,196 a15 12 0 0 1 30 0 a15 12 0 0 1 30 0 a15 12 0 0 1 30 0 a15 12 0 0 1 30 0 a15 12 0 0 1 30 0 a15 12 0 0 1 30 0 L405,120"/>
+          </g>
+          <text class="th-only" x="205" y="216" text-anchor="middle" fill="var(--secondary)" font-weight="700" font-size="10">80 Ω</text>
+          <text class="en-only" x="205" y="216" text-anchor="middle" fill="var(--secondary)" font-weight="700" font-size="10">80 Ω</text>
+          <text x="295" y="216" text-anchor="middle" fill="var(--secondary)" font-weight="700" font-size="10">80 Ω</text>
+          <text class="th-only" x="250" y="236" text-anchor="middle" fill="var(--secondary)" font-weight="700">ขดโช้ค (Choke)</text>
+          <text class="en-only" x="250" y="236" text-anchor="middle" fill="var(--secondary)" font-weight="700">Choke winding</text>
+
+          <!-- tap 3: end nearest the common point → no choke at all -->
+          <path d="M70,140 H340 V196" fill="none" stroke="var(--secondary)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="70" cy="140" r="4.5" fill="var(--secondary)"/>
+          <circle cx="340" cy="196" r="3.4" fill="var(--secondary)"/>
+          <text x="50" y="144" text-anchor="middle" fill="var(--secondary)" font-weight="700" font-size="13">3</text>
+          <text class="th-only" x="80" y="134" fill="var(--text-light)" font-size="9.5">0 Ω — แรงสุด</text>
+          <text class="en-only" x="80" y="134" fill="var(--text-light)" font-size="9.5">0 Ω — fastest</text>
+
+          <!-- tap 2: centre tap → one section -->
+          <path d="M70,178 H250 V196" fill="none" stroke="var(--secondary)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>
+          <circle cx="70" cy="178" r="4.5" fill="var(--secondary)"/>
+          <circle cx="250" cy="196" r="3.4" fill="var(--secondary)"/>
+          <text x="50" y="182" text-anchor="middle" fill="var(--secondary)" font-weight="700" font-size="13">2</text>
+          <text class="th-only" x="80" y="172" fill="var(--text-light)" font-size="9.5">80 Ω — ปานกลาง</text>
+          <text class="en-only" x="80" y="172" fill="var(--text-light)" font-size="9.5">80 Ω — medium</text>
+
+          <!-- tap 1: far end → both sections -->
+          <path d="M70,216 H160 V196" fill="none" stroke="var(--secondary)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+          <circle cx="70" cy="216" r="4.5" fill="var(--secondary)"/>
+          <text x="50" y="220" text-anchor="middle" fill="var(--secondary)" font-weight="700" font-size="13">1</text>
+          <text class="th-only" x="80" y="210" fill="var(--text-light)" font-size="9.5">160 Ω — เบาสุด</text>
+          <text class="en-only" x="80" y="210" fill="var(--text-light)" font-size="9.5">160 Ω — slowest</text>
+
+          <!-- ===== common node C ===== -->
+          <circle cx="405" cy="120" r="10" fill="var(--card)" stroke="var(--border)" stroke-width="1.2"/>
+          <circle cx="405" cy="120" r="5" fill="var(--text)"/>
+          <text x="405" y="102" text-anchor="middle" fill="var(--text)" font-weight="700" font-size="13">C</text>
+          <text class="th-only" x="405" y="146" text-anchor="middle" fill="var(--text-light)" font-size="9.5">จุดร่วม</text>
+          <text class="en-only" x="405" y="146" text-anchor="middle" fill="var(--text-light)" font-size="9.5">common</text>
         </svg>
-        <p class="th-only" style="font-size:.85rem;color:var(--text-light);margin-top:.3rem">ปลายทั้งขดรัน ขดสตาร์ท และขดโช้ค มาบรรจบกันที่จุดร่วม <strong>C</strong> ภายในตัวมอเตอร์ (ต่ออนุกรมกันไว้แล้วจากโรงงาน) — วัดคร่อมปลายสาย R กับ S จะได้ค่าความต้านทานรวมสูงสุด ประมาณ 750 Ω</p>
-        <p class="en-only" style="font-size:.85rem;color:var(--text-light);margin-top:.3rem">The run, start, and choke windings all meet at a common point <strong>C</strong> inside the motor (factory-wired in series) — measuring across leads R and S gives the highest combined reading, around 750 Ω</p>
+        <p class="th-only" style="font-size:.85rem;color:var(--text-light);margin-top:.3rem">ปลายทั้งขดรัน ขดสตาร์ท และขดโช้ค มาบรรจบกันที่จุดร่วม <strong>C</strong> ภายในตัวมอเตอร์ (ต่ออนุกรมกันไว้แล้วจากโรงงาน) — วัดคร่อมปลายสาย R กับ S จะได้ค่าความต้านทานรวมสูงสุด ประมาณ 750 Ω<br>สายเบอร์ <strong>3</strong> ต่อที่ปลายโช้คฝั่งจุดร่วม จึงไม่ผ่านโช้คเลย (0 Ω) ได้แรงดันเต็ม → <strong>แรงสุด</strong>, เบอร์ 2 ผ่านโช้ค 1 ชุด (~80 Ω), เบอร์ 1 ผ่านทั้ง 2 ชุด (~160 Ω) → <strong>เบาสุด</strong></p>
+        <p class="en-only" style="font-size:.85rem;color:var(--text-light);margin-top:.3rem">The run, start, and choke windings all meet at a common point <strong>C</strong> inside the motor (factory-wired in series) — measuring across leads R and S gives the highest combined reading, around 750 Ω<br>Lead <strong>3</strong> taps the choke end at the common point, so it bypasses the choke entirely (0 Ω) and gets full voltage → <strong>fastest</strong>; lead 2 goes through one section (~80 Ω); lead 1 through both (~160 Ω) → <strong>slowest</strong></p>
       </div>
     </div>
   </div>
@@ -175,6 +270,96 @@
         <li><strong class="th-only">คาปาซิเตอร์ (Capacitor)</strong><strong class="en-only">Capacitor</strong> — <span class="th-only">ต่อขนานอยู่ที่ขดสตาร์ท ช่วยสร้างแรงบิดเริ่มหมุน</span><span class="en-only">wired across the start winding, helps produce starting torque</span></li>
         <li><strong class="th-only">มอเตอร์ (Motor)</strong><strong class="en-only">Motor</strong> — <span class="th-only">ขดลวด 3 ชุดตามหัวข้อก่อนหน้า</span><span class="en-only">the 3 windings covered above</span></li>
       </ol>
+    </div>
+  </div>
+
+  <!-- 3b. ซิมโต้ตอบ: ไฟวิ่งอย่างไรเมื่อกดแต่ละเบอร์ -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ลองกดดู — ไฟวิ่งผ่านอะไรบ้างในแต่ละเบอร์</span><span class="en-only">Try It — Where the Current Flows at Each Speed</span></div>
+    <div class="card">
+      <p class="th-only">กดปุ่มสวิตช์ด้านล่างแล้วดูเส้นทางกระแสไฟในวงจรจริงของพัดลม จุดสีที่วิ่งคือ <strong>กระแสสมมติ</strong> (ไหลจากขั้วบวกไปลบ) สังเกตว่าเบอร์ยิ่งสูง ไฟยิ่งผ่านขดโช้คน้อยลง แรงดันที่ถึงมอเตอร์จึงสูงขึ้น</p>
+      <p class="en-only">Press a switch position below and watch the current path through the fan's actual circuit. The moving dots are <strong>conventional current</strong> (+ to −). Notice that the higher the position, the less choke winding the current passes through, so more voltage reaches the motor.</p>
+
+      <div id="fan-motor-sim">
+        <div class="fms-bar" role="group" aria-label="Speed switch">
+          <button class="fms-btn" data-speed="0" aria-pressed="false">0<small class="th-only">ปิด</small><small class="en-only">off</small></button>
+          <button class="fms-btn" data-speed="1" aria-pressed="false">1<small class="th-only">เบา</small><small class="en-only">low</small></button>
+          <button class="fms-btn" data-speed="2" aria-pressed="false">2<small class="th-only">กลาง</small><small class="en-only">med</small></button>
+          <button class="fms-btn" data-speed="3" aria-pressed="false">3<small class="th-only">แรงสุด</small><small class="en-only">high</small></button>
+        </div>
+
+        <div id="fms-canvas"></div>
+
+        <div class="fms-legend">
+          <span><i style="background:#f59e0b"></i><span class="th-only">กระแสจากปลั๊ก→สวิตช์→โช้ค</span><span class="en-only">plug → switch → choke</span></span>
+          <span><i style="background:var(--primary)"></i><span class="th-only">แยกเข้าขดรัน</span><span class="en-only">run-winding branch</span></span>
+          <span><i style="background:#dc2626"></i><span class="th-only">แยกเข้าขดสตาร์ท + คาปาซิเตอร์</span><span class="en-only">start winding + capacitor</span></span>
+        </div>
+
+        <div class="fms-readout">
+          <div class="fms-cell"><b id="fms-v">—</b><span class="th-only">แรงดันที่ถึงมอเตอร์</span><span class="en-only">voltage at motor</span></div>
+          <div class="fms-cell"><b id="fms-ohm">—</b><span class="th-only">โช้คที่กระแสต้องผ่าน</span><span class="en-only">choke in the path</span></div>
+          <div class="fms-cell"><b id="fms-rpm">—</b><span class="th-only">รอบต่อนาที (โดยประมาณ)</span><span class="en-only">rpm (approx.)</span></div>
+          <div class="fms-cell"><b id="fms-pct">—</b><span class="th-only">กำลัง/แรงลม</span><span class="en-only">power / airflow</span></div>
+        </div>
+        <div class="fms-meter"><i id="fms-fill" style="width:0"></i></div>
+
+        <div class="fms-desc" data-speed="0" hidden>
+          <h4 class="th-only">เบอร์ 0 — สวิตช์ตัดวงจร พัดลมหยุด</h4>
+          <h4 class="en-only">Position 0 — switch open, fan stops</h4>
+          <p class="th-only">หน้าสัมผัสของสวิตช์ไม่ต่อกับเบอร์ไหนเลย วงจรจึงเปิด (open circuit) — <strong>ไม่มีกระแสไหลได้ครบวง</strong> ทั้งขดรัน ขดสตาร์ท และขดโช้คจึงไม่มีกระแส ไม่มีสนามแม่เหล็ก ใบพัดที่ยังหมุนอยู่จะค่อยๆ ช้าลงด้วยแรงเฉื่อยแล้วหยุดเอง</p>
+          <p class="en-only">The switch contacts touch none of the taps, so the circuit is open — <strong>no current can complete the loop</strong>. Run, start and choke windings all carry zero current, no magnetic field is produced, and the spinning blades simply coast down to a stop.</p>
+          <p class="th-only" style="color:#b91c1c"><strong>⚠ ระวัง:</strong> เส้นประสีส้มคือไฟบ้านที่ยัง <em>ค้างอยู่ที่ขั้วสวิตช์</em> ตราบใดที่ยังเสียบปลั๊ก — ปิดสวิตช์ไม่เท่ากับปลอดภัย ต้องถอดปลั๊กก่อนซ่อมเสมอ</p>
+          <p class="en-only" style="color:#b91c1c"><strong>⚠ Careful:</strong> the dashed amber line is live mains still sitting <em>at the switch terminals</em> as long as the plug is in — switching off is not the same as being safe. Always unplug before servicing.</p>
+        </div>
+
+        <div class="fms-desc" data-speed="1" hidden>
+          <h4 class="th-only">เบอร์ 1 — ผ่านขดโช้คทั้ง 2 ชุด → ลมเบาสุด</h4>
+          <h4 class="en-only">Position 1 — through both choke sections → slowest</h4>
+          <p class="th-only">ไฟจากปลั๊ก (L) → สวิตช์เบอร์ 1 → เข้าขดโช้คที่ <strong>ปลายไกลสุด</strong> จึงต้องไหลผ่านโช้คครบทั้ง 2 ชุด (~160 Ω) กว่าจะถึงจุดร่วม C</p>
+          <p class="en-only">Mains (L) → switch position 1 → enters the choke at its <strong>far end</strong>, so the current must pass through both sections (~160 Ω) before reaching common point C.</p>
+          <p class="th-only">ขดโช้คกินแรงดันไปส่วนหนึ่ง เหลือถึงมอเตอร์เพียง ~165 V สนามแม่เหล็กจึงอ่อน แรงบิดน้อย ลมเบาที่สุด — ที่ใช้ "ขดลวด" แทนตัวต้านทานเพราะมันหน่วงด้วยรีแอกแตนซ์ (X<sub>L</sub>) จึงไม่เผาผลาญพลังงานทิ้งเป็นความร้อนมากเท่าตัวต้านทาน</p>
+          <p class="en-only">The choke drops part of the voltage, leaving only ~165 V at the motor: weaker field, less torque, least airflow. A coil is used instead of a resistor because it opposes current by reactance (X<sub>L</sub>), so far less energy is wasted as heat.</p>
+        </div>
+
+        <div class="fms-desc" data-speed="2" hidden>
+          <h4 class="th-only">เบอร์ 2 — ผ่านขดโช้คชุดเดียว → ลมปานกลาง</h4>
+          <h4 class="en-only">Position 2 — through one choke section → medium</h4>
+          <p class="th-only">สวิตช์เบอร์ 2 ต่อเข้าที่ <strong>จุดกลาง (tap)</strong> ของขดโช้ค กระแสจึงผ่านโช้คเพียงชุดเดียว (~80 Ω) แรงดันตกคร่อมโช้คน้อยลง เหลือถึงมอเตอร์ ~190 V</p>
+          <p class="en-only">Position 2 connects to the <strong>centre tap</strong> of the choke, so current passes through only one section (~80 Ω). Less voltage is dropped, leaving about 190 V at the motor.</p>
+          <p class="th-only">สังเกตในภาพว่าครึ่งซ้ายของขดโช้คไม่มีจุดกระแสวิ่งเลย — เพราะกระแสเข้าตรงกลาง ไม่ได้เข้าที่ปลาย</p>
+          <p class="en-only">Notice that the left half of the choke has no current dots at all — the current enters at the middle, not at the end.</p>
+        </div>
+
+        <div class="fms-desc" data-speed="3" hidden>
+          <h4 class="th-only">เบอร์ 3 — ไม่ผ่านโช้คเลย → ลมแรงสุด</h4>
+          <h4 class="en-only">Position 3 — bypasses the choke → fastest</h4>
+          <p class="th-only">สายเบอร์ 3 ต่ออยู่ที่ <strong>ปลายโช้คด้านจุดร่วม C พอดี</strong> กระแสจึงข้ามขดโช้คไปทั้งเส้น (0 Ω) มอเตอร์ได้รับแรงดันเต็ม 220 V</p>
+          <p class="en-only">Lead 3 taps the choke <strong>right at the end nearest common point C</strong>, so the current bypasses the whole choke (0 Ω) and the motor gets the full 220 V.</p>
+          <p class="th-only">เพราะ <strong>กำลังแปรผันตามแรงดันยกกำลังสอง (P ∝ V²)</strong> แรงดันที่มากขึ้นเพียง ~33% จากเบอร์ 1 จึงให้กำลังเกือบสองเท่า สนามแม่เหล็กแรงขึ้น แรงบิดมากขึ้น รอบสูงขึ้น ลมจึงแรงกว่าเบอร์อื่นชัดเจน</p>
+          <p class="en-only">Because <strong>power scales with the square of voltage (P ∝ V²)</strong>, roughly 33% more voltage than position 1 gives nearly double the power — stronger field, more torque, higher rpm, and noticeably more airflow.</p>
+        </div>
+
+        <div class="info-box" style="margin-top:1rem">
+          <strong class="th-only">🔀 ที่จุดร่วม C กระแสแยกเป็น 2 ทางเสมอ (ทั้งขดรันและขดสตาร์ททำงานพร้อมกันตลอดเวลา)</strong>
+          <strong class="en-only">🔀 At common point C the current always splits in two (both windings work all the time)</strong>
+          <ul class="content-list th-only" style="margin-top:.5rem">
+            <li><strong style="color:var(--primary)">ทางขดรัน (เส้นน้ำเงิน)</strong> — จาก C ผ่านขดรัน 350 Ω ออกสาย R กลับเข้านิวทรัลโดยตรง เป็นกระแสหลักที่สร้างแรงบิดให้พัดลมหมุนต่อเนื่อง</li>
+            <li><strong style="color:#dc2626">ทางขดสตาร์ท (เส้นแดง)</strong> — จาก C ผ่านขดสตาร์ท 400 Ω ออกสาย S แล้ว <strong>ผ่านคาปาซิเตอร์</strong> ก่อนกลับเข้านิวทรัล คาปาทำให้กระแสในขดสตาร์ท <strong>นำหน้าเฟส</strong> กระแสขดรันประมาณ 90°</li>
+            <li>เมื่อสนามแม่เหล็กของสองขดเกิด <em>ไม่พร้อมกัน</em> และวางเยื้องกันในตัวมอเตอร์ จึงกลายเป็น <strong>สนามแม่เหล็กหมุน</strong> ที่ลากโรเตอร์ให้หมุนตาม — นี่คือเหตุผลที่มอเตอร์ 1 เฟสต้องมีขดสตาร์ทกับคาปาซิเตอร์ ถ้าคาปาเสื่อม พัดลมจะไม่ออกตัวเอง ต้องเอามือปัดใบพัดช่วย</li>
+            <li>พัดลมเป็นแบบ <strong>คาปาซิเตอร์รัน (PSC)</strong> คาปาจึงต่อค้างไว้ตลอด ไม่ได้ตัดออกหลังสตาร์ทเหมือนมอเตอร์คาปาซิเตอร์สตาร์ทของปั๊มน้ำ</li>
+          </ul>
+          <ul class="content-list en-only" style="margin-top:.5rem">
+            <li><strong style="color:var(--primary)">Run branch (blue)</strong> — from C through the 350 Ω run winding, out lead R, straight back to neutral. This is the main current that produces the running torque.</li>
+            <li><strong style="color:#dc2626">Start branch (red)</strong> — from C through the 400 Ω start winding, out lead S, then <strong>through the capacitor</strong> before returning to neutral. The capacitor makes this current <strong>lead</strong> the run current by roughly 90°.</li>
+            <li>Because the two fields peak at <em>different instants</em> and the windings sit at an angle to each other, the result is a <strong>rotating magnetic field</strong> that drags the rotor around — this is why a single-phase motor needs a start winding and a capacitor. If the capacitor fails, the fan will not start on its own and needs a push.</li>
+            <li>A fan is a <strong>permanent-split-capacitor (PSC)</strong> motor, so the capacitor stays in circuit permanently — it is not switched out after starting like the capacitor-start motor in a water pump.</li>
+          </ul>
+        </div>
+
+        <p class="th-only" style="font-size:.8rem;color:var(--text-light);margin-top:.8rem">* ตัวเลขแรงดัน/รอบเป็นค่าโดยประมาณเพื่อการเรียนรู้ ค่าจริงต่างกันไปตามรุ่นและขนาดมอเตอร์</p>
+        <p class="en-only" style="font-size:.8rem;color:var(--text-light);margin-top:.8rem">* Voltage and rpm figures are approximate teaching values; real numbers vary by model and motor size.</p>
+      </div>
     </div>
   </div>
 
@@ -288,6 +473,7 @@
 </main>
 
 <footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
+<script src="js/fan-motor-sim.js"></script>
 <script>const CURRENT_PAGE='repair-fan';</script>
 <script src="js/nav.js"></script>
 </body>

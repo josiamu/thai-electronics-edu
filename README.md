@@ -17,7 +17,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | 🌏 **2 ภาษา** | สลับ TH ↔ EN ได้ทันทีผ่านปุ่มใน nav bar — จำการตั้งค่าไว้ |
 | 🌙 **Dark Mode** | ธีมสว่าง/มืด — จำการตั้งค่าไว้ |
 | 📱 **Responsive** | ใช้งานได้ทั้ง Desktop, Tablet, Mobile |
-| 🔬 **เครื่องมือจำลองเชิงโต้ตอบ** | เบรดบอร์ดเสมือน, ออสซิลโลสโคป, BJT switch, เครื่องกำเนิดสัญญาณ, แหล่งจ่ายไฟ, เรียงกระแส AC→DC, ออปโตคัปเปลอร์, จำลองวงจร |
+| 🔬 **เครื่องมือจำลองเชิงโต้ตอบ** | เบรดบอร์ดเสมือน, ออสซิลโลสโคป, BJT switch, เครื่องกำเนิดสัญญาณ, แหล่งจ่ายไฟ, เรียงกระแส AC→DC, ออปโตคัปเปลอร์, สวิตช์ความเร็วพัดลม, จำลองวงจร |
 | 🧮 **7 เครื่องคิดเลข** | รหัสสี, โอห์ม, กำลัง, พลังงาน, อนุกรม/ขนาน, แปลงหน่วย |
 | 📝 **แบบทดสอบ 84 ข้อ** | 13 หมวด, สุ่มข้อ, บันทึกคะแนนสูงสุด — มีทั้ง TH และ EN |
 | 📥 **PDF 40 ไฟล์** | ดาวน์โหลดใบเนื้อหา + ใบงานประกอบการเรียน |
@@ -66,7 +66,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 **งานซ่อมเครื่องใช้ไฟฟ้า / Appliance Repair**
 | ไทย | English | หน้า |
 |---|---|---|
-| มอเตอร์พัดลมไฟฟ้า | Electric Fan Motor | `fan-motor.html` |
+| มอเตอร์พัดลมไฟฟ้า | Electric Fan Motor | `fan-motor.html` (มีซิมสวิตช์ความเร็วโต้ตอบ) |
 | เตาแม่เหล็กไฟฟ้า | Induction Stove | `induction-stove.html` |
 
 **งานปฏิบัติ / Practical**
@@ -185,6 +185,7 @@ git push
 ├── js/announcements.js     — Home-page "latest news/updates" box (data-driven, dismissible, bilingual)
 ├── js/breadboard.js        — Virtual breadboard lab (MNA solver + transistors + multimeter)
 ├── js/scr-sim.js           — Phase-control dimmer sim (SCR/TRIAC firing angle)
+├── js/fan-motor-sim.js     — Fan speed-switch sim (press 0/1/2/3 → live current path through choke, run & start windings)
 ├── js/relay-lab.js         — MY4 relay control lab (DC nodal solver + power rails + terminal block + ladder view + auto-graded missions + save/share)
 ├── index.html           — Home page
 │   ├── electricity.html / ohm.html                 — Fundamentals

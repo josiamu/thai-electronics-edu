@@ -14,6 +14,10 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'fan-motor-speed-sim-2026-08-05', date:'2026-08-05', type:'update',
+    th:'บทมอเตอร์พัดลม: เพิ่ม <b>ซิมสวิตช์ความเร็วแบบโต้ตอบ</b> — กดเบอร์ 0/1/2/3 แล้วดูกระแสวิ่งจริงในวงจร ว่าไฟเข้าที่ไหน ผ่านขดโช้คกี่ชุด ทำไมเบอร์ 3 ถึงลมแรงสุด และที่จุดร่วม C กระแสแยกเข้า<b>ขดรัน</b>กับ<b>ขดสตาร์ท+คาปาซิเตอร์</b>อย่างไรจนเกิดสนามแม่เหล็กหมุน พร้อมค่าแรงดัน/รอบ/กำลังรายเบอร์ (แผนภาพขดลวดวาดใหม่ให้อ่านง่ายขึ้นด้วย)',
+    en:'Fan motor lesson: a new <b>interactive speed-switch sim</b> — press 0/1/2/3 and watch the real current path: where the mains enters, how many choke sections it passes, why position 3 gives the most airflow, and how the current splits at common point C into the <b>run winding</b> and the <b>start winding + capacitor</b> to create the rotating field. Voltage, rpm and power readouts included (the winding diagram was redrawn too)',
+    href:'fan-motor.html' },
   { id:'lessons-repair-group-2026-08-04', date:'2026-08-04', type:'lesson',
     th:'เปิดกลุ่มบทเรียนใหม่ <b>🛠️ งานซ่อมเครื่องใช้ไฟฟ้า</b> ในเมนูบทเรียน — เริ่มด้วย 2 บท: <b>มอเตอร์พัดลมไฟฟ้า</b> (โครงสร้างขดรัน/สตาร์ท/โช้ค, หาขั้วสาย R/S/1/2/3 ด้วยมัลติมิเตอร์ทั้งแบบ 5 สายและ 6 สาย) และ <b>เตาแม่เหล็กไฟฟ้า</b> (หลักการเหนี่ยวนำแม่เหล็กไฟฟ้า, อะไหล่บนบอร์ด IGBT, คลินิกวิเคราะห์อาการเสีย 6 เคส, กฎความปลอดภัยการคายประจุ)',
     en:'New lesson group <b>🛠️ Appliance Repair</b> in the Lessons menu — starting with 2 chapters: <b>Electric Fan Motor</b> (run/start/choke winding structure, finding R/S/1/2/3 leads with a multimeter on both 5-wire and 6-wire fans) and <b>Induction Stove</b> (electromagnetic induction theory, the IGBT board&#39;s parts, a 6-case fault-diagnosis clinic, and discharge safety rules)',
