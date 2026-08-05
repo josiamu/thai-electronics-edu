@@ -138,7 +138,7 @@
           <tr>
             <td class="hi"><span class="th-only">ขดสตาร์ท (Start)</span><span class="en-only">Start</span></td>
             <td>~400 Ω</td>
-            <td><span class="th-only">ให้แรงบิดเริ่มหมุน ลวดเล็กกว่าขดรัน ทำงานร่วมกับคาปาซิเตอร์</span><span class="en-only">Provides starting torque; thinner wire than the run winding, works with the capacitor</span></td>
+            <td><span class="th-only">ให้แรงบิดเริ่มหมุน ลวดเล็กกว่าขดรัน ทำงานร่วมกับคาปาซิเตอร์ — พัดลมเป็นแบบคาปาซิเตอร์รัน ขดนี้จึง<strong>ทำงานตลอดเวลาเช่นเดียวกับขดรัน</strong> ไม่ได้ถูกตัดออกหลังสตาร์ท</span><span class="en-only">Provides starting torque; thinner wire than the run winding, works with the capacitor — since a fan is a capacitor-run motor, this winding <strong>stays energized the whole time</strong> like the run winding, it is not switched out after starting</span></td>
           </tr>
           <tr>
             <td class="hi"><span class="th-only">ขดโช้ค (Choke)</span><span class="en-only">Choke</span></td>
@@ -262,13 +262,22 @@
   <div class="section">
     <div class="section-title"><span class="th-only">ส่วนประกอบหลักของวงจรพัดลม</span><span class="en-only">Main Parts of the Fan Circuit</span></div>
     <div class="card">
-      <p class="th-only">ก่อนลงมือซ่อม ต้องรู้จักอุปกรณ์ที่เกี่ยวข้องกับวงจรไฟฟ้าของพัดลม ซึ่งมี 4 ส่วนหลัก ต่อเรียงกันจากปลั๊กไฟจนถึงขดลวด:</p>
-      <p class="en-only">Before repairing, know the 4 parts that make up the fan's electrical path, wired in sequence from the plug to the windings:</p>
+      <p class="th-only">ก่อนลงมือซ่อม ต้องรู้จักอุปกรณ์ที่เกี่ยวข้องกับวงจรไฟฟ้าของพัดลม ซึ่งมี 5 ส่วนหลัก ตั้งแต่ปลั๊กไฟจนถึงขดลวด:</p>
+      <p class="en-only">Before repairing, know the 5 parts that make up the fan's electrical path, from the plug through to the windings:</p>
       <ol class="fm-steps">
         <li><strong class="th-only">สายเสียบปลั๊กไฟ (AC Cord)</strong><strong class="en-only">AC Cord</strong> — <span class="th-only">นำไฟจากเต้ารับเข้าเครื่อง</span><span class="en-only">brings mains power into the unit</span></li>
         <li><strong class="th-only">สวิตช์ควบคุมความเร็ว (Speed Switch)</strong><strong class="en-only">Speed Switch</strong> — <span class="th-only">เลือกว่าจะป้อนไฟผ่านขดโช้คมากหรือน้อย (ตำแหน่ง 1/2/3)</span><span class="en-only">selects how much choke winding is in the path (position 1/2/3)</span></li>
-        <li><strong class="th-only">คาปาซิเตอร์ (Capacitor)</strong><strong class="en-only">Capacitor</strong> — <span class="th-only">ต่อขนานอยู่ที่ขดสตาร์ท ช่วยสร้างแรงบิดเริ่มหมุน</span><span class="en-only">wired across the start winding, helps produce starting torque</span></li>
+        <li>
+          <strong class="th-only">คาปาซิเตอร์ (Capacitor)</strong><strong class="en-only">Capacitor</strong> —
+          <span class="th-only">ต่อคร่อมระหว่างสาย <strong>R กับ S</strong> ทำให้มันไป <strong>อนุกรมกับขดสตาร์ท</strong> (ไม่ใช่ขนานกับขดสตาร์ท) ช่วยเลื่อนเฟสกระแสให้เกิดสนามแม่เหล็กหมุน จึงมีแรงบิดออกตัวและหมุนต่อเนื่อง</span>
+          <span class="en-only">connects between leads <strong>R and S</strong>, which puts it <strong>in series with the start winding</strong> (not in parallel with it). It shifts the current phase to create the rotating field that both starts and keeps the motor turning</span>
+        </li>
         <li><strong class="th-only">มอเตอร์ (Motor)</strong><strong class="en-only">Motor</strong> — <span class="th-only">ขดลวด 3 ชุดตามหัวข้อก่อนหน้า</span><span class="en-only">the 3 windings covered above</span></li>
+        <li>
+          <strong class="th-only">เทอร์โมฟิวส์ (Thermal Fuse)</strong><strong class="en-only">Thermal Fuse</strong> —
+          <span class="th-only">ฝังอยู่ในกลุ่มขดลวด ต่ออนุกรมอยู่ในเส้นทางไฟของมอเตอร์ ปกติวัดได้ราว 0 Ω แต่ถ้าขดลวดร้อนเกินพิกัด (มักราว 120–150 °C แล้วแต่รุ่น) จะ<strong>ขาดถาวร</strong> ต่อกลับไม่ได้ ต้องเปลี่ยนใหม่ — พัดลมที่ "ไฟเข้าแต่ไม่ทำงานเลยทุกเบอร์" ให้สงสัยตัวนี้ไว้ด้วยเสมอ (ดูวิธีเช็คในหัวข้อพัดลม 6 สาย)</span>
+          <span class="en-only">buried inside the winding bundle, in series with the motor's supply path. It normally reads about 0 Ω, but once the winding overheats past its rating (typically 120–150 °C depending on the model) it <strong>opens permanently</strong> and must be replaced. A fan that is "getting power but dead on every speed" is a classic symptom (see the 6-wire section for how to check it)</span>
+        </li>
       </ol>
     </div>
   </div>
@@ -345,13 +354,13 @@
           <strong class="en-only">🔀 At common point C the current always splits in two (both windings work all the time)</strong>
           <ul class="content-list th-only" style="margin-top:.5rem">
             <li><strong style="color:var(--primary)">ทางขดรัน (เส้นน้ำเงิน)</strong> — จาก C ผ่านขดรัน 350 Ω ออกสาย R กลับเข้านิวทรัลโดยตรง เป็นกระแสหลักที่สร้างแรงบิดให้พัดลมหมุนต่อเนื่อง</li>
-            <li><strong style="color:#dc2626">ทางขดสตาร์ท (เส้นแดง)</strong> — จาก C ผ่านขดสตาร์ท 400 Ω ออกสาย S แล้ว <strong>ผ่านคาปาซิเตอร์</strong> ก่อนกลับเข้านิวทรัล คาปาทำให้กระแสในขดสตาร์ท <strong>นำหน้าเฟส</strong> กระแสขดรันประมาณ 90°</li>
+            <li><strong style="color:#dc2626">ทางขดสตาร์ท (เส้นแดง)</strong> — จาก C ผ่านขดสตาร์ท 400 Ω ออกสาย S แล้ว <strong>ผ่านคาปาซิเตอร์</strong> ก่อนกลับเข้านิวทรัล คาปาทำให้กระแสในขดสตาร์ท <strong>นำหน้าเฟส</strong> กระแสขดรันประมาณ 90° <em>(ปลายอีกข้างของคาปาไปบรรจบรางนิวทรัล ซึ่งเป็นโหนดเดียวกับขา R อยู่แล้ว — จึงเท่ากับคาปาคร่อม R–S ตามที่ใบงานทั่วไปวาด)</em></li>
             <li>เมื่อสนามแม่เหล็กของสองขดเกิด <em>ไม่พร้อมกัน</em> และวางเยื้องกันในตัวมอเตอร์ จึงกลายเป็น <strong>สนามแม่เหล็กหมุน</strong> ที่ลากโรเตอร์ให้หมุนตาม — นี่คือเหตุผลที่มอเตอร์ 1 เฟสต้องมีขดสตาร์ทกับคาปาซิเตอร์ ถ้าคาปาเสื่อม พัดลมจะไม่ออกตัวเอง ต้องเอามือปัดใบพัดช่วย</li>
             <li>พัดลมเป็นแบบ <strong>คาปาซิเตอร์รัน (PSC)</strong> คาปาจึงต่อค้างไว้ตลอด ไม่ได้ตัดออกหลังสตาร์ทเหมือนมอเตอร์คาปาซิเตอร์สตาร์ทของปั๊มน้ำ</li>
           </ul>
           <ul class="content-list en-only" style="margin-top:.5rem">
             <li><strong style="color:var(--primary)">Run branch (blue)</strong> — from C through the 350 Ω run winding, out lead R, straight back to neutral. This is the main current that produces the running torque.</li>
-            <li><strong style="color:#dc2626">Start branch (red)</strong> — from C through the 400 Ω start winding, out lead S, then <strong>through the capacitor</strong> before returning to neutral. The capacitor makes this current <strong>lead</strong> the run current by roughly 90°.</li>
+            <li><strong style="color:#dc2626">Start branch (red)</strong> — from C through the 400 Ω start winding, out lead S, then <strong>through the capacitor</strong> before returning to neutral. The capacitor makes this current <strong>lead</strong> the run current by roughly 90°. <em>(Its far end joins the neutral rail, which is already the same node as lead R — so it is bridging R–S exactly as most worksheets draw it.)</em></li>
             <li>Because the two fields peak at <em>different instants</em> and the windings sit at an angle to each other, the result is a <strong>rotating magnetic field</strong> that drags the rotor around — this is why a single-phase motor needs a start winding and a capacitor. If the capacitor fails, the fan will not start on its own and needs a push.</li>
             <li>A fan is a <strong>permanent-split-capacitor (PSC)</strong> motor, so the capacitor stays in circuit permanently — it is not switched out after starting like the capacitor-start motor in a water pump.</li>
           </ul>
@@ -379,8 +388,8 @@
         </li>
         <li>
           <strong class="th-only">หาคู่สายสวิตช์ (1, 2, 3):</strong><strong class="en-only">Find the switch leads (1, 2, 3):</strong>
-          <span class="th-only">นำสายมิเตอร์เส้นหนึ่งจับที่สายคาปาซิเตอร์ (S) แล้วใช้มิเตอร์อีกเส้นไล่วัดปลายสายที่เหลือ 3 เส้น</span>
-          <span class="en-only">Hold one meter lead on the capacitor lead (S), then use the other to probe the remaining 3 leads</span>
+          <span class="th-only">นำสายมิเตอร์เส้นหนึ่งจับที่สายคาปาซิเตอร์ <strong>เส้นใดเส้นหนึ่ง</strong> (ตอนนี้ยังไม่ต้องรู้ว่าเส้นไหนคือ R เส้นไหนคือ S — ขั้นตอนที่ 3 จะแยกให้เอง จับเส้นไหนก็ได้ลำดับเบอร์ออกมาเหมือนกัน) แล้วใช้มิเตอร์อีกเส้นไล่วัดปลายสายที่เหลือ 3 เส้น</span>
+          <span class="en-only">Hold one meter lead on <strong>either</strong> capacitor lead (no need to know yet which is R and which is S — step 3 sorts that out, and either one gives the same ordering), then use the other to probe the remaining 3 leads</span>
           <ol>
             <li class="th-only">ค่าน้อยที่สุด 👉 ต่อสวิตช์เบอร์ 3 (แรงสุด)</li><li class="en-only">Lowest value 👉 wire to switch position 3 (fastest)</li>
             <li class="th-only">ค่าปานกลาง 👉 ต่อสวิตช์เบอร์ 2</li><li class="en-only">Middle value 👉 switch position 2</li>
@@ -388,8 +397,8 @@
           </ol>
         </li>
         <li>
-          <strong class="th-only">หาจุดต่อสายนิวตรอน (N):</strong><strong class="en-only">Find the neutral lead (N):</strong>
-          <span class="th-only">นำสายมิเตอร์เส้นหนึ่งจับที่สายสวิตช์เบอร์ 3 อีกเส้นไล่วัดปลายสายคาปาซิเตอร์ทั้ง 2 เส้น ฝั่งที่วัดได้ความต้านทานน้อยกว่าคือปลายของขดรัน ให้นำสายนิวตรอน (N) จากปลั๊กไฟมาต่อที่จุดนี้</span>
+          <strong class="th-only">หาจุดต่อสายนิวทรัล (N):</strong><strong class="en-only">Find the neutral lead (N):</strong>
+          <span class="th-only">นำสายมิเตอร์เส้นหนึ่งจับที่สายสวิตช์เบอร์ 3 อีกเส้นไล่วัดปลายสายคาปาซิเตอร์ทั้ง 2 เส้น ฝั่งที่วัดได้ความต้านทานน้อยกว่าคือปลายของขดรัน ให้นำสายนิวทรัล (N) จากปลั๊กไฟมาต่อที่จุดนี้</span>
           <span class="en-only">Hold one lead on switch position 3, and probe both capacitor leads with the other. Whichever reads lower resistance is the run-winding end — connect the plug's neutral (N) there</span>
         </li>
       </ol>
@@ -400,12 +409,12 @@
   <div class="section">
     <div class="section-title"><span class="th-only">หาขั้วสาย — พัดลมรุ่นปัจจุบัน (6 สาย)</span><span class="en-only">Finding Leads — Newer Fans (6 Wires)</span></div>
     <div class="card">
-      <p class="th-only">พัดลมรุ่นใหม่นิยมติดตั้งคาปาซิเตอร์ไว้ด้านบนกระโหลกมอเตอร์เลย จึงมีสายสั้น 2 เส้นอยู่ด้านบน (ต่อคาปาซิเตอร์อยู่แล้ว) และมีสายยาว 4 เส้นร้อยลงมาที่ฐาน คือ นิวตรอน (N) 1 เส้น และสายเข้าสวิตช์ 3 เส้น</p>
+      <p class="th-only">พัดลมรุ่นใหม่นิยมติดตั้งคาปาซิเตอร์ไว้ด้านบนกระโหลกมอเตอร์เลย จึงมีสายสั้น 2 เส้นอยู่ด้านบน (ต่อคาปาซิเตอร์อยู่แล้ว) และมีสายยาว 4 เส้นร้อยลงมาที่ฐาน คือ นิวทรัล (N) 1 เส้น และสายเข้าสวิตช์ 3 เส้น</p>
       <p class="en-only">Newer fans mount the capacitor right on top of the motor housing, so 2 short leads up top are already wired to it, leaving 4 long leads down to the base: 1 neutral (N) and 3 switch leads</p>
       <ol class="fm-steps">
         <li>
-          <strong class="th-only">หาจุดต่อสายนิวตรอน (N) และเช็คเทอร์โมฟิวส์:</strong><strong class="en-only">Find neutral (N) and check the thermal fuse:</strong>
-          <span class="th-only">นำสายสั้น 2 เส้นด้านบนมา พันต่อกลับรวมกันไว้ชั่วคราว ใช้มิเตอร์เส้นหนึ่งจับที่จุดนี้ แล้วไล่วัดสายยาวทั้ง 4 เส้น เส้นที่วัดได้ <strong>0 โอห์ม</strong> คือสายนิวตรอน (N)</span>
+          <strong class="th-only">หาจุดต่อสายนิวทรัล (N) และเช็คเทอร์โมฟิวส์:</strong><strong class="en-only">Find neutral (N) and check the thermal fuse:</strong>
+          <span class="th-only">นำสายสั้น 2 เส้นด้านบนมา พันต่อกลับรวมกันไว้ชั่วคราว ใช้มิเตอร์เส้นหนึ่งจับที่จุดนี้ แล้วไล่วัดสายยาวทั้ง 4 เส้น เส้นที่วัดได้ <strong>0 โอห์ม</strong> คือสายนิวทรัล (N)</span>
           <span class="en-only">Twist the 2 short top leads together temporarily. Probe there with one meter lead and check all 4 long leads with the other — the one reading <strong>0 Ω</strong> is neutral (N)</span>
           <p class="th-only" style="font-size:.85rem;color:var(--text-light);margin:.3rem 0 0"><em>วิเคราะห์อาการเสีย: หากวัดแล้วเข็มไม่ขึ้นเลย แสดงว่าเทอร์โมฟิวส์ขาด</em></p>
           <p class="en-only" style="font-size:.85rem;color:var(--text-light);margin:.3rem 0 0"><em>Fault check: if nothing reads at all, the thermal fuse has blown</em></p>
@@ -419,7 +428,7 @@
         </li>
         <li>
           <strong class="th-only">หาคู่สายสวิตช์ (1, 2, 3):</strong><strong class="en-only">Find the switch leads (1, 2, 3):</strong>
-          <span class="th-only">นำสายมิเตอร์เส้นหนึ่งจับที่สายยาวนิวตรอน (N) อีกเส้นไล่วัดปลายสายยาวที่เหลือ 3 เส้น</span>
+          <span class="th-only">นำสายมิเตอร์เส้นหนึ่งจับที่สายยาวนิวทรัล (N) อีกเส้นไล่วัดปลายสายยาวที่เหลือ 3 เส้น</span>
           <span class="en-only">Hold one meter lead on the long neutral (N), and probe the remaining 3 long leads with the other</span>
           <ol>
             <li class="th-only">ค่าความต้านทานมากที่สุด 👉 ต่อสวิตช์เบอร์ 1 (หมุนช้าสุด)</li><li class="en-only">Highest reading 👉 switch position 1 (slowest)</li>
@@ -428,11 +437,6 @@
           </ol>
         </li>
       </ol>
-      <div class="info-box" style="margin-top:1rem;">
-        <strong class="th-only">💡 สังเกต</strong><strong class="en-only">💡 Notice</strong>
-        <p class="th-only" style="margin:.4rem 0 0">ลำดับเบอร์สวิตช์กลับด้านกันระหว่างพัดลม 5 สายกับ 6 สาย เพราะจุดอ้างอิงในการวัดคนละจุด (แบบ 5 สายวัดจากฝั่ง S ส่วนแบบ 6 สายวัดจากฝั่ง N) — ให้ยึดหลักที่ว่า <strong>ค่าความต้านทานยิ่งมาก = ผ่านขดโช้คมาก = หมุนช้ากว่า</strong> เสมอ</p>
-        <p class="en-only" style="margin:.4rem 0 0">The switch-number order flips between the 5-wire and 6-wire methods because the reference point differs (5-wire measures from S, 6-wire from N) — the rule that never changes: <strong>more resistance = more choke winding in the path = slower spin</strong></p>
-      </div>
     </div>
   </div>
 
