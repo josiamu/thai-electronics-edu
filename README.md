@@ -84,7 +84,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | `formulas.html` | สูตรสรุป + พิมพ์ PDF | Formula summary + print |
 | `tools.html` | เครื่องคิดเลขเชิงโต้ตอบ 7 ตัว | 7 interactive calculators |
 | `quiz.html` | แบบทดสอบ 92 ข้อ 14 หมวด | 92-question quiz, 14 categories |
-| `downloads.html` | ดาวน์โหลด PDF 41 ไฟล์ (รวมหัวข้อ "งานซ่อม") | Download 41 PDF files (incl. a "Repair" section) |
+| `downloads.html` | ดาวน์โหลด PDF 42 ไฟล์ (รวมหัวข้อ "งานซ่อม") | Download 42 PDF files (incl. a "Repair" section) |
 
 ---
 

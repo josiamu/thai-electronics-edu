@@ -14,6 +14,10 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'download-smps-2026-08-05', date:'2026-08-05', type:'download',
+    th:'ไฟล์ใหม่ในหมวด <b>🛠️ งานซ่อม</b>: <b>ตรวจเช็ควงจรภาคจ่ายไฟสวิตชิ่ง (LNK304) ในแผงวงจรพัดลม</b> — วงจรแปลง 220VAC → 5VDC ที่เลี้ยงภาคควบคุม พร้อมเคสจริง "พัดลมเปิดไม่ติด กดปุ่มไม่ได้" และวิธีไล่หาจุดเสีย (PDF)',
+    en:'New file in the <b>🛠️ Repair</b> section: <b>Checking the Switching Power Supply (LNK304) on a Fan Control Board</b> — the 220 VAC → 5 VDC stage that powers the control circuit, with a real "fan won\'t turn on, buttons dead" case and how to trace the fault (PDF)',
+    href:'downloads.html', cat:'repair', file:'pdf/workshop/ตรวจเช็ค_วงจรภาคจ่ายไฟสวิตชิ่ง.pdf' },
   { id:'fan-motor-speed-sim-2026-08-05', date:'2026-08-05', type:'update',
     th:'บทมอเตอร์พัดลม: เพิ่ม <b>ซิมสวิตช์ความเร็วแบบโต้ตอบ</b> — กดเบอร์ 0/1/2/3 แล้วดูกระแสวิ่งจริงในวงจร ว่าไฟเข้าที่ไหน ผ่านขดโช้คกี่ชุด ทำไมเบอร์ 3 ถึงลมแรงสุด และที่จุดร่วม C กระแสแยกเข้า<b>ขดรัน</b>กับ<b>ขดสตาร์ท+คาปาซิเตอร์</b>อย่างไรจนเกิดสนามแม่เหล็กหมุน พร้อมค่าแรงดัน/รอบ/กำลังรายเบอร์ และ<b>ปุ่มจำลองเทอร์โมฟิวส์ขาด</b> ให้เห็นว่าทำไมพัดลมถึง "ไฟเข้าแต่ไม่ทำงานเลยทุกเบอร์" (แผนภาพขดลวดวาดใหม่ให้อ่านง่ายขึ้นด้วย)',
     en:'Fan motor lesson: a new <b>interactive speed-switch sim</b> — press 0/1/2/3 and watch the real current path: where the mains enters, how many choke sections it passes, why position 3 gives the most airflow, and how the current splits at common point C into the <b>run winding</b> and the <b>start winding + capacitor</b> to create the rotating field. Voltage, rpm and power readouts included, plus a <b>blown-thermal-fuse mode</b> showing why a fan can be "getting power but dead on every speed" (the winding diagram was redrawn too)',

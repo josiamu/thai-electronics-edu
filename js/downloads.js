@@ -104,7 +104,7 @@
     search.placeholder = document.documentElement.lang === 'en' ? 'Search files…' : 'ค้นหาไฟล์…';
   }
   setPlaceholder();
-  window.addEventListener('langchange', setPlaceholder);
+  document.addEventListener('langchange', setPlaceholder);   // nav.js ยิงที่ document และไม่ bubble
 
   // ── มาจากกล่องข่าวหน้าแรก (?cat=/?file=) → กรองหมวด + เลื่อนไป/ไฮไลต์การ์ดให้อัตโนมัติ ──
   (function fromNews() {
