@@ -52,6 +52,7 @@ const NAV_LESSON_GROUPS = [
     items: [
       { id: 'repair-fan', href: 'fan-motor.html', label_th: '🌀 มอเตอร์พัดลมไฟฟ้า', label_en: '🌀 Electric Fan Motor' },
       { id: 'repair-stove', href: 'induction-stove.html', label_th: '🔥 เตาแม่เหล็กไฟฟ้า', label_en: '🔥 Induction Stove' },
+      { id: 'repair-smps', href: 'switching-psu.html', label_th: '🔌 ภาคจ่ายไฟสวิตชิ่ง (LNK304)', label_en: '🔌 Switching PSU (LNK304)' },
     ],
   },
 ];
@@ -283,7 +284,7 @@ const NAV_RESOURCES = [
 
   // ── บรรทัด "ครอบคลุมเนื้อหาจาก N หัวข้อ": เติมเข้า footer ทุกหน้าอัตโนมัติ (bilingual) ──
   // แหล่งความจริงเดียว — แก้เลขที่ TOPIC_COUNT ที่เดียว ทุกหน้าอัปเดตพร้อมกัน (อย่า hardcode ในแต่ละหน้า)
-  const TOPIC_COUNT = 34;
+  const TOPIC_COUNT = 35;
   const pageFooter = document.querySelector('footer');
   if (pageFooter && !pageFooter.querySelector('.footer-topics')) {
     const topics = document.createElement('div');

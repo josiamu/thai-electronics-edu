@@ -14,6 +14,10 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'lesson-switching-psu-2026-08-05', date:'2026-08-05', type:'lesson',
+    th:'บทเรียนใหม่ในกลุ่ม <b>🛠️ งานซ่อมเครื่องใช้ไฟฟ้า</b>: <b>ภาคจ่ายไฟสวิตชิ่ง (LNK304)</b> — ทำไมพัดลมยุคใหม่เลิกใช้ C-Drop, ไล่วงจร 5 ภาคจากปลั๊ก 220V ถึงไฟ 5V ที่เลี้ยง MCU (เรียงกระแส → Pi-filter 310V → สับสวิตช์ → บัค → ป้อนกลับ), คลินิกอาการเสีย 4 เคสพร้อมจุดวัด และกฎความปลอดภัยของ<b>วงจรไม่แยกกราวด์</b> ที่ห้ามคีบสโคปตรงๆ',
+    en:'New lesson in the <b>🛠️ Appliance Repair</b> group: <b>Switching Power Supply (LNK304)</b> — why modern fans dropped the C-Drop supply, all 5 stages from the 220V plug to the 5V that runs the MCU (rectifier → 310V Pi filter → chopper → buck → feedback), a 4-case fault clinic with test points, and the <b>non-isolated</b> safety rule that forbids clipping a scope straight onto the board',
+    href:'switching-psu.html' },
   { id:'download-smps-2026-08-05', date:'2026-08-05', type:'download',
     th:'ไฟล์ใหม่ในหมวด <b>🛠️ งานซ่อม</b>: <b>ตรวจเช็ควงจรภาคจ่ายไฟสวิตชิ่ง (LNK304) ในแผงวงจรพัดลม</b> — วงจรแปลง 220VAC → 5VDC ที่เลี้ยงภาคควบคุม พร้อมเคสจริง "พัดลมเปิดไม่ติด กดปุ่มไม่ได้" และวิธีไล่หาจุดเสีย (PDF)',
     en:'New file in the <b>🛠️ Repair</b> section: <b>Checking the Switching Power Supply (LNK304) on a Fan Control Board</b> — the 220 VAC → 5 VDC stage that powers the control circuit, with a real "fan won\'t turn on, buttons dead" case and how to trace the fault (PDF)',

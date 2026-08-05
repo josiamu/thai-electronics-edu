@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="ซ่อมภาคจ่ายไฟสวิตชิ่ง (LNK304) | สื่อการเรียนการสอน" data-title-en="Switching PSU Repair (LNK304) | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ซ่อมภาคจ่ายไฟสวิตชิ่ง (LNK304) | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.smps-parts-tbl td.hi { font-weight:700; color:var(--primary-dark); white-space:nowrap; }
+.smps-fault { border:1px solid var(--border); border-radius:12px; padding:1rem 1.15rem; margin:0 0 1rem; border-left-width:5px; border-left-style:solid; }
+.smps-fault:last-child { margin-bottom:0; }
+.smps-fault-title { font-weight:700; margin-bottom:.4rem; display:block; }
+.smps-stage { background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:.9rem 1rem; margin:0 0 .8rem; border-left:4px solid var(--primary); }
+.smps-stage:last-child { margin-bottom:0; }
+.smps-stage h4 { margin:0 0 .35rem; font-size:.98rem; color:var(--primary-dark); }
+.smps-stage h4 .smps-num { display:inline-block; width:22px; height:22px; line-height:22px; text-align:center; border-radius:50%; background:var(--primary); color:#fff; font-size:.78rem; margin-right:.45rem; }
+.smps-stage p { margin:0 0 .35rem; font-size:.9rem; }
+.smps-stage p:last-child { margin-bottom:0; }
+.smps-chip { display:inline-block; background:var(--card); border:1px solid var(--border); border-radius:999px; padding:.1rem .55rem; font-size:.78rem; font-weight:700; color:var(--primary-dark); margin:.15rem .25rem .15rem 0; }
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🔌</div>
+    <div>
+      <h1 class="th-only">ซ่อมภาคจ่ายไฟสวิตชิ่ง (LNK304)</h1>
+      <h1 class="en-only">Switching Power Supply Repair (LNK304)</h1>
+      <p class="th-only">วงจร 220VAC → 5VDC บนแผงพัดลมดิจิทัล • บัคคอนเวอร์เตอร์แบบไม่แยกกราวด์ • คลินิกอาการเสีย • กฎความปลอดภัย</p>
+      <p class="en-only">220VAC → 5VDC on a digital fan board • Non-isolated buck converter • Fault clinic • Safety rules</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="card" style="border-left:4px solid #dc2626; display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+    <div style="font-size:1.6rem;">⚠️</div>
+    <div style="flex:1; min-width:220px;">
+      <strong class="th-only">วงจรนี้ "ไม่แยกกราวด์" และมีไฟ 310V DC อยู่บนบอร์ด</strong>
+      <strong class="en-only">This circuit is NON-isolated and carries 310V DC on the board</strong><br>
+      <span class="th-only">แม้แต่ฝั่ง 5V ก็มีไฟบ้านถึงตัว — อ่านหัวข้อความปลอดภัยท้ายบทก่อนแตะบอร์ดจริงเสมอ</span>
+      <span class="en-only">Even the 5V side is referenced to the mains — read the safety section at the end before touching a real board</span>
+    </div>
+    <a class="btn btn-green" href="downloads.html?cat=repair&amp;file=pdf%2Fworkshop%2F%E0%B8%95%E0%B8%A3%E0%B8%A7%E0%B8%88%E0%B9%80%E0%B8%8A%E0%B9%87%E0%B8%84_%E0%B8%A7%E0%B8%87%E0%B8%88%E0%B8%A3%E0%B8%A0%E0%B8%B2%E0%B8%84%E0%B8%88%E0%B9%88%E0%B8%B2%E0%B8%A2%E0%B9%84%E0%B8%9F%E0%B8%AA%E0%B8%A7%E0%B8%B4%E0%B8%95%E0%B8%8A%E0%B8%B4%E0%B9%88%E0%B8%87.pdf"><span class="th-only">เปิดหน้าดาวน์โหลด →</span><span class="en-only">Open Downloads →</span></a>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">วัตถุประสงค์การเรียนรู้</span><span class="en-only">Learning Objectives</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li>บอกได้ว่าทำไมเครื่องใช้ไฟฟ้ารุ่นใหม่จึงเปลี่ยนจากวงจรลดแรงดันแบบ C-Drop มาใช้ภาคจ่ายไฟสวิตชิ่ง</li>
+        <li>ไล่ลำดับการทำงาน 5 ภาคของวงจร LNK304 ตั้งแต่ไฟบ้าน 220V จนได้ไฟ 5V เลี้ยง MCU</li>
+        <li>ระบุอะไหล่ผู้ต้องสงสัยจากอาการเสียของพัดลมได้ และวัดยืนยันด้วยมัลติมิเตอร์</li>
+        <li>อธิบายอันตรายของวงจรแบบไม่แยกกราวด์ (Non-Isolated) และปฏิบัติตามกฎความปลอดภัยได้</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>Explain why modern appliances moved from a C-Drop supply to a switching supply</li>
+        <li>Follow all 5 stages of the LNK304 circuit, from 220V mains to the 5V that powers the MCU</li>
+        <li>Name the likely faulty part from the fan's symptom and confirm it with a multimeter</li>
+        <li>Explain the danger of a non-isolated supply and work to the safety rules</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 1. ทำไมเลิกใช้ C-Drop -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ทำไมพัดลมยุคใหม่ถึงเลิกใช้ C-Drop?</span><span class="en-only">Why Modern Fans Dropped the C-Drop Supply</span></div>
+    <div class="card">
+      <p class="th-only">ในพัดลมดิจิทัลรุ่นเก่า เราจะคุ้นเคยกับวงจรลดแรงดันแบบ <strong>C-Drop (Capacitive Dropper)</strong> ซึ่งใช้คาปาซิเตอร์เป็นตัวจำกัดกระแส ข้อเสียคือจ่ายกระแสได้น้อยและแรงดันไฟไม่ค่อยนิ่ง แต่ในพัดลมรุ่นใหม่ๆ (เช่น พัดลมทาวเวอร์ พัดลมไอน้ำ หรือรุ่นที่มีรีโมท) จะเปลี่ยนมาใช้ <strong>ภาคจ่ายไฟสวิตชิ่ง (Switching Power Supply)</strong> โดยใช้ไอซีตระกูล <strong>LNK304</strong> เป็นหัวใจหลัก</p>
+      <p class="en-only">Older digital fans used a <strong>C-Drop (capacitive dropper)</strong> supply, where a capacitor limits the current. It delivers little current and its output sags easily. Newer fans (tower fans, misting fans, anything with a remote) switched to a <strong>switching power supply</strong> built around the <strong>LNK304</strong> IC.</p>
+      <p class="th-only">วงจรนี้ถูกออกแบบมาในรูปแบบ <strong>Non-Isolated Buck Converter</strong> (วงจรลดแรงดันแบบเชื่อมต่อกราวด์ตรง) ซึ่งมีข้อดีคือ:</p>
+      <p class="en-only">It is built as a <strong>non-isolated buck converter</strong> (the output ground is tied straight to the mains), which gives these advantages:</p>
+      <div class="table-scroll" style="overflow-x:auto;">
+      <table>
+        <thead><tr>
+          <th><span class="th-only">หัวข้อ</span><span class="en-only">Aspect</span></th>
+          <th><span class="th-only">C-Drop (รุ่นเก่า)</span><span class="en-only">C-Drop (older)</span></th>
+          <th><span class="th-only">สวิตชิ่ง LNK304 (รุ่นใหม่)</span><span class="en-only">LNK304 switching (newer)</span></th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="th-only">กระแสที่จ่ายได้</span><span class="en-only">Available current</span></td>
+            <td><span class="th-only">น้อย — พอเลี้ยงวงจรเล็กๆ</span><span class="en-only">Low — only small loads</span></td>
+            <td class="hi"><span class="th-only">จ่ายไฟ 5V ให้ MCU ได้เสถียรมาก</span><span class="en-only">Feeds the MCU's 5V rail very stably</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">ความนิ่งของแรงดัน</span><span class="en-only">Regulation</span></td>
+            <td><span class="th-only">ไม่ค่อยนิ่ง แกว่งตามโหลด</span><span class="en-only">Poor, sags with load</span></td>
+            <td class="hi"><span class="th-only">มีภาคป้อนกลับคุมแรงดันตลอดเวลา</span><span class="en-only">A feedback loop holds it steady</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">ขนาด/น้ำหนัก</span><span class="en-only">Size / weight</span></td>
+            <td><span class="th-only">เล็ก แต่ต้องใช้ C แรงดันสูงตัวใหญ่</span><span class="en-only">Small, but needs a bulky high-voltage cap</span></td>
+            <td class="hi"><span class="th-only">เล็ก เบา ไม่ต้องใช้หม้อแปลงเหล็กตัวใหญ่</span><span class="en-only">Small and light, no bulky iron transformer</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">ทนไฟตก–ไฟกระชาก</span><span class="en-only">Sag / surge tolerance</span></td>
+            <td><span class="th-only">อ่อนไหว</span><span class="en-only">Sensitive</span></td>
+            <td class="hi"><span class="th-only">ทนทานกว่า</span><span class="en-only">More robust</span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="warn-box" style="margin-top:1rem">
+        <strong class="th-only">⚠ ข้อแลกเปลี่ยนที่ต้องจำ</strong><strong class="en-only">⚠ The trade-off to remember</strong>
+        <p class="th-only" style="margin:.4rem 0 0">ทั้ง C-Drop และบัคคอนเวอร์เตอร์ตัวนี้ <strong>ไม่มีหม้อแปลงแยกกราวด์</strong> ทั้งคู่ ฉะนั้นฝั่ง 5V ไม่ได้ "ปลอดภัย" อย่างที่หน้าตาบอก — ดูหัวข้อความปลอดภัยท้ายบท</p>
+        <p class="en-only" style="margin:.4rem 0 0">Neither the C-Drop nor this buck converter has an isolating transformer, so the 5V side is <strong>not</strong> as safe as it looks — see the safety section at the end.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. ภาพรวมวงจร -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ภาพรวมวงจร — ไล่จากปลั๊กถึงขา MCU</span><span class="en-only">Circuit Overview — From Plug to MCU Pin</span></div>
+    <div class="card">
+      <p class="th-only">วงจรทั้งหมดแบ่งได้เป็น 5 ภาค ไล่จากซ้ายไปขวา แรงดันจะถูกแปลง 3 ครั้ง: 220V สลับ → 310V ตรง → สับด้วยความถี่สูง → 5V ตรง</p>
+      <p class="en-only">The circuit splits into 5 stages, left to right. The voltage is converted three times: 220V AC → 310V DC → chopped at high frequency → 5V DC.</p>
+
+      <div style="text-align:center; margin-top:1rem;">
+        <svg viewBox="0 0 900 320" style="max-width:100%;height:auto;font-family:inherit;font-size:11px;" role="img"
+             aria-label="LNK304 switching power supply block diagram">
+          <defs>
+            <marker id="sp-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0,1 L9,5 L0,9 z" fill="var(--primary)"/>
+            </marker>
+            <marker id="sp-b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0,1 L9,5 L0,9 z" fill="var(--secondary)"/>
+            </marker>
+          </defs>
+
+          <!-- mains in -->
+          <text class="th-only" x="16" y="86" fill="#dc2626" font-weight="700" font-size="13">220V AC</text>
+          <text class="en-only" x="16" y="86" fill="#dc2626" font-weight="700" font-size="13">220V AC</text>
+          <text x="16" y="102" fill="var(--text-light)">L / N</text>
+          <line x1="76" y1="110" x2="110" y2="110" stroke="var(--primary)" stroke-width="2" marker-end="url(#sp-a)"/>
+
+          <!-- stage 1 -->
+          <rect x="110" y="60" width="150" height="100" rx="12" fill="var(--bg)" stroke="var(--border)" stroke-width="1.5"/>
+          <circle cx="128" cy="78" r="10" fill="var(--primary)"/><text x="128" y="82" text-anchor="middle" fill="#fff" font-weight="700">1</text>
+          <text class="th-only" x="146" y="82" fill="var(--primary-dark)" font-weight="700">อินพุต + เรียงกระแส</text>
+          <text class="en-only" x="146" y="82" fill="var(--primary-dark)" font-weight="700">Input + rectifier</text>
+          <text x="126" y="106" fill="var(--text)">NTC 12D-9</text>
+          <text x="126" y="124" fill="var(--text)">D1 (half-wave)</text>
+          <text class="th-only" x="126" y="144" fill="var(--text-light)">กันไฟกระชาก + แปลงเป็น DC</text>
+          <text class="en-only" x="126" y="144" fill="var(--text-light)">inrush guard + AC→DC</text>
+          <line x1="260" y1="110" x2="292" y2="110" stroke="var(--primary)" stroke-width="2" marker-end="url(#sp-a)"/>
+
+          <!-- stage 2 -->
+          <rect x="292" y="60" width="150" height="100" rx="12" fill="var(--bg)" stroke="var(--border)" stroke-width="1.5"/>
+          <circle cx="310" cy="78" r="10" fill="var(--primary)"/><text x="310" y="82" text-anchor="middle" fill="#fff" font-weight="700">2</text>
+          <text class="th-only" x="328" y="82" fill="var(--primary-dark)" font-weight="700">กรอง Pi-Filter</text>
+          <text class="en-only" x="328" y="82" fill="var(--primary-dark)" font-weight="700">Pi filter</text>
+          <text x="308" y="106" fill="var(--text)">C 4.7µF — L 1mH — C 1µF</text>
+          <text class="th-only" x="308" y="126" fill="var(--text-light)">กรองให้เรียบไร้รอยหยัก</text>
+          <text class="en-only" x="308" y="126" fill="var(--text-light)">smooths out the ripple</text>
+          <text x="308" y="146" fill="#dc2626" font-weight="700">≈ 310V DC</text>
+          <line x1="442" y1="110" x2="474" y2="110" stroke="var(--primary)" stroke-width="2" marker-end="url(#sp-a)"/>
+
+          <!-- stage 3 -->
+          <rect x="474" y="60" width="150" height="100" rx="12" fill="var(--bg)" stroke="var(--primary)" stroke-width="2"/>
+          <circle cx="492" cy="78" r="10" fill="var(--primary)"/><text x="492" y="82" text-anchor="middle" fill="#fff" font-weight="700">3</text>
+          <text x="510" y="82" fill="var(--primary-dark)" font-weight="700">LNK304</text>
+          <text class="th-only" x="490" y="106" fill="var(--text)">สับสวิตช์ความถี่สูง (D–S)</text>
+          <text class="en-only" x="490" y="106" fill="var(--text)">high-freq chopper (D–S)</text>
+          <text x="490" y="126" fill="var(--text)">BP: C 0.1µF</text>
+          <text x="490" y="146" fill="var(--text)">FB: <tspan class="th-only">ขารับค่าป้อนกลับ</tspan><tspan class="en-only">feedback input</tspan></text>
+          <line x1="624" y1="110" x2="656" y2="110" stroke="var(--primary)" stroke-width="2" marker-end="url(#sp-a)"/>
+
+          <!-- stage 4 -->
+          <rect x="656" y="60" width="160" height="100" rx="12" fill="var(--bg)" stroke="var(--border)" stroke-width="1.5"/>
+          <circle cx="674" cy="78" r="10" fill="var(--primary)"/><text x="674" y="82" text-anchor="middle" fill="#fff" font-weight="700">4</text>
+          <text class="th-only" x="692" y="82" fill="var(--primary-dark)" font-weight="700">ภาคขาออกบัค</text>
+          <text class="en-only" x="692" y="82" fill="var(--primary-dark)" font-weight="700">Buck output</text>
+          <text x="672" y="106" fill="var(--text)">L 1mH + D2</text>
+          <text x="672" y="126" fill="var(--text)">ZD <tspan class="th-only">ขลิบแรงดัน</tspan><tspan class="en-only">clamp</tspan></text>
+          <text x="672" y="146" fill="var(--secondary)" font-weight="700">= 5V DC</text>
+
+          <!-- output -->
+          <line x1="816" y1="110" x2="852" y2="110" stroke="var(--secondary)" stroke-width="2" marker-end="url(#sp-b)"/>
+          <text x="884" y="100" text-anchor="end" fill="var(--secondary)" font-weight="700" font-size="13">5V</text>
+          <text x="884" y="118" text-anchor="end" fill="var(--text-light)">MCU</text>
+
+          <!-- stage 5: feedback -->
+          <rect x="474" y="220" width="342" height="66" rx="12" fill="var(--bg)" stroke="var(--secondary)" stroke-width="1.5"/>
+          <circle cx="492" cy="240" r="10" fill="var(--secondary)"/><text x="492" y="244" text-anchor="middle" fill="#fff" font-weight="700">5</text>
+          <text class="th-only" x="510" y="244" fill="var(--secondary)" font-weight="700">ภาคป้อนกลับ (Feedback) — R 4.3K + R 2K + D3</text>
+          <text class="en-only" x="510" y="244" fill="var(--secondary)" font-weight="700">Feedback loop — R 4.3K + R 2K + D3</text>
+          <text class="th-only" x="492" y="268" fill="var(--text-light)">คอยวัดไฟ 5V ขาออก แล้วรายงานกลับที่ขา FB</text>
+          <text class="en-only" x="492" y="268" fill="var(--text-light)">watches the 5V output and reports back to the FB pin</text>
+
+          <path d="M840,130 V253 H824" fill="none" stroke="var(--secondary)" stroke-width="2" marker-end="url(#sp-b)"/>
+          <path d="M474,253 H452 V150" fill="none" stroke="var(--secondary)" stroke-width="2" marker-end="url(#sp-b)"/>
+          <text class="th-only" x="446" y="196" text-anchor="end" fill="var(--secondary)" font-size="10">แก้ไขรอบสวิตช์</text>
+          <text class="en-only" x="446" y="196" text-anchor="end" fill="var(--secondary)" font-size="10">adjusts duty</text>
+        </svg>
+        <p class="th-only" style="font-size:.85rem;color:var(--text-light);margin-top:.4rem">ค่าอุปกรณ์อ้างอิงจากแผงวงจรพัดลมตัวอย่างในใบความรู้ — รุ่นอื่นค่าอาจต่างกันเล็กน้อยแต่โครงสร้าง 5 ภาคเหมือนกัน</p>
+        <p class="en-only" style="font-size:.85rem;color:var(--text-light);margin-top:.4rem">Values are from the example fan board in the worksheet — other models vary slightly, but the 5-stage structure is the same</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. เจาะลึก 5 ภาค -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">เจาะลึกการทำงาน 5 ภาคส่วน</span><span class="en-only">The 5 Stages in Detail</span></div>
+    <div class="card">
+
+      <div class="smps-stage">
+        <h4><span class="smps-num">1</span><span class="th-only">ภาคอินพุตและเรียงกระแส (Input &amp; Rectification)</span><span class="en-only">Input &amp; Rectification</span></h4>
+        <p><span class="smps-chip">NTC 12D-9</span><span class="smps-chip">D1</span></p>
+        <p class="th-only"><strong>NTC (เทอร์มิสเตอร์):</strong> ตัวต้านทานแบบพิเศษที่ทำหน้าที่เป็น "กันชน" ลดกระแสไฟกระชาก (Inrush Current) ในเสี้ยววินาทีแรกที่เสียบปลั๊ก ป้องกันไม่ให้ไดโอดและไอซีช็อตระเบิด</p>
+        <p class="en-only"><strong>NTC thermistor:</strong> a "shock absorber" that limits the inrush current in the first instant the plug goes in, keeping the diode and the IC from blowing.</p>
+        <p class="th-only"><strong>D1 (ไดโอดเรียงกระแสครึ่งคลื่น):</strong> แปลงไฟสลับ 220V ให้กลายเป็นไฟตรง — วงจรนี้ใช้ไดโอดตัวเดียว ไม่ได้ใช้บริดจ์ 4 ตัวเหมือนแหล่งจ่ายไฟทั่วไป</p>
+        <p class="en-only"><strong>D1 (half-wave rectifier):</strong> turns the 220V AC into DC — this design uses a single diode, not a 4-diode bridge.</p>
+      </div>
+
+      <div class="smps-stage">
+        <h4><span class="smps-num">2</span><span class="th-only">ภาคกรองกระแสแรงดันสูง (Pi-Filter)</span><span class="en-only">High-Voltage Filter (Pi Filter)</span></h4>
+        <p><span class="smps-chip">C 4.7µF</span><span class="smps-chip">L 1mH</span><span class="smps-chip">C 1µF</span></p>
+        <p class="th-only">อุปกรณ์สามตัวเรียงเป็นรูปตัวอักษร <strong>π</strong> (คาปา–ตัวเหนี่ยวนำ–คาปา) จึงเรียกว่า Pi-Filter ทำหน้าที่กรองไฟ DC ให้เรียบกริบไร้รอยหยัก</p>
+        <p class="en-only">Three parts arranged like the letter <strong>π</strong> (cap–inductor–cap), hence "Pi filter". It smooths the DC until the ripple is gone.</p>
+        <p class="th-only"><strong>จุดวัดสำคัญ:</strong> แรงดันตกคร่อมที่จุดนี้จะพุ่งสูงถึง <strong>ประมาณ 310V DC</strong> (มาจาก 220 × √2) เพื่อเตรียมส่งเข้าไอซี — ถ้าวัดแล้วไม่มี 310V ให้ย้อนกลับไปดูภาคที่ 1</p>
+        <p class="en-only"><strong>Key test point:</strong> the voltage here climbs to about <strong>310V DC</strong> (220 × √2) ready for the IC. No 310V here means the fault is back in stage 1.</p>
+      </div>
+
+      <div class="smps-stage">
+        <h4><span class="smps-num">3</span><span class="th-only">ภาคสวิตชิ่ง (Switching Control IC)</span><span class="en-only">Switching Control IC</span></h4>
+        <p><span class="smps-chip">LNK304</span><span class="smps-chip">C 0.1µF (BP)</span></p>
+        <p class="th-only"><strong>LNK304</strong> คือสมองกลของภาคจ่ายไฟ ทำหน้าที่สับสวิตช์เปิด-ปิดด้วยความถี่สูงมากๆ (ผ่านขา <strong>D</strong> และ <strong>S</strong>) เพื่อ "ซอย" แรงดัน 310V ให้ลดลง</p>
+        <p class="en-only"><strong>LNK304</strong> is the brain of the supply. It switches on and off at very high frequency (through pins <strong>D</strong> and <strong>S</strong>) to chop the 310V down.</p>
+        <p class="th-only"><strong>C 0.1µF คร่อมขา BP:</strong> เป็นตัวเก็บประจุ Bypass ทำหน้าที่กรองไฟเลี้ยงย่อยให้วงจรภายในตัว LNK304 ทำงานได้นิ่ง — <strong>หาก C ตัวนี้เสื่อมหรือค่าแห้ง ไอซีจะไม่ยอมทำงานเลย</strong></p>
+        <p class="en-only"><strong>C 0.1µF on the BP pin:</strong> a bypass capacitor that steadies the LNK304's own internal supply — <strong>if it dries out, the IC simply refuses to run</strong>.</p>
+      </div>
+
+      <div class="smps-stage">
+        <h4><span class="smps-num">4</span><span class="th-only">ภาคแปลงแรงดันขาออก (Buck Output Stage)</span><span class="en-only">Buck Output Stage</span></h4>
+        <p><span class="smps-chip">L 1mH</span><span class="smps-chip">D2</span><span class="smps-chip">ZD</span></p>
+        <p class="th-only"><strong>L 1mH (ตัวขวา) และไดโอด D2</strong> คือหัวใจของการแปลงไฟลงมาเหลือ 5V ทำงานสลับกันเป็นจังหวะ:</p>
+        <p class="en-only"><strong>The right-hand 1mH inductor and diode D2</strong> are what actually bring the voltage down to 5V, working in alternating strokes:</p>
+        <ul class="content-list th-only" style="margin:.4rem 0">
+          <li><strong>จังหวะไอซีทำงาน (ON):</strong> ไฟวิ่งผ่านโหลด ผ่าน L 1mH เกิดการสะสมพลังงานแม่เหล็กในตัวเหนี่ยวนำ</li>
+          <li><strong>จังหวะไอซีหยุด (OFF):</strong> พลังงานที่ค้างใน L จะยุบตัวและไหลวนต่อเนื่องผ่านไดโอด D2 ทำให้ไฟเลี้ยง 5V ไม่ขาดช่วง</li>
+        </ul>
+        <ul class="content-list en-only" style="margin:.4rem 0">
+          <li><strong>IC ON:</strong> current flows through the load and the 1mH inductor, storing energy in its magnetic field</li>
+          <li><strong>IC OFF:</strong> that stored energy collapses and keeps circulating through diode D2, so the 5V rail never drops out</li>
+        </ul>
+        <p class="th-only"><strong>ZD (ซีเนอร์ไดโอด):</strong> ทำหน้าที่เป็นตำรวจจราจร คอยขลิบแรงดัน (Clamp) ป้องกันไม่ให้ไฟกระชากเกิน 5V ไปทำลาย MCU จนช็อตทะลุ</p>
+        <p class="en-only"><strong>ZD (zener):</strong> the traffic cop — it clamps the rail so a spike above 5V can't punch through and destroy the MCU.</p>
+      </div>
+
+      <div class="smps-stage" style="border-left-color:var(--secondary)">
+        <h4><span class="smps-num" style="background:var(--secondary)">5</span><span class="th-only">ภาคป้อนกลับ (Feedback Loop)</span><span class="en-only">Feedback Loop</span></h4>
+        <p><span class="smps-chip">R 4.3K</span><span class="smps-chip">R 2K</span><span class="smps-chip">D3</span></p>
+        <p class="th-only">ทำหน้าที่เป็น "สายสืบ" คอยวัดแรงดัน 5V ขาออก แล้วส่งสัญญาณกลับไปรายงานที่ขา <strong>FB</strong> ของไอซี LNK304</p>
+        <p class="en-only">This is the "informant": it senses the 5V output and reports it back to the LNK304's <strong>FB</strong> pin.</p>
+        <p class="th-only"><strong>การทำงาน:</strong> ถ้าไฟ 5V ตกลง ไอซีจะเร่งสวิตช์ให้แรงขึ้น / ถ้าไฟ 5V เกิน ไอซีจะลดรอบการทำงานลง ทำให้ไฟเลี้ยงพัดลมนิ่งตลอดเวลา</p>
+        <p class="en-only"><strong>How it works:</strong> if the 5V sags the IC switches harder; if it overshoots the IC backs off. That is what keeps the rail rock steady.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 4. คลินิกช่าง -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">คลินิกช่าง — ชี้เป้าอาการเสียยอดฮิตในวงจร LNK304</span><span class="en-only">Repair Clinic — Common LNK304 Failures</span></div>
+    <div class="card">
+      <p class="th-only">⚠️ ทุกขั้นตอนการวัดความต้านทานต้อง <strong>ถอดปลั๊กและคายประจุคาปาแรงสูงก่อนเสมอ</strong></p>
+      <p class="en-only">⚠️ Every resistance measurement below must be done <strong>unplugged, with the high-voltage caps discharged first</strong>.</p>
+
+      <div class="smps-fault" style="border-left-color:#dc2626;">
+        <span class="smps-fault-title th-only">🔴 อาการที่ 1: เปิดไม่ติด เงียบสนิท (วัดไฟ 310V ไม่มา)</span>
+        <span class="smps-fault-title en-only">🔴 Symptom 1: Dead silent, no 310V present</span>
+        <p class="th-only" style="margin:0"><strong>อะไหล่ผู้ต้องสงสัย:</strong> NTC (12D-9) และ D1</p>
+        <p class="en-only" style="margin:0"><strong>Suspects:</strong> the NTC (12D-9) and D1</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>วิธีตรวจ:</strong> วัด NTC ด้วยย่านโอห์ม ถ้าค่ายืดผิดปกติหรือขาด (อ่านได้ OL) แสดงว่ามีไฟกระชากอย่างหนักหรือเสียบไฟผิด แล้วจึงไล่วัด D1 ต่อว่ายังเรียงกระแสได้อยู่ไหม</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>How to check:</strong> measure the NTC on ohms. A wildly drifted or open (OL) reading means a heavy surge or the wrong supply was applied. Then check D1 still rectifies.</p>
+      </div>
+
+      <div class="smps-fault" style="border-left-color:#dc2626;">
+        <span class="smps-fault-title th-only">🔴 อาการที่ 2: เปิดไม่ติด + ไอซีระเบิดดำ (ไฟหน้าจอไม่ติด)</span>
+        <span class="smps-fault-title en-only">🔴 Symptom 2: Dead, with a charred IC (display never lights)</span>
+        <p class="th-only" style="margin:0"><strong>อะไหล่ผู้ต้องสงสัย:</strong> LNK304 ช็อตทะลุ</p>
+        <p class="en-only" style="margin:0"><strong>Suspect:</strong> the LNK304 has shorted through</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>วิธีตรวจ:</strong> ตั้งมิเตอร์ย่านเสียงปี๊บ (continuity) วัดคร่อมขา <strong>D</strong> และ <strong>S</strong> ถ้ามิเตอร์ร้องปี๊บยาวหรืออ่านได้ 0 Ω แปลว่าไอซีช็อตทะลุ — <strong>เปลี่ยนคู่กับ D1 เสมอ</strong> เพราะเมื่อไอซีช็อต กระแสมหาศาลจะวิ่งผ่าน D1 จนเสียตามไปด้วย</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>How to check:</strong> set the meter to continuity and probe across pins <strong>D</strong> and <strong>S</strong>. A long beep or 0 Ω means the IC has shorted — <strong>always replace it together with D1</strong>, because the surge that kills the IC usually takes D1 with it.</p>
+      </div>
+
+      <div class="smps-fault" style="border-left-color:#f59e0b;">
+        <span class="smps-fault-title th-only">🟠 อาการที่ 3: พัดลมติดๆ ดับๆ (ไฟหน้าจอกระพริบ รีเลย์ดังรัวๆ)</span>
+        <span class="smps-fault-title en-only">🟠 Symptom 3: Fan cuts in and out (display flickers, relay chatters)</span>
+        <p class="th-only" style="margin:0"><strong>อะไหล่ผู้ต้องสงสัย:</strong> C 4.7µF และ C 1µF ในภาค Pi-Filter</p>
+        <p class="en-only" style="margin:0"><strong>Suspects:</strong> C 4.7µF and C 1µF in the Pi filter</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>วิเคราะห์:</strong> คาปาซิเตอร์ฟิลเตอร์แรงดันสูง "ค่าแห้ง" ทำให้ไฟ 310V ไม่เรียบ ไอซี LNK304 จึงทำงานผิดพลาดและรีสตาร์ทตัวเองตลอดเวลา อาการรีเลย์ดังรัวๆ คือ MCU ถูกตัดไฟแล้วบูตใหม่ซ้ำๆ</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Analysis:</strong> the high-voltage filter caps have dried out, so the 310V rail is no longer smooth. The LNK304 misfires and keeps restarting itself — the chattering relay is the MCU losing power and rebooting over and over.</p>
+      </div>
+
+      <div class="smps-fault" style="border-left-color:#eab308;">
+        <span class="smps-fault-title th-only">🟡 อาการที่ 4: ไฟไม่เข้า แต่ LNK304 ไม่ช็อต</span>
+        <span class="smps-fault-title en-only">🟡 Symptom 4: No output, yet the LNK304 is not shorted</span>
+        <p class="th-only" style="margin:0"><strong>อะไหล่ผู้ต้องสงสัย:</strong> C 0.1µF ที่ขา BP หรือ D2</p>
+        <p class="en-only" style="margin:0"><strong>Suspects:</strong> the 0.1µF cap on the BP pin, or D2</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>วิเคราะห์:</strong> ถ้า C ที่ขา BP แห้ง ไอซีจะไม่มีไฟเลี้ยงตัวเองจึงไม่ยอมเริ่มทำงาน หรือถ้า D2 ขาด/ช็อต วงจรก็ไม่สามารถสร้างแรงดัน 5V ออกมาได้ ทั้งที่ตัวไอซียังดีอยู่</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Analysis:</strong> a dried-out BP capacitor leaves the IC without its own housekeeping supply, so it never starts. Or if D2 is open/shorted the circuit cannot build the 5V rail at all, even with a perfectly good IC.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. ความปลอดภัย Non-isolated -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">เคล็ดวิชาช่าง — กฎความปลอดภัย "วงจรไม่แยกกราวด์"</span><span class="en-only">Pro Tip — The Non-Isolated Safety Rule</span></div>
+    <div class="card">
+      <p class="th-only">ช่างมือใหม่ที่เคยซ่อมแต่บอร์ดทีวีหรือเครื่องเสียง มักจะชินกับวงจรที่มี <strong>หม้อแปลงสวิตชิ่ง</strong> ซึ่งทำหน้าที่แยกกราวด์ไฟแรงสูง (Hot) ออกจากกราวด์ไฟต่ำ (Cold) ทำให้จับฝั่งไฟต่ำได้โดยไม่โดนดูด</p>
+      <p class="en-only">Technicians who cut their teeth on TV or audio boards get used to a <strong>switching transformer</strong> separating the hot ground from the cold ground, so the low-voltage side is safe to touch.</p>
+
+      <div class="warn-box" style="border-left-color:#dc2626; background:#fef2f2;">
+        <strong class="th-only" style="color:#b91c1c">🚨 แต่บอร์ดพัดลมที่ใช้ LNK304 เป็นวงจรแบบ Non-Isolated (ไม่แยกกราวด์)</strong>
+        <strong class="en-only" style="color:#b91c1c">🚨 But an LNK304 fan board is NON-isolated</strong>
+        <p class="th-only" style="margin:.4rem 0 0">ให้สังเกตที่วงจร จะเห็นว่าลายปริ้นท์เส้นล่าง (N) ของไฟบ้าน 220V <strong>ถูกโยงตรงวิ่งทะลุไปเป็นขั้วลบ (GND) ของฝั่ง Output 5V ด้วย</strong> — พูดง่ายๆ คือกราวด์ของ MCU กับสายไฟบ้านเป็นเส้นเดียวกัน</p>
+        <p class="en-only" style="margin:.4rem 0 0">Trace the board and you will see the lower mains track (N) running <strong>straight through to become the negative (GND) of the 5V output</strong> — the MCU ground and the mains wire are literally the same node.</p>
+      </div>
+
+      <ul class="content-list th-only" style="margin-top:1rem">
+        <li><strong>ห้ามใช้มือเปล่าสัมผัสแผงวงจรเด็ดขาด</strong>ในขณะที่เสียบปลั๊กไฟทดสอบ แม้จะเป็นบริเวณฝั่งไฟ 5V หรือขาของ MCU ก็ตาม เพราะไฟบ้าน 220V สามารถวิ่งย้อนมากระตุกมือได้ทุกเมื่อ</li>
+        <li>หากต้องการวัดไฟแบบ <strong>Hot Test</strong> (จ่ายไฟจริงขณะวัด) ต้องใส่รองเท้า ยืนบนพื้นแห้ง วัดด้วยความระมัดระวัง และใช้มือเดียว</li>
+        <li><strong>ห้ามนำออสซิลโลสโคปไปคีบวัดที่บอร์ดตรงๆ เด็ดขาด</strong> เว้นแต่จะจ่ายไฟผ่าน <strong>Isolation Transformer</strong> — ไม่เช่นนั้นไฟ 220V จะวิ่งทะลุสายกราวด์ของสโคป ทำให้เครื่องมือวัดราคาแพงระเบิดพังทันที</li>
+        <li>คายประจุคาปาซิเตอร์แรงสูง (จุด 310V) ก่อนจับบอร์ดทุกครั้ง แม้ถอดปลั๊กแล้วก็ยังมีประจุค้างอยู่</li>
+      </ul>
+      <ul class="content-list en-only" style="margin-top:1rem">
+        <li><strong>Never touch the board bare-handed</strong> while it is plugged in — not even the 5V side or the MCU pins. Mains voltage can find its way back to your hand at any moment.</li>
+        <li>If you must do a <strong>hot test</strong>, wear shoes, stand on a dry floor, work carefully, and keep one hand behind your back.</li>
+        <li><strong>Never clip an oscilloscope straight onto this board</strong> unless it is powered through an <strong>isolation transformer</strong> — otherwise 220V runs down the scope's ground lead and destroys the instrument on the spot.</li>
+        <li>Discharge the high-voltage (310V) capacitors before handling the board; they hold their charge after unplugging.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 6. ทบทวนต่อ -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ทบทวนเพิ่มเติม</span><span class="en-only">Related Lessons</span></div>
+    <div class="card">
+      <p class="th-only" style="margin:0 0 .5rem">🔗 พื้นฐานภาคจ่ายไฟ 4 ขั้น (หม้อแปลง → เรียงกระแส → กรอง → เรกูเลต) อยู่ในบท <a href="power-supply.html"><strong>แหล่งจ่ายไฟ</strong></a> — เทียบให้เห็นว่าแบบลิเนียร์กับสวิตชิ่งต่างกันอย่างไร</p>
+      <p class="en-only" style="margin:0 0 .5rem">🔗 The 4-stage power-supply basics (transformer → rectifier → filter → regulator) are in the <a href="power-supply.html"><strong>Power Supply</strong></a> lesson — compare linear against switching there.</p>
+      <p class="th-only" style="margin:0 0 .5rem">🔗 หลักการเรียงกระแสและไดโอดความถี่สูงอยู่ในบท <a href="diode.html"><strong>ไดโอด</strong></a> (มีห้องแล็บ AC→DC ให้ลองเล่น)</p>
+      <p class="en-only" style="margin:0 0 .5rem">🔗 Rectification and fast diodes are covered in the <a href="diode.html"><strong>Diode</strong></a> lesson (with an interactive AC→DC lab)</p>
+      <p class="th-only" style="margin:0">🔗 บอร์ดที่วงจรนี้ไปเลี้ยง คือแผงควบคุมพัดลม — ดูวงจรมอเตอร์และสวิตช์ความเร็วได้ที่บท <a href="fan-motor.html"><strong>มอเตอร์พัดลมไฟฟ้า</strong></a></p>
+      <p class="en-only" style="margin:0">🔗 The board this supply feeds is the fan controller — see the motor and speed-switch circuit in the <a href="fan-motor.html"><strong>Electric Fan Motor</strong></a> lesson</p>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
+<script>const CURRENT_PAGE='repair-smps';</script>
+<script src="js/nav.js"></script>
+</body>
+</html>

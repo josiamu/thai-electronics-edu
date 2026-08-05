@@ -68,6 +68,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 |---|---|---|
 | มอเตอร์พัดลมไฟฟ้า | Electric Fan Motor | `fan-motor.html` (มีซิมสวิตช์ความเร็วโต้ตอบ) |
 | เตาแม่เหล็กไฟฟ้า | Induction Stove | `induction-stove.html` |
+| ภาคจ่ายไฟสวิตชิ่ง (LNK304) | Switching PSU (LNK304) | `switching-psu.html` |
 
 **งานปฏิบัติ / Practical**
 | ไทย | English | หน้า |
