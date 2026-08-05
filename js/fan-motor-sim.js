@@ -134,14 +134,25 @@
   <g id="fms-wind" class="fms-wind">
     <path d="M754,224 q16,26 0,52"/><path d="M766,216 q20,34 0,68"/><path d="M778,208 q24,42 0,84"/>
   </g>
+
+  <!-- เทอร์โมฟิวส์ (อยู่ในสายนิวทรัลของมอเตอร์ — ฝังมากับขดลวด) -->
+  <g id="fms-fuse" class="fms-fuse">
+    <rect x="598" y="417" width="66" height="26" rx="8"/>
+    <path class="fms-f-ok"  d="M608,430 h46"/>
+    <path class="fms-f-bad" d="M608,430 h13 M641,430 h13"/>
+    <text class="fms-f-ok"  x="631" y="459" text-anchor="middle">${T('เทอร์โมฟิวส์', 'Thermal fuse')}</text>
+    <text class="fms-f-bad" x="631" y="459" text-anchor="middle">${T('เทอร์โมฟิวส์ขาด', 'Fuse blown')}</text>
+  </g>
 </svg>`;
   }
 
   /* ============================================================ */
   const wrap = root.querySelector('#fms-canvas');
-  const btns = [...root.querySelectorAll('.fms-btn')];
-  let cur = 3;
-  let svg, live, dotLayer, rotor, wind, wiper, trains = [];
+  const btns = [...root.querySelectorAll('.fms-btn[data-speed]')];
+  const fuseBtn = root.querySelector('#fms-fuse-btn');
+  let cur = 3, blown = false;
+  let svg, live, dotLayer, rotor, wind, wiper, fuse, trains = [];
+  let eff = SPEEDS[3];
   let t = 0, spin = 0, angle = 0, last = 0;
 
   function render() {
@@ -156,6 +167,7 @@
     rotor = svg.querySelector('#fms-rotor');
     wind = svg.querySelector('#fms-wind');
     wiper = svg.querySelector('#fms-wiper');
+    fuse = svg.querySelector('#fms-fuse');
     apply();
   }
 
@@ -180,42 +192,55 @@
 
   function apply() {
     const s = SPEEDS[cur];
+    /* ฟิวส์ขาด = วงจรเปิดที่สายนิวทรัล → ไม่มีกระแสเลย แต่ยังมีแรงดันค้างอยู่ทั้งเส้นทาง */
+    const dead = blown || cur === 0;
+    eff = dead ? { v: 0, pct: 0, rpm: 0, ohm: s.ohm, flow: 0 } : s;
 
     wiper.setAttribute('d', `M172,160 L200,${PAD_Y[cur]}`);
     live.main.setAttribute('d', MAIN[cur]);
-    live.main.classList.toggle('fms-waiting', cur === 0);
     live.run.setAttribute('d', cur ? RUN : '');
     live.start.setAttribute('d', cur ? START : '');
+    /* เส้นประ = มีไฟแต่กระแสไหลไม่ได้ */
+    [live.main, live.run, live.start].forEach(p => p.classList.toggle('fms-waiting', dead));
+
+    fuse.classList.toggle('fms-blown', blown);
 
     svg.querySelectorAll('.fms-pad').forEach(g =>
       g.classList.toggle('fms-pad-on', +g.dataset.pad === cur));
 
     dotLayer.innerHTML = '';
-    trains = cur
-      ? [train(MAIN[cur], 'var(--fms-amber)'), train(RUN, 'var(--primary)'), train(START, '#dc2626')]
-      : [];
+    trains = dead
+      ? []
+      : [train(MAIN[cur], 'var(--fms-amber)'), train(RUN, 'var(--primary)'), train(START, '#dc2626')];
 
-    wind.style.opacity = cur ? 0.25 + 0.25 * cur : 0;
+    wind.style.opacity = dead ? 0 : 0.25 + 0.25 * cur;
 
     btns.forEach(b => {
       const on = +b.dataset.speed === cur;
       b.classList.toggle('fms-btn-on', on);
       b.setAttribute('aria-pressed', on);
     });
-    root.querySelectorAll('.fms-desc').forEach(d =>
-      d.hidden = +d.dataset.speed !== cur);
+    if (fuseBtn) {
+      fuseBtn.classList.toggle('fms-btn-blown', blown);
+      fuseBtn.setAttribute('aria-pressed', blown);
+      fuseBtn.querySelector('.fms-lbl-ok').hidden = blown;
+      fuseBtn.querySelector('.fms-lbl-bad').hidden = !blown;
+    }
 
-    root.querySelector('#fms-v').textContent = s.v + ' V';
-    root.querySelector('#fms-ohm').textContent = s.ohm;
-    root.querySelector('#fms-rpm').textContent = s.rpm ? s.rpm.toLocaleString() : '0';
-    root.querySelector('#fms-pct').textContent = s.pct + '%';
-    root.querySelector('#fms-fill').style.width = s.pct + '%';
+    root.querySelectorAll('.fms-desc').forEach(d =>
+      d.hidden = d.dataset.speed !== (blown ? 'blown' : String(cur)));
+
+    root.querySelector('#fms-v').textContent = eff.v + ' V';
+    root.querySelector('#fms-ohm').textContent = eff.ohm;
+    root.querySelector('#fms-rpm').textContent = eff.rpm ? eff.rpm.toLocaleString() : '0';
+    root.querySelector('#fms-pct').textContent = eff.pct + '%';
+    root.querySelector('#fms-fill').style.width = eff.pct + '%';
   }
 
   function frame(now) {
     const dt = Math.min(0.05, (now - last) / 1000) || 0;
     last = now;
-    const s = SPEEDS[cur];
+    const s = eff;
 
     t += dt * 120 * s.flow;
     trains.forEach(tr => {
@@ -235,6 +260,7 @@
   }
 
   btns.forEach(b => b.addEventListener('click', () => { cur = +b.dataset.speed; apply(); }));
+  if (fuseBtn) fuseBtn.addEventListener('click', () => { blown = !blown; apply(); });
   document.addEventListener('langchange', render);   /* nav.js ยิงที่ document และไม่ bubble */
 
   render();

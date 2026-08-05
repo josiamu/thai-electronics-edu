@@ -185,7 +185,7 @@ git push
 ├── js/announcements.js     — Home-page "latest news/updates" box (data-driven, dismissible, bilingual)
 ├── js/breadboard.js        — Virtual breadboard lab (MNA solver + transistors + multimeter)
 ├── js/scr-sim.js           — Phase-control dimmer sim (SCR/TRIAC firing angle)
-├── js/fan-motor-sim.js     — Fan speed-switch sim (press 0/1/2/3 → live current path through choke, run & start windings)
+├── js/fan-motor-sim.js     — Fan speed-switch sim (press 0/1/2/3 → live current path through choke, run & start windings + blown-thermal-fuse mode)
 ├── js/relay-lab.js         — MY4 relay control lab (DC nodal solver + power rails + terminal block + ladder view + auto-graded missions + save/share)
 ├── index.html           — Home page
 │   ├── electricity.html / ohm.html                 — Fundamentals

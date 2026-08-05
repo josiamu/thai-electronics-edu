@@ -24,6 +24,20 @@
 .fms-btn:hover { border-color:var(--primary); transform:translateY(-1px); }
 .fms-btn small { display:block; font-size:.66rem; font-weight:500; opacity:.85; }
 .fms-btn-on { background:var(--primary); border-color:var(--primary); color:#fff; box-shadow:0 5px 16px rgba(37,99,235,.32); }
+.fms-btn-fuse { margin-left:.6rem; font-size:.95rem; }
+.fms-btn-fuse:hover { border-color:#dc2626; }
+.fms-btn-blown { background:#dc2626; border-color:#dc2626; color:#fff; box-shadow:0 5px 16px rgba(220,38,38,.32); }
+.fms-fuse rect { fill:var(--bg); stroke:var(--text-light); stroke-width:2; transition:.2s; }
+.fms-fuse path { stroke:var(--text); stroke-width:2.6; stroke-linecap:round; fill:none; }
+.fms-fuse text { font-size:10.5px; font-weight:700; fill:var(--text-light); }
+.fms-fuse .fms-f-bad { display:none; }
+.fms-fuse.fms-blown .fms-f-ok { display:none; }
+.fms-fuse.fms-blown .fms-f-bad { display:block; }
+.fms-fuse.fms-blown rect { fill:#fee2e2; stroke:#dc2626; }
+.fms-fuse.fms-blown path { stroke:#dc2626; }
+.fms-fuse.fms-blown text { fill:#dc2626; }
+.fms-desc-bad { border-left-color:#dc2626; }
+.fms-desc-bad h4 { color:#b91c1c; }
 #fms-canvas svg { width:100%; height:auto; font-family:inherit; }
 .fms-base path { fill:none; stroke:var(--border); stroke-width:6; stroke-linecap:round; stroke-linejoin:round; }
 .fms-coil { fill:none; stroke-width:3; stroke-linecap:round; }
@@ -295,6 +309,10 @@
           <button class="fms-btn" data-speed="1" aria-pressed="false">1<small class="th-only">เบา</small><small class="en-only">low</small></button>
           <button class="fms-btn" data-speed="2" aria-pressed="false">2<small class="th-only">กลาง</small><small class="en-only">med</small></button>
           <button class="fms-btn" data-speed="3" aria-pressed="false">3<small class="th-only">แรงสุด</small><small class="en-only">high</small></button>
+          <button class="fms-btn fms-btn-fuse" id="fms-fuse-btn" aria-pressed="false">
+            <span class="fms-lbl-ok">🔥<small class="th-only">จำลองฟิวส์ขาด</small><small class="en-only">blow fuse</small></span>
+            <span class="fms-lbl-bad" hidden>↺<small class="th-only">ใส่ฟิวส์ใหม่</small><small class="en-only">new fuse</small></span>
+          </button>
         </div>
 
         <div id="fms-canvas"></div>
@@ -347,6 +365,19 @@
           <p class="en-only">Lead 3 taps the choke <strong>right at the end nearest common point C</strong>, so the current bypasses the whole choke (0 Ω) and the motor gets the full 220 V.</p>
           <p class="th-only">เพราะ <strong>กำลังแปรผันตามแรงดันยกกำลังสอง (P ∝ V²)</strong> แรงดันที่มากขึ้นเพียง ~33% จากเบอร์ 1 จึงให้กำลังเกือบสองเท่า สนามแม่เหล็กแรงขึ้น แรงบิดมากขึ้น รอบสูงขึ้น ลมจึงแรงกว่าเบอร์อื่นชัดเจน</p>
           <p class="en-only">Because <strong>power scales with the square of voltage (P ∝ V²)</strong>, roughly 33% more voltage than position 1 gives nearly double the power — stronger field, more torque, higher rpm, and noticeably more airflow.</p>
+        </div>
+
+        <div class="fms-desc fms-desc-bad" data-speed="blown" hidden>
+          <h4 class="th-only">🔥 เทอร์โมฟิวส์ขาด — กดเบอร์ไหนก็ไม่ทำงาน</h4>
+          <h4 class="en-only">🔥 Thermal fuse blown — dead on every position</h4>
+          <p class="th-only">เทอร์โมฟิวส์ฝังอยู่ในกลุ่มขดลวด ต่ออนุกรมอยู่ในเส้นทางไฟฝั่งนิวทรัลของมอเตอร์ พอมันขาด วงจรจึง<strong>เปิดวงจรทั้งวง</strong> — ลองกดเบอร์ 1/2/3 สลับไปมาดูได้ แขนปัดสวิตช์ยังเลื่อนตามปกติ แต่<strong>ไม่มีจุดกระแสวิ่งเลยสักเบอร์</strong> เพราะกระแสไม่มีทางกลับแหล่งจ่าย</p>
+          <p class="en-only">The thermal fuse is buried in the winding bundle, in series with the motor's neutral-side path. Once it opens, the <strong>whole loop is broken</strong> — switch between 1/2/3 and the wiper still moves, but <strong>not a single current dot flows</strong>, because there is no return path to the supply.</p>
+          <p class="th-only">เส้นประสีส้ม/น้ำเงิน/แดงหมายถึงจุดที่ยัง <strong>มีแรงดันค้างอยู่</strong> แต่ไม่มีกระแส — ไฟยังเดินมาถึงขดลวดทุกชุดจนถึงจุดที่ฟิวส์ขาด</p>
+          <p class="en-only">The dashed amber/blue/red lines mark where <strong>voltage is still present</strong> but no current flows — the mains still reaches every winding right up to the break.</p>
+          <p class="th-only"><strong>วิธีตรวจจริง (ถอดปลั๊กก่อน):</strong> วัดความต้านทานจากสายนิวทรัลไปยังคู่สายคาปาซิเตอร์ ปกติต้องได้ราว 0 Ω ถ้าอ่านได้ <strong>OL / อนันต์</strong> แสดงว่าเทอร์โมฟิวส์ขาด (ดูขั้นตอนที่ 1 ในหัวข้อพัดลม 6 สาย)</p>
+          <p class="en-only"><strong>Checking it for real (unplug first):</strong> measure resistance from the neutral lead to the capacitor pair — it should read about 0 Ω. An <strong>OL / infinite</strong> reading means the thermal fuse has opened (see step 1 of the 6-wire section).</p>
+          <p class="th-only" style="color:#b91c1c"><strong>⚠ อย่าลัดข้ามฟิวส์ทิ้ง</strong> — ฟิวส์ขาดแปลว่ามอเตอร์เคยร้อนจัด (ลูกปืนฝืด ใบพัดติดขัด หรือคาปาเสื่อมจนกินกระแสเกิน) ต้องหาสาเหตุก่อนแล้วเปลี่ยนฟิวส์ตัวใหม่พิกัดเดิม ไม่ใช่ต่อข้ามไป ไม่งั้นครั้งหน้าขดลวดจะไหม้แทน</p>
+          <p class="en-only" style="color:#b91c1c"><strong>⚠ Never bypass the fuse</strong> — it opened because the motor overheated (stiff bearings, jammed blade, or a failing capacitor drawing excess current). Find the cause, then fit a new fuse of the same rating. Shorting it out means the winding burns next time instead.</p>
         </div>
 
         <div class="info-box" style="margin-top:1rem">
