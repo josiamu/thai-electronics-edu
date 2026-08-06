@@ -22,29 +22,7 @@
 
 .part-num { font-family:monospace; font-weight:700; color:var(--primary); }
 
-/* Interactive step-by-step: how a BJT works */
-.bs-wrap { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; }
-.bs-tabs { display:grid; grid-template-columns:repeat(auto-fit,minmax(125px,1fr)); gap:.4rem; margin-bottom:.9rem; }
-@media (max-width:700px){ .bs-tabs{ grid-template-columns:repeat(2,1fr); } }
-.bs-tab { display:flex; align-items:center; gap:.45rem; justify-content:center; text-align:center;
-  background:var(--card); border:1px solid var(--border); border-radius:10px; padding:.5rem .5rem;
-  font:inherit; font-size:.82rem; font-weight:600; color:var(--text-light); cursor:pointer; transition:.15s; }
-.bs-tab:hover { border-color:var(--primary); color:var(--text); }
-.bs-tab .bs-n { display:flex; align-items:center; justify-content:center; min-width:22px; height:22px;
-  border-radius:50%; background:var(--border); color:var(--text); font-size:.78rem; font-weight:800; }
-.bs-tab.active { background:var(--primary); border-color:var(--primary); color:#fff; box-shadow:0 2px 8px rgba(37,99,235,.3); }
-.bs-tab.active .bs-n { background:rgba(255,255,255,.28); color:#fff; }
-.bs-canvas { width:100%; height:auto; aspect-ratio:680/320; display:block;
-  background:var(--card); border:1px solid var(--border); border-radius:12px; }
-.bs-nav { display:flex; gap:.5rem; justify-content:center; margin:.75rem 0; }
-.bs-navbtn { background:var(--card); border:1px solid var(--border); border-radius:9px; padding:.4rem .9rem;
-  font:inherit; font-size:.85rem; font-weight:600; color:var(--text); cursor:pointer; transition:.15s; }
-.bs-navbtn:hover { border-color:var(--primary); color:var(--primary); }
-.bs-navbtn.active { background:var(--primary); border-color:var(--primary); color:#fff; }
-.bs-desc { display:none; background:var(--card); border:1px solid var(--border); border-left:4px solid var(--accent);
-  border-radius:12px; padding:.9rem 1.1rem; font-size:.93rem; }
-.bs-desc.active { display:block; }
-.bs-desc p { margin:0; }
+/* Interactive step-by-step (.bs-*) — ย้ายไปอยู่ใน css/style.css แล้ว (ใช้ร่วมกับ switching-psu.html) */
 </style>
 </head>
 <body>

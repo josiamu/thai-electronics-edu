@@ -21,6 +21,13 @@
 .smps-stage p { margin:0 0 .35rem; font-size:.9rem; }
 .smps-stage p:last-child { margin-bottom:0; }
 .smps-chip { display:inline-block; background:var(--card); border:1px solid var(--border); border-radius:999px; padding:.1rem .55rem; font-size:.78rem; font-weight:700; color:var(--primary-dark); margin:.15rem .25rem .15rem 0; }
+.sp-select { background:var(--card); border:1px solid var(--border); border-radius:9px; padding:.4rem .7rem;
+  font-family:inherit; font-size:.85rem; font-weight:600; color:var(--text); cursor:pointer; }
+.sp-select:hover { border-color:var(--primary); }
+.sp-faultnote { display:none; background:#fef2f2; border:1px solid #fecaca; border-left:4px solid #dc2626;
+  border-radius:10px; padding:.6rem .85rem; margin:.75rem 0 0; font-size:.87rem; color:#b91c1c; }
+.sp-faultnote.active { display:block; }
+[data-theme="dark"] .sp-faultnote { background:rgba(220,38,38,.12); border-color:rgba(220,38,38,.35); color:#fca5a5; }
 </style>
 </head>
 <body>
@@ -207,6 +214,141 @@
     </div>
   </div>
 
+  <!-- 2.5 ซิมโต้ตอบทีละขั้น -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">วงจรโต้ตอบ — เดินตามกระแสทีละขั้น</span><span class="en-only">Interactive Circuit — Follow the Current Step by Step</span></div>
+    <div class="card">
+      <p class="th-only" style="margin-bottom:1rem">กดปุ่มขั้นที่ 1–8 เพื่อไล่ดูว่ากระแสวิ่งไปทางไหนในแต่ละจังหวะ และลอง <strong>เลือกอาการเสีย</strong> จากช่องด้านล่างเพื่อดูว่าจุดวัดไหนจะ "ไฟหาย" — ตรงกับคลินิกช่างในหัวข้อถัดไป</p>
+      <p class="en-only" style="margin-bottom:1rem">Use buttons 1–8 to follow where the current goes at each moment, and pick a <strong>fault</strong> from the dropdown to see which test point loses its voltage — these match the repair clinic further down.</p>
+
+      <div class="bs-wrap" id="smps-circuit">
+        <div class="bs-tabs">
+          <button class="bs-tab" data-step="1"><span class="bs-n">1</span><span class="th-only">NTC กันไฟกระชาก</span><span class="en-only">NTC inrush guard</span></button>
+          <button class="bs-tab" data-step="2"><span class="bs-n">2</span><span class="th-only">D1 เรียงกระแส</span><span class="en-only">D1 rectifies</span></button>
+          <button class="bs-tab" data-step="3"><span class="bs-n">3</span><span class="th-only">Pi-Filter → 310V</span><span class="en-only">Pi filter → 310V</span></button>
+          <button class="bs-tab" data-step="4"><span class="bs-n">4</span><span class="th-only">จังหวะ ON</span><span class="en-only">The ON stroke</span></button>
+          <button class="bs-tab" data-step="5"><span class="bs-n">5</span><span class="th-only">จังหวะ OFF</span><span class="en-only">The OFF stroke</span></button>
+          <button class="bs-tab" data-step="6"><span class="bs-n">6</span><span class="th-only">ป้อนกลับที่ขา FB</span><span class="en-only">Feedback at FB</span></button>
+          <button class="bs-tab" data-step="7"><span class="bs-n">7</span><span class="th-only">⚡ ไม่แยกกราวด์</span><span class="en-only">⚡ Non-isolated</span></button>
+          <button class="bs-tab" data-step="8"><span class="bs-n">8</span><span class="th-only">🔧 ไล่วัด 4 จุด</span><span class="en-only">🔧 Probe 4 points</span></button>
+        </div>
+
+        <canvas id="sp-canvas" class="bs-canvas" style="aspect-ratio:940/500;"></canvas>
+
+        <div class="bs-nav" style="flex-wrap:wrap;">
+          <button id="sp-prev" class="bs-navbtn">◀ <span class="th-only">ก่อนหน้า</span><span class="en-only">Prev</span></button>
+          <button id="sp-play" class="bs-navbtn"><span class="th-only">▶ เล่นอัตโนมัติ</span><span class="en-only">▶ Auto-play</span></button>
+          <button id="sp-load" class="bs-navbtn">
+            <span class="sp-lt"><span class="th-only">🔋 โหลด: เบา</span><span class="en-only">🔋 Load: light</span></span>
+            <span class="sp-hv"><span class="th-only">🔋 โหลด: หนัก</span><span class="en-only">🔋 Load: heavy</span></span>
+          </button>
+          <select id="sp-fault" class="sp-select" aria-label="fault mode">
+            <option value="ok">✅ ปกติ — Normal</option>
+            <option value="ntc">🔴 NTC / D1 ขาด — NTC / D1 open</option>
+            <option value="ics">🔴 LNK304 ช็อต D–S — LNK304 shorted D–S</option>
+            <option value="cap">🟠 C ฟิลเตอร์ค่าแห้ง — Filter caps dried out</option>
+            <option value="bp">🟡 C ขา BP แห้ง — BP cap dried out</option>
+            <option value="d2">🟡 D2 ขาด — D2 open</option>
+          </select>
+          <button id="sp-next" class="bs-navbtn"><span class="th-only">ถัดไป</span><span class="en-only">Next</span> ▶</button>
+        </div>
+
+        <div class="sp-faultnote">
+          <span class="th-only">🔧 กำลังจำลองวงจรที่เสียอยู่ — สังเกตป้าย TP1–TP4 บนวงจรว่าไฟไปหายที่จุดไหน แล้วกดขั้นที่ 8 เพื่อดูสรุปการไล่วัด</span>
+          <span class="en-only">🔧 A faulty board is being simulated — watch the TP1–TP4 badges to see where the voltage disappears, then press step 8 for the full probing summary</span>
+        </div>
+
+        <div class="bs-desc" data-step="1">
+          <p class="th-only"><strong>ขั้นที่ 1 — เสี้ยววินาทีแรกที่เสียบปลั๊ก:</strong> ตอนนั้นคาปาซิเตอร์ฟิลเตอร์ยังไม่มีประจุเลย มันจึงมีสภาพเหมือน<strong>ลัดวงจร</strong>ชั่วขณะ กระแสจะพุ่งเข้ามาสูงมาก (Inrush Current)
+            <br><strong>NTC 12D-9</strong> คือตัวรับแรงกระแทกนั้นแทน — ตอนเย็นมันมีความต้านทานราว 12Ω คอยหน่วงกระแสไว้ พอกระแสไหลผ่านสักพักจนตัวมันร้อน ความต้านทานจะลดเหลือไม่ถึง 1Ω แล้วปล่อยไฟผ่านตามปกติ (นี่คือความหมายของ NTC = ร้อนแล้วค่าลด)
+            <br><span style="color:var(--text-light);">ดูกราฟล่าง: เส้นแดงคือกระแสถ้าไม่มี NTC ส่วนเส้นเขียวคือกระแสที่ถูก NTC จำกัดไว้ — นี่คือเหตุผลที่ NTC ขาดแล้วมักลาก D1 พังไปด้วย</span></p>
+          <p class="en-only"><strong>Step 1 — the first instant after plug-in:</strong> the filter capacitors are still completely empty, so momentarily they behave like a <strong>short circuit</strong> and the inrush current is enormous.
+            <br>The <strong>NTC 12D-9</strong> takes that hit. Cold it is about 12Ω, holding the current back; once current warms it up its resistance falls below 1Ω and it lets the supply through (that is what NTC means — hotter, lower resistance).
+            <br><span style="color:var(--text-light);">See the trace below: red is the current without an NTC, green is what the NTC allows. That is why a failed NTC usually takes D1 with it.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="2">
+          <p class="th-only"><strong>ขั้นที่ 2 — D1 ตัดครึ่งคลื่นทิ้ง:</strong> ไฟบ้านเป็นไฟสลับ วิ่งบวก-ลบสลับกัน 50 ครั้งต่อวินาที แต่วงจรอิเล็กทรอนิกส์ต้องการไฟตรง
+            <br><strong>D1 ยอมให้กระแสผ่านทางเดียว</strong> ครึ่งบวกจึงผ่านไปได้ ส่วนครึ่งลบถูกกั้นทิ้งไปเลย — เรียกว่า <strong>เรียงกระแสครึ่งคลื่น (Half-Wave)</strong>
+            <br>วงจรนี้ใช้ไดโอดตัวเดียว ไม่ใช้บริดจ์ 4 ตัว เพราะโหลดกินกระแสน้อยมาก (แค่เลี้ยง MCU) จึงยอมทิ้งครึ่งคลื่นไปได้โดยไม่เดือดร้อน
+            <br><span style="color:var(--text-light);">ผลข้างเคียงคือแรงดันที่ออกมายังเป็นห้วงๆ ไม่ต่อเนื่อง จึงต้องมีภาคกรองในขั้นถัดไป</span></p>
+          <p class="en-only"><strong>Step 2 — D1 throws away half the wave:</strong> the mains alternates positive and negative 50 times a second, but electronics need DC.
+            <br><strong>D1 passes current one way only</strong>, so the positive halves get through and the negative halves are blocked — <strong>half-wave rectification</strong>.
+            <br>A single diode is enough here (no 4-diode bridge) because the load is tiny — just the MCU — so throwing away half the wave costs nothing that matters.
+            <br><span style="color:var(--text-light);">The side effect is that the output still arrives in lumps, which is what the next stage has to fix.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="3">
+          <p class="th-only"><strong>ขั้นที่ 3 — Pi-Filter ทำให้ไฟเรียบ:</strong> C 4.7µF → L 1mH → C 1µF เรียงกันคล้ายตัวอักษรกรีก <strong>π</strong>
+            <br>คาปาตัวแรกทำหน้าที่เหมือนถังพักน้ำ — ชาร์จเต็มตอนยอดคลื่น แล้วค่อยๆ คายออกช่วงที่ไฟขาดหาย ทำให้แรงดันไม่ตกเป็นหลุม ส่วนตัวเหนี่ยวนำกับคาปาตัวที่สองช่วยกันเก็บรอยหยักที่เหลือ (และกันสัญญาณรบกวนความถี่สูงจากการสับสวิตช์ไม่ให้ย้อนออกไปที่สายไฟบ้าน)
+            <br><strong>จุดวัดสำคัญ TP2 = ประมาณ 310V DC</strong> — มาจาก 220 × √2 คือ<strong>ยอด</strong>ของคลื่นไซน์ ไม่ใช่ค่า 220 ที่เป็นค่าประสิทธิผล
+            <br><span style="color:var(--text-light);">ลองเลือกอาการ "C ฟิลเตอร์ค่าแห้ง" ดู แล้วดูกราฟล่าง — ไฟ 310V จะกลับมากระเพื่อมเหมือนไม่มีตัวกรอง นั่นคือสาเหตุที่พัดลมติดๆ ดับๆ</span></p>
+          <p class="en-only"><strong>Step 3 — the Pi filter smooths it out:</strong> C 4.7µF → L 1mH → C 1µF, arranged like the Greek letter <strong>π</strong>.
+            <br>The first capacitor acts as a reservoir — it fills at the crest and drains slowly through the gaps, so the rail never falls into a hole. The inductor and second capacitor mop up what ripple is left (and keep the switching noise from escaping back out onto the mains wiring).
+            <br><strong>Test point TP2 ≈ 310V DC</strong> — that is 220 × √2, the <strong>peak</strong> of the sine wave, not the 220 RMS figure.
+            <br><span style="color:var(--text-light);">Select the "filter caps dried out" fault and watch the trace: the 310V rail ripples as if there were no filter at all. That is exactly what makes the fan cut in and out.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="4">
+          <p class="th-only"><strong>ขั้นที่ 4 — จังหวะ ON (สวิตช์ในไอซีปิด):</strong> ภายใน LNK304 มีมอสเฟตอยู่ระหว่าง<strong>ขา D กับขา S</strong> เมื่อมันปิดวงจร ไฟ 310V จะทะลุจากขา D ออกมาที่ขา S ทันที
+            <br>กระแสวิ่งครบวง: <strong>บัส 310V → ขา D → ขา S → L 1mH → ไฟ 5V → โหลด/C out → กราวด์ → กลับไปที่บัส</strong>
+            <br><strong>สิ่งที่เกิดใน L:</strong> กระแสไม่ได้พุ่งขึ้นทันที เพราะตัวเหนี่ยวนำต้าน<em>การเปลี่ยนแปลง</em>ของกระแส มันจึงค่อยๆ ไต่ขึ้นเป็นเส้นเฉียง พร้อมกับ<strong>สะสมพลังงานไว้ในสนามแม่เหล็ก</strong> ส่วนแรงดันส่วนเกิน (310 − 5 ≈ 305V) ก็ไปตกคร่อมตัว L เอง
+            <br><span style="color:var(--text-light);">ช่วงนี้ไดโอด D2 ถูกไบอัสย้อน จึงกั้นไว้ไม่นำกระแส — สังเกตว่ามันจางอยู่</span></p>
+          <p class="en-only"><strong>Step 4 — the ON stroke (the internal switch closes):</strong> inside the LNK304 sits a MOSFET between <strong>pin D and pin S</strong>. When it closes, the 310V rail appears straight through at pin S.
+            <br>The full loop: <strong>310V bus → pin D → pin S → L 1mH → the 5V rail → load / C out → ground → back to the bus</strong>.
+            <br><strong>What happens in L:</strong> the current cannot jump instantly, because an inductor opposes any <em>change</em> in current. It ramps up as a slope while <strong>storing energy in its magnetic field</strong>, and the surplus voltage (310 − 5 ≈ 305V) is dropped across the inductor itself.
+            <br><span style="color:var(--text-light);">During this stroke D2 is reverse-biased and blocks — notice it is dimmed out.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="5">
+          <p class="th-only"><strong>ขั้นที่ 5 — จังหวะ OFF (สวิตช์เปิด แต่ไฟ 5V ไม่ดับ):</strong> พอมอสเฟตตัดวงจร แหล่งจ่าย 310V ก็ถูกตัดขาดทันที — แต่<strong>กระแสในตัวเหนี่ยวนำหยุดกะทันหันไม่ได้</strong>
+            <br>ตัว L จึงกลับขั้วแรงดันตัวเองเพื่อดันกระแสให้ไหลต่อ และไปดึงขา S ให้ต่ำลงจนต่ำกว่ากราวด์ราว 0.7V ทำให้ <strong>D2 นำกระแส</strong> เกิดวงจรปิดวงเล็กๆ: <strong>L → โหลด → กราวด์ → ผ่าน D2 → กลับเข้า L</strong>
+            <br>นี่คือเหตุผลที่ D2 ถูกเรียกว่า <strong>ไดโอดไหลวน (Freewheel Diode)</strong> — ไฟ 5V จึงต่อเนื่องไม่ขาดช่วงทั้งที่ไอซีสับเปิด-ปิดหลายหมื่นครั้งต่อวินาที
+            <br><span style="color:var(--text-light);">ลองเลือกอาการ "D2 ขาด" ดู — กระแสในขดลวดจะไม่มีทางไป เกิดสไปก์แรงดันสูงและไฟ 5V สร้างไม่ขึ้นเลย</span></p>
+          <p class="en-only"><strong>Step 5 — the OFF stroke (the switch opens, yet 5V survives):</strong> the moment the MOSFET opens, the 310V source is cut away — but <strong>the current in the inductor cannot stop abruptly</strong>.
+            <br>The inductor reverses its own voltage to keep that current going, dragging pin S about 0.7V <em>below</em> ground, which makes <strong>D2 conduct</strong> and completes a small loop: <strong>L → load → ground → through D2 → back into L</strong>.
+            <br>That is why D2 is called the <strong>freewheel diode</strong> — the 5V rail stays unbroken even though the IC is chopping tens of thousands of times a second.
+            <br><span style="color:var(--text-light);">Try the "D2 open" fault: the inductor current has nowhere to go, it spikes, and the 5V rail never builds at all.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="6">
+          <p class="th-only"><strong>ขั้นที่ 6 — ป้อนกลับ: ไอซีรู้ได้ยังไงว่าพอแล้ว?</strong> ตัวแบ่งแรงดัน <strong>R 4.3K + R 2K</strong> คอยหารไฟ 5V ลงมาเป็นแรงดันเล็กๆ ป้อนเข้าขา <strong>FB</strong> เมื่อค่าที่ขา FB ถึงเกณฑ์ (ราว 1.65V) แปลว่าไฟขาออกเต็มแล้ว
+            <br><strong>LNK304 ไม่ได้ปรับความกว้างพัลส์แบบ PWM ทั่วไป แต่ใช้วิธี "ข้ามพัลส์" (ON/OFF Control):</strong> ถ้าไฟยังไม่พอก็สับพัลส์ถัดไป ถ้าพอแล้วก็<strong>ข้ามพัลส์นั้นไปเฉยๆ</strong> — กดปุ่ม "โหลด" สลับเบา/หนักดูกราฟล่าง จะเห็นว่าโหลดหนักไอซีข้ามพัลส์น้อยลง แต่ไฟ 5V นิ่งเท่าเดิมทั้งสองแบบ
+            <br><strong>จุดที่ช่างต้องรู้:</strong> ปลายล่างของตัวแบ่งไม่ได้ลงกราวด์ แต่<strong>กลับไปที่ขา S</strong> เพราะวงจรภายในไอซีทั้งหมดอ้างอิงกับขา S ไอซีจึงอ่านค่า FB เฉพาะ<strong>ช่วง OFF</strong> ซึ่งเป็นจังหวะที่ D2 ตรึงขา S ไว้ใกล้กราวด์พอดี ส่วน <strong>D3 คือตัวกัน</strong>ไม่ให้ขา FB ถูกลากติดลบตอนช่วง ON ที่ขา S พุ่งขึ้นไป 310V</p>
+          <p class="en-only"><strong>Step 6 — feedback: how does the IC know when to stop?</strong> The divider <strong>R 4.3K + R 2K</strong> scales the 5V rail down and feeds it to the <strong>FB</strong> pin. When FB reaches its threshold (about 1.65V), the output is full.
+            <br><strong>The LNK304 does not vary pulse width like an ordinary PWM controller — it skips pulses (ON/OFF control):</strong> if the rail is low it fires the next pulse; if the rail is full it simply <strong>omits that pulse</strong>. Toggle the "Load" button and watch the trace: under a heavy load fewer pulses are skipped, yet the 5V rail is equally steady either way.
+            <br><strong>What a technician must know:</strong> the bottom of the divider does not go to ground — it <strong>returns to pin S</strong>, because everything inside the IC is referenced to pin S. So the IC only samples FB during the <strong>OFF</strong> stroke, precisely when D2 is holding pin S near ground. And <strong>D3 is there to block</strong> the FB pin from being dragged negative during the ON stroke, when pin S jumps to 310V.</p>
+        </div>
+
+        <div class="bs-desc" data-step="7">
+          <p class="th-only"><strong>ขั้นที่ 7 — สองอันตรายที่มองไม่เห็น:</strong>
+            <br><strong>(1) กราวด์ของ 5V คือสาย N ของไฟบ้าน</strong> — ดูเส้นแดงล่างสุด มันคือลายปริ้นท์เส้นเดียวกันจริงๆ ไม่มีหม้อแปลงแยกกราวด์คั่นที่ไหนเลย ฉะนั้นการจับ "ฝั่ง 5V" ไม่ได้ปลอดภัยกว่าการจับสายไฟบ้าน
+            <br><strong>(2) ขา S ไม่ใช่กราวด์</strong> — แม้ชื่อจะว่า Source แต่ในวงจรบัคแบบนี้ขา S คือ<strong>โหนดสวิตช์</strong>ที่แกว่งขึ้นลงระหว่าง 0V กับ 310V หลายหมื่นครั้งต่อวินาที (ดูกราฟล่าง) ใครเผลอเอาคลิปกราวด์ของสโคปไปหนีบขา S เข้า = ลัดบัส 310V ลงกราวด์สโคปทันที
+            <br><span style="color:var(--text-light);">ทางออกเดียวที่ถูกต้องคือจ่ายไฟผ่าน <strong>Isolation Transformer</strong> ก่อนวัดด้วยสโคปเสมอ</span></p>
+          <p class="en-only"><strong>Step 7 — two dangers you cannot see:</strong>
+            <br><strong>(1) The 5V ground IS the mains neutral</strong> — look at the red track along the bottom: it is literally one copper trace, with no isolating transformer anywhere. Touching "the 5V side" is no safer than touching a mains wire.
+            <br><strong>(2) Pin S is not ground</strong> — despite the name "Source", in this buck configuration pin S is the <strong>switching node</strong>, swinging between 0V and 310V tens of thousands of times a second (see the trace). Clip a scope ground lead onto pin S and you short the 310V bus straight into the scope's earth.
+            <br><span style="color:var(--text-light);">The only correct answer is to power the board through an <strong>isolation transformer</strong> before any scope goes near it.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="8">
+          <p class="th-only"><strong>ขั้นที่ 8 — ไล่วัดตามลำดับน้ำไหล:</strong> เลือกอาการเสียจากช่องด้านบน แล้วอ่านตารางในกราฟล่าง หลักการคือ <strong>วัดไล่จากต้นน้ำไปปลายน้ำ จุดแรกที่ไฟหาย คือภาคที่เสีย</strong>
+            <br>• <strong>TP2 ไม่มี 310V</strong> → ปัญหาอยู่ก่อนหน้านั้น: NTC หรือ D1
+            <br>• <strong>TP2 มี 310V แต่ TP3 ค้างนิ่งไม่สับ</strong> → ไอซีไม่ทำงาน: สงสัย C ขา BP
+            <br>• <strong>TP2 ตกลงเหลือเกือบศูนย์ + D–S ร้องปี๊บ</strong> → LNK304 ช็อตทะลุ (เปลี่ยนคู่กับ D1 เสมอ)
+            <br>• <strong>TP3 สับปกติ แต่ TP4 ไม่มี 5V</strong> → ปัญหาอยู่ปลายน้ำ: D2 หรือ C out
+            <br><span style="color:var(--text-light);">สังเกตว่าเคส "C ขา BP แห้ง" กับ "LNK304 ช็อต" ให้อาการหน้าบ้านเหมือนกันเป๊ะ (5V หาย เปิดไม่ติด) แต่ <strong>TP2 แยกสองเคสนี้ออกจากกันได้ทันที</strong> — นี่คือประโยชน์ของการไล่วัดเป็นลำดับแทนการเดา</span></p>
+          <p class="en-only"><strong>Step 8 — probe in the order the current flows:</strong> pick a fault above and read the table below. The rule is simple: <strong>work downstream, and the first point where the voltage disappears is the stage that failed</strong>.
+            <br>• <strong>No 310V at TP2</strong> → the fault is upstream: NTC or D1
+            <br>• <strong>310V at TP2 but TP3 sits still</strong> → the IC never starts: suspect the BP cap
+            <br>• <strong>TP2 collapses to near zero + D–S beeps</strong> → the LNK304 has shorted (always replace it with D1)
+            <br>• <strong>TP3 switches fine but no 5V at TP4</strong> → the fault is downstream: D2 or C out
+            <br><span style="color:var(--text-light);">Note that "BP cap dried out" and "LNK304 shorted" look identical from the outside (no 5V, dead unit), yet <strong>TP2 separates them instantly</strong> — that is why you probe in order instead of guessing.</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- 3. เจาะลึก 5 ภาค -->
   <div class="section">
     <div class="section-title"><span class="th-only">เจาะลึกการทำงาน 5 ภาคส่วน</span><span class="en-only">The 5 Stages in Detail</span></div>
@@ -237,6 +379,12 @@
         <p class="en-only"><strong>LNK304</strong> is the brain of the supply. It switches on and off at very high frequency (through pins <strong>D</strong> and <strong>S</strong>) to chop the 310V down.</p>
         <p class="th-only"><strong>C 0.1µF คร่อมขา BP:</strong> เป็นตัวเก็บประจุ Bypass ทำหน้าที่กรองไฟเลี้ยงย่อยให้วงจรภายในตัว LNK304 ทำงานได้นิ่ง — <strong>หาก C ตัวนี้เสื่อมหรือค่าแห้ง ไอซีจะไม่ยอมทำงานเลย</strong></p>
         <p class="en-only"><strong>C 0.1µF on the BP pin:</strong> a bypass capacitor that steadies the LNK304's own internal supply — <strong>if it dries out, the IC simply refuses to run</strong>.</p>
+        <div class="warn-box" style="margin-top:.6rem">
+          <strong class="th-only">⚠ ขา S ไม่ใช่กราวด์ อย่าเข้าใจผิด</strong>
+          <strong class="en-only">⚠ Pin S is not ground — a costly misconception</strong>
+          <p class="th-only" style="margin:.4rem 0 0">ในวงจรบัคแบบนี้ ขา <strong>D ผูกอยู่กับบัส 310V ตลอดเวลา</strong> ส่วนขา <strong>S คือ "โหนดสวิตช์"</strong> ที่ถูกยกขึ้นไป 310V ทุกครั้งที่มอสเฟตปิดวงจร แล้วตกกลับลงมาใต้กราวด์ราว 0.7V เมื่อ D2 นำกระแส — แกว่งแบบนี้หลายหมื่นครั้งต่อวินาที และวงจรภายในไอซีทั้งหมด (รวมทั้งขา BP และ FB) ก็อ้างอิงกับขา S ตัวนี้ ไม่ได้อ้างอิงกราวด์</p>
+          <p class="en-only" style="margin:.4rem 0 0">In this buck configuration pin <strong>D sits permanently on the 310V bus</strong>, while pin <strong>S is the "switching node"</strong>: it is pulled up to 310V every time the MOSFET closes and falls about 0.7V below ground when D2 conducts — tens of thousands of times a second. Everything inside the IC, including the BP and FB pins, is referenced to pin S, not to ground.</p>
+        </div>
       </div>
 
       <div class="smps-stage">
@@ -261,8 +409,10 @@
         <p><span class="smps-chip">R 4.3K</span><span class="smps-chip">R 2K</span><span class="smps-chip">D3</span></p>
         <p class="th-only">ทำหน้าที่เป็น "สายสืบ" คอยวัดแรงดัน 5V ขาออก แล้วส่งสัญญาณกลับไปรายงานที่ขา <strong>FB</strong> ของไอซี LNK304</p>
         <p class="en-only">This is the "informant": it senses the 5V output and reports it back to the LNK304's <strong>FB</strong> pin.</p>
-        <p class="th-only"><strong>การทำงาน:</strong> ถ้าไฟ 5V ตกลง ไอซีจะเร่งสวิตช์ให้แรงขึ้น / ถ้าไฟ 5V เกิน ไอซีจะลดรอบการทำงานลง ทำให้ไฟเลี้ยงพัดลมนิ่งตลอดเวลา</p>
-        <p class="en-only"><strong>How it works:</strong> if the 5V sags the IC switches harder; if it overshoots the IC backs off. That is what keeps the rail rock steady.</p>
+        <p class="th-only"><strong>การทำงาน:</strong> เมื่อแรงดันที่ขา FB ถึงเกณฑ์ (ราว 1.65V) แปลว่าไฟขาออกเต็มแล้ว — <strong>LNK304 ไม่ได้ปรับความกว้างพัลส์แบบ PWM ทั่วไป แต่ใช้วิธี "ข้ามพัลส์" (ON/OFF Control)</strong> คือถ้าไฟยังไม่พอก็สับพัลส์ถัดไป ถ้าพอแล้วก็ข้ามพัลส์นั้นไปเฉยๆ โหลดหนักจะข้ามน้อย โหลดเบาจะข้ามเยอะ แต่ไฟ 5V นิ่งเท่ากันทั้งสองกรณี</p>
+        <p class="en-only"><strong>How it works:</strong> once the FB pin reaches its threshold (about 1.65V) the output is full — <strong>the LNK304 does not vary pulse width like an ordinary PWM controller, it skips pulses (ON/OFF control)</strong>. Rail low? fire the next pulse. Rail full? simply omit it. A heavy load skips few pulses and a light load skips many, yet the 5V rail is equally steady either way.</p>
+        <p class="th-only"><strong>รายละเอียดที่ช่างมักมองข้าม:</strong> ปลายล่างของตัวแบ่งแรงดันไม่ได้ลงกราวด์ แต่<strong>กลับไปที่ขา S</strong> (เพราะวงจรภายในอ้างอิงขา S) ไอซีจึงอ่านค่าที่ขา FB เฉพาะ<strong>ช่วง OFF</strong> ซึ่งเป็นจังหวะที่ D2 ตรึงขา S ไว้ใกล้กราวด์พอดี ส่วน <strong>D3 ทำหน้าที่กั้น</strong>ไม่ให้ขา FB ถูกลากติดลบตอนช่วง ON ที่ขา S พุ่งขึ้นไป 310V</p>
+        <p class="en-only"><strong>The detail most people miss:</strong> the bottom of the divider does not go to ground — it <strong>returns to pin S</strong>, because the IC's internals are referenced there. So the FB pin is only sampled during the <strong>OFF</strong> stroke, exactly when D2 is holding pin S near ground, and <strong>D3 blocks</strong> the FB pin from being dragged negative during the ON stroke when pin S jumps to 310V.</p>
       </div>
 
     </div>
@@ -331,12 +481,14 @@
         <li><strong>ห้ามใช้มือเปล่าสัมผัสแผงวงจรเด็ดขาด</strong>ในขณะที่เสียบปลั๊กไฟทดสอบ แม้จะเป็นบริเวณฝั่งไฟ 5V หรือขาของ MCU ก็ตาม เพราะไฟบ้าน 220V สามารถวิ่งย้อนมากระตุกมือได้ทุกเมื่อ</li>
         <li>หากต้องการวัดไฟแบบ <strong>Hot Test</strong> (จ่ายไฟจริงขณะวัด) ต้องใส่รองเท้า ยืนบนพื้นแห้ง วัดด้วยความระมัดระวัง และใช้มือเดียว</li>
         <li><strong>ห้ามนำออสซิลโลสโคปไปคีบวัดที่บอร์ดตรงๆ เด็ดขาด</strong> เว้นแต่จะจ่ายไฟผ่าน <strong>Isolation Transformer</strong> — ไม่เช่นนั้นไฟ 220V จะวิ่งทะลุสายกราวด์ของสโคป ทำให้เครื่องมือวัดราคาแพงระเบิดพังทันที</li>
+        <li><strong>ห้ามหนีบคลิปกราวด์ของสโคปที่ขา S ของ LNK304</strong> แม้ชื่อขาจะว่า "Source" ก็ตาม เพราะขานี้คือโหนดสวิตช์ที่แกว่งขึ้นถึง 310V — หนีบเมื่อไหร่เท่ากับลัดบัส 310V ลงกราวด์ของสโคปทันที (อ่านรายละเอียดในหัวข้อภาคสวิตชิ่งด้านบน)</li>
         <li>คายประจุคาปาซิเตอร์แรงสูง (จุด 310V) ก่อนจับบอร์ดทุกครั้ง แม้ถอดปลั๊กแล้วก็ยังมีประจุค้างอยู่</li>
       </ul>
       <ul class="content-list en-only" style="margin-top:1rem">
         <li><strong>Never touch the board bare-handed</strong> while it is plugged in — not even the 5V side or the MCU pins. Mains voltage can find its way back to your hand at any moment.</li>
         <li>If you must do a <strong>hot test</strong>, wear shoes, stand on a dry floor, work carefully, and keep one hand behind your back.</li>
         <li><strong>Never clip an oscilloscope straight onto this board</strong> unless it is powered through an <strong>isolation transformer</strong> — otherwise 220V runs down the scope's ground lead and destroys the instrument on the spot.</li>
+        <li><strong>Never put a scope ground clip on the LNK304's S pin</strong>, whatever the name "Source" suggests. That pin is the switching node and rises to 310V — clipping it shorts the 310V bus straight into the scope's earth (see the switching-stage section above).</li>
         <li>Discharge the high-voltage (310V) capacitors before handling the board; they hold their charge after unplugging.</li>
       </ul>
     </div>
@@ -362,5 +514,6 @@
 <footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
 <script>const CURRENT_PAGE='repair-smps';</script>
 <script src="js/nav.js"></script>
+<script src="js/smps-steps.js"></script>
 </body>
 </html>

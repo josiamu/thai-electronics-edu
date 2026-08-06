@@ -14,6 +14,10 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'smps-step-sim-2026-08-06', date:'2026-08-06', type:'update',
+    th:'บทภาคจ่ายไฟสวิตชิ่ง (LNK304): เพิ่ม <b>วงจรโต้ตอบทีละขั้น 8 ขั้น</b> — เดินตามกระแสจริงตั้งแต่ NTC กันไฟกระชาก → D1 เรียงกระแส → Pi-filter 310V → <b>จังหวะ ON</b> (ไฟผ่านขา D–S เข้าตัวเหนี่ยวนำ) → <b>จังหวะ OFF</b> (กระแสไหลวนผ่าน D2 ไฟ 5V ไม่ขาดช่วง) → ป้อนกลับที่ขา FB แบบ<b>ข้ามพัลส์</b> พร้อม <b>ช่องเลือกอาการเสีย 5 แบบ</b> ให้ดูว่าจุดวัด TP1–TP4 จุดไหน "ไฟหาย" และขั้นสุดท้ายสอนไล่วัดหาภาคที่เสียเป็นลำดับ — รวมถึงกับดักที่ช่างมือใหม่ตายบ่อย: <b>ขา S ไม่ใช่กราวด์ มันแกว่ง 0↔310V</b>',
+    en:'Switching PSU (LNK304) lesson: a new <b>8-step interactive circuit</b> — follow the real current from the NTC inrush guard → D1 rectifier → 310V Pi filter → the <b>ON stroke</b> (through pins D–S into the inductor) → the <b>OFF stroke</b> (freewheeling through D2 so the 5V never drops) → <b>pulse-skipping</b> feedback at the FB pin. It includes a <b>5-fault selector</b> showing which of test points TP1–TP4 loses its voltage, and a final step that teaches probing in order — plus the trap that catches beginners: <b>pin S is not ground, it swings 0↔310V</b>',
+    href:'switching-psu.html' },
   { id:'lesson-switching-psu-2026-08-05', date:'2026-08-05', type:'lesson',
     th:'บทเรียนใหม่ในกลุ่ม <b>🛠️ งานซ่อมเครื่องใช้ไฟฟ้า</b>: <b>ภาคจ่ายไฟสวิตชิ่ง (LNK304)</b> — ทำไมพัดลมยุคใหม่เลิกใช้ C-Drop, ไล่วงจร 5 ภาคจากปลั๊ก 220V ถึงไฟ 5V ที่เลี้ยง MCU (เรียงกระแส → Pi-filter 310V → สับสวิตช์ → บัค → ป้อนกลับ), คลินิกอาการเสีย 4 เคสพร้อมจุดวัด และกฎความปลอดภัยของ<b>วงจรไม่แยกกราวด์</b> ที่ห้ามคีบสโคปตรงๆ',
     en:'New lesson in the <b>🛠️ Appliance Repair</b> group: <b>Switching Power Supply (LNK304)</b> — why modern fans dropped the C-Drop supply, all 5 stages from the 220V plug to the 5V that runs the MCU (rectifier → 310V Pi filter → chopper → buck → feedback), a 4-case fault clinic with test points, and the <b>non-isolated</b> safety rule that forbids clipping a scope straight onto the board',

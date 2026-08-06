@@ -68,7 +68,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 |---|---|---|
 | มอเตอร์พัดลมไฟฟ้า | Electric Fan Motor | `fan-motor.html` (มีซิมสวิตช์ความเร็วโต้ตอบ) |
 | เตาแม่เหล็กไฟฟ้า | Induction Stove | `induction-stove.html` |
-| ภาคจ่ายไฟสวิตชิ่ง (LNK304) | Switching PSU (LNK304) | `switching-psu.html` |
+| ภาคจ่ายไฟสวิตชิ่ง (LNK304) | Switching PSU (LNK304) | `switching-psu.html` (มีวงจรโต้ตอบทีละขั้น 8 ขั้น + จำลองอาการเสีย) |
 
 **งานปฏิบัติ / Practical**
 | ไทย | English | หน้า |
@@ -165,7 +165,7 @@ git push
 
 ```
 .
-├── css/style.css            — Global styles, dark mode, bilingual classes
+├── css/style.css            — Global styles, dark mode, bilingual classes, shared `.bs-*` step-by-step sim styles
 ├── js/nav.js               — Shared navigation, lang toggle, dark mode toggle
 ├── js/tools.js             — Calculator logic
 ├── js/quiz.js              — Quiz data + logic
@@ -175,6 +175,7 @@ git push
 ├── js/osc-reader.js        — Scope reading trainer
 ├── js/bjt-steps.js         — Interactive step-by-step: how a BJT works (5 clickable steps, animated cross-section)
 ├── js/bjt-circuit.js       — Interactive step-by-step: a real 5V circuit (R_B → NPN → LED + R_C, 6 steps, HIGH/LOW toggle)
+├── js/smps-steps.js        — Interactive step-by-step: LNK304 switching PSU (8 steps, 6 fault modes, TP1–TP4 readouts)
 ├── js/signal-gen-sim.js    — Waveform generator
 ├── js/capacitor-sim.js     — RC charge/discharge simulator
 ├── js/power-supply-sim.js  — Power supply (AC→DC) simulator
