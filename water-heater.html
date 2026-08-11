@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="ซ่อมเครื่องทำน้ำอุ่น | สื่อการเรียนการสอน" data-title-en="Water Heater Repair | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ซ่อมเครื่องทำน้ำอุ่น | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.wh-steps { display:grid; grid-template-columns:repeat(4,1fr); gap:.5rem; align-items:stretch; }
+@media (max-width:760px){ .wh-steps{ grid-template-columns:1fr 1fr; } }
+.wh-step { background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:.85rem .6rem; text-align:center; }
+.wh-step .wh-num { display:inline-block; width:24px; height:24px; line-height:24px; border-radius:50%; background:var(--primary); color:#fff; font-weight:700; font-size:.82rem; margin-bottom:.4rem; }
+.wh-step h4 { margin:.2rem 0 .35rem; font-size:.9rem; color:var(--primary-dark); }
+.wh-step p { margin:0; font-size:.78rem; color:var(--text-light); }
+.wh-tbl td.hi { font-weight:700; color:var(--primary-dark); white-space:nowrap; }
+.wh-tbl td.val { font-weight:700; color:var(--secondary); white-space:nowrap; }
+.wh-fault { border:1px solid var(--border); border-radius:12px; padding:1rem 1.15rem; margin:0 0 1rem; border-left-width:5px; border-left-style:solid; }
+.wh-fault:last-child { margin-bottom:0; }
+.wh-fault-title { font-weight:700; margin-bottom:.4rem; display:block; }
+.wh-formula { background:var(--bg); border:1px dashed var(--border); border-radius:10px; padding:.8rem 1rem; text-align:center; font-size:1.05rem; font-weight:700; color:var(--primary-dark); margin:.8rem 0; }
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🚿</div>
+    <div>
+      <h1 class="th-only">ซ่อมเครื่องทำน้ำอุ่น (Water Heater)</h1>
+      <h1 class="en-only">Electric Water Heater Repair</h1>
+      <p class="th-only">หลักการทำน้ำร้อนทันที • ฟลุกซ์สวิตช์ • วงจรไฟฟ้าอย่างง่าย • ELCB กับสายดิน • คลินิกวิเคราะห์อาการเสีย</p>
+      <p class="en-only">Instant-heating principle • Flow switch • The simplified circuit • ELCB &amp; earthing • Fault-diagnosis clinic</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="card" style="border-left:4px solid #dc2626; display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+    <div style="font-size:1.6rem;">⚠️</div>
+    <div style="flex:1; min-width:220px;">
+      <strong class="th-only">บทนี้คือเครื่องใช้ไฟฟ้าที่ "ไฟกับน้ำอยู่ด้วยกัน" — พลาดครั้งเดียวถึงชีวิต</strong>
+      <strong class="en-only">This appliance puts electricity and water in the same box — one mistake can be fatal</strong><br>
+      <span class="th-only">เครื่องทำน้ำอุ่นกินกระแสสูงมาก (16–27 A) และผู้ใช้ยืนเปียกน้ำเท้าเปล่าอยู่ตรงหน้า <strong>สายดินและ ELCB ไม่ใช่ของเสริม แต่เป็นสิ่งที่ขาดไม่ได้</strong> — อ่านหัวข้อความปลอดภัยท้ายบทก่อนลงมือทุกครั้ง</span>
+      <span class="en-only">A water heater draws a very high current (16–27 A) while the user stands barefoot and soaking wet in front of it. <strong>The earth wire and the ELCB are not optional extras</strong> — read the safety section at the end before you start.</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">วัตถุประสงค์การเรียนรู้</span><span class="en-only">Learning Objectives</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li>อธิบายหลักการทำน้ำร้อนแบบทันที (Instant / Tankless) และบอกได้ว่าทำไมต้องมีน้ำไหลก่อนถึงจะร้อน</li>
+        <li>บอกหน้าที่ของชิ้นส่วนหลักทั้ง 8 ชิ้น โดยเฉพาะฟลุกซ์สวิตช์ เทอร์โมสตัท และเทอร์มอลคัตเอาต์</li>
+        <li>อ่านวงจรไฟฟ้าอย่างง่ายของเครื่องทำน้ำอุ่น และไล่หาจุดที่วงจรขาดได้</li>
+        <li>คำนวณความต้านทานและกระแสของฮีตเตอร์จากพิกัดวัตต์ แล้วเลือกขนาดสายไฟและเบรกเกอร์ให้ถูก</li>
+        <li>วิเคราะห์อาการเสียยอดฮิต 6 เคส และแยกให้ออกว่าเคสไหน "ไม่ใช่ของเสีย"</li>
+        <li>ปฏิบัติตามกฎความปลอดภัยเรื่องสายดิน ELCB และการระบายน้ำก่อนถอดเครื่อง</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>Explain instant (tankless) water heating and why water must flow before it can heat</li>
+        <li>State what each of the 8 core parts does, especially the flow switch, thermostat and thermal cutout</li>
+        <li>Read the simplified circuit and locate where the path is broken</li>
+        <li>Calculate the element's resistance and current from its wattage, then pick the right cable and breaker</li>
+        <li>Diagnose 6 common symptoms — and tell which ones are not a fault at all</li>
+        <li>Follow the safety rules on earthing, the ELCB, and draining the unit before opening it</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 1. หลักการทำงาน -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">เครื่องทำน้ำอุ่นทำงานอย่างไร?</span><span class="en-only">How Does It Work?</span></div>
+    <div class="card">
+      <p class="th-only">เครื่องทำน้ำอุ่นที่ใช้ตามบ้านในบ้านเราเกือบทั้งหมดเป็นแบบ <strong>ทำน้ำร้อนทันที (Instant / Tankless)</strong> คือ<strong>ไม่มีถังเก็บน้ำร้อน</strong> น้ำเย็นไหลผ่านหม้อต้มเล็กๆ ที่มีฮีตเตอร์อยู่ข้างใน แล้วร้อนออกไปที่ฝักบัวเลยภายในเสี้ยววินาที ข้อดีคือเล็กและไม่ต้องอุ่นน้ำทิ้งไว้ ข้อเสียคือ<strong>ต้องใช้กำลังไฟสูงมากในช่วงเวลาสั้นๆ</strong> (3,500–6,000 วัตต์)</p>
+      <p class="en-only">Almost every domestic water heater here is the <strong>instant (tankless)</strong> type: there is <strong>no hot-water tank</strong>. Cold water flows through a small heating chamber with an element inside and comes out hot at the shower head within a fraction of a second. It's compact and wastes no standby heat, but it <strong>demands a very high power for that brief moment</strong> (3,500–6,000 W).</p>
+
+      <div class="wh-steps" style="margin-top:1rem;">
+        <div class="wh-step">
+          <span class="wh-num">1</span>
+          <h4 class="th-only">น้ำเย็นเข้า</h4><h4 class="en-only">Cold water in</h4>
+          <p class="th-only">ผ่านตัวกรองผงตะกอน แล้วเข้าสู่ทางน้ำในเครื่อง</p>
+          <p class="en-only">Through the inlet strainer and into the unit's waterway</p>
+        </div>
+        <div class="wh-step">
+          <span class="wh-num">2</span>
+          <h4 class="th-only">ฟลุกซ์สวิตช์สั่งงาน</h4><h4 class="en-only">Flow switch closes</h4>
+          <p class="th-only">แรงดันน้ำดันไดอะแฟรม → สวิตช์ต่อวงจร <strong>ถ้าน้ำไม่ไหล ฮีตเตอร์ไม่มีทางติด</strong></p>
+          <p class="en-only">Water pressure pushes the diaphragm → the switch closes. <strong>No flow, no heat — ever</strong></p>
+        </div>
+        <div class="wh-step">
+          <span class="wh-num">3</span>
+          <h4 class="th-only">ฮีตเตอร์ต้มน้ำ</h4><h4 class="en-only">The element heats</h4>
+          <p class="th-only">ลวดความร้อนในหม้อต้มถ่ายความร้อนให้น้ำที่ไหลผ่านโดยตรง</p>
+          <p class="en-only">The element transfers its heat straight into the passing water</p>
+        </div>
+        <div class="wh-step">
+          <span class="wh-num">4</span>
+          <h4 class="th-only">น้ำอุ่นออก</h4><h4 class="en-only">Warm water out</h4>
+          <p class="th-only">ออกที่ฝักบัว โดยมีเทอร์โมสตัทคอยเฝ้าไม่ให้ร้อนเกิน</p>
+          <p class="en-only">Out to the shower head, with the thermostat watching for overheat</p>
+        </div>
+      </div>
+
+      <p class="th-only" style="margin-top:1.1rem"><strong>ทำไมหน้าหนาวน้ำถึงไม่ค่อยร้อน?</strong> เพราะเครื่องไม่ได้ "ตั้งอุณหภูมิ" แต่มันแค่ <strong>เติมความร้อนคงที่</strong> ให้น้ำที่ไหลผ่าน อุณหภูมิที่เพิ่มขึ้น (ΔT) จึงขึ้นกับกำลังไฟและอัตราการไหลเท่านั้น:</p>
+      <p class="en-only" style="margin-top:1.1rem"><strong>Why is the water weak in the cool season?</strong> The heater doesn't "set a temperature" — it just <strong>adds a fixed amount of heat</strong> to whatever flows through. The temperature rise (ΔT) depends only on the power and the flow rate:</p>
+
+      <div class="wh-formula">ΔT (°C) ≈ P (วัตต์) ÷ ( 70 × Q )</div>
+      <p class="th-only" style="font-size:.88rem;color:var(--text-light);text-align:center;margin-top:-.3rem">เมื่อ Q = อัตราการไหล (ลิตร/นาที)</p>
+      <p class="en-only" style="font-size:.88rem;color:var(--text-light);text-align:center;margin-top:-.3rem">where Q = flow rate in litres per minute</p>
+
+      <div class="info-box" style="margin-top:1rem;">
+        <strong class="th-only">💡 ลองแทนค่าดู</strong><strong class="en-only">💡 Try the numbers</strong>
+        <p class="th-only" style="margin:.4rem 0 0">เครื่อง 3,500 W เปิดน้ำ 3 ลิตร/นาที → ΔT = 3500 ÷ (70×3) ≈ <strong>17°C</strong> ถ้าน้ำประปาเข้ามา 25°C ก็จะได้น้ำออก 42°C กำลังสบาย แต่พอหน้าหนาวน้ำเข้าเหลือ 20°C น้ำออกก็เหลือ 37°C ทันที — <strong>เครื่องไม่ได้เสีย</strong> ทางแก้คือ<strong>หรี่น้ำให้ไหลน้อยลง</strong> ΔT จะสูงขึ้นเอง (เปิด 2 ลิตร/นาที → ΔT ≈ 25°C)</p>
+        <p class="en-only" style="margin:.4rem 0 0">A 3,500 W unit at 3 L/min gives ΔT = 3500 ÷ (70×3) ≈ <strong>17°C</strong>. With 25°C tap water that's a comfortable 42°C — but when the supply drops to 20°C in the cool season the output falls to 37°C. <strong>Nothing is broken.</strong> The fix is to <strong>reduce the flow</strong>: at 2 L/min the same unit gives ΔT ≈ 25°C.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. ชิ้นส่วนหลัก -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ชิ้นส่วนหลัก 8 ชิ้น</span><span class="en-only">The 8 Core Parts</span></div>
+    <div class="card">
+      <div style="overflow-x:auto;">
+      <table class="wh-tbl">
+        <thead><tr>
+          <th style="width:2rem">#</th>
+          <th><span class="th-only">ชิ้นส่วน</span><span class="en-only">Part</span></th>
+          <th><span class="th-only">หน้าที่</span><span class="en-only">Role</span></th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td class="hi">ELCB / RCBO</td>
+            <td><span class="th-only">เครื่องตัดไฟรั่วในตัวเครื่อง ตัดไฟภายในเสี้ยววินาทีเมื่อมีกระแสรั่วลงดิน มีปุ่ม TEST / RESET อยู่หน้าเครื่อง <strong>นี่คือชิ้นส่วนที่ช่วยชีวิตผู้ใช้</strong></span><span class="en-only">The built-in earth-leakage breaker. It cuts power within milliseconds if current leaks to earth, and has TEST / RESET buttons on the front. <strong>This is the part that saves the user's life.</strong></span></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td class="hi"><span class="th-only">ฟลุกซ์สวิตช์ (Flow Switch)</span><span class="en-only">Flow switch</span></td>
+            <td><span class="th-only">สวิตช์ชนิด <strong>NO</strong> ที่ถูกดันให้ต่อด้วยแรงดันน้ำ (ไดอะแฟรม หรือลูกลอยแม่เหล็ก) — เป็นตัวรับประกันว่า <strong>ฮีตเตอร์จะติดได้ก็ต่อเมื่อมีน้ำไหลผ่านจริงเท่านั้น</strong> กันฮีตเตอร์ไหม้แห้ง (dry burn)</span><span class="en-only">A <strong>NO</strong> switch pushed closed by water pressure (a diaphragm or a magnetic float). It guarantees that <strong>the element can only run while water is actually flowing</strong>, preventing a dry burn.</span></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td class="hi"><span class="th-only">หม้อต้ม + ฮีตเตอร์</span><span class="en-only">Heating chamber + element</span></td>
+            <td><span class="th-only">ลวดความร้อนหุ้มฉนวนอยู่ในทางน้ำ กินกำลัง 3,500–6,000 W บางรุ่นมี 2 ชุดเพื่อเลือกกำลังต่ำ/สูง</span><span class="en-only">An insulated heating element sitting in the waterway, rated 3,500–6,000 W. Some models fit two elements to offer a low/high setting.</span></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td class="hi"><span class="th-only">เทอร์โมสตัท (Auto-reset)</span><span class="en-only">Thermostat (auto-reset)</span></td>
+            <td><span class="th-only">สวิตช์ <strong>NC</strong> ที่ตัดไฟเมื่อน้ำร้อนเกินค่าที่ตั้งไว้ แล้ว<strong>ต่อกลับเอง</strong>เมื่อเย็นลง — เป็นตัวคุมอุณหภูมิในการใช้งานปกติ</span><span class="en-only">An <strong>NC</strong> switch that opens when the water exceeds its set point and <strong>closes again by itself</strong> once it cools — the normal temperature control.</span></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td class="hi"><span class="th-only">เทอร์มอลคัตเอาต์ / เทอร์มอลฟิวส์</span><span class="en-only">Thermal cutout / thermal fuse</span></td>
+            <td><span class="th-only">ด่านสุดท้ายกันไฟไหม้ ทำงานที่อุณหภูมิสูงกว่าเทอร์โมสตัทมาก แบบ <strong>Manual reset</strong> ต้องกดปุ่มคืน ส่วนแบบ <strong>เทอร์มอลฟิวส์จะขาดถาวร</strong> ต้องเปลี่ยนใหม่</span><span class="en-only">The last line of defence against fire, tripping far above the thermostat's point. The <strong>manual-reset</strong> type needs its button pressed; a <strong>thermal fuse blows permanently</strong> and must be replaced.</span></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td class="hi"><span class="th-only">สวิตช์เลือกกำลัง / ปุ่มปรับ</span><span class="en-only">Power selector</span></td>
+            <td><span class="th-only">รุ่นพื้นฐานเป็นสวิตช์ ปิด / ต่ำ / สูง สลับจำนวนชุดฮีตเตอร์ ส่วน<strong>รุ่นดิจิทัลปรับกำลังต่อเนื่องด้วยไทริสเตอร์ (TRIAC/SCR)</strong> ซึ่งเป็นหลักการ Phase Control ตัวเดียวกับวงจรหรี่ไฟหลอดไส้</span><span class="en-only">Basic units use an off/low/high switch that selects how many elements run. <strong>Digital units vary the power continuously with a thyristor (TRIAC/SCR)</strong> — the same phase-control principle as an incandescent lamp dimmer.</span></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td class="hi"><span class="th-only">บอร์ดควบคุม + เซ็นเซอร์ NTC</span><span class="en-only">Control board + NTC sensor</span></td>
+            <td><span class="th-only">เฉพาะรุ่นดิจิทัล — อ่านอุณหภูมิน้ำด้วยเทอร์มิสเตอร์ NTC แล้วปรับกำลังฮีตเตอร์ให้ได้อุณหภูมิตามที่ตั้งไว้ พร้อมแสดงตัวเลขบนหน้าจอ</span><span class="en-only">Digital models only — an NTC thermistor reads the water temperature and the board trims the element power to hold the set point, showing it on the display.</span></td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td class="hi"><span class="th-only">สายดิน + ตัวกรองน้ำ</span><span class="en-only">Earth wire + inlet strainer</span></td>
+            <td><span class="th-only">สายดินต่อเข้าตัวถังโลหะและท่อน้ำ เป็นทางให้กระแสรั่วไหลลงดินจน ELCB จับได้ ส่วนตัวกรองกันผงตะกอนเข้าไปอุดทางน้ำและฟลุกซ์สวิตช์</span><span class="en-only">The earth wire bonds the metal body and pipework so leakage current has a path the ELCB can detect. The strainer keeps grit out of the waterway and the flow switch.</span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="th-only" style="font-size:.88rem;color:var(--text-light); margin-top:1rem;">🔗 หลักการของไทริสเตอร์และวงจรหรี่ไฟแบบ Phase Control (TRIAC + DIAC + VR + C) อธิบายละเอียดในบท <a href="thyristor.html"><strong>ไทริสเตอร์ SCR / TRIAC / DIAC</strong></a> — เครื่องทำน้ำอุ่นดิจิทัลใช้หลักการเดียวกันนี้ เพียงแต่เปลี่ยนโหลดจากหลอดไส้เป็นฮีตเตอร์</p>
+      <p class="en-only" style="font-size:.88rem;color:var(--text-light); margin-top:1rem;">🔗 Thyristors and phase-control dimming (TRIAC + DIAC + pot + capacitor) are covered in the <a href="thyristor.html"><strong>Thyristor — SCR / TRIAC / DIAC</strong></a> lesson. A digital water heater uses exactly that principle, just with a heating element in place of the lamp.</p>
+    </div>
+  </div>
+
+  <!-- 3. วงจรอย่างง่าย -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">วงจรไฟฟ้าอย่างง่าย</span><span class="en-only">The Simplified Circuit</span></div>
+    <div class="card">
+      <p class="th-only">วงจรหลักของเครื่องทำน้ำอุ่นนั้น<strong>ง่ายกว่าที่คิดมาก</strong> — มันคือ<strong>วงจรอนุกรมวงจรเดียว</strong> ที่มีสวิตช์นิรภัยหลายตัวต่อเรียงกันอยู่ กว่าไฟจะไปถึงฮีตเตอร์ได้ต้อง<strong>ผ่านทุกด่านครบทุกตัว</strong> ถ้าตัวใดตัวหนึ่งเปิดวงจร ฮีตเตอร์ก็ไม่ทำงาน นี่แหละคือหัวใจของการไล่ซ่อม: <strong>หาให้เจอว่าขาดที่ด่านไหน</strong></p>
+      <p class="en-only">The main circuit is <strong>far simpler than people expect</strong> — it is <strong>one series loop</strong> with several safety switches chained along it. Power reaches the element only after passing <strong>every</strong> one of them; if any single switch opens, there is no heat. That is the whole diagnostic job: <strong>find which link is broken.</strong></p>
+
+      <div style="text-align:center; margin-top:1rem; overflow-x:auto;">
+        <svg viewBox="0 0 900 290" style="min-width:620px;max-width:100%;height:auto;font-family:inherit;font-size:11.5px;" role="img"
+             aria-label="Water heater series circuit: live through ELCB, power switch, flow switch, thermostat and thermal cutout to the element, then back to neutral, with an earth wire on the body">
+
+          <!-- L in -->
+          <text x="14" y="75" fill="#dc2626" font-weight="700" font-size="13">L</text>
+          <line x1="30" y1="70" x2="62" y2="70" stroke="#dc2626" stroke-width="2.5"/>
+
+          <!-- ELCB -->
+          <rect x="62" y="50" width="74" height="40" rx="7" fill="#fef2f2" stroke="#dc2626" stroke-width="1.7"/>
+          <text x="99" y="68" text-anchor="middle" fill="#b91c1c" font-weight="700">ELCB</text>
+          <text class="th-only" x="99" y="83" text-anchor="middle" fill="var(--text-light)">ตัดไฟรั่ว</text>
+          <text class="en-only" x="99" y="83" text-anchor="middle" fill="var(--text-light)">leakage</text>
+          <line x1="136" y1="70" x2="172" y2="70" stroke="#dc2626" stroke-width="2.5"/>
+
+          <!-- power switch (open) -->
+          <circle cx="172" cy="70" r="3.5" fill="var(--text)"/>
+          <line x1="172" y1="70" x2="222" y2="52" stroke="var(--text)" stroke-width="2.2"/>
+          <circle cx="228" cy="70" r="3.5" fill="var(--text)"/>
+          <text class="th-only" x="200" y="106" text-anchor="middle" fill="var(--text)" font-weight="700">สวิตช์เปิด-ปิด</text>
+          <text class="en-only" x="200" y="106" text-anchor="middle" fill="var(--text)" font-weight="700">Power switch</text>
+          <line x1="228" y1="70" x2="278" y2="70" stroke="#dc2626" stroke-width="2.5"/>
+
+          <!-- flow switch (NO, open) -->
+          <circle cx="278" cy="70" r="3.5" fill="var(--text)"/>
+          <line x1="278" y1="70" x2="330" y2="52" stroke="var(--secondary)" stroke-width="2.6"/>
+          <circle cx="336" cy="70" r="3.5" fill="var(--text)"/>
+          <text class="th-only" x="307" y="106" text-anchor="middle" fill="var(--secondary)" font-weight="700">ฟลุกซ์สวิตช์ (NO)</text>
+          <text class="en-only" x="307" y="106" text-anchor="middle" fill="var(--secondary)" font-weight="700">Flow switch (NO)</text>
+          <text class="th-only" x="307" y="122" text-anchor="middle" fill="var(--text-light)">ต่อเมื่อมีน้ำไหล</text>
+          <text class="en-only" x="307" y="122" text-anchor="middle" fill="var(--text-light)">closes when water flows</text>
+          <line x1="336" y1="70" x2="386" y2="70" stroke="#dc2626" stroke-width="2.5"/>
+
+          <!-- thermostat (NC, closed) -->
+          <circle cx="386" cy="70" r="3.5" fill="var(--text)"/>
+          <line x1="386" y1="70" x2="438" y2="64" stroke="var(--text)" stroke-width="2.2"/>
+          <circle cx="438" cy="70" r="3.5" fill="var(--text)"/>
+          <text class="th-only" x="412" y="106" text-anchor="middle" fill="var(--text)" font-weight="700">เทอร์โมสตัท (NC)</text>
+          <text class="en-only" x="412" y="106" text-anchor="middle" fill="var(--text)" font-weight="700">Thermostat (NC)</text>
+          <line x1="438" y1="70" x2="486" y2="70" stroke="#dc2626" stroke-width="2.5"/>
+
+          <!-- thermal cutout (NC, closed) -->
+          <circle cx="486" cy="70" r="3.5" fill="var(--text)"/>
+          <line x1="486" y1="70" x2="538" y2="64" stroke="var(--text)" stroke-width="2.2"/>
+          <circle cx="538" cy="70" r="3.5" fill="var(--text)"/>
+          <line x1="512" y1="76" x2="512" y2="124" stroke="var(--border)" stroke-width="1"/>
+          <text class="th-only" x="512" y="138" text-anchor="middle" fill="var(--text)" font-weight="700">เทอร์มอลคัตเอาต์ (NC)</text>
+          <text class="en-only" x="512" y="138" text-anchor="middle" fill="var(--text)" font-weight="700">Thermal cutout (NC)</text>
+          <line x1="538" y1="70" x2="606" y2="70" stroke="#dc2626" stroke-width="2.5"/>
+
+          <!-- heater element -->
+          <rect x="606" y="48" width="150" height="44" rx="7" fill="var(--bg)" stroke="var(--text)" stroke-width="1.8"/>
+          <path d="M620,70 l12,-12 l16,24 l16,-24 l16,24 l16,-24 l16,24 l12,-12" fill="none" stroke="var(--text)" stroke-width="2"/>
+          <text class="th-only" x="681" y="34" text-anchor="middle" fill="var(--primary-dark)" font-weight="700">ฮีตเตอร์ 3,500 – 6,000 W</text>
+          <text class="en-only" x="681" y="34" text-anchor="middle" fill="var(--primary-dark)" font-weight="700">Element 3,500 – 6,000 W</text>
+          <line x1="756" y1="70" x2="820" y2="70" stroke="#dc2626" stroke-width="2.5"/>
+
+          <!-- return to N -->
+          <line x1="820" y1="70" x2="820" y2="216" stroke="var(--primary)" stroke-width="2.5"/>
+          <line x1="30" y1="216" x2="820" y2="216" stroke="var(--primary)" stroke-width="2.5"/>
+          <text x="14" y="221" fill="var(--primary)" font-weight="700" font-size="13">N</text>
+
+          <!-- earth on the body -->
+          <rect x="596" y="140" width="170" height="34" rx="7" fill="none" stroke="#16a34a" stroke-width="1.6" stroke-dasharray="6 4"/>
+          <text class="th-only" x="681" y="161" text-anchor="middle" fill="#16a34a" font-weight="700">ตัวถังโลหะ + ท่อน้ำ</text>
+          <text class="en-only" x="681" y="161" text-anchor="middle" fill="#16a34a" font-weight="700">metal body + pipework</text>
+          <line x1="681" y1="92" x2="681" y2="140" stroke="#16a34a" stroke-width="1.6" stroke-dasharray="4 4"/>
+          <line x1="681" y1="174" x2="681" y2="240" stroke="#16a34a" stroke-width="2.4"/>
+          <line x1="655" y1="240" x2="707" y2="240" stroke="#16a34a" stroke-width="2.6"/>
+          <line x1="663" y1="248" x2="699" y2="248" stroke="#16a34a" stroke-width="2.2"/>
+          <line x1="672" y1="256" x2="690" y2="256" stroke="#16a34a" stroke-width="1.8"/>
+          <text class="th-only" x="720" y="252" fill="#16a34a" font-weight="700">สายดิน (G)</text>
+          <text class="en-only" x="720" y="252" fill="#16a34a" font-weight="700">Earth (G)</text>
+
+          <!-- leakage note -->
+          <text class="th-only" x="30" y="252" fill="var(--text-light)">ถ้าฮีตเตอร์รั่ว → กระแสไหลลงสายดินแทนที่จะกลับทาง N → ELCB จับได้และตัดไฟทันที</text>
+          <text class="en-only" x="30" y="252" fill="var(--text-light)">If the element leaks, current returns via earth instead of N — the ELCB sees the imbalance and trips</text>
+          <line x1="99" y1="90" x2="99" y2="232" stroke="#dc2626" stroke-width="1.3" stroke-dasharray="3 3"/>
+        </svg>
+      </div>
+
+      <div class="info-box" style="margin-top:1rem;">
+        <strong class="th-only">💡 อ่านวงจรนี้ยังไง</strong><strong class="en-only">💡 How to read this circuit</strong>
+        <ul class="content-list th-only" style="margin:.4rem 0 0">
+          <li>ไฟ L ต้องผ่าน <strong>5 ด่านเรียงกัน</strong> — ELCB → สวิตช์เปิดปิด → ฟลุกซ์สวิตช์ → เทอร์โมสตัท → เทอร์มอลคัตเอาต์ — แล้วจึงถึงฮีตเตอร์ และกลับออกทาง N</li>
+          <li><strong>ฟลุกซ์สวิตช์เป็นด่านเดียวที่เป็น NO</strong> (ปกติเปิด) ที่เหลือเป็น NC ทั้งหมด ดังนั้นตอนวัดขณะน้ำไม่ไหล มันต้องขึ้น OL ถือว่าปกติ อย่าเพิ่งไปเปลี่ยนมัน</li>
+          <li><strong>สายดินไม่ได้อยู่ในวงจรทำงาน</strong> — มันเป็นเส้นสำรองสำหรับกระแสรั่วโดยเฉพาะ วงจรจะทำงานได้ตามปกติแม้ไม่มีสายดิน (แต่ผู้ใช้จะไม่มีอะไรป้องกันเลย)</li>
+          <li>รุ่นดิจิทัลจะแทรก <strong>ไทริสเตอร์คั่นระหว่างด่านสุดท้ายกับฮีตเตอร์</strong> เพื่อหั่นคลื่นไฟให้กำลังลดลงตามอุณหภูมิที่ตั้งไว้ — โครงวงจรที่เหลือยังเหมือนเดิมทุกอย่าง</li>
+        </ul>
+        <ul class="content-list en-only" style="margin:.4rem 0 0">
+          <li>L must clear <strong>five links in a row</strong> — ELCB → power switch → flow switch → thermostat → thermal cutout — before reaching the element and returning via N.</li>
+          <li><strong>Only the flow switch is NO</strong> (normally open); all the others are NC. So with the water off it should read OL — that is correct, don't condemn it.</li>
+          <li><strong>The earth wire is not part of the working circuit</strong> — it is a dedicated return for leakage current. The heater runs perfectly well without it, leaving the user with no protection at all.</li>
+          <li>Digital models insert a <strong>thyristor between the last safety switch and the element</strong>, chopping the waveform to trim the power to the set temperature. Everything else stays exactly the same.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. ตารางวัดค่า -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ตารางจุดวัดและค่ามาตรฐาน</span><span class="en-only">Test Points &amp; Standard Readings</span></div>
+    <div class="card">
+      <div class="warn-box" style="border-left-color:#dc2626; background:#fef2f2; margin-bottom:1rem;">
+        <strong class="th-only" style="color:#b91c1c">🔴 ปิดเบรกเกอร์ ปิดวาล์วน้ำ และระบายน้ำออกก่อนวัดทุกครั้ง</strong>
+        <strong class="en-only" style="color:#b91c1c">🔴 Switch off the breaker, close the valve and drain the unit before measuring</strong>
+        <p class="th-only" style="margin:.4rem 0 0">การถอดปลั๊กอย่างเดียวไม่พอ เพราะบางบ้านต่อสายตรงเข้าเบรกเกอร์ และในหม้อต้มยังมีน้ำค้างอยู่ซึ่งจะไหลออกมาโดนมือและมิเตอร์เมื่อคลายน็อต</p>
+        <p class="en-only" style="margin:.4rem 0 0">Unplugging is not enough — many installations are hard-wired to a breaker, and the chamber still holds water that will pour over your hands and meter when you loosen the fittings.</p>
+      </div>
+
+      <div style="overflow-x:auto;">
+      <table class="wh-tbl">
+        <thead><tr>
+          <th><span class="th-only">จุดวัด</span><span class="en-only">Test point</span></th>
+          <th><span class="th-only">ค่ามาตรฐาน</span><span class="en-only">Standard reading</span></th>
+          <th><span class="th-only">ถ้าผิดปกติแปลว่า</span><span class="en-only">If it's wrong</span></th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td class="hi"><span class="th-only">ฮีตเตอร์ 3,500 W</span><span class="en-only">Element 3,500 W</span></td>
+            <td class="val">≈ 13.8 Ω <span class="th-only">(กิน 16 A)</span><span class="en-only">(draws 16 A)</span></td>
+            <td rowspan="3"><span class="th-only">OL = <strong>ขดลวดขาด</strong> ไฟติดแต่ไม่ร้อน • ค่าต่ำกว่ามาก = ช็อตรอบ กินกระแสเกินจนเบรกเกอร์ตก</span><span class="en-only">OL = <strong>element open</strong>, power on but no heat • Much lower than spec = shorted turns, drawing enough current to trip the breaker</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">ฮีตเตอร์ 4,500 W</span><span class="en-only">Element 4,500 W</span></td>
+            <td class="val">≈ 10.8 Ω <span class="th-only">(กิน 20 A)</span><span class="en-only">(draws 20 A)</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">ฮีตเตอร์ 6,000 W</span><span class="en-only">Element 6,000 W</span></td>
+            <td class="val">≈ 8.1 Ω <span class="th-only">(กิน 27 A)</span><span class="en-only">(draws 27 A)</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">ฮีตเตอร์ ↔ ตัวถัง / สายดิน</span><span class="en-only">Element ↔ body / earth</span></td>
+            <td class="val">OL <span class="th-only">(สูงกว่า 1 MΩ)</span><span class="en-only">(above 1 MΩ)</span></td>
+            <td><span class="th-only">มีค่าอ่านได้ = <strong>ฮีตเตอร์รั่วลงน้ำ/ลงตัวถัง</strong> นี่คือสาเหตุที่ ELCB ตัด ต้องเปลี่ยนสถานเดียว</span><span class="en-only">Any reading = <strong>the element is leaking to water/body</strong>. This is why the ELCB trips — replacement is the only fix.</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">ฟลุกซ์สวิตช์ (NO)</span><span class="en-only">Flow switch (NO)</span></td>
+            <td class="val"><span class="th-only">น้ำไม่ไหล OL / น้ำไหล 0 Ω</span><span class="en-only">no flow OL / flowing 0 Ω</span></td>
+            <td><span class="th-only">เปิดน้ำแรงแล้วยังไม่ต่อ = ไดอะแฟรมแข็ง/ตะกรันอุด หรือแรงดันน้ำไม่พอ</span><span class="en-only">Still open at full flow = stiff diaphragm, scale blockage, or not enough water pressure</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">เทอร์โมสตัท / เทอร์มอลคัตเอาต์ (NC)</span><span class="en-only">Thermostat / thermal cutout (NC)</span></td>
+            <td class="val"><span class="th-only">0 Ω ขณะเครื่องเย็น</span><span class="en-only">0 Ω when cold</span></td>
+            <td><span class="th-only">OL ขณะเย็น = ตัดค้าง/ขาดถาวร <strong>ต้องหาสาเหตุที่ทำให้มันร้อนเกินก่อนเปลี่ยน</strong></span><span class="en-only">OL when cold = tripped or permanently open. <strong>Find what overheated it before replacing.</strong></span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">ปุ่ม TEST ของ ELCB</span><span class="en-only">The ELCB TEST button</span></td>
+            <td class="val"><span class="th-only">กดแล้วต้องตัดทันที</span><span class="en-only">must trip instantly</span></td>
+            <td><span class="th-only">กดแล้วไม่ตัด = <strong>ELCB เสีย ห้ามใช้เครื่องต่อเด็ดขาด</strong></span><span class="en-only">No trip = <strong>the ELCB is dead; the unit must not be used</strong></span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+
+      <div class="info-box" style="margin-top:1rem;">
+        <strong class="th-only">💡 ที่มาของตัวเลข</strong><strong class="en-only">💡 Where those numbers come from</strong>
+        <p class="th-only" style="margin:.4rem 0 0">ค่าความต้านทานฮีตเตอร์ไม่ต้องท่องจำ คำนวณจากกฎของโอห์มได้เลย: <strong>R = V² ÷ P</strong> เช่น 220² ÷ 3500 = 48400 ÷ 3500 ≈ 13.8 Ω และกระแส <strong>I = P ÷ V</strong> = 3500 ÷ 220 ≈ 16 A — พอรู้กระแสก็เลือกขนาดสายกับเบรกเกอร์ได้ทันที</p>
+        <p class="en-only" style="margin:.4rem 0 0">You don't need to memorise those resistances — Ohm's law gives them: <strong>R = V² ÷ P</strong>, e.g. 220² ÷ 3500 = 48400 ÷ 3500 ≈ 13.8 Ω, and the current <strong>I = P ÷ V</strong> = 3500 ÷ 220 ≈ 16 A. Once you know the current, the cable and breaker sizes follow.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. คลินิกอาการเสีย -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">คลินิกวิเคราะห์อาการเสีย</span><span class="en-only">Fault-Diagnosis Clinic</span></div>
+    <div class="card">
+
+      <div class="wh-fault" style="border-left-color:#dc2626;">
+        <span class="wh-fault-title th-only">🔴 อาการที่ 1: "ELCB ตัดทันทีที่เปิดน้ำ / กด RESET แล้วตัดซ้ำ"</span>
+        <span class="wh-fault-title en-only">🔴 Symptom 1: "The ELCB trips the moment water flows, and again after RESET"</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> ฮีตเตอร์รั่วลงน้ำหรือลงตัวถัง เป็นอาการที่<strong>อันตรายที่สุด</strong>ในบทนี้</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> the element is leaking into the water or the body — <strong>the most dangerous fault</strong> in this lesson</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> วัดความต้านทานระหว่างขั้วฮีตเตอร์กับตัวถัง ต้องขึ้น OL ถ้าอ่านค่าได้ = ฮีตเตอร์รั่ว ต้องเปลี่ยน <strong>⚠️ ห้ามลัดข้ามหรือถอด ELCB ทิ้งเพื่อให้เครื่องใช้งานต่อได้เด็ดขาด</strong> — ELCB ที่ตัดคือมันกำลังทำงานถูกต้อง มันกำลังบอกว่ามีไฟรั่วรออยู่ที่ตัวเครื่อง</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> measure between the element terminals and the body — it must read OL. Any reading means the element is leaking and must be replaced. <strong>⚠️ Never bypass or remove the ELCB to "get it working again."</strong> A tripping ELCB is doing its job: it is telling you live current is waiting on that casing.</p>
+      </div>
+
+      <div class="wh-fault" style="border-left-color:#f59e0b;">
+        <span class="wh-fault-title th-only">🟠 อาการที่ 2: "เปิดน้ำแล้วไฟไม่ติดเลย เครื่องเงียบสนิท"</span>
+        <span class="wh-fault-title en-only">🟠 Symptom 2: "Water on, no indicator light at all, completely dead"</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> ไม่มีไฟเข้าเครื่อง หรือ ELCB ยังไม่ได้ RESET</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> no supply reaching the unit, or the ELCB has not been reset</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> ไล่จากต้นทางก่อนเสมอ — เบรกเกอร์ที่ตู้ไฟตกหรือไม่ → กด RESET ที่ ELCB หน้าเครื่อง → วัดไฟที่ขั้วสายเข้าเครื่องว่ามี 220V จริงไหม อย่าเพิ่งรื้อเครื่องก่อนที่จะพิสูจน์ว่ามีไฟเข้าถึงตัวเครื่องแล้ว</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> always work from the supply end — is the consumer-unit breaker tripped? → press RESET on the unit's ELCB → measure for a real 220V at the incoming terminals. Don't open the heater before proving power actually gets to it.</p>
+      </div>
+
+      <div class="wh-fault" style="border-left-color:#eab308;">
+        <span class="wh-fault-title th-only">🟡 อาการที่ 3: "ไฟติด แต่น้ำไม่ร้อนเลย"</span>
+        <span class="wh-fault-title en-only">🟡 Symptom 3: "The light is on, but the water never gets hot"</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> วงจรอนุกรมขาดที่ด่านใดด่านหนึ่งหลังไฟแสดงสถานะ หรือฮีตเตอร์ขาด</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> the series chain is broken somewhere past the indicator lamp, or the element itself is open</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> วัดฮีตเตอร์ก่อนเลย (ต้องได้ 8–14 Ω ตามพิกัดวัตต์) ถ้าปกติให้ไล่วัดสวิตช์นิรภัยทีละตัวว่าตัวไหนขึ้น OL ขณะเครื่องเย็น — ตัวที่พบบ่อยคือ<strong>เทอร์มอลคัตเอาต์ตัดค้าง</strong> (บางรุ่นมีปุ่มกดคืน กดแล้วใช้ได้เลย <strong>แต่ต้องหาสาเหตุที่ทำให้มันร้อนเกินก่อน</strong> ไม่งั้นเดี๋ยวก็ตัดอีก)</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> measure the element first (8–14 Ω depending on rating). If it's fine, ohm each safety switch in turn while cold and find the one reading OL — most often it's a <strong>tripped thermal cutout</strong>. Some have a reset button that fixes it instantly, <strong>but find out what overheated it first</strong> or it will simply trip again.</p>
+      </div>
+
+      <div class="wh-fault" style="border-left-color:#2563eb;">
+        <span class="wh-fault-title th-only">🔵 อาการที่ 4: "น้ำไหลอ่อนแล้วเครื่องไม่ทำงาน ต้องเปิดน้ำแรงๆ ถึงจะติด"</span>
+        <span class="wh-fault-title en-only">🔵 Symptom 4: "It only kicks in when the tap is wide open"</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> ฟลุกซ์สวิตช์ไม่ยอมต่อวงจร เพราะแรงดันน้ำที่ดันไดอะแฟรมไม่พอ</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> the flow switch isn't closing because the water pressure on its diaphragm is too low</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> เริ่มจากของง่ายก่อน — <strong>ล้างตัวกรองน้ำขาเข้า</strong> และล้างตะกรันที่หัวฝักบัว (ส่วนใหญ่จบตรงนี้) ถ้ายังไม่หาย ให้ถอดชุดฟลุกซ์สวิตช์มาดูว่าไดอะแฟรมแข็งกรอบหรือตะกรันเกาะจนขยับไม่ได้ และเช็คว่าแรงดันน้ำในบ้านต่ำเกินสเปคเครื่องหรือไม่ (บ้านที่ใช้น้ำประปาตรงโดยไม่มีปั๊มมักเจอปัญหานี้)</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> start with the easy things — <strong>clean the inlet strainer</strong> and descale the shower head (that usually solves it). If not, pull the flow-switch assembly and check whether the diaphragm has hardened or is caked with scale, and whether household pressure is simply below the unit's spec (common in homes fed straight off the mains with no pump).</p>
+      </div>
+
+      <div class="wh-fault" style="border-left-color:#7c3aed;">
+        <span class="wh-fault-title th-only">🟣 อาการที่ 5: "ร้อนๆ หายๆ ตัดเป็นช่วงระหว่างอาบ"</span>
+        <span class="wh-fault-title en-only">🟣 Symptom 5: "It cycles hot and cold during a shower"</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> เทอร์โมสตัททำงานตัดบ่อยเกินปกติ เพราะน้ำระบายความร้อนออกจากฮีตเตอร์ได้ไม่ทัน</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> the thermostat is cycling because water isn't carrying heat away from the element fast enough</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> สาเหตุที่พบบ่อยที่สุดคือ <strong>ตะกรันเกาะฮีตเตอร์หนา</strong> ทำให้ความร้อนถ่ายเทลงน้ำไม่ทัน ตัวฮีตเตอร์เลยร้อนจัดจนเทอร์โมสตัทตัด รองลงมาคือน้ำไหลน้อยเกินไป (ดูอาการที่ 4) หรือเทอร์โมสตัทเองเสื่อมจนตัดที่อุณหภูมิต่ำกว่าที่ควร</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> the usual culprit is <strong>heavy scale on the element</strong>, insulating it so its own temperature runs away and the thermostat cuts out. Next most likely is insufficient flow (see symptom 4), or a drifting thermostat that now trips well below its rated point.</p>
+      </div>
+
+      <div class="wh-fault" style="border-left-color:#16a34a;">
+        <span class="wh-fault-title th-only">🟢 อาการที่ 6: "น้ำอุ่นไม่พอในหน้าหนาว" — เคสที่ "ไม่ใช่ของเสีย"</span>
+        <span class="wh-fault-title en-only">🟢 Symptom 6: "Not warm enough in the cool season" — the not-a-fault case</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> ฟิสิกส์ ไม่ใช่ความเสียหาย — น้ำประปาขาเข้าเย็นลง ΔT เท่าเดิม น้ำออกจึงเย็นลงตาม</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> physics, not a fault — the incoming water is colder, ΔT is unchanged, so the outlet is colder too</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สิ่งที่ช่างควรทำ:</strong> อธิบายลูกค้าด้วยสูตร ΔT ≈ P ÷ (70 × Q) และแนะนำให้<strong>หรี่น้ำลง</strong> ถ้าลูกค้ายืนยันว่าต้องการน้ำแรงและร้อนพร้อมกัน ทางเดียวคือ<strong>เปลี่ยนไปใช้เครื่องพิกัดวัตต์สูงกว่า</strong> ซึ่งต้อง<strong>ตรวจขนาดสายไฟและเบรกเกอร์เดิมว่ารับไหวหรือไม่ก่อนเสมอ</strong> — จุดนี้คือจุดที่ช่างมือใหม่ทำบ้านไฟไหม้บ่อยที่สุด</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>What the technician should do:</strong> explain it with ΔT ≈ P ÷ (70 × Q) and suggest <strong>turning the flow down</strong>. If the customer insists on both strong flow and hot water, the only answer is <strong>a higher-wattage unit</strong> — and you must <strong>verify the existing cable and breaker can carry it first</strong>. This is where inexperienced technicians start house fires.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. ความปลอดภัย -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">กฎเหล็กความปลอดภัยและการติดตั้ง</span><span class="en-only">Safety &amp; Installation Rules</span></div>
+    <div class="card">
+      <div class="warn-box" style="border-left-color:#dc2626; background:#fef2f2;">
+        <strong class="th-only" style="color:#b91c1c">🔴 สายดินและ ELCB — ห้ามต่อรองทุกกรณี</strong>
+        <strong class="en-only" style="color:#b91c1c">🔴 Earthing and the ELCB — never negotiable</strong>
+        <ol style="margin:.5rem 0 0 1.1rem; padding:0;">
+          <li class="th-only"><strong>ห้ามติดตั้งหรือส่งมอบเครื่องที่ไม่มีสายดิน</strong> ไม่ว่าลูกค้าจะบอกว่า "ใช้มาตั้งนานแล้วไม่เห็นเป็นไร" ก็ตาม</li>
+          <li class="en-only"><strong>Never install or hand back a unit without an earth connection</strong>, no matter how long the customer says it has been fine.</li>
+          <li class="th-only"><strong>ห้ามลัดข้าม ถอด หรือเปลี่ยน ELCB ให้เป็นเบรกเกอร์ธรรมดา</strong> เพื่อแก้อาการ "ไฟตัดบ่อย" — อาการนั้นคือ ELCB กำลังบอกว่ามีไฟรั่ว</li>
+          <li class="en-only"><strong>Never bypass, remove, or swap the ELCB for a plain breaker</strong> to stop "nuisance tripping" — that tripping is the ELCB reporting a real leak.</li>
+          <li class="th-only"><strong>กดปุ่ม TEST เดือนละครั้ง</strong> ต้องตัดทันที ถ้าไม่ตัดแปลว่า ELCB เสียและเครื่องไม่มีการป้องกันอะไรเหลืออยู่เลย</li>
+          <li class="en-only"><strong>Press the TEST button monthly.</strong> It must trip instantly; if it doesn't, the ELCB is dead and the unit has no protection left.</li>
+          <li class="th-only">ห้ามใช้เครื่องทำน้ำอุ่นร่วมกับปลั๊กพ่วง หรือปลั๊กที่ไม่มีขากราวด์ — ต้องเดินสายเฉพาะจากตู้ไฟพร้อมเบรกเกอร์ของตัวเอง</li>
+          <li class="en-only">Never run a water heater from an extension lead or a two-pin socket — it needs its own dedicated circuit and breaker from the consumer unit.</li>
+        </ol>
+      </div>
+
+      <div class="warn-box" style="margin-top:1rem;">
+        <strong class="th-only">🟡 ขนาดสายไฟและเบรกเกอร์ (ค่าอ้างอิงเบื้องต้น)</strong>
+        <strong class="en-only">🟡 Cable and breaker sizing (starting reference)</strong>
+        <div style="overflow-x:auto; margin-top:.5rem;">
+        <table class="wh-tbl">
+          <thead><tr>
+            <th><span class="th-only">พิกัดเครื่อง</span><span class="en-only">Rating</span></th>
+            <th><span class="th-only">กระแสใช้งาน</span><span class="en-only">Current</span></th>
+            <th><span class="th-only">สายไฟ (ทองแดง)</span><span class="en-only">Copper cable</span></th>
+            <th><span class="th-only">เบรกเกอร์</span><span class="en-only">Breaker</span></th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="hi">3,500 W</td><td class="val">≈ 16 A</td><td>2.5 mm²</td><td>20 A</td></tr>
+            <tr><td class="hi">4,500 W</td><td class="val">≈ 20 A</td><td>4 mm²</td><td>25 A</td></tr>
+            <tr><td class="hi">6,000 W</td><td class="val">≈ 27 A</td><td>6 mm²</td><td>32 A</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="th-only" style="margin:.6rem 0 0; font-size:.88rem;">⚠️ ตารางนี้เป็นค่าอ้างอิงเพื่อให้เห็นภาพเท่านั้น — <strong>การติดตั้งจริงต้องยึดตามคู่มือของเครื่องรุ่นนั้นและมาตรฐานการเดินสายไฟฟ้า</strong> เพราะขนาดสายยังขึ้นกับความยาวสาย วิธีเดินสาย (ในท่อ/ในผนัง) และอุณหภูมิแวดล้อมด้วย</p>
+        <p class="en-only" style="margin:.6rem 0 0; font-size:.88rem;">⚠️ These figures are illustrative only — <strong>real installations must follow the model's own manual and the wiring regulations</strong>, since cable size also depends on run length, installation method (conduit/in-wall) and ambient temperature.</p>
+      </div>
+
+      <div class="warn-box" style="margin-top:1rem;">
+        <strong class="th-only">🟢 ขั้นตอนก่อนเปิดฝาเครื่อง</strong>
+        <strong class="en-only">🟢 Before opening the unit</strong>
+        <ol style="margin:.5rem 0 0 1.1rem; padding:0;">
+          <li class="th-only"><strong>ปิดเบรกเกอร์ที่ตู้ไฟ</strong> (ไม่ใช่แค่ปิดสวิตช์ที่เครื่อง) แล้วใช้ไขควงวัดไฟหรือมิเตอร์ยืนยันว่าไม่มีไฟจริง</li>
+          <li class="en-only"><strong>Switch off at the consumer unit</strong> (not just the unit's own switch) and confirm it's dead with a tester or meter.</li>
+          <li class="th-only"><strong>ปิดวาล์วน้ำเข้า แล้วเปิดฝักบัวค้างไว้เพื่อระบายแรงดันและน้ำที่ค้างในหม้อต้ม</strong></li>
+          <li class="en-only"><strong>Close the inlet valve and leave the shower open</strong> to release pressure and drain the chamber.</li>
+          <li class="th-only">ถ่ายรูปตำแหน่งสายไฟและสายกราวด์ก่อนถอดทุกครั้ง — โดยเฉพาะขั้วสายที่ฮีตเตอร์และเทอร์โมสตัท</li>
+          <li class="en-only">Photograph the wiring and earth connections before removing anything, especially at the element and thermostat terminals.</li>
+          <li class="th-only">ประกอบกลับแล้ว <strong>ต้องไล่อากาศออกจากหม้อต้มด้วยการเปิดน้ำก่อนจ่ายไฟเสมอ</strong> — ถ้าจ่ายไฟตอนหม้อต้มยังมีอากาศค้าง ฮีตเตอร์จะไหม้แห้งทันที</li>
+          <li class="en-only">After reassembly, <strong>always run water through to purge the air before switching the power on</strong> — energising a chamber with an air pocket dry-burns the element immediately.</li>
+        </ol>
+      </div>
+
+      <p class="th-only" style="font-size:.88rem;color:var(--text-light); margin-top:1rem;">🔗 ทบทวนการคำนวณ P = V²/R และ I = P/V ในบท <a href="ohm.html"><strong>กฎของโอห์ม</strong></a> • ระบบสายดินและไฟรั่วในบท <a href="home-wiring.html"><strong>ไฟบ้านและความปลอดภัย</strong></a> • การปรับกำลังด้วยไทริสเตอร์ในบท <a href="thyristor.html"><strong>ไทริสเตอร์</strong></a></p>
+      <p class="en-only" style="font-size:.88rem;color:var(--text-light); margin-top:1rem;">🔗 Review P = V²/R and I = P/V in the <a href="ohm.html"><strong>Ohm's Law</strong></a> lesson • earthing and leakage in <a href="home-wiring.html"><strong>Home Wiring &amp; Safety</strong></a> • thyristor power control in the <a href="thyristor.html"><strong>Thyristor</strong></a> lesson</p>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
+<script>const CURRENT_PAGE='repair-water-heater';</script>
+<script src="js/nav.js"></script>
+</body>
+</html>

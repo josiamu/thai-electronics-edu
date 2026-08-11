@@ -69,7 +69,8 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | มอเตอร์พัดลมไฟฟ้า | Electric Fan Motor | `fan-motor.html` (มีซิมสวิตช์ความเร็วโต้ตอบ) |
 | เตาแม่เหล็กไฟฟ้า | Induction Stove | `induction-stove.html` |
 | ภาคจ่ายไฟสวิตชิ่ง (LNK304) | Switching PSU (LNK304) | `switching-psu.html` (มีวงจรโต้ตอบทีละขั้น 8 ขั้น + จำลองอาการเสีย) |
-| เตาไมโครเวฟ | Microwave Oven | `microwave.html` (วงจร 4 โซน • เซฟตี้ประตู 3 ตัว • ทวีแรงดัน 4,000V • ตารางจุดวัด Cold Test) |
+| เตาไมโครเวฟ | Microwave Oven | `microwave.html` (วงจร 4 โซน + วงจรรวมแบบง่าย • เซฟตี้ประตู 3 ตัว • ทวีแรงดัน 4,000V • ตารางจุดวัด Cold Test) |
+| เครื่องทำน้ำอุ่น | Water Heater | `water-heater.html` (ทำน้ำร้อนทันที • ฟลุกซ์สวิตช์ • วงจรอย่างง่าย • ELCB กับสายดิน) |
 
 **งานปฏิบัติ / Practical**
 | ไทย | English | หน้า |
