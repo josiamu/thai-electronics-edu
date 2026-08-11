@@ -14,6 +14,10 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'lesson-microwave-2026-08-11', date:'2026-08-11', type:'lesson',
+    th:'บทเรียนใหม่ในกลุ่ม <b>🛠️ งานซ่อมเครื่องใช้ไฟฟ้า</b>: <b>เตาไมโครเวฟ</b> — อ่านลายแทงวงจรโดยแบ่งเป็น 4 โซนจากปลั๊กถึงแมกนีตรอน, ผ่า<b>ระบบเซฟตี้ประตู 3 ทหารเสือ</b> ว่าทำไม "ปิดประตูแล้วฟิวส์ระเบิดปัง", วงจร<b>ทวีแรงดัน 2,000V → 4,000V</b> ทีละจังหวะ, ตารางจุดวัด Cold Test พร้อมค่ามาตรฐานครบทุกอะไหล่ และคลินิกอาการเสีย 7 เคส — พร้อมกฎเหล็กที่ห้ามลืม: <b>ถอดปลั๊กแล้ว HV Capacitor ยังอมไฟ 2,000V รออยู่</b>',
+    en:'New lesson in the <b>🛠️ Appliance Repair</b> group: <b>Microwave Oven</b> — read the schematic as 4 zones from plug to magnetron, dissect the <b>3-switch door interlock</b> and why "closing the door blows the fuse", walk the <b>2,000V → 4,000V voltage doubler</b> stroke by stroke, plus a full cold-test reference table and a 7-case fault clinic — and the rule you must never forget: <b>unplugging does not empty the HV capacitor, it still holds 2,000V</b>',
+    href:'microwave.html' },
   { id:'download-microwave-2026-08-11', date:'2026-08-11', type:'download',
     th:'ไฟล์ใหม่ 4 ไฟล์ในหมวด <b>🛠️ งานซ่อม</b>: <b>ตรวจเช็คเตาไมโครเวฟ</b> — คัมภีร์ช่างวิเคราะห์และตรวจซ่อม, ผังวงจร (Schematic Diagram), ผังการเดินสายจริง (Pictorial Wiring Diagram) และ<b>วงจรไฟแรงสูง (HV Circuit)</b> ที่ต้องคายประจุก่อนแตะทุกครั้ง (PDF)',
     en:'Four new files in the <b>🛠️ Repair</b> section: <b>Checking a Microwave Oven</b> — the technician&#39;s diagnostic &amp; repair guide, the schematic diagram, the pictorial wiring diagram, and the <b>high-voltage (HV) circuit</b> you must discharge before touching (PDF)',

@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="ซ่อมเตาไมโครเวฟ | สื่อการเรียนการสอน" data-title-en="Microwave Oven Repair | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ซ่อมเตาไมโครเวฟ | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.mw-zones { display:grid; grid-template-columns:repeat(4,1fr); gap:.5rem; align-items:stretch; }
+@media (max-width:760px){ .mw-zones{ grid-template-columns:1fr 1fr; } }
+.mw-zone { background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:.85rem .6rem; text-align:center; }
+.mw-zone .mw-num { display:inline-block; width:24px; height:24px; line-height:24px; border-radius:50%; background:var(--primary); color:#fff; font-weight:700; font-size:.82rem; margin-bottom:.4rem; }
+.mw-zone.danger .mw-num { background:#dc2626; }
+.mw-zone h4 { margin:.2rem 0 .35rem; font-size:.9rem; color:var(--primary-dark); }
+.mw-zone.danger h4 { color:#b91c1c; }
+.mw-zone p { margin:0; font-size:.78rem; color:var(--text-light); }
+.mw-tbl td.hi { font-weight:700; color:var(--primary-dark); white-space:nowrap; }
+.mw-tbl td.val { font-weight:700; color:var(--secondary); white-space:nowrap; }
+.mw-fault { border:1px solid var(--border); border-radius:12px; padding:1rem 1.15rem; margin:0 0 1rem; border-left-width:5px; border-left-style:solid; }
+.mw-fault:last-child { margin-bottom:0; }
+.mw-fault-title { font-weight:700; margin-bottom:.4rem; display:block; }
+.mw-sw { display:grid; grid-template-columns:repeat(3,1fr); gap:.6rem; }
+@media (max-width:760px){ .mw-sw{ grid-template-columns:1fr; } }
+.mw-swcard { border:1px solid var(--border); border-radius:12px; padding:.85rem; background:var(--bg); border-top:4px solid var(--primary); }
+.mw-swcard.nc { border-top-color:#dc2626; }
+.mw-swcard h4 { margin:0 0 .35rem; font-size:.9rem; color:var(--primary-dark); }
+.mw-swcard.nc h4 { color:#b91c1c; }
+.mw-swcard p { margin:0; font-size:.82rem; color:var(--text-light); }
+.mw-swcard .mw-type { display:inline-block; font-size:.72rem; font-weight:700; padding:.1rem .45rem; border-radius:6px; background:var(--primary); color:#fff; margin-bottom:.35rem; }
+.mw-swcard.nc .mw-type { background:#dc2626; }
+.mw-wire { display:inline-block; width:.85rem; height:.85rem; border-radius:3px; vertical-align:-1px; margin-right:.35rem; border:1px solid rgba(0,0,0,.2); }
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">📡</div>
+    <div>
+      <h1 class="th-only">ซ่อมเตาไมโครเวฟ (Microwave Oven)</h1>
+      <h1 class="en-only">Microwave Oven Repair</h1>
+      <p class="th-only">ไล่วงจร 4 โซน • ระบบเซฟตี้ประตู 3 ทหารเสือ • วงจรทวีแรงดัน 4,000V • ตารางจุดวัด Cold Test • คลินิกวิเคราะห์อาการเสีย</p>
+      <p class="en-only">The 4 circuit zones • The 3-switch door interlock • The 4,000V voltage doubler • Cold-test reference table • Fault-diagnosis clinic</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="card" style="border-left:4px solid #dc2626; display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+    <div style="font-size:1.6rem;">☠️</div>
+    <div style="flex:1; min-width:220px;">
+      <strong class="th-only">บทนี้เกี่ยวข้องกับไฟฟ้าแรงสูงระดับ 4,000 โวลต์ ที่ค้างอยู่แม้ถอดปลั๊กแล้ว</strong>
+      <strong class="en-only">This lesson involves 4,000 volts that remains stored even after unplugging</strong><br>
+      <span class="th-only">เตาไมโครเวฟคือเครื่องใช้ไฟฟ้าในบ้านที่อันตรายที่สุดสำหรับช่างที่ไม่มีความรู้ — อ่านหัวข้อ "กฎเหล็กความปลอดภัย" ท้ายบทให้เข้าใจก่อนเปิดฝาเครื่องจริง</span>
+      <span class="en-only">A microwave is the most dangerous household appliance for an untrained technician — read the "Safety Rules" section at the end before opening a real unit</span>
+    </div>
+    <a class="btn btn-green" href="downloads.html?cat=repair&amp;file=pdf%2Fworkshop%2F%E0%B8%95%E0%B8%A3%E0%B8%A7%E0%B8%88%E0%B9%80%E0%B8%8A%E0%B9%87%E0%B8%84_%E0%B9%84%E0%B8%A1%E0%B9%82%E0%B8%84%E0%B8%A3%E0%B9%80%E0%B8%A7%E0%B8%9F_%E0%B8%84%E0%B8%B1%E0%B8%A1%E0%B8%A0%E0%B8%B5%E0%B8%A3%E0%B9%8C%E0%B8%8A%E0%B9%88%E0%B8%B2%E0%B8%87%E0%B8%A7%E0%B8%B4%E0%B9%80%E0%B8%84%E0%B8%A3%E0%B8%B2%E0%B8%B0%E0%B8%AB%E0%B9%8C%E0%B9%81%E0%B8%A5%E0%B8%B0%E0%B8%95%E0%B8%A3%E0%B8%A7%E0%B8%88%E0%B8%8B%E0%B9%88%E0%B8%AD%E0%B8%A1%E0%B9%80%E0%B8%95%E0%B8%B2%E0%B9%84%E0%B8%A1%E0%B9%82%E0%B8%84.pdf"><span class="th-only">ใบความรู้ + ผังวงจร →</span><span class="en-only">Handouts &amp; diagrams →</span></a>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">วัตถุประสงค์การเรียนรู้</span><span class="en-only">Learning Objectives</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li>ไล่เส้นทางไฟ 220V จากปลั๊กไปจนถึงหลอดแมกนีตรอน โดยแบ่งวงจรออกเป็น 4 โซน</li>
+        <li>อธิบายการทำงานของไมโครสวิตช์ประตูทั้ง 3 ตัว และบอกได้ว่าทำไม "ปิดประตูแล้วฟิวส์ระเบิด"</li>
+        <li>อธิบายวงจรทวีแรงดัน (Voltage Doubler) ที่เปลี่ยนไฟ 2,000V AC เป็น 4,000V DC</li>
+        <li>วัดค่าอะไหล่ฝั่งแรงสูงด้วยวิธี Cold Test และเทียบกับค่ามาตรฐานได้</li>
+        <li>วิเคราะห์อาการเสียยอดฮิต แล้วพุ่งเป้าไปยังอะไหล่ต้นตอโดยไม่ต้องไล่มั่ว</li>
+        <li>ปฏิบัติตามกฎการคายประจุ HV Capacitor ก่อนลงมือซ่อมทุกครั้ง</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>Trace the 220V path from the plug to the magnetron by splitting the circuit into 4 zones</li>
+        <li>Explain what each of the 3 door microswitches does, and why "closing the door blows the fuse"</li>
+        <li>Explain the voltage doubler that turns 2,000V AC into 4,000V DC</li>
+        <li>Cold-test the high-voltage parts and compare readings against the standard values</li>
+        <li>Match common symptoms to the likely faulty part instead of probing at random</li>
+        <li>Follow the HV capacitor discharge rule before every repair</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 1. อ่านวงจร 4 โซน -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">อ่านลายแทง: แบ่งวงจรเป็น 4 โซน</span><span class="en-only">Reading the Schematic: 4 Zones</span></div>
+    <div class="card">
+      <p class="th-only">ผังวงจรไมโครเวฟดูรกตาเพราะมีสายไฟเต็มไปหมด แต่ถ้าแบ่งเป็น <strong>4 โซน</strong> แล้วไล่ว่าไฟ 220V วิ่งจากปลั๊กไปสิ้นสุดที่หัวยิงคลื่นอย่างไร มันจะอ่านง่ายขึ้นทันที</p>
+      <p class="en-only">A microwave schematic looks cluttered, but split it into <strong>4 zones</strong> and follow how the 220V travels from the plug to the wave emitter — it becomes readable at once.</p>
+
+      <div style="text-align:center; margin-top:1rem;">
+        <svg viewBox="0 0 900 250" style="max-width:100%;height:auto;font-family:inherit;font-size:11px;" role="img"
+             aria-label="Microwave oven block diagram: AC input, door interlock, control board, high voltage section">
+          <defs>
+            <marker id="mw-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0,1 L9,5 L0,9 z" fill="var(--primary)"/>
+            </marker>
+            <marker id="mw-r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0,1 L9,5 L0,9 z" fill="#dc2626"/>
+            </marker>
+          </defs>
+
+          <text class="th-only" x="10" y="106" fill="#dc2626" font-weight="700" font-size="13">220–240V AC</text>
+          <text class="en-only" x="10" y="106" fill="#dc2626" font-weight="700" font-size="13">220–240V AC</text>
+          <text x="10" y="122" fill="var(--text-light)">L / N</text>
+          <line x1="92" y1="120" x2="118" y2="120" stroke="var(--primary)" stroke-width="2" marker-end="url(#mw-a)"/>
+
+          <!-- zone 1 -->
+          <rect x="118" y="66" width="164" height="112" rx="12" fill="var(--bg)" stroke="var(--border)" stroke-width="1.5"/>
+          <circle cx="136" cy="84" r="10" fill="var(--primary)"/><text x="136" y="88" text-anchor="middle" fill="#fff" font-weight="700">1</text>
+          <text class="th-only" x="154" y="88" fill="var(--primary-dark)" font-weight="700">ด่านหน้า + เซฟตี้ความร้อน</text>
+          <text class="en-only" x="154" y="88" fill="var(--primary-dark)" font-weight="700">Input + thermal cutout</text>
+          <text x="134" y="112" fill="var(--text)">Noise filter → Fuse 8–15A</text>
+          <text x="134" y="130" fill="var(--text)">Thermal cutout (oven)</text>
+          <text x="134" y="148" fill="var(--text)">Thermal cutout (mag.)</text>
+          <text class="th-only" x="134" y="166" fill="var(--text-light)">ร้อนจัด = ตัดไฟทั้งระบบ</text>
+          <text class="en-only" x="134" y="166" fill="var(--text-light)">overheat = cuts the whole system</text>
+          <line x1="282" y1="120" x2="308" y2="120" stroke="var(--primary)" stroke-width="2" marker-end="url(#mw-a)"/>
+
+          <!-- zone 2 -->
+          <rect x="308" y="66" width="164" height="112" rx="12" fill="var(--bg)" stroke="var(--border)" stroke-width="1.5"/>
+          <circle cx="326" cy="84" r="10" fill="var(--primary)"/><text x="326" y="88" text-anchor="middle" fill="#fff" font-weight="700">2</text>
+          <text class="th-only" x="344" y="88" fill="var(--primary-dark)" font-weight="700">เซฟตี้ประตู 3 ทหารเสือ</text>
+          <text class="en-only" x="344" y="88" fill="var(--primary-dark)" font-weight="700">3-switch door interlock</text>
+          <text x="324" y="112" fill="var(--text)">Latch switch A (NO)</text>
+          <text x="324" y="130" fill="var(--text)">Latch switch B (NO)</text>
+          <text x="324" y="148" fill="#dc2626" font-weight="700">Monitor switch (NC)</text>
+          <text class="th-only" x="324" y="166" fill="var(--text-light)">ประตูไม่สนิท = ไฟ L ไปต่อไม่ได้</text>
+          <text class="en-only" x="324" y="166" fill="var(--text-light)">door ajar = L cannot pass</text>
+          <line x1="472" y1="120" x2="498" y2="120" stroke="var(--primary)" stroke-width="2" marker-end="url(#mw-a)"/>
+
+          <!-- zone 3 -->
+          <rect x="498" y="66" width="164" height="112" rx="12" fill="var(--bg)" stroke="var(--border)" stroke-width="1.5"/>
+          <circle cx="516" cy="84" r="10" fill="var(--primary)"/><text x="516" y="88" text-anchor="middle" fill="#fff" font-weight="700">3</text>
+          <text class="th-only" x="534" y="88" fill="var(--primary-dark)" font-weight="700">สมองกล + รีเลย์สั่งการ</text>
+          <text class="en-only" x="534" y="88" fill="var(--primary-dark)" font-weight="700">Control board + relays</text>
+          <text x="514" y="112" fill="var(--text)">LV transformer → 9–12V</text>
+          <text x="514" y="130" fill="var(--text)">Main / Grill / Power relay</text>
+          <text class="th-only" x="514" y="150" fill="var(--text-light)">จานหมุน • พัดลม • หลอดไฟ</text>
+          <text class="en-only" x="514" y="150" fill="var(--text-light)">turntable • fan • lamp</text>
+          <text class="th-only" x="514" y="166" fill="var(--text-light)">และคำสั่ง "เริ่มทำความร้อน"</text>
+          <text class="en-only" x="514" y="166" fill="var(--text-light)">and the "start heating" command</text>
+          <line x1="662" y1="120" x2="688" y2="120" stroke="#dc2626" stroke-width="2.5" marker-end="url(#mw-r)"/>
+
+          <!-- zone 4 -->
+          <rect x="688" y="52" width="200" height="140" rx="12" fill="#fef2f2" stroke="#dc2626" stroke-width="1.8"/>
+          <circle cx="706" cy="72" r="10" fill="#dc2626"/><text x="706" y="76" text-anchor="middle" fill="#fff" font-weight="700">4</text>
+          <text class="th-only" x="724" y="76" fill="#b91c1c" font-weight="700">ภาคแรงสูง (โซนอันตราย)</text>
+          <text class="en-only" x="724" y="76" fill="#b91c1c" font-weight="700">High-voltage (danger zone)</text>
+          <text x="704" y="100" fill="var(--text)">HV transformer → 2,000V AC</text>
+          <text x="704" y="118" fill="var(--text)">HV fuse</text>
+          <text x="704" y="136" fill="var(--text)">HV capacitor + HV diode</text>
+          <text x="704" y="154" fill="#b91c1c" font-weight="700">→ 4,000V DC</text>
+          <text x="704" y="176" fill="var(--text)" font-weight="700">Magnetron (2,450 MHz)</text>
+        </svg>
+      </div>
+
+      <div class="mw-zones" style="margin-top:1.1rem;">
+        <div class="mw-zone">
+          <span class="mw-num">1</span>
+          <h4 class="th-only">ไฟขาเข้า</h4><h4 class="en-only">AC Input</h4>
+          <p class="th-only">Noise filter กันคลื่นย้อนกลับไปกวนไฟบ้าน + ฟิวส์เมนดักไว้เป็นด่านแรก</p>
+          <p class="en-only">A noise filter stops RF getting back into the mains, with the main fuse guarding the entry</p>
+        </div>
+        <div class="mw-zone">
+          <span class="mw-num">2</span>
+          <h4 class="th-only">เซฟตี้ประตู</h4><h4 class="en-only">Door Interlock</h4>
+          <p class="th-only">ไมโครสวิตช์ 3 ตัวทำงานสอดประสานกัน กันคลื่นรั่วไหลออกจากตัวเครื่อง</p>
+          <p class="en-only">Three microswitches work together so no radiation can leak out</p>
+        </div>
+        <div class="mw-zone">
+          <span class="mw-num">3</span>
+          <h4 class="th-only">บอร์ดควบคุม</h4><h4 class="en-only">Control Board</h4>
+          <p class="th-only">MCU + รีเลย์ 3 ตัว สับสวิตช์จ่ายไฟ 220V ให้แต่ละกลุ่มโหลด</p>
+          <p class="en-only">The MCU plus 3 relays switch the 220V out to each load group</p>
+        </div>
+        <div class="mw-zone danger">
+          <span class="mw-num">4</span>
+          <h4 class="th-only">ภาคแรงสูง</h4><h4 class="en-only">High Voltage</h4>
+          <p class="th-only">หม้อแปลง + C + ไดโอด ทวีแรงดันเป็น 4,000V DC ป้อนแมกนีตรอน</p>
+          <p class="en-only">Transformer + cap + diode double it to 4,000V DC for the magnetron</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. โซน 1 -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">โซน 1 — ด่านหน้า: ฟิวส์เมนและเทอร์โมสตัท</span><span class="en-only">Zone 1 — The Front Line: Main Fuse &amp; Thermostats</span></div>
+    <div class="card">
+      <p class="th-only">ไฟ L และ N วิ่งผ่าน <strong>Noise Filter</strong> เพื่อดักคลื่นความถี่สูงจากไมโครเวฟไม่ให้ย้อนกลับไปกวนระบบไฟบ้าน โดยมี <strong>ฟิวส์เมน (8A–15A)</strong> คอยดักอยู่ ถัดมาจะเจอ <strong>เทอร์โมสตัท (Thermal Cutout)</strong> 2 ตัว ตัวหนึ่งแปะบนเพดานเตา อีกตัวแปะบนตัวแมกนีตรอน ทั้งคู่เป็นสวิตช์ชนิด <strong>NC (ปกติต่อ)</strong> — ถ้าจุดใดจุดหนึ่งร้อนจัด หน้าสัมผัสจะจากออกและตัดไฟทิ้งทั้งระบบเพื่อกันไฟไหม้</p>
+      <p class="en-only">L and N pass through the <strong>noise filter</strong>, which keeps the microwave's RF out of the household mains, with the <strong>main fuse (8A–15A)</strong> guarding the way in. Next come two <strong>thermal cutouts</strong> — one on the oven ceiling, one on the magnetron body. Both are <strong>NC (normally closed)</strong> switches: if either point overheats, the contacts open and kill the whole system to prevent a fire.</p>
+
+      <div class="warn-box" style="margin-top:1rem;">
+        <strong class="th-only">⚠️ กฎเหล็ก: ฟิวส์เมนขาดดำกระจุย ห้ามใส่ฟิวส์ใหม่แล้วเสียบปลั๊กทันที</strong>
+        <strong class="en-only">⚠️ Rule: a charred main fuse means never just fit a new one and plug in</strong>
+        <p class="th-only" style="margin:.4rem 0 0">ฟิวส์ระดับ 15A ที่ขาดจนดำ แปลว่ามี <strong>อุปกรณ์ตัวใหญ่ช็อตทะลุ</strong> อยู่ในเครื่อง (ส่วนใหญ่คือสวิตช์ประตู หรือ HV Capacitor) ต้องหาตัวช็อตให้เจอก่อน ไม่งั้นใส่ฟิวส์กี่ตัวก็ระเบิดทิ้งหมด</p>
+        <p class="en-only" style="margin:.4rem 0 0">A 15A fuse blown black means something big has <strong>shorted through</strong> inside (usually a door switch or the HV capacitor). Find the short first, or every new fuse you fit will blow too.</p>
+      </div>
+
+      <div class="info-box" style="margin-top:1rem;">
+        <strong class="th-only">💡 เคล็ดวิชาช่าง: "เวฟไป 3 นาทีแล้วเครื่องดับมืดสนิท พอทิ้งไว้ครึ่งชั่วโมงกลับมาเปิดติดเอง"</strong>
+        <strong class="en-only">💡 Pro tip: "It runs 3 minutes, goes completely dead, then works again after half an hour"</strong>
+        <p class="th-only" style="margin:.4rem 0 0">อาการนี้ <strong>ไม่ใช่บอร์ดรวน</strong> แต่คือเทอร์โมสตัททำงานถูกต้องตามหน้าที่ — สาเหตุจริงคือ <strong>พัดลมระบายความร้อนไม่หมุน</strong> ทำให้เครื่องร้อนจัดจนเทอร์โมสตัทสั่งตัดไฟ พอเย็นลงมันก็กลับมาต่อเอง ช่างต้องพุ่งเป้าไปเช็คมอเตอร์พัดลม ไม่ใช่เปลี่ยนบอร์ด</p>
+        <p class="en-only" style="margin:.4rem 0 0">This is <strong>not a faulty board</strong> — the thermostat is doing exactly its job. The real cause is a <strong>cooling fan that isn't spinning</strong>, so the unit overheats and the thermostat cuts power; once it cools it resets itself. Go straight to the fan motor, don't replace the board.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. โซน 2 ประตู 3 ทหารเสือ -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">โซน 2 — เซฟตี้ประตู "3 ทหารเสือ"</span><span class="en-only">Zone 2 — The 3-Switch Door Interlock</span></div>
+    <div class="card">
+      <p class="th-only">ไมโครเวฟต้องกันคลื่นรั่วไหลออกมาโดนคนใช้ วิศวกรจึงใส่ <strong>ไมโครสวิตช์ 3 ตัว</strong> ทำงานสอดประสานกัน นี่คือ<strong>จุดปราบเซียน</strong>ที่ช่างต้องเข้าใจให้ขึ้นใจ เพราะสวิตช์ตัวกลางทำงาน<strong>ตรงข้าม</strong>กับเพื่อนอีก 2 ตัว</p>
+      <p class="en-only">A microwave must never leak radiation at the user, so engineers fit <strong>three microswitches</strong> that work in concert. This is the section that <strong>catches out experienced techs</strong>, because the middle switch works the <strong>opposite way</strong> to the other two.</p>
+
+      <div class="mw-sw" style="margin-top:1rem;">
+        <div class="mw-swcard">
+          <span class="mw-type">NO</span>
+          <h4 class="th-only">1. Latch Switch A (ตัวบน)</h4><h4 class="en-only">1. Latch Switch A (top)</h4>
+          <p class="th-only">ตัดต่อไฟเส้น L หลักเข้าเครื่อง ถ้าประตูไม่ปิด ไฟ L จะวิ่งข้ามไปหาอุปกรณ์อื่นไม่ได้เลย</p>
+          <p class="en-only">Switches the main L line into the oven. With the door open, L cannot reach anything downstream at all.</p>
+        </div>
+        <div class="mw-swcard nc">
+          <span class="mw-type">NC</span>
+          <h4 class="th-only">2. Monitor Switch (ตัวกลาง — สายพลีชีพ)</h4><h4 class="en-only">2. Monitor Switch (middle — the sacrificial one)</h4>
+          <p class="th-only">ต่อคร่อมขวางระหว่าง L กับ N ตอนประตูเปิดหน้าสัมผัสจะ<strong>ต่อถึงกัน</strong> รอจังหวะพลีชีพ</p>
+          <p class="en-only">Bridges L to N. With the door open its contacts are <strong>closed</strong>, waiting to sacrifice itself.</p>
+        </div>
+        <div class="mw-swcard">
+          <span class="mw-type">NO</span>
+          <h4 class="th-only">3. Latch Switch B (ตัวล่าง)</h4><h4 class="en-only">3. Latch Switch B (bottom)</h4>
+          <p class="th-only">ด่านสุดท้าย คอยตัด-ต่อไฟที่วิ่งไปหาชุดรีเลย์ทำความร้อน และส่งสัญญาณบอกบอร์ดว่าประตูปิดสนิทแล้ว</p>
+          <p class="en-only">The last line of defence: it gates the feed to the heating relay and tells the board the door is properly shut.</p>
+        </div>
+      </div>
+
+      <div style="text-align:center; margin-top:1.2rem;">
+        <svg viewBox="0 0 760 250" style="max-width:100%;height:auto;font-family:inherit;font-size:11.5px;" role="img"
+             aria-label="Door interlock wiring: latch switch A on line, monitor switch bridging line to neutral, latch switch B feeding the relay">
+          <!-- L rail -->
+          <text x="8" y="58" fill="#dc2626" font-weight="700" font-size="13">L</text>
+          <line x1="26" y1="54" x2="96" y2="54" stroke="#dc2626" stroke-width="2.5"/>
+          <!-- fuse -->
+          <rect x="96" y="44" width="48" height="20" rx="4" fill="var(--bg)" stroke="var(--text)" stroke-width="1.5"/>
+          <line x1="96" y1="54" x2="144" y2="54" stroke="var(--text)" stroke-width="1.5"/>
+          <text x="120" y="36" text-anchor="middle" fill="var(--text)" font-weight="700">FUSE</text>
+          <line x1="144" y1="54" x2="230" y2="54" stroke="#dc2626" stroke-width="2.5"/>
+
+          <!-- latch A (NO, drawn open) -->
+          <circle cx="230" cy="54" r="3.5" fill="var(--text)"/>
+          <line x1="230" y1="54" x2="292" y2="34" stroke="var(--text)" stroke-width="2.2"/>
+          <circle cx="298" cy="54" r="3.5" fill="var(--text)"/>
+          <text class="th-only" x="264" y="88" text-anchor="middle" fill="var(--primary-dark)" font-weight="700">Latch A (NO)</text>
+          <text class="en-only" x="264" y="88" text-anchor="middle" fill="var(--primary-dark)" font-weight="700">Latch A (NO)</text>
+          <line x1="298" y1="54" x2="470" y2="54" stroke="#dc2626" stroke-width="2.5"/>
+          <circle cx="380" cy="54" r="4" fill="#dc2626"/>
+
+          <!-- latch B (NO) down to relay -->
+          <line x1="470" y1="54" x2="470" y2="120" stroke="#dc2626" stroke-width="2.5"/>
+          <circle cx="470" cy="120" r="3.5" fill="var(--text)"/>
+          <line x1="470" y1="120" x2="490" y2="164" stroke="var(--text)" stroke-width="2.2"/>
+          <circle cx="470" cy="176" r="3.5" fill="var(--text)"/>
+          <text class="th-only" x="516" y="150" fill="var(--primary-dark)" font-weight="700">Latch B (NO)</text>
+          <text class="en-only" x="516" y="150" fill="var(--primary-dark)" font-weight="700">Latch B (NO)</text>
+          <line x1="470" y1="176" x2="470" y2="200" stroke="#dc2626" stroke-width="2.5"/>
+          <line x1="470" y1="200" x2="596" y2="200" stroke="#dc2626" stroke-width="2.5"/>
+
+          <!-- relay + HV transformer -->
+          <rect x="596" y="168" width="132" height="46" rx="8" fill="var(--bg)" stroke="var(--border)" stroke-width="1.5"/>
+          <text class="th-only" x="662" y="188" text-anchor="middle" fill="var(--text)" font-weight="700">Power Relay</text>
+          <text class="en-only" x="662" y="188" text-anchor="middle" fill="var(--text)" font-weight="700">Power Relay</text>
+          <text class="th-only" x="662" y="205" text-anchor="middle" fill="var(--text-light)">→ หม้อแปลงแรงสูง</text>
+          <text class="en-only" x="662" y="205" text-anchor="middle" fill="var(--text-light)">→ HV transformer</text>
+
+          <!-- monitor switch bridging L(after latch A) to N -->
+          <line x1="380" y1="54" x2="380" y2="96" stroke="#dc2626" stroke-width="2.5"/>
+          <circle cx="380" cy="96" r="3.5" fill="var(--text)"/>
+          <line x1="380" y1="96" x2="380" y2="128" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="0"/>
+          <circle cx="380" cy="128" r="3.5" fill="var(--text)"/>
+          <rect x="342" y="96" width="76" height="32" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="1.6"/>
+          <text x="380" y="116" text-anchor="middle" fill="#b91c1c" font-weight="700">MONITOR</text>
+          <text class="th-only" x="196" y="116" fill="#b91c1c" font-weight="700">NC — ประตูเปิดอยู่ = ต่อถึงกัน</text>
+          <text class="en-only" x="176" y="116" fill="#b91c1c" font-weight="700">NC — closed while the door is open</text>
+          <line x1="380" y1="128" x2="380" y2="222" stroke="#dc2626" stroke-width="2.5"/>
+
+          <!-- N rail -->
+          <text x="8" y="226" fill="var(--primary)" font-weight="700" font-size="13">N</text>
+          <line x1="26" y1="222" x2="662" y2="222" stroke="var(--primary)" stroke-width="2.5"/>
+          <circle cx="380" cy="222" r="4" fill="var(--primary)"/>
+          <line x1="662" y1="222" x2="662" y2="214" stroke="var(--primary)" stroke-width="2.5"/>
+          <circle cx="662" cy="222" r="4" fill="var(--primary)"/>
+        </svg>
+      </div>
+
+      <div class="warn-box" style="border-left-color:#dc2626; background:#fef2f2; margin-top:1.1rem;">
+        <strong class="th-only" style="color:#b91c1c">💥 กลไก "สายพลีชีพ" — ทำไมปิดประตูแล้วฟิวส์ระเบิดปัง</strong>
+        <strong class="en-only" style="color:#b91c1c">💥 The sacrificial mechanism — why closing the door blows the fuse</strong>
+        <p class="th-only" style="margin:.5rem 0 0">ปกติเมื่อปิดประตู <strong>Monitor Switch จะจากออกก่อน</strong> แล้ว Latch A ถึงจะต่อไฟ — ทั้งสองตัวจึงไม่มีทางต่อพร้อมกัน แต่ถ้า <strong>Latch A หน้าสัมผัสละลายติดค้าง</strong> พอเปิดประตูครั้งถัดไป Monitor จะต่อถึงกันขณะที่ไฟ L ยังทะลุมาถึง ผลคือ <strong>ลัดวงจร L–N 100%</strong> ดึงกระแสมหาศาลไปทำลายฟิวส์เมนให้ขาดกระจุยทันที — นี่คือการออกแบบให้ "ฆ่าตัวตายอย่างตั้งใจ" ดีกว่าปล่อยให้เครื่องยิงคลื่นทั้งที่ประตูเปิด</p>
+        <p class="en-only" style="margin:.5rem 0 0">Normally the <strong>monitor switch opens first</strong> as the door closes, and only then does Latch A make contact — so the two are never closed at the same time. But if <strong>Latch A's contacts weld shut</strong>, the next time the door opens the monitor closes while L is still live: a <strong>dead L–N short</strong> that draws enormous current and destroys the main fuse instantly. It is a deliberate suicide by design — far better than letting the oven fire with the door open.</p>
+      </div>
+
+      <div class="info-box" style="margin-top:1rem;">
+        <strong class="th-only">🔧 วิธีวัดและกฎการเปลี่ยน</strong><strong class="en-only">🔧 How to test, and the replacement rule</strong>
+        <ul class="content-list th-only" style="margin:.4rem 0 0">
+          <li>ถอดสายไฟออกก่อนวัดเสมอ ตั้งมิเตอร์ย่านเสียงปี๊บ จิ้มขั้วสวิตช์ทีละตัวแล้วลองกดก้านสวิตช์ดู</li>
+          <li>ชนิด NO: กดแล้วต้องร้องปี๊บ ปล่อยต้องเงียบสนิท — <strong>ห้ามมีค่าความต้านทานแฝง</strong></li>
+          <li>ชนิด NC (Monitor): ปล่อยต้องร้องปี๊บ กดแล้วต้องเงียบ</li>
+          <li><strong>เจออาการฟิวส์ระเบิด ต้องเปลี่ยนสวิตช์ประตูใหม่ยกชุดทั้ง 3 ตัวเสมอ</strong> ห้ามงกเปลี่ยนแค่ตัวเดียว ไม่งั้นกลไกจะกินแรงกันแล้วตีกลับมาพังอีก</li>
+          <li>ก่อนถอดสายไฟ <strong>ให้ถ่ายรูปเก็บไว้ทุกครั้ง</strong> — ถ้าเสียบสาย Monitor Switch สลับขั้ว เครื่องจะระเบิดทันทีที่เสียบปลั๊ก</li>
+        </ul>
+        <ul class="content-list en-only" style="margin:.4rem 0 0">
+          <li>Always disconnect the wires first. Set the meter to continuity, probe one switch at a time and press its lever.</li>
+          <li>NO type: pressed must beep, released must be completely silent — <strong>no residual resistance allowed</strong>.</li>
+          <li>NC type (monitor): released must beep, pressed must be silent.</li>
+          <li><strong>After a blown-fuse job, always replace all three door switches as a set.</strong> Swapping just one leaves the mechanism fighting itself and it will fail again.</li>
+          <li><strong>Photograph the wiring before unplugging anything.</strong> Reconnect the monitor switch the wrong way round and the oven blows up the moment you plug it in.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. โซน 3 บอร์ด -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">โซน 3 — สมองกลและรีเลย์สั่งการ</span><span class="en-only">Zone 3 — The Control Board &amp; Relays</span></div>
+    <div class="card">
+      <p class="th-only">ไฟ 220V ส่วนหนึ่งจะแยกเข้า <strong>หม้อแปลงไฟต่ำ (LV Transformer)</strong> แปลงเป็น 9V/12V เลี้ยงแผงวงจร (ถ้าหม้อแปลงตัวนี้ขาด หน้าจอจะดับสนิท) จากนั้น MCU จะสั่งงานผ่าน <strong>รีเลย์ 3 ตัว</strong> ที่คอยสับสวิตช์จ่ายไฟ 220V แยกไปแต่ละกลุ่มโหลด</p>
+      <p class="en-only">Part of the 220V branches into a <strong>low-voltage transformer</strong> that produces 9V/12V for the board (if it goes open, the display is completely dead). The MCU then commands <strong>three relays</strong> that switch the 220V out to separate load groups.</p>
+
+      <div style="overflow-x:auto; margin-top:1rem;">
+      <table class="mw-tbl">
+        <thead><tr>
+          <th><span class="th-only">รีเลย์</span><span class="en-only">Relay</span></th>
+          <th><span class="th-only">จ่ายไฟให้</span><span class="en-only">Feeds</span></th>
+          <th><span class="th-only">สิ่งที่บอกเราตอนวิเคราะห์</span><span class="en-only">What it tells you when diagnosing</span></th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td class="hi">Main Relay</td>
+            <td><span class="th-only">หลอดไฟในเตา • พัดลม • มอเตอร์จานหมุน</span><span class="en-only">Oven lamp • fan • turntable motor</span></td>
+            <td><span class="th-only">ทั้ง 3 ตัวรับไฟจากรีเลย์เดียวกัน ถ้า<strong>พัดลมหมุนแต่จานไม่หมุน</strong> แปลว่าอะไหล่ชิ้นนั้นพังเอง ไม่ใช่บอร์ด</span><span class="en-only">All three share one relay, so if the <strong>fan spins but the plate doesn't</strong>, that part itself is dead — not the board</span></td>
+          </tr>
+          <tr>
+            <td class="hi">Power Relay</td>
+            <td><span class="th-only">หม้อแปลงแรงสูง (สั่ง "เริ่มทำความร้อน")</span><span class="en-only">The HV transformer (the "start heating" command)</span></td>
+            <td><span class="th-only">ถ้าเครื่องทำงานครบทุกอย่างแต่<strong>น้ำไม่ร้อน</strong> ให้สงสัยหน้าสัมผัสรีเลย์ตัวนี้ก่อนฝั่งแรงสูง</span><span class="en-only">If everything runs but the <strong>water stays cold</strong>, suspect these contacts before the HV side</span></td>
+          </tr>
+          <tr>
+            <td class="hi">Grill Relay</td>
+            <td><span class="th-only">ขดลวดย่าง (Heater) บนเพดานเตา</span><span class="en-only">The grill heating element in the oven ceiling</span></td>
+            <td><span class="th-only">อาการ "เวฟได้แต่ย่างไม่ได้" ให้วัดขดลวด Heater (30–50 Ω) และหน้าสัมผัสรีเลย์ตัวนี้</span><span class="en-only">For "microwaves fine but won't grill", measure the element (30–50 Ω) and these contacts</span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+
+      <div class="warn-box" style="margin-top:1rem;">
+        <strong class="th-only">⚠️ อาการปราบเซียน: "แค่เสียบปลั๊ก เครื่องก็ต้มน้ำเองทันที ทั้งที่ยังไม่ได้กด Start"</strong>
+        <strong class="en-only">⚠️ The classic: "It starts cooking the moment I plug it in, before I press Start"</strong>
+        <p class="th-only" style="margin:.4rem 0 0">ถอดปลั๊ก แล้วใช้มิเตอร์ย่านโอห์มจิ้มขั้ว<strong>หน้าสัมผัส</strong>ของรีเลย์ตัวใหญ่ ถ้าวัดได้ <strong>0 Ω ทั้งที่ยังไม่ได้จ่ายไฟให้คอยล์</strong> แปลว่าหน้าสัมผัส <strong>ละลายติดค้าง (Welded Contacts)</strong> ต้องถอดเปลี่ยนรีเลย์ใหม่</p>
+        <p class="en-only" style="margin:.4rem 0 0">Unplug, then ohm across the big relay's <strong>contacts</strong>. Reading <strong>0 Ω with no power on the coil</strong> means the contacts have <strong>welded shut</strong> — replace the relay.</p>
+      </div>
+
+      <p class="th-only" style="margin-top:1rem"><strong>ภาคจ่ายไฟบนบอร์ด:</strong> บอร์ดรุ่นเก่าใช้หม้อแปลงตัวเล็ก — ขดฝั่ง Primary (220V) มักขาดใน ให้ลอยขาแล้ววัดโอห์ม ถ้าขึ้น OL ต้องเปลี่ยน ส่วนบอร์ดรุ่นใหม่ใช้ <strong>ไอซีสวิตชิ่ง</strong> (เช่น LNK364) ถ้าบอร์ดดับสนิทให้ส่องดูตัวถังไอซีว่ามีรอยปริแตกไหม และเช็ค <strong>ตัวต้านทานฟิวส์ (Fusible Resistor)</strong> ที่อยู่ต้นทาง — มันมักขาดคู่กับไอซีเสมอ</p>
+      <p class="en-only" style="margin-top:1rem"><strong>The board's own supply:</strong> older boards use a small iron transformer whose 220V primary tends to go open — lift a leg, ohm it, and replace it if it reads OL. Newer boards use a <strong>switching IC</strong> (e.g. LNK364): if the board is dead, inspect the IC body for cracks and check the <strong>fusible resistor</strong> upstream — it almost always fails together with the IC.</p>
+      <p class="th-only" style="font-size:.88rem;color:var(--text-light); margin-top:.6rem;">🔗 หลักการของภาคจ่ายไฟสวิตชิ่งแบบนี้อธิบายละเอียดในบท <a href="switching-psu.html"><strong>ภาคจ่ายไฟสวิตชิ่ง (LNK304)</strong></a></p>
+      <p class="en-only" style="font-size:.88rem;color:var(--text-light); margin-top:.6rem;">🔗 This kind of switching supply is covered in detail in the <a href="switching-psu.html"><strong>Switching PSU (LNK304)</strong></a> lesson</p>
+
+      <p class="th-only" style="margin-top:1rem"><strong>แผงปุ่มกด (Membrane Switch):</strong> อาการ "กดติดบ้างไม่ติดบ้าง ต้องกดย้ำแรงๆ" เกิดจากสายแพรหักพับหรือคราบออกไซด์เกาะหน้าสัมผัส เบื้องต้นใช้น้ำยาล้างคอนแทคเช็ดปลายสายแพรเบาๆ แต่ถ้าลายปริ้นท์เงิน (Silver Conductive Paste) ขาดใน ต้องใช้ปากกาน้ำยาเงินนำไฟฟ้าแต้มเชื่อมลาย หรือเบิกอะไหล่เปลี่ยนใหม่ทั้งแผ่น</p>
+      <p class="en-only" style="margin-top:1rem"><strong>Membrane keypad:</strong> "some presses register, some don't, you have to press hard" comes from a creased ribbon tail or oxide on the contacts. Start by gently cleaning the tail with contact cleaner; if the silver conductive trace itself is broken, bridge it with a conductive silver pen or replace the whole membrane.</p>
+    </div>
+  </div>
+
+  <!-- 5. โซน 4 แรงสูง + voltage doubler -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">โซน 4 — ภาคแรงสูงและวงจรทวีแรงดัน</span><span class="en-only">Zone 4 — High Voltage &amp; the Voltage Doubler</span></div>
+    <div class="card">
+      <p class="th-only">หม้อแปลงแรงสูงผลิตไฟ AC ได้สูงสุดราว <strong>2,000 โวลต์</strong> แต่หลอดแมกนีตรอนต้องการไฟ <strong>กระแสตรง 4,000 โวลต์</strong> ในการยิงคลื่น วิศวกรจึงใช้ <strong>HV Capacitor คู่กับ HV Diode</strong> ทำเป็น <strong>วงจรทวีแรงดัน (Voltage Doubler)</strong> ปั๊มแรงดันให้สูงขึ้นเป็น 2 เท่า โดยแบ่งการทำงานตามครึ่งคลื่น AC เป็น 2 จังหวะ</p>
+      <p class="en-only">The HV transformer produces at most about <strong>2,000 volts AC</strong>, but the magnetron needs <strong>4,000 volts DC</strong> to fire. So engineers pair an <strong>HV capacitor with an HV diode</strong> as a <strong>voltage doubler</strong>, pumping the voltage to twice its value across the two halves of the AC cycle.</p>
+
+      <div style="text-align:center; margin-top:1rem;">
+        <svg viewBox="0 0 780 342" style="max-width:100%;height:auto;font-family:inherit;font-size:11.5px;" role="img"
+             aria-label="Voltage doubler: HV transformer secondary, HV capacitor, HV diode to chassis, magnetron">
+          <defs>
+            <marker id="mw-c1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,1 L9,5 L0,9 z" fill="var(--primary)"/>
+            </marker>
+            <marker id="mw-c2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,1 L9,5 L0,9 z" fill="#dc2626"/>
+            </marker>
+          </defs>
+
+          <!-- HV transformer secondary coil -->
+          <text class="th-only" x="18" y="40" fill="var(--primary-dark)" font-weight="700">หม้อแปลงแรงสูง</text>
+          <text class="en-only" x="18" y="40" fill="var(--primary-dark)" font-weight="700">HV transformer</text>
+          <path d="M70,70 a11,11 0 0 1 0,22 a11,11 0 0 1 0,22 a11,11 0 0 1 0,22 a11,11 0 0 1 0,22 a11,11 0 0 1 0,22"
+                fill="none" stroke="var(--text)" stroke-width="2"/>
+          <text x="56" y="130" text-anchor="end" fill="#b91c1c" font-weight="700">ac 2,000V</text>
+          <line x1="70" y1="70" x2="70" y2="58" stroke="var(--text)" stroke-width="2"/>
+          <line x1="70" y1="58" x2="180" y2="58" stroke="var(--text)" stroke-width="2"/>
+          <line x1="70" y1="180" x2="70" y2="236" stroke="var(--text)" stroke-width="2"/>
+          <!-- chassis ground of secondary -->
+          <line x1="46" y1="236" x2="94" y2="236" stroke="var(--text)" stroke-width="2.4"/>
+          <line x1="54" y1="242" x2="86" y2="242" stroke="var(--text)" stroke-width="2"/>
+          <line x1="62" y1="248" x2="78" y2="248" stroke="var(--text)" stroke-width="1.6"/>
+          <text class="th-only" x="24" y="270" fill="var(--text-light)">ปลายนี้ยึดติดโครงเหล็ก</text>
+          <text class="en-only" x="14" y="270" fill="var(--text-light)">this end bonds to the chassis</text>
+
+          <!-- HV fuse -->
+          <rect x="180" y="48" width="44" height="20" rx="4" fill="var(--bg)" stroke="var(--text)" stroke-width="1.5"/>
+          <text x="202" y="88" text-anchor="middle" fill="var(--text)" font-weight="700">HV fuse</text>
+          <line x1="224" y1="58" x2="300" y2="58" stroke="var(--text)" stroke-width="2"/>
+
+          <!-- HV capacitor (series) -->
+          <line x1="300" y1="48" x2="300" y2="68" stroke="var(--text)" stroke-width="3"/>
+          <line x1="312" y1="48" x2="312" y2="68" stroke="var(--text)" stroke-width="3"/>
+          <text x="306" y="34" text-anchor="middle" fill="var(--primary-dark)" font-weight="700">HV C  0.9–1.1 µF</text>
+          <line x1="312" y1="58" x2="470" y2="58" stroke="var(--text)" stroke-width="2"/>
+          <circle cx="400" cy="58" r="4" fill="var(--text)"/>
+
+          <!-- bleeder resistor across cap -->
+          <path d="M296,86 h20 v14 h-20 z" fill="none" stroke="var(--text-light)" stroke-width="1.4"/>
+          <line x1="296" y1="93" x2="286" y2="93" stroke="var(--text-light)" stroke-width="1.4"/>
+          <line x1="316" y1="93" x2="326" y2="93" stroke="var(--text-light)" stroke-width="1.4"/>
+          <line x1="286" y1="93" x2="286" y2="58" stroke="var(--text-light)" stroke-width="1.4"/>
+          <line x1="326" y1="93" x2="326" y2="58" stroke="var(--text-light)" stroke-width="1.4"/>
+          <text class="th-only" x="306" y="118" text-anchor="middle" fill="var(--text-light)">Bleeder R (ห้ามไว้ใจ)</text>
+          <text class="en-only" x="306" y="118" text-anchor="middle" fill="var(--text-light)">Bleeder R (never trust it)</text>
+
+          <!-- HV diode down to chassis -->
+          <line x1="400" y1="58" x2="400" y2="150" stroke="var(--text)" stroke-width="2"/>
+          <path d="M388,150 L412,150 L400,172 z" fill="none" stroke="var(--text)" stroke-width="2"/>
+          <line x1="386" y1="172" x2="414" y2="172" stroke="var(--text)" stroke-width="2.4"/>
+          <text x="424" y="166" fill="var(--primary-dark)" font-weight="700">HV diode</text>
+          <line x1="400" y1="172" x2="400" y2="236" stroke="var(--text)" stroke-width="2"/>
+          <line x1="376" y1="236" x2="424" y2="236" stroke="var(--text)" stroke-width="2.4"/>
+          <line x1="384" y1="242" x2="416" y2="242" stroke="var(--text)" stroke-width="2"/>
+          <line x1="392" y1="248" x2="408" y2="248" stroke="var(--text)" stroke-width="1.6"/>
+          <text class="th-only" x="352" y="270" fill="var(--text-light)">ขันน็อตยึดโครงเหล็ก = กราวด์</text>
+          <text class="en-only" x="352" y="270" fill="var(--text-light)">bolted to the chassis = ground</text>
+
+          <!-- magnetron -->
+          <rect x="470" y="30" width="150" height="120" rx="14" fill="#fef2f2" stroke="#dc2626" stroke-width="1.8"/>
+          <text x="545" y="58" text-anchor="middle" fill="#b91c1c" font-weight="700" font-size="13">MAGNETRON</text>
+          <text x="545" y="80" text-anchor="middle" fill="var(--text)">FA / F</text>
+          <text class="th-only" x="545" y="102" text-anchor="middle" fill="var(--text-light)">ไส้หลอด 3V จากขดจุดไส้</text>
+          <text class="en-only" x="545" y="102" text-anchor="middle" fill="var(--text-light)">3V filament winding</text>
+          <text x="545" y="126" text-anchor="middle" fill="#b91c1c" font-weight="700">2,450 MHz</text>
+          <line x1="620" y1="90" x2="700" y2="90" stroke="#dc2626" stroke-width="2" marker-end="url(#mw-c2)"/>
+          <text class="th-only" x="660" y="78" text-anchor="middle" fill="#b91c1c" font-weight="700">คลื่นไมโครเวฟ</text>
+          <text class="en-only" x="660" y="78" text-anchor="middle" fill="#b91c1c" font-weight="700">microwaves</text>
+          <!-- magnetron chassis return -->
+          <line x1="545" y1="150" x2="545" y2="236" stroke="var(--text)" stroke-width="2"/>
+          <line x1="521" y1="236" x2="569" y2="236" stroke="var(--text)" stroke-width="2.4"/>
+          <line x1="529" y1="242" x2="561" y2="242" stroke="var(--text)" stroke-width="2"/>
+          <line x1="537" y1="248" x2="553" y2="248" stroke="var(--text)" stroke-width="1.6"/>
+
+          <!-- stroke 1: charging path (dashed, alongside the wire then down through the diode) -->
+          <polyline points="124,42 386,42 386,138" fill="none" stroke="var(--primary)" stroke-width="2.2"
+                    stroke-dasharray="6 4" marker-end="url(#mw-c1)"/>
+          <!-- stroke 2: firing path (below the wire, into the magnetron) -->
+          <polyline points="112,74 462,74" fill="none" stroke="#dc2626" stroke-width="2.2" marker-end="url(#mw-c2)"/>
+
+          <!-- stroke legend -->
+          <line x1="60" y1="298" x2="86" y2="298" stroke="var(--primary)" stroke-width="2.5" stroke-dasharray="6 4"/>
+          <text class="th-only" x="96" y="302" fill="var(--primary)" font-weight="700">จังหวะ 1 — ไดโอดนำกระแส ชาร์จไฟ 2,000V เก็บไว้ใน C</text>
+          <text class="en-only" x="96" y="302" fill="var(--primary)" font-weight="700">Stroke 1 — the diode conducts, charging C to 2,000V</text>
+          <line x1="60" y1="324" x2="86" y2="324" stroke="#dc2626" stroke-width="2.5"/>
+          <text class="th-only" x="96" y="328" fill="#dc2626" font-weight="700">จังหวะ 2 — ไดโอดบล็อก หม้อแปลง + C ต่ออนุกรมกัน = 4,000V DC เข้าแมกนีตรอน</text>
+          <text class="en-only" x="96" y="328" fill="#dc2626" font-weight="700">Stroke 2 — the diode blocks; transformer + C in series = 4,000V DC into the magnetron</text>
+        </svg>
+      </div>
+
+      <div class="mw-zones" style="grid-template-columns:1fr 1fr; margin-top:1.1rem;">
+        <div class="mw-zone" style="text-align:left;">
+          <span class="mw-num">1</span>
+          <h4 class="th-only">จังหวะชาร์จประจุ (Charging)</h4><h4 class="en-only">Charging stroke</h4>
+          <p class="th-only">เมื่อไฟสลับมาในทิศที่ <strong>ไดโอดนำกระแส</strong> ไฟ 2,000V จะวิ่งผ่านไดโอดมุดลงกราวด์ ในจังหวะนี้ HV Capacitor ทำหน้าที่เหมือน "ถังเก็บน้ำ" อมแรงดัน 2,000V ไว้ในตัวมันเอง</p>
+          <p class="en-only">When the AC swings to the polarity the <strong>diode conducts</strong>, the 2,000V runs through it to ground. In this stroke the HV capacitor acts like a water tank, storing 2,000V inside itself.</p>
+        </div>
+        <div class="mw-zone danger" style="text-align:left;">
+          <span class="mw-num">2</span>
+          <h4 class="th-only">จังหวะทวีแรงดันและยิงคลื่น (Firing)</h4><h4 class="en-only">Doubling &amp; firing stroke</h4>
+          <p class="th-only">เสี้ยววินาทีต่อมา ไฟสลับขั้ว ไดโอดบล็อกกระแส แรงดัน 2,000V จากหม้อแปลงจึงถูก<strong>ผลักไปรวมพลังแบบอนุกรม</strong>กับ 2,000V ที่อมไว้ในคาปาซิเตอร์ กลายเป็น <strong>4,000V DC</strong> พุ่งเข้าแมกนีตรอน</p>
+          <p class="en-only">A fraction of a second later the polarity flips, the diode blocks, and the transformer's 2,000V is <strong>pushed in series</strong> with the 2,000V held in the capacitor — <strong>4,000V DC</strong> straight into the magnetron.</p>
+        </div>
+      </div>
+
+      <div class="warn-box" style="border-left-color:#dc2626; background:#fef2f2; margin-top:1.1rem;">
+        <strong class="th-only" style="color:#b91c1c">☠️ Bleeder Resistor มีไว้ให้เห็น ไม่ได้มีไว้ให้ไว้ใจ</strong>
+        <strong class="en-only" style="color:#b91c1c">☠️ The bleeder resistor is there to be seen, not to be trusted</strong>
+        <p class="th-only" style="margin:.4rem 0 0">ในผังวงจรจะเห็นสัญลักษณ์ตัวต้านทานต่อขนานอยู่<strong>ภายใน</strong> HV Capacitor นั่นคือ <strong>ตัวต้านทานคลายประจุ (Bleeder Resistor)</strong> ทำหน้าที่ค่อยๆ คลายไฟ 2,000V ทิ้งลงกราวด์หลังถอดปลั๊ก แต่ถ้าตัวต้านทานตัวนี้ <strong>ขาดใน</strong> ตัว C ก็จะอมไฟ 2,000V ไว้รอช็อตมือช่างอยู่ดี — ช่างระดับโปรจึงถือกฎว่า <strong>"ห้ามไว้ใจวงจรเด็ดขาด ต้อง Discharge ด้วยมือตัวเองทุกครั้ง"</strong></p>
+        <p class="en-only" style="margin:.4rem 0 0">On the schematic you'll see a resistor symbol wired in parallel <strong>inside</strong> the HV capacitor — the <strong>bleeder resistor</strong>, which slowly drains the 2,000V to ground after unplugging. But if that resistor has gone <strong>open internally</strong>, the cap still sits there holding 2,000V waiting for your hand. Professionals therefore treat it as an absolute rule: <strong>never trust the circuit, discharge it by hand every single time.</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. ตารางวัดค่า Cold Test -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ตารางจุดวัด "Cold Test" และค่ามาตรฐาน</span><span class="en-only">Cold-Test Reference Table</span></div>
+    <div class="card">
+      <div class="warn-box" style="border-left-color:#dc2626; background:#fef2f2; margin-bottom:1rem;">
+        <strong class="th-only" style="color:#b91c1c">🔴 ทุกค่าในตารางนี้วัดขณะ "ถอดปลั๊กและคายประจุแล้ว" เท่านั้น</strong>
+        <strong class="en-only" style="color:#b91c1c">🔴 Every reading below is taken unplugged and discharged — never live</strong>
+        <p class="th-only" style="margin:.4rem 0 0">ฝั่งแรงสูง <strong>ห้ามจ่ายไฟแล้วเอามิเตอร์ไปจิ้มวัดเด็ดขาด</strong> และก่อนวัดอะไหล่ทุกชิ้น ให้ถอดสายไฟที่เสียบอยู่ออกให้หมดก่อน ไม่งั้นจะอ่านค่าวงจรข้างเคียงปนมาด้วย</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Never probe the high-voltage side with power applied.</strong> And disconnect every wire from a part before measuring it, or you will be reading neighbouring circuits through it.</p>
+      </div>
+
+      <div style="overflow-x:auto;">
+      <table class="mw-tbl">
+        <thead><tr>
+          <th><span class="th-only">จุดวัด</span><span class="en-only">Test point</span></th>
+          <th><span class="th-only">ค่ามาตรฐาน</span><span class="en-only">Standard reading</span></th>
+          <th><span class="th-only">ถ้าผิดปกติแปลว่า</span><span class="en-only">If it's wrong</span></th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td class="hi"><span class="th-only">ฟิวส์เมน (8–15A)</span><span class="en-only">Main fuse (8–15A)</span></td>
+            <td class="val">0 Ω <span class="th-only">/ ร้องปี๊บ</span><span class="en-only">/ beeps</span></td>
+            <td><span class="th-only">ขาด = มีตัวช็อตต้นทาง ต้องหาให้เจอก่อนใส่ฟิวส์ใหม่</span><span class="en-only">Open = something upstream is shorted; find it before fitting a new fuse</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">เทอร์โมสตัท (NC) ขณะเครื่องเย็น</span><span class="en-only">Thermostat (NC), cold</span></td>
+            <td class="val">0 Ω</td>
+            <td><span class="th-only">เงียบ = หน้าสัมผัสค้างเสีย เครื่องจะดับสนิท</span><span class="en-only">Silent = contacts stuck open, the oven is completely dead</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">ไมโครสวิตช์ชนิด NO</span><span class="en-only">NO microswitch</span></td>
+            <td class="val"><span class="th-only">กด 0 Ω / ปล่อย OL</span><span class="en-only">pressed 0 Ω / released OL</span></td>
+            <td><span class="th-only">มีค่าความต้านทานแฝง = หน้าสัมผัสไหม้ ต้องเปลี่ยนยกชุด 3 ตัว</span><span class="en-only">Any residual resistance = burnt contacts; replace all 3 as a set</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">Monitor Switch (NC)</span><span class="en-only">Monitor switch (NC)</span></td>
+            <td class="val"><span class="th-only">ปล่อย 0 Ω / กด OL</span><span class="en-only">released 0 Ω / pressed OL</span></td>
+            <td><span class="th-only">ทำงานสลับกับ 2 ตัวแรก ถ้าเสียบสายสลับขั้วจะระเบิดฟิวส์ทันที</span><span class="en-only">Works opposite to the other two; wired backwards it blows the fuse instantly</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">HV Transformer — ขดปฐมภูมิ</span><span class="en-only">HV transformer — primary</span></td>
+            <td class="val">1.5 – 3 Ω</td>
+            <td><span class="th-only">OL = ขดลวดขาดใน หม้อแปลงเสีย</span><span class="en-only">OL = winding open internally, transformer is dead</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">HV Transformer — ขดจุดไส้หลอด</span><span class="en-only">HV transformer — filament coil</span></td>
+            <td class="val"><span class="th-only">ใกล้ 0 Ω</span><span class="en-only">near 0 Ω</span></td>
+            <td><span class="th-only">OL = สายขาด ไส้หลอดแมกนีตรอนไม่ติด</span><span class="en-only">OL = broken lead, the magnetron filament never lights</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">HV Transformer — ขดทุติยภูมิ ↔ โครงเหล็ก</span><span class="en-only">HV transformer — secondary ↔ chassis</span></td>
+            <td class="val">90 – 150 Ω</td>
+            <td><span class="th-only">OL = ขดแรงสูงขาดใน เครื่องทำงานปกติแต่น้ำเย็นเจี๊ยบ</span><span class="en-only">OL = HV winding open; everything runs but the water stays ice cold</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">HV Capacitor — ค่าความจุ</span><span class="en-only">HV capacitor — capacitance</span></td>
+            <td class="val">0.9 – 1.1 µF</td>
+            <td><span class="th-only">ค่าตก/แห้ง = แรงดันไปไม่ถึง 4,000V จานหมุนแต่ไม่ร้อน</span><span class="en-only">Low/dried out = never reaches 4,000V; the plate spins but no heat</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">HV Capacitor — ขั้ว ↔ กระป๋อง</span><span class="en-only">HV capacitor — terminal ↔ can</span></td>
+            <td class="val">OL</td>
+            <td><span class="th-only">ช็อตลงกระป๋อง = ฟิวส์เมนขาดกระจุยทันทีที่เสียบปลั๊ก</span><span class="en-only">Shorted to the can = the main fuse blows the instant you plug in</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">HV Diode</span><span class="en-only">HV diode</span></td>
+            <td class="val"><span class="th-only">5 – 7 V (แบต 9V)</span><span class="en-only">5 – 7 V (with a 9V battery)</span></td>
+            <td><span class="th-only">ทะลุ 2 ทาง หรือไม่ทะลุเลย = ไดโอดเสีย</span><span class="en-only">Conducts both ways, or neither way = the diode is dead</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">Magnetron — ขั้วไส้หลอด ↔ โครงเหล็ก</span><span class="en-only">Magnetron — filament ↔ chassis</span></td>
+            <td class="val">OL</td>
+            <td><span class="th-only">เข็มกระดิก = ไส้หลอดช็อตลงโครง ฟิวส์แรงสูงจะขาดทันที</span><span class="en-only">Any reading = the filament has shorted to the body; the HV fuse blows at once</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">ขดลวดย่าง (Heater)</span><span class="en-only">Grill element</span></td>
+            <td class="val">30 – 50 Ω</td>
+            <td><span class="th-only">OL = ขดลวดขาด เวฟได้แต่ย่างไม่ได้</span><span class="en-only">OL = element open; microwaves fine but won't grill</span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+
+      <div class="info-box" style="margin-top:1rem;">
+        <strong class="th-only">💡 เคล็ดวิชาช่าง: ทำไมมัลติมิเตอร์วัดไดโอดแรงสูงไม่ขึ้น</strong>
+        <strong class="en-only">💡 Pro tip: why your multimeter can't test an HV diode</strong>
+        <p class="th-only" style="margin:.4rem 0 0">มัลติมิเตอร์ดิจิตอลทั่วไปจ่ายแรงดันทดสอบแค่ราว 2–3V แต่ไดโอดแรงสูงเป็นไดโอดหลายตัวต่ออนุกรมกันภายใน แรงดันเท่านั้นจึง "ดันไม่ผ่าน" มันจะขึ้น <strong>OL เสมอทั้งสองทิศ</strong> ทำให้ช่างเข้าใจผิดว่าไดโอดขาด วิธีที่ถูกคือ <strong>ต่อแบตเตอรี่ 9V อนุกรมกับไดโอด แล้วใช้มิเตอร์วัดโวลต์คร่อม</strong> — ไฟต้องไหลผ่านได้ทิศเดียว (อ่านได้ราว 5–7V) ถ้าทะลุทั้ง 2 ทางหรือไม่ทะลุเลย แปลว่าไดโอดเสีย</p>
+        <p class="en-only" style="margin:.4rem 0 0">A typical digital multimeter only puts out 2–3V on diode range, while an HV diode is many diodes stacked in series inside — that voltage simply cannot push through, so it reads <strong>OL in both directions</strong> and techs wrongly condemn it. The correct method is to <strong>put a 9V battery in series with the diode and measure the voltage across it</strong>: current must flow one way only (about 5–7V). Conducting both ways, or neither, means the diode is faulty.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. ผังการเดินสายจริง -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">อ่านผังการเดินสายจริง (Pictorial Wiring)</span><span class="en-only">Reading the Pictorial Wiring Diagram</span></div>
+    <div class="card">
+      <p class="th-only">ผังวงจรแบบสัญลักษณ์ (Schematic) บอกว่าไฟ "ไหลอย่างไร" ส่วนผังภาพเสมือนจริง (Pictorial) บอกว่าสายไฟเส้นไหน "เสียบอยู่ตรงไหนจริงๆ" ในตัวเครื่อง ช่างต้องอ่านคู่กันทั้ง 2 แบบ</p>
+      <p class="en-only">The schematic tells you how the current flows; the pictorial diagram tells you where each wire physically plugs in. A technician reads both together.</p>
+
+      <ul class="content-list th-only" style="margin-top:.8rem">
+        <li><span class="mw-wire" style="background:#dc2626"></span><strong>สายสีแดง (Line — L):</strong> เส้นที่มีไฟ วิ่งผ่านฟิวส์เมนเป็นด่านแรก แล้วไปรอที่สวิตช์ประตูและหน้าสัมผัสรีเลย์บนบอร์ด เพื่อรอคำสั่งสับสวิตช์</li>
+        <li><span class="mw-wire" style="background:#2563eb"></span><strong>สายสีน้ำเงิน (Neutral — N):</strong> โยงเป็นโครงข่ายไปเสียบรอไว้ที่อุปกรณ์ปลายทาง<strong>ทุกตัว</strong> — มอเตอร์จานหมุน พัดลม หลอดไฟ ขดลวดย่าง และหม้อแปลง</li>
+        <li><span class="mw-wire" style="background:#16a34a"></span><strong>สายสีเขียว/น้ำตาล (Earth):</strong> สายดิน สังเกตว่าไดโอดแรงสูง (แท่งสีดำข้างคาปาซิเตอร์) จะถูกขันน็อตยึดติดโครงเหล็กเพื่อลงกราวด์เสมอ</li>
+        <li>ในบางรุ่น <strong>เทอร์โมฟิวส์ถูกต่อดักไว้ฝั่งสาย N</strong> ไม่ใช่ฝั่ง L — ถ้ามันขาด ไฟจะไม่ครบวงจรและเครื่องดับมืดสนิทเหมือนกัน อย่าไปไล่วัดแต่ฝั่ง L อย่างเดียว</li>
+        <li><strong>HV Fuse ซ่อนอยู่ในกระบอกพลาสติกสีขาวขุ่น</strong> ระหว่างหม้อแปลงกับคาปาซิเตอร์ ต้องงัดกระบอกออกมาเช็ค — ถ้าฟิวส์นี้ขาด เครื่องจะทำงานปกติทุกอย่างแต่น้ำไม่ร้อน</li>
+      </ul>
+      <ul class="content-list en-only" style="margin-top:.8rem">
+        <li><span class="mw-wire" style="background:#dc2626"></span><strong>Red wire (Line — L):</strong> the live conductor. It passes the main fuse first, then waits at the door switches and the board's relay contacts for the command to switch.</li>
+        <li><span class="mw-wire" style="background:#2563eb"></span><strong>Blue wire (Neutral — N):</strong> routed as a network to <strong>every</strong> end device — turntable motor, fan, lamp, grill element and transformer.</li>
+        <li><span class="mw-wire" style="background:#16a34a"></span><strong>Green/brown wire (Earth):</strong> the ground. Note that the HV diode (the black stick beside the capacitor) is always bolted to the chassis for its ground return.</li>
+        <li>On some models the <strong>thermal fuse sits in the N line</strong>, not the L line — if it opens, the circuit is just as incomplete and the oven is just as dead. Don't only probe the L side.</li>
+        <li>The <strong>HV fuse hides inside a milky white plastic tube</strong> between the transformer and the capacitor. Pry it open to check: if it's blown, everything runs normally but nothing heats.</li>
+      </ul>
+
+      <div class="warn-box" style="margin-top:1rem;">
+        <strong class="th-only">🔧 กฎเหล็กของการถอด-ประกอบสายไฟ (ช่างมือใหม่ตกม้าตายตรงนี้)</strong>
+        <strong class="en-only">🔧 Rules for disconnecting and refitting wires (where beginners come unstuck)</strong>
+        <ol style="margin:.5rem 0 0 1.1rem; padding:0;">
+          <li class="th-only"><strong>ถ่ายรูปก่อนถอดเสมอ</strong> — ทั้งมุมกว้างและมุมซูมที่ขั้วสวิตช์ประตูกับขั้วคาปาซิเตอร์แรงสูง</li>
+          <li class="en-only"><strong>Always photograph before removing anything</strong> — a wide shot plus close-ups of the door switch terminals and the HV capacitor.</li>
+          <li class="th-only"><strong>เช็คความแน่นของหางปลา</strong> — เสียบแล้วต้องแน่นตึงมือ ถ้าหลวมคลอน ไฟจะสปาร์คจนขั้วพลาสติกละลายไฟไหม้ ต้องใช้คีมบีบย้ำก่อนเสียบกลับ</li>
+          <li class="en-only"><strong>Check every spade connector is tight</strong> — it must feel firm. A loose one will arc until the plastic housing melts and catches fire; crimp it properly before refitting.</li>
+          <li class="th-only"><strong>จัดระเบียบสายไฟฝั่งแรงสูง</strong> — สายจากหม้อแปลงไปแมกนีตรอนห้ามพาดแตะโครงเหล็กเด็ดขาด ความสั่นสะเทือนจะทำให้ฉนวนถลอกแล้วไฟ 4,000V จะกระโดดช็อตลงตัวถัง ใช้เคเบิลไทร์รัดให้ลอยพ้นเสมอ</li>
+          <li class="en-only"><strong>Dress the high-voltage wiring</strong> — the transformer-to-magnetron leads must never rest against the chassis. Vibration wears through the insulation and 4,000V jumps to the case. Cable-tie them clear.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. คลินิกอาการเสีย -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">คลินิกวิเคราะห์อาการเสีย</span><span class="en-only">Fault-Diagnosis Clinic</span></div>
+    <div class="card">
+      <p class="th-only">แยกอาการให้ออกก่อน แล้วค่อยพุ่งเป้าตรวจ — จะประหยัดเวลาได้มหาศาลเมื่อเทียบกับการไล่วัดทีละตัวทั้งเครื่อง:</p>
+      <p class="en-only">Identify the symptom first, then aim your checks — it saves an enormous amount of time compared with probing the whole oven part by part:</p>
+
+      <div class="mw-fault" style="border-left-color:#dc2626;">
+        <span class="mw-fault-title th-only">🔴 อาการที่ 1: "ปิดประตูแล้วฟิวส์ระเบิดปัง เสียบปลั๊กใหม่ก็ขาดซ้ำ"</span>
+        <span class="mw-fault-title en-only">🔴 Symptom 1: "Close the door and the fuse blows; a new fuse blows again"</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> Latch Switch A หน้าสัมผัสละลายติดค้าง แล้ว Monitor Switch พลีชีพลัดวงจร L–N</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> Latch switch A has welded shut, so the monitor switch sacrifices itself by shorting L to N</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> วัดสวิตช์ประตูทั้ง 3 ตัวแบบถอดสายออก แล้ว<strong>เปลี่ยนใหม่ยกชุดทั้ง 3 ตัว</strong> พร้อมกัน ห้ามเปลี่ยนเฉพาะตัวที่เสีย และตรวจว่าบานประตูหย่อน/ตะขอสึกจนกดสวิตช์ไม่ตรงจังหวะหรือไม่ ไม่งั้นมันจะพังซ้ำ</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> test all three switches disconnected, then <strong>replace all three as a set</strong> — never just the failed one. Also check for a sagging door or worn latch hooks throwing off the switching sequence, or it will fail again.</p>
+      </div>
+
+      <div class="mw-fault" style="border-left-color:#f59e0b;">
+        <span class="mw-fault-title th-only">🟠 อาการที่ 2: "จานหมุน ไฟติด พัดลมทำงาน แต่น้ำไม่ร้อน"</span>
+        <span class="mw-fault-title en-only">🟠 Symptom 2: "Plate spins, lamp on, fan runs — but the water stays cold"</span>
+        <p class="th-only" style="margin:0"><strong>อ่านวงจรก่อน:</strong> จานหมุน พัดลม และหลอดไฟ รับไฟจาก <strong>Main Relay</strong> ทั้งหมด การที่ทั้ง 3 ตัวทำงาน แปลว่า<strong>บอร์ดสั่งงานปกติและประตูปิดสนิทแล้ว</strong> — ไม่ต้องเสียเวลาไล่เช็คเซ็นเซอร์หรือสวิตช์ประตูอีก</p>
+        <p class="en-only" style="margin:0"><strong>Read the circuit first:</strong> the turntable, fan and lamp all come off the <strong>main relay</strong>. All three working means <strong>the board is commanding correctly and the door is properly shut</strong> — don't waste time on sensors or door switches.</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> ปัญหาอยู่ที่ <strong>Power Relay</strong> (หน้าสัมผัสเสีย) หรือฝั่งแรงสูง ให้ไล่ตามลำดับ: HV Fuse ขาด → ขดทุติยภูมิหม้อแปลงขาด (OL) → C ค่าแห้ง → ไดโอดเสีย → แมกนีตรอนหมดสภาพ</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> it's the <strong>power relay</strong> (bad contacts) or the HV side. Work in order: blown HV fuse → open secondary winding (OL) → dried-out capacitor → faulty diode → worn-out magnetron.</p>
+      </div>
+
+      <div class="mw-fault" style="border-left-color:#dc2626;">
+        <span class="mw-fault-title th-only">🔴 อาการที่ 3: "เครื่องครางเสียงดังหึ่งๆ แล้วฟิวส์แรงสูงขาดกระจุย"</span>
+        <span class="mw-fault-title en-only">🔴 Symptom 3: "Loud humming, then the HV fuse blows"</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> ไดโอดแรงสูงช็อตทะลุ (0 Ω) ทำให้ไฟจากหม้อแปลงวิ่งลงกราวด์ตลอดเวลา หม้อแปลงจึงถูกดึงกระแสจนครางและฟิวส์แรงสูงขาด</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> the HV diode has shorted through (0 Ω), so the transformer dumps straight to ground — it groans under the load and the HV fuse gives out</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> เช็คไดโอดด้วยวิธีแบต 9V และเช็ค C ว่าช็อตลงกระป๋องด้วยหรือไม่ <strong>เปลี่ยนไดโอดพร้อมฟิวส์แรงสูงเสมอ</strong> และอย่าลืมขันน็อตขาไดโอดฝั่งกราวด์ให้แน่น — ถ้าหลวม ไดโอดจะทำงานไม่ได้และเครื่องก็จะไม่ร้อน</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> test the diode with the 9V battery method and check whether the capacitor has also shorted to its can. <strong>Always replace the diode together with the HV fuse</strong>, and torque the diode's ground bolt properly — if it's loose the diode cannot work and the oven still won't heat.</p>
+      </div>
+
+      <div class="mw-fault" style="border-left-color:#eab308;">
+        <span class="mw-fault-title th-only">🟡 อาการที่ 4: "ทุกอย่างครบ ไม่มีเสียงผิดปกติ แต่น้ำเย็นเจี๊ยบ"</span>
+        <span class="mw-fault-title en-only">🟡 Symptom 4: "Everything runs, nothing sounds wrong, but the water is ice cold"</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> HV Capacitor ค่าความจุเสื่อม (แห้ง) เก็บไฟไม่ได้ แรงดันจึงไปเลี้ยงแมกนีตรอนไม่ถึง 4,000V หรือขดทุติยภูมิของหม้อแปลงขาดใน</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> the HV capacitor has dried out and no longer stores charge, so the magnetron never sees 4,000V — or the transformer secondary is open internally</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> ใช้มิเตอร์ย่านวัดค่าความจุ (F) วัด C ต้องได้ 0.9–1.1 µF ตามสเปคข้างตัว ถ้าค่าตกให้เปลี่ยน; แล้ววัดขดทุติยภูมิเทียบโครงเหล็กต้องได้ 90–150 Ω (ขึ้น OL = หม้อแปลงเสีย)</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> measure the capacitor on the capacitance (F) range — it must match its printed 0.9–1.1 µF; if it has drifted low, replace it. Then measure the secondary to chassis: 90–150 Ω (OL means the transformer is finished).</p>
+      </div>
+
+      <div class="mw-fault" style="border-left-color:#2563eb;">
+        <span class="mw-fault-title th-only">🔵 อาการที่ 5: "ไฟหน้าจอติด แต่กด Start แล้วเครื่องไม่ยอมทำงาน"</span>
+        <span class="mw-fault-title en-only">🔵 Symptom 5: "The display lights up, but pressing Start does nothing"</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> Secondary Interlock / Door Sensing Switch (ตัวล่างสุด) สกปรกหรือหน้าสัมผัสไม่ต่อ บอร์ดจึงไม่รู้ว่าประตูปิดสนิทแล้ว</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> the secondary interlock / door-sensing switch (the bottom one) is dirty or not making contact, so the board never learns the door is shut</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> วัดสวิตช์ตัวล่างแบบถอดสาย กดแล้วต้องร้องปี๊บสนิท ถ้าไม่ต่อหรือมีความต้านทานแฝงให้เปลี่ยน; ถ้าสวิตช์ปกติ ให้ไปเช็คแผงปุ่มกด (Membrane) ว่าปุ่ม Start ขาดในหรือไม่</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> test the bottom switch disconnected — pressed it must beep cleanly. Replace it if it's open or shows residual resistance. If the switch is fine, check the membrane keypad for a dead Start button.</p>
+      </div>
+
+      <div class="mw-fault" style="border-left-color:#16a34a;">
+        <span class="mw-fault-title th-only">🟢 อาการที่ 6: "เวฟได้ปกติ แต่ย่างไม่ได้"</span>
+        <span class="mw-fault-title en-only">🟢 Symptom 6: "Microwaves fine, but won't grill"</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> ขดลวดย่าง (Heater) ขาด หรือหน้าสัมผัส Grill Relay เสีย</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> the grill element is open, or the grill relay's contacts have failed</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> วัดขดลวด Heater ต้องได้ 30–50 Ω ห้ามขาด แล้วเช็คหน้าสัมผัสของ Grill Relay บนบอร์ด — <strong>ไม่ต้องไปยุ่งกับฝั่งแรงสูงเลย</strong> เพราะเวฟยังทำงานได้ปกติ</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> the element must read 30–50 Ω, not open. Then check the grill relay contacts on the board — <strong>leave the HV side alone entirely</strong>, since the microwave function still works.</p>
+      </div>
+
+      <div class="mw-fault" style="border-left-color:#7c3aed;">
+        <span class="mw-fault-title th-only">🟣 อาการที่ 7 (รุ่นอินเวอร์เตอร์): "ทำงานไป 3 วินาที แล้วเครื่องตัดดับ"</span>
+        <span class="mw-fault-title en-only">🟣 Symptom 7 (inverter models): "Runs for 3 seconds, then cuts out"</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> อุปกรณ์กำลังบนบอร์ดอินเวอร์เตอร์ช็อตทะลุ ทำให้วงจรป้องกันสั่งตัด</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> a power device on the inverter board has shorted, tripping the protection circuit</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> ถอดบอร์ดอินเวอร์เตอร์ออกมา <strong>วัดแห้ง (Cold Test)</strong> ชิ้นส่วนที่พบบ่อยว่าระเบิดคือ <strong>IGBT</strong> (ตัวดำ 3 ขา ยึดกับซิงค์ — วัดขาเทียบกันห้ามช็อตเป็น 0 Ω), <strong>ไดโอดบริดจ์</strong> และ <strong>ฟิวส์บนบอร์ด</strong> ที่มักขาดคู่กับ IGBT เสมอ</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> pull the inverter board and <strong>cold-test</strong> it. The usual casualties are the <strong>IGBT</strong> (black 3-pin device on the heatsink — no pin pair may read 0 Ω), the <strong>bridge rectifier</strong>, and the <strong>on-board fuse</strong>, which almost always goes with the IGBT.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. อินเวอร์เตอร์ -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ไมโครเวฟระบบอินเวอร์เตอร์ (Inverter)</span><span class="en-only">Inverter Microwaves</span></div>
+    <div class="card">
+      <p class="th-only">ไมโครเวฟรุ่นเรือธงจะ<strong>โละหม้อแปลงเหล็กตัวใหญ่ทิ้ง</strong> แล้วใช้ <strong>บอร์ดอินเวอร์เตอร์</strong> จ่ายไฟความถี่สูงให้แมกนีตรอนแทน ข้อดีคือปรับกำลังได้ต่อเนื่องจริง (ไม่ใช่การสับ on-off เป็นห้วงๆ แบบรุ่นหม้อแปลง) อาหารจึงสุกทั่วถึงกว่า เครื่องเบากว่า และประหยัดไฟกว่า</p>
+      <p class="en-only">Flagship microwaves <strong>drop the heavy iron transformer</strong> and use an <strong>inverter board</strong> to feed the magnetron at high frequency instead. It can genuinely vary the power continuously (rather than pulsing full power on and off as transformer models do), so food cooks more evenly, and the oven is lighter and more efficient.</p>
+
+      <div class="warn-box" style="border-left-color:#dc2626; background:#fef2f2; margin-top:1rem;">
+        <strong class="th-only" style="color:#b91c1c">☠️ กฎความปลอดภัยขั้นสูงสุดของบอร์ดอินเวอร์เตอร์</strong>
+        <strong class="en-only" style="color:#b91c1c">☠️ The absolute rule for inverter boards</strong>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>ห้ามนำมัลติมิเตอร์ไปจิ้มวัดไฟสด (Live Test) ขณะเครื่องทำงาน บนฝั่งแรงสูงของบอร์ดอินเวอร์เตอร์เด็ดขาด</strong> เพราะแรงดันสูงที่ความถี่ระดับหมื่นเฮิรตซ์จะทำให้มัลติมิเตอร์พังระเบิดคามือ และไฟจะกระโดดเข้าหาตัวช่างได้ — วิธีเดียวที่ปลอดภัยคือถอดบอร์ดออกมา <strong>วัดโอห์มหาตัวช็อตขณะถอดปลั๊ก</strong> เท่านั้น</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Never probe the high-voltage side of a live inverter board with a multimeter.</strong> High voltage at tens of kilohertz will destroy the meter in your hand, and the energy can jump to you. The only safe method is to remove the board and <strong>ohm it out for shorts with the unit unplugged.</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. ความปลอดภัย -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">กฎเหล็กความปลอดภัยประจำโต๊ะซ่อม</span><span class="en-only">Bench Safety Rules</span></div>
+    <div class="card">
+      <div class="warn-box" style="border-left-color:#dc2626; background:#fef2f2;">
+        <strong class="th-only" style="color:#b91c1c">🔴 กฎการคายประจุ (HV Discharge Rule) — ต้องทำทุกครั้งก่อนซ่อม</strong>
+        <strong class="en-only" style="color:#b91c1c">🔴 The HV discharge rule — do this before every single repair</strong>
+        <ol style="margin:.5rem 0 0 1.1rem; padding:0;">
+          <li class="th-only">ถอดปลั๊กไฟบ้านออกก่อนเสมอ — แต่จำไว้ว่า <strong>ถอดปลั๊กแล้วไฟฟ้าแรงสูงยังตกค้างอยู่ใน HV Capacitor</strong></li>
+          <li class="en-only">Unplug from the wall first — but remember that <strong>unplugging does not remove the charge stored in the HV capacitor</strong>.</li>
+          <li class="th-only">ใช้ <strong>คีมปากจิ้งจกที่ด้ามหุ้มฉนวนหนา 1,000V</strong> นำปลายคีมโลหะไปแตะคร่อมระหว่าง<strong>ขั้วซ้ายและขั้วขวา</strong>ของ HV Capacitor พร้อมกัน ค้างไว้ 3–5 วินาที</li>
+          <li class="en-only">Take <strong>long-nose pliers with 1,000V-rated insulated handles</strong> and bridge the metal tips across <strong>both terminals</strong> of the HV capacitor at once, holding for 3–5 seconds.</li>
+          <li class="th-only">หรือใช้ไขควงด้ามฉนวน จิ้มที่ขั้ว C แล้วงัดก้านไขควงให้แตะกับ<strong>โครงเหล็กตัวถัง</strong> เพื่อทิ้งไฟลงกราวด์</li>
+          <li class="en-only">Alternatively, put an insulated screwdriver on a capacitor terminal and lean its shaft against the <strong>steel chassis</strong> to dump the charge to ground.</li>
+          <li class="th-only">⚠️ <strong>ห้ามไว้ใจ Bleeder Resistor ในตัว C เด็ดขาด</strong> — ถ้ามันขาดใน ตัว C จะอมไฟ 2,000V รออยู่ ต้อง Discharge ด้วยมือตัวเองทุกครั้ง</li>
+          <li class="en-only">⚠️ <strong>Never trust the capacitor's built-in bleeder resistor.</strong> If it has gone open, the cap is still sitting at 2,000V. Discharge it by hand, every time.</li>
+        </ol>
+      </div>
+
+      <div class="warn-box" style="margin-top:1rem;">
+        <strong class="th-only">🟡 กฎการวัดฝั่งแรงสูง (Cold Test Only)</strong>
+        <strong class="en-only">🟡 The high-voltage measurement rule (cold test only)</strong>
+        <ol style="margin:.5rem 0 0 1.1rem; padding:0;">
+          <li class="th-only"><strong>ห้ามจ่ายไฟแล้วเอามิเตอร์ไปจิ้มวัดฝั่งแรงสูงเด็ดขาด</strong> — มิเตอร์บ้านทั่วไปทนได้แค่ 600–1,000V แต่จุดนี้มี 4,000V</li>
+          <li class="en-only"><strong>Never probe the HV side with power on.</strong> A typical meter is rated 600–1,000V; this point carries 4,000V.</li>
+          <li class="th-only">ถอดสายไฟที่เสียบอยู่ออกให้หมดก่อนวัดอะไหล่ทุกชิ้น เพื่อไม่ให้อ่านค่าวงจรข้างเคียงปนมา</li>
+          <li class="en-only">Disconnect every wire from a part before measuring it, so you aren't reading neighbouring circuits through it.</li>
+          <li class="th-only">เวลาวัดขดทุติยภูมิเทียบโครงเหล็ก ให้<strong>ขูดสนิมหรือน้ำยาวานิชที่โครงเหล็กออกก่อน</strong> เพื่อให้ปลายมิเตอร์สัมผัสเนื้อเหล็กจริงๆ ไม่งั้นจะอ่านได้ OL ทั้งที่หม้อแปลงยังดี</li>
+          <li class="en-only">When measuring the secondary against the frame, <strong>scrape off the rust or varnish first</strong> so the probe touches bare steel — otherwise you'll read OL on a perfectly good transformer.</li>
+        </ol>
+      </div>
+
+      <div class="warn-box" style="margin-top:1rem;">
+        <strong class="th-only">🟢 หลังซ่อมเสร็จ ก่อนส่งมอบ</strong>
+        <strong class="en-only">🟢 After the repair, before handing it back</strong>
+        <ol style="margin:.5rem 0 0 1.1rem; padding:0;">
+          <li class="th-only">ตรวจว่าสายไฟทุกเส้นเสียบตรงตำแหน่งตามรูปที่ถ่ายไว้ โดยเฉพาะ <strong>Monitor Switch</strong> ที่ถ้าสลับขั้วจะระเบิดทันทีที่เสียบปลั๊ก</li>
+          <li class="en-only">Verify every wire matches your photos, especially the <strong>monitor switch</strong> — reversed, it blows up the moment you plug in.</li>
+          <li class="th-only">ตรวจว่าบานประตูปิดสนิท ไม่หย่อน ไม่บิด และตะขอกดสวิตช์ครบทั้ง 3 ตัวตามจังหวะ</li>
+          <li class="en-only">Check the door closes flush, isn't sagging or twisted, and that its hooks actuate all three switches in the right sequence.</li>
+          <li class="th-only">ทดสอบทำความร้อนด้วย <strong>น้ำในแก้วเซรามิก 1 แก้ว</strong> เสมอ — <strong>ห้ามเปิดเครื่องเปล่า</strong> เพราะไม่มีอะไรดูดซับคลื่น พลังงานจะสะท้อนกลับเข้าแมกนีตรอนจนพัง</li>
+          <li class="en-only">Always test-heat with <strong>a cup of water in a ceramic mug</strong>. <strong>Never run it empty</strong> — with nothing to absorb the energy, it reflects back into the magnetron and destroys it.</li>
+        </ol>
+      </div>
+
+      <p class="th-only" style="font-size:.88rem;color:var(--text-light); margin-top:1rem;">🔗 ทบทวนการเรียงกระแสและไดโอดในบท <a href="diode.html"><strong>ไดโอด</strong></a> • หลักการเก็บประจุในบท <a href="capacitor.html"><strong>ตัวเก็บประจุ</strong></a> • หน้าสัมผัส NO/NC ในบท <a href="relay.html"><strong>รีเลย์</strong></a></p>
+      <p class="en-only" style="font-size:.88rem;color:var(--text-light); margin-top:1rem;">🔗 Review rectification in the <a href="diode.html"><strong>Diode</strong></a> lesson • charge storage in the <a href="capacitor.html"><strong>Capacitor</strong></a> lesson • NO/NC contacts in the <a href="relay.html"><strong>Relay</strong></a> lesson</p>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
+<script>const CURRENT_PAGE='repair-microwave';</script>
+<script src="js/nav.js"></script>
+</body>
+</html>
