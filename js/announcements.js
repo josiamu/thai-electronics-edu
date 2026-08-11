@@ -14,6 +14,10 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'download-microwave-2026-08-11', date:'2026-08-11', type:'download',
+    th:'ไฟล์ใหม่ 4 ไฟล์ในหมวด <b>🛠️ งานซ่อม</b>: <b>ตรวจเช็คเตาไมโครเวฟ</b> — คัมภีร์ช่างวิเคราะห์และตรวจซ่อม, ผังวงจร (Schematic Diagram), ผังการเดินสายจริง (Pictorial Wiring Diagram) และ<b>วงจรไฟแรงสูง (HV Circuit)</b> ที่ต้องคายประจุก่อนแตะทุกครั้ง (PDF)',
+    en:'Four new files in the <b>🛠️ Repair</b> section: <b>Checking a Microwave Oven</b> — the technician&#39;s diagnostic &amp; repair guide, the schematic diagram, the pictorial wiring diagram, and the <b>high-voltage (HV) circuit</b> you must discharge before touching (PDF)',
+    href:'downloads.html', cat:'repair', file:'pdf/workshop/ตรวจเช็ค_ไมโครเวฟ_คัมภีร์ช่างวิเคราะห์และตรวจซ่อมเตาไมโค.pdf' },
   { id:'smps-step-sim-2026-08-06', date:'2026-08-06', type:'update',
     th:'บทภาคจ่ายไฟสวิตชิ่ง (LNK304): เพิ่ม <b>วงจรโต้ตอบทีละขั้น 8 ขั้น</b> — เดินตามกระแสจริงตั้งแต่ NTC กันไฟกระชาก → D1 เรียงกระแส → Pi-filter 310V → <b>จังหวะ ON</b> (ไฟผ่านขา D–S เข้าตัวเหนี่ยวนำ) → <b>จังหวะ OFF</b> (กระแสไหลวนผ่าน D2 ไฟ 5V ไม่ขาดช่วง) → ป้อนกลับที่ขา FB แบบ<b>ข้ามพัลส์</b> พร้อม <b>ช่องเลือกอาการเสีย 5 แบบ</b> ให้ดูว่าจุดวัด TP1–TP4 จุดไหน "ไฟหาย" และขั้นสุดท้ายสอนไล่วัดหาภาคที่เสียเป็นลำดับ — รวมถึงกับดักที่ช่างมือใหม่ตายบ่อย: <b>ขา S ไม่ใช่กราวด์ มันแกว่ง 0↔310V</b>',
     en:'Switching PSU (LNK304) lesson: a new <b>8-step interactive circuit</b> — follow the real current from the NTC inrush guard → D1 rectifier → 310V Pi filter → the <b>ON stroke</b> (through pins D–S into the inductor) → the <b>OFF stroke</b> (freewheeling through D2 so the 5V never drops) → <b>pulse-skipping</b> feedback at the FB pin. It includes a <b>5-fault selector</b> showing which of test points TP1–TP4 loses its voltage, and a final step that teaches probing in order — plus the trap that catches beginners: <b>pin S is not ground, it swings 0↔310V</b>',
