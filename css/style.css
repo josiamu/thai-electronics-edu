@@ -503,6 +503,30 @@ footer strong { color: #fff; }
   .container { padding: 1.75rem 1rem; }
 }
 
+/* ── SLIDER SIM (shared: water-heater.html; หน้าเก่าอย่าง thyristor/igbt/op-amp
+   ยังมีสำเนา .sim-* ใน <style> ของตัวเอง — กฎเดียวกับ .bs-* คือหน้าใหม่ใช้ชุดนี้ ห้ามก๊อปไปฝัง) ── */
+.sim-wrap { display:grid; grid-template-columns:1fr 285px; gap:1.25rem; align-items:start; }
+@media (max-width:860px){ .sim-wrap{ grid-template-columns:1fr; } }
+.sim-screen { width:100%; height:auto; display:block; border-radius:12px; background:#0b1220; border:1px solid var(--border); }
+.sim-panel { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:.9rem 1rem; }
+.sim-ctrl { margin-bottom:.9rem; }
+.sim-ctrl-row { display:flex; justify-content:space-between; align-items:center; font-size:.84rem; font-weight:600; margin-bottom:.25rem; }
+.sim-ctrl-row span { color:var(--primary); font-size:.9rem; }
+.sim-ctrl input[type=range] { width:100%; cursor:pointer; accent-color:var(--primary); }
+.sim-readout { display:grid; grid-template-columns:1fr 1fr; gap:.45rem; margin-top:.4rem; }
+.sim-rb { background:var(--bg); border:1px solid var(--border); border-radius:9px; padding:.45rem .6rem; text-align:center; }
+.sim-rl { font-size:.72rem; color:var(--text-light); margin-bottom:.12rem; }
+.sim-rv { font-size:1.02rem; font-weight:700; color:var(--text); }
+.sim-modes { display:flex; gap:.4rem; margin-bottom:.9rem; }
+.sim-modes button { flex:1; padding:.45rem .3rem; font-family:inherit; font-size:.85rem; font-weight:600; cursor:pointer;
+  border:1px solid var(--border); background:var(--bg); color:var(--text); border-radius:9px; }
+.sim-modes button.active { background:var(--primary); border-color:var(--primary); color:#fff; }
+.sim-verdict { margin-top:.7rem; padding:.5rem .65rem; border-radius:9px; font-size:.83rem; font-weight:600; text-align:center;
+  background:var(--bg); border:1px solid var(--border); color:var(--text); }
+.sim-btn { width:100%; margin-top:.2rem; padding:.45rem .3rem; font-family:inherit; font-size:.85rem; font-weight:700; cursor:pointer;
+  border:1px solid var(--border); background:var(--bg); color:var(--text); border-radius:9px; }
+.sim-btn:hover { border-color:var(--primary); color:var(--primary); }
+
 /* ── INTERACTIVE STEP-BY-STEP (shared: transistor.html, switching-psu.html) ── */
 .bs-wrap { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; }
 .bs-tabs { display:grid; grid-template-columns:repeat(auto-fit,minmax(125px,1fr)); gap:.4rem; margin-bottom:.9rem; }

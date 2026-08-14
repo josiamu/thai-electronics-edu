@@ -120,6 +120,75 @@
         <p class="th-only" style="margin:.4rem 0 0">เครื่อง 3,500 W เปิดน้ำ 3 ลิตร/นาที → ΔT = 3500 ÷ (70×3) ≈ <strong>17°C</strong> ถ้าน้ำประปาเข้ามา 25°C ก็จะได้น้ำออก 42°C กำลังสบาย แต่พอหน้าหนาวน้ำเข้าเหลือ 20°C น้ำออกก็เหลือ 37°C ทันที — <strong>เครื่องไม่ได้เสีย</strong> ทางแก้คือ<strong>หรี่น้ำให้ไหลน้อยลง</strong> ΔT จะสูงขึ้นเอง (เปิด 2 ลิตร/นาที → ΔT ≈ 25°C)</p>
         <p class="en-only" style="margin:.4rem 0 0">A 3,500 W unit at 3 L/min gives ΔT = 3500 ÷ (70×3) ≈ <strong>17°C</strong>. With 25°C tap water that's a comfortable 42°C — but when the supply drops to 20°C in the cool season the output falls to 37°C. <strong>Nothing is broken.</strong> The fix is to <strong>reduce the flow</strong>: at 2 L/min the same unit gives ΔT ≈ 25°C.</p>
       </div>
+
+      <h3 style="margin:1.4rem 0 .6rem;font-size:1.05rem;">
+        <span class="th-only">🚿 ซิมโต้ตอบ — ลากสไลเดอร์ดูอุณหภูมิน้ำจริง และดู ELCB ทำงาน</span>
+        <span class="en-only">🚿 Interactive sim — drag the sliders for the real outlet temperature, and watch the ELCB work</span>
+      </h3>
+      <div class="sim-wrap" id="wh-sim">
+        <canvas id="wh-canvas" class="sim-screen" width="520" height="300" aria-label="Water heater simulator"></canvas>
+        <div class="sim-panel">
+          <div class="sim-modes">
+            <button id="wh-mode-temp" class="active" type="button">🚿 <span class="th-only">อุณหภูมิน้ำ</span><span class="en-only">Water temp</span></button>
+            <button id="wh-mode-elcb" type="button">⚡ <span class="th-only">ELCB ไฟรั่ว</span><span class="en-only">ELCB leak</span></button>
+          </div>
+
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="wh-p"><span class="th-only">กำลังไฟเครื่อง</span><span class="en-only">Heater power</span></label>
+              <span id="wh-p-val">3500 W</span>
+            </div>
+            <input type="range" id="wh-p" min="3000" max="6000" step="500" value="3500">
+          </div>
+          <div class="sim-ctrl" data-mode="temp">
+            <div class="sim-ctrl-row">
+              <label for="wh-q"><span class="th-only">อัตราการไหลของน้ำ</span><span class="en-only">Water flow</span></label>
+              <span id="wh-q-val">3.0 L/min</span>
+            </div>
+            <input type="range" id="wh-q" min="1" max="6" step="0.1" value="3">
+          </div>
+          <div class="sim-ctrl" data-mode="temp">
+            <div class="sim-ctrl-row">
+              <label for="wh-tin"><span class="th-only">อุณหภูมิน้ำเข้า</span><span class="en-only">Inlet temperature</span></label>
+              <span id="wh-tin-val">25 °C</span>
+            </div>
+            <input type="range" id="wh-tin" min="15" max="32" step="1" value="25">
+          </div>
+          <div class="sim-ctrl" data-mode="elcb" style="display:none;">
+            <div class="sim-ctrl-row">
+              <label for="wh-leak"><span class="th-only">กระแสรั่วลงตัวถัง</span><span class="en-only">Leakage to the body</span></label>
+              <span id="wh-leak-val">0 mA</span>
+            </div>
+            <input type="range" id="wh-leak" min="0" max="60" step="1" value="0">
+            <button id="wh-reset" class="sim-btn" type="button">🔄 <span class="th-only">กด RESET ที่ ELCB</span><span class="en-only">Press ELCB RESET</span></button>
+          </div>
+
+          <div class="sim-readout">
+            <div class="sim-rb"><div class="sim-rl" id="wh-l1">อุณหภูมิที่เพิ่ม ΔT</div><div class="sim-rv" id="wh-r1">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="wh-l2">น้ำออก</div><div class="sim-rv" id="wh-r2">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="wh-l3">กระแสที่กิน</div><div class="sim-rv" id="wh-r3">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="wh-l4">สถานะน้ำ</div><div class="sim-rv" id="wh-r4">—</div></div>
+          </div>
+          <div class="sim-verdict" id="wh-verdict">—</div>
+        </div>
+      </div>
+
+      <div class="info-box" style="margin-top:1rem;">
+        <strong class="th-only">🧪 ลองไล่ 3 สถานการณ์นี้</strong>
+        <strong class="en-only">🧪 Three scenarios worth trying</strong>
+        <p class="th-only" style="margin:.4rem 0 0;">
+          <strong>1) หน้าหนาวน้ำไม่ร้อน:</strong> ตั้ง 3,500 W · 3 ลิตร/นาที แล้วลากน้ำเข้าจาก 25°C ลงไป 20°C — น้ำออกตกจาก 42°C เหลือ 37°C ทันที <strong>โดยที่เครื่องไม่ได้เสียอะไรเลย</strong> จากนั้นหรี่น้ำเหลือ 2 ลิตร/นาที น้ำออกจะกลับขึ้นไป 45°C<br>
+          <strong>2) ทำไมเครื่องแรงกว่าถึงกินไฟเยอะ:</strong> เลื่อนกำลังไฟไป 6,000 W ดูเลขกระแส — 27A ต้องใช้สายกับเบรกเกอร์ตามตารางท้ายบท ไม่ใช่เสียบปลั๊กธรรมดา<br>
+          <strong>3) ELCB ทำงานยังไง:</strong> สลับไปโหมด ELCB แล้วค่อยๆ เพิ่มกระแสรั่ว จะเห็นว่า <strong>กระแสในสาย L กับ N เริ่มไม่เท่ากัน</strong> พอถึง 30 mA ELCB ตัดทันที — และถ้ายังไม่แก้จุดรั่ว กด RESET ก็ไม่ขึ้น เหมือนของจริง
+        </p>
+        <p class="en-only" style="margin:.4rem 0 0;">
+          <strong>1) "Not hot enough in the cool season":</strong> set 3,500 W and 3 L/min, then drag the inlet from 25°C down to 20°C — the outlet falls from 42°C to 37°C <strong>with nothing broken at all</strong>. Now cut the flow to 2 L/min and it climbs back to 45°C<br>
+          <strong>2) Why a bigger unit needs bigger wiring:</strong> push the power to 6,000 W and read the current — 27 A needs the cable and breaker from the table below, not a normal wall socket<br>
+          <strong>3) How the ELCB decides:</strong> switch to ELCB mode and raise the leakage — the <strong>live and neutral currents stop matching</strong>, and at 30 mA it trips instantly. Until the leak is fixed, RESET will not hold — exactly like the real thing
+        </p>
+      </div>
+      <p class="th-only" style="font-size:.88rem;color:var(--text-light);margin-top:.8rem;">🔗 หลักการ ELCB กับระบบสายดินในบ้าน อ่านต่อในบท <a href="home-wiring.html"><strong>ไฟบ้านและความปลอดภัย</strong></a></p>
+      <p class="en-only" style="font-size:.88rem;color:var(--text-light);margin-top:.8rem;">🔗 More on ELCBs and household earthing in the <a href="home-wiring.html"><strong>Home Wiring &amp; Safety</strong></a> lesson</p>
     </div>
   </div>
 
@@ -482,5 +551,6 @@
 <footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
 <script>const CURRENT_PAGE='repair-water-heater';</script>
 <script src="js/nav.js"></script>
+<script src="js/water-heater-sim.js"></script>
 </body>
 </html>
