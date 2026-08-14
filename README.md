@@ -20,7 +20,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | 🔬 **เครื่องมือจำลองเชิงโต้ตอบ** | เบรดบอร์ดเสมือน, ออสซิลโลสโคป, BJT switch, เครื่องกำเนิดสัญญาณ, แหล่งจ่ายไฟ, เรียงกระแส AC→DC, ออปโตคัปเปลอร์, สวิตช์ความเร็วพัดลม, จำลองวงจร |
 | 🧮 **7 เครื่องคิดเลข** | รหัสสี, โอห์ม, กำลัง, พลังงาน, อนุกรม/ขนาน, แปลงหน่วย |
 | 📝 **แบบทดสอบ 84 ข้อ** | 13 หมวด, สุ่มข้อ, บันทึกคะแนนสูงสุด — มีทั้ง TH และ EN |
-| 📥 **PDF 49 ไฟล์** | ดาวน์โหลดใบเนื้อหา + ใบงานประกอบการเรียน |
+| 📥 **PDF 50 ไฟล์** | ดาวน์โหลดใบเนื้อหา + ใบงานประกอบการเรียน |
 | 🖨️ **Print-friendly** | หน้าสูตรสรุปพิมพ์ออกกระดาษ A4 ได้เลย |
 
 ---
@@ -42,6 +42,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | ไดโอด | Diode | `diode.html` |
 | ตัวเก็บประจุ | Capacitor | `capacitor.html` |
 | ทรานซิสเตอร์ | Transistor (BJT/MOSFET) | `transistor.html` |
+| IGBT ทรานซิสเตอร์กำลัง | IGBT Power Transistor | `igbt.html` (มีซิมเทียบกำลังสูญเสีย MOSFET/IGBT) |
 | ไทริสเตอร์ SCR/TRIAC/DIAC | Thyristors (SCR/TRIAC/DIAC) | `thyristor.html` |
 | ตัวเหนี่ยวนำและหม้อแปลง | Inductor & Transformer | `inductor.html` |
 | รีเลย์ | Relay | `relay.html` |
@@ -87,7 +88,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | `formulas.html` | สูตรสรุป + พิมพ์ PDF | Formula summary + print |
 | `tools.html` | เครื่องคิดเลขเชิงโต้ตอบ 7 ตัว | 7 interactive calculators |
 | `quiz.html` | แบบทดสอบ 92 ข้อ 14 หมวด | 92-question quiz, 14 categories |
-| `downloads.html` | ดาวน์โหลด PDF 49 ไฟล์ (รวมหัวข้อ "ฟอร์มตรวจเช็ค" และ "งานซ่อม") | Download 49 PDF files (incl. "Check Forms" and "Repair" sections) |
+| `downloads.html` | ดาวน์โหลด PDF 50 ไฟล์ (รวมหัวข้อ "ฟอร์มตรวจเช็ค" และ "งานซ่อม") | Download 50 PDF files (incl. "Check Forms" and "Repair" sections) |
 
 ---
 
@@ -189,11 +190,12 @@ git push
 ├── js/announcements.js     — Home-page "latest news/updates" box (data-driven, dismissible, bilingual)
 ├── js/breadboard.js        — Virtual breadboard lab (MNA solver + transistors + multimeter)
 ├── js/scr-sim.js           — Phase-control dimmer sim (SCR/TRIAC firing angle)
+├── js/igbt-sim.js          — MOSFET-vs-IGBT loss comparison sim (current/frequency/bus + hard vs ZVS switching)
 ├── js/fan-motor-sim.js     — Fan speed-switch sim (press 0/1/2/3 → live current path through choke, run & start windings + blown-thermal-fuse mode)
 ├── js/relay-lab.js         — MY4 relay control lab (DC nodal solver + power rails + terminal block + ladder view + auto-graded missions + save/share)
 ├── index.html           — Home page
 │   ├── electricity.html / ohm.html                 — Fundamentals
-│   ├── resistor.html / diode.html / transistor.html / thyristor.html / ic.html / 555.html / op-amp.html / logic-gates.html / relay.html
+│   ├── resistor.html / diode.html / transistor.html / igbt.html / thyristor.html / ic.html / 555.html / op-amp.html / logic-gates.html / relay.html
 │   │   capacitor.html / inductor.html / optoelectronics.html / power-supply.html   — Components
 │   ├── multimeter.html / signal-generator.html / oscilloscope.html  — Measurement
 │   ├── soldering.html / home-wiring.html           — Practical

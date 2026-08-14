@@ -14,6 +14,14 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'lesson-igbt-2026-08-14', date:'2026-08-14', type:'lesson',
+    th:'บทเรียนใหม่: <b>⚡ IGBT — ทรานซิสเตอร์กำลังลูกผสม</b> — อุปกรณ์ที่เป็นหัวใจของบอร์ดเตาแม่เหล็กไฟฟ้าและอินเวอร์เตอร์ แต่เว็บยังไม่เคยสอนตรงๆ: ลูกผสม<b>เกตแบบมอสเฟต + ทางเดินกระแสแบบ BJT</b>, สงคราม <b>V<sub>CE(sat)</sub> กับ R<sub>DS(on)</sub></b> ว่างานไหนควรใช้ตัวไหน, <b>ทำไมต้องขับเกต 15–18V ไม่ใช่ 5V</b>, ไดโอดฟรีวีลกับโหลดเหนี่ยวนำ, วิธีตรวจเช็คด้วยมัลติมิเตอร์ 5 ขั้น (รวมทริกชาร์จเกตด้วยแบต 9V) + <b>ซิมเทียบกำลังสูญเสีย MOSFET/IGBT</b> ที่สลับโหมดสวิตช์แข็ง↔ซอฟต์ (ZVS) ได้ — เห็นชัดว่าทำไมบอร์ดเตาถึงเลือก IGBT',
+    en:'New lesson: <b>⚡ IGBT — the Hybrid Power Transistor</b> — the device at the heart of induction-stove and inverter boards that the site had never taught directly: a hybrid <b>MOSFET gate on a BJT current path</b>, the <b>V<sub>CE(sat)</sub> vs R<sub>DS(on)</sub></b> trade-off that decides which device fits a job, <b>why the gate needs 15–18 V and not 5 V</b>, freewheel diodes and inductive loads, a 5-step multimeter test (including the 9 V gate-charge trick), plus a <b>MOSFET-vs-IGBT loss sim</b> with hard ↔ soft (ZVS) switching — showing exactly why stove boards pick the IGBT',
+    href:'igbt.html' },
+  { id:'download-igbt-sheet-2026-08-14', date:'2026-08-14', type:'download',
+    th:'ไฟล์ใหม่ในหมวด <b>🔧 อุปกรณ์อิเล็กทรอนิกส์</b>: <b>ใบความรู้ IGBT</b> — ใช้อ่านคู่กับบทเรียน <a href="igbt.html">IGBT</a> ที่เพิ่งเปิดใหม่ (PDF)',
+    en:'New file in the <b>🔧 Components</b> section: the <b>IGBT knowledge sheet</b> — read it alongside the new <a href="igbt.html">IGBT lesson</a> (PDF)',
+    href:'downloads.html', cat:'components', file:'pdf/IGBT.pdf' },
   { id:'download-check-forms-2026-08-14', date:'2026-08-14', type:'download',
     th:'หมวดใหม่ในหน้าดาวน์โหลด: <b>✅ ฟอร์มตรวจเช็ค</b> 3 ไฟล์ — <b>BJT · MOSFET · IGBT</b> ใบบันทึกผลสำหรับวัดอุปกรณ์ทีละขาแล้วสรุปว่าดีหรือเสีย พิมพ์ออกมาใช้คู่กับมัลติมิเตอร์ในคาบปฏิบัติได้เลย (PDF)',
     en:'New section on the downloads page: <b>✅ Check Forms</b> — three record sheets for <b>BJT · MOSFET · IGBT</b>. Measure the device pin by pin, log the readings, and mark it pass or fail; print them and use them alongside a multimeter in the lab (PDF)',

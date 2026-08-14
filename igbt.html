@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="IGBT ทรานซิสเตอร์กำลัง | สื่อการเรียนการสอน" data-title-en="IGBT Power Transistor | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IGBT ทรานซิสเตอร์กำลัง | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.sim-wrap { display:grid; grid-template-columns:1fr 285px; gap:1.25rem; align-items:start; }
+@media (max-width:860px){ .sim-wrap{ grid-template-columns:1fr; } }
+.sim-screen { width:100%; height:auto; display:block; border-radius:12px; background:#0b1220; border:1px solid var(--border); }
+.sim-panel { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:.9rem 1rem; }
+.sim-ctrl { margin-bottom:.9rem; }
+.sim-ctrl-row { display:flex; justify-content:space-between; align-items:center; font-size:.84rem; font-weight:600; margin-bottom:.25rem; }
+.sim-ctrl-row span { color:var(--primary); font-size:.9rem; }
+.sim-ctrl input[type=range] { width:100%; cursor:pointer; accent-color:var(--primary); }
+.sim-readout { display:grid; grid-template-columns:1fr 1fr; gap:.45rem; margin-top:.4rem; }
+.sim-rb { background:var(--bg); border:1px solid var(--border); border-radius:9px; padding:.45rem .6rem; text-align:center; }
+.sim-rl { font-size:.72rem; color:var(--text-light); margin-bottom:.12rem; }
+.sim-rv { font-size:1.02rem; font-weight:700; color:var(--text); }
+.sim-modes { display:flex; gap:.4rem; margin-bottom:.9rem; }
+.sim-modes button { flex:1; padding:.45rem .3rem; font-family:inherit; font-size:.85rem; font-weight:600; cursor:pointer;
+  border:1px solid var(--border); background:var(--bg); color:var(--text); border-radius:9px; }
+.sim-modes button.active { background:var(--primary); border-color:var(--primary); color:#fff; }
+.sim-verdict { margin-top:.7rem; padding:.5rem .65rem; border-radius:9px; font-size:.83rem; font-weight:600; text-align:center;
+  background:var(--bg); border:1px solid var(--border); color:var(--text); }
+.pin-tbl td { vertical-align:top; }
+.part-num { font-family:monospace; font-weight:700; color:var(--primary); }
+.sym-fig { text-align:center; }
+.sym-fig svg { max-width:100%; height:auto; font-family:inherit; font-size:11px; }
+.sym-cap { font-size:.85rem; color:var(--text-light); margin-top:.35rem; }
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">⚡</div>
+    <div>
+      <h1 class="th-only">IGBT — ทรานซิสเตอร์กำลังลูกผสม</h1>
+      <h1 class="en-only">IGBT — the Hybrid Power Transistor</h1>
+      <p class="th-only">เกตแบบมอสเฟต + ตัวนำกระแสแบบ BJT • หัวใจของเตาแม่เหล็กไฟฟ้าและอินเวอร์เตอร์ • ขับเกต วัดค่า และเลือกใช้ + ซิมเทียบ MOSFET/IGBT</p>
+      <p class="en-only">A MOSFET gate on a BJT conduction path • the heart of induction stoves and inverters • gate drive, testing and device choice + a live MOSFET-vs-IGBT sim</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">วัตถุประสงค์การเรียนรู้</span><span class="en-only">Learning Objectives</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li>อธิบายได้ว่า IGBT เป็น <strong>ลูกผสมระหว่าง MOSFET กับ BJT</strong> และแต่ละส่วนมาทำหน้าที่อะไร</li>
+        <li>เรียกชื่อขา <strong>G / C / E</strong> และอ่านสัญลักษณ์ IGBT ได้</li>
+        <li>เปรียบเทียบ <strong>V<sub>CE(sat)</sub> ของ IGBT กับ R<sub>DS(on)</sub> ของ MOSFET</strong> และบอกได้ว่างานไหนควรใช้ตัวไหน</li>
+        <li>อธิบายการ <strong>ขับเกต 15–18V</strong>, หน้าที่ของ R-gate และซีเนอร์ป้องกันเกต</li>
+        <li>บอกได้ว่าทำไม <strong>โหลดเหนี่ยวนำ</strong> ถึงทำให้ IGBT พัง และไดโอดฟรีวีลช่วยอย่างไร</li>
+        <li>ตรวจเช็ค IGBT ด้วยมัลติมิเตอร์ได้ทั้งแบบวัดรอยต่อและแบบทดสอบชาร์จเกต</li>
+        <li>บอกกฎความปลอดภัยเมื่อทำงานกับบอร์ดที่มี IGBT ต่อกับบัส 310V ได้</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>Explain that an IGBT is a <strong>hybrid of a MOSFET and a BJT</strong>, and what each half contributes</li>
+        <li>Name the <strong>G / C / E</strong> terminals and read the IGBT symbol</li>
+        <li>Compare <strong>IGBT V<sub>CE(sat)</sub> against MOSFET R<sub>DS(on)</sub></strong> and pick the right device for a job</li>
+        <li>Explain <strong>15–18 V gate drive</strong>, the job of the gate resistor and of the gate-protection zener</li>
+        <li>Say why an <strong>inductive load</strong> destroys IGBTs and how the freewheel diode prevents it</li>
+        <li>Test an IGBT with a multimeter — both junction checks and the gate-charge test</li>
+        <li>State the safety rules for working on a board where an IGBT sits on a 310 V bus</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 1. IGBT คืออะไร -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">IGBT คืออะไร?</span><span class="en-only">What is an IGBT?</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li>ย่อจาก <strong>Insulated Gate Bipolar Transistor</strong> — "ทรานซิสเตอร์สองขั้วที่มีเกตหุ้มฉนวน"</li>
+            <li>เป็น <strong>ลูกผสม</strong>: ด้านสั่งงานเป็น <strong>มอสเฟต</strong> (เกตหุ้มฉนวน สั่งด้วยแรงดัน แทบไม่กินกระแส) ส่วนด้านที่รับกระแสโหลดเป็น <strong>BJT</strong> (แรงดันตกคร่อมต่ำแม้กระแสสูงมาก)</li>
+            <li>เกิดมาเพื่อแก้จุดอ่อนของทั้งสองฝ่าย — <strong>BJT ขับยาก</strong> (ต้องป้อนกระแสเบสมหาศาล) และ <strong>MOSFET แรงดันสูงร้อนจัด</strong> (R<sub>DS(on)</sub> โตเร็วมากตามพิกัดแรงดัน)</li>
+            <li>ครองงานช่วง <strong>300–1,700V กระแสสูง ความถี่ปานกลาง (ไม่กี่ kHz ถึงหลักสิบ kHz)</strong> เช่น เตาแม่เหล็กไฟฟ้า อินเวอร์เตอร์แอร์ เครื่องเชื่อม UPS มอเตอร์ไดรฟ์</li>
+            <li>ไม่ใช่สวิตช์แบบล็อกตัวเหมือน <a href="thyristor.html">ไทริสเตอร์</a> — <strong>ปล่อยเกตเมื่อไหร่ก็ดับ</strong> จึงคุมเป็นพัลส์ PWM ได้</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li>Short for <strong>Insulated Gate Bipolar Transistor</strong></li>
+            <li>A <strong>hybrid</strong>: the control side is a <strong>MOSFET</strong> (insulated gate, voltage driven, draws almost no current) while the load current flows through a <strong>BJT</strong> section (low forward drop even at very high current)</li>
+            <li>It exists to cancel the weakness of each parent — <strong>BJTs are hard to drive</strong> (they need huge base current) and <strong>high-voltage MOSFETs run hot</strong> (R<sub>DS(on)</sub> rises steeply with the voltage rating)</li>
+            <li>It owns the <strong>300–1,700 V, high-current, medium-frequency</strong> space (a few kHz to tens of kHz): induction stoves, air-conditioner inverters, welders, UPS units, motor drives</li>
+            <li>Unlike a <a href="thyristor.html">thyristor</a> it does not latch — <strong>release the gate and it turns off</strong>, so it can be PWM controlled</li>
+          </ul>
+        </div>
+        <div class="info-box">
+          <strong class="th-only">💡 จำง่ายๆ</strong>
+          <strong class="en-only">💡 The one-line summary</strong>
+          <p class="th-only" style="margin:.4rem 0 0;">IGBT = <strong>"ขาเกตของมอสเฟต ต่อเข้ากับตัวถ่างกระแสของ BJT"</strong><br>
+          สั่งงานง่ายเหมือนมอสเฟต แต่ทนกระแสและแรงดันตกต่ำเหมือน BJT<br><br>
+          ราคาที่ต้องจ่าย: <strong>ปิดช้ากว่ามอสเฟต</strong> (มีหางกระแส current tail) จึงไม่เหมาะกับความถี่สูงมาก และ <strong>มีแรงดันตกคงที่ ~0.8–1V ติดตัวเสมอ</strong> แม้กระแสจะน้อยนิดเดียว</p>
+          <p class="en-only" style="margin:.4rem 0 0;">IGBT = <strong>"a MOSFET gate bolted onto a BJT current path"</strong><br>
+          As easy to drive as a MOSFET, with the low drop and current handling of a BJT<br><br>
+          The price: it <strong>turns off more slowly</strong> than a MOSFET (the current tail), so very high frequencies hurt, and it always carries a <strong>fixed ~0.8–1 V offset</strong> even at tiny currents</p>
+        </div>
+      </div>
+
+      <div style="overflow-x:auto;margin-top:1rem;">
+        <table class="pin-tbl">
+          <thead>
+            <tr>
+              <th><span class="th-only">หัวข้อ</span><span class="en-only">Property</span></th>
+              <th>BJT</th>
+              <th>MOSFET</th>
+              <th>IGBT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="th-only">ขาสั่งงาน</span><span class="en-only">Control terminal</span></td>
+              <td><span class="th-only">เบส — กินกระแส I<sub>B</sub> = I<sub>C</sub>/β ตลอดเวลา</span><span class="en-only">Base — draws I<sub>B</sub> = I<sub>C</sub>/β continuously</span></td>
+              <td><span class="th-only">เกต — แรงดัน แทบไม่กินกระแส</span><span class="en-only">Gate — voltage driven, near-zero current</span></td>
+              <td><span class="th-only">เกต — แรงดัน แทบไม่กินกระแส (เหมือนมอสเฟต)</span><span class="en-only">Gate — voltage driven, near-zero current (MOSFET-like)</span></td>
+            </tr>
+            <tr>
+              <td><span class="th-only">แรงดันตกตอนนำกระแส</span><span class="en-only">On-state drop</span></td>
+              <td>V<sub>CE(sat)</sub> ≈ 0.2–1 V</td>
+              <td>I × R<sub>DS(on)</sub> <span class="th-only">— โตตามกระแสยกกำลังสอง</span><span class="en-only"> — rises with the square of current</span></td>
+              <td>V<sub>CE(sat)</sub> ≈ 1.5–2.5 V <span class="th-only">— เกือบคงที่</span><span class="en-only">— nearly constant</span></td>
+            </tr>
+            <tr>
+              <td><span class="th-only">ย่านแรงดันที่ถนัด</span><span class="en-only">Voltage sweet spot</span></td>
+              <td>&lt; 400 V</td>
+              <td>&lt; 250 V <span class="th-only">(สูงกว่านี้ R<sub>DS(on)</sub> พุ่ง)</span><span class="en-only">(above that R<sub>DS(on)</sub> explodes)</span></td>
+              <td>400–1,700 V</td>
+            </tr>
+            <tr>
+              <td><span class="th-only">ความถี่ที่ถนัด</span><span class="en-only">Frequency sweet spot</span></td>
+              <td>&lt; 50 kHz</td>
+              <td><span class="th-only">สูงมาก (100 kHz–MHz)</span><span class="en-only">Very high (100 kHz–MHz)</span></td>
+              <td><span class="th-only">ปานกลาง (1–50 kHz)</span><span class="en-only">Medium (1–50 kHz)</span></td>
+            </tr>
+            <tr>
+              <td><span class="th-only">เจอที่ไหนในบทเรียนนี้</span><span class="en-only">Where you meet it here</span></td>
+              <td><a href="transistor.html"><span class="th-only">บททรานซิสเตอร์</span><span class="en-only">Transistor lesson</span></a></td>
+              <td><a href="transistor.html"><span class="th-only">บททรานซิสเตอร์</span><span class="en-only">Transistor lesson</span></a> · <a href="switching-psu.html"><span class="th-only">ภาคจ่ายไฟสวิตชิ่ง</span><span class="en-only">Switching PSU</span></a></td>
+              <td><a href="induction-stove.html"><span class="th-only">เตาแม่เหล็กไฟฟ้า</span><span class="en-only">Induction stove</span></a> · <a href="microwave.html"><span class="th-only">ไมโครเวฟอินเวอร์เตอร์</span><span class="en-only">Inverter microwave</span></a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. สัญลักษณ์และขา -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">สัญลักษณ์ ขา และวงจรสมมูล</span><span class="en-only">Symbol, Terminals &amp; Equivalent Circuit</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div class="sym-fig">
+          <svg viewBox="0 0 250 200" role="img" aria-label="IGBT symbol and equivalent circuit">
+            <!-- symbol -->
+            <g stroke="var(--text)" stroke-width="2" fill="none">
+              <line x1="18" y1="100" x2="46" y2="100"/>          <!-- gate lead -->
+              <line x1="46" y1="72" x2="46" y2="128"/>            <!-- gate plate -->
+              <line x1="56" y1="66" x2="56" y2="134"/>            <!-- channel bar -->
+              <line x1="56" y1="78" x2="92" y2="78"/>             <!-- to collector -->
+              <line x1="92" y1="78" x2="92" y2="26"/>
+              <line x1="56" y1="122" x2="92" y2="122"/>           <!-- to emitter -->
+              <line x1="92" y1="122" x2="92" y2="174"/>
+            </g>
+            <polygon points="74,116 74,128 88,122" fill="var(--text)"/>  <!-- emitter arrow -->
+            <text x="92" y="18" text-anchor="middle" fill="var(--text)" font-weight="700">C</text>
+            <text x="92" y="190" text-anchor="middle" fill="var(--text)" font-weight="700">E</text>
+            <text x="14" y="96" text-anchor="end" fill="var(--secondary)" font-weight="700">G</text>
+            <text x="70" y="200" text-anchor="middle" fill="var(--text-light)">IGBT (N-channel)</text>
+
+            <!-- equivalent circuit: MOSFET driving a PNP -->
+            <g stroke="var(--text)" stroke-width="1.8" fill="none">
+              <line x1="200" y1="26" x2="200" y2="52"/>           <!-- collector rail -->
+              <!-- PNP: emitter top, collector bottom -->
+              <line x1="176" y1="52" x2="224" y2="52"/>
+              <line x1="200" y1="52" x2="200" y2="64"/>
+              <line x1="182" y1="64" x2="218" y2="64"/>
+              <line x1="190" y1="64" x2="176" y2="86"/>
+              <line x1="210" y1="64" x2="224" y2="86"/>
+              <!-- MOSFET below -->
+              <line x1="150" y1="120" x2="176" y2="120"/>
+              <line x1="176" y1="102" x2="176" y2="138"/>
+              <line x1="184" y1="98" x2="184" y2="142"/>
+              <line x1="184" y1="106" x2="210" y2="106"/>
+              <line x1="210" y1="86" x2="210" y2="106"/>
+              <line x1="184" y1="134" x2="210" y2="134"/>
+              <line x1="210" y1="134" x2="210" y2="174"/>
+              <line x1="176" y1="86" x2="176" y2="120"/>
+            </g>
+            <text x="200" y="18" text-anchor="middle" fill="var(--text)" font-weight="700">C</text>
+            <text x="210" y="190" text-anchor="middle" fill="var(--text)" font-weight="700">E</text>
+            <text x="146" y="116" text-anchor="end" fill="var(--secondary)" font-weight="700">G</text>
+            <text x="238" y="58" text-anchor="middle" fill="#b45309" font-weight="700">PNP</text>
+            <text x="238" y="126" text-anchor="middle" fill="#1d4ed8" font-weight="700">MOS</text>
+            <text x="196" y="200" text-anchor="middle" fill="var(--text-light)">
+              <tspan class="th-only">วงจรสมมูล</tspan><tspan class="en-only">Equivalent</tspan>
+            </text>
+          </svg>
+          <div class="sym-cap">
+            <span class="th-only">สัญลักษณ์ = มอสเฟตที่เปลี่ยนขาออกเป็นลูกศรแบบ BJT • ภายในคือมอสเฟตขับทรานซิสเตอร์ PNP ตัวใหญ่</span>
+            <span class="en-only">The symbol is a MOSFET whose output leg carries a BJT-style arrow • inside, a MOSFET drives a large PNP transistor</span>
+          </div>
+        </div>
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>G (Gate)</strong> — ขาสั่งงาน วัดเทียบขา E เสมอ หุ้มฉนวนด้วยออกไซด์บางมาก จึง <strong>ไม่กินกระแสตอนค้างสถานะ</strong> แต่ <strong>ทะลุพังได้ถ้าเกิน ±20V</strong></li>
+            <li><strong>C (Collector)</strong> — ขารับกระแสจากไฟบวก (ในแพ็กเกจ TO-247/TO-220 <strong>ต่ออยู่กับแผ่นโลหะหลัง</strong> — แผ่นหลังจึงมีไฟ 310V!)</li>
+            <li><strong>E (Emitter)</strong> — ขาออก ลงกราวด์ของภาคกำลัง เป็นจุดอ้างอิงของแรงดันเกต</li>
+            <li>เรียงขาแบบมาตรฐานของ TO-247 มองจากด้านหน้า (ด้านที่มีตัวหนังสือ) คือ <strong>G – C – E</strong> จากซ้ายไปขวา (แต่ <strong>ต้องเช็ค datasheet เสมอ</strong> เพราะบางเบอร์สลับ)</li>
+            <li>หลายเบอร์มี <strong>ไดโอดฟรีวีล (FRD) ประกบมาในตัว</strong> — วัดจาก C ไป E จะเจอไดโอดทิศเดียวเสมอ อันนี้ปกติ ไม่ใช่ของเสีย</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li><strong>G (Gate)</strong> — the control pin, always referenced to E. The oxide under it is extremely thin, so it <strong>draws no steady current</strong> but <strong>punches through above ±20 V</strong></li>
+            <li><strong>C (Collector)</strong> — takes current from the positive rail. In TO-247/TO-220 packages it is <strong>bonded to the metal back tab</strong> — so that tab sits at 310 V!</li>
+            <li><strong>E (Emitter)</strong> — the output leg to the power ground, and the reference for the gate voltage</li>
+            <li>The usual TO-247 order, viewed from the printed face, is <strong>G – C – E</strong> left to right — but <strong>always confirm in the datasheet</strong>, some parts differ</li>
+            <li>Many parts include a <strong>co-packaged freewheel diode (FRD)</strong> — so C-to-E always reads as a diode in one direction. That is normal, not a fault</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <strong class="th-only">🔍 อ่านสัญลักษณ์ให้ไว</strong>
+        <strong class="en-only">🔍 Reading the symbol quickly</strong>
+        <p class="th-only" style="margin:.4rem 0 0;">เห็น <strong>ขาเกตมีเส้นขีดขนานหุ้มฉนวน</strong> = ตระกูลมอสเฟต · เห็น <strong>ลูกศรที่ขาออก</strong> = ตระกูล BJT · เห็นทั้งสองอย่างในตัวเดียว = <strong>IGBT</strong> และชื่อขาจะเปลี่ยนจาก D/S เป็น C/E ตามฝั่ง BJT</p>
+        <p class="en-only" style="margin:.4rem 0 0;">An <strong>insulated gate plate</strong> means the MOSFET family · an <strong>arrow on the output leg</strong> means the BJT family · both on one device means <strong>IGBT</strong>, and the pins are named C/E after its BJT half rather than D/S</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. ทำไมต้องมี IGBT + ซิม -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ทำไมต้องมี IGBT? — สงคราม V<sub>CE(sat)</sub> กับ R<sub>DS(on)</sub></span><span class="en-only">Why IGBTs Exist — V<sub>CE(sat)</sub> vs R<sub>DS(on)</sub></span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>มอสเฟตตอนนำกระแสคือ "ตัวต้านทาน"</strong> → แรงดันตก = I × R<sub>DS(on)</sub> และกำลังสูญเสีย = <strong>I² × R</strong> — กระแสเพิ่ม 2 เท่า ความร้อนเพิ่ม 4 เท่า</li>
+            <li><strong>IGBT ตอนนำกระแสคือ "ไดโอด + ตัวต้านทานเล็กๆ"</strong> → แรงดันตก ≈ V<sub>CE0</sub> + I × r และกำลังสูญเสีย = <strong>I × V</strong> — โตแบบเชิงเส้น ไม่ระเบิดตามกำลังสอง</li>
+            <li>ที่ <strong>กระแสน้อย</strong> มอสเฟตชนะขาด (แรงดันตกเกือบศูนย์ ส่วน IGBT เสีย ~0.9V ฟรีๆ)</li>
+            <li>ที่ <strong>กระแสสูง</strong> IGBT ชนะ เพราะ R<sub>DS(on)</sub> ของมอสเฟตพิกัด 600V สูงกว่าของ 100V หลายสิบเท่า</li>
+            <li>แต่ IGBT <strong>ปิดช้ากว่า</strong> มีหางกระแส (tail current) ทำให้ <strong>กำลังสูญเสียตอนสวิตช์แปรตามความถี่</strong> — ยิ่งสับเร็ว ยิ่งร้อน</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li><strong>A MOSFET in the on-state is a resistor</strong> → drop = I × R<sub>DS(on)</sub>, loss = <strong>I² × R</strong> — double the current, quadruple the heat</li>
+            <li><strong>An IGBT in the on-state is a diode plus a small resistor</strong> → drop ≈ V<sub>CE0</sub> + I × r, loss = <strong>I × V</strong> — linear, not quadratic</li>
+            <li>At <strong>low current</strong> the MOSFET wins easily (almost no drop, while the IGBT wastes ~0.9 V for free)</li>
+            <li>At <strong>high current</strong> the IGBT wins, because a 600 V MOSFET's R<sub>DS(on)</sub> is tens of times worse than a 100 V one</li>
+            <li>But the IGBT <strong>turns off more slowly</strong> — its current tail makes <strong>switching loss scale with frequency</strong>, so the faster you chop, the hotter it runs</li>
+          </ul>
+        </div>
+        <div class="formula-box">
+          <div class="formula">P<sub>MOSFET</sub> = I² × R<sub>DS(on)</sub></div>
+          <div class="formula" style="margin-top:.5rem;">P<sub>IGBT</sub> = I × (V<sub>CE0</sub> + I × r)</div>
+          <p class="th-only" style="margin:.6rem 0 0;font-size:.9rem;">จุดตัด (กระแสที่ทั้งสองเสมอกัน):<br>
+          <strong>I* = V<sub>CE0</sub> ÷ (R<sub>DS(on)</sub> − r)</strong><br>
+          ต่ำกว่า I* ใช้มอสเฟต · สูงกว่า I* ใช้ IGBT</p>
+          <p class="en-only" style="margin:.6rem 0 0;font-size:.9rem;">They break even at<br>
+          <strong>I* = V<sub>CE0</sub> ÷ (R<sub>DS(on)</sub> − r)</strong><br>
+          Below I* pick the MOSFET · above it pick the IGBT</p>
+        </div>
+      </div>
+
+      <h3 style="margin:1.2rem 0 .6rem;font-size:1.05rem;">
+        <span class="th-only">⚔️ ซิมเทียบกำลังสูญเสีย — MOSFET 600V กับ IGBT 600V</span>
+        <span class="en-only">⚔️ Loss comparison sim — 600 V MOSFET vs 600 V IGBT</span>
+      </h3>
+      <div class="sim-wrap">
+        <canvas id="igbt-canvas" class="sim-screen" width="520" height="300" aria-label="MOSFET vs IGBT power loss chart"></canvas>
+        <div class="sim-panel">
+          <div class="sim-modes">
+            <button id="igbt-mode-hard" class="active" type="button"><span class="th-only">สวิตช์แข็ง</span><span class="en-only">Hard</span></button>
+            <button id="igbt-mode-soft" type="button"><span class="th-only">ซอฟต์ (ZVS)</span><span class="en-only">Soft (ZVS)</span></button>
+          </div>
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="igbt-i"><span class="th-only">กระแสโหลด</span><span class="en-only">Load current</span></label>
+              <span id="igbt-i-val">12 A</span>
+            </div>
+            <input type="range" id="igbt-i" min="1" max="40" step="0.5" value="12">
+          </div>
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="igbt-f"><span class="th-only">ความถี่สวิตช์</span><span class="en-only">Switching freq</span></label>
+              <span id="igbt-f-val">25 kHz</span>
+            </div>
+            <input type="range" id="igbt-f" min="1" max="100" step="1" value="25">
+          </div>
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="igbt-v"><span class="th-only">แรงดันบัส</span><span class="en-only">Bus voltage</span></label>
+              <span id="igbt-v-val">310 V</span>
+            </div>
+            <input type="range" id="igbt-v" min="50" max="400" step="10" value="310">
+          </div>
+          <div class="sim-readout">
+            <div class="sim-rb">
+              <div class="sim-rl">MOSFET <span class="th-only">รวม</span><span class="en-only">total</span></div>
+              <div class="sim-rv" id="igbt-out-mos">—</div>
+            </div>
+            <div class="sim-rb">
+              <div class="sim-rl">IGBT <span class="th-only">รวม</span><span class="en-only">total</span></div>
+              <div class="sim-rv" id="igbt-out-igbt">—</div>
+            </div>
+            <div class="sim-rb">
+              <div class="sim-rl"><span class="th-only">แรงดันตก MOS</span><span class="en-only">MOS drop</span></div>
+              <div class="sim-rv" id="igbt-out-vmos">—</div>
+            </div>
+            <div class="sim-rb">
+              <div class="sim-rl"><span class="th-only">แรงดันตก IGBT</span><span class="en-only">IGBT drop</span></div>
+              <div class="sim-rv" id="igbt-out-vigbt">—</div>
+            </div>
+          </div>
+          <div class="sim-verdict" id="igbt-verdict">—</div>
+          <div style="font-size:.78rem;color:var(--text-light);margin-top:.6rem;">
+            <span class="th-only">พิกัด 600V: มอสเฟต R<sub>DS(on)</sub> 0.19 Ω · IGBT V<sub>CE0</sub> 0.9 V + r 0.035 Ω (ค่าตอนร้อนจะแย่กว่านี้ทั้งคู่)</span>
+            <span class="en-only">600 V class: MOSFET R<sub>DS(on)</sub> 0.19 Ω · IGBT V<sub>CE0</sub> 0.9 V + r 0.035 Ω (both get worse when hot)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <strong class="th-only">🍳 ลองแบบเตาแม่เหล็กไฟฟ้า</strong>
+        <strong class="en-only">🍳 Try the induction-stove case</strong>
+        <p class="th-only" style="margin:.4rem 0 0;">ลองไล่ 3 จุดนี้ดู:<br>
+        <strong>1) กระแส 25A · 25 kHz · 310V</strong> (เงื่อนไขของเตา) → IGBT ชนะเกือบเท่าตัว เพราะที่กระแสระดับนี้ R<sub>DS(on)</sub> ของมอสเฟต 600V กินความร้อนตามกำลังสอง<br>
+        <strong>2) กดสลับ สวิตช์แข็ง ↔ ซอฟต์ (ZVS)</strong> ที่จุดเดิม → กำลังสูญเสียของ IGBT ลดลงอีกก้อนใหญ่ นั่นคืองานของ<strong>คาปาซิเตอร์เรโซแนนซ์</strong> ที่บังคับให้ IGBT ปิด-เปิดตอนแรงดันใกล้ศูนย์ — และเป็นเหตุผลที่<strong>คาปาตัวนี้ค่าแห้งเมื่อไหร่ IGBT ระเบิดทันที</strong> (ดู <a href="induction-stove.html">บทเตาแม่เหล็กไฟฟ้า</a>)<br>
+        <strong>3) ลดกระแสเหลือ ~8A แล้วดันความถี่ไป 100 kHz</strong> → มอสเฟตกลับมาชนะทันที เพราะหางกระแสของ IGBT ต้องจ่ายค่าสวิตช์ทุกรอบ — <strong>นี่คือเหตุผลที่ <a href="switching-psu.html">ภาคจ่ายไฟสวิตชิ่ง</a> ความถี่สูงใช้มอสเฟต ไม่ใช่ IGBT</strong></p>
+        <p class="en-only" style="margin:.4rem 0 0;">Walk through three points:<br>
+        <strong>1) 25 A · 25 kHz · 310 V</strong> (stove conditions) → the IGBT wins by nearly 2:1, because at that current a 600 V MOSFET's R<sub>DS(on)</sub> burns power with the square of the current<br>
+        <strong>2) Toggle hard ↔ soft (ZVS)</strong> at the same point → the IGBT sheds another big chunk of loss. That is the job of the <strong>resonant capacitor</strong>, which makes the IGBT switch near zero volts — and why a <strong>dried-out resonant capacitor blows the IGBT instantly</strong> (see the <a href="induction-stove.html">induction stove lesson</a>)<br>
+        <strong>3) Drop to ~8 A and push the frequency to 100 kHz</strong> → the MOSFET takes the lead again, because the IGBT's current tail is paid on every cycle — <strong>which is why high-frequency <a href="switching-psu.html">switching supplies</a> use MOSFETs, not IGBTs</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. การขับเกต -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">การขับเกต (Gate Drive)</span><span class="en-only">Gate Drive</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>ต้องใช้ 15–18V ไม่ใช่ 5V</strong> — V<sub>GE(th)</sub> ของ IGBT กำลังอยู่ที่ราว 4–6V ถ้าป้อนแค่ 5V มันจะเปิดแบบ "แง้มประตู" นำกระแสได้นิดเดียวแต่แรงดันตกสูงมาก แล้ว<strong>ไหม้ภายในไม่กี่วินาที</strong></li>
+            <li>นี่คือเหตุผลที่บอร์ดเตาแม่เหล็กไฟฟ้าต้องมี <strong>ภาคจ่าย 18V แยกต่างหาก</strong> และมี <strong>วงจรขับเกต (gate driver)</strong> คั่นระหว่าง MCU 5V กับขาเกต</li>
+            <li><strong>R-gate (10–47Ω)</strong> — จำกัดกระแสประจุ/คายประจุเกต คุมความเร็วสวิตช์และลดการแกว่ง (ringing) ถ้า<strong>ไหม้ขาด IGBT จะไม่เปิดเลย</strong></li>
+            <li><strong>ซีเนอร์ 18V คร่อม G-E</strong> — กันแรงดันเกินทำให้ออกไซด์ทะลุ ถ้าซีเนอร์ตัวนี้<strong>ช็อต สัญญาณสั่งจะถูกดึงลงกราวด์หมด</strong> IGBT ก็ไม่เปิด</li>
+            <li><strong>ห้ามปล่อยขาเกตลอย</strong> — เกตคือตัวเก็บประจุ ประจุค้างหรือสัญญาณรบกวนทำให้เปิดเองได้ ต้องมี<strong>ตัวต้านทาน 10k คร่อม G-E</strong> คอยคายประจุเสมอ</li>
+            <li>ปิดให้สนิทควรดึงเกตลง <strong>0V (หรือติดลบ −5 ถึง −15V ในงานใหญ่)</strong> เพื่อกันเปิดเองจาก dv/dt</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li><strong>It needs 15–18 V, not 5 V</strong> — a power IGBT's V<sub>GE(th)</sub> is around 4–6 V, so 5 V only cracks the door open: a little current flows with a huge voltage across it, and it <strong>cooks in seconds</strong></li>
+            <li>That is why a stove board carries a <strong>separate 18 V supply</strong> and a <strong>gate driver</strong> between the 5 V MCU and the gate</li>
+            <li><strong>Gate resistor (10–47 Ω)</strong> — limits the charge/discharge current, sets switching speed and damps ringing. If it <strong>burns open, the IGBT never turns on</strong></li>
+            <li><strong>An 18 V zener across G-E</strong> — stops overvoltage from punching through the oxide. If that zener <strong>shorts, the drive signal is dragged to ground</strong> and again the IGBT never turns on</li>
+            <li><strong>Never leave the gate floating</strong> — it is a capacitor; trapped charge or noise can switch it on by itself. Always fit a <strong>10 k resistor across G-E</strong> to bleed it</li>
+            <li>To turn off hard, pull the gate to <strong>0 V (or negative, −5 to −15 V on large modules)</strong> so dv/dt cannot re-trigger it</li>
+          </ul>
+        </div>
+        <div>
+          <div class="warn-box">
+            <strong class="th-only">⚠️ จุดที่ช่างพลาดบ่อยที่สุด</strong>
+            <strong class="en-only">⚠️ The most common repair mistake</strong>
+            <p class="th-only" style="margin:.4rem 0 0;">เปลี่ยน IGBT ตัวใหม่โดย<strong>ไม่ตรวจวงจรขับเกตก่อน</strong> → ตัวใหม่ระเบิดซ้ำทันทีที่เสียบปลั๊ก<br><br>
+            ก่อนใส่ตัวใหม่ทุกครั้ง: วัด R-gate ว่ายังไม่ขาด · วัดซีเนอร์ว่าไม่ช็อต · <strong>จ่ายไฟตอนยังไม่ใส่ IGBT แล้ววัดที่รูบัดกรีขาเกตต้องได้ 0V</strong> ห้ามมี 18V ค้างเด็ดขาด</p>
+            <p class="en-only" style="margin:.4rem 0 0;">Fitting a new IGBT <strong>without checking the gate drive first</strong> → the new part blows the moment you plug in<br><br>
+            Before every replacement: check the gate resistor is not open · check the zener is not shorted · <strong>power up with the IGBT still out and probe the gate pad — it must read 0 V</strong>, never a lingering 18 V</p>
+          </div>
+          <div class="info-box">
+            <strong class="th-only">🔗 เชื่อมกับบทอื่น</strong>
+            <strong class="en-only">🔗 Related lessons</strong>
+            <p class="th-only" style="margin:.4rem 0 0;">วงจรขับเกตในเตาแม่เหล็กไฟฟ้าใช้ <a href="transistor.html">ทรานซิสเตอร์คู่ (เช่น S8050/S8550)</a> ขยาย 5V ให้เป็น 18V และไฟ 18V นั้นมาจาก <a href="switching-psu.html">ภาคจ่ายไฟสวิตชิ่ง</a> บนบอร์ดเดียวกัน — ถ้าไฟ 18V หาย IGBT ก็ไม่เปิดทั้งที่ตัวมันยังดี</p>
+            <p class="en-only" style="margin:.4rem 0 0;">A stove's gate driver uses a <a href="transistor.html">transistor pair (e.g. S8050/S8550)</a> to lift 5 V to 18 V, and that 18 V comes from the <a href="switching-psu.html">switching supply</a> on the same board — lose the 18 V rail and a perfectly good IGBT still will not turn on</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. โหลดเหนี่ยวนำ + ไดโอดฟรีวีล -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">โหลดเหนี่ยวนำ และไดโอดฟรีวีล</span><span class="en-only">Inductive Loads &amp; the Freewheel Diode</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li>งานของ IGBT เกือบทั้งหมด<strong>เป็นโหลดเหนี่ยวนำ</strong> — ขดลวดเตาแม่เหล็กไฟฟ้า มอเตอร์ หม้อแปลง</li>
+        <li>ขดลวด<strong>ต้านการเปลี่ยนแปลงของกระแส</strong> ตอน IGBT ปิดกะทันหัน กระแสที่ค้างอยู่ต้องหาทางไปต่อ ไม่งั้นจะเกิดแรงดันสูงมากตามสมการ <strong>V = L × (dI/dt)</strong> — หลักร้อยถึงหลักพันโวลต์ในชั่วพริบตา</li>
+        <li>ถ้าแรงดันนั้นเกิน <strong>V<sub>CES</sub></strong> ของ IGBT มันจะทะลุพังทันที (อาการยอดฮิต: ช็อต C-E ทำให้ฟิวส์เมนขาดตามไปด้วย)</li>
+        <li><strong>ไดโอดฟรีวีล</strong> ต่อกลับขั้วคร่อมโหลด (หรือประกบมาในตัว IGBT) เปิดทางให้กระแสไหลวนต่อจนหมดพลังงาน — แรงดันจึงถูกหนีบไว้แค่ระดับบัส</li>
+        <li>ในเตาแม่เหล็กไฟฟ้ายังมี <strong>คาปาซิเตอร์เรโซแนนซ์ 0.27–0.3 µF 1200V</strong> คร่อม IGBT ทำหน้าที่หน่วงการขึ้นของแรงดัน (snubber) และสร้างจังหวะ ZVS — <strong>ค่าแห้งเมื่อไหร่ IGBT ระเบิดทันที</strong></li>
+        <li>อย่าลืมพิกัดความปลอดภัย: เลือก IGBT ที่ V<sub>CES</sub> สูงกว่าบัสอย่างน้อย ~2 เท่า (บัส 310V → ใช้เบอร์ 600V ขึ้นไป)</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>Almost every IGBT job drives an <strong>inductive load</strong> — a stove's work coil, a motor, a transformer</li>
+        <li>An inductor <strong>fights any change in current</strong>. When the IGBT switches off abruptly, the trapped current must go somewhere, or it generates a huge spike per <strong>V = L × (dI/dt)</strong> — hundreds to thousands of volts in an instant</li>
+        <li>If that spike exceeds the IGBT's <strong>V<sub>CES</sub></strong>, it punches through immediately (classic result: a C-E short that also takes out the mains fuse)</li>
+        <li>The <strong>freewheel diode</strong>, reverse-connected across the load (or co-packaged inside the IGBT), gives that current a loop to decay in, clamping the voltage to about the bus level</li>
+        <li>Induction stoves add a <strong>0.27–0.3 µF 1200 V resonant capacitor</strong> across the IGBT, which slows the voltage rise (snubber) and creates the ZVS window — <strong>let it dry out and the IGBT blows instantly</strong></li>
+        <li>Keep margin: choose an IGBT whose V<sub>CES</sub> is roughly twice the bus (310 V bus → a 600 V part or better)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 6. สเปคและเบอร์ -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">สเปคที่ต้องดู และเบอร์ยอดนิยม</span><span class="en-only">Key Ratings &amp; Common Part Numbers</span></div>
+    <div class="card">
+      <div style="overflow-x:auto;">
+        <table class="pin-tbl">
+          <thead>
+            <tr>
+              <th><span class="th-only">สเปค</span><span class="en-only">Rating</span></th>
+              <th><span class="th-only">ความหมาย</span><span class="en-only">Meaning</span></th>
+              <th><span class="th-only">ทำไมต้องสนใจ</span><span class="en-only">Why it matters</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>V<sub>CES</sub></strong></td>
+              <td><span class="th-only">แรงดัน C-E สูงสุดตอนกั้นไฟ</span><span class="en-only">Max blocking voltage C-E</span></td>
+              <td><span class="th-only">ต้องสูงกว่าบัส 310V มากพอรับสไปก์ — ปกติเลือก 600–1200V</span><span class="en-only">Must clear the 310 V bus with spike margin — usually 600–1200 V</span></td>
+            </tr>
+            <tr>
+              <td><strong>I<sub>C</sub></strong></td>
+              <td><span class="th-only">กระแสต่อเนื่องสูงสุด (ระบุที่อุณหภูมิ)</span><span class="en-only">Continuous collector current (at a stated temperature)</span></td>
+              <td><span class="th-only">ค่าที่โฆษณามักวัดที่ 25°C ของจริงตอนร้อนเหลือราวครึ่งเดียว</span><span class="en-only">The headline figure is at 25 °C; hot, you get about half</span></td>
+            </tr>
+            <tr>
+              <td><strong>V<sub>CE(sat)</sub></strong></td>
+              <td><span class="th-only">แรงดันตกตอนนำกระแสเต็มที่</span><span class="en-only">On-state voltage drop</span></td>
+              <td><span class="th-only">คูณกระแสแล้วได้ความร้อนที่ต้องระบาย — ยิ่งต่ำยิ่งเย็น</span><span class="en-only">Times the current, that is the heat to remove — lower is cooler</span></td>
+            </tr>
+            <tr>
+              <td><strong>V<sub>GE(th)</sub></strong></td>
+              <td><span class="th-only">แรงดันเกตที่เริ่มนำกระแส</span><span class="en-only">Gate threshold voltage</span></td>
+              <td><span class="th-only">ราว 4–6V จึงต้องขับ 15–18V ให้เปิดสุด</span><span class="en-only">Typically 4–6 V, which is why you drive 15–18 V for full turn-on</span></td>
+            </tr>
+            <tr>
+              <td><strong>V<sub>GE(max)</sub></strong></td>
+              <td><span class="th-only">แรงดันเกตสูงสุด มัก ±20V</span><span class="en-only">Absolute gate limit, usually ±20 V</span></td>
+              <td><span class="th-only">เกินแล้วออกไซด์ทะลุถาวร — ต้องมีซีเนอร์กัน</span><span class="en-only">Exceed it and the oxide is destroyed — hence the clamp zener</span></td>
+            </tr>
+            <tr>
+              <td><strong>t<sub>f</sub> / tail</strong></td>
+              <td><span class="th-only">เวลาปิดและหางกระแส</span><span class="en-only">Fall time / current tail</span></td>
+              <td><span class="th-only">ตัวกำหนดกำลังสูญเสียตอนสวิตช์และเพดานความถี่</span><span class="en-only">Sets switching loss and the usable frequency ceiling</span></td>
+            </tr>
+            <tr>
+              <td><strong>SOA / SCSOA</strong></td>
+              <td><span class="th-only">ย่านทำงานปลอดภัย และเวลาทนช็อต (มัก 5–10 µs)</span><span class="en-only">Safe operating area and short-circuit withstand (often 5–10 µs)</span></td>
+              <td><span class="th-only">วงจรป้องกันต้องตัดให้ทันในหลักไมโครวินาที</span><span class="en-only">Protection must trip within microseconds</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="overflow-x:auto;margin-top:1rem;">
+        <table class="pin-tbl">
+          <thead>
+            <tr>
+              <th><span class="th-only">เบอร์</span><span class="en-only">Part</span></th>
+              <th><span class="th-only">พิกัดโดยประมาณ</span><span class="en-only">Approx. rating</span></th>
+              <th><span class="th-only">เจอที่ไหน</span><span class="en-only">Where you find it</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="part-num">H20R1203 / H20R1353</td><td>1200V ~20A <span class="th-only">มี FRD ในตัว</span><span class="en-only">with co-packaged FRD</span></td><td><span class="th-only">บอร์ดเตาแม่เหล็กไฟฟ้า (เบอร์ที่เจอบ่อยที่สุด)</span><span class="en-only">Induction stove boards (the one you meet most)</span></td></tr>
+            <tr><td class="part-num">GT30J122 / GT40T101</td><td>600V 30–40A</td><td><span class="th-only">เตาแม่เหล็กไฟฟ้า อินเวอร์เตอร์ไมโครเวฟ</span><span class="en-only">Induction stoves, inverter microwaves</span></td></tr>
+            <tr><td class="part-num">FGA25N120</td><td>1200V 25A</td><td><span class="th-only">เครื่องเชื่อมอินเวอร์เตอร์ UPS</span><span class="en-only">Inverter welders, UPS units</span></td></tr>
+            <tr><td class="part-num">IRG4BC30U</td><td>600V 23A</td><td><span class="th-only">มอเตอร์ไดรฟ์ งานความถี่ปานกลาง</span><span class="en-only">Motor drives, medium-frequency jobs</span></td></tr>
+            <tr><td class="part-num">FGH60N60</td><td>600V 60A</td><td><span class="th-only">อินเวอร์เตอร์กำลังสูง เครื่องเชื่อม</span><span class="en-only">High-power inverters, welders</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:.85rem;color:var(--text-light);margin-top:.7rem;">
+        <span class="th-only">⚠️ ค่าในตารางเป็นค่าโดยประมาณเพื่อการเปรียบเทียบ — <strong>ยึด datasheet ของเบอร์นั้นเสมอ</strong> โดยเฉพาะลำดับขาและพิกัดกระแสที่อุณหภูมิใช้งานจริง</span>
+        <span class="en-only">⚠️ These figures are approximate, for comparison only — <strong>always follow the part's datasheet</strong>, especially pin order and current rating at the real operating temperature</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- 7. ตรวจเช็คด้วยมัลติมิเตอร์ -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ตรวจเช็ค IGBT ด้วยมัลติมิเตอร์</span><span class="en-only">Testing an IGBT with a Multimeter</span></div>
+    <div class="card">
+      <div class="warn-box">
+        <strong class="th-only">⚠️ ก่อนเริ่ม</strong>
+        <strong class="en-only">⚠️ Before you start</strong>
+        <p class="th-only" style="margin:.4rem 0 0;"><strong>ถอดปลั๊ก คายประจุคาปาซิเตอร์บัส 310V ให้หมดก่อนเสมอ</strong> และ<strong>ถอด IGBT ออกจากบอร์ด</strong>จึงจะวัดได้แม่นยำ — วัดคาบอร์ดมักโดนวงจรรอบข้าง (ซีเนอร์/R 10k/ไดรเวอร์) หลอกจนอ่านผิด</p>
+        <p class="en-only" style="margin:.4rem 0 0;"><strong>Unplug and fully discharge the 310 V bus capacitor first</strong>, and <strong>remove the IGBT from the board</strong> for an accurate reading — in-circuit, the surrounding parts (zener, 10 k, driver) fool the meter</p>
+      </div>
+
+      <div class="steps" style="margin-top:1rem;">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <strong class="th-only">คายประจุเกตก่อน</strong><strong class="en-only">Discharge the gate first</strong>
+            <p class="th-only" style="margin:.3rem 0 0;">แตะขา <strong>G กับ E เข้าหากัน</strong> ด้วยไขควงหรือนิ้ว เพื่อรีดประจุที่ค้างในเกตออก ไม่งั้นผลวัดจะเพี้ยน (IGBT อาจยัง "เปิดค้าง" อยู่จากประจุเดิม)</p>
+            <p class="en-only" style="margin:.3rem 0 0;">Short <strong>G to E</strong> with a screwdriver or your fingers to bleed any trapped gate charge, otherwise the readings lie (it may still be latched on from a previous charge)</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <strong class="th-only">วัดเกต — ต้องไม่รั่ว</strong><strong class="en-only">Check the gate — no leakage allowed</strong>
+            <p class="th-only" style="margin:.3rem 0 0;">ตั้งย่าน <strong>Ω สูงสุดหรือย่านไดโอด</strong> วัด <strong>G-E และ G-C ทั้งสองทิศ ต้องขึ้น OL (∞) ทุกทิศ</strong> — ถ้าอ่านค่าได้แม้แต่หลักสิบ kΩ = <strong>เกตรั่ว ตัวนี้เสียแน่นอน</strong></p>
+            <p class="en-only" style="margin:.3rem 0 0;">On the <strong>highest Ω range or diode range</strong>, measure <strong>G-E and G-C both ways — every reading must be OL (∞)</strong>. Any reading at all, even tens of kΩ, means <strong>a leaky gate: the part is dead</strong></p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <strong class="th-only">วัด C-E ในย่านไดโอด</strong><strong class="en-only">Diode-test C to E</strong>
+            <p class="th-only" style="margin:.3rem 0 0;">โพรบ <strong>แดงที่ E ดำที่ C</strong> → ถ้ามีไดโอดฟรีวีลในตัวจะอ่านได้ราว <strong>0.3–0.6V</strong> (ปกติ) · กลับทิศ <strong>แดงที่ C ดำที่ E</strong> → ต้องขึ้น <strong>OL</strong> · ถ้า<strong>อ่านใกล้ 0 ทั้งสองทิศ = ช็อต C-E</strong> อาการคลาสสิกของ IGBT ระเบิด</p>
+            <p class="en-only" style="margin:.3rem 0 0;">Red probe on <strong>E</strong>, black on <strong>C</strong> → with a co-packaged diode you get about <strong>0.3–0.6 V</strong> (normal). Reversed (<strong>red on C</strong>) it must read <strong>OL</strong>. <strong>Near zero both ways = a shorted C-E</strong>, the classic blown IGBT</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <strong class="th-only">ทดสอบการทำงานจริง — ชาร์จเกต</strong><strong class="en-only">Functional test — charge the gate</strong>
+            <p class="th-only" style="margin:.3rem 0 0;">ต่อ <strong>แบตเตอรี่ 9V</strong> เข้าที่ <strong>ขั้วบวก→G, ลบ→E</strong> แวบเดียวเพื่อชาร์จเกต (มิเตอร์ย่านไดโอดเพียงอย่างเดียวมักจ่ายไม่ถึงระดับ threshold) จากนั้นวัด <strong>C-E ในย่านไดโอด (ดำที่ C แดงที่ E)</strong> — ตัวที่ดี<strong>จะเริ่มนำกระแส อ่านค่าตกลงมาชัดเจน</strong></p>
+            <p class="en-only" style="margin:.3rem 0 0;">Touch a <strong>9 V battery</strong> briefly, <strong>+ to G, − to E</strong>, to charge the gate (a diode range alone rarely reaches the threshold). Now diode-test <strong>C-E (black on C, red on E)</strong> — a good part <strong>starts conducting and the reading drops noticeably</strong></p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <strong class="th-only">สั่งให้ดับ แล้ววัดซ้ำ</strong><strong class="en-only">Turn it off and re-measure</strong>
+            <p class="th-only" style="margin:.3rem 0 0;">แตะ <strong>G กับ E</strong> เข้าหากันอีกครั้งเพื่อคายประจุ แล้ววัด C-E ซ้ำ — ต้อง<strong>กลับไปกั้นไฟ (OL)</strong> ถ้ายังนำกระแสค้างแปลว่าเสีย · <strong>สรุปผล:</strong> ผ่านครบ 5 ขั้น = ใช้ได้ ตกข้อใดข้อหนึ่ง = เปลี่ยนตัวใหม่</p>
+            <p class="en-only" style="margin:.3rem 0 0;">Short <strong>G to E</strong> again to discharge, then re-test C-E — it must <strong>go back to blocking (OL)</strong>. Still conducting means it is faulty. <strong>Verdict:</strong> all five steps pass = usable; any step fails = replace it</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <strong class="th-only">📄 ฟอร์มบันทึกผล</strong>
+        <strong class="en-only">📄 Record sheet</strong>
+        <p class="th-only" style="margin:.4rem 0 0;">ดาวน์โหลด <a href="downloads.html?cat=checklist&amp;file=pdf%2Fchec_list%2F20260812_%E0%B8%9F%E0%B8%AD%E0%B8%A3%E0%B9%8C%E0%B8%A1%E0%B8%95%E0%B8%A3%E0%B8%A7%E0%B8%88%E0%B9%80%E0%B8%8A%E0%B9%87%E0%B8%84%20IGBT.pdf"><strong>ฟอร์มตรวจเช็ค IGBT (PDF)</strong></a> ไปพิมพ์ใช้บันทึกผลวัดทีละขา แล้วสรุปดี-เสียในใบเดียว (มีฟอร์มของ <a href="downloads.html?cat=checklist">BJT และ MOSFET</a> ด้วย)</p>
+        <p class="en-only" style="margin:.4rem 0 0;">Download the <a href="downloads.html?cat=checklist&amp;file=pdf%2Fchec_list%2F20260812_%E0%B8%9F%E0%B8%AD%E0%B8%A3%E0%B9%8C%E0%B8%A1%E0%B8%95%E0%B8%A3%E0%B8%A7%E0%B8%88%E0%B9%80%E0%B8%8A%E0%B9%87%E0%B8%84%20IGBT.pdf"><strong>IGBT check form (PDF)</strong></a> and log each pin's reading, then mark pass or fail on one sheet (<a href="downloads.html?cat=checklist">BJT and MOSFET forms</a> are there too)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. ความปลอดภัย -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ความปลอดภัยและข้อควรระวัง</span><span class="en-only">Safety &amp; Cautions</span></div>
+    <div class="card">
+      <div class="warn-box">
+        <strong class="th-only">⚡ กฎเหล็กเมื่อทำงานกับบอร์ดที่มี IGBT</strong>
+        <strong class="en-only">⚡ Hard rules when working on an IGBT board</strong>
+        <ul class="content-list th-only" style="margin-top:.5rem;">
+          <li><strong>แผ่นโลหะหลังของ IGBT = ขา C = มีไฟ 310V</strong> อย่าไปจับ อย่าให้แตะโครงเครื่อง และเวลาขันสกรูยึดฮีตซิงก์ต้องมีแผ่นฉนวนไมกาครบ</li>
+          <li><strong>คายประจุคาปาซิเตอร์บัสก่อนเสมอ</strong> — ถอดปลั๊กแล้วยังมีไฟ 310V ค้างอยู่หลายนาที ใช้หลอดไส้หรือตัวต้านทานคายประจุ ห้ามใช้ไขควงลัดตรงๆ</li>
+          <li><strong>ห้ามจ่ายไฟทดสอบโดยไม่มีโหลด/ไม่มีคาปาเรโซแนนซ์ครบ</strong> — สไปก์จากขดลวดจะฆ่า IGBT ทันที</li>
+          <li>ทดสอบครั้งแรกหลังซ่อม ให้ <strong>ต่ออนุกรมกับหลอดไส้ 100W</strong> ที่สายไฟบ้าน ถ้ามีอะไรช็อตหลอดจะสว่างจ้าแทนที่จะระเบิด</li>
+          <li>เก็บ/จับ IGBT ตัวใหม่แบบระวังไฟสถิต (ESD) — เกตพังจากไฟสถิตได้เงียบๆ โดยดูภายนอกไม่ออก</li>
+        </ul>
+        <ul class="content-list en-only" style="margin-top:.5rem;">
+          <li><strong>The metal tab is the collector — it sits at 310 V.</strong> Do not touch it, keep it off the chassis, and never omit the mica insulator when bolting it to the heatsink</li>
+          <li><strong>Always discharge the bus capacitor first</strong> — 310 V lingers for minutes after unplugging. Use a lamp or a bleed resistor, never a screwdriver short</li>
+          <li><strong>Never power up with the load or the resonant capacitor missing</strong> — the coil's spike kills the IGBT instantly</li>
+          <li>For the first power-up after a repair, <strong>put a 100 W incandescent lamp in series</strong> with the mains lead: a short lights the lamp instead of exploding parts</li>
+          <li>Handle new IGBTs as ESD-sensitive — static kills the gate silently, with nothing visible from outside</li>
+        </ul>
+      </div>
+
+      <p class="th-only" style="font-size:.88rem;color:var(--text-light);margin-top:1rem;">🔗 ดูการใช้งานจริงและคลินิกอาการเสียในบท <a href="induction-stove.html"><strong>เตาแม่เหล็กไฟฟ้า</strong></a> · ทบทวน BJT/MOSFET ในบท <a href="transistor.html"><strong>ทรานซิสเตอร์</strong></a> · สวิตช์แบบล็อกตัวในบท <a href="thyristor.html"><strong>ไทริสเตอร์</strong></a></p>
+      <p class="en-only" style="font-size:.88rem;color:var(--text-light);margin-top:1rem;">🔗 See it at work, with a fault clinic, in the <a href="induction-stove.html"><strong>induction stove</strong></a> lesson · review BJTs and MOSFETs in the <a href="transistor.html"><strong>transistor</strong></a> lesson · latching switches in the <a href="thyristor.html"><strong>thyristor</strong></a> lesson</p>
+    </div>
+  </div>
+
+</div>
+
+<footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
+<script>const CURRENT_PAGE='igbt';</script>
+<script src="js/nav.js"></script>
+<script src="js/igbt-sim.js"></script>
+</body>
+</html>
