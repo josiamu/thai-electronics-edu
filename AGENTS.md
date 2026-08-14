@@ -112,8 +112,9 @@ CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor
 - **หมายเหตุ:** `<span>` ใน `<option>` ของ `<select>` ไม่ถูก CSS hide — browser แสดงข้อความทั้งหมด ดังนั้น option ควรเขียนเป็น `0 — <span class="th-only">ดำ</span> Black` เพื่อให้แสดงทั้งไทย-อังกฤษเสมอ
 
 ### Navigation (nav.js)
-- NAV_LESSON_GROUPS → mega menu "บทเรียน / Lessons" แบ่ง 5 กลุ่ม: พื้นฐานไฟฟ้า, อุปกรณ์อิเล็กทรอนิกส์, วงจรรวมและดิจิทัล (ic/timer555/opamp/logic), เครื่องมือวัดและทดสอบ, งานซ่อมเครื่องใช้ไฟฟ้า (fan-motor/induction-stove/switching-psu/microwave/water-heater — กลุ่มที่โตได้เรื่อยๆ ตามเครื่องใช้ไฟฟ้าที่เพิ่ม)
-- บน desktop แสดง mega menu 4 คอลัมน์ (`.nav-mega-menu` ใน style.css = `repeat(4,...)` width 900px); บน mobile กลุ่มบทเรียนเป็น accordion เปิดทีละกลุ่ม
+- NAV_LESSON_GROUPS → mega menu "บทเรียน / Lessons" แบ่ง 4 กลุ่ม: พื้นฐานไฟฟ้า, อุปกรณ์อิเล็กทรอนิกส์, วงจรรวมและดิจิทัล (ic/timer555/opamp/logic), เครื่องมือวัดและทดสอบ
+- บน desktop แสดง mega menu 4 คอลัมน์ (`.nav-mega-menu` ใน style.css = `repeat(4,...)` width 900px — **4 กลุ่มพอดี 1 แถว ถ้าเพิ่มกลุ่มที่ 5 ต้องแก้ grid ด้วย**); บน mobile กลุ่มบทเรียนเป็น accordion เปิดทีละกลุ่ม
+- **NAV_REPAIR** (fan-motor/induction-stove/switching-psu/microwave/water-heater) → dropdown **ระดับบนสุดของตัวเอง** "งานซ่อม / Repair" (ไม่ได้อยู่ใน mega menu บทเรียนแล้ว — ย้ายออกมาเพราะเมนูบทเรียนแน่นเกินและกลุ่มนี้โตได้เรื่อยๆ ตามเครื่องใช้ไฟฟ้าที่เพิ่ม); ลำดับเมนู: บทเรียน · งานซ่อม · งานปฏิบัติ · เครื่องมือ · คลังการเรียนรู้
 - NAV_PRACTICE (soldering, home-wiring) → dropdown "งานปฏิบัติ / Practical"
 - NAV_TOOLS (simulation, breadboard, relay-lab, formulas, tools) → dropdown "เครื่องมือ ▼" / "Tools ▼"
 - NAV_RESOURCES (quiz, downloads) → dropdown "คลังการเรียนรู้ / Resources"
@@ -123,7 +124,7 @@ CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor
 - **Footer topic-count:** nav.js ต่อท้าย `.footer-topics` ("ครอบคลุมเนื้อหาจาก N หัวข้อ" / "Covering N topics") เข้า `<footer>` ทุกหน้าอัตโนมัติ — เลข N นิยามที่เดียวใน `const TOPIC_COUNT` ใน nav.js (อย่า hardcode ในแต่ละหน้า); เพิ่มหน้าใหม่แล้วอยากปรับเลข → แก้ที่ TOPIC_COUNT ที่เดียว
 - **Footer license:** nav.js ต่อท้าย `.footer-license` (ลิงก์ CC BY-NC 4.0, bilingual th-only/en-only) เข้า `<footer>` ทุกหน้าอัตโนมัติ — ไม่ต้องแก้ทีละไฟล์
 
-> **กฎ:** เมื่อเพิ่มหน้าใหม่ใน nav.js (NAV_LESSON_GROUPS / NAV_PRACTICE / NAV_TOOLS) ต้องอัปเดต **index.html** ด้วยเสมอ — เพิ่ม card ในกลุ่มที่ตรงกัน และแก้ card ดาวน์โหลด; ส่วนจำนวนหัวข้อใน footer แก้ที่ `TOPIC_COUNT` ใน nav.js ที่เดียว (ทุกหน้าอัปเดตพร้อมกัน)
+> **กฎ:** เมื่อเพิ่มหน้าใหม่ใน nav.js (NAV_LESSON_GROUPS / NAV_REPAIR / NAV_PRACTICE / NAV_TOOLS) ต้องอัปเดต **index.html** ด้วยเสมอ — เพิ่ม card ในกลุ่มที่ตรงกัน และแก้ card ดาวน์โหลด; ส่วนจำนวนหัวข้อใน footer แก้ที่ `TOPIC_COUNT` ใน nav.js ที่เดียว (ทุกหน้าอัปเดตพร้อมกัน)
 
 ### CSS (style.css)
 - Color palette: `--primary: #2563eb`, `--accent: #06b6d4`, `--secondary: #10b981`, `--bg: #f8fafc`
@@ -141,7 +142,7 @@ CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor
 | 📚 อุปกรณ์อิเล็กทรอนิกส์ | resistor, diode, capacitor, transistor, thyristor, inductor, relay, opto, power-supply | `topic-card-blue` |
 | 📚 วงจรรวมและดิจิทัล | ic, timer555, opamp, logic | `topic-card-blue` |
 | 📚 เครื่องมือวัดและทดสอบ | multimeter, signal-generator, oscilloscope | `topic-card-blue` |
-| 📚 งานซ่อมเครื่องใช้ไฟฟ้า | fan-motor, induction-stove, switching-psu, microwave, water-heater | `topic-card-blue` |
+| 🔧 งานซ่อมเครื่องใช้ไฟฟ้า (section ของตัวเอง) | fan-motor, induction-stove, switching-psu, microwave, water-heater | `topic-card-blue` |
 | 🧰 งานปฏิบัติ | soldering, home-wiring | `topic-card-teal` |
 | 🛠 เครื่องมือ | simulation, breadboard, formulas, tools | `topic-card-teal` |
 | 📚 คลังการเรียนรู้ | quiz, downloads | `topic-card-orange` / `topic-card-green` |

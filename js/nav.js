@@ -45,23 +45,20 @@ const NAV_LESSON_GROUPS = [
       { id: 'oscilloscope', href: 'oscilloscope.html', label_th: '📡 ออสซิลโลสโคป', label_en: '📡 Oscilloscope' },
     ],
   },
-  {
-    id: 'repair',
-    label_th: 'งานซ่อมเครื่องใช้ไฟฟ้า',
-    label_en: 'Appliance Repair',
-    items: [
-      { id: 'repair-fan', href: 'fan-motor.html', label_th: '🌀 มอเตอร์พัดลมไฟฟ้า', label_en: '🌀 Electric Fan Motor' },
-      { id: 'repair-stove', href: 'induction-stove.html', label_th: '🔥 เตาแม่เหล็กไฟฟ้า', label_en: '🔥 Induction Stove' },
-      { id: 'repair-smps', href: 'switching-psu.html', label_th: '🔌 ภาคจ่ายไฟสวิตชิ่ง (LNK304)', label_en: '🔌 Switching PSU (LNK304)' },
-      { id: 'repair-microwave', href: 'microwave.html', label_th: '📡 เตาไมโครเวฟ', label_en: '📡 Microwave Oven' },
-      { id: 'repair-water-heater', href: 'water-heater.html', label_th: '🚿 เครื่องทำน้ำอุ่น', label_en: '🚿 Water Heater' },
-    ],
-  },
 ];
 
 const NAV_PRACTICE = [
   { id: 'soldering', href: 'soldering.html', label_th: '🔥 การบัดกรี', label_en: '🔥 Soldering' },
   { id: 'home-wiring', href: 'home-wiring.html', label_th: '🔌 ไฟบ้านและความปลอดภัย', label_en: '🔌 Home Wiring & Safety' },
+];
+
+// เมนูบนสุดของตัวเอง (ไม่อยู่ใน mega menu บทเรียน) — กลุ่มที่โตได้เรื่อยๆ ตามเครื่องใช้ไฟฟ้าที่เพิ่ม
+const NAV_REPAIR = [
+  { id: 'repair-fan', href: 'fan-motor.html', label_th: '🌀 มอเตอร์พัดลมไฟฟ้า', label_en: '🌀 Electric Fan Motor' },
+  { id: 'repair-stove', href: 'induction-stove.html', label_th: '🔥 เตาแม่เหล็กไฟฟ้า', label_en: '🔥 Induction Stove' },
+  { id: 'repair-smps', href: 'switching-psu.html', label_th: '🔌 ภาคจ่ายไฟสวิตชิ่ง (LNK304)', label_en: '🔌 Switching PSU (LNK304)' },
+  { id: 'repair-microwave', href: 'microwave.html', label_th: '📡 เตาไมโครเวฟ', label_en: '📡 Microwave Oven' },
+  { id: 'repair-water-heater', href: 'water-heater.html', label_th: '🚿 เครื่องทำน้ำอุ่น', label_en: '🚿 Water Heater' },
 ];
 
 const NAV_TOOLS = [
@@ -87,6 +84,7 @@ const NAV_RESOURCES = [
   const lessonPages = NAV_LESSON_GROUPS.flatMap(group => group.items);
   const lessonsActive = lessonPages.some(page => page.id === cur);
   const practiceActive = NAV_PRACTICE.some(page => page.id === cur);
+  const repairActive = NAV_REPAIR.some(page => page.id === cur);
   const toolsActive = NAV_TOOLS.some(page => page.id === cur);
   const resourcesActive = NAV_RESOURCES.some(page => page.id === cur);
 
@@ -108,6 +106,7 @@ const NAV_RESOURCES = [
   }).join('');
 
   const practiceItems = NAV_PRACTICE.map(page => renderLink(page)).join('');
+  const repairItems = NAV_REPAIR.map(page => renderLink(page)).join('');
   const toolItems = NAV_TOOLS.map(page => renderLink(page)).join('');
   const resourceItems = NAV_RESOURCES.map(page => renderLink(page)).join('');
 
@@ -123,6 +122,12 @@ const NAV_RESOURCES = [
               <span class="th-only">บทเรียน</span><span class="en-only">Lessons</span> <span class="nav-chevron">▼</span>
             </button>
             <div class="nav-dropdown-menu nav-mega-menu" id="nav-dropdown-lessons-menu">${lessonGroups}</div>
+          </div>
+          <div class="nav-dropdown" id="nav-dropdown-repair">
+            <button class="nav-dropdown-toggle${repairActive ? ' active' : ''}" type="button" aria-controls="nav-dropdown-repair-menu" aria-expanded="false" aria-haspopup="true">
+              <span class="th-only">งานซ่อม</span><span class="en-only">Repair</span> <span class="nav-chevron">▼</span>
+            </button>
+            <div class="nav-dropdown-menu" id="nav-dropdown-repair-menu">${repairItems}</div>
           </div>
           <div class="nav-dropdown" id="nav-dropdown-practice">
             <button class="nav-dropdown-toggle${practiceActive ? ' active' : ''}" type="button" aria-controls="nav-dropdown-practice-menu" aria-expanded="false" aria-haspopup="true">

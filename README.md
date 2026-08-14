@@ -63,7 +63,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | เครื่องกำเนิดสัญญาณ | Signal Generator | `signal-generator.html` |
 | ออสซิลโลสโคป | Oscilloscope | `oscilloscope.html` |
 
-**งานซ่อมเครื่องใช้ไฟฟ้า / Appliance Repair**
+**งานซ่อมเครื่องใช้ไฟฟ้า / Appliance Repair** — เมนูระดับบนสุดของตัวเอง ("งานซ่อม / Repair" บน nav bar)
 | ไทย | English | หน้า |
 |---|---|---|
 | มอเตอร์พัดลมไฟฟ้า | Electric Fan Motor | `fan-motor.html` (มีซิมสวิตช์ความเร็วโต้ตอบ) |

@@ -14,6 +14,10 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'nav-repair-menu-2026-08-14', date:'2026-08-14', type:'update',
+    th:'ปรับเมนู: ยก <b>🔧 งานซ่อม</b> ออกจากเมนูบทเรียนมาเป็น<b>เมนูของตัวเองบนแถบด้านบน</b> — พัดลม · เตาแม่เหล็กไฟฟ้า · ภาคจ่ายไฟสวิตชิ่ง · ไมโครเวฟ · เครื่องทำน้ำอุ่น กดถึงได้ในคลิกเดียว ไม่ต้องเข้าเมนูบทเรียนแล้วไล่หากลุ่มอีกต่อไป (เมนูบทเรียนเหลือ 4 กลุ่มพอดีแถวเดียว หาง่ายขึ้นด้วย)',
+    en:'Navigation update: <b>🔧 Repair</b> is now its <b>own top-level menu</b> instead of a group buried inside Lessons — fan motor · induction stove · switching PSU · microwave · water heater are one click away. The Lessons mega menu is down to a tidy 4 groups in a single row',
+    href:'' },
   { id:'lesson-water-heater-2026-08-11', date:'2026-08-11', type:'lesson',
     th:'บทเรียนใหม่ในกลุ่ม <b>🛠️ งานซ่อมเครื่องใช้ไฟฟ้า</b>: <b>เครื่องทำน้ำอุ่น</b> — หลักการทำน้ำร้อนทันที, <b>วงจรไฟฟ้าอย่างง่าย</b> ที่เป็นวงจรอนุกรมวงจรเดียวเรียงสวิตช์นิรภัย 5 ด่าน (ELCB → สวิตช์ → ฟลุกซ์สวิตช์ → เทอร์โมสตัท → เทอร์มอลคัตเอาต์ → ฮีตเตอร์), สูตร <b>ΔT ≈ P ÷ (70×Q)</b> ที่อธิบายว่าทำไมหน้าหนาวน้ำถึงไม่ร้อนโดยที่เครื่องไม่ได้เสีย, ตารางวัดค่าฮีตเตอร์ตามพิกัดวัตต์ + ขนาดสายและเบรกเกอร์ และคลินิกอาการเสีย 6 เคส — พร้อมกฎที่ห้ามละเมิด: <b>ELCB ตัดคือมันทำงานถูกต้อง ห้ามลัดข้ามเด็ดขาด</b>',
     en:'New lesson in the <b>🛠️ Appliance Repair</b> group: <b>Electric Water Heater</b> — how instant heating works, <b>the simplified circuit</b> (one series loop through five safety links: ELCB → switch → flow switch → thermostat → thermal cutout → element), the <b>ΔT ≈ P ÷ (70×Q)</b> formula that explains why the water feels weak in the cool season with nothing broken, element resistance by wattage with cable and breaker sizing, and a 6-case fault clinic — plus the rule you must never break: <b>a tripping ELCB is working correctly, never bypass it</b>',
