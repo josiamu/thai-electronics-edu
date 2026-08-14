@@ -14,6 +14,10 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'download-check-forms-2026-08-14', date:'2026-08-14', type:'download',
+    th:'หมวดใหม่ในหน้าดาวน์โหลด: <b>✅ ฟอร์มตรวจเช็ค</b> 3 ไฟล์ — <b>BJT · MOSFET · IGBT</b> ใบบันทึกผลสำหรับวัดอุปกรณ์ทีละขาแล้วสรุปว่าดีหรือเสีย พิมพ์ออกมาใช้คู่กับมัลติมิเตอร์ในคาบปฏิบัติได้เลย (PDF)',
+    en:'New section on the downloads page: <b>✅ Check Forms</b> — three record sheets for <b>BJT · MOSFET · IGBT</b>. Measure the device pin by pin, log the readings, and mark it pass or fail; print them and use them alongside a multimeter in the lab (PDF)',
+    href:'downloads.html', cat:'checklist', file:'pdf/chec_list/20260812_ฟอร์มตรวจเช็ค BJT.pdf' },
   { id:'nav-repair-menu-2026-08-14', date:'2026-08-14', type:'update',
     th:'ปรับเมนู: ยก <b>🔧 งานซ่อม</b> ออกจากเมนูบทเรียนมาเป็น<b>เมนูของตัวเองบนแถบด้านบน</b> — พัดลม · เตาแม่เหล็กไฟฟ้า · ภาคจ่ายไฟสวิตชิ่ง · ไมโครเวฟ · เครื่องทำน้ำอุ่น กดถึงได้ในคลิกเดียว ไม่ต้องเข้าเมนูบทเรียนแล้วไล่หากลุ่มอีกต่อไป (เมนูบทเรียนเหลือ 4 กลุ่มพอดีแถวเดียว หาง่ายขึ้นด้วย)',
     en:'Navigation update: <b>🔧 Repair</b> is now its <b>own top-level menu</b> instead of a group buried inside Lessons — fan motor · induction stove · switching PSU · microwave · water heater are one click away. The Lessons mega menu is down to a tidy 4 groups in a single row',
