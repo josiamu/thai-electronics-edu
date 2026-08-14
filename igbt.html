@@ -62,7 +62,9 @@
         <li>เปรียบเทียบ <strong>V<sub>CE(sat)</sub> ของ IGBT กับ R<sub>DS(on)</sub> ของ MOSFET</strong> และบอกได้ว่างานไหนควรใช้ตัวไหน</li>
         <li>อธิบายการ <strong>ขับเกต 15–18V</strong>, หน้าที่ของ R-gate และซีเนอร์ป้องกันเกต</li>
         <li>บอกได้ว่าทำไม <strong>โหลดเหนี่ยวนำ</strong> ถึงทำให้ IGBT พัง และไดโอดฟรีวีลช่วยอย่างไร</li>
-        <li>ตรวจเช็ค IGBT ด้วยมัลติมิเตอร์ได้ทั้งแบบวัดรอยต่อและแบบทดสอบชาร์จเกต</li>
+        <li>ตรวจเช็ค IGBT ด้วยมัลติมิเตอร์ได้ทั้ง <strong>แบบคาบอร์ด</strong> และ <strong>แบบถอดออกมาวัด 5 ขั้น</strong> (รวมการทดสอบทริกเกอร์)</li>
+        <li>ประกอบกลับได้ถูกวิธี — ซิลิโคนระบายความร้อน แผ่นฉนวน และการวัดยืนยันว่าขา C ไม่ช็อตกับฮีตซิงก์</li>
+        <li>อ่านพิกัดจากเบอร์อะไหล่ เลือกเบอร์แทนให้ถูกกฎ และดูออกว่าเป็นของรีมาร์ค</li>
         <li>บอกกฎความปลอดภัยเมื่อทำงานกับบอร์ดที่มี IGBT ต่อกับบัส 310V ได้</li>
       </ul>
       <ul class="content-list en-only">
@@ -71,7 +73,9 @@
         <li>Compare <strong>IGBT V<sub>CE(sat)</sub> against MOSFET R<sub>DS(on)</sub></strong> and pick the right device for a job</li>
         <li>Explain <strong>15–18 V gate drive</strong>, the job of the gate resistor and of the gate-protection zener</li>
         <li>Say why an <strong>inductive load</strong> destroys IGBTs and how the freewheel diode prevents it</li>
-        <li>Test an IGBT with a multimeter — both junction checks and the gate-charge test</li>
+        <li>Test an IGBT with a multimeter both <strong>in-circuit</strong> and with the <strong>5-step out-of-circuit procedure</strong> (including the trigger test)</li>
+        <li>Refit it correctly — thermal grease, insulator pad, and the check that the collector is not shorted to the heatsink</li>
+        <li>Read the ratings out of a part number, choose a legitimate substitute, and spot a remarked fake</li>
         <li>State the safety rules for working on a board where an IGBT sits on a 310 V bus</li>
       </ul>
     </div>
@@ -217,14 +221,14 @@
           <ul class="content-list th-only">
             <li><strong>G (Gate)</strong> — ขาสั่งงาน วัดเทียบขา E เสมอ หุ้มฉนวนด้วยออกไซด์บางมาก จึง <strong>ไม่กินกระแสตอนค้างสถานะ</strong> แต่ <strong>ทะลุพังได้ถ้าเกิน ±20V</strong></li>
             <li><strong>C (Collector)</strong> — ขารับกระแสจากไฟบวก (ในแพ็กเกจ TO-247/TO-220 <strong>ต่ออยู่กับแผ่นโลหะหลัง</strong> — แผ่นหลังจึงมีไฟ 310V!)</li>
-            <li><strong>E (Emitter)</strong> — ขาออก ลงกราวด์ของภาคกำลัง เป็นจุดอ้างอิงของแรงดันเกต</li>
+            <li><strong>E (Emitter)</strong> — ขาออก เป็นจุดอ้างอิงของแรงดันเกตเสมอ · หลายบอร์ด<strong>ไม่ได้ลงกราวด์ตรงๆ</strong> แต่ผ่าน <strong>ตัวต้านทานเซ็นเซอร์กระแส</strong> ค่าต่ำมาก (หลักมิลลิโอห์ม) ก่อน เพื่อให้วงจรอ่านกระแสได้</li>
             <li>เรียงขาแบบมาตรฐานของ TO-247 มองจากด้านหน้า (ด้านที่มีตัวหนังสือ) คือ <strong>G – C – E</strong> จากซ้ายไปขวา (แต่ <strong>ต้องเช็ค datasheet เสมอ</strong> เพราะบางเบอร์สลับ)</li>
             <li>หลายเบอร์มี <strong>ไดโอดฟรีวีล (FRD) ประกบมาในตัว</strong> — วัดจาก C ไป E จะเจอไดโอดทิศเดียวเสมอ อันนี้ปกติ ไม่ใช่ของเสีย</li>
           </ul>
           <ul class="content-list en-only">
             <li><strong>G (Gate)</strong> — the control pin, always referenced to E. The oxide under it is extremely thin, so it <strong>draws no steady current</strong> but <strong>punches through above ±20 V</strong></li>
             <li><strong>C (Collector)</strong> — takes current from the positive rail. In TO-247/TO-220 packages it is <strong>bonded to the metal back tab</strong> — so that tab sits at 310 V!</li>
-            <li><strong>E (Emitter)</strong> — the output leg to the power ground, and the reference for the gate voltage</li>
+            <li><strong>E (Emitter)</strong> — the output leg and always the reference for the gate voltage · on many boards it does <strong>not go straight to ground</strong> but through a <strong>current-sense resistor</strong> of a few milliohms so the circuit can read the current</li>
             <li>The usual TO-247 order, viewed from the printed face, is <strong>G – C – E</strong> left to right — but <strong>always confirm in the datasheet</strong>, some parts differ</li>
             <li>Many parts include a <strong>co-packaged freewheel diode (FRD)</strong> — so C-to-E always reads as a diode in one direction. That is normal, not a fault</li>
           </ul>
@@ -501,13 +505,44 @@
         <p class="en-only" style="margin:.4rem 0 0;"><strong>Unplug and fully discharge the 310 V bus capacitor first</strong>, and <strong>remove the IGBT from the board</strong> for an accurate reading — in-circuit, the surrounding parts (zener, 10 k, driver) fool the meter</p>
       </div>
 
+      <h3 style="margin:1.2rem 0 .6rem;font-size:1.05rem;">
+        <span class="th-only">🩺 ขั้นแรก: สแกนเร็วแบบ "คาบอร์ด" (ยังไม่ต้องถอดอะไหล่)</span>
+        <span class="en-only">🩺 First pass: a quick in-circuit scan (nothing removed yet)</span>
+      </h3>
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li>ตั้งมิเตอร์ย่าน <strong>เสียงปี๊บ (continuity) หรือย่านไดโอด</strong> แล้วไล่หา "ช็อตทะลุ" ก่อนเป็นอันดับแรก — เจอตรงนี้ก็จบ ไม่ต้องถอดให้เสียเวลา</li>
+            <li>วัดคร่อม <strong>C (ขากลาง) กับ E (ขาขวา)</strong> สลับสายไปมา — ถ้า<strong>ร้องปี๊บยาว / อ่านได้ ~0 Ω</strong> = <strong>ช็อตทะลุ 100%</strong> ถอดทิ้งได้เลย</li>
+            <li>วัดคร่อม <strong>G (ขาซ้าย) กับ E</strong> — ค่าที่ได้จะ<strong>ไม่ใช่ OL</strong> เหมือนวัดนอกบอร์ด</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li>Set the meter to <strong>continuity or the diode range</strong> and hunt for a dead short first — if you find one, you are done, no desoldering needed</li>
+            <li>Probe <strong>C (middle) to E (right)</strong> both ways — a <strong>long beep / ~0 Ω</strong> means it is <strong>definitively shorted through</strong>; pull it out</li>
+            <li>Probe <strong>G (left) to E</strong> — in-circuit this will <strong>not</strong> read OL the way it does out of circuit</li>
+          </ul>
+        </div>
+        <div class="info-box" style="margin-top:0;">
+          <strong class="th-only">👀 จุดสังเกตของช่าง — G-E คาบอร์ดขึ้น ~10 kΩ ถือว่าปกติ</strong>
+          <strong class="en-only">👀 The detail that trips people up — ~10 kΩ across G-E in-circuit is normal</strong>
+          <p class="th-only" style="margin:.4rem 0 0;">บนบอร์ดมี <strong>ตัวต้านทาน ~10 kΩ คร่อม G-E</strong> คอยดึงเกตลงกราวด์กันเปิดเอง มิเตอร์จึงอ่านค่าผ่านตัวต้านทานตัวนี้ได้ — <strong>อย่าเพิ่งด่วนสรุปว่าเกตรั่ว</strong><br><br>
+          แต่ถ้า G-E <strong>ขึ้น 0 Ω หรือร้องปี๊บยาว = เกตช็อตทะลุ ถอดทิ้งทันที</strong> · และถ้าอยากยืนยันว่าตัว IGBT เองดีจริง ต้องถอดออกมาวัดนอกบอร์ดตามขั้นตอนด้านล่าง เพราะคาบอร์ดจะโดนซีเนอร์/ไดรเวอร์/ตัวต้านทานรอบข้างหลอกได้เสมอ</p>
+          <p class="en-only" style="margin:.4rem 0 0;">The board carries a <strong>~10 kΩ resistor across G-E</strong> that holds the gate down, and the meter simply reads through it — <strong>do not call that a leaky gate</strong><br><br>
+          But <strong>0 Ω or a long beep across G-E means the gate has punched through — remove it</strong>. And to truly clear a part, take it off the board and follow the steps below: in-circuit, the zener, driver and surrounding resistors can always fool you</p>
+        </div>
+      </div>
+
+      <h3 style="margin:1.4rem 0 .6rem;font-size:1.05rem;">
+        <span class="th-only">🔬 ขั้นถัดไป: ถอดออกมาวัดนอกบอร์ด 5 ขั้น</span>
+        <span class="en-only">🔬 Then: the 5-step out-of-circuit test</span>
+      </h3>
       <div class="steps" style="margin-top:1rem;">
         <div class="step">
           <div class="step-num">1</div>
           <div class="step-content">
             <strong class="th-only">คายประจุเกตก่อน</strong><strong class="en-only">Discharge the gate first</strong>
-            <p class="th-only" style="margin:.3rem 0 0;">แตะขา <strong>G กับ E เข้าหากัน</strong> ด้วยไขควงหรือนิ้ว เพื่อรีดประจุที่ค้างในเกตออก ไม่งั้นผลวัดจะเพี้ยน (IGBT อาจยัง "เปิดค้าง" อยู่จากประจุเดิม)</p>
-            <p class="en-only" style="margin:.3rem 0 0;">Short <strong>G to E</strong> with a screwdriver or your fingers to bleed any trapped gate charge, otherwise the readings lie (it may still be latched on from a previous charge)</p>
+            <p class="th-only" style="margin:.3rem 0 0;">ใช้ไขควงหรือปลายสายมิเตอร์ <strong>แตะช็อตทั้ง 3 ขา (G, C, E) เข้าด้วยกัน</strong> เพื่อรีดประจุที่ค้างในเกตออก — เกตมีฉนวนกั้นจึงเก็บประจุได้เหมือนคาปาซิเตอร์ ถ้าไม่เคลียร์ก่อน IGBT อาจยัง "เปิดค้าง" อยู่จากประจุเดิมแล้วอ่านค่าเพี้ยนทั้งชุด</p>
+            <p class="en-only" style="margin:.3rem 0 0;">With a screwdriver or the probe tips, <strong>short all three legs (G, C, E) together</strong> to bleed the gate. The insulated gate stores charge like a capacitor, so without this the part may still be latched on and every reading afterwards is wrong</p>
           </div>
         </div>
         <div class="step">
@@ -530,16 +565,18 @@
           <div class="step-num">4</div>
           <div class="step-content">
             <strong class="th-only">ทดสอบการทำงานจริง — ชาร์จเกต</strong><strong class="en-only">Functional test — charge the gate</strong>
-            <p class="th-only" style="margin:.3rem 0 0;">ต่อ <strong>แบตเตอรี่ 9V</strong> เข้าที่ <strong>ขั้วบวก→G, ลบ→E</strong> แวบเดียวเพื่อชาร์จเกต (มิเตอร์ย่านไดโอดเพียงอย่างเดียวมักจ่ายไม่ถึงระดับ threshold) จากนั้นวัด <strong>C-E ในย่านไดโอด (ดำที่ C แดงที่ E)</strong> — ตัวที่ดี<strong>จะเริ่มนำกระแส อ่านค่าตกลงมาชัดเจน</strong></p>
-            <p class="en-only" style="margin:.3rem 0 0;">Touch a <strong>9 V battery</strong> briefly, <strong>+ to G, − to E</strong>, to charge the gate (a diode range alone rarely reaches the threshold). Now diode-test <strong>C-E (black on C, red on E)</strong> — a good part <strong>starts conducting and the reading drops noticeably</strong></p>
+            <p class="th-only" style="margin:.3rem 0 0;"><strong>วิธีที่ 1 — ใช้มิเตอร์ตัวเดียว:</strong> จับ <strong>สายดำแช่ค้างที่ขา E</strong> ตลอดการทดสอบ → เอาสายแดงจิ้ม <strong>C</strong> ก่อน ต้องขึ้น <strong>OL</strong> (ยังปิดอยู่) → ยกสายแดงมา<strong>แตะขา G แวบเดียว</strong> (ไฟจากแบตในมิเตอร์จะชาร์จเกต) → เอาสายแดงกลับไปจิ้ม <strong>C</strong> อีกครั้ง — ตัวที่ดี<strong>ต้องอ่านค่าได้ (เช่น 0.1–0.2V) แทนที่จะเป็น OL</strong> แปลว่ามันรับคำสั่งแล้ว "เปิดค้าง" ได้จริง<br>
+            <strong>วิธีที่ 2 — ถ้ามิเตอร์ทริกไม่ขึ้น:</strong> แรงดันจากมิเตอร์บางรุ่นไม่ถึง V<sub>GE(th)</sub> ให้ใช้ <strong>แบตเตอรี่ 9V แตะ ขั้วบวก→G, ลบ→E</strong> แวบเดียวแทน แล้ววัด C-E ซ้ำ</p>
+            <p class="en-only" style="margin:.3rem 0 0;"><strong>Method 1 — meter only:</strong> keep the <strong>black probe parked on E</strong> for the whole test → touch red to <strong>C</strong> first, it must read <strong>OL</strong> (still off) → lift red and <strong>tap G once</strong> (the meter's internal battery charges the gate) → put red back on <strong>C</strong> — a good part now <strong>reads a value (say 0.1–0.2 V) instead of OL</strong>, proving it accepted the command and latched on<br>
+            <strong>Method 2 — if the meter cannot trigger it:</strong> some meters never reach V<sub>GE(th)</sub>. Briefly touch a <strong>9 V battery, + to G and − to E</strong> instead, then re-measure C-E</p>
           </div>
         </div>
         <div class="step">
           <div class="step-num">5</div>
           <div class="step-content">
             <strong class="th-only">สั่งให้ดับ แล้ววัดซ้ำ</strong><strong class="en-only">Turn it off and re-measure</strong>
-            <p class="th-only" style="margin:.3rem 0 0;">แตะ <strong>G กับ E</strong> เข้าหากันอีกครั้งเพื่อคายประจุ แล้ววัด C-E ซ้ำ — ต้อง<strong>กลับไปกั้นไฟ (OL)</strong> ถ้ายังนำกระแสค้างแปลว่าเสีย · <strong>สรุปผล:</strong> ผ่านครบ 5 ขั้น = ใช้ได้ ตกข้อใดข้อหนึ่ง = เปลี่ยนตัวใหม่</p>
-            <p class="en-only" style="margin:.3rem 0 0;">Short <strong>G to E</strong> again to discharge, then re-test C-E — it must <strong>go back to blocking (OL)</strong>. Still conducting means it is faulty. <strong>Verdict:</strong> all five steps pass = usable; any step fails = replace it</p>
+            <p class="th-only" style="margin:.3rem 0 0;">ใช้<strong>นิ้วมือหรือไขควงแตะช็อต G กับ E</strong> เข้าหากันเพื่อดึงประจุลง (= สั่งปิดวาล์ว) แล้ววัด C-E ซ้ำ — ต้อง<strong>กลับไปกั้นไฟ ขึ้น OL</strong> ถ้ายังนำกระแสค้างอยู่แปลว่าเสีย · <strong>สรุปผล:</strong> ผ่านครบทั้งเปิดได้-ปิดได้ = ตัวนี้สมบูรณ์พร้อมใช้ · ตกข้อใดข้อหนึ่ง = เปลี่ยนตัวใหม่</p>
+            <p class="en-only" style="margin:.3rem 0 0;">Short <strong>G to E with a finger or screwdriver</strong> to pull the charge away (= close the valve), then re-test C-E — it must <strong>go back to blocking, reading OL</strong>. Still conducting means it is faulty. <strong>Verdict:</strong> turns on and turns off = the part is good; any step fails = replace it</p>
           </div>
         </div>
       </div>
@@ -553,7 +590,87 @@
     </div>
   </div>
 
-  <!-- 8. ความปลอดภัย -->
+  <!-- 8. ประกอบกลับ -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">การประกอบกลับ — ซิลิโคนและแผ่นฉนวน</span><span class="en-only">Refitting — Thermal Grease &amp; the Insulator Pad</span></div>
+    <div class="card">
+      <p class="th-only" style="margin-top:0;">ขั้นตอนนี้พังบ่อยพอๆ กับตัวอะไหล่เอง — IGBT ตัวใหม่ที่ดีทุกอย่างก็ตายได้ในไม่กี่นาทีถ้าประกอบกลับผิด</p>
+      <p class="en-only" style="margin-top:0;">This step kills as many parts as the fault did — a perfectly good new IGBT dies within minutes if it is refitted wrongly</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <strong class="th-only">ทาซิลิโคนระบายความร้อนทุกครั้ง</strong><strong class="en-only">Always apply thermal grease</strong>
+            <p class="th-only" style="margin:.3rem 0 0;">ทา <strong>ซิลิโคนระบายความร้อน (thermal grease)</strong> บางๆ ให้ทั่วก่อนขันยึดกับฮีตซิงก์เสมอ — <strong>ลืมทา หรือใช้ของเก่าที่แห้งกรัง IGBT จะสะสมความร้อนจนพังในเวลาไม่ถึง 5 นาที</strong> (ของเก่าต้องเช็ดออกให้หมดก่อนทาใหม่)</p>
+            <p class="en-only" style="margin:.3rem 0 0;">Spread a thin, even layer of <strong>thermal grease</strong> before bolting it to the heatsink — <strong>skip it, or reuse dried-out grease, and the IGBT cooks itself in under five minutes</strong> (wipe the old compound off completely first)</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <strong class="th-only">ดูว่าหลังตัวเป็นเหล็กเปลือยหรือไม่</strong><strong class="en-only">Check whether the back is bare metal</strong>
+            <p class="th-only" style="margin:.3rem 0 0;">ถ้าด้านหลังเป็น <strong>แผ่นเหล็กเปลือย</strong> (ไม่ใช่พลาสติกดำหุ้มมิด) <strong>ต้องใส่แผ่นไมกาหรือแผ่นซิลิโคนยางรองเสมอ</strong> รวมทั้งปลอกฉนวนที่รูน็อตถ้ามีมาให้ — เพราะแผ่นเหล็กนั้น<strong>คือขา C = ไฟ 310V</strong></p>
+            <p class="en-only" style="margin:.3rem 0 0;">If the back is a <strong>bare metal tab</strong> (not fully moulded plastic), you <strong>must fit a mica or silicone insulator pad</strong>, plus the shoulder washer if one is supplied — that tab <strong>is the collector, sitting at 310 V</strong></p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <strong class="th-only">ขันเสร็จแล้ว "ต้องวัดยืนยัน"</strong><strong class="en-only">After bolting it down, verify with the meter</strong>
+            <p class="th-only" style="margin:.3rem 0 0;">วัดระหว่าง <strong>ขา C กับตัวฮีตซิงก์อลูมิเนียม — ต้องไม่ช็อตถึงกัน (OL)</strong> ถ้าช็อต แปลว่าแผ่นฉนวนขาด/เลื่อน/น็อตกินเนื้อ พอจ่ายไฟ 310V จะลงกราวด์ระเบิดทันที <strong>อย่าเสียบปลั๊กจนกว่าจะวัดผ่านข้อนี้</strong></p>
+            <p class="en-only" style="margin:.3rem 0 0;">Measure from the <strong>collector to the aluminium heatsink — it must read open (OL)</strong>. A short means the pad is torn, shifted, or the screw is biting through; power up and 310 V goes straight to ground with a bang. <strong>Do not plug in until this check passes</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. อ่านเบอร์ / เบอร์แทน / ของปลอม -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">อ่านเบอร์ หาเบอร์แทน และระวังของปลอม</span><span class="en-only">Reading Part Numbers, Substitutes &amp; Fakes</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>ถอดรหัสเบอร์เบื้องต้น</strong> — หลายตระกูลฝังพิกัดไว้ในเบอร์เลย เช่น <span class="part-num">25N120</span> = ทนกระแส <strong>25A</strong> แรงดัน <strong>1200V</strong> · <span class="part-num">50JR22</span> = กระแสระดับ <strong>50A</strong> · <span class="part-num">H20R1203</span> = <strong>20A 1200V</strong></li>
+            <li><strong>เป็นแค่ตัวช่วยจำ ไม่ใช่กฎตายตัว</strong> — บางผู้ผลิตตั้งเบอร์คนละระบบ ยังไงก็<strong>ต้องเปิด datasheet ยืนยัน</strong> ทั้งพิกัดและลำดับขา</li>
+            <li><strong>กฎการหาเบอร์แทน:</strong> ต้องได้ทั้งกระแส (A) และแรงดัน (V) <strong>เท่าเดิมหรือสูงกว่า</strong> เท่านั้น <strong>ห้ามใส่ตัวที่แอมป์ต่ำกว่าเด็ดขาด</strong></li>
+            <li>ถ้าตัวเดิมมี <strong>ไดโอดฟรีวีลในตัว</strong> ตัวแทนก็ต้องมีด้วย — ใส่ตัวที่ไม่มีไดโอดลงในวงจรเตา = พังซ้ำแน่นอน</li>
+            <li>ควรเลือก<strong>ความเร็ว/ตระกูลให้ตรงงาน</strong> (เบอร์สำหรับเตาแม่เหล็กไฟฟ้าออกแบบมาให้ทน dv/dt และทำงานย่าน 20–30 kHz)</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li><strong>Decoding the number</strong> — many families encode the ratings: <span class="part-num">25N120</span> = <strong>25 A, 1200 V</strong> · <span class="part-num">50JR22</span> = around <strong>50 A</strong> · <span class="part-num">H20R1203</span> = <strong>20 A, 1200 V</strong></li>
+            <li>It is a <strong>memory aid, not a rule</strong> — some makers number parts differently, so <strong>confirm ratings and pin order in the datasheet</strong> either way</li>
+            <li><strong>Substitution rule:</strong> the replacement must be <strong>equal or higher</strong> in both current and voltage. <strong>Never fit a lower-current part</strong></li>
+            <li>If the original had a <strong>co-packaged freewheel diode</strong>, the substitute needs one too — a diode-less part in a stove circuit will fail again</li>
+            <li>Match the <strong>family/speed to the job</strong> — stove-grade parts are designed for the dv/dt and the 20–30 kHz operating range</li>
+          </ul>
+        </div>
+        <div class="warn-box">
+          <strong class="th-only">🚩 ระวัง IGBT ปลอม / รีมาร์ค</strong>
+          <strong class="en-only">🚩 Watch out for fake / remarked IGBTs</strong>
+          <p class="th-only" style="margin:.4rem 0 0;">ในท้องตลาดมีของ <strong>"รีมาร์ค"</strong> เยอะมาก — เอาตัวสเปคต่ำมาลบเบอร์แล้วสกรีนเบอร์สเปคสูงหลอกขาย ใส่แล้ว<strong>เปิดเครื่องปุ๊บระเบิดปั๊บ</strong></p>
+          <p class="en-only" style="margin:.4rem 0 0;">The market is full of <strong>remarked</strong> parts — a low-spec device with its number sanded off and a high-spec one printed on. Fit one and it <strong>blows the instant you power up</strong></p>
+          <ul class="content-list th-only" style="margin-top:.4rem;">
+            <li><strong>ขาเหล็กบาง งอง่าย</strong> ผิดจากของแท้ที่แข็ง</li>
+            <li><strong>น้ำหนักเบากว่าปกติ</strong> (เนื้อชิปเล็กกว่า)</li>
+            <li><strong>ตัวหนังสือขูดลอกได้</strong> ลองเช็ดด้วยทินเนอร์/แอลกอฮอล์แล้วเลือน = รีมาร์ค</li>
+            <li>ผิวเรียบผิดปกติ ไม่มีร่องรอยแม่พิมพ์ หรือฟอนต์เบี้ยวไม่คมเหมือนของโรงงาน</li>
+            <li><strong>ซื้อจากร้านที่เชื่อถือได้</strong> — ค่าอะไหล่ถูกกว่าไม่กี่สิบบาท แต่พังซ้ำทั้งบอร์ดไม่คุ้มกันเลย</li>
+          </ul>
+          <ul class="content-list en-only" style="margin-top:.4rem;">
+            <li><strong>Thin legs that bend easily</strong>, unlike the stiff leads of a genuine part</li>
+            <li><strong>Lighter than it should be</strong> (a smaller die inside)</li>
+            <li><strong>Printing rubs off</strong> — wipe with thinner or alcohol; if it smears, it was remarked</li>
+            <li>Oddly smooth casing, missing mould marks, or fuzzy off-centre fonts</li>
+            <li><strong>Buy from a shop you trust</strong> — the few baht saved is nothing against blowing the whole board again</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. ความปลอดภัย -->
   <div class="section">
     <div class="section-title"><span class="th-only">ความปลอดภัยและข้อควรระวัง</span><span class="en-only">Safety &amp; Cautions</span></div>
     <div class="card">
