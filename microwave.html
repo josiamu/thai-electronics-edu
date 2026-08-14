@@ -196,142 +196,128 @@
       <p class="th-only">ถ้าจับทั้ง 4 โซนมาวาดใหม่เป็นวงจรเดียว จะได้หน้าตาแบบนี้ — <strong>เส้นแดงคือสาย L</strong> (ไฟเข้า) ลากลงมาเป็นเส้นตั้งทางซ้าย, <strong>เส้นน้ำเงินคือสาย N</strong> อยู่ทางขวา และโหลดแต่ละกลุ่มต่อพาดขวางระหว่างสองเส้นนี้เหมือน "ขั้นบันได" ทีละขั้น ทุกขั้นต้องครบวงจร L→โหลด→N จึงจะทำงาน</p>
       <p class="en-only">Redraw all 4 zones as one circuit and it looks like this — <strong>the red line is L</strong> (live) running down the left, <strong>the blue line is N</strong> on the right, and each load group bridges between them like the rungs of a ladder. Every rung needs a complete L→load→N path before it can work.</p>
 
-      <div style="text-align:center; margin-top:1rem; overflow-x:auto;">
-        <svg viewBox="0 0 980 500" style="min-width:660px;max-width:100%;height:auto;font-family:inherit;font-size:11.5px;" role="img"
-             aria-label="Simplified whole-oven ladder circuit from plug through fuse, thermal cutouts and door switches to each load group">
+      <div class="bs-wrap" id="mw-circuit">
+        <div class="bs-tabs">
+          <button class="bs-tab" data-step="1"><span class="bs-n">1</span><span class="th-only">ภาพรวมขั้นบันได</span><span class="en-only">The ladder</span></button>
+          <button class="bs-tab" data-step="2"><span class="bs-n">2</span><span class="th-only">ด่านบนสุด</span><span class="en-only">Top chain</span></button>
+          <button class="bs-tab" data-step="3"><span class="bs-n">3</span><span class="th-only">รัง 1 ไฟ/พัดลม/จาน</span><span class="en-only">Rung 1 lamp &amp; fan</span></button>
+          <button class="bs-tab" data-step="4"><span class="bs-n">4</span><span class="th-only">รัง 2 ฮีตเตอร์ย่าง</span><span class="en-only">Rung 2 grill</span></button>
+          <button class="bs-tab" data-step="5"><span class="bs-n">5</span><span class="th-only">รัง 3 หม้อแปลงแรงสูง</span><span class="en-only">Rung 3 HV transformer</span></button>
+          <button class="bs-tab" data-step="6"><span class="bs-n">6</span><span class="th-only">รัง 4 บอร์ดควบคุม</span><span class="en-only">Rung 4 control board</span></button>
+          <button class="bs-tab" data-step="7"><span class="bs-n">7</span><span class="th-only">⚡ monitor switch</span><span class="en-only">⚡ Monitor switch</span></button>
+          <button class="bs-tab" data-step="8"><span class="bs-n">8</span><span class="th-only">ทวีแรงดัน จังหวะ 1</span><span class="en-only">Doubler stroke 1</span></button>
+          <button class="bs-tab" data-step="9"><span class="bs-n">9</span><span class="th-only">ทวีแรงดัน จังหวะ 2</span><span class="en-only">Doubler stroke 2</span></button>
+        </div>
 
-          <!-- ── series protection chain on L ── -->
-          <text x="14" y="51" fill="#dc2626" font-weight="700" font-size="13">L</text>
-          <line x1="30" y1="46" x2="60" y2="46" stroke="#dc2626" stroke-width="2.5"/>
-          <rect x="60" y="36" width="54" height="20" rx="4" fill="var(--bg)" stroke="var(--text)" stroke-width="1.5"/>
-          <line x1="60" y1="46" x2="114" y2="46" stroke="var(--text)" stroke-width="1.5"/>
-          <text x="87" y="28" text-anchor="middle" fill="var(--text)" font-weight="700">FUSE</text>
-          <line x1="114" y1="46" x2="144" y2="46" stroke="#dc2626" stroke-width="2.5"/>
+        <canvas id="mwc-canvas" class="bs-canvas" style="aspect-ratio:940/560;"></canvas>
 
-          <circle cx="144" cy="46" r="3.5" fill="var(--text)"/>
-          <line x1="144" y1="46" x2="196" y2="41" stroke="var(--text)" stroke-width="2.2"/>
-          <circle cx="196" cy="46" r="3.5" fill="var(--text)"/>
-          <text class="th-only" x="170" y="70" text-anchor="middle" fill="var(--text-light)">TCO เพดานเตา (NC)</text>
-          <text class="en-only" x="170" y="70" text-anchor="middle" fill="var(--text-light)">TCO oven (NC)</text>
-          <line x1="196" y1="46" x2="226" y2="46" stroke="#dc2626" stroke-width="2.5"/>
+        <div class="bs-nav" style="flex-wrap:wrap;">
+          <button id="mwc-prev" class="bs-navbtn">◀ <span class="th-only">ก่อนหน้า</span><span class="en-only">Prev</span></button>
+          <button id="mwc-play" class="bs-navbtn"><span class="th-only">▶ เล่นอัตโนมัติ</span><span class="en-only">▶ Auto-play</span></button>
+          <button id="mwc-door" class="bs-navbtn">
+            <span class="mwc-closed">🚪 <span class="th-only">ประตูปิด</span><span class="en-only">Door closed</span></span>
+            <span class="mwc-open">🚪 <span class="th-only">ประตูเปิด</span><span class="en-only">Door open</span></span>
+          </button>
+          <button id="mwc-start" class="bs-navbtn">
+            <span class="mwc-run">▶ <span class="th-only">กด Start แล้ว</span><span class="en-only">Start pressed</span></span>
+            <span class="mwc-stop">⏸ <span class="th-only">ยังไม่กด Start</span><span class="en-only">Not started</span></span>
+          </button>
+          <button id="mwc-fuse" class="bs-navbtn" style="display:none;">🔁 <span class="th-only">เปลี่ยนฟิวส์</span><span class="en-only">New fuse</span></button>
+          <select id="mwc-fault" class="bs-select" aria-label="fault mode">
+            <option value="ok">✅ ปกติ — Normal</option>
+            <option value="tco">🔴 เทอร์โมสตัทขาด — thermal cutout open</option>
+            <option value="latchstuck">💥 Latch A ละลายติดค้าง — Latch A welded shut</option>
+            <option value="latchb">🟠 Latch B ไม่ต่อ — Latch B never closes</option>
+            <option value="hvdiode">🔴 ไดโอดแรงสูงช็อต — HV diode shorted</option>
+            <option value="magnetron">🟡 แมกนีตรอน/ไส้หลอดขาด — magnetron open</option>
+            <option value="grill">🟢 ฮีตเตอร์ย่างเสีย — grill element dead</option>
+          </select>
+          <button id="mwc-next" class="bs-navbtn"><span class="th-only">ถัดไป</span><span class="en-only">Next</span> ▶</button>
+        </div>
 
-          <circle cx="226" cy="46" r="3.5" fill="var(--text)"/>
-          <line x1="226" y1="46" x2="278" y2="41" stroke="var(--text)" stroke-width="2.2"/>
-          <circle cx="278" cy="46" r="3.5" fill="var(--text)"/>
-          <line x1="252" y1="52" x2="252" y2="82" stroke="var(--border)" stroke-width="1"/>
-          <text class="th-only" x="252" y="94" text-anchor="middle" fill="var(--text-light)">TCO แมกนีตรอน (NC)</text>
-          <text class="en-only" x="252" y="94" text-anchor="middle" fill="var(--text-light)">TCO magnetron (NC)</text>
-          <line x1="278" y1="46" x2="312" y2="46" stroke="#dc2626" stroke-width="2.5"/>
+        <div class="bs-faultnote">
+          <span class="th-only">🔧 กำลังจำลองเครื่องที่เสียอยู่ — ดูว่ารังไหน "ไฟไม่ถึง" แล้วเทียบกับอาการที่ลูกค้าบอก</span>
+          <span class="en-only">🔧 A faulty oven is being simulated — see which rung loses power and match it against what the customer describes</span>
+        </div>
 
-          <circle cx="312" cy="46" r="3.5" fill="var(--text)"/>
-          <line x1="312" y1="46" x2="366" y2="26" stroke="var(--text)" stroke-width="2.2"/>
-          <circle cx="372" cy="46" r="3.5" fill="var(--text)"/>
-          <text class="th-only" x="342" y="70" text-anchor="middle" fill="var(--primary-dark)" font-weight="700">LATCH A (NO)</text>
-          <text class="en-only" x="342" y="70" text-anchor="middle" fill="var(--primary-dark)" font-weight="700">LATCH A (NO)</text>
-          <line x1="372" y1="46" x2="430" y2="46" stroke="#dc2626" stroke-width="2.5"/>
+        <div class="bs-desc" data-step="1">
+          <p class="th-only"><strong>ขั้นที่ 1 — ทั้งเครื่องคือขั้นบันไดเดียว:</strong> <strong>รางซ้ายคือสาย L</strong> (ผ่านด่านบนสุดมาแล้ว) <strong>รางขวาคือสาย N</strong> และโหลดแต่ละกลุ่มพาดขวางระหว่างสองราง — <strong>ทุกรังต้องครบวงจร L → โหลด → N จึงจะทำงาน</strong> และแต่ละรังเป็นอิสระต่อกัน นี่คือเหตุผลที่ "ย่างไม่ได้แต่เวฟได้" เป็นไปได้
+            <br>ลองกดปุ่ม <strong>🚪 ประตู</strong> และ <strong>▶ Start</strong> ด้านบนเพื่อดูว่ารังไหนทำงานเมื่อไหร่ แล้วเลือกอาการเสียจากช่องด้านล่างเพื่อฝึกวินิจฉัย</p>
+          <p class="en-only"><strong>Step 1 — the whole oven is one ladder:</strong> <strong>the left rail is L</strong> (after the top chain) and <strong>the right rail is N</strong>, with each load group bridging across. <strong>Every rung needs a complete L → load → N path</strong>, and the rungs are independent — which is exactly why "grill dead, microwave fine" is possible.
+            <br>Press <strong>🚪 door</strong> and <strong>▶ Start</strong> above to see which rung runs when, then pick a fault below to practise diagnosing.</p>
+        </div>
 
-          <!-- ── rails ── -->
-          <line x1="430" y1="46" x2="430" y2="430" stroke="#dc2626" stroke-width="2.5"/>
-          <circle cx="430" cy="46" r="4" fill="#dc2626"/>
-          <line x1="900" y1="110" x2="900" y2="458" stroke="var(--primary)" stroke-width="2.5"/>
-          <line x1="30" y1="458" x2="900" y2="458" stroke="var(--primary)" stroke-width="2.5"/>
-          <text x="14" y="463" fill="var(--primary)" font-weight="700" font-size="13">N</text>
+        <div class="bs-desc" data-step="2">
+          <p class="th-only"><strong>ขั้นที่ 2 — ด่านบนสุดที่ทุกอย่างต้องผ่าน:</strong> ไฟ L ต้องผ่าน <strong>ฟิวส์เมน → เทอร์โมสตัทเตา → เทอร์โมสตัทแมกนีตรอน → Latch A</strong> ก่อนจะกลายเป็นรางซ้ายที่เลี้ยงทุกรัง
+            <br><strong>ถ้าด่านใดด่านหนึ่งขาด เครื่องดับหมดทั้งเครื่อง</strong> ไม่ใช่เสียแค่ฟังก์ชันเดียว — เจอ "เสียบปลั๊กแล้วเงียบสนิท จอไม่ติด" ให้มาไล่แถวนี้ก่อนเสมอ (ลองเลือกอาการ "เทอร์โมสตัทขาด" ดู)
+            <br><span style="color:var(--text-light);">เทอร์โมสตัททั้งสองตัวเป็น NC ปกติต่ออยู่ ถ้าเจอตัวไหนขาดแปลว่าจุดนั้นเคยร้อนจัดจริง ต้องหาสาเหตุก่อนเปลี่ยน</span></p>
+          <p class="en-only"><strong>Step 2 — the top chain everything depends on:</strong> L must pass the <strong>main fuse → oven thermal cutout → magnetron thermal cutout → Latch A</strong> before it becomes the left rail that feeds every rung.
+            <br><strong>If any one of them opens, the entire oven is dead</strong>, not just one function — so "plugged in, completely silent, no display" always starts here (try the "thermal cutout open" fault).
+            <br><span style="color:var(--text-light);">Both cutouts are NC. Finding one open proves that spot really overheated: find the cause before replacing it.</span></p>
+        </div>
 
-          <!-- ── legend in the free area on the left ── -->
-          <rect x="40" y="180" width="330" height="150" rx="12" fill="var(--bg)" stroke="var(--border)" stroke-width="1.4" stroke-dasharray="6 4"/>
-          <text class="th-only" x="64" y="208" fill="var(--primary-dark)" font-weight="700" font-size="12.5">วิธีอ่านวงจรขั้นบันได</text>
-          <text class="en-only" x="64" y="208" fill="var(--primary-dark)" font-weight="700" font-size="12.5">Reading a ladder diagram</text>
-          <line x1="64" y1="234" x2="92" y2="234" stroke="#dc2626" stroke-width="2.5"/>
-          <text class="th-only" x="102" y="238" fill="var(--text)">เส้นแดง = สาย L (ไฟเข้า)</text>
-          <text class="en-only" x="102" y="238" fill="var(--text)">red = the L (live) rail</text>
-          <line x1="64" y1="262" x2="92" y2="262" stroke="var(--primary)" stroke-width="2.5"/>
-          <text class="th-only" x="102" y="266" fill="var(--text)">เส้นน้ำเงิน = สาย N (ไฟกลับ)</text>
-          <text class="en-only" x="102" y="266" fill="var(--text)">blue = the N (return) rail</text>
-          <text class="th-only" x="64" y="294" fill="var(--text-light)">แต่ละ "ขั้น" คือโหลด 1 กลุ่ม พาดระหว่างสองเส้น</text>
-          <text class="en-only" x="64" y="294" fill="var(--text-light)">each rung is one load group bridging the rails</text>
-          <text class="th-only" x="64" y="314" fill="var(--text-light)">ต้องครบวงจร L → โหลด → N เท่านั้นจึงทำงาน</text>
-          <text class="en-only" x="64" y="314" fill="var(--text-light)">it works only on a complete L → load → N path</text>
+        <div class="bs-desc" data-step="3">
+          <p class="th-only"><strong>ขั้นที่ 3 — รังที่ 1 ทำงานพร้อมกันทั้งชุด:</strong> หลอดไฟ พัดลมระบายความร้อน และมอเตอร์จานหมุน ต่อ<strong>ขนานกัน</strong>อยู่หลังรีเลย์ตัวเดียว
+            <br>ดังนั้นถ้า <strong>บางตัวทำงาน บางตัวไม่ทำงาน</strong> = อะไหล่ตัวนั้นพังเอง <strong>ไม่ใช่บอร์ด</strong> แต่ถ้า<strong>ไม่ทำงานพร้อมกันทั้งชุด</strong> ให้ไปสงสัยรีเลย์หรือคำสั่งจากบอร์ดแทน — วิธีแยกแค่นี้ประหยัดเวลาไปได้ครึ่งวัน</p>
+          <p class="en-only"><strong>Step 3 — rung 1 works as a set:</strong> the lamp, the cooling fan and the turntable motor sit <strong>in parallel</strong> behind a single relay.
+            <br>So if <strong>some run and some do not</strong>, that specific part has failed — <strong>not the board</strong>. If <strong>none of them run</strong>, suspect the relay or the board's command instead. That one distinction saves half a day of hunting.</p>
+        </div>
 
-          <!-- ── rung 1: main relay → lamp / fan / turntable ── -->
-          <line x1="430" y1="110" x2="500" y2="110" stroke="#dc2626" stroke-width="2"/>
-          <circle cx="500" cy="110" r="3.5" fill="var(--text)"/>
-          <line x1="500" y1="110" x2="552" y2="94" stroke="var(--text)" stroke-width="2.2"/>
-          <circle cx="558" cy="110" r="3.5" fill="var(--text)"/>
-          <text x="528" y="134" text-anchor="middle" fill="var(--text)" font-weight="700">MAIN RELAY</text>
-          <line x1="558" y1="110" x2="640" y2="110" stroke="#dc2626" stroke-width="2"/>
-          <rect x="640" y="88" width="200" height="44" rx="8" fill="var(--bg)" stroke="var(--border)" stroke-width="1.5"/>
-          <text class="th-only" x="740" y="106" text-anchor="middle" fill="var(--text)">หลอดไฟ • พัดลม • จานหมุน</text>
-          <text class="en-only" x="740" y="106" text-anchor="middle" fill="var(--text)">Lamp • fan • turntable</text>
-          <text class="th-only" x="740" y="123" text-anchor="middle" fill="var(--text-light)">(ต่อขนานกัน รับไฟชุดเดียว)</text>
-          <text class="en-only" x="740" y="123" text-anchor="middle" fill="var(--text-light)">(in parallel, one feed)</text>
-          <line x1="840" y1="110" x2="900" y2="110" stroke="var(--primary)" stroke-width="2"/>
+        <div class="bs-desc" data-step="4">
+          <p class="th-only"><strong>ขั้นที่ 4 — รังที่ 2 คือฮีตเตอร์ย่าง:</strong> มีรีเลย์ของตัวเองแยกจากรังอื่น เพราะโหมดย่างกับโหมดไมโครเวฟทำงานคนละทาง (ย่าง = ความร้อนจากขดลวดโดยตรง / เวฟ = คลื่นจากแมกนีตรอน)
+            <br><span style="color:var(--text-light);">อาการ "เวฟได้ปกติแต่ย่างไม่ได้" จึงชี้มาที่รังนี้โดยเฉพาะ — วัดฮีตเตอร์ว่าขาดไหม แล้ววัดหน้าสัมผัสรีเลย์ย่างว่าต่อจริงไหมตอนสั่งงาน</span></p>
+          <p class="en-only"><strong>Step 4 — rung 2 is the grill element:</strong> it has its own relay because grilling and microwaving heat food in completely different ways (radiant heat from a coil vs. microwaves from the magnetron).
+            <br><span style="color:var(--text-light);">"Microwaves fine, grill dead" therefore points at this rung alone — check the element for continuity, then check that the grill relay's contacts actually close on command.</span></p>
+        </div>
 
-          <!-- ── rung 2: grill relay → heater ── -->
-          <line x1="430" y1="196" x2="500" y2="196" stroke="#dc2626" stroke-width="2"/>
-          <circle cx="500" cy="196" r="3.5" fill="var(--text)"/>
-          <line x1="500" y1="196" x2="552" y2="180" stroke="var(--text)" stroke-width="2.2"/>
-          <circle cx="558" cy="196" r="3.5" fill="var(--text)"/>
-          <text x="528" y="220" text-anchor="middle" fill="var(--text)" font-weight="700">GRILL RELAY</text>
-          <line x1="558" y1="196" x2="640" y2="196" stroke="#dc2626" stroke-width="2"/>
-          <rect x="640" y="176" width="200" height="40" rx="8" fill="var(--bg)" stroke="var(--border)" stroke-width="1.5"/>
-          <text class="th-only" x="740" y="193" text-anchor="middle" fill="var(--text)">ขดลวดย่าง (Heater)</text>
-          <text class="en-only" x="740" y="193" text-anchor="middle" fill="var(--text)">Grill element (Heater)</text>
-          <text x="740" y="209" text-anchor="middle" fill="var(--text-light)">30 – 50 Ω</text>
-          <line x1="840" y1="196" x2="900" y2="196" stroke="var(--primary)" stroke-width="2"/>
+        <div class="bs-desc" data-step="5">
+          <p class="th-only"><strong>ขั้นที่ 5 — รังที่ 3 มีสวิตช์อนุกรมกัน 2 ตัว:</strong> <strong>Latch B</strong> (ยืนยันว่าประตูปิดสนิท) และ <strong>power relay</strong> (คำสั่ง Start จากบอร์ด) <strong>ต้องต่อทั้งคู่</strong> หม้อแปลงแรงสูงถึงจะได้ไฟ
+            <br>นี่คือเหตุผลที่อาการ <strong>"จานหมุน ไฟติด พัดลมทำงาน แต่น้ำไม่ร้อน"</strong> ต้องมาสงสัยสองตัวนี้ก่อนเสมอ — เพราะรังที่ 1 ยังทำงานปกติ แปลว่าด่านบนสุดและบอร์ดยังดี ปัญหาอยู่เฉพาะรังนี้ (ลองเลือกอาการ "Latch B ไม่ต่อ")
+            <br><span style="color:var(--text-light);">เมื่อรังนี้ครบวงจร ไฟ 2,000V จะออกที่ขดทุติยภูมิ → ไปต่อขั้นที่ 8–9</span></p>
+          <p class="en-only"><strong>Step 5 — rung 3 has two switches in series:</strong> <strong>Latch B</strong> (confirming the door is truly shut) and the <strong>power relay</strong> (the board's Start command) — <strong>both must close</strong> before the HV transformer sees power.
+            <br>That is why <strong>"plate spins, lamp on, fan running, but nothing heats"</strong> always points here first: rung 1 still works, so the top chain and the board are fine and the fault is confined to this rung (try the "Latch B never closes" fault).
+            <br><span style="color:var(--text-light);">Once this rung is complete, 2,000 V appears on the secondary — continue to steps 8–9.</span></p>
+        </div>
 
-          <!-- ── rung 3: latch B + power relay → HV transformer ── -->
-          <line x1="430" y1="272" x2="480" y2="272" stroke="#dc2626" stroke-width="2"/>
-          <circle cx="480" cy="272" r="3.5" fill="var(--text)"/>
-          <line x1="480" y1="272" x2="530" y2="256" stroke="var(--text)" stroke-width="2.2"/>
-          <circle cx="536" cy="272" r="3.5" fill="var(--text)"/>
-          <text class="th-only" x="508" y="296" text-anchor="middle" fill="var(--primary-dark)" font-weight="700">LATCH B (NO)</text>
-          <text class="en-only" x="508" y="296" text-anchor="middle" fill="var(--primary-dark)" font-weight="700">LATCH B (NO)</text>
-          <line x1="536" y1="272" x2="580" y2="272" stroke="#dc2626" stroke-width="2"/>
-          <circle cx="580" cy="272" r="3.5" fill="var(--text)"/>
-          <line x1="580" y1="272" x2="630" y2="256" stroke="var(--text)" stroke-width="2.2"/>
-          <circle cx="636" cy="272" r="3.5" fill="var(--text)"/>
-          <text x="608" y="296" text-anchor="middle" fill="var(--text)" font-weight="700">POWER RELAY</text>
-          <line x1="636" y1="272" x2="690" y2="272" stroke="#dc2626" stroke-width="2"/>
-          <rect x="690" y="246" width="180" height="52" rx="8" fill="#fef2f2" stroke="#dc2626" stroke-width="1.6"/>
-          <text x="780" y="266" text-anchor="middle" fill="#b91c1c" font-weight="700">HV TRANSFORMER</text>
-          <text class="th-only" x="780" y="284" text-anchor="middle" fill="var(--text-light)">→ 2,000V (ดูวงจรทวีแรงดัน)</text>
-          <text class="en-only" x="780" y="284" text-anchor="middle" fill="var(--text-light)">→ 2,000V (see the doubler)</text>
-          <line x1="870" y1="272" x2="900" y2="272" stroke="var(--primary)" stroke-width="2"/>
+        <div class="bs-desc" data-step="6">
+          <p class="th-only"><strong>ขั้นที่ 6 — รังที่ 4 เลี้ยงสมองของเครื่อง:</strong> หม้อแปลงลูกเล็กแปลงไฟบ้านลงมาเป็นไฟต่ำเลี้ยงบอร์ดควบคุม จอ และปุ่มกด
+            <br><strong>รังนี้มีไฟตลอดเวลาที่เสียบปลั๊กและด่านบนสุดยังดี</strong> — จอจึงติดแม้ยังไม่ได้กดอะไร นั่นแปลว่า <strong>"จอติด" พิสูจน์แค่ว่าด่านบนสุดกับรังนี้ปกติ</strong> ไม่ได้แปลว่ารังอื่นดีด้วย
+            <br><span style="color:var(--text-light);">กลับกัน ถ้าจอไม่ติดเลย ให้ย้อนไปไล่ด่านบนสุดในขั้นที่ 2 ก่อนจะไปสงสัยบอร์ด</span></p>
+          <p class="en-only"><strong>Step 6 — rung 4 powers the brain:</strong> a small transformer drops the mains to a low voltage for the control board, the display and the keypad.
+            <br><strong>This rung is live whenever the oven is plugged in and the top chain is intact</strong>, which is why the display lights up before you press anything. So <strong>"the display works" only proves the top chain and this rung are fine</strong> — it says nothing about the others.
+            <br><span style="color:var(--text-light);">Conversely, a completely dead display sends you back to the top chain in step 2 before you ever suspect the board.</span></p>
+        </div>
 
-          <!-- ── rung 4: LV transformer → control board ── -->
-          <line x1="430" y1="352" x2="560" y2="352" stroke="#dc2626" stroke-width="2"/>
-          <rect x="560" y="330" width="300" height="44" rx="8" fill="var(--bg)" stroke="var(--border)" stroke-width="1.5"/>
-          <text class="th-only" x="710" y="348" text-anchor="middle" fill="var(--text)" font-weight="700">LV TRANSFORMER → บอร์ดควบคุม (MCU)</text>
-          <text class="en-only" x="710" y="348" text-anchor="middle" fill="var(--text)" font-weight="700">LV TRANSFORMER → control board (MCU)</text>
-          <text class="th-only" x="710" y="365" text-anchor="middle" fill="var(--text-light)">สั่งปิด-เปิดรีเลย์ทั้ง 3 ตัวข้างบน</text>
-          <text class="en-only" x="710" y="365" text-anchor="middle" fill="var(--text-light)">commands all 3 relays above</text>
-          <line x1="860" y1="352" x2="900" y2="352" stroke="var(--primary)" stroke-width="2"/>
+        <div class="bs-desc" data-step="7">
+          <p class="th-only"><strong>ขั้นที่ 7 — รังล่างสุดคือกับดักที่ต้องเข้าใจให้ได้:</strong> <strong>monitor switch พาดระหว่าง L กับ N ตรงๆ โดยไม่มีโหลดคั่นเลย</strong> และมันเป็นชนิด NC ที่ <strong>"ต่อวงจรตอนประตูเปิด"</strong> (ตรงข้ามกับ Latch A/B ที่ต่อตอนประตูปิด)
+            <br>ตอนใช้งานปกติจึงไม่มีอะไรเกิดขึ้น เพราะพอประตูปิด monitor จะเปิดวงจรทิ้งไว้เฉยๆ
+            <br><strong style="color:#dc2626;">แต่ถ้า Latch A ละลายติดค้าง</strong> — เลือกอาการนั้นแล้ว<strong>กดปุ่มเปิดประตูดู</strong> — monitor จะต่อขณะที่ L ยังจ่ายอยู่ กลายเป็น<strong>ลัดวงจร L–N เต็มๆ ฟิวส์เมนขาดทันที</strong> นี่คือการ "พลีชีพ" ที่ออกแบบมาโดยตั้งใจ เพราะยอมให้ฟิวส์ขาดดีกว่าปล่อยให้เตายิงคลื่นออกมาตอนประตูเปิด
+            <br><span style="color:var(--text-light);">ดังนั้นอาการ "ฟิวส์ขาดซ้ำทุกครั้งที่เปิด-ปิดประตู" = <strong>เปลี่ยนฟิวส์อย่างเดียวไม่มีวันจบ ต้องเปลี่ยนสวิตช์ประตูยกชุด</strong></span></p>
+          <p class="en-only"><strong>Step 7 — the bottom rung is the trap you must understand:</strong> the <strong>monitor switch bridges L to N directly with no load in between</strong>, and it is the NC type that <strong>closes when the door opens</strong> (the opposite of latches A and B, which close when the door shuts).
+            <br>In normal use nothing happens: with the door closed the monitor simply sits open.
+            <br><strong style="color:#dc2626;">But if Latch A welds shut</strong> — select that fault and <strong>press the door button</strong> — the monitor closes while L is still live, creating a <strong>dead L–N short that instantly destroys the mains fuse</strong>. That sacrifice is deliberate: a blown fuse is far better than an oven that can fire with the door open.
+            <br><span style="color:var(--text-light);">So "the fuse blows every time the door is opened" means <strong>replacing the fuse alone will never fix it — the whole interlock set must be replaced</strong>.</span></p>
+        </div>
 
-          <!-- ── rung 5: monitor switch (sacrificial bridge) ── -->
-          <text class="th-only" x="665" y="412" text-anchor="middle" fill="#b91c1c" font-weight="700">MONITOR SWITCH (NC) — ต่อถึงกันตอนประตูเปิด = "สายพลีชีพ"</text>
-          <text class="en-only" x="665" y="412" text-anchor="middle" fill="#b91c1c" font-weight="700">MONITOR SWITCH (NC) — closed while the door is open = the sacrificial bridge</text>
-          <line x1="430" y1="430" x2="620" y2="430" stroke="#dc2626" stroke-width="2"/>
-          <circle cx="620" cy="430" r="3.5" fill="#dc2626"/>
-          <line x1="620" y1="430" x2="700" y2="426" stroke="#dc2626" stroke-width="2.6"/>
-          <circle cx="700" cy="430" r="3.5" fill="#dc2626"/>
-          <line x1="700" y1="430" x2="900" y2="430" stroke="var(--primary)" stroke-width="2"/>
-        </svg>
-      </div>
+        <div class="bs-desc" data-step="8">
+          <p class="th-only"><strong>ขั้นที่ 8 — ภาคแรงสูง จังหวะที่ 1 (ชาร์จคาปาซิเตอร์):</strong> เมื่อรังที่ 3 ครบวงจร หม้อแปลงแรงสูงจะสร้างไฟ <strong>~2,000V AC</strong> ที่ขดทุติยภูมิ
+            <br>ในครึ่งคลื่นแรก <strong>ไดโอดแรงสูงนำกระแส</strong> ลงโครงเหล็ก กระแสจึงไหลผ่านคาปาซิเตอร์จน<strong>ชาร์จเต็มที่ ~2,000V</strong> ช่วงนี้แมกนีตรอนยังไม่ทำงาน
+            <br><span style="color:var(--text-light);">สังเกตตัวต้านทาน bleeder ที่วาดขนานกับคาปา มันมีไว้คายประจุเมื่อถอดปลั๊ก — <strong>แต่ห้ามไว้ใจเด็ดขาด</strong> ถ้ามันขาด คาปาจะอมไฟ 2,000V รอไว้เต็มๆ</span></p>
+          <p class="en-only"><strong>Step 8 — the HV section, stroke 1 (charging the capacitor):</strong> once rung 3 is complete the HV transformer produces about <strong>2,000 V AC</strong> on its secondary.
+            <br>On the first half-cycle the <strong>HV diode conducts</strong> to the chassis, so current flows through the capacitor and <strong>charges it to ~2,000 V</strong>. The magnetron is not firing yet.
+            <br><span style="color:var(--text-light);">Note the bleeder resistor drawn across the capacitor: it is meant to drain the charge after unplugging — <strong>but never trust it</strong>. If it has failed open, the capacitor sits there holding 2,000 V.</span></p>
+        </div>
 
-      <div class="info-box" style="margin-top:1rem;">
-        <strong class="th-only">💡 อ่านวงจรนี้ยังไง</strong><strong class="en-only">💡 How to read this circuit</strong>
-        <ul class="content-list th-only" style="margin:.4rem 0 0">
-          <li><strong>ทุกอย่างต้องผ่านด่านบนสุดก่อน</strong> — ฟิวส์ → เทอร์โมสตัท 2 ตัว → Latch A ถ้าตัวใดตัวหนึ่งขาด <strong>เครื่องดับหมดทั้งเครื่อง</strong> ไม่ใช่แค่ฟังก์ชันเดียว</li>
-          <li><strong>ขั้นที่ 1 ทำงานพร้อมกันทั้งชุด</strong> — หลอดไฟ พัดลม จานหมุน ต่อขนานกันหลังรีเลย์ตัวเดียว ถ้าหมุนแค่บางตัว แปลว่าอะไหล่ตัวนั้นพังเอง ไม่ใช่บอร์ด</li>
-          <li><strong>ขั้นที่ 3 มีสวิตช์อนุกรมกัน 2 ตัว</strong> — Latch B (ประตู) และ Power Relay (คำสั่ง Start) ต้องต่อทั้งคู่ หม้อแปลงแรงสูงถึงจะได้ไฟ นี่คือเหตุผลว่าทำไม "จานหมุนแต่น้ำไม่ร้อน" ต้องไปสงสัย 2 ตัวนี้ก่อน</li>
-          <li><strong>ขั้นล่างสุดคือกับดัก</strong> — Monitor Switch พาด L กับ N ไว้ตรงๆ ไม่มีโหลดคั่นเลย ถ้ามันต่อพร้อมกับที่ Latch A ต่ออยู่ = ลัดวงจรเต็มๆ ฟิวส์ขาดทันที</li>
-        </ul>
-        <ul class="content-list en-only" style="margin:.4rem 0 0">
-          <li><strong>Everything passes the top chain first</strong> — fuse → both thermal cutouts → Latch A. If any one opens, <strong>the whole oven dies</strong>, not just one function.</li>
-          <li><strong>Rung 1 works as a set</strong> — lamp, fan and turntable are in parallel behind one relay. If only some of them run, that specific part is dead, not the board.</li>
-          <li><strong>Rung 3 has two switches in series</strong> — Latch B (door) and the power relay (Start command). Both must close before the HV transformer sees power, which is why "plate spins but no heat" points at these two first.</li>
-          <li><strong>The bottom rung is the trap</strong> — the monitor switch bridges L to N with no load in between. If it closes while Latch A is also closed, that is a dead short and the fuse goes instantly.</li>
-        </ul>
+        <div class="bs-desc" data-step="9">
+          <p class="th-only"><strong>ขั้นที่ 9 — จังหวะที่ 2 (บวกกันเป็น 4,000V):</strong> พอไฟบ้านกลับขั้ว <strong>ไดโอดบล็อก</strong> ประจุในคาปาจึงออกไปไหนไม่ได้ ผลคือ <strong>แรงดันหม้อแปลง 2,000V บวกกับแรงดันในคาปา 2,000V เรียงอนุกรมกัน = ~4,000V DC</strong> ป้อนเข้าแมกนีตรอน แล้วคลื่นไมโครเวฟจึงถูกยิงออกมา
+            <br>นี่คือเหตุผลที่เรียกว่า <strong>วงจรทวีแรงดัน (Voltage Doubler)</strong> — ได้ไฟสองเท่าโดยไม่ต้องพันหม้อแปลงให้ใหญ่ขึ้น
+            <br><strong style="color:#dc2626;">ถ้าไดโอดช็อต</strong> กระแสจะไหลตลอดจนหม้อแปลงโอเวอร์โหลด → ครางหึ่งๆ แล้วฟิวส์แรงสูงขาด · <strong style="color:#dc2626;">ถ้าไส้หลอดแมกนีตรอนขาด</strong> ทุกอย่างจะดูปกติเงียบสนิทแต่ไม่มีความร้อนเลย (ลองสลับสองอาการนี้ดู)
+            <br><strong style="color:#dc2626;">⚠ คาปาตัวนี้อมไฟ 2,000V ต่อได้นานหลังถอดปลั๊ก — ต้องคายประจุด้วยคีมด้ามฉนวน 1,000V ก่อนแตะทุกครั้ง</strong></p>
+          <p class="en-only"><strong>Step 9 — stroke 2 (they add up to 4,000 V):</strong> when the mains reverses, the <strong>diode blocks</strong> and the capacitor's charge cannot escape. The <strong>transformer's 2,000 V and the capacitor's 2,000 V now sit in series = about 4,000 V DC</strong> across the magnetron, and the microwaves start.
+            <br>That is what makes it a <strong>voltage doubler</strong> — twice the voltage without winding a bigger transformer.
+            <br><strong style="color:#dc2626;">A shorted diode</strong> lets current flow continuously and overloads the transformer: a loud hum, then the HV fuse blows. <strong style="color:#dc2626;">An open magnetron filament</strong> leaves everything looking and sounding normal with no heat at all (try switching between those two faults).
+            <br><strong style="color:#dc2626;">⚠ This capacitor holds 2,000 V long after unplugging — always discharge it with 1,000 V insulated pliers before touching anything.</strong></p>
+        </div>
       </div>
     </div>
   </div>
@@ -530,98 +516,8 @@
       <p class="th-only">หม้อแปลงแรงสูงผลิตไฟ AC ได้สูงสุดราว <strong>2,000 โวลต์</strong> แต่หลอดแมกนีตรอนต้องการไฟ <strong>กระแสตรง 4,000 โวลต์</strong> ในการยิงคลื่น วิศวกรจึงใช้ <strong>HV Capacitor คู่กับ HV Diode</strong> ทำเป็น <strong>วงจรทวีแรงดัน (Voltage Doubler)</strong> ปั๊มแรงดันให้สูงขึ้นเป็น 2 เท่า โดยแบ่งการทำงานตามครึ่งคลื่น AC เป็น 2 จังหวะ</p>
       <p class="en-only">The HV transformer produces at most about <strong>2,000 volts AC</strong>, but the magnetron needs <strong>4,000 volts DC</strong> to fire. So engineers pair an <strong>HV capacitor with an HV diode</strong> as a <strong>voltage doubler</strong>, pumping the voltage to twice its value across the two halves of the AC cycle.</p>
 
-      <div style="text-align:center; margin-top:1rem;">
-        <svg viewBox="0 0 780 342" style="max-width:100%;height:auto;font-family:inherit;font-size:11.5px;" role="img"
-             aria-label="Voltage doubler: HV transformer secondary, HV capacitor, HV diode to chassis, magnetron">
-          <defs>
-            <marker id="mw-c1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-              <path d="M0,1 L9,5 L0,9 z" fill="var(--primary)"/>
-            </marker>
-            <marker id="mw-c2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-              <path d="M0,1 L9,5 L0,9 z" fill="#dc2626"/>
-            </marker>
-          </defs>
-
-          <!-- HV transformer secondary coil -->
-          <text class="th-only" x="18" y="40" fill="var(--primary-dark)" font-weight="700">หม้อแปลงแรงสูง</text>
-          <text class="en-only" x="18" y="40" fill="var(--primary-dark)" font-weight="700">HV transformer</text>
-          <path d="M70,70 a11,11 0 0 1 0,22 a11,11 0 0 1 0,22 a11,11 0 0 1 0,22 a11,11 0 0 1 0,22 a11,11 0 0 1 0,22"
-                fill="none" stroke="var(--text)" stroke-width="2"/>
-          <text x="56" y="130" text-anchor="end" fill="#b91c1c" font-weight="700">ac 2,000V</text>
-          <line x1="70" y1="70" x2="70" y2="58" stroke="var(--text)" stroke-width="2"/>
-          <line x1="70" y1="58" x2="180" y2="58" stroke="var(--text)" stroke-width="2"/>
-          <line x1="70" y1="180" x2="70" y2="236" stroke="var(--text)" stroke-width="2"/>
-          <!-- chassis ground of secondary -->
-          <line x1="46" y1="236" x2="94" y2="236" stroke="var(--text)" stroke-width="2.4"/>
-          <line x1="54" y1="242" x2="86" y2="242" stroke="var(--text)" stroke-width="2"/>
-          <line x1="62" y1="248" x2="78" y2="248" stroke="var(--text)" stroke-width="1.6"/>
-          <text class="th-only" x="24" y="270" fill="var(--text-light)">ปลายนี้ยึดติดโครงเหล็ก</text>
-          <text class="en-only" x="14" y="270" fill="var(--text-light)">this end bonds to the chassis</text>
-
-          <!-- HV fuse -->
-          <rect x="180" y="48" width="44" height="20" rx="4" fill="var(--bg)" stroke="var(--text)" stroke-width="1.5"/>
-          <text x="202" y="88" text-anchor="middle" fill="var(--text)" font-weight="700">HV fuse</text>
-          <line x1="224" y1="58" x2="300" y2="58" stroke="var(--text)" stroke-width="2"/>
-
-          <!-- HV capacitor (series) -->
-          <line x1="300" y1="48" x2="300" y2="68" stroke="var(--text)" stroke-width="3"/>
-          <line x1="312" y1="48" x2="312" y2="68" stroke="var(--text)" stroke-width="3"/>
-          <text x="306" y="34" text-anchor="middle" fill="var(--primary-dark)" font-weight="700">HV C  0.9–1.1 µF</text>
-          <line x1="312" y1="58" x2="470" y2="58" stroke="var(--text)" stroke-width="2"/>
-          <circle cx="400" cy="58" r="4" fill="var(--text)"/>
-
-          <!-- bleeder resistor across cap -->
-          <path d="M296,86 h20 v14 h-20 z" fill="none" stroke="var(--text-light)" stroke-width="1.4"/>
-          <line x1="296" y1="93" x2="286" y2="93" stroke="var(--text-light)" stroke-width="1.4"/>
-          <line x1="316" y1="93" x2="326" y2="93" stroke="var(--text-light)" stroke-width="1.4"/>
-          <line x1="286" y1="93" x2="286" y2="58" stroke="var(--text-light)" stroke-width="1.4"/>
-          <line x1="326" y1="93" x2="326" y2="58" stroke="var(--text-light)" stroke-width="1.4"/>
-          <text class="th-only" x="306" y="118" text-anchor="middle" fill="var(--text-light)">Bleeder R (ห้ามไว้ใจ)</text>
-          <text class="en-only" x="306" y="118" text-anchor="middle" fill="var(--text-light)">Bleeder R (never trust it)</text>
-
-          <!-- HV diode down to chassis -->
-          <line x1="400" y1="58" x2="400" y2="150" stroke="var(--text)" stroke-width="2"/>
-          <path d="M388,150 L412,150 L400,172 z" fill="none" stroke="var(--text)" stroke-width="2"/>
-          <line x1="386" y1="172" x2="414" y2="172" stroke="var(--text)" stroke-width="2.4"/>
-          <text x="424" y="166" fill="var(--primary-dark)" font-weight="700">HV diode</text>
-          <line x1="400" y1="172" x2="400" y2="236" stroke="var(--text)" stroke-width="2"/>
-          <line x1="376" y1="236" x2="424" y2="236" stroke="var(--text)" stroke-width="2.4"/>
-          <line x1="384" y1="242" x2="416" y2="242" stroke="var(--text)" stroke-width="2"/>
-          <line x1="392" y1="248" x2="408" y2="248" stroke="var(--text)" stroke-width="1.6"/>
-          <text class="th-only" x="352" y="270" fill="var(--text-light)">ขันน็อตยึดโครงเหล็ก = กราวด์</text>
-          <text class="en-only" x="352" y="270" fill="var(--text-light)">bolted to the chassis = ground</text>
-
-          <!-- magnetron -->
-          <rect x="470" y="30" width="150" height="120" rx="14" fill="#fef2f2" stroke="#dc2626" stroke-width="1.8"/>
-          <text x="545" y="58" text-anchor="middle" fill="#b91c1c" font-weight="700" font-size="13">MAGNETRON</text>
-          <text x="545" y="80" text-anchor="middle" fill="var(--text)">FA / F</text>
-          <text class="th-only" x="545" y="102" text-anchor="middle" fill="var(--text-light)">ไส้หลอด 3V จากขดจุดไส้</text>
-          <text class="en-only" x="545" y="102" text-anchor="middle" fill="var(--text-light)">3V filament winding</text>
-          <text x="545" y="126" text-anchor="middle" fill="#b91c1c" font-weight="700">2,450 MHz</text>
-          <line x1="620" y1="90" x2="700" y2="90" stroke="#dc2626" stroke-width="2" marker-end="url(#mw-c2)"/>
-          <text class="th-only" x="660" y="78" text-anchor="middle" fill="#b91c1c" font-weight="700">คลื่นไมโครเวฟ</text>
-          <text class="en-only" x="660" y="78" text-anchor="middle" fill="#b91c1c" font-weight="700">microwaves</text>
-          <!-- magnetron chassis return -->
-          <line x1="545" y1="150" x2="545" y2="236" stroke="var(--text)" stroke-width="2"/>
-          <line x1="521" y1="236" x2="569" y2="236" stroke="var(--text)" stroke-width="2.4"/>
-          <line x1="529" y1="242" x2="561" y2="242" stroke="var(--text)" stroke-width="2"/>
-          <line x1="537" y1="248" x2="553" y2="248" stroke="var(--text)" stroke-width="1.6"/>
-
-          <!-- stroke 1: charging path (dashed, alongside the wire then down through the diode) -->
-          <polyline points="124,42 386,42 386,138" fill="none" stroke="var(--primary)" stroke-width="2.2"
-                    stroke-dasharray="6 4" marker-end="url(#mw-c1)"/>
-          <!-- stroke 2: firing path (below the wire, into the magnetron) -->
-          <polyline points="112,74 462,74" fill="none" stroke="#dc2626" stroke-width="2.2" marker-end="url(#mw-c2)"/>
-
-          <!-- stroke legend -->
-          <line x1="60" y1="298" x2="86" y2="298" stroke="var(--primary)" stroke-width="2.5" stroke-dasharray="6 4"/>
-          <text class="th-only" x="96" y="302" fill="var(--primary)" font-weight="700">จังหวะ 1 — ไดโอดนำกระแส ชาร์จไฟ 2,000V เก็บไว้ใน C</text>
-          <text class="en-only" x="96" y="302" fill="var(--primary)" font-weight="700">Stroke 1 — the diode conducts, charging C to 2,000V</text>
-          <line x1="60" y1="324" x2="86" y2="324" stroke="#dc2626" stroke-width="2.5"/>
-          <text class="th-only" x="96" y="328" fill="#dc2626" font-weight="700">จังหวะ 2 — ไดโอดบล็อก หม้อแปลง + C ต่ออนุกรมกัน = 4,000V DC เข้าแมกนีตรอน</text>
-          <text class="en-only" x="96" y="328" fill="#dc2626" font-weight="700">Stroke 2 — the diode blocks; transformer + C in series = 4,000V DC into the magnetron</text>
-        </svg>
-      </div>
+      <p class="th-only" style="font-size:.9rem;color:var(--text-light);margin-top:.6rem">🔗 ดูวงจรทวีแรงดันแบบเดินไฟทีละจังหวะได้ที่ <strong>ขั้นที่ 8–9 ของวงจรโต้ตอบด้านบน</strong></p>
+      <p class="en-only" style="font-size:.9rem;color:var(--text-light);margin-top:.6rem">🔗 Walk the doubler stroke by stroke in <strong>steps 8–9 of the interactive circuit above</strong></p>
 
       <div class="mw-zones" style="grid-template-columns:1fr 1fr; margin-top:1.1rem;">
         <div class="mw-zone" style="text-align:left;">
@@ -921,5 +817,6 @@
 <footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
 <script>const CURRENT_PAGE='repair-microwave';</script>
 <script src="js/nav.js"></script>
+<script src="js/mw-circuit.js"></script>
 </body>
 </html>
