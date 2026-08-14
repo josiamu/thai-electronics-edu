@@ -258,102 +258,99 @@
     <div class="card">
       <p class="th-only">วงจรหลักของเครื่องทำน้ำอุ่นนั้น<strong>ง่ายกว่าที่คิดมาก</strong> — มันคือ<strong>วงจรอนุกรมวงจรเดียว</strong> ที่มีสวิตช์นิรภัยหลายตัวต่อเรียงกันอยู่ กว่าไฟจะไปถึงฮีตเตอร์ได้ต้อง<strong>ผ่านทุกด่านครบทุกตัว</strong> ถ้าตัวใดตัวหนึ่งเปิดวงจร ฮีตเตอร์ก็ไม่ทำงาน นี่แหละคือหัวใจของการไล่ซ่อม: <strong>หาให้เจอว่าขาดที่ด่านไหน</strong></p>
       <p class="en-only">The main circuit is <strong>far simpler than people expect</strong> — it is <strong>one series loop</strong> with several safety switches chained along it. Power reaches the element only after passing <strong>every</strong> one of them; if any single switch opens, there is no heat. That is the whole diagnostic job: <strong>find which link is broken.</strong></p>
+      <p class="th-only" style="margin-top:.6rem">กดปุ่มขั้นที่ 1–7 เพื่อไล่ดูทีละด่าน · กดปุ่ม <strong>🚿 น้ำไหล/ปิดน้ำ</strong> เพื่อดูว่าฟลุกซ์สวิตช์ตัดวงจรอย่างไร · และ <strong>เลือกอาการเสีย</strong> จากช่องด้านล่างเพื่อฝึกไล่หาด่านที่ขาดจากป้ายจุดวัดแถวบน</p>
+      <p class="en-only" style="margin-top:.6rem">Use buttons 1–7 to walk the chain link by link, press <strong>🚿 water on/off</strong> to see how the flow switch breaks the circuit, and pick a <strong>fault</strong> below to practise finding the broken link from the probe badges along the top.</p>
 
-      <div style="text-align:center; margin-top:1rem; overflow-x:auto;">
-        <svg viewBox="0 0 900 290" style="min-width:620px;max-width:100%;height:auto;font-family:inherit;font-size:11.5px;" role="img"
-             aria-label="Water heater series circuit: live through ELCB, power switch, flow switch, thermostat and thermal cutout to the element, then back to neutral, with an earth wire on the body">
+      <div class="bs-wrap" id="wh-circuit">
+        <div class="bs-tabs">
+          <button class="bs-tab" data-step="1"><span class="bs-n">1</span><span class="th-only">ภาพรวมวงจรอนุกรม</span><span class="en-only">One series loop</span></button>
+          <button class="bs-tab" data-step="2"><span class="bs-n">2</span><span class="th-only">ELCB</span><span class="en-only">ELCB</span></button>
+          <button class="bs-tab" data-step="3"><span class="bs-n">3</span><span class="th-only">สวิตช์เปิด-ปิด</span><span class="en-only">Power switch</span></button>
+          <button class="bs-tab" data-step="4"><span class="bs-n">4</span><span class="th-only">ฟลุกซ์สวิตช์ (NO)</span><span class="en-only">Flow switch (NO)</span></button>
+          <button class="bs-tab" data-step="5"><span class="bs-n">5</span><span class="th-only">เทอร์โมสตัท</span><span class="en-only">Thermostat</span></button>
+          <button class="bs-tab" data-step="6"><span class="bs-n">6</span><span class="th-only">เทอร์มอลคัตเอาต์</span><span class="en-only">Thermal cutout</span></button>
+          <button class="bs-tab" data-step="7"><span class="bs-n">7</span><span class="th-only">ฮีตเตอร์ + สายดิน</span><span class="en-only">Element + earth</span></button>
+        </div>
 
-          <!-- L in -->
-          <text x="14" y="75" fill="#dc2626" font-weight="700" font-size="13">L</text>
-          <line x1="30" y1="70" x2="62" y2="70" stroke="#dc2626" stroke-width="2.5"/>
+        <canvas id="whc-canvas" class="bs-canvas" style="aspect-ratio:940/420;"></canvas>
 
-          <!-- ELCB -->
-          <rect x="62" y="50" width="74" height="40" rx="7" fill="#fef2f2" stroke="#dc2626" stroke-width="1.7"/>
-          <text x="99" y="68" text-anchor="middle" fill="#b91c1c" font-weight="700">ELCB</text>
-          <text class="th-only" x="99" y="83" text-anchor="middle" fill="var(--text-light)">ตัดไฟรั่ว</text>
-          <text class="en-only" x="99" y="83" text-anchor="middle" fill="var(--text-light)">leakage</text>
-          <line x1="136" y1="70" x2="172" y2="70" stroke="#dc2626" stroke-width="2.5"/>
+        <div class="bs-nav" style="flex-wrap:wrap;">
+          <button id="whc-prev" class="bs-navbtn">◀ <span class="th-only">ก่อนหน้า</span><span class="en-only">Prev</span></button>
+          <button id="whc-play" class="bs-navbtn"><span class="th-only">▶ เล่นอัตโนมัติ</span><span class="en-only">▶ Auto-play</span></button>
+          <button id="whc-water" class="bs-navbtn">
+            <span class="whc-on">🚿 <span class="th-only">น้ำไหลอยู่</span><span class="en-only">Water on</span></span>
+            <span class="whc-off">🚱 <span class="th-only">ปิดน้ำอยู่</span><span class="en-only">Water off</span></span>
+          </button>
+          <select id="whc-fault" class="bs-select" aria-label="fault mode">
+            <option value="ok">✅ ปกติ — Normal</option>
+            <option value="leak">🔴 ฮีตเตอร์รั่ว → ELCB ตัด — element leaking</option>
+            <option value="flowbad">🔵 ฟลุกซ์สวิตช์ไม่ทำงาน — flow switch stuck open</option>
+            <option value="stat">🟠 เทอร์โมสตัทตัดค้าง — thermostat stuck open</option>
+            <option value="tco">🟣 เทอร์มอลคัตเอาต์ขาด — thermal cutout open</option>
+            <option value="element">🟡 ฮีตเตอร์ขาด — element open</option>
+          </select>
+          <button id="whc-next" class="bs-navbtn"><span class="th-only">ถัดไป</span><span class="en-only">Next</span> ▶</button>
+        </div>
 
-          <!-- power switch (open) -->
-          <circle cx="172" cy="70" r="3.5" fill="var(--text)"/>
-          <line x1="172" y1="70" x2="222" y2="52" stroke="var(--text)" stroke-width="2.2"/>
-          <circle cx="228" cy="70" r="3.5" fill="var(--text)"/>
-          <text class="th-only" x="200" y="106" text-anchor="middle" fill="var(--text)" font-weight="700">สวิตช์เปิด-ปิด</text>
-          <text class="en-only" x="200" y="106" text-anchor="middle" fill="var(--text)" font-weight="700">Power switch</text>
-          <line x1="228" y1="70" x2="278" y2="70" stroke="#dc2626" stroke-width="2.5"/>
+        <div class="bs-faultnote">
+          <span class="th-only">🔧 กำลังจำลองเครื่องที่เสียอยู่ — ดูป้ายจุดวัดแถวบน <b>จุดแรกที่เปลี่ยนจาก 220V เป็น 0V คือด่านที่ขาด</b></span>
+          <span class="en-only">🔧 A faulty unit is being simulated — read the probe badges along the top: <b>the first one that drops from 220 V to 0 V is the broken link</b></span>
+        </div>
 
-          <!-- flow switch (NO, open) -->
-          <circle cx="278" cy="70" r="3.5" fill="var(--text)"/>
-          <line x1="278" y1="70" x2="330" y2="52" stroke="var(--secondary)" stroke-width="2.6"/>
-          <circle cx="336" cy="70" r="3.5" fill="var(--text)"/>
-          <text class="th-only" x="307" y="106" text-anchor="middle" fill="var(--secondary)" font-weight="700">ฟลุกซ์สวิตช์ (NO)</text>
-          <text class="en-only" x="307" y="106" text-anchor="middle" fill="var(--secondary)" font-weight="700">Flow switch (NO)</text>
-          <text class="th-only" x="307" y="122" text-anchor="middle" fill="var(--text-light)">ต่อเมื่อมีน้ำไหล</text>
-          <text class="en-only" x="307" y="122" text-anchor="middle" fill="var(--text-light)">closes when water flows</text>
-          <line x1="336" y1="70" x2="386" y2="70" stroke="#dc2626" stroke-width="2.5"/>
+        <div class="bs-desc" data-step="1">
+          <p class="th-only"><strong>ขั้นที่ 1 — ทั้งเครื่องคือวงจรอนุกรมวงจรเดียว:</strong> ไฟ L ต้องผ่าน <strong>5 ด่านเรียงกัน</strong> (ELCB → สวิตช์เปิด-ปิด → ฟลุกซ์สวิตช์ → เทอร์โมสตัท → เทอร์มอลคัตเอาต์) แล้วจึงถึงฮีตเตอร์ และไหลกลับออกทาง N — <strong>ถ้าด่านใดด่านหนึ่งเปิดวงจร ฮีตเตอร์ไม่ทำงานทันที</strong>
+            <br>ป้ายแถวบนคือจุดวัด ให้ไล่จากซ้ายไปขวา <strong>จุดแรกที่เปลี่ยนจาก 220V เป็น 0V คือด่านที่ขาด</strong> — นี่คือวิธีไล่ซ่อมเครื่องนี้ทั้งหมด ลองเลือกอาการเสียในช่องด้านบนแล้วดูว่าไฟหายที่ไหน</p>
+          <p class="en-only"><strong>Step 1 — the whole appliance is one series loop:</strong> the live wire must clear <strong>five links in a row</strong> (ELCB → power switch → flow switch → thermostat → thermal cutout) before it reaches the element and returns through N. <strong>If any one of them opens, the element stops.</strong>
+            <br>The badges along the top are probe points. Read them left to right: <strong>the first one that drops from 220 V to 0 V is the broken link</strong> — that is the entire diagnostic method for this appliance. Pick a fault above and watch where the voltage dies.</p>
+        </div>
 
-          <!-- thermostat (NC, closed) -->
-          <circle cx="386" cy="70" r="3.5" fill="var(--text)"/>
-          <line x1="386" y1="70" x2="438" y2="64" stroke="var(--text)" stroke-width="2.2"/>
-          <circle cx="438" cy="70" r="3.5" fill="var(--text)"/>
-          <text class="th-only" x="412" y="106" text-anchor="middle" fill="var(--text)" font-weight="700">เทอร์โมสตัท (NC)</text>
-          <text class="en-only" x="412" y="106" text-anchor="middle" fill="var(--text)" font-weight="700">Thermostat (NC)</text>
-          <line x1="438" y1="70" x2="486" y2="70" stroke="#dc2626" stroke-width="2.5"/>
+        <div class="bs-desc" data-step="2">
+          <p class="th-only"><strong>ขั้นที่ 2 — ELCB คือด่านแรกและเป็นด่านชีวิต:</strong> มันไม่ได้วัดว่ากระแสมากหรือน้อย แต่<strong>เทียบกระแสในสาย L กับ N ว่าเท่ากันไหม</strong> (เส้นประที่ลากผ่านแกนวงแหวนในภาพ) ปกติกระแสไปเท่าไหร่ต้องกลับเท่านั้น
+            <br>ถ้าฮีตเตอร์รั่ว กระแสส่วนหนึ่งจะไหลลงตัวถัง/สายดิน/ตัวคนแทนที่จะกลับทาง N ผลต่างเกิน ~30 mA เมื่อไหร่ <strong>ELCB ตัดใน 0.04 วินาที</strong>
+            <br><strong style="color:#dc2626;">ELCB ตัดบ่อย = มันทำงานถูกต้อง ห้ามลัดข้ามหรือถอดออกเด็ดขาด</strong> (ลองเลือกอาการ "ฮีตเตอร์รั่ว" ดู — ไฟจะดับตั้งแต่ด่านแรกเลย) · ดูซิมโหมด ELCB ด้านบนประกอบ</p>
+          <p class="en-only"><strong>Step 2 — the ELCB is the first link and the life-saving one:</strong> it does not measure how much current flows, it <strong>compares the live and neutral currents</strong> (the dashed lines through the toroid in the diagram). Whatever goes out must come back.
+            <br>If the element leaks, part of that current returns through the body, the earth wire or a person instead of N. Once the imbalance passes ~30 mA the <strong>ELCB cuts within 0.04 s</strong>.
+            <br><strong style="color:#dc2626;">Frequent tripping means it is working — never bypass or remove it</strong> (try the "element leaking" fault: the voltage dies at the very first link). See the ELCB mode in the simulator above.</p>
+        </div>
 
-          <!-- thermal cutout (NC, closed) -->
-          <circle cx="486" cy="70" r="3.5" fill="var(--text)"/>
-          <line x1="486" y1="70" x2="538" y2="64" stroke="var(--text)" stroke-width="2.2"/>
-          <circle cx="538" cy="70" r="3.5" fill="var(--text)"/>
-          <line x1="512" y1="76" x2="512" y2="124" stroke="var(--border)" stroke-width="1"/>
-          <text class="th-only" x="512" y="138" text-anchor="middle" fill="var(--text)" font-weight="700">เทอร์มอลคัตเอาต์ (NC)</text>
-          <text class="en-only" x="512" y="138" text-anchor="middle" fill="var(--text)" font-weight="700">Thermal cutout (NC)</text>
-          <line x1="538" y1="70" x2="606" y2="70" stroke="#dc2626" stroke-width="2.5"/>
+        <div class="bs-desc" data-step="3">
+          <p class="th-only"><strong>ขั้นที่ 3 — สวิตช์เปิด-ปิด / เลือกกำลัง:</strong> ด่านนี้คือสิ่งที่ผู้ใช้กดเอง บางรุ่นเป็นสวิตช์ธรรมดา บางรุ่นเป็นสวิตช์เลือกกำลัง (ต่ำ/สูง) ที่เลือกว่าจะจ่ายไฟให้ขดฮีตเตอร์กี่ชุด
+            <br><span style="color:var(--text-light);">รุ่นดิจิทัลจะไม่ได้ตัดต่อกำลังด้วยหน้าสัมผัส แต่ใช้ <a href="thyristor.html">ไทริสเตอร์</a> หั่นคลื่นไฟแทน — ปรับกำลังได้ละเอียดเป็นขั้นๆ โดยไม่มีหน้าสัมผัสให้ไหม้</span></p>
+          <p class="en-only"><strong>Step 3 — the power switch / power selector:</strong> this is the link the user operates. Some models use a plain on-off switch, others a low/high selector that decides how many element sections get fed.
+            <br><span style="color:var(--text-light);">Digital models do not switch power with contacts at all — they use a <a href="thyristor.html">thyristor</a> to chop the waveform, giving fine control with no contacts to burn.</span></p>
+        </div>
 
-          <!-- heater element -->
-          <rect x="606" y="48" width="150" height="44" rx="7" fill="var(--bg)" stroke="var(--text)" stroke-width="1.8"/>
-          <path d="M620,70 l12,-12 l16,24 l16,-24 l16,24 l16,-24 l16,24 l12,-12" fill="none" stroke="var(--text)" stroke-width="2"/>
-          <text class="th-only" x="681" y="34" text-anchor="middle" fill="var(--primary-dark)" font-weight="700">ฮีตเตอร์ 3,500 – 6,000 W</text>
-          <text class="en-only" x="681" y="34" text-anchor="middle" fill="var(--primary-dark)" font-weight="700">Element 3,500 – 6,000 W</text>
-          <line x1="756" y1="70" x2="820" y2="70" stroke="#dc2626" stroke-width="2.5"/>
+        <div class="bs-desc" data-step="4">
+          <p class="th-only"><strong>ขั้นที่ 4 — ฟลุกซ์สวิตช์ คือด่านเดียวที่เป็น NO:</strong> ที่เหลือทุกตัวเป็น NC (ปกติปิด) แต่ตัวนี้ <strong>ปกติเปิด</strong> แรงดันน้ำที่ไหลผ่านจะดันไดอะแฟรมให้หน้าสัมผัสต่อวงจร — <strong>ไม่มีน้ำไหล = ฮีตเตอร์ไม่มีทางติด</strong> นี่คือระบบกันฮีตเตอร์ไหม้แห้ง
+            <br><strong>กดปุ่ม 🚿 ด้านบนเพื่อปิดน้ำดู</strong> — วงจรจะขาดที่ด่านนี้ทันที และนั่นคือ<strong>สภาพปกติ ไม่ใช่ของเสีย</strong>
+            <br><strong style="color:#dc2626;">กับดักตอนวัด:</strong> วัดฟลุกซ์สวิตช์ตอนน้ำไม่ไหลแล้วขึ้น OL <strong>อย่าเพิ่งเปลี่ยน</strong> มันถูกต้องแล้ว · แต่ถ้าเปิดน้ำเต็มที่แล้วยังไม่ต่อ = ไดอะแฟรมแข็ง ตะกรันอุด หรือแรงดันน้ำไม่พอ (ลองเลือกอาการนั้นดู)</p>
+          <p class="en-only"><strong>Step 4 — the flow switch is the only NO link:</strong> every other link is NC (normally closed); this one is <strong>normally open</strong>. Water pressure pushes a diaphragm that closes the contact — <strong>no flow, no heat, ever</strong>. That is the dry-fire protection.
+            <br><strong>Press the 🚿 button above to turn the water off</strong> — the loop breaks right here, and that is <strong>the correct state, not a fault</strong>.
+            <br><strong style="color:#dc2626;">The measuring trap:</strong> if you test the flow switch with the water off and get OL, <strong>do not replace it</strong> — that is correct. But if it still will not close with the tap wide open, the diaphragm is stiff, scale is blocking it, or the supply pressure is too low (try that fault).</p>
+        </div>
 
-          <!-- return to N -->
-          <line x1="820" y1="70" x2="820" y2="216" stroke="var(--primary)" stroke-width="2.5"/>
-          <line x1="30" y1="216" x2="820" y2="216" stroke="var(--primary)" stroke-width="2.5"/>
-          <text x="14" y="221" fill="var(--primary)" font-weight="700" font-size="13">N</text>
+        <div class="bs-desc" data-step="5">
+          <p class="th-only"><strong>ขั้นที่ 5 — เทอร์โมสตัท (NC, กลับเองได้):</strong> เฝ้าอุณหภูมิน้ำในหม้อต้ม ถ้าร้อนเกินค่าที่ตั้งไว้ก็เปิดวงจรตัดไฟฮีตเตอร์ พอเย็นลงมันจะ<strong>ต่อกลับเอง</strong> (auto-reset)
+            <br><span style="color:var(--text-light);">อาการ "ร้อนๆ หายๆ ตัดเป็นช่วงระหว่างอาบ" มักมาจากตัวนี้ทำงานถี่ผิดปกติ ซึ่งต้นเหตุจริงมักเป็น<strong>น้ำไหลอ่อน</strong>หรือ<strong>ตะกรันหุ้มฮีตเตอร์</strong>จนความร้อนระบายออกไปกับน้ำไม่ทัน — แก้ที่ต้นเหตุ อย่าไปเปลี่ยนเทอร์โมสตัทอย่างเดียว</span></p>
+          <p class="en-only"><strong>Step 5 — the thermostat (NC, self-resetting):</strong> it watches the water temperature in the chamber and opens the circuit if it exceeds the setpoint, then <strong>closes again on its own</strong> once things cool.
+            <br><span style="color:var(--text-light);">"It cycles hot and cold during a shower" usually means this contact is cycling far too often, and the real cause is normally <strong>weak flow</strong> or <strong>scale insulating the element</strong> so the heat cannot leave with the water. Fix the cause, not just the thermostat.</span></p>
+        </div>
 
-          <!-- earth on the body -->
-          <rect x="596" y="140" width="170" height="34" rx="7" fill="none" stroke="#16a34a" stroke-width="1.6" stroke-dasharray="6 4"/>
-          <text class="th-only" x="681" y="161" text-anchor="middle" fill="#16a34a" font-weight="700">ตัวถังโลหะ + ท่อน้ำ</text>
-          <text class="en-only" x="681" y="161" text-anchor="middle" fill="#16a34a" font-weight="700">metal body + pipework</text>
-          <line x1="681" y1="92" x2="681" y2="140" stroke="#16a34a" stroke-width="1.6" stroke-dasharray="4 4"/>
-          <line x1="681" y1="174" x2="681" y2="240" stroke="#16a34a" stroke-width="2.4"/>
-          <line x1="655" y1="240" x2="707" y2="240" stroke="#16a34a" stroke-width="2.6"/>
-          <line x1="663" y1="248" x2="699" y2="248" stroke="#16a34a" stroke-width="2.2"/>
-          <line x1="672" y1="256" x2="690" y2="256" stroke="#16a34a" stroke-width="1.8"/>
-          <text class="th-only" x="720" y="252" fill="#16a34a" font-weight="700">สายดิน (G)</text>
-          <text class="en-only" x="720" y="252" fill="#16a34a" font-weight="700">Earth (G)</text>
+        <div class="bs-desc" data-step="6">
+          <p class="th-only"><strong>ขั้นที่ 6 — เทอร์มอลคัตเอาต์ (NC, ด่านสุดท้ายก่อนฮีตเตอร์):</strong> เป็นตัวสำรองของเทอร์โมสตัท ทำงานที่อุณหภูมิสูงกว่ามาก และส่วนใหญ่ <strong>ตัดแล้วตัดเลย ไม่กลับเอง</strong> (บางรุ่นมีปุ่มรีเซ็ตให้กด)
+            <br><strong style="color:#dc2626;">ถ้าเจอตัวนี้ขาด แปลว่าเครื่องเคยร้อนจัดผิดปกติมาก่อนแน่นอน</strong> — ห้ามเปลี่ยนแล้วจบ ต้องหาสาเหตุก่อน (น้ำไหลอ่อน ตะกรัน เทอร์โมสตัทเสีย) ไม่งั้นตัวใหม่ก็ขาดซ้ำหรือเกิดเรื่องใหญ่กว่าเดิม</p>
+          <p class="en-only"><strong>Step 6 — the thermal cutout (NC, the last link before the element):</strong> the thermostat's backup. It trips at a much higher temperature and usually <strong>stays open for good</strong> (some models have a reset button).
+            <br><strong style="color:#dc2626;">Finding this one open proves the unit really did overheat</strong> — never just replace it. Find the cause first (weak flow, scale, a failed thermostat) or the new one will open again, or something worse will happen.</p>
+        </div>
 
-          <!-- leakage note -->
-          <text class="th-only" x="30" y="252" fill="var(--text-light)">ถ้าฮีตเตอร์รั่ว → กระแสไหลลงสายดินแทนที่จะกลับทาง N → ELCB จับได้และตัดไฟทันที</text>
-          <text class="en-only" x="30" y="252" fill="var(--text-light)">If the element leaks, current returns via earth instead of N — the ELCB sees the imbalance and trips</text>
-          <line x1="99" y1="90" x2="99" y2="232" stroke="#dc2626" stroke-width="1.3" stroke-dasharray="3 3"/>
-        </svg>
-      </div>
-
-      <div class="info-box" style="margin-top:1rem;">
-        <strong class="th-only">💡 อ่านวงจรนี้ยังไง</strong><strong class="en-only">💡 How to read this circuit</strong>
-        <ul class="content-list th-only" style="margin:.4rem 0 0">
-          <li>ไฟ L ต้องผ่าน <strong>5 ด่านเรียงกัน</strong> — ELCB → สวิตช์เปิดปิด → ฟลุกซ์สวิตช์ → เทอร์โมสตัท → เทอร์มอลคัตเอาต์ — แล้วจึงถึงฮีตเตอร์ และกลับออกทาง N</li>
-          <li><strong>ฟลุกซ์สวิตช์เป็นด่านเดียวที่เป็น NO</strong> (ปกติเปิด) ที่เหลือเป็น NC ทั้งหมด ดังนั้นตอนวัดขณะน้ำไม่ไหล มันต้องขึ้น OL ถือว่าปกติ อย่าเพิ่งไปเปลี่ยนมัน</li>
-          <li><strong>สายดินไม่ได้อยู่ในวงจรทำงาน</strong> — มันเป็นเส้นสำรองสำหรับกระแสรั่วโดยเฉพาะ วงจรจะทำงานได้ตามปกติแม้ไม่มีสายดิน (แต่ผู้ใช้จะไม่มีอะไรป้องกันเลย)</li>
-          <li>รุ่นดิจิทัลจะแทรก <strong>ไทริสเตอร์คั่นระหว่างด่านสุดท้ายกับฮีตเตอร์</strong> เพื่อหั่นคลื่นไฟให้กำลังลดลงตามอุณหภูมิที่ตั้งไว้ — โครงวงจรที่เหลือยังเหมือนเดิมทุกอย่าง</li>
-        </ul>
-        <ul class="content-list en-only" style="margin:.4rem 0 0">
-          <li>L must clear <strong>five links in a row</strong> — ELCB → power switch → flow switch → thermostat → thermal cutout — before reaching the element and returning via N.</li>
-          <li><strong>Only the flow switch is NO</strong> (normally open); all the others are NC. So with the water off it should read OL — that is correct, don't condemn it.</li>
-          <li><strong>The earth wire is not part of the working circuit</strong> — it is a dedicated return for leakage current. The heater runs perfectly well without it, leaving the user with no protection at all.</li>
-          <li>Digital models insert a <strong>thyristor between the last safety switch and the element</strong>, chopping the waveform to trim the power to the set temperature. Everything else stays exactly the same.</li>
-        </ul>
+        <div class="bs-desc" data-step="7">
+          <p class="th-only"><strong>ขั้นที่ 7 — ฮีตเตอร์ และสายดินที่ไม่ได้อยู่ในวงจร:</strong> เมื่อครบทุกด่าน กระแสจึงไหลผ่านขดลวดความร้อนแล้วกลับออกทาง N — กำลังไฟ 3,500–6,000W กินกระแส 16–27A จึงต้องใช้สายและเบรกเกอร์ตามตารางท้ายบท
+            <br><strong>สังเกตเส้นประสีเขียวจากตัวถังลงดิน:</strong> มัน<strong>ไม่ได้อยู่ในวงจรทำงาน</strong> เครื่องจะทำงานได้ตามปกติแม้ไม่มีสายดิน — แต่ถ้าฮีตเตอร์รั่วขึ้นมา จะไม่มีทางให้กระแสรั่วไหลลงดิน <strong>ตัวถังจะกลายเป็นตัวนำที่รอคนมาแตะ</strong> และ ELCB อาจไม่ทันได้ทำงานจนกว่าจะมีคนเป็นทางผ่าน
+            <br><span style="color:var(--text-light);">รุ่นดิจิทัลจะแทรก <a href="thyristor.html">ไทริสเตอร์</a> คั่นระหว่างด่านสุดท้ายกับฮีตเตอร์ เพื่อหั่นคลื่นไฟให้กำลังลดลงตามอุณหภูมิที่ตั้งไว้ — โครงวงจรที่เหลือเหมือนเดิมทุกอย่าง</span></p>
+          <p class="en-only"><strong>Step 7 — the element, and the earth wire that is not in the circuit:</strong> once every link is closed the current flows through the heating coil and back via N. At 3,500–6,000 W it draws 16–27 A, which is why the cable and breaker table at the end of this lesson matters.
+            <br><strong>Notice the dashed green wire from the body to earth:</strong> it is <strong>not part of the working circuit</strong> — the heater runs perfectly without it. But if the element ever leaks, there is no path for that current to drain away: <strong>the casing becomes live and waits for someone to touch it</strong>, and the ELCB may not see an imbalance until a person becomes the path.
+            <br><span style="color:var(--text-light);">Digital models insert a <a href="thyristor.html">thyristor</a> between the last safety link and the element, chopping the waveform to trim the power to the set temperature. Everything else stays the same.</span></p>
+        </div>
       </div>
     </div>
   </div>
@@ -552,5 +549,6 @@
 <script>const CURRENT_PAGE='repair-water-heater';</script>
 <script src="js/nav.js"></script>
 <script src="js/water-heater-sim.js"></script>
+<script src="js/wh-circuit.js"></script>
 </body>
 </html>

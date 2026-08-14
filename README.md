@@ -71,7 +71,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | เตาแม่เหล็กไฟฟ้า | Induction Stove | `induction-stove.html` (มีวงจรโต้ตอบ 8 ขั้น + จำลองอาการเสีย 6 แบบ + ตารางจุดวัด TP1–TP5) |
 | ภาคจ่ายไฟสวิตชิ่ง (LNK304) | Switching PSU (LNK304) | `switching-psu.html` (มีวงจรโต้ตอบทีละขั้น 8 ขั้น + จำลองอาการเสีย) |
 | เตาไมโครเวฟ | Microwave Oven | `microwave.html` (วงจร 4 โซน + วงจรรวมแบบง่าย • เซฟตี้ประตู 3 ตัว • ทวีแรงดัน 4,000V • ตารางจุดวัด Cold Test) |
-| เครื่องทำน้ำอุ่น | Water Heater | `water-heater.html` (ทำน้ำร้อนทันที • ฟลุกซ์สวิตช์ • วงจรอย่างง่าย • ELCB กับสายดิน + ซิม 2 โหมด: อุณหภูมิน้ำตาม ΔT และไฟรั่ว/ELCB) |
+| เครื่องทำน้ำอุ่น | Water Heater | `water-heater.html` (ทำน้ำร้อนทันที • ฟลุกซ์สวิตช์ • วงจรอย่างง่าย • ELCB กับสายดิน + ซิม 2 โหมด: อุณหภูมิน้ำตาม ΔT และไฟรั่ว/ELCB + วงจรโต้ตอบ 7 ขั้น) |
 
 **งานปฏิบัติ / Practical**
 | ไทย | English | หน้า |
@@ -180,6 +180,7 @@ git push
 ├── js/bjt-circuit.js       — Interactive step-by-step: a real 5V circuit (R_B → NPN → LED + R_C, 6 steps, HIGH/LOW toggle)
 ├── js/smps-steps.js        — Interactive step-by-step: LNK304 switching PSU (8 steps, 6 fault modes, TP1–TP4 readouts)
 ├── js/stove-steps.js       — Interactive step-by-step: induction-cooker board (8 steps, 6 fault modes, ZVS resonant waveform, TP1–TP5 readouts)
+├── js/wh-circuit.js        — Interactive step-by-step: water-heater safety chain (7 steps, 6 fault modes, water on/off, 220V/0V probe badges)
 ├── js/water-heater-sim.js  — Instant water heater sim (ΔT vs power/flow/inlet temperature, plus an earth-leakage mode where the ELCB trips at 30 mA)
 ├── js/signal-gen-sim.js    — Waveform generator
 ├── js/capacitor-sim.js     — RC charge/discharge simulator
