@@ -163,6 +163,167 @@
     </div>
   </div>
 
+  <!-- 2.5 วงจรโต้ตอบทีละขั้น -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">วงจรโต้ตอบ — เดินตามกระแสทีละขั้น</span><span class="en-only">Interactive Circuit — Follow the Current Step by Step</span></div>
+    <div class="card">
+      <p class="th-only" style="margin-bottom:1rem">กดปุ่มขั้นที่ 1–8 เพื่อดูว่าอะไหล่ทั้ง 7 ตัวข้างบนต่อกันอย่างไรและกระแสวิ่งไปทางไหนในแต่ละจังหวะ แล้วลอง <strong>เลือกอาการเสีย</strong> จากช่องด้านล่างเพื่อดูว่าจุดวัด TP1–TP5 จุดไหนจะ "ไฟหาย" — ทั้ง 6 อาการตรงกับคลินิกช่างในหัวข้อถัดไป</p>
+      <p class="en-only" style="margin-bottom:1rem">Use buttons 1–8 to see how the seven parts above connect and where the current flows at each moment, then pick a <strong>fault</strong> from the dropdown to see which of TP1–TP5 loses its voltage — all six match the repair clinic in the next section.</p>
+
+      <div class="bs-wrap" id="stove-circuit">
+        <div class="bs-tabs">
+          <button class="bs-tab" data-step="1"><span class="bs-n">1</span><span class="th-only">ไฟเข้า → บริดจ์</span><span class="en-only">Input → bridge</span></button>
+          <button class="bs-tab" data-step="2"><span class="bs-n">2</span><span class="th-only">โช้ก + C → 310V</span><span class="en-only">Choke + C → 310V</span></button>
+          <button class="bs-tab" data-step="3"><span class="bs-n">3</span><span class="th-only">ไฟเลี้ยง 5V / 18V</span><span class="en-only">5V / 18V rails</span></button>
+          <button class="bs-tab" data-step="4"><span class="bs-n">4</span><span class="th-only">MCU → เกต</span><span class="en-only">MCU → gate</span></button>
+          <button class="bs-tab" data-step="5"><span class="bs-n">5</span><span class="th-only">จังหวะ ON</span><span class="en-only">The ON stroke</span></button>
+          <button class="bs-tab" data-step="6"><span class="bs-n">6</span><span class="th-only">จังหวะ OFF (ZVS)</span><span class="en-only">The OFF stroke (ZVS)</span></button>
+          <button class="bs-tab" data-step="7"><span class="bs-n">7</span><span class="th-only">🍳 หม้อกับ eddy</span><span class="en-only">🍳 Pot &amp; eddy current</span></button>
+          <button class="bs-tab" data-step="8"><span class="bs-n">8</span><span class="th-only">🔧 ไล่วัด 5 จุด</span><span class="en-only">🔧 Probe 5 points</span></button>
+        </div>
+
+        <canvas id="st-canvas" class="bs-canvas" style="aspect-ratio:940/500;"></canvas>
+
+        <div class="bs-nav" style="flex-wrap:wrap;">
+          <button id="st-prev" class="bs-navbtn">◀ <span class="th-only">ก่อนหน้า</span><span class="en-only">Prev</span></button>
+          <button id="st-play" class="bs-navbtn"><span class="th-only">▶ เล่นอัตโนมัติ</span><span class="en-only">▶ Auto-play</span></button>
+          <select id="st-fault" class="bs-select" aria-label="fault mode">
+            <option value="ok">✅ ปกติ — Normal</option>
+            <option value="igbt">🔴 IGBT ช็อต C-E (ฟิวส์ขาด) — IGBT shorted C-E</option>
+            <option value="psu">🔴 ภาคจ่ายไฟต่ำเสีย — LV supply dead</option>
+            <option value="gate">🟡 R-gate ขาด / ซีเนอร์ช็อต — gate drive lost</option>
+            <option value="cres">💥 C-resonance ค่าแห้ง — resonant cap dried out</option>
+            <option value="pot">🔵 ไม่มีหม้อ / หม้ออะลูมิเนียม — no pot / aluminium</option>
+          </select>
+          <button id="st-next" class="bs-navbtn"><span class="th-only">ถัดไป</span><span class="en-only">Next</span> ▶</button>
+        </div>
+
+        <div class="bs-faultnote">
+          <span class="th-only">🔧 กำลังจำลองบอร์ดที่เสียอยู่ — ดูป้าย TP1–TP5 บนวงจรว่าไฟหายที่จุดไหน แล้วกดขั้นที่ 8 เพื่อดูสรุปการไล่วัด</span>
+          <span class="en-only">🔧 A faulty board is being simulated — watch the TP1–TP5 badges to see where the voltage disappears, then press step 8 for the probing summary</span>
+        </div>
+
+        <div class="bs-desc" data-step="1">
+          <p class="th-only"><strong>ขั้นที่ 1 — จากปลั๊กถึงไฟตรง:</strong> ไฟบ้าน 220V ผ่าน <strong>ฟิวส์</strong> → <strong>CT (หม้อแปลงวัดกระแส)</strong> ที่คล้องสาย L ไว้เพื่อรายงานกระแสให้ MCU → เข้า <strong>ไดโอดบริดจ์</strong> ที่พลิกครึ่งลบขึ้นมาเป็นบวก ได้ไฟตรงแบบเป็นลูกคลื่น
+            <br><span style="color:var(--text-light);">ฟิวส์ขาดแบบ "ดำปี๋/แตก" แทบไม่เคยเป็นความผิดของฟิวส์เอง — มันคือผลจากของที่ช็อตอยู่ข้างหลัง ลองเลือกอาการ "IGBT ช็อต C-E" ดู</span></p>
+          <p class="en-only"><strong>Step 1 — from the plug to DC:</strong> 220 V mains passes the <strong>fuse</strong> → the <strong>current transformer (CT)</strong> clamped around the live wire, which reports the current to the MCU → into the <strong>bridge rectifier</strong>, which flips the negative half up to give pulsating DC.
+            <br><span style="color:var(--text-light);">A charred or cracked fuse is almost never the fuse's own fault — it is the symptom of something shorted behind it. Try the "IGBT shorted C-E" fault.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="2">
+          <p class="th-only"><strong>ขั้นที่ 2 — ทำให้เรียบเป็น 310V DC:</strong> <strong>โช้ก</strong> กันสัญญาณรบกวนความถี่สูงไม่ให้ย้อนออกไปที่สายไฟบ้าน ส่วน <strong>คาปาซิเตอร์ 5µF 400V</strong> เก็บประจุจนแรงดันเรียบที่ราว 310V (= 220 × √2)
+            <br><strong style="color:#dc2626;">⚠ จุดนี้คือจุดที่ต้องคายประจุก่อนซ่อมทุกครั้ง</strong> — ถอดปลั๊กแล้วมันยังอมไฟ 310V ค้างอยู่ได้นาน</p>
+          <p class="en-only"><strong>Step 2 — smoothing it into 310 V DC:</strong> the <strong>choke</strong> keeps high-frequency noise from getting back out onto the mains, and the <strong>5 µF 400 V capacitor</strong> charges until the rail is flat at about 310 V (= 220 × √2).
+            <br><strong style="color:#dc2626;">⚠ This is the point you must discharge before servicing</strong> — it holds 310 V long after the plug is out.</p>
+        </div>
+
+        <div class="bs-desc" data-step="3">
+          <p class="th-only"><strong>ขั้นที่ 3 — ไฟเลี้ยงสมองและไดรเวอร์:</strong> ภาคจ่ายไฟต่ำ (IC อย่าง VIPer12A / AP8012) แบ่งไฟจากบัส 310V ลงมาเป็น <strong>5V เลี้ยง MCU</strong> และ <strong>18V เลี้ยงวงจรขับเกตกับพัดลม</strong>
+            <br><span style="color:var(--text-light);">ถ้าภาคนี้เสีย เตาจะ "เงียบสนิททั้งที่ฟิวส์ยังดี" และอันตรายตรงที่บัส 310V ยังมีไฟเต็มอยู่ — ลองเลือกอาการ "ภาคจ่ายไฟต่ำเสีย"</span></p>
+          <p class="en-only"><strong>Step 3 — powering the brain and the driver:</strong> the low-voltage supply (an IC such as VIPer12A / AP8012) steps the 310 V bus down to <strong>5 V for the MCU</strong> and <strong>18 V for the gate driver and the fan</strong>.
+            <br><span style="color:var(--text-light);">If this stage dies the stove is "silent with a good fuse" — and dangerous, because the 310 V bus is still fully charged. Try the "LV supply dead" fault.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="4">
+          <p class="th-only"><strong>ขั้นที่ 4 — คำสั่งเดินทางไปถึงขาเกต:</strong> MCU สั่งเป็นสัญญาณ 5V → <strong>ไดรเวอร์</strong> (ทรานซิสเตอร์คู่ S8050/S8550) ขยายเป็นพัลส์ <strong>18V</strong> → ผ่าน <strong>R-gate 10–47Ω</strong> → เข้าขา G ของ IGBT โดยมี <strong>ซีเนอร์ 18V</strong> คร่อม G-E คอยกันแรงดันเกิน
+            <br><span style="color:var(--text-light);">ทำไมต้อง 18V ไม่ใช่ 5V? เพราะ 5V เปิด IGBT ได้แค่ "แง้มประตู" แล้วมันจะไหม้ในไม่กี่วินาที (อ่านเพิ่มในบท <a href="igbt.html">IGBT</a>) · R-gate ไหม้ขาด หรือซีเนอร์ช็อต = คำสั่งไปไม่ถึง ลองเลือกอาการนั้นดู</span></p>
+          <p class="en-only"><strong>Step 4 — the command reaches the gate:</strong> the MCU issues a 5 V signal → the <strong>driver</strong> (an S8050/S8550 pair) amplifies it to an <strong>18 V</strong> pulse → through the <strong>10–47 Ω gate resistor</strong> → into the IGBT's gate, with an <strong>18 V zener</strong> across G-E guarding against overvoltage.
+            <br><span style="color:var(--text-light);">Why 18 V rather than 5 V? Because 5 V only cracks the IGBT open and it burns out in seconds (see the <a href="igbt.html">IGBT lesson</a>). An open gate resistor or a shorted zener means the command never arrives — try that fault.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="5">
+          <p class="th-only"><strong>ขั้นที่ 5 — จังหวะ ON (สะสมพลังงาน):</strong> IGBT นำกระแส ขา C ถูกกดลงมาเกือบ 0V ไฟ 310V จึงคร่อม <strong>ขดลวดทำงาน</strong> เต็มๆ กระแสในขดลวดค่อยๆ ไต่ขึ้น = <strong>เก็บพลังงานไว้ในสนามแม่เหล็ก</strong>
+            <br><span style="color:var(--text-light);">ช่วงนี้กินเวลาแค่ระดับไมโครวินาที เพราะทั้งวงจรสับที่ 20–30 kHz</span></p>
+          <p class="en-only"><strong>Step 5 — the ON stroke (storing energy):</strong> the IGBT conducts, its collector is pulled down to nearly 0 V, so the full 310 V sits across the <strong>work coil</strong> and the coil current ramps up — <strong>energy is being stored in the magnetic field</strong>.
+            <br><span style="color:var(--text-light);">This lasts only microseconds: the whole circuit switches at 20–30 kHz.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="6">
+          <p class="th-only"><strong>ขั้นที่ 6 — จังหวะ OFF และหัวใจของเครื่อง (ZVS):</strong> พอ IGBT ปิด กระแสในขดลวดหยุดทันทีไม่ได้ มันจึงวิ่งเข้า <strong>C-resonance 0.27µF</strong> ทำให้แรงดันที่ขา C พุ่งขึ้นเป็นลูกครึ่งไซน์สูงราว <strong>800V</strong> แล้ว<strong>ไหลกลับลงมาที่ศูนย์เอง</strong>
+            <br>บอร์ดจะสั่งเปิด IGBT อีกครั้ง<strong>ตรงจังหวะที่แรงดันเป็นศูนย์พอดี</strong> = <strong>Zero-Voltage Switching</strong> แทบไม่มีกำลังสูญเสียตอนสวิตช์ นี่คือเหตุผลที่ IGBT ตัวเดียวคุมกำลัง 2,000W ที่ 25 kHz ได้โดยไม่ละลาย
+            <br><strong style="color:#dc2626;">และนี่คือเหตุผลที่ C-resonance ค่าแห้งแล้ว IGBT ระเบิดทันที</strong> — ไม่มีตัวรองรับพลังงาน ยอดคลื่นจะพุ่งทะลุพิกัด 1200V (ลองเลือกอาการนั้นดูเส้นสีแดง)</p>
+          <p class="en-only"><strong>Step 6 — the OFF stroke, and the heart of the machine (ZVS):</strong> when the IGBT turns off the coil current cannot stop instantly, so it pours into the <strong>0.27 µF resonant capacitor</strong>. The collector voltage rises as a half-sine to about <strong>800 V</strong> and then <strong>falls back to zero by itself</strong>.
+            <br>The board turns the IGBT on again <strong>exactly as that voltage reaches zero</strong> — <strong>zero-voltage switching</strong>, with almost no switching loss. That is how one IGBT handles 2,000 W at 25 kHz without melting.
+            <br><strong style="color:#dc2626;">And it is why a dried-out resonant capacitor blows the IGBT instantly</strong> — with nothing to absorb the energy the peak clears the 1200 V rating (pick that fault and watch the red trace).</p>
+        </div>
+
+        <div class="bs-desc" data-step="7">
+          <p class="th-only"><strong>ขั้นที่ 7 — หม้อคือส่วนหนึ่งของวงจร:</strong> สนามแม่เหล็กความถี่สูงจากขดลวดพุ่งขึ้นไปเหนี่ยวนำ <strong>กระแสไหลวน (eddy current)</strong> ในก้นหม้อเหล็ก ความต้านทานของเนื้อเหล็กเปลี่ยนกระแสนั้นเป็นความร้อน — <strong>หม้อจึงเป็น "โหลด" ตัวจริงของวงจรนี้</strong>
+            <br>ถ้าไม่มีหม้อ หรือใช้หม้ออะลูมิเนียม จะไม่มีอะไรดูดพลังงาน คลื่นเรโซแนนซ์จะแกว่งยาวผิดปกติ (Q สูง) MCU อ่านค่าผ่าน CT แล้วสั่งตัดพร้อมโชว์ <strong>E0/E1</strong>
+            <br><span style="color:var(--text-light);">เวลาลูกค้าบอกว่า "หาหม้อไม่เจอ" จึงต้องแยกให้ออกว่าเป็นที่หม้อจริงๆ หรือวงจรตรวจจับเพี้ยน</span></p>
+          <p class="en-only"><strong>Step 7 — the pot is part of the circuit:</strong> the coil's high-frequency field induces <strong>eddy currents</strong> in the steel pot base, and the steel's resistance turns them into heat — <strong>the pot is this circuit's real load</strong>.
+            <br>With no pot, or an aluminium one, nothing absorbs the energy: the resonant ring lasts far too long (high Q), the MCU sees it through the CT and shuts down with <strong>E0/E1</strong>.
+            <br><span style="color:var(--text-light);">So when a customer says "it can't find the pot", your job is to tell a genuinely wrong pot from a faulty detection circuit.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="8">
+          <p class="th-only"><strong>ขั้นที่ 8 — ไล่วัดตามลำดับ:</strong> วัด <strong>TP1 → TP5</strong> ไปทีละจุด <strong>จุดแรกที่ค่าหายไปคือภาคที่เสีย</strong> ไม่ต้องเดาสุ่ม
+            <br>ลองเปลี่ยนอาการเสียในช่องด้านบนแล้วดูว่าแต่ละเคสค่าเปลี่ยนที่จุดไหน — ตารางค่ามาตรฐานเต็มๆ อยู่หัวข้อถัดไป
+            <br><strong style="color:#dc2626;">⚠ TP1 กับ TP5 คือไฟ 310V ขึ้นไป ห้ามวัดโดยไม่คายประจุ/ไม่มีสมาธิ</strong></p>
+          <p class="en-only"><strong>Step 8 — probe in order:</strong> measure <strong>TP1 → TP5</strong> one after another. <strong>The first point where the reading disappears is the stage that failed</strong> — no guessing.
+            <br>Switch faults above and watch which point changes in each case; the full reference table is in the next section.
+            <br><strong style="color:#dc2626;">⚠ TP1 and TP5 sit at 310 V and above — never probe them without discharging first and giving it your full attention.</strong></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2.6 ตารางจุดวัด -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ตารางจุดวัด TP1–TP5</span><span class="en-only">Test-Point Reference (TP1–TP5)</span></div>
+    <div class="card">
+      <div class="warn-box" style="margin-top:0;">
+        <strong class="th-only">⚡ ก่อนวัดทุกครั้ง</strong><strong class="en-only">⚡ Before every measurement</strong>
+        <p class="th-only" style="margin:.4rem 0 0;">TP1 และ TP5 อยู่บนไฟ 310V ขึ้นไป (ยอดคลื่นที่ TP5 แตะระดับ 800–1000V) — <strong>วัดตอนจ่ายไฟเฉพาะเมื่อจำเป็น ใช้มือเดียว และห้ามจับตัวถัง</strong> ส่วนการวัดแบบไม่จ่ายไฟให้คายประจุคาปา 5µF ก่อนเสมอ</p>
+        <p class="en-only" style="margin:.4rem 0 0;">TP1 and TP5 live at 310 V and above (the TP5 peak reaches 800–1000 V) — <strong>only probe them live when you must, work one-handed, and never touch the chassis</strong>. For dead tests, always discharge the 5 µF capacitor first.</p>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="ind-parts-tbl">
+          <thead><tr>
+            <th style="width:3.2rem">TP</th>
+            <th><span class="th-only">วัดที่ไหน</span><span class="en-only">Where to probe</span></th>
+            <th><span class="th-only">ค่าที่ควรได้</span><span class="en-only">Expected reading</span></th>
+            <th><span class="th-only">ถ้าไม่ได้ตามนี้ = สงสัยอะไร</span><span class="en-only">If it is wrong, suspect…</span></th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td class="hi">TP1</td>
+              <td><span class="th-only">คร่อมคาปา 5µF (บัส 310V) เทียบกราวด์บอร์ด</span><span class="en-only">Across the 5 µF capacitor (310 V bus) w.r.t. board ground</span></td>
+              <td><strong>≈ 310V DC</strong></td>
+              <td><span class="th-only">0V → ฟิวส์/บริดจ์/โช้กขาด หรือมีของช็อตดึงบัสลง · กระเพื่อมมาก → คาปาค่าแห้ง</span><span class="en-only">0 V → open fuse/bridge/choke, or something shorted dragging the bus down · heavy ripple → the capacitor has dried out</span></td>
+            </tr>
+            <tr>
+              <td class="hi">TP2</td>
+              <td><span class="th-only">ขาไฟเลี้ยงของ MCU</span><span class="en-only">The MCU supply pin</span></td>
+              <td><strong>5.0V</strong> <span class="th-only">(±0.25V)</span><span class="en-only">(±0.25 V)</span></td>
+              <td><span class="th-only">ไม่มี 5V แต่ TP1 ปกติ → ภาคจ่ายไฟต่ำเสีย (เตาเงียบทั้งที่ฟิวส์ดี)</span><span class="en-only">No 5 V while TP1 is fine → the LV supply has failed (silent stove, good fuse)</span></td>
+            </tr>
+            <tr>
+              <td class="hi">TP3</td>
+              <td><span class="th-only">รางไฟเลี้ยงไดรเวอร์/พัดลม</span><span class="en-only">The driver &amp; fan rail</span></td>
+              <td><strong>≈ 18V</strong> <span class="th-only">(บางรุ่น 15–20V)</span><span class="en-only">(15–20 V on some models)</span></td>
+              <td><span class="th-only">ไม่มี 18V → เตาสั่งงานได้แต่ไม่ร้อน · พัดลมมักไม่หมุนด้วย</span><span class="en-only">No 18 V → the stove responds but never heats, and usually the fan does not spin either</span></td>
+            </tr>
+            <tr>
+              <td class="hi">TP4</td>
+              <td><span class="th-only">ขา G ของ IGBT เทียบขา E (ต้องใช้สโคป จะเห็นเป็นพัลส์)</span><span class="en-only">IGBT gate w.r.t. emitter (a scope shows the pulse train)</span></td>
+              <td><strong><span class="th-only">พัลส์ 0 ↔ 18V ที่ 20–30 kHz</span><span class="en-only">0 ↔ 18 V pulses at 20–30 kHz</span></strong></td>
+              <td><span class="th-only">0V ค้าง → R-gate ไหม้ขาด / ซีเนอร์ 18V ช็อต / ไดรเวอร์เสีย · <strong>มี 18V ค้างนิ่งตอนยังไม่ใส่ IGBT = ห้ามใส่ตัวใหม่</strong></span><span class="en-only">Stuck at 0 V → open gate resistor, shorted 18 V zener, or a dead driver · <strong>a steady 18 V there with the IGBT removed means do not fit a new one yet</strong></span></td>
+            </tr>
+            <tr>
+              <td class="hi">TP5</td>
+              <td><span class="th-only">ขา C ของ IGBT เทียบกราวด์ (สโคปพร้อมโพรบ ×10 และหม้อแปลงแยกกราวด์)</span><span class="en-only">IGBT collector w.r.t. ground (scope with a ×10 probe and an isolation transformer)</span></td>
+              <td><strong><span class="th-only">คลื่นครึ่งไซน์ 0 ↔ ~800V แล้วกลับถึงศูนย์</span><span class="en-only">A half-sine, 0 ↔ ~800 V, returning to zero</span></strong></td>
+              <td><span class="th-only">ค้าง 310V → ไม่สับสวิตช์ (ย้อนไปดู TP4) · ยอดเกิน 1200V → C-resonance ค่าแห้ง · แกว่งยาวผิดปกติ → ไม่มีหม้อ/หม้อผิดชนิด</span><span class="en-only">Stuck at 310 V → not switching (go back to TP4) · peaks past 1200 V → the resonant capacitor has dried out · a long ring → wrong pot or no pot</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="th-only" style="font-size:.88rem;color:var(--text-light);margin-top:.9rem;">🔗 วิธีวัดตัว IGBT เองทั้งคาบอร์ดและนอกบอร์ด อยู่ในบท <a href="igbt.html"><strong>IGBT</strong></a> (มีฟอร์มบันทึกผลให้ดาวน์โหลดด้วย)</p>
+      <p class="en-only" style="font-size:.88rem;color:var(--text-light);margin-top:.9rem;">🔗 How to test the IGBT itself, in and out of circuit, is in the <a href="igbt.html"><strong>IGBT lesson</strong></a> (with a printable record sheet)</p>
+    </div>
+  </div>
+
   <!-- 3. คลินิกช่างวิเคราะห์อาการเสีย -->
   <div class="section">
     <div class="section-title"><span class="th-only">คลินิกวิเคราะห์อาการเสีย</span><span class="en-only">Fault-Diagnosis Clinic</span></div>
@@ -275,5 +436,6 @@
 <footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
 <script>const CURRENT_PAGE='repair-stove';</script>
 <script src="js/nav.js"></script>
+<script src="js/stove-steps.js"></script>
 </body>
 </html>

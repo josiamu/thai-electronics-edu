@@ -525,4 +525,13 @@ footer strong { color: #fff; }
   border-radius:12px; padding:.9rem 1.1rem; font-size:.93rem; }
 .bs-desc.active { display:block; }
 .bs-desc p { margin:0; }
+/* ช่องเลือกอาการเสีย + แถบเตือนของซิมทีละขั้น (switching-psu ยังใช้ .sp-* ของตัวเองอยู่;
+   ซิมใหม่ให้ใช้ 2 คลาสนี้แทน จะได้ไม่ต้องก๊อป CSS ไปฝังในแต่ละหน้า) */
+.bs-select { background:var(--card); border:1px solid var(--border); border-radius:9px; padding:.4rem .7rem;
+  font-family:inherit; font-size:.85rem; font-weight:600; color:var(--text); cursor:pointer; }
+.bs-select:hover { border-color:var(--primary); }
+.bs-faultnote { display:none; background:#fef2f2; border:1px solid #fecaca; border-left:4px solid #dc2626;
+  border-radius:10px; padding:.6rem .85rem; margin:.75rem 0 0; font-size:.87rem; color:#b91c1c; }
+.bs-faultnote.active { display:block; }
+[data-theme="dark"] .bs-faultnote { background:rgba(220,38,38,.12); border-color:rgba(220,38,38,.35); color:#fca5a5; }
 @media (max-width:700px){ .bs-tabs{ grid-template-columns:repeat(2,1fr); } }
