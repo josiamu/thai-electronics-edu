@@ -135,9 +135,18 @@
     if (target) {
       target.scrollIntoView({ behavior: 'smooth', block: 'center' });
       if (target.animate) {
+        // ค้างไฮไลต์ ~5 วินาที: กระพริบช่วงแรกให้สังเกตเห็น แล้วค่อยจางหายวินาทีสุดท้าย
         target.animate(
-          [{ boxShadow: '0 0 0 3px var(--primary)' }, { boxShadow: '0 0 0 3px rgba(0,0,0,0)' }],
-          { duration: 1800, easing: 'ease-out' }
+          [
+            { boxShadow: '0 0 0 3px var(--primary)',            offset: 0 },
+            { boxShadow: '0 0 0 6px rgba(37, 99, 235, 0.35)',   offset: 0.08 },
+            { boxShadow: '0 0 0 3px var(--primary)',            offset: 0.16 },
+            { boxShadow: '0 0 0 6px rgba(37, 99, 235, 0.35)',   offset: 0.24 },
+            { boxShadow: '0 0 0 3px var(--primary)',            offset: 0.32 },
+            { boxShadow: '0 0 0 3px var(--primary)',            offset: 0.8 },
+            { boxShadow: '0 0 0 3px rgba(0,0,0,0)',             offset: 1 }
+          ],
+          { duration: 5000, easing: 'ease-out' }
         );
       }
     }
