@@ -72,6 +72,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | ภาคจ่ายไฟสวิตชิ่ง (LNK304) | Switching PSU (LNK304) | `switching-psu.html` (มีวงจรโต้ตอบทีละขั้น 8 ขั้น + จำลองอาการเสีย) |
 | เตาไมโครเวฟ | Microwave Oven | `microwave.html` (วงจร 4 โซน • เซฟตี้ประตู 3 ตัว • ตารางจุดวัด Cold Test + วงจรโต้ตอบ 9 ขั้น พร้อมทวีแรงดัน 4,000V 2 จังหวะ) |
 | เครื่องทำน้ำอุ่น | Water Heater | `water-heater.html` (ทำน้ำร้อนทันที • ฟลุกซ์สวิตช์ • วงจรอย่างง่าย • ELCB กับสายดิน + ซิม 2 โหมด: อุณหภูมิน้ำตาม ΔT และไฟรั่ว/ELCB + วงจรโต้ตอบ 7 ขั้น) |
+| หม้อหุงข้าว | Rice Cooker | `rice-cooker.html` (จุดคูรีของแม่เหล็ก • วงจรหุง-อุ่น • อุ่นทิพย์ 3D • รุ่นดิจิทัล MCU + รีเลย์ + NTC + ซิมกราฟการหุง + วงจรโต้ตอบ 9 ขั้น 2 ฉาก) |
 
 **งานปฏิบัติ / Practical**
 | ไทย | English | หน้า |
@@ -183,6 +184,8 @@ git push
 ├── js/mw-circuit.js        — Interactive step-by-step: whole microwave circuit (7 ladder steps + 2 voltage-doubler strokes, 7 fault modes, door/Start toggles)
 ├── js/wh-circuit.js        — Interactive step-by-step: water-heater safety chain (7 steps, 6 fault modes, water on/off, 220V/0V probe badges)
 ├── js/water-heater-sim.js  — Instant water heater sim (ΔT vs power/flow/inlet temperature, plus an earth-leakage mode where the ELCB trips at 30 mA)
+├── js/rice-circuit.js      — Interactive step-by-step: rice cooker (6 mechanical steps + 3 digital steps, 7 fault modes, Cook button with a real Curie-point release)
+├── js/rice-sim.js          — Rice cooking curve (ramp → 100°C plateau → Curie release, with a weak-magnet mode)
 ├── js/signal-gen-sim.js    — Waveform generator
 ├── js/capacitor-sim.js     — RC charge/discharge simulator
 ├── js/power-supply-sim.js  — Power supply (AC→DC) simulator

@@ -60,6 +60,7 @@ const NAV_REPAIR = [
   { id: 'repair-smps', href: 'switching-psu.html', label_th: '🔌 ภาคจ่ายไฟสวิตชิ่ง (LNK304)', label_en: '🔌 Switching PSU (LNK304)' },
   { id: 'repair-microwave', href: 'microwave.html', label_th: '📡 เตาไมโครเวฟ', label_en: '📡 Microwave Oven' },
   { id: 'repair-water-heater', href: 'water-heater.html', label_th: '🚿 เครื่องทำน้ำอุ่น', label_en: '🚿 Water Heater' },
+  { id: 'repair-rice-cooker', href: 'rice-cooker.html', label_th: '🍚 หม้อหุงข้าว', label_en: '🍚 Rice Cooker' },
 ];
 
 const NAV_TOOLS = [
@@ -292,7 +293,7 @@ const NAV_RESOURCES = [
 
   // ── บรรทัด "ครอบคลุมเนื้อหาจาก N หัวข้อ": เติมเข้า footer ทุกหน้าอัตโนมัติ (bilingual) ──
   // แหล่งความจริงเดียว — แก้เลขที่ TOPIC_COUNT ที่เดียว ทุกหน้าอัปเดตพร้อมกัน (อย่า hardcode ในแต่ละหน้า)
-  const TOPIC_COUNT = 38;
+  const TOPIC_COUNT = 39;
   const pageFooter = document.querySelector('footer');
   if (pageFooter && !pageFooter.querySelector('.footer-topics')) {
     const topics = document.createElement('div');
