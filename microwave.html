@@ -189,139 +189,6 @@
     </div>
   </div>
 
-  <!-- 1b. วงจรรวมแบบง่าย -->
-  <div class="section">
-    <div class="section-title"><span class="th-only">วงจรรวมทั้งเครื่องแบบง่าย</span><span class="en-only">The Whole Circuit, Simplified</span></div>
-    <div class="card">
-      <p class="th-only">ถ้าจับทั้ง 4 โซนมาวาดใหม่เป็นวงจรเดียว จะได้หน้าตาแบบนี้ — <strong>เส้นแดงคือสาย L</strong> (ไฟเข้า) ลากลงมาเป็นเส้นตั้งทางซ้าย, <strong>เส้นน้ำเงินคือสาย N</strong> อยู่ทางขวา และโหลดแต่ละกลุ่มต่อพาดขวางระหว่างสองเส้นนี้เหมือน "ขั้นบันได" ทีละขั้น ทุกขั้นต้องครบวงจร L→โหลด→N จึงจะทำงาน</p>
-      <p class="en-only">Redraw all 4 zones as one circuit and it looks like this — <strong>the red line is L</strong> (live) running down the left, <strong>the blue line is N</strong> on the right, and each load group bridges between them like the rungs of a ladder. Every rung needs a complete L→load→N path before it can work.</p>
-
-      <div class="bs-wrap" id="mw-circuit">
-        <div class="bs-tabs">
-          <button class="bs-tab" data-step="1"><span class="bs-n">1</span><span class="th-only">ภาพรวมขั้นบันได</span><span class="en-only">The ladder</span></button>
-          <button class="bs-tab" data-step="2"><span class="bs-n">2</span><span class="th-only">ด่านบนสุด</span><span class="en-only">Top chain</span></button>
-          <button class="bs-tab" data-step="3"><span class="bs-n">3</span><span class="th-only">รัง 1 ไฟ/พัดลม/จาน</span><span class="en-only">Rung 1 lamp &amp; fan</span></button>
-          <button class="bs-tab" data-step="4"><span class="bs-n">4</span><span class="th-only">รัง 2 ฮีตเตอร์ย่าง</span><span class="en-only">Rung 2 grill</span></button>
-          <button class="bs-tab" data-step="5"><span class="bs-n">5</span><span class="th-only">รัง 3 หม้อแปลงแรงสูง</span><span class="en-only">Rung 3 HV transformer</span></button>
-          <button class="bs-tab" data-step="6"><span class="bs-n">6</span><span class="th-only">รัง 4 บอร์ดควบคุม</span><span class="en-only">Rung 4 control board</span></button>
-          <button class="bs-tab" data-step="7"><span class="bs-n">7</span><span class="th-only">⚡ monitor switch</span><span class="en-only">⚡ Monitor switch</span></button>
-          <button class="bs-tab" data-step="8"><span class="bs-n">8</span><span class="th-only">ทวีแรงดัน จังหวะ 1</span><span class="en-only">Doubler stroke 1</span></button>
-          <button class="bs-tab" data-step="9"><span class="bs-n">9</span><span class="th-only">ทวีแรงดัน จังหวะ 2</span><span class="en-only">Doubler stroke 2</span></button>
-        </div>
-
-        <canvas id="mwc-canvas" class="bs-canvas" style="aspect-ratio:940/560;"></canvas>
-
-        <div class="bs-nav" style="flex-wrap:wrap;">
-          <button id="mwc-prev" class="bs-navbtn">◀ <span class="th-only">ก่อนหน้า</span><span class="en-only">Prev</span></button>
-          <button id="mwc-play" class="bs-navbtn"><span class="th-only">▶ เล่นอัตโนมัติ</span><span class="en-only">▶ Auto-play</span></button>
-          <button id="mwc-door" class="bs-navbtn">
-            <span class="mwc-closed">🚪 <span class="th-only">ประตูปิด</span><span class="en-only">Door closed</span></span>
-            <span class="mwc-open">🚪 <span class="th-only">ประตูเปิด</span><span class="en-only">Door open</span></span>
-          </button>
-          <button id="mwc-start" class="bs-navbtn">
-            <span class="mwc-run">▶ <span class="th-only">กด Start แล้ว</span><span class="en-only">Start pressed</span></span>
-            <span class="mwc-stop">⏸ <span class="th-only">ยังไม่กด Start</span><span class="en-only">Not started</span></span>
-          </button>
-          <button id="mwc-fuse" class="bs-navbtn" style="display:none;">🔁 <span class="th-only">เปลี่ยนฟิวส์</span><span class="en-only">New fuse</span></button>
-          <select id="mwc-fault" class="bs-select" aria-label="fault mode">
-            <option value="ok">✅ ปกติ — Normal</option>
-            <option value="tco">🔴 เทอร์โมสตัทขาด — thermal cutout open</option>
-            <option value="latchstuck">💥 Latch A ละลายติดค้าง — Latch A welded shut</option>
-            <option value="latchb">🟠 Latch B ไม่ต่อ — Latch B never closes</option>
-            <option value="hvdiode">🔴 ไดโอดแรงสูงช็อต — HV diode shorted</option>
-            <option value="magnetron">🟡 แมกนีตรอน/ไส้หลอดขาด — magnetron open</option>
-            <option value="grill">🟢 ฮีตเตอร์ย่างเสีย — grill element dead</option>
-          </select>
-          <button id="mwc-next" class="bs-navbtn"><span class="th-only">ถัดไป</span><span class="en-only">Next</span> ▶</button>
-        </div>
-
-        <div class="bs-faultnote">
-          <span class="th-only">🔧 กำลังจำลองเครื่องที่เสียอยู่ — ดูว่ารังไหน "ไฟไม่ถึง" แล้วเทียบกับอาการที่ลูกค้าบอก</span>
-          <span class="en-only">🔧 A faulty oven is being simulated — see which rung loses power and match it against what the customer describes</span>
-        </div>
-
-        <div class="bs-desc" data-step="1">
-          <p class="th-only"><strong>ขั้นที่ 1 — ทั้งเครื่องคือขั้นบันไดเดียว:</strong> <strong>รางซ้ายคือสาย L</strong> (ผ่านด่านบนสุดมาแล้ว) <strong>รางขวาคือสาย N</strong> และโหลดแต่ละกลุ่มพาดขวางระหว่างสองราง — <strong>ทุกรังต้องครบวงจร L → โหลด → N จึงจะทำงาน</strong> และแต่ละรังเป็นอิสระต่อกัน นี่คือเหตุผลที่ "ย่างไม่ได้แต่เวฟได้" เป็นไปได้
-            <br>ลองกดปุ่ม <strong>🚪 ประตู</strong> และ <strong>▶ Start</strong> ด้านบนเพื่อดูว่ารังไหนทำงานเมื่อไหร่ แล้วเลือกอาการเสียจากช่องด้านล่างเพื่อฝึกวินิจฉัย</p>
-          <p class="en-only"><strong>Step 1 — the whole oven is one ladder:</strong> <strong>the left rail is L</strong> (after the top chain) and <strong>the right rail is N</strong>, with each load group bridging across. <strong>Every rung needs a complete L → load → N path</strong>, and the rungs are independent — which is exactly why "grill dead, microwave fine" is possible.
-            <br>Press <strong>🚪 door</strong> and <strong>▶ Start</strong> above to see which rung runs when, then pick a fault below to practise diagnosing.</p>
-        </div>
-
-        <div class="bs-desc" data-step="2">
-          <p class="th-only"><strong>ขั้นที่ 2 — ด่านบนสุดที่ทุกอย่างต้องผ่าน:</strong> ไฟ L ต้องผ่าน <strong>ฟิวส์เมน → เทอร์โมสตัทเตา → เทอร์โมสตัทแมกนีตรอน → Latch A</strong> ก่อนจะกลายเป็นรางซ้ายที่เลี้ยงทุกรัง
-            <br><strong>ถ้าด่านใดด่านหนึ่งขาด เครื่องดับหมดทั้งเครื่อง</strong> ไม่ใช่เสียแค่ฟังก์ชันเดียว — เจอ "เสียบปลั๊กแล้วเงียบสนิท จอไม่ติด" ให้มาไล่แถวนี้ก่อนเสมอ (ลองเลือกอาการ "เทอร์โมสตัทขาด" ดู)
-            <br><span style="color:var(--text-light);">เทอร์โมสตัททั้งสองตัวเป็น NC ปกติต่ออยู่ ถ้าเจอตัวไหนขาดแปลว่าจุดนั้นเคยร้อนจัดจริง ต้องหาสาเหตุก่อนเปลี่ยน</span></p>
-          <p class="en-only"><strong>Step 2 — the top chain everything depends on:</strong> L must pass the <strong>main fuse → oven thermal cutout → magnetron thermal cutout → Latch A</strong> before it becomes the left rail that feeds every rung.
-            <br><strong>If any one of them opens, the entire oven is dead</strong>, not just one function — so "plugged in, completely silent, no display" always starts here (try the "thermal cutout open" fault).
-            <br><span style="color:var(--text-light);">Both cutouts are NC. Finding one open proves that spot really overheated: find the cause before replacing it.</span></p>
-        </div>
-
-        <div class="bs-desc" data-step="3">
-          <p class="th-only"><strong>ขั้นที่ 3 — รังที่ 1 ทำงานพร้อมกันทั้งชุด:</strong> หลอดไฟ พัดลมระบายความร้อน และมอเตอร์จานหมุน ต่อ<strong>ขนานกัน</strong>อยู่หลังรีเลย์ตัวเดียว
-            <br>ดังนั้นถ้า <strong>บางตัวทำงาน บางตัวไม่ทำงาน</strong> = อะไหล่ตัวนั้นพังเอง <strong>ไม่ใช่บอร์ด</strong> แต่ถ้า<strong>ไม่ทำงานพร้อมกันทั้งชุด</strong> ให้ไปสงสัยรีเลย์หรือคำสั่งจากบอร์ดแทน — วิธีแยกแค่นี้ประหยัดเวลาไปได้ครึ่งวัน</p>
-          <p class="en-only"><strong>Step 3 — rung 1 works as a set:</strong> the lamp, the cooling fan and the turntable motor sit <strong>in parallel</strong> behind a single relay.
-            <br>So if <strong>some run and some do not</strong>, that specific part has failed — <strong>not the board</strong>. If <strong>none of them run</strong>, suspect the relay or the board's command instead. That one distinction saves half a day of hunting.</p>
-        </div>
-
-        <div class="bs-desc" data-step="4">
-          <p class="th-only"><strong>ขั้นที่ 4 — รังที่ 2 คือฮีตเตอร์ย่าง:</strong> มีรีเลย์ของตัวเองแยกจากรังอื่น เพราะโหมดย่างกับโหมดไมโครเวฟทำงานคนละทาง (ย่าง = ความร้อนจากขดลวดโดยตรง / เวฟ = คลื่นจากแมกนีตรอน)
-            <br><span style="color:var(--text-light);">อาการ "เวฟได้ปกติแต่ย่างไม่ได้" จึงชี้มาที่รังนี้โดยเฉพาะ — วัดฮีตเตอร์ว่าขาดไหม แล้ววัดหน้าสัมผัสรีเลย์ย่างว่าต่อจริงไหมตอนสั่งงาน</span></p>
-          <p class="en-only"><strong>Step 4 — rung 2 is the grill element:</strong> it has its own relay because grilling and microwaving heat food in completely different ways (radiant heat from a coil vs. microwaves from the magnetron).
-            <br><span style="color:var(--text-light);">"Microwaves fine, grill dead" therefore points at this rung alone — check the element for continuity, then check that the grill relay's contacts actually close on command.</span></p>
-        </div>
-
-        <div class="bs-desc" data-step="5">
-          <p class="th-only"><strong>ขั้นที่ 5 — รังที่ 3 มีสวิตช์อนุกรมกัน 2 ตัว:</strong> <strong>Latch B</strong> (ยืนยันว่าประตูปิดสนิท) และ <strong>power relay</strong> (คำสั่ง Start จากบอร์ด) <strong>ต้องต่อทั้งคู่</strong> หม้อแปลงแรงสูงถึงจะได้ไฟ
-            <br>นี่คือเหตุผลที่อาการ <strong>"จานหมุน ไฟติด พัดลมทำงาน แต่น้ำไม่ร้อน"</strong> ต้องมาสงสัยสองตัวนี้ก่อนเสมอ — เพราะรังที่ 1 ยังทำงานปกติ แปลว่าด่านบนสุดและบอร์ดยังดี ปัญหาอยู่เฉพาะรังนี้ (ลองเลือกอาการ "Latch B ไม่ต่อ")
-            <br><span style="color:var(--text-light);">เมื่อรังนี้ครบวงจร ไฟ 2,000V จะออกที่ขดทุติยภูมิ → ไปต่อขั้นที่ 8–9</span></p>
-          <p class="en-only"><strong>Step 5 — rung 3 has two switches in series:</strong> <strong>Latch B</strong> (confirming the door is truly shut) and the <strong>power relay</strong> (the board's Start command) — <strong>both must close</strong> before the HV transformer sees power.
-            <br>That is why <strong>"plate spins, lamp on, fan running, but nothing heats"</strong> always points here first: rung 1 still works, so the top chain and the board are fine and the fault is confined to this rung (try the "Latch B never closes" fault).
-            <br><span style="color:var(--text-light);">Once this rung is complete, 2,000 V appears on the secondary — continue to steps 8–9.</span></p>
-        </div>
-
-        <div class="bs-desc" data-step="6">
-          <p class="th-only"><strong>ขั้นที่ 6 — รังที่ 4 เลี้ยงสมองของเครื่อง:</strong> หม้อแปลงลูกเล็กแปลงไฟบ้านลงมาเป็นไฟต่ำเลี้ยงบอร์ดควบคุม จอ และปุ่มกด
-            <br><strong>รังนี้มีไฟตลอดเวลาที่เสียบปลั๊กและด่านบนสุดยังดี</strong> — จอจึงติดแม้ยังไม่ได้กดอะไร นั่นแปลว่า <strong>"จอติด" พิสูจน์แค่ว่าด่านบนสุดกับรังนี้ปกติ</strong> ไม่ได้แปลว่ารังอื่นดีด้วย
-            <br><span style="color:var(--text-light);">กลับกัน ถ้าจอไม่ติดเลย ให้ย้อนไปไล่ด่านบนสุดในขั้นที่ 2 ก่อนจะไปสงสัยบอร์ด</span></p>
-          <p class="en-only"><strong>Step 6 — rung 4 powers the brain:</strong> a small transformer drops the mains to a low voltage for the control board, the display and the keypad.
-            <br><strong>This rung is live whenever the oven is plugged in and the top chain is intact</strong>, which is why the display lights up before you press anything. So <strong>"the display works" only proves the top chain and this rung are fine</strong> — it says nothing about the others.
-            <br><span style="color:var(--text-light);">Conversely, a completely dead display sends you back to the top chain in step 2 before you ever suspect the board.</span></p>
-        </div>
-
-        <div class="bs-desc" data-step="7">
-          <p class="th-only"><strong>ขั้นที่ 7 — รังล่างสุดคือกับดักที่ต้องเข้าใจให้ได้:</strong> <strong>monitor switch พาดระหว่าง L กับ N ตรงๆ โดยไม่มีโหลดคั่นเลย</strong> และมันเป็นชนิด NC ที่ <strong>"ต่อวงจรตอนประตูเปิด"</strong> (ตรงข้ามกับ Latch A/B ที่ต่อตอนประตูปิด)
-            <br>ตอนใช้งานปกติจึงไม่มีอะไรเกิดขึ้น เพราะพอประตูปิด monitor จะเปิดวงจรทิ้งไว้เฉยๆ
-            <br><strong style="color:#dc2626;">แต่ถ้า Latch A ละลายติดค้าง</strong> — เลือกอาการนั้นแล้ว<strong>กดปุ่มเปิดประตูดู</strong> — monitor จะต่อขณะที่ L ยังจ่ายอยู่ กลายเป็น<strong>ลัดวงจร L–N เต็มๆ ฟิวส์เมนขาดทันที</strong> นี่คือการ "พลีชีพ" ที่ออกแบบมาโดยตั้งใจ เพราะยอมให้ฟิวส์ขาดดีกว่าปล่อยให้เตายิงคลื่นออกมาตอนประตูเปิด
-            <br><span style="color:var(--text-light);">ดังนั้นอาการ "ฟิวส์ขาดซ้ำทุกครั้งที่เปิด-ปิดประตู" = <strong>เปลี่ยนฟิวส์อย่างเดียวไม่มีวันจบ ต้องเปลี่ยนสวิตช์ประตูยกชุด</strong></span></p>
-          <p class="en-only"><strong>Step 7 — the bottom rung is the trap you must understand:</strong> the <strong>monitor switch bridges L to N directly with no load in between</strong>, and it is the NC type that <strong>closes when the door opens</strong> (the opposite of latches A and B, which close when the door shuts).
-            <br>In normal use nothing happens: with the door closed the monitor simply sits open.
-            <br><strong style="color:#dc2626;">But if Latch A welds shut</strong> — select that fault and <strong>press the door button</strong> — the monitor closes while L is still live, creating a <strong>dead L–N short that instantly destroys the mains fuse</strong>. That sacrifice is deliberate: a blown fuse is far better than an oven that can fire with the door open.
-            <br><span style="color:var(--text-light);">So "the fuse blows every time the door is opened" means <strong>replacing the fuse alone will never fix it — the whole interlock set must be replaced</strong>.</span></p>
-        </div>
-
-        <div class="bs-desc" data-step="8">
-          <p class="th-only"><strong>ขั้นที่ 8 — ภาคแรงสูง จังหวะที่ 1 (ชาร์จคาปาซิเตอร์):</strong> เมื่อรังที่ 3 ครบวงจร หม้อแปลงแรงสูงจะสร้างไฟ <strong>~2,000V AC</strong> ที่ขดทุติยภูมิ
-            <br>ในครึ่งคลื่นแรก <strong>ไดโอดแรงสูงนำกระแส</strong> ลงโครงเหล็ก กระแสจึงไหลผ่านคาปาซิเตอร์จน<strong>ชาร์จเต็มที่ ~2,000V</strong> ช่วงนี้แมกนีตรอนยังไม่ทำงาน
-            <br><span style="color:var(--text-light);">สังเกตตัวต้านทาน bleeder ที่วาดขนานกับคาปา มันมีไว้คายประจุเมื่อถอดปลั๊ก — <strong>แต่ห้ามไว้ใจเด็ดขาด</strong> ถ้ามันขาด คาปาจะอมไฟ 2,000V รอไว้เต็มๆ</span></p>
-          <p class="en-only"><strong>Step 8 — the HV section, stroke 1 (charging the capacitor):</strong> once rung 3 is complete the HV transformer produces about <strong>2,000 V AC</strong> on its secondary.
-            <br>On the first half-cycle the <strong>HV diode conducts</strong> to the chassis, so current flows through the capacitor and <strong>charges it to ~2,000 V</strong>. The magnetron is not firing yet.
-            <br><span style="color:var(--text-light);">Note the bleeder resistor drawn across the capacitor: it is meant to drain the charge after unplugging — <strong>but never trust it</strong>. If it has failed open, the capacitor sits there holding 2,000 V.</span></p>
-        </div>
-
-        <div class="bs-desc" data-step="9">
-          <p class="th-only"><strong>ขั้นที่ 9 — จังหวะที่ 2 (บวกกันเป็น 4,000V):</strong> พอไฟบ้านกลับขั้ว <strong>ไดโอดบล็อก</strong> ประจุในคาปาจึงออกไปไหนไม่ได้ ผลคือ <strong>แรงดันหม้อแปลง 2,000V บวกกับแรงดันในคาปา 2,000V เรียงอนุกรมกัน = ~4,000V DC</strong> ป้อนเข้าแมกนีตรอน แล้วคลื่นไมโครเวฟจึงถูกยิงออกมา
-            <br>นี่คือเหตุผลที่เรียกว่า <strong>วงจรทวีแรงดัน (Voltage Doubler)</strong> — ได้ไฟสองเท่าโดยไม่ต้องพันหม้อแปลงให้ใหญ่ขึ้น
-            <br><strong style="color:#dc2626;">ถ้าไดโอดช็อต</strong> กระแสจะไหลตลอดจนหม้อแปลงโอเวอร์โหลด → ครางหึ่งๆ แล้วฟิวส์แรงสูงขาด · <strong style="color:#dc2626;">ถ้าไส้หลอดแมกนีตรอนขาด</strong> ทุกอย่างจะดูปกติเงียบสนิทแต่ไม่มีความร้อนเลย (ลองสลับสองอาการนี้ดู)
-            <br><strong style="color:#dc2626;">⚠ คาปาตัวนี้อมไฟ 2,000V ต่อได้นานหลังถอดปลั๊ก — ต้องคายประจุด้วยคีมด้ามฉนวน 1,000V ก่อนแตะทุกครั้ง</strong></p>
-          <p class="en-only"><strong>Step 9 — stroke 2 (they add up to 4,000 V):</strong> when the mains reverses, the <strong>diode blocks</strong> and the capacitor's charge cannot escape. The <strong>transformer's 2,000 V and the capacitor's 2,000 V now sit in series = about 4,000 V DC</strong> across the magnetron, and the microwaves start.
-            <br>That is what makes it a <strong>voltage doubler</strong> — twice the voltage without winding a bigger transformer.
-            <br><strong style="color:#dc2626;">A shorted diode</strong> lets current flow continuously and overloads the transformer: a loud hum, then the HV fuse blows. <strong style="color:#dc2626;">An open magnetron filament</strong> leaves everything looking and sounding normal with no heat at all (try switching between those two faults).
-            <br><strong style="color:#dc2626;">⚠ This capacitor holds 2,000 V long after unplugging — always discharge it with 1,000 V insulated pliers before touching anything.</strong></p>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- 2. โซน 1 -->
   <div class="section">
     <div class="section-title"><span class="th-only">โซน 1 — ด่านหน้า: ฟิวส์เมนและเทอร์โมสตัท</span><span class="en-only">Zone 1 — The Front Line: Main Fuse &amp; Thermostats</span></div>
@@ -516,8 +383,8 @@
       <p class="th-only">หม้อแปลงแรงสูงผลิตไฟ AC ได้สูงสุดราว <strong>2,000 โวลต์</strong> แต่หลอดแมกนีตรอนต้องการไฟ <strong>กระแสตรง 4,000 โวลต์</strong> ในการยิงคลื่น วิศวกรจึงใช้ <strong>HV Capacitor คู่กับ HV Diode</strong> ทำเป็น <strong>วงจรทวีแรงดัน (Voltage Doubler)</strong> ปั๊มแรงดันให้สูงขึ้นเป็น 2 เท่า โดยแบ่งการทำงานตามครึ่งคลื่น AC เป็น 2 จังหวะ</p>
       <p class="en-only">The HV transformer produces at most about <strong>2,000 volts AC</strong>, but the magnetron needs <strong>4,000 volts DC</strong> to fire. So engineers pair an <strong>HV capacitor with an HV diode</strong> as a <strong>voltage doubler</strong>, pumping the voltage to twice its value across the two halves of the AC cycle.</p>
 
-      <p class="th-only" style="font-size:.9rem;color:var(--text-light);margin-top:.6rem">🔗 ดูวงจรทวีแรงดันแบบเดินไฟทีละจังหวะได้ที่ <strong>ขั้นที่ 8–9 ของวงจรโต้ตอบด้านบน</strong></p>
-      <p class="en-only" style="font-size:.9rem;color:var(--text-light);margin-top:.6rem">🔗 Walk the doubler stroke by stroke in <strong>steps 8–9 of the interactive circuit above</strong></p>
+      <p class="th-only" style="font-size:.9rem;color:var(--text-light);margin-top:.6rem">🔗 ดูวงจรทวีแรงดันแบบเดินไฟทีละจังหวะได้ที่ <strong>ขั้นที่ 8–9 ของวงจรโต้ตอบในหัวข้อถัดไป</strong></p>
+      <p class="en-only" style="font-size:.9rem;color:var(--text-light);margin-top:.6rem">🔗 Walk the doubler stroke by stroke in <strong>steps 8–9 of the interactive circuit in the next section</strong></p>
 
       <div class="mw-zones" style="grid-template-columns:1fr 1fr; margin-top:1.1rem;">
         <div class="mw-zone" style="text-align:left;">
@@ -539,6 +406,139 @@
         <strong class="en-only" style="color:#b91c1c">☠️ The bleeder resistor is there to be seen, not to be trusted</strong>
         <p class="th-only" style="margin:.4rem 0 0">ในผังวงจรจะเห็นสัญลักษณ์ตัวต้านทานต่อขนานอยู่<strong>ภายใน</strong> HV Capacitor นั่นคือ <strong>ตัวต้านทานคลายประจุ (Bleeder Resistor)</strong> ทำหน้าที่ค่อยๆ คลายไฟ 2,000V ทิ้งลงกราวด์หลังถอดปลั๊ก แต่ถ้าตัวต้านทานตัวนี้ <strong>ขาดใน</strong> ตัว C ก็จะอมไฟ 2,000V ไว้รอช็อตมือช่างอยู่ดี — ช่างระดับโปรจึงถือกฎว่า <strong>"ห้ามไว้ใจวงจรเด็ดขาด ต้อง Discharge ด้วยมือตัวเองทุกครั้ง"</strong></p>
         <p class="en-only" style="margin:.4rem 0 0">On the schematic you'll see a resistor symbol wired in parallel <strong>inside</strong> the HV capacitor — the <strong>bleeder resistor</strong>, which slowly drains the 2,000V to ground after unplugging. But if that resistor has gone <strong>open internally</strong>, the cap still sits there holding 2,000V waiting for your hand. Professionals therefore treat it as an absolute rule: <strong>never trust the circuit, discharge it by hand every single time.</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5b. วงจรรวมแบบง่าย (วางไว้หลังครบทั้ง 4 โซน — ผู้เรียนเห็นแต่ละโซนมาแล้วจึงประกอบภาพรวมได้) -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">วงจรรวมทั้งเครื่องแบบง่าย</span><span class="en-only">The Whole Circuit, Simplified</span></div>
+    <div class="card">
+      <p class="th-only">ถ้าจับทั้ง 4 โซนมาวาดใหม่เป็นวงจรเดียว จะได้หน้าตาแบบนี้ — <strong>เส้นแดงคือสาย L</strong> (ไฟเข้า) ลากลงมาเป็นเส้นตั้งทางซ้าย, <strong>เส้นน้ำเงินคือสาย N</strong> อยู่ทางขวา และโหลดแต่ละกลุ่มต่อพาดขวางระหว่างสองเส้นนี้เหมือน "ขั้นบันได" ทีละขั้น ทุกขั้นต้องครบวงจร L→โหลด→N จึงจะทำงาน</p>
+      <p class="en-only">Redraw all 4 zones as one circuit and it looks like this — <strong>the red line is L</strong> (live) running down the left, <strong>the blue line is N</strong> on the right, and each load group bridges between them like the rungs of a ladder. Every rung needs a complete L→load→N path before it can work.</p>
+
+      <div class="bs-wrap" id="mw-circuit">
+        <div class="bs-tabs">
+          <button class="bs-tab" data-step="1"><span class="bs-n">1</span><span class="th-only">ภาพรวมขั้นบันได</span><span class="en-only">The ladder</span></button>
+          <button class="bs-tab" data-step="2"><span class="bs-n">2</span><span class="th-only">ด่านบนสุด</span><span class="en-only">Top chain</span></button>
+          <button class="bs-tab" data-step="3"><span class="bs-n">3</span><span class="th-only">รัง 1 ไฟ/พัดลม/จาน</span><span class="en-only">Rung 1 lamp &amp; fan</span></button>
+          <button class="bs-tab" data-step="4"><span class="bs-n">4</span><span class="th-only">รัง 2 ฮีตเตอร์ย่าง</span><span class="en-only">Rung 2 grill</span></button>
+          <button class="bs-tab" data-step="5"><span class="bs-n">5</span><span class="th-only">รัง 3 หม้อแปลงแรงสูง</span><span class="en-only">Rung 3 HV transformer</span></button>
+          <button class="bs-tab" data-step="6"><span class="bs-n">6</span><span class="th-only">รัง 4 บอร์ดควบคุม</span><span class="en-only">Rung 4 control board</span></button>
+          <button class="bs-tab" data-step="7"><span class="bs-n">7</span><span class="th-only">⚡ monitor switch</span><span class="en-only">⚡ Monitor switch</span></button>
+          <button class="bs-tab" data-step="8"><span class="bs-n">8</span><span class="th-only">ทวีแรงดัน จังหวะ 1</span><span class="en-only">Doubler stroke 1</span></button>
+          <button class="bs-tab" data-step="9"><span class="bs-n">9</span><span class="th-only">ทวีแรงดัน จังหวะ 2</span><span class="en-only">Doubler stroke 2</span></button>
+        </div>
+
+        <canvas id="mwc-canvas" class="bs-canvas" style="aspect-ratio:940/560;"></canvas>
+
+        <div class="bs-nav" style="flex-wrap:wrap;">
+          <button id="mwc-prev" class="bs-navbtn">◀ <span class="th-only">ก่อนหน้า</span><span class="en-only">Prev</span></button>
+          <button id="mwc-play" class="bs-navbtn"><span class="th-only">▶ เล่นอัตโนมัติ</span><span class="en-only">▶ Auto-play</span></button>
+          <button id="mwc-door" class="bs-navbtn">
+            <span class="mwc-closed">🚪 <span class="th-only">ประตูปิด</span><span class="en-only">Door closed</span></span>
+            <span class="mwc-open">🚪 <span class="th-only">ประตูเปิด</span><span class="en-only">Door open</span></span>
+          </button>
+          <button id="mwc-start" class="bs-navbtn">
+            <span class="mwc-run">▶ <span class="th-only">กด Start แล้ว</span><span class="en-only">Start pressed</span></span>
+            <span class="mwc-stop">⏸ <span class="th-only">ยังไม่กด Start</span><span class="en-only">Not started</span></span>
+          </button>
+          <button id="mwc-fuse" class="bs-navbtn" style="display:none;">🔁 <span class="th-only">เปลี่ยนฟิวส์</span><span class="en-only">New fuse</span></button>
+          <select id="mwc-fault" class="bs-select" aria-label="fault mode">
+            <option value="ok">✅ ปกติ — Normal</option>
+            <option value="tco">🔴 เทอร์โมสตัทขาด — thermal cutout open</option>
+            <option value="latchstuck">💥 Latch A ละลายติดค้าง — Latch A welded shut</option>
+            <option value="latchb">🟠 Latch B ไม่ต่อ — Latch B never closes</option>
+            <option value="hvdiode">🔴 ไดโอดแรงสูงช็อต — HV diode shorted</option>
+            <option value="magnetron">🟡 แมกนีตรอน/ไส้หลอดขาด — magnetron open</option>
+            <option value="grill">🟢 ฮีตเตอร์ย่างเสีย — grill element dead</option>
+          </select>
+          <button id="mwc-next" class="bs-navbtn"><span class="th-only">ถัดไป</span><span class="en-only">Next</span> ▶</button>
+        </div>
+
+        <div class="bs-faultnote">
+          <span class="th-only">🔧 กำลังจำลองเครื่องที่เสียอยู่ — ดูว่ารังไหน "ไฟไม่ถึง" แล้วเทียบกับอาการที่ลูกค้าบอก</span>
+          <span class="en-only">🔧 A faulty oven is being simulated — see which rung loses power and match it against what the customer describes</span>
+        </div>
+
+        <div class="bs-desc" data-step="1">
+          <p class="th-only"><strong>ขั้นที่ 1 — ทั้งเครื่องคือขั้นบันไดเดียว:</strong> <strong>รางซ้ายคือสาย L</strong> (ผ่านด่านบนสุดมาแล้ว) <strong>รางขวาคือสาย N</strong> และโหลดแต่ละกลุ่มพาดขวางระหว่างสองราง — <strong>ทุกรังต้องครบวงจร L → โหลด → N จึงจะทำงาน</strong> และแต่ละรังเป็นอิสระต่อกัน นี่คือเหตุผลที่ "ย่างไม่ได้แต่เวฟได้" เป็นไปได้
+            <br>ลองกดปุ่ม <strong>🚪 ประตู</strong> และ <strong>▶ Start</strong> ด้านบนเพื่อดูว่ารังไหนทำงานเมื่อไหร่ แล้วเลือกอาการเสียจากช่องด้านล่างเพื่อฝึกวินิจฉัย</p>
+          <p class="en-only"><strong>Step 1 — the whole oven is one ladder:</strong> <strong>the left rail is L</strong> (after the top chain) and <strong>the right rail is N</strong>, with each load group bridging across. <strong>Every rung needs a complete L → load → N path</strong>, and the rungs are independent — which is exactly why "grill dead, microwave fine" is possible.
+            <br>Press <strong>🚪 door</strong> and <strong>▶ Start</strong> above to see which rung runs when, then pick a fault below to practise diagnosing.</p>
+        </div>
+
+        <div class="bs-desc" data-step="2">
+          <p class="th-only"><strong>ขั้นที่ 2 — ด่านบนสุดที่ทุกอย่างต้องผ่าน:</strong> ไฟ L ต้องผ่าน <strong>ฟิวส์เมน → เทอร์โมสตัทเตา → เทอร์โมสตัทแมกนีตรอน → Latch A</strong> ก่อนจะกลายเป็นรางซ้ายที่เลี้ยงทุกรัง
+            <br><strong>ถ้าด่านใดด่านหนึ่งขาด เครื่องดับหมดทั้งเครื่อง</strong> ไม่ใช่เสียแค่ฟังก์ชันเดียว — เจอ "เสียบปลั๊กแล้วเงียบสนิท จอไม่ติด" ให้มาไล่แถวนี้ก่อนเสมอ (ลองเลือกอาการ "เทอร์โมสตัทขาด" ดู)
+            <br><span style="color:var(--text-light);">เทอร์โมสตัททั้งสองตัวเป็น NC ปกติต่ออยู่ ถ้าเจอตัวไหนขาดแปลว่าจุดนั้นเคยร้อนจัดจริง ต้องหาสาเหตุก่อนเปลี่ยน</span></p>
+          <p class="en-only"><strong>Step 2 — the top chain everything depends on:</strong> L must pass the <strong>main fuse → oven thermal cutout → magnetron thermal cutout → Latch A</strong> before it becomes the left rail that feeds every rung.
+            <br><strong>If any one of them opens, the entire oven is dead</strong>, not just one function — so "plugged in, completely silent, no display" always starts here (try the "thermal cutout open" fault).
+            <br><span style="color:var(--text-light);">Both cutouts are NC. Finding one open proves that spot really overheated: find the cause before replacing it.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="3">
+          <p class="th-only"><strong>ขั้นที่ 3 — รังที่ 1 ทำงานพร้อมกันทั้งชุด:</strong> หลอดไฟ พัดลมระบายความร้อน และมอเตอร์จานหมุน ต่อ<strong>ขนานกัน</strong>อยู่หลังรีเลย์ตัวเดียว
+            <br>ดังนั้นถ้า <strong>บางตัวทำงาน บางตัวไม่ทำงาน</strong> = อะไหล่ตัวนั้นพังเอง <strong>ไม่ใช่บอร์ด</strong> แต่ถ้า<strong>ไม่ทำงานพร้อมกันทั้งชุด</strong> ให้ไปสงสัยรีเลย์หรือคำสั่งจากบอร์ดแทน — วิธีแยกแค่นี้ประหยัดเวลาไปได้ครึ่งวัน</p>
+          <p class="en-only"><strong>Step 3 — rung 1 works as a set:</strong> the lamp, the cooling fan and the turntable motor sit <strong>in parallel</strong> behind a single relay.
+            <br>So if <strong>some run and some do not</strong>, that specific part has failed — <strong>not the board</strong>. If <strong>none of them run</strong>, suspect the relay or the board's command instead. That one distinction saves half a day of hunting.</p>
+        </div>
+
+        <div class="bs-desc" data-step="4">
+          <p class="th-only"><strong>ขั้นที่ 4 — รังที่ 2 คือฮีตเตอร์ย่าง:</strong> มีรีเลย์ของตัวเองแยกจากรังอื่น เพราะโหมดย่างกับโหมดไมโครเวฟทำงานคนละทาง (ย่าง = ความร้อนจากขดลวดโดยตรง / เวฟ = คลื่นจากแมกนีตรอน)
+            <br><span style="color:var(--text-light);">อาการ "เวฟได้ปกติแต่ย่างไม่ได้" จึงชี้มาที่รังนี้โดยเฉพาะ — วัดฮีตเตอร์ว่าขาดไหม แล้ววัดหน้าสัมผัสรีเลย์ย่างว่าต่อจริงไหมตอนสั่งงาน</span></p>
+          <p class="en-only"><strong>Step 4 — rung 2 is the grill element:</strong> it has its own relay because grilling and microwaving heat food in completely different ways (radiant heat from a coil vs. microwaves from the magnetron).
+            <br><span style="color:var(--text-light);">"Microwaves fine, grill dead" therefore points at this rung alone — check the element for continuity, then check that the grill relay's contacts actually close on command.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="5">
+          <p class="th-only"><strong>ขั้นที่ 5 — รังที่ 3 มีสวิตช์อนุกรมกัน 2 ตัว:</strong> <strong>Latch B</strong> (ยืนยันว่าประตูปิดสนิท) และ <strong>power relay</strong> (คำสั่ง Start จากบอร์ด) <strong>ต้องต่อทั้งคู่</strong> หม้อแปลงแรงสูงถึงจะได้ไฟ
+            <br>นี่คือเหตุผลที่อาการ <strong>"จานหมุน ไฟติด พัดลมทำงาน แต่น้ำไม่ร้อน"</strong> ต้องมาสงสัยสองตัวนี้ก่อนเสมอ — เพราะรังที่ 1 ยังทำงานปกติ แปลว่าด่านบนสุดและบอร์ดยังดี ปัญหาอยู่เฉพาะรังนี้ (ลองเลือกอาการ "Latch B ไม่ต่อ")
+            <br><span style="color:var(--text-light);">เมื่อรังนี้ครบวงจร ไฟ 2,000V จะออกที่ขดทุติยภูมิ → ไปต่อขั้นที่ 8–9</span></p>
+          <p class="en-only"><strong>Step 5 — rung 3 has two switches in series:</strong> <strong>Latch B</strong> (confirming the door is truly shut) and the <strong>power relay</strong> (the board's Start command) — <strong>both must close</strong> before the HV transformer sees power.
+            <br>That is why <strong>"plate spins, lamp on, fan running, but nothing heats"</strong> always points here first: rung 1 still works, so the top chain and the board are fine and the fault is confined to this rung (try the "Latch B never closes" fault).
+            <br><span style="color:var(--text-light);">Once this rung is complete, 2,000 V appears on the secondary — continue to steps 8–9.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="6">
+          <p class="th-only"><strong>ขั้นที่ 6 — รังที่ 4 เลี้ยงสมองของเครื่อง:</strong> หม้อแปลงลูกเล็กแปลงไฟบ้านลงมาเป็นไฟต่ำเลี้ยงบอร์ดควบคุม จอ และปุ่มกด
+            <br><strong>รังนี้มีไฟตลอดเวลาที่เสียบปลั๊กและด่านบนสุดยังดี</strong> — จอจึงติดแม้ยังไม่ได้กดอะไร นั่นแปลว่า <strong>"จอติด" พิสูจน์แค่ว่าด่านบนสุดกับรังนี้ปกติ</strong> ไม่ได้แปลว่ารังอื่นดีด้วย
+            <br><span style="color:var(--text-light);">กลับกัน ถ้าจอไม่ติดเลย ให้ย้อนไปไล่ด่านบนสุดในขั้นที่ 2 ก่อนจะไปสงสัยบอร์ด</span></p>
+          <p class="en-only"><strong>Step 6 — rung 4 powers the brain:</strong> a small transformer drops the mains to a low voltage for the control board, the display and the keypad.
+            <br><strong>This rung is live whenever the oven is plugged in and the top chain is intact</strong>, which is why the display lights up before you press anything. So <strong>"the display works" only proves the top chain and this rung are fine</strong> — it says nothing about the others.
+            <br><span style="color:var(--text-light);">Conversely, a completely dead display sends you back to the top chain in step 2 before you ever suspect the board.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="7">
+          <p class="th-only"><strong>ขั้นที่ 7 — รังล่างสุดคือกับดักที่ต้องเข้าใจให้ได้:</strong> <strong>monitor switch พาดระหว่าง L กับ N ตรงๆ โดยไม่มีโหลดคั่นเลย</strong> และมันเป็นชนิด NC ที่ <strong>"ต่อวงจรตอนประตูเปิด"</strong> (ตรงข้ามกับ Latch A/B ที่ต่อตอนประตูปิด)
+            <br>ตอนใช้งานปกติจึงไม่มีอะไรเกิดขึ้น เพราะพอประตูปิด monitor จะเปิดวงจรทิ้งไว้เฉยๆ
+            <br><strong style="color:#dc2626;">แต่ถ้า Latch A ละลายติดค้าง</strong> — เลือกอาการนั้นแล้ว<strong>กดปุ่มเปิดประตูดู</strong> — monitor จะต่อขณะที่ L ยังจ่ายอยู่ กลายเป็น<strong>ลัดวงจร L–N เต็มๆ ฟิวส์เมนขาดทันที</strong> นี่คือการ "พลีชีพ" ที่ออกแบบมาโดยตั้งใจ เพราะยอมให้ฟิวส์ขาดดีกว่าปล่อยให้เตายิงคลื่นออกมาตอนประตูเปิด
+            <br><span style="color:var(--text-light);">ดังนั้นอาการ "ฟิวส์ขาดซ้ำทุกครั้งที่เปิด-ปิดประตู" = <strong>เปลี่ยนฟิวส์อย่างเดียวไม่มีวันจบ ต้องเปลี่ยนสวิตช์ประตูยกชุด</strong></span></p>
+          <p class="en-only"><strong>Step 7 — the bottom rung is the trap you must understand:</strong> the <strong>monitor switch bridges L to N directly with no load in between</strong>, and it is the NC type that <strong>closes when the door opens</strong> (the opposite of latches A and B, which close when the door shuts).
+            <br>In normal use nothing happens: with the door closed the monitor simply sits open.
+            <br><strong style="color:#dc2626;">But if Latch A welds shut</strong> — select that fault and <strong>press the door button</strong> — the monitor closes while L is still live, creating a <strong>dead L–N short that instantly destroys the mains fuse</strong>. That sacrifice is deliberate: a blown fuse is far better than an oven that can fire with the door open.
+            <br><span style="color:var(--text-light);">So "the fuse blows every time the door is opened" means <strong>replacing the fuse alone will never fix it — the whole interlock set must be replaced</strong>.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="8">
+          <p class="th-only"><strong>ขั้นที่ 8 — ภาคแรงสูง จังหวะที่ 1 (ชาร์จคาปาซิเตอร์):</strong> เมื่อรังที่ 3 ครบวงจร หม้อแปลงแรงสูงจะสร้างไฟ <strong>~2,000V AC</strong> ที่ขดทุติยภูมิ
+            <br>ในครึ่งคลื่นแรก <strong>ไดโอดแรงสูงนำกระแส</strong> ลงโครงเหล็ก กระแสจึงไหลผ่านคาปาซิเตอร์จน<strong>ชาร์จเต็มที่ ~2,000V</strong> ช่วงนี้แมกนีตรอนยังไม่ทำงาน
+            <br><span style="color:var(--text-light);">สังเกตตัวต้านทาน bleeder ที่วาดขนานกับคาปา มันมีไว้คายประจุเมื่อถอดปลั๊ก — <strong>แต่ห้ามไว้ใจเด็ดขาด</strong> ถ้ามันขาด คาปาจะอมไฟ 2,000V รอไว้เต็มๆ</span></p>
+          <p class="en-only"><strong>Step 8 — the HV section, stroke 1 (charging the capacitor):</strong> once rung 3 is complete the HV transformer produces about <strong>2,000 V AC</strong> on its secondary.
+            <br>On the first half-cycle the <strong>HV diode conducts</strong> to the chassis, so current flows through the capacitor and <strong>charges it to ~2,000 V</strong>. The magnetron is not firing yet.
+            <br><span style="color:var(--text-light);">Note the bleeder resistor drawn across the capacitor: it is meant to drain the charge after unplugging — <strong>but never trust it</strong>. If it has failed open, the capacitor sits there holding 2,000 V.</span></p>
+        </div>
+
+        <div class="bs-desc" data-step="9">
+          <p class="th-only"><strong>ขั้นที่ 9 — จังหวะที่ 2 (บวกกันเป็น 4,000V):</strong> พอไฟบ้านกลับขั้ว <strong>ไดโอดบล็อก</strong> ประจุในคาปาจึงออกไปไหนไม่ได้ ผลคือ <strong>แรงดันหม้อแปลง 2,000V บวกกับแรงดันในคาปา 2,000V เรียงอนุกรมกัน = ~4,000V DC</strong> ป้อนเข้าแมกนีตรอน แล้วคลื่นไมโครเวฟจึงถูกยิงออกมา
+            <br>นี่คือเหตุผลที่เรียกว่า <strong>วงจรทวีแรงดัน (Voltage Doubler)</strong> — ได้ไฟสองเท่าโดยไม่ต้องพันหม้อแปลงให้ใหญ่ขึ้น
+            <br><strong style="color:#dc2626;">ถ้าไดโอดช็อต</strong> กระแสจะไหลตลอดจนหม้อแปลงโอเวอร์โหลด → ครางหึ่งๆ แล้วฟิวส์แรงสูงขาด · <strong style="color:#dc2626;">ถ้าไส้หลอดแมกนีตรอนขาด</strong> ทุกอย่างจะดูปกติเงียบสนิทแต่ไม่มีความร้อนเลย (ลองสลับสองอาการนี้ดู)
+            <br><strong style="color:#dc2626;">⚠ คาปาตัวนี้อมไฟ 2,000V ต่อได้นานหลังถอดปลั๊ก — ต้องคายประจุด้วยคีมด้ามฉนวน 1,000V ก่อนแตะทุกครั้ง</strong></p>
+          <p class="en-only"><strong>Step 9 — stroke 2 (they add up to 4,000 V):</strong> when the mains reverses, the <strong>diode blocks</strong> and the capacitor's charge cannot escape. The <strong>transformer's 2,000 V and the capacitor's 2,000 V now sit in series = about 4,000 V DC</strong> across the magnetron, and the microwaves start.
+            <br>That is what makes it a <strong>voltage doubler</strong> — twice the voltage without winding a bigger transformer.
+            <br><strong style="color:#dc2626;">A shorted diode</strong> lets current flow continuously and overloads the transformer: a loud hum, then the HV fuse blows. <strong style="color:#dc2626;">An open magnetron filament</strong> leaves everything looking and sounding normal with no heat at all (try switching between those two faults).
+            <br><strong style="color:#dc2626;">⚠ This capacitor holds 2,000 V long after unplugging — always discharge it with 1,000 V insulated pliers before touching anything.</strong></p>
+        </div>
       </div>
     </div>
   </div>
