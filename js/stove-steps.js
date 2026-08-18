@@ -28,19 +28,23 @@
   const CH_X0 = 292, CH_X1 = 352, C1_X = 392;
   const COIL_X0 = 560, COIL_X1 = 680, RES_X = 780;
   const IG_X0 = 642, IG_X1 = 728, IG_Y0 = 232, IG_Y1 = 300, IG_CX = 685;
-  const PSU_X0 = 246, PSU_X1 = 348, PSU_Y0 = 142, PSU_Y1 = 198;
-  const MCU_X0 = 246, MCU_X1 = 348, MCU_Y0 = 248, MCU_Y1 = 300;
+  const PSU_X0 = 280, PSU_X1 = 382, PSU_Y0 = 142, PSU_Y1 = 198;
+  const MCU_X0 = 280, MCU_X1 = 382, MCU_Y0 = 248, MCU_Y1 = 300;
   const DRV_X0 = 424, DRV_X1 = 514, DRV_Y0 = 240, DRV_Y1 = 296;
   const RG_X0 = 532, RG_X1 = 592, GATE_Y = 266, ZD_X = 612;
-  const V18_Y = 158, V5_X = 297;
+  const V18_Y = 158, V5_X = 331;
+  const N_X = 184;                 // สาย N ของไฟบ้าน ไต่ขึ้นเข้าขา AC ตัวล่างของบริดจ์
+  const TAP_X = 430, TAP_Y = 120;  // จุดแยกไฟเลี้ยงภาคต่ำ — ต้องอยู่ **หลังคาปา 5µF** (บัส 310V ที่เรียบแล้ว)
   const SX0 = 45, SX1 = 895, SY0 = 392, SY1 = 486;               // scope strip
 
   const BLUE = '#2563eb', GREEN = '#10b981', ORANGE = '#f59e0b', RED = '#ef4444', VIOLET = '#8b5cf6';
 
   /* ---------- current paths (conventional current, + → −) ---------- */
-  const P_INPUT = [[AC_X, HV_Y], [BR_X0, HV_Y], [BR_X1, HV_Y], [C1_X, HV_Y], [C1_X, GND_Y], [AC_X, GND_Y], [AC_X, HV_Y]];
-  const P_FILT = [[BR_X1, HV_Y], [C1_X, HV_Y], [C1_X, GND_Y], [BR_X1, GND_Y], [BR_X1, HV_Y]];
-  const P_PSU = [[V5_X, HV_Y], [V5_X, PSU_Y0]];
+  // ฝั่ง AC: L → ฟิวส์ → CT → ขา AC ของบริดจ์ แล้ววนกลับทาง N (ไม่ได้ใช้รางล่างร่วมกับ DC−)
+  const P_INPUT = [[AC_X, HV_Y], [BR_X0, HV_Y], [BR_X0, HV_Y + 26], [N_X, HV_Y + 26], [N_X, GND_Y], [AC_X, GND_Y], [AC_X, HV_Y]];
+  // ฝั่ง DC: ขั้ว + ของบริดจ์ → โช้ก → คาปา → กลับเข้าขั้ว − ของบริดจ์ทางบัส DC−
+  const P_FILT = [[BR_X1, HV_Y], [C1_X, HV_Y], [C1_X, GND_Y], [BR_X1, GND_Y], [BR_X1, HV_Y + 26]];
+  const P_PSU = [[TAP_X, HV_Y], [TAP_X, TAP_Y], [V5_X, TAP_Y], [V5_X, PSU_Y0]];
   const P_5V = [[V5_X, PSU_Y1], [V5_X, MCU_Y0]];
   const P_18V = [[PSU_X1, V18_Y], [DRV_X0 + 34, V18_Y], [DRV_X0 + 34, DRV_Y0]];
   const P_SIG = [[MCU_X1, GATE_Y], [DRV_X0, GATE_Y]];
@@ -83,7 +87,7 @@
             en: 'The resonant capacitor has dried out → at turn-off the coil energy has nowhere to go and the collector peak shoots past the IGBT rating, so a brand-new IGBT explodes the moment you plug in' },
     pot:  { psu: true, gate: true, sw: true, nopot: true,
             tp: ['310V DC', '5.0V', '18V', 'พัลส์สั้นๆ แล้วหยุด', 'แกว่งยาว Q สูง'],
-            tpe: ['310V DC', '5.0V', '18V', 'a few pulses, then stops', 'long high-Q ringing'],
+            tpe: ['310V DC', '5.0V', '18V', 'a few pulses', 'long high-Q ringing'],
             c: [GREEN, GREEN, GREEN, ORANGE, ORANGE],
             th: 'ไม่มีหม้อ หรือใช้หม้ออะลูมิเนียม → ไม่มีอะไรดูดพลังงาน คลื่นเรโซแนนซ์แกว่งยาวผิดปกติ บอร์ดอ่านค่าจาก CT แล้วตัดการทำงาน โชว์ E0/E1',
             en: 'No pot, or an aluminium one → nothing absorbs the energy, the resonant ring lasts far too long, the board reads it through the CT and shuts down with E0/E1' }
@@ -199,7 +203,9 @@
     rrect(BR_X0, HV_Y - 26, BR_X1 - BR_X0, 52, 8); ctx.fill(); ctx.stroke();
     label((BR_X0 + BR_X1) / 2, HV_Y - 6, t('บริดจ์', 'Bridge'), c, 11.5, 'center', 700);
     label((BR_X0 + BR_X1) / 2, HV_Y + 10, 'AC → DC', css('--text-light'), 9.5);
-    line([[BR_X0, GND_Y], [BR_X0, HV_Y + 26]], css('--text'), 1.6);
+    // ขา AC ตัวล่าง (รับสาย N) และขา DC− ที่ออกไปเป็นบัสกราวด์ของบอร์ด — คนละโหนดกัน
+    label(BR_X0 - 6, HV_Y + 30, 'AC', css('--text-light'), 9, 'right', 700);
+    label(BR_X1 + 6, HV_Y + 30, 'DC−', css('--text-light'), 9, 'left', 700);
   }
   function drawChoke(hot) {
     const c = hot ? BLUE : css('--text'), n = 4, w = (CH_X1 - CH_X0) / n;
@@ -208,15 +214,16 @@
     ctx.stroke();
     label((CH_X0 + CH_X1) / 2, HV_Y - 16, t('โช้ก', 'choke'), hot ? c : css('--text-light'), 10.5);
   }
-  function drawCapV(x, y0, y1, name, hot, color, labLeft) {
+  function drawCapV(x, y0, y1, name, hot, color, labLeft, labY) {
     const c = hot ? (color || BLUE) : css('--text'), ym = (y0 + y1) / 2;
     line([[x, y0], [x, ym - 6]], css('--text')); line([[x, ym + 6], [x, y1]], css('--text'));
     line([[x - 15, ym - 6], [x + 15, ym - 6]], c, 2.8);
     ctx.save(); ctx.beginPath(); ctx.arc(x, ym + 16, 22, Math.PI * 1.18, Math.PI * 1.82);
     ctx.strokeStyle = c; ctx.lineWidth = 2.8; ctx.stroke(); ctx.restore();
     const lc = hot ? c : css('--text-light');
-    if (labLeft) label(x - 20, ym + 4, name, lc, 10.5, 'right');
-    else label(x + 20, ym + 4, name, lc, 10.5, 'left');
+    const ly = labY || ym + 4;
+    if (labLeft) label(x - 20, ly, name, lc, 10.5, 'right');
+    else label(x + 20, ly, name, lc, 10.5, 'left');
   }
   function drawResH(x0, x1, y, name, hot, color) {
     const c = hot ? (color || ORANGE) : css('--text'), open = fault === 'gate';
@@ -328,7 +335,7 @@
   /* ---------- test-point badges ---------- */
   function badge(x, y, tag, val, color, align) {
     ctx.font = '700 10.5px Anuphan, sans-serif';
-    const w = Math.max(ctx.measureText(val).width, 34) + 30;
+    const w = ctx.measureText(tag).width + ctx.measureText(val).width + 26;   // 6 ซ้าย + 14 ช่องไฟ + 6 ขวา
     const bx = align === 'right' ? x - w : align === 'center' ? x - w / 2 : x;
     ctx.fillStyle = css('--card'); ctx.strokeStyle = color; ctx.lineWidth = 1.4;
     rrect(bx, y - 10, w, 20, 6); ctx.fill(); ctx.stroke();
@@ -337,10 +344,10 @@
   }
   function drawTPs() {
     const f = F(), v = isEN() ? f.tpe : f.tp;
-    badge(430, 62, 'TP1', v[0], f.c[0], 'left');
+    badge(430, 52, 'TP1', v[0], f.c[0], 'left');
     badge(MCU_X0 - 6, MCU_Y1 + 22, 'TP2', v[1], f.c[1], 'left');
     badge(DRV_X0 + 34, V18_Y - 22, 'TP3', v[2], f.c[2], 'center');
-    badge(RG_X1 + 6, GATE_Y + 34, 'TP4', v[3], f.c[3], 'center');
+    badge(RG_X1 - 14, GATE_Y + 34, 'TP4', v[3], f.c[3], 'center');
     badge(895, SW_Y - 26, 'TP5', v[4], f.c[4], 'right');
   }
 
@@ -372,7 +379,7 @@
     ctx.save(); ctx.setLineDash([4, 4]); ctx.strokeStyle = color; ctx.lineWidth = 1.4;
     const py = SY1 - 14 - (SY1 - SY0 - 26) * y01;
     ctx.beginPath(); ctx.moveTo(SX0, py); ctx.lineTo(SX1, py); ctx.stroke(); ctx.restore();
-    if (txt) label(SX0 + 8, py - 4, txt, color, 10, 'left', 700);
+    if (txt) label(SX0 + 8, py + 13, txt, color, 10, 'left', 700);   // ใต้เส้น — ด้านบนเป็นหัวเรื่องสโคป
   }
 
   // แรงดันที่ขา C ของ IGBT ในหนึ่งคาบ: ON = 0V, OFF = ลูกครึ่งไซน์เรโซแนนซ์แล้วกลับมาศูนย์ (ZVS)
@@ -511,7 +518,10 @@
 
     // rails
     line([[AC_X, HV_Y], [COIL_X0, HV_Y]], step <= 2 ? BLUE : txt, 2.4);
-    line([[AC_X, GND_Y], [RES_X, GND_Y]], txt, 2.4);
+    // **รางล่างไม่ใช่เส้นเดียวกัน**: ซ้ายคือสาย N ของไฟบ้านที่ไต่ขึ้นเข้าบริดจ์
+    // ขวาคือบัส DC− ของบอร์ดที่ออกจากบริดจ์ — ถ้าลากต่อกันเมื่อไหร่ = ช็อตไดโอดในบริดจ์
+    line([[AC_X, GND_Y], [N_X, GND_Y], [N_X, HV_Y + 26], [BR_X0, HV_Y + 26]], step === 1 ? BLUE : txt, 2.4);
+    line([[BR_X1, HV_Y + 26], [BR_X1, GND_Y], [RES_X, GND_Y]], txt, 2.4);
     line([[COIL_X1, HV_Y], [COIL_X1, SW_Y]], txt, 2.4);
     line([[COIL_X1, SW_Y], [RES_X, SW_Y]], f.sw && !on && step >= 5 ? ORANGE : txt, 2.4);
     label(470, HV_Y - 16, '310V DC', RED, 12, 'center', 700);
@@ -522,15 +532,15 @@
     drawCT(step === 1 || step === 7);
     drawBridge(step === 1, f.shorted);
     drawChoke(step === 2);
-    drawCapV(C1_X, HV_Y, GND_Y, 'C 5µF 400V', step === 2, BLUE);
-    drawGnd(AC_X + 120, GND_Y);
+    drawCapV(C1_X, HV_Y, GND_Y, 'C 5µF 400V', step === 2, BLUE, false, HV_Y + 88);
+    drawGnd(470, GND_Y);   // กราวด์ของบอร์ด = ขั้วลบของบัส 310V ไม่ใช่สาย N
 
     // low-voltage side
-    line([[V5_X, HV_Y], [V5_X, PSU_Y0]], step === 3 ? GREEN : txt, 1.8);
+    line([[TAP_X, HV_Y], [TAP_X, TAP_Y], [V5_X, TAP_Y], [V5_X, PSU_Y0]], step === 3 ? GREEN : txt, 1.8);
     box(PSU_X0, PSU_Y0, PSU_X1, PSU_Y1, t('ภาคจ่ายไฟต่ำ', 'LV supply'), '310V → 5V / 18V',
         step === 3, f.psu ? GREEN : RED);
     line([[PSU_X1, V18_Y], [DRV_X0 + 34, V18_Y], [DRV_X0 + 34, DRV_Y0]], f.psu ? (step === 3 ? ORANGE : txt) : RED, 1.8);
-    label(DRV_X0 + 40, V18_Y - 6, '18V', f.psu ? ORANGE : RED, 10.5, 'left', 700);
+    label(PSU_X1 + 8, V18_Y - 6, '18V', f.psu ? ORANGE : RED, 10.5, 'left', 700);
     line([[V5_X, PSU_Y1], [V5_X, MCU_Y0]], f.psu ? (step === 3 ? GREEN : txt) : RED, 1.8);
     label(V5_X + 8, (PSU_Y1 + MCU_Y0) / 2 + 4, '5V', f.psu ? GREEN : RED, 10.5, 'left', 700);
     box(MCU_X0, MCU_Y0, MCU_X1, MCU_Y1, 'MCU', t('สมองสั่งงาน', 'the brain'), step === 4 || step === 7, BLUE);
@@ -548,7 +558,7 @@
     drawIGBT(on, step === 5 || step === 6);
     drawSense(step === 7);
     drawCapV(RES_X, SW_Y, GND_Y, t('C-res 0.27µF 1200V', 'C-res 0.27µF 1200V'),
-             step === 6 || f.overv, f.overv ? RED : ORANGE, true);
+             step === 6 || f.overv, f.overv ? RED : ORANGE, false);   // ป้ายอยู่ขวาของคาปา ไม่ทับกล่อง IGBT
 
     // SW node dot
     ctx.fillStyle = step >= 5 ? (on ? GREEN : ORANGE) : txt;
@@ -566,7 +576,7 @@
     flow(P_RES, ORANGE, 100, (step === 6 || step >= 7) && f.sw && !on);
 
     if (step === 7) {
-      label((COIL_X0 + COIL_X1) / 2, 24,
+      label(CT_X + 90, 44,
         t('CT อ่านกระแสขาเข้า → MCU ตัดสินว่าหม้อใช้ได้ไหม',
           'the CT reads the input current → the MCU decides whether the pot is valid'),
         VIOLET, 11, 'center', 700);
