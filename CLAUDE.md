@@ -76,7 +76,7 @@ website/
 ├── formulas.html       — สูตรสรุป + print-friendly
 ├── tools.html          — เครื่องคิดเลข 7 ตัว (4-band + 5-band มีชื่อไทย-อังกฤษครบ)
 ├── quiz.html           — แบบทดสอบ 92 ข้อ 14 หมวด — มีข้อสอบ EN ครบทุกข้อ
-├── downloads.html      — ดาวน์โหลด PDF 50 ไฟล์ (มีหัวข้อ "ใบงาน" → pdf/worksheet/ + "ฟอร์มตรวจเช็ค" → pdf/chec_list/ + "งานซ่อม" → pdf/workshop/) + toolbar ค้นหา/กรองหมวด (sticky: #dl-search + #dl-chips, sections มี data-cat)
+├── downloads.html      — ดาวน์โหลด PDF 53 ไฟล์ (มีหัวข้อ "ใบงาน" → pdf/worksheet/ + "ฟอร์มตรวจเช็ค" → pdf/chec_list/ + "งานซ่อม" → pdf/workshop/) + toolbar ค้นหา/กรองหมวด (sticky: #dl-search + #dl-chips, sections มี data-cat)
 ├── pdf/                — ไฟล์ PDF ภาษาไทย (~24 MB) — สื่อจากหลายแหล่ง ไม่อยู่ใต้ CC (ดู LICENSE)
 └── LICENSE             — CC BY-NC 4.0 (คลุมเฉพาะเนื้อหา/โค้ดต้นฉบับ; PDF แยกออกตาม NOTICE ในไฟล์)
 ```
