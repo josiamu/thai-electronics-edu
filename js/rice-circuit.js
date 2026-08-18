@@ -11,11 +11,18 @@
  *      L → เทอร์โมฟิวส์ → บอร์ด: SMPS 220V→5V → MCU (อ่าน NTC) → รีเลย์ → **ฮีตเตอร์ทุกชิ้นขนานกัน**
  *      MCU ↔ บอร์ดหน้าจอ ด้วยสาย UART 4 เส้น (VCC/GND/TXD/RXD) — ขาดเส้นเดียวเครื่องรวน
  *
+ * **สวิตช์อยู่ฝั่ง N ไม่ใช่ฝั่ง L** (ตามใบความรู้ต้นทาง) → ขั้วบนของฮีตเตอร์ต่อกับ L ผ่านเทอร์โมฟิวส์
+ * อย่างเดียว จึง **มีไฟ 220V ตลอดเวลาที่เสียบปลั๊ก** ไม่ว่าสวิตช์จะอยู่ตำแหน่งไหน — ป้าย "ขั้วนี้มีไฟตลอด"
+ * บนแคนวาสกับกล่องเตือนในหน้าอิงข้อนี้ ถ้าจะย้ายสวิตช์ไปฝั่ง L ต้องแก้ทั้งสองที่ด้วย
+ *
  * ปุ่ม 🍚 เดินเวลาจำลองการหุง: ไต่ขึ้น → พลาโต 100°C → พุ่ง → แม่เหล็กปล่อยที่ 103°C เข้าโหมดอุ่น
  * อาการเสีย 7 แบบตรงกับคลินิกในหน้า — โดยเฉพาะ swstuck (สวิตช์ละลายติดค้าง) ที่ปล่อยไว้แล้ว
  * **เทอร์โมฟิวส์จะขาดจริงต่อหน้า** เพื่อสอนว่าฟิวส์ขาดไม่ได้ขาดเอง มันขาดเพราะมีต้นเหตุ
- * จุดที่วิ่ง = กระแสสมมติ (+ → −) · ใช้ CSS .bs-* ร่วมกับหน้าอื่น และ query .bs-tab/.bs-desc
- * เฉพาะใน wrap ตัวเองเท่านั้น
+ * **จุดที่วิ่งไม่ใช่ทิศกระแสจริง** — หน้านี้เป็นไฟบ้าน AC 50Hz กระแสสลับทิศ 50 ครั้ง/วินาที
+ * จุดที่วิ่งบอกแค่ว่า "วงจรครบวงและมีกระแสไหล" เท่านั้น (ต่างจากซิม DC อย่าง bjt-circuit.js
+ * ที่ทิศ +→− มีความหมายจริง) ทิศที่วาดจึงเลือกให้ **เริ่มที่ขั้ว L → โหลด → ออกทาง N** เพื่อให้
+ * ตรงกับลำดับป้ายจุดวัดที่ไล่ซ้าย→ขวา และตรงกับ wh-circuit.js — อย่ากลับทิศโดยไม่แก้ทั้งสองที่
+ * ใช้ CSS .bs-* ร่วมกับหน้าอื่น และ query .bs-tab/.bs-desc เฉพาะใน wrap ตัวเองเท่านั้น
  */
 (function () {
   const root = document.getElementById('rice-circuit');
@@ -85,6 +92,9 @@
 
   const T_RAMP = 6, T_PLATEAU = 10;              // วินาที (เวลาจำลอง) ของช่วงไต่ขึ้นและช่วงน้ำเดือด
   const T_CURIE = 103, T_FUSE = 185;             // จุดคูรี และอุณหภูมิที่เทอร์โมฟิวส์ขาด
+  const SIM_SPEED = 1.2;                         // เท่าของเวลาจริง → ช่วงไต่ขึ้นใช้เวลาดูราว 5 วินาที
+  const RISE_DRY = 6;                            // °C ต่อวินาทีจำลอง ช่วงน้ำเพิ่งแห้ง (ยังมีไอน้ำหน่วงอยู่บ้าง)
+  const RISE_RUNAWAY = 20;                       // เกิน 110°C = แห้งสนิท ไม่มีน้ำหน่วงแล้ว อุณหภูมิพุ่งเร็วขึ้น
 
   const isEN = () => document.documentElement.lang === 'en';
   const t = (th, en) => (isEN() ? en : th);
@@ -192,11 +202,13 @@
   }
 
   /* ---------- ฉาก A: รุ่นกลไก ---------- */
-  const cookPath = () => ([[A.x0, A.nY], [A.swX + A.swW, A.nY], [A.swX + A.swW + 30, A.cookY],
-                           [A.heatX, A.cookY], [A.heatX, A.lY], [A.x0, A.lY]]);
-  const warmPath = () => ([[A.x0, A.nY], [A.swX + A.swW, A.nY], [A.swX + A.swW + 30, A.warmY],
-                           [A.statX + A.statW, A.warmY], [A.warmX + A.warmW, A.warmY],
-                           [A.heatX, A.warmY], [A.heatX, A.lY], [A.x0, A.lY]]);
+  // ไล่จากขั้ว L → โหลด → กลับออกทาง N ให้ตรงกับลำดับป้ายจุดวัด (ซ้าย→ขวา) และตรงกับ wh-circuit.js
+  // ไฟบ้านเป็น AC จึงไม่มีทิศถาวรจริง — ทิศที่วาดเลือกให้ตรงกับวิธีไล่ซ่อม (เริ่มที่ต้นทาง L)
+  const cookPath = () => ([[A.x0, A.lY], [A.heatX, A.lY], [A.heatX, A.cookY],
+                           [A.swX + A.swW + 30, A.cookY], [A.swX + A.swW, A.nY], [A.x0, A.nY]]);
+  const warmPath = () => ([[A.x0, A.lY], [A.heatX, A.lY], [A.heatX, A.warmY],
+                           [A.warmX + A.warmW, A.warmY], [A.statX + A.statW, A.warmY],
+                           [A.swX + A.swW + 30, A.warmY], [A.swX + A.swW, A.nY], [A.x0, A.nY]]);
 
   function drawFuse(x, y, w, hot) {
     const ok = fuseOK();
@@ -278,6 +290,8 @@
     coil(x, A.lY + 58, x, A.cookY - 30,
          hotGlow ? 'rgba(239,68,68,' + (0.6 + 0.3 * Math.sin(tStep * 5)) + ')' : on ? GREEN : css('--text-light'), 5, 16);
     label(x - 52, A.lY + 60, t('ฮีตเตอร์หลัก ~50Ω', 'main element ~50Ω'), hot ? VIOLET : css('--text-light'), 10.5, 'right', 700);
+    // สวิตช์อยู่ฝั่ง N → ขั้วบนของฮีตเตอร์ต่อกับ L ผ่านฟิวส์อย่างเดียว จึงมีไฟตลอดที่เสียบปลั๊ก
+    if (fuseOK()) label(x - 52, A.lY + 20, t('⚡ ขั้วนี้มีไฟตลอดที่เสียบปลั๊ก', '⚡ live whenever plugged in'), RED, 10, 'right', 700);
     label(x - 52, A.cookY - 8, cookRuns() ? t('ต้มน้ำเต็มกำลัง ~970W', 'boiling, ~970 W')
                         : warmRuns() ? t('แทบไม่ร้อน (~0.6W)', 'barely warm (~0.6 W)')
                                      : t('ไม่ทำงาน', 'idle'),
@@ -510,10 +524,13 @@
   /* ---------- simulation clock ---------- */
   function advanceCook(dt) {
     if (!cooking || !fuseOK()) return;
-    cookT += dt * 12;                                   // เร่งเวลา ~12 เท่า
+    cookT += dt * SIM_SPEED;
     if (cookT <= T_RAMP) temp = 30 + 70 * (cookT / T_RAMP);
     else if (cookT <= T_RAMP + T_PLATEAU) temp = 100;   // พลาโต — พลังงานไปเป็นไอน้ำทั้งหมด
-    else temp = 100 + (cookT - T_RAMP - T_PLATEAU) * 3;
+    else {
+      const td = cookT - T_RAMP - T_PLATEAU, knee = 10 / RISE_DRY;
+      temp = td <= knee ? 100 + td * RISE_DRY : 110 + (td - knee) * RISE_RUNAWAY;
+    }
 
     if (fault === 'magnet' && cookT >= T_RAMP + T_PLATEAU * 0.5) { cooking = false; syncCook(); }
     else if (fault === 'swstuck') {
