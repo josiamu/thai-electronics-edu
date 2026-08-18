@@ -123,7 +123,7 @@ CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor
 ### Navigation (nav.js)
 - NAV_LESSON_GROUPS → mega menu "บทเรียน / Lessons" แบ่ง 4 กลุ่ม: พื้นฐานไฟฟ้า, อุปกรณ์อิเล็กทรอนิกส์, วงจรรวมและดิจิทัล (ic/timer555/opamp/logic), เครื่องมือวัดและทดสอบ
 - บน desktop แสดง mega menu 4 คอลัมน์ (`.nav-mega-menu` ใน style.css = `repeat(4,...)` width 900px — **4 กลุ่มพอดี 1 แถว ถ้าเพิ่มกลุ่มที่ 5 ต้องแก้ grid ด้วย**); บน mobile กลุ่มบทเรียนเป็น accordion เปิดทีละกลุ่ม
-- **NAV_REPAIR** (fan-motor/induction-stove/switching-psu/microwave/water-heater/rice-cooker) → dropdown **ระดับบนสุดของตัวเอง** "งานซ่อม / Repair" (ไม่ได้อยู่ใน mega menu บทเรียนแล้ว — ย้ายออกมาเพราะเมนูบทเรียนแน่นเกินและกลุ่มนี้โตได้เรื่อยๆ ตามเครื่องใช้ไฟฟ้าที่เพิ่ม); ลำดับเมนู: บทเรียน · งานซ่อม · งานปฏิบัติ · เครื่องมือ · คลังการเรียนรู้
+- **NAV_REPAIR** (fan-motor/switching-psu/induction-stove/microwave/water-heater/rice-cooker) → dropdown **ระดับบนสุดของตัวเอง** "งานซ่อม / Repair" (ไม่ได้อยู่ใน mega menu บทเรียนแล้ว — ย้ายออกมาเพราะเมนูบทเรียนแน่นเกินและกลุ่มนี้โตได้เรื่อยๆ ตามเครื่องใช้ไฟฟ้าที่เพิ่ม); ลำดับเมนู: บทเรียน · งานซ่อม · งานปฏิบัติ · เครื่องมือ · คลังการเรียนรู้
 - NAV_PRACTICE (soldering, home-wiring) → dropdown "งานปฏิบัติ / Practical"
 - NAV_TOOLS (simulation, breadboard, relay-lab, formulas, tools) → dropdown "เครื่องมือ ▼" / "Tools ▼"
 - NAV_RESOURCES (quiz, downloads) → dropdown "คลังการเรียนรู้ / Resources"
@@ -151,7 +151,7 @@ CURRENT_PAGE ids: `home`, `electricity`, `ohm`, `resistor`, `diode`, `transistor
 | 📚 อุปกรณ์อิเล็กทรอนิกส์ | resistor, diode, capacitor, transistor, igbt, thyristor, inductor, relay, opto, power-supply | `topic-card-blue` |
 | 📚 วงจรรวมและดิจิทัล | ic, timer555, opamp, logic | `topic-card-blue` |
 | 📚 เครื่องมือวัดและทดสอบ | multimeter, signal-generator, oscilloscope | `topic-card-blue` |
-| 🔧 งานซ่อมเครื่องใช้ไฟฟ้า (section ของตัวเอง) | fan-motor, induction-stove, switching-psu, microwave, water-heater, rice-cooker | `topic-card-blue` |
+| 🔧 งานซ่อมเครื่องใช้ไฟฟ้า (section ของตัวเอง) | fan-motor, switching-psu, induction-stove, microwave, water-heater, rice-cooker | `topic-card-blue` |
 | 🧰 งานปฏิบัติ | soldering, home-wiring | `topic-card-teal` |
 | 🛠 เครื่องมือ | simulation, breadboard, formulas, tools | `topic-card-teal` |
 | 📚 คลังการเรียนรู้ | quiz, downloads | `topic-card-orange` / `topic-card-green` |

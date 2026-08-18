@@ -56,8 +56,8 @@ const NAV_PRACTICE = [
 // เมนูบนสุดของตัวเอง (ไม่อยู่ใน mega menu บทเรียน) — กลุ่มที่โตได้เรื่อยๆ ตามเครื่องใช้ไฟฟ้าที่เพิ่ม
 const NAV_REPAIR = [
   { id: 'repair-fan', href: 'fan-motor.html', label_th: '🌀 มอเตอร์พัดลมไฟฟ้า', label_en: '🌀 Electric Fan Motor' },
-  { id: 'repair-stove', href: 'induction-stove.html', label_th: '🔥 เตาแม่เหล็กไฟฟ้า', label_en: '🔥 Induction Stove' },
   { id: 'repair-smps', href: 'switching-psu.html', label_th: '🔌 ภาคจ่ายไฟสวิตชิ่ง (LNK304)', label_en: '🔌 Switching PSU (LNK304)' },
+  { id: 'repair-stove', href: 'induction-stove.html', label_th: '🔥 เตาแม่เหล็กไฟฟ้า', label_en: '🔥 Induction Stove' },
   { id: 'repair-microwave', href: 'microwave.html', label_th: '📡 เตาไมโครเวฟ', label_en: '📡 Microwave Oven' },
   { id: 'repair-water-heater', href: 'water-heater.html', label_th: '🚿 เครื่องทำน้ำอุ่น', label_en: '🚿 Water Heater' },
   { id: 'repair-rice-cooker', href: 'rice-cooker.html', label_th: '🍚 หม้อหุงข้าว', label_en: '🍚 Rice Cooker' },
@@ -80,7 +80,9 @@ const NAV_RESOURCES = [
   const savedTheme = localStorage.getItem('theme');
   if (savedTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
 
-  const cur = window.CURRENT_PAGE || '';
+  // แต่ละหน้าประกาศ `const CURRENT_PAGE = '...'` ซึ่ง **const ไม่ผูกเข้ากับ window**
+  // (อ่านผ่าน window.CURRENT_PAGE จะได้ undefined เสมอ → เมนูไม่ไฮไลต์หน้าปัจจุบันเลย)
+  const cur = typeof CURRENT_PAGE !== 'undefined' ? CURRENT_PAGE : (window.CURRENT_PAGE || '');
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   const curLang = document.documentElement.lang || 'th';
   const lessonPages = NAV_LESSON_GROUPS.flatMap(group => group.items);

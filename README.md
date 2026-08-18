@@ -68,8 +68,8 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | ไทย | English | หน้า |
 |---|---|---|
 | มอเตอร์พัดลมไฟฟ้า | Electric Fan Motor | `fan-motor.html` (มีซิมสวิตช์ความเร็วโต้ตอบ) |
-| เตาแม่เหล็กไฟฟ้า | Induction Stove | `induction-stove.html` (มีวงจรโต้ตอบ 8 ขั้น + จำลองอาการเสีย 6 แบบ + ตารางจุดวัด TP1–TP5) |
 | ภาคจ่ายไฟสวิตชิ่ง (LNK304) | Switching PSU (LNK304) | `switching-psu.html` (มีวงจรโต้ตอบทีละขั้น 8 ขั้น + จำลองอาการเสีย) |
+| เตาแม่เหล็กไฟฟ้า | Induction Stove | `induction-stove.html` (มีวงจรโต้ตอบ 8 ขั้น + จำลองอาการเสีย 6 แบบ + ตารางจุดวัด TP1–TP5) |
 | เตาไมโครเวฟ | Microwave Oven | `microwave.html` (วงจร 4 โซน • เซฟตี้ประตู 3 ตัว • ตารางจุดวัด Cold Test + วงจรโต้ตอบ 9 ขั้น พร้อมทวีแรงดัน 4,000V 2 จังหวะ) |
 | เครื่องทำน้ำอุ่น | Water Heater | `water-heater.html` (ทำน้ำร้อนทันที • ฟลุกซ์สวิตช์ • วงจรอย่างง่าย • ELCB กับสายดิน + ซิม 2 โหมด: อุณหภูมิน้ำตาม ΔT และไฟรั่ว/ELCB + วงจรโต้ตอบ 7 ขั้น) |
 | หม้อหุงข้าว | Rice Cooker | `rice-cooker.html` (จุดคูรีของแม่เหล็ก • วงจรหุง-อุ่น • อุ่นทิพย์ 3D • รุ่นดิจิทัล MCU + รีเลย์ + NTC + ซิมกราฟการหุง + วงจรโต้ตอบ 9 ขั้น 2 ฉาก) |
