@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="ซ่อมหม้อหุงข้าว | สื่อการเรียนการสอน" data-title-en="Rice Cooker Repair | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ซ่อมหม้อหุงข้าว | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.rc-steps { display:grid; grid-template-columns:repeat(4,1fr); gap:.5rem; align-items:stretch; }
+@media (max-width:760px){ .rc-steps{ grid-template-columns:1fr 1fr; } }
+.rc-step { background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:.85rem .6rem; text-align:center; }
+.rc-step .rc-num { display:inline-block; width:24px; height:24px; line-height:24px; border-radius:50%; background:var(--primary); color:#fff; font-weight:700; font-size:.82rem; margin-bottom:.4rem; }
+.rc-step h4 { margin:.2rem 0 .35rem; font-size:.9rem; color:var(--primary-dark); }
+.rc-step p { margin:0; font-size:.78rem; color:var(--text-light); }
+.rc-tbl td.hi { font-weight:700; color:var(--primary-dark); white-space:nowrap; }
+.rc-tbl td.val { font-weight:700; color:var(--secondary); white-space:nowrap; }
+.rc-fault { border:1px solid var(--border); border-radius:12px; padding:1rem 1.15rem; margin:0 0 1rem; border-left-width:5px; border-left-style:solid; }
+.rc-fault:last-child { margin-bottom:0; }
+.rc-fault-title { font-weight:700; margin-bottom:.4rem; display:block; }
+.rc-formula { background:var(--bg); border:1px dashed var(--border); border-radius:10px; padding:.8rem 1rem; text-align:center; font-size:1.05rem; font-weight:700; color:var(--primary-dark); margin:.8rem 0; }
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🍚</div>
+    <div>
+      <h1 class="th-only">ซ่อมหม้อหุงข้าว (Rice Cooker)</h1>
+      <h1 class="en-only">Rice Cooker Repair</h1>
+      <p class="th-only">จุดคูรีของแม่เหล็ก • วงจรหุง-อุ่น • อุ่นทิพย์ 3D • รุ่นดิจิทัล (MCU + รีเลย์ + NTC) • คลินิกวิเคราะห์อาการเสีย</p>
+      <p class="en-only">The magnet Curie point • Cook / Warm circuit • 3D warming • Digital models (MCU + relay + NTC) • Fault-diagnosis clinic</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="card" style="border-left:4px solid #dc2626; display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+    <div style="font-size:1.6rem;">⚠️</div>
+    <div style="flex:1; min-width:220px;">
+      <strong class="th-only">หม้อหุงข้าวเป็นเครื่องโครงโลหะที่กินกระแสสูง — 2 กฎนี้ห้ามละเมิด</strong>
+      <strong class="en-only">A rice cooker is a metal-bodied appliance drawing high current — two rules you must never break</strong><br>
+      <span class="th-only">① <strong>ห้ามใช้ลวดต่อตรงข้ามเทอร์โมฟิวส์เด็ดขาด</strong> — ฟิวส์ตัวนี้คือสิ่งเดียวที่กันไฟไหม้เมื่อสวิตช์ไม่ยอมดีด ② <strong>สายดินสีเขียว-เหลืองที่ขันกับโครงเหล็กต้องขันกลับให้แน่นทุกครั้ง</strong> — โครงหม้ออยู่ห่างจากขั้วฮีตเตอร์ 220V แค่ไม่กี่มิลลิเมตร และถอดปลั๊กก่อนแกะทุกครั้ง</span>
+      <span class="en-only">① <strong>Never bridge the thermal fuse with a piece of wire</strong> — it is the only thing standing between a stuck switch and a house fire. ② <strong>The green/yellow earth screw on the steel chassis goes back on, tight, every time</strong> — that chassis sits millimetres from a live 220 V element. And always unplug before opening the base.</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">วัตถุประสงค์การเรียนรู้</span><span class="en-only">Learning Objectives</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li>อธิบายได้ว่าหม้อหุงข้าว "รู้ได้อย่างไรว่าข้าวสุก" ด้วยจุดคูรี (Curie point) ของแม่เหล็ก โดยไม่ต้องใช้เซ็นเซอร์หรือตัวตั้งเวลา</li>
+        <li>ไล่วงจรหม้อรุ่นกลไกจากปลั๊กถึงฮีตเตอร์ และบอกได้ว่าไมโครสวิตช์สับรางไฟไปทางไหนในโหมดหุงและโหมดอุ่น</li>
+        <li>อธิบายด้วยกฎของโอห์มว่าทำไมโหมดอุ่นถึงต่อฮีตเตอร์อุ่นอนุกรมกับฮีตเตอร์หลัก แล้วข้าวยังไม่ไหม้</li>
+        <li>เปรียบเทียบรุ่นกลไกกับรุ่นดิจิทัล (SMPS 5V + MCU + รีเลย์ + NTC + สาย UART) ว่าต่างกันตรงไหน</li>
+        <li>วัดค่ามาตรฐานของเทอร์โมฟิวส์ ฮีตเตอร์หลัก ฮีตเตอร์อุ่น หน้าสัมผัสสวิตช์ และ NTC ด้วยมัลติมิเตอร์ได้</li>
+        <li>วิเคราะห์อาการเสียยอดฮิต 7 เคส และแกะ-ประกอบเครื่องกลับโดยไม่ทำสายบานพับหรือกรอบพลาสติกเสียหาย</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>Explain how a rice cooker "knows" the rice is done — the Curie point of a magnet, with no sensor and no timer</li>
+        <li>Trace a mechanical cooker from plug to element and say which way the micro switch routes power in Cook and in Warm</li>
+        <li>Use Ohm's law to explain why the warming elements sit in series with the main element, and why the rice does not burn</li>
+        <li>Compare mechanical and digital models (5 V switching supply + MCU + relay + NTC thermistor + UART link)</li>
+        <li>Measure the standard values of the thermal fuse, main element, warming element, switch contacts and NTC</li>
+        <li>Diagnose 7 common faults, and take the unit apart and back together without damaging the hinge wiring or the plastic</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 1. หลักการ -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">หม้อหุงข้าวรู้ได้อย่างไรว่าข้าวสุก?</span><span class="en-only">How Does It Know the Rice Is Done?</span></div>
+    <div class="card">
+      <p class="th-only">คำตอบที่คนส่วนใหญ่เดาคือ "มันจับเวลา" หรือ "มันวัดความสุกของข้าว" — <strong>ผิดทั้งคู่</strong> หม้อหุงข้าวแบบกลไกไม่มีทั้งนาฬิกาและเซ็นเซอร์อิเล็กทรอนิกส์เลยสักตัว มันใช้<strong>คุณสมบัติทางฟิสิกส์ 2 ข้อ</strong> ทำงานร่วมกัน:</p>
+      <p class="en-only">Most people guess "it times it" or "it measures the rice" — <strong>both wrong</strong>. A mechanical rice cooker has neither a clock nor an electronic sensor. It rides on <strong>two pieces of physics</strong>, one about water and one about magnets:</p>
+      <ul class="content-list th-only">
+        <li><strong>น้ำเดือดตรึงอุณหภูมิไว้ที่ 100°C</strong> — ตราบใดที่ยังมีน้ำเหลืออยู่ในหม้อ ต่อให้จ่ายไฟเข้าฮีตเตอร์เต็มที่ ก้นหม้อก็ขึ้นไม่เกิน ~100°C เพราะพลังงานทั้งหมดถูกใช้ไปกับการเปลี่ยนน้ำเป็นไอ</li>
+        <li><strong>แม่เหล็กถาวรจะหมดอำนาจดูดเมื่อร้อนถึงจุดคูรี (Curie point)</strong> — แป้นแม่เหล็กที่ก้นหม้อถูกเลือกวัสดุมาให้สูญเสียแรงดูดที่ประมาณ <strong>103°C</strong> พอดี</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li><strong>Boiling water pins the temperature at 100°C</strong> — while any water remains, the base cannot climb past ~100°C no matter how hard the element works; all the energy goes into turning water into steam</li>
+        <li><strong>A permanent magnet loses its pull at its Curie point</strong> — the magnet in the centre of the base is chosen to let go at roughly <strong>103°C</strong></li>
+      </ul>
+      <p class="th-only" style="margin-top:.8rem">เอาสองข้อนี้มาต่อกัน จะได้กลไกที่ฉลาดอย่างเหลือเชื่อ: <strong>ตราบใดที่ข้าวยังมีน้ำ อุณหภูมิจะค้างอยู่ 100°C แม่เหล็กก็ยังดูดสวิตช์ไว้ พอน้ำถูกข้าวดูดซับและระเหยจนแห้ง อุณหภูมิก้นหม้อจะพุ่งขึ้นทันที</strong> ผ่าน 103°C เมื่อไหร่ แม่เหล็กก็ปล่อยมือ สปริงดีดสวิตช์เด้งกลับเข้าโหมดอุ่นเอง — <strong>"น้ำแห้ง" คือนิยามของ "ข้าวสุก" ในสายตาของหม้อใบนี้</strong></p>
+      <p class="en-only" style="margin-top:.8rem">Chain them together and you get something remarkably clever: <strong>while the rice still holds water the base stays at 100°C and the magnet keeps holding the switch down. The moment the water has all been absorbed and boiled away, the base temperature shoots up</strong> — it crosses 103°C, the magnet lets go, and a spring flicks the switch back to Warm. <strong>To this appliance, "the water is gone" is the definition of "the rice is done."</strong></p>
+
+      <div class="rc-steps" style="margin-top:1rem;">
+        <div class="rc-step">
+          <span class="rc-num">1</span>
+          <h4 class="th-only">กดคันโยกลง</h4><h4 class="en-only">Press the lever</h4>
+          <p class="th-only">แม่เหล็กดูดค้างสวิตช์ไว้ ไฟเข้าฮีตเตอร์หลักเต็มกำลัง (หลอดแดงติด)</p>
+          <p class="en-only">The magnet latches the switch; the main element gets full power (red lamp on)</p>
+        </div>
+        <div class="rc-step">
+          <span class="rc-num">2</span>
+          <h4 class="th-only">น้ำเดือด 100°C</h4><h4 class="en-only">Water boils at 100°C</h4>
+          <p class="th-only">อุณหภูมิค้างนิ่งเป็นเส้นตรง ยาวนานตามปริมาณน้ำ ข้าวสุกในช่วงนี้</p>
+          <p class="en-only">The temperature flatlines for as long as the water lasts — this is when the rice cooks</p>
+        </div>
+        <div class="rc-step">
+          <span class="rc-num">3</span>
+          <h4 class="th-only">น้ำแห้ง อุณหภูมิพุ่ง</h4><h4 class="en-only">Dry: temperature spikes</h4>
+          <p class="th-only">ไม่มีน้ำให้ระเหยแล้ว ก้นหม้อไต่ทะลุ 100°C ขึ้นไปอย่างรวดเร็ว</p>
+          <p class="en-only">With nothing left to evaporate, the base climbs straight past 100°C</p>
+        </div>
+        <div class="rc-step">
+          <span class="rc-num">4</span>
+          <h4 class="th-only">แม่เหล็กปล่อยที่ ~103°C</h4><h4 class="en-only">Magnet releases at ~103°C</h4>
+          <p class="th-only">สวิตช์เด้งเอง สับรางไปโหมดอุ่น (หลอดเขียวติด) — เสียง "ป๊อก" ที่เราคุ้นเคย</p>
+          <p class="en-only">The switch pops up into Warm (green lamp) — that familiar clunk from the kitchen</p>
+        </div>
+      </div>
+
+      <h3 style="margin:1.4rem 0 .6rem;font-size:1.05rem;">
+        <span class="th-only">🍚 ซิมโต้ตอบ — ดูอุณหภูมิก้นหม้อตลอดการหุง จนแม่เหล็กปล่อยสวิตช์</span>
+        <span class="en-only">🍚 Interactive sim — watch the base temperature all the way to the moment the magnet lets go</span>
+      </h3>
+      <div class="sim-wrap" id="rice-sim">
+        <canvas id="rc-sim-canvas" class="sim-screen" width="520" height="300" aria-label="Rice cooker temperature simulator"></canvas>
+        <div class="sim-panel">
+          <div class="sim-modes">
+            <button id="rc-mode-ok" class="active" type="button">🧲 <span class="th-only">แม่เหล็กปกติ</span><span class="en-only">Healthy magnet</span></button>
+            <button id="rc-mode-weak" type="button">⚠️ <span class="th-only">แม่เหล็กเสื่อม</span><span class="en-only">Weak magnet</span></button>
+          </div>
+
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="rc-cups"><span class="th-only">ปริมาณข้าว + น้ำ</span><span class="en-only">Rice + water</span></label>
+              <span id="rc-cups-val">3</span>
+            </div>
+            <input type="range" id="rc-cups" min="1" max="8" step="1" value="3">
+          </div>
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="rc-power"><span class="th-only">กำลังฮีตเตอร์ (พิกัด)</span><span class="en-only">Element rating</span></label>
+              <span id="rc-power-val">700 W</span>
+            </div>
+            <input type="range" id="rc-power" min="400" max="1200" step="50" value="700">
+          </div>
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="rc-volt"><span class="th-only">แรงดันไฟบ้าน</span><span class="en-only">Mains voltage</span></label>
+              <span id="rc-volt-val">220 V</span>
+            </div>
+            <input type="range" id="rc-volt" min="190" max="240" step="5" value="220">
+          </div>
+          <button id="rc-sim-start" class="sim-btn" type="button">▶ <span class="th-only">เริ่มหุงใหม่</span><span class="en-only">Start a new cook</span></button>
+
+          <div class="sim-readout">
+            <div class="sim-rb"><div class="sim-rl" id="rc-l1">อุณหภูมิก้นหม้อ</div><div class="sim-rv" id="rc-r1">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="rc-l2">โหมด</div><div class="sim-rv" id="rc-r2">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="rc-l3">กำลังที่ได้จริง</div><div class="sim-rv" id="rc-r3">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="rc-l4">เวลาจนสวิตช์ดีด</div><div class="sim-rv" id="rc-r4">—</div></div>
+          </div>
+          <div class="sim-verdict" id="rc-sim-verdict">—</div>
+        </div>
+      </div>
+
+      <div class="info-box" style="margin-top:1rem;">
+        <strong class="th-only">🧪 ลองไล่ 3 สถานการณ์นี้</strong>
+        <strong class="en-only">🧪 Three scenarios worth trying</strong>
+        <p class="th-only" style="margin:.4rem 0 0;">
+          <strong>1) ทำไมหุงเยอะถึงนานกว่า:</strong> เลื่อนปริมาณจาก 2 ถ้วยไป 8 ถ้วย จะเห็น<strong>ช่วงพลาโต 100°C ยาวขึ้นเรื่อยๆ</strong> ในขณะที่อุณหภูมิที่แม่เหล็กปล่อยยังเท่าเดิม — น้ำมากกว่าก็ใช้เวลาต้มให้แห้งนานกว่า เท่านั้นเอง<br>
+          <strong>2) ไฟตกแล้วหุงนานขึ้น:</strong> ลากแรงดันจาก 220V ลง 190V กำลังที่ได้จริงจะหล่นตาม <strong>P = V²/R</strong> (เหลือราว 75%) เวลาหุงยืดออกทันที ทั้งที่หม้อไม่ได้เสีย<br>
+          <strong>3) แม่เหล็กเสื่อม = ข้าวดิบ:</strong> กดปุ่ม "แม่เหล็กเสื่อม" — แรงดูดที่อ่อนลงทำให้สปริงชนะก่อน มัน<strong>ดีดตั้งแต่ยังอยู่กลางช่วงน้ำเดือด</strong> ทั้งที่น้ำยังเหลือครึ่งหม้อและอุณหภูมิยังไม่เคยแตะจุดคูรีเลย นี่คืออาการ "หม้อดีดก่อน ข้าวยังฉ่ำ" ในคลินิกเคสที่ 2
+        </p>
+        <p class="en-only" style="margin:.4rem 0 0;">
+          <strong>1) Why a bigger batch takes longer:</strong> drag the amount from 2 cups to 8 and watch the <strong>100°C plateau stretch</strong> while the release temperature stays put — more water simply takes longer to boil away<br>
+          <strong>2) Low mains, longer cook:</strong> pull the voltage from 220 V down to 190 V and the real power drops with <strong>P = V²/R</strong> (to about 75%), stretching the cook time with nothing broken<br>
+          <strong>3) A weak magnet means raw rice:</strong> press "weak magnet" — with less holding force the spring wins early, so it <strong>releases in the middle of the boiling plateau</strong> with half the water still there and the base never anywhere near the Curie point. That is exactly symptom 2 in the clinic below
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. ชิ้นส่วนหลัก -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ชิ้นส่วนหลักที่ต้องรู้จัก</span><span class="en-only">The Parts You Must Know</span></div>
+    <div class="card">
+      <div style="overflow-x:auto;">
+      <table class="rc-tbl">
+        <thead><tr>
+          <th style="width:2rem">#</th>
+          <th><span class="th-only">ชิ้นส่วน</span><span class="en-only">Part</span></th>
+          <th><span class="th-only">หน้าที่</span><span class="en-only">Role</span></th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td class="hi"><span class="th-only">เทอร์โมฟิวส์ (Thermal Fuse)</span><span class="en-only">Thermal fuse</span></td>
+            <td><span class="th-only">ซ่อนอยู่ใน<strong>ท่อใยแก้วสีขาว</strong>บนเส้น L เป็นด่านแรกสุดของวงจร ตัดไฟ <strong>ถาวร</strong> เมื่อก้นหม้อร้อนเกินพิกัด (มักเป็น 165–185°C) — <strong>ขาดแล้วขาดเลย ไม่รีเซ็ตเอง</strong> ต้องเปลี่ยนตัวใหม่ให้ตรงสเปคอุณหภูมิเดิม</span><span class="en-only">Hidden inside the <strong>white fibreglass sleeve</strong> on the live wire, the first link in the whole circuit. It cuts power <strong>permanently</strong> if the base overheats (typically 165–185°C) — <strong>it never resets</strong>, and a replacement must match the original temperature rating.</span></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td class="hi"><span class="th-only">แป้นแม่เหล็ก (Magnetic Switch)</span><span class="en-only">Magnetic temperature switch</span></td>
+            <td><span class="th-only">ลูกแป้นกลมสปริงตรงกลางก้นหม้อ ที่ดันแนบกับหม้อในตลอดเวลา — คือ<strong>เซ็นเซอร์เพียงตัวเดียว</strong>ของหม้อรุ่นกลไก อาศัยจุดคูรีปล่อยสวิตช์เมื่อเกิน ~103°C</span><span class="en-only">The spring-loaded disc in the centre of the base, always pressed against the inner pot — the <strong>only sensor</strong> a mechanical cooker has. It uses its Curie point to release the switch above ~103°C.</span></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td class="hi"><span class="th-only">ไมโครสวิตช์สับราง</span><span class="en-only">Change-over micro switch</span></td>
+            <td><span class="th-only">สวิตช์ <strong>3 ขา (C / COOK / WARM)</strong> ที่รับไฟสาย N มาที่ขา C แล้วสับรางว่าจะจ่ายไปฮีตเตอร์หลัก หรือไปทางชุดอุ่น — ทำงานด้วยคันโยกที่เรากดและกลไกแม่เหล็ก</span><span class="en-only">A <strong>three-terminal (C / COOK / WARM)</strong> switch. Neutral arrives at C and is routed either to the main element or to the warming path — thrown by the lever you press and released by the magnet.</span></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td class="hi"><span class="th-only">ฮีตเตอร์หลัก (Cooking Element)</span><span class="en-only">Main cooking element</span></td>
+            <td><span class="th-only">จานอลูมิเนียมใต้ก้นหม้อ ขั้วหางปลาหุ้มซิลิโคน <strong>ความต้านทานต่ำ 30–100Ω</strong> กินกำลังหลายร้อยวัตต์ ทำหน้าที่ต้มน้ำให้เดือด</span><span class="en-only">The aluminium plate under the pot with silicone-sleeved spade terminals. <strong>Low resistance, 30–100Ω</strong>, drawing several hundred watts to bring the water to a boil.</span></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td class="hi"><span class="th-only">ฮีตเตอร์อุ่น / ฝาหม้อ / ด้านข้าง</span><span class="en-only">Warming / lid / side elements</span></td>
+            <td><span class="th-only">ลวดหรือแผ่นฟอยล์ <strong>ความต้านทานสูง 1,000–3,000Ω</strong> รุ่นอุ่นทิพย์จะมีทั้งแผ่นบนฝา (กันไอน้ำกลั่นหยดลงข้าว) และแผ่นคาดรอบหม้อ (อุ่นทั่วถึง = <strong>3D Heating</strong>)</span><span class="en-only">Wire or foil elements of <strong>high resistance, 1,000–3,000Ω</strong>. "3D" models add one on the lid (so condensation does not drip back onto the rice) and a band around the pot for even warming.</span></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td class="hi"><span class="th-only">เทอร์โมสตัทคุมอุ่น</span><span class="en-only">Warm thermostat</span></td>
+            <td><span class="th-only">แปะอยู่ข้างหม้อ ตัด-ต่อวงจรฮีตเตอร์อุ่นเพื่อรักษาอุณหภูมิไว้ราว <strong>70–80°C</strong> ทั้งวัน — เป็นแบบ <strong>ต่อกลับเองเมื่อเย็นลง</strong> ต่างจากเทอร์โมฟิวส์ที่ขาดถาวร</span><span class="en-only">Clipped to the side of the pot, it cycles the warming elements to hold about <strong>70–80°C</strong> all day. It is a <strong>self-resetting</strong> device, unlike the thermal fuse.</span></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td class="hi"><span class="th-only">หลอดนีออน + R 150kΩ</span><span class="en-only">Neon lamps + 150kΩ resistor</span></td>
+            <td><span class="th-only">หลอดแดง = COOK, หลอดเขียว/เหลือง = WARM ต่อคร่อมไฟ 220V โดยมี<strong>ตัวต้านทาน 150kΩ จำกัดกระแส</strong> (ราว 1.5 mA) ถ้าไม่มีตัวนี้หลอดจะขาดทันที</span><span class="en-only">Red = Cook, green/amber = Warm. They sit across the 220 V line behind a <strong>150kΩ current-limiting resistor</strong> (about 1.5 mA); without it a neon would die instantly.</span></td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td class="hi"><span class="th-only">สายดิน (Earth)</span><span class="en-only">Earth wire</span></td>
+            <td><span class="th-only">สายเขียว-เหลืองขันน็อตกับโครงเหล็ก ใช้กับปลั๊ก 3 ขา — <strong>ไม่ได้อยู่ในวงจรทำงาน</strong> แต่เป็นทางให้กระแสรั่วลงดินจนเบรกเกอร์กันดูดตัด</span><span class="en-only">A green/yellow wire bolted to the steel chassis, used with a 3-pin plug. It carries <strong>no working current</strong> — it exists so any leakage has a path to earth that trips the RCD.</span></td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td class="hi"><span class="th-only">รุ่นดิจิทัล: NTC · รีเลย์ · SMPS · MCU</span><span class="en-only">Digital: NTC · relay · SMPS · MCU</span></td>
+            <td><span class="th-only">เทอร์มิสเตอร์ NTC แทนแป้นแม่เหล็ก, รีเลย์แทนไมโครสวิตช์, ภาคจ่ายไฟสวิตชิ่งแปลง 220V เป็น 5V เลี้ยงบอร์ด, และไมโครคอนโทรลเลอร์เป็นตัวตัดสินใจแทนกลไกทั้งหมด</span><span class="en-only">An NTC thermistor replaces the magnet, a relay replaces the micro switch, a switching supply turns 220 V into 5 V for the boards, and a microcontroller makes every decision the mechanism used to make.</span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. วงจรทีละขั้น -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">วงจรไฟฟ้าทีละขั้น</span><span class="en-only">The Circuit, Step by Step</span></div>
+    <div class="card">
+      <p class="th-only">วงจรหม้อหุงข้าวรุ่นกลไก<strong>ง่ายจนน่าตกใจ</strong> — ไฟ L ผ่านเทอร์โมฟิวส์แล้วรอที่ขั้วฮีตเตอร์ ส่วนไฟ N วิ่งมารอที่ขา C ของไมโครสวิตช์ แล้วสวิตช์ก็แค่ <strong>"สับราง"</strong> ว่าจะปล่อยไฟไปทางฮีตเตอร์หลัก (หุง) หรือทางชุดอุ่น เท่านั้นเอง ส่วนรุ่นดิจิทัลเปลี่ยนคนตัดสินใจจากแม่เหล็กเป็นไมโครคอนโทรลเลอร์ แต่<strong>เส้นทางไฟ 220V ยังเป็นเรื่องเดิม</strong></p>
+      <p class="en-only">A mechanical rice cooker circuit is <strong>startlingly simple</strong>: live passes the thermal fuse and waits at the element terminal, neutral arrives at the C terminal of the micro switch, and the switch simply <strong>routes</strong> it either to the main element (Cook) or to the warming path. Digital models swap the decision-maker from a magnet to a microcontroller, but <strong>the 220 V path is the same story</strong>.</p>
+      <p class="th-only" style="margin-top:.6rem">กดปุ่มขั้นที่ 1–6 เพื่อไล่วงจรรุ่นกลไก และ 7–9 เพื่อดูรุ่นดิจิทัล · กดปุ่ม <strong>🍚 กดหุง</strong> แล้วปล่อยให้เวลาเดินจนแม่เหล็กปล่อยเอง · และ <strong>เลือกอาการเสีย</strong> เพื่อฝึกอ่านป้ายจุดวัด</p>
+      <p class="en-only" style="margin-top:.6rem">Use buttons 1–6 for the mechanical circuit and 7–9 for the digital one. Press <strong>🍚 Cook</strong> and let it run until the magnet releases by itself, and pick a <strong>fault</strong> to practise reading the probe badges.</p>
+
+      <div class="bs-wrap" id="rice-circuit">
+        <div class="bs-tabs">
+          <button class="bs-tab" data-step="1"><span class="bs-n">1</span><span class="th-only">ไฟเข้า L / N / สายดิน</span><span class="en-only">L / N / earth in</span></button>
+          <button class="bs-tab" data-step="2"><span class="bs-n">2</span><span class="th-only">เทอร์โมฟิวส์</span><span class="en-only">Thermal fuse</span></button>
+          <button class="bs-tab" data-step="3"><span class="bs-n">3</span><span class="th-only">โหมดหุง (COOK)</span><span class="en-only">Cook mode</span></button>
+          <button class="bs-tab" data-step="4"><span class="bs-n">4</span><span class="th-only">แม่เหล็ก + จุดคูรี</span><span class="en-only">Magnet + Curie point</span></button>
+          <button class="bs-tab" data-step="5"><span class="bs-n">5</span><span class="th-only">โหมดอุ่น (WARM)</span><span class="en-only">Warm mode</span></button>
+          <button class="bs-tab" data-step="6"><span class="bs-n">6</span><span class="th-only">แบ่งแรงดันในโหมดอุ่น</span><span class="en-only">The warm divider</span></button>
+          <button class="bs-tab" data-step="7"><span class="bs-n">7</span><span class="th-only">ดิจิทัล: ไฟเลี้ยง 5V</span><span class="en-only">Digital: 5 V supply</span></button>
+          <button class="bs-tab" data-step="8"><span class="bs-n">8</span><span class="th-only">ดิจิทัล: MCU + NTC + UART</span><span class="en-only">Digital: MCU + NTC + UART</span></button>
+          <button class="bs-tab" data-step="9"><span class="bs-n">9</span><span class="th-only">ดิจิทัล: รีเลย์ + ฮีตเตอร์ขนาน</span><span class="en-only">Digital: relay + parallel elements</span></button>
+        </div>
+
+        <canvas id="rc-canvas" class="bs-canvas" style="aspect-ratio:940/420;"></canvas>
+
+        <div class="bs-nav" style="flex-wrap:wrap;">
+          <button id="rc-prev" class="bs-navbtn">◀ <span class="th-only">ก่อนหน้า</span><span class="en-only">Prev</span></button>
+          <button id="rc-play" class="bs-navbtn"><span class="th-only">▶ เล่นอัตโนมัติ</span><span class="en-only">▶ Auto-play</span></button>
+          <button id="rc-cook" class="bs-navbtn">
+            <span class="rc-on">🍚 <span class="th-only">กำลังหุงอยู่</span><span class="en-only">Cooking</span></span>
+            <span class="rc-off">♨️ <span class="th-only">อยู่โหมดอุ่น — กดหุง</span><span class="en-only">Warming — press to cook</span></span>
+          </button>
+          <select id="rc-fault" class="bs-select" aria-label="fault mode">
+            <option value="ok">✅ ปกติ — Normal</option>
+            <option value="fuse">🔴 เทอร์โมฟิวส์ขาด — thermal fuse open</option>
+            <option value="magnet">🟠 แม่เหล็กเสื่อม ดีดก่อน — weak magnet</option>
+            <option value="swstuck">🟡 สวิตช์ละลายติดค้าง — switch welded in Cook</option>
+            <option value="warmopen">🟢 ฮีตเตอร์อุ่น/สายบานพับขาด — warm path open</option>
+            <option value="relay">🔵 ดิจิทัล: รีเลย์ไม่จ่ายไฟ — relay contact dead</option>
+            <option value="ntc">🟣 ดิจิทัล: NTC ขาด → Error — NTC open</option>
+          </select>
+          <button id="rc-next" class="bs-navbtn"><span class="th-only">ถัดไป</span><span class="en-only">Next</span> ▶</button>
+        </div>
+
+        <div class="bs-faultnote">
+          <span class="th-only">🔧 กำลังจำลองเครื่องที่เสียอยู่ — ไล่ป้ายจุดวัดจากซ้ายไปขวา <b>จุดแรกที่เปลี่ยนจาก 220V เป็น 0V คือด่านที่ขาด</b></span>
+          <span class="en-only">🔧 A faulty unit is being simulated — read the probe badges left to right: <b>the first one that drops from 220 V to 0 V is the broken link</b></span>
+        </div>
+
+        <div class="bs-desc" data-step="1">
+          <p class="th-only"><strong>ขั้นที่ 1 — ไฟเข้าเครื่องมี 3 เส้น แต่ทำงานแค่ 2:</strong> สาย <strong>L</strong> และ <strong>N</strong> คือคู่ที่จ่ายกำลังให้ฮีตเตอร์ ส่วน <strong>สายดิน (E)</strong> ขันน็อตอยู่กับโครงเหล็กเฉยๆ <strong>ไม่มีกระแสไหลในสภาวะปกติ</strong> — มันมีไว้เพื่อวันที่ฮีตเตอร์รั่วลงตัวถัง กระแสจะได้ลงดินแล้วเบรกเกอร์กันดูดตัดก่อนที่ผู้ใช้จะจับหม้อ<br>ป้ายแถวบนคือจุดวัดตามเส้นทางไฟ ให้ไล่จากซ้ายไปขวาเสมอ</p>
+          <p class="en-only"><strong>Step 1 — three wires come in, but only two do the work:</strong> <strong>L</strong> and <strong>N</strong> deliver power to the element; <strong>earth (E)</strong> is merely bolted to the steel chassis and <strong>carries no current in normal operation</strong>. It exists for the day the element leaks into the body, so the current finds earth and the RCD trips before the user touches the pot.<br>The badges along the top are probe points along the path — always read them left to right.</p>
+        </div>
+
+        <div class="bs-desc" data-step="2">
+          <p class="th-only"><strong>ขั้นที่ 2 — เทอร์โมฟิวส์คือด่านแรกของสาย L:</strong> มันซ่อนอยู่ในท่อใยแก้วสีขาว ช่างมือใหม่มักมองข้ามเพราะไม่เห็นตัว แต่<strong>90% ของอาการ "เสียบปลั๊กแล้วเงียบสนิท" จบที่ฟิวส์ตัวนี้</strong><br>ต่างจากเทอร์โมสตัทตรงที่มัน <strong>ขาดถาวร ไม่ต่อกลับเอง</strong> — และที่สำคัญ ฟิวส์ขาดแปลว่ามันเคย<strong>ร้อนเกินพิกัดมาแล้ว</strong> เปลี่ยนฟิวส์อย่างเดียวโดยไม่หาสาเหตุ เดี๋ยวก็ขาดซ้ำ (ดูเคสสวิตช์ละลายติดค้าง)</p>
+          <p class="en-only"><strong>Step 2 — the thermal fuse is the first link on the live wire:</strong> buried in a white fibreglass sleeve, it is easy to miss because you cannot see it — yet <strong>90% of "plugged in and completely dead" ends right here</strong>.<br>Unlike a thermostat it is <strong>permanent: it never closes again</strong>. And remember that a blown fuse means something <strong>did overheat</strong>. Replace the fuse without finding the cause and it will blow again (see the welded-switch case).</p>
+        </div>
+
+        <div class="bs-desc" data-step="3">
+          <p class="th-only"><strong>ขั้นที่ 3 — กดคันโยก = สับรางไฟ N ไปฮีตเตอร์หลัก:</strong> ไฟ N วิ่งเข้าขา <strong>C</strong> ของไมโครสวิตช์ พอกดคันโยกลง หน้าสัมผัสจะต่อขา C เข้ากับฝั่ง <strong>COOK</strong> ทำให้ฮีตเตอร์หลักได้รับ 220V เต็มๆ (หลอดแดงติด)<br>ฮีตเตอร์หลักมีความต้านทานราว <strong>50Ω</strong> จึงกินกระแส I = 220/50 ≈ <strong>4.4 A</strong> คิดเป็นกำลังเกือบ <strong>1,000 วัตต์</strong> — ก้นหม้อจึงร้อนเร็วมาก</p>
+          <p class="en-only"><strong>Step 3 — pressing the lever routes neutral to the main element:</strong> neutral arrives at terminal <strong>C</strong>; pressing the lever closes C onto the <strong>COOK</strong> side, putting the full 220 V across the main element (red lamp on).<br>At around <strong>50Ω</strong> it draws I = 220/50 ≈ <strong>4.4 A</strong>, close to <strong>1,000 W</strong> — which is why the base heats so quickly.</p>
+        </div>
+
+        <div class="bs-desc" data-step="4">
+          <p class="th-only"><strong>ขั้นที่ 4 — แม่เหล็กคือคนที่ตัดสินว่าข้าวสุก:</strong> คันโยกที่เรากดจะถูก<strong>แม่เหล็กถาวรดูดค้างไว้</strong> ไม่ให้สปริงดีดกลับ ตราบใดที่หม้อยังมีน้ำเดือด ก้นหม้อจะค้างที่ 100°C แม่เหล็กก็ยังแรงพอ<br>พอน้ำแห้ง อุณหภูมิพุ่งผ่าน <strong>~103°C (จุดคูรี)</strong> แม่เหล็กหมดอำนาจดูดทันที สปริงจึงดีดสวิตช์เด้งขึ้น — <strong>ไม่มีตัวจับเวลา ไม่มีเซ็นเซอร์ มีแค่ฟิสิกส์</strong><br>ลองกดปุ่ม 🍚 แล้วปล่อยให้เวลาเดิน จะเห็นแม่เหล็กปล่อยเอง</p>
+          <p class="en-only"><strong>Step 4 — the magnet is the judge:</strong> the lever you pressed is <strong>held down by a permanent magnet</strong> against its spring. While water still boils, the base sits at 100°C and the magnet holds.<br>Once the water is gone and the base crosses <strong>~103°C (the Curie point)</strong>, the magnet loses its grip and the spring flicks the switch up — <strong>no timer, no sensor, just physics</strong>.<br>Press 🍚 and let it run to watch the magnet release on its own.</p>
+        </div>
+
+        <div class="bs-desc" data-step="5">
+          <p class="th-only"><strong>ขั้นที่ 5 — โหมดอุ่น: ไฟถูกสับไปอีกทาง:</strong> เมื่อสวิตช์เด้งขึ้น ขา C จะไปต่อกับฝั่ง <strong>WARM</strong> แทน ไฟ N จึงวิ่งผ่าน <strong>เทอร์โมสตัทคุมอุ่น</strong> ไปเข้า<strong>ฮีตเตอร์ฝาหม้อกับฮีตเตอร์ด้านข้าง</strong> (หลอดเขียวติด)<br>จุดที่คนอ่านวงจรพลาดบ่อยที่สุด: ไฟที่ออกจากฮีตเตอร์ฝา/ข้าง <strong>ต้องวิ่งกลับมาผ่านฮีตเตอร์หลัก</strong> เพื่อกลับไปหาสาย L — คือทั้งชุดต่อ <strong>อนุกรม</strong> กัน ไม่ได้แยกวงจรกัน</p>
+          <p class="en-only"><strong>Step 5 — Warm mode routes power the other way:</strong> with the switch up, C now connects to the <strong>WARM</strong> side, so neutral runs through the <strong>warm thermostat</strong> into the <strong>lid and side elements</strong> (green lamp on).<br>Here is what people misread most often: the current leaving the lid/side elements <strong>must return through the main element</strong> to reach live — the whole lot is wired <strong>in series</strong>, not as separate circuits.</p>
+        </div>
+
+        <div class="bs-desc" data-step="6">
+          <p class="th-only"><strong>ขั้นที่ 6 — ทำไมไฟผ่านฮีตเตอร์หลัก แต่หลักไม่ร้อน:</strong> เพราะมันคือ<strong>วงจรแบ่งแรงดัน</strong>ชัดๆ ฮีตเตอร์อุ่นราว <strong>2,000Ω</strong> อนุกรมกับฮีตเตอร์หลัก <strong>50Ω</strong> กระแสในวงจรจึงเหลือแค่ I = 220 ÷ 2,050 ≈ <strong>107 mA</strong><br>แรงดันเกือบทั้งหมด (~215V) ไปตกที่ฮีตเตอร์อุ่น เหลือตกคร่อมฮีตเตอร์หลักแค่ ~5V เท่านั้น <strong>ฮีตเตอร์หลักจึงทำตัวเป็นแค่ "สายไฟทางผ่าน"</strong> ในโหมดอุ่น กำลังรวมทั้งหม้อเหลือราว <strong>24 วัตต์</strong> เทียบกับ ~970 วัตต์ตอนหุง</p>
+          <p class="en-only"><strong>Step 6 — why current flows through the main element yet it stays cool:</strong> because this is a textbook <strong>voltage divider</strong>. The warming elements (~<strong>2,000Ω</strong>) sit in series with the main element (<strong>50Ω</strong>), so the loop current is only I = 220 ÷ 2,050 ≈ <strong>107 mA</strong>.<br>Nearly all the voltage (~215 V) lands across the warming elements, leaving about 5 V across the main plate — <strong>in Warm mode the main element is effectively just a piece of wire</strong>. Total draw falls to roughly <strong>24 W</strong>, against ~970 W while cooking.</p>
+        </div>
+
+        <div class="bs-desc" data-step="7">
+          <p class="th-only"><strong>ขั้นที่ 7 — รุ่นดิจิทัล: ไฟ 220V ต้องกลายเป็น 5V ก่อน:</strong> บนบอร์ดหลักมีโซน<strong>ภาคจ่ายไฟสวิตชิ่ง</strong> (หม้อแปลงความถี่สูงตัวเล็กสีเหลือง + ไอซี 7 ขา + คาปาซิเตอร์กระป๋อง) แปลง 220V AC เป็น <strong>5V DC</strong> เลี้ยงสมองกลและบอร์ดหน้าจอ<br><strong style="color:#dc2626;">อันตรายที่ช่างมือใหม่ประมาท:</strong> บอร์ดนี้วัดได้ 5V ก็จริง แต่ครึ่งบอร์ดฝั่งอินพุตยังเป็นไฟบ้านเต็มๆ และคาปาซิเตอร์ยัง<strong>อมไฟค้างหลังถอดปลั๊ก</strong> — จับบอร์ดตอนเสียบปลั๊กไม่ได้เด็ดขาด</p>
+          <p class="en-only"><strong>Step 7 — a digital model must turn 220 V into 5 V first:</strong> the main board carries a <strong>switching power supply</strong> section (small yellow high-frequency transformer, a 7-pin IC, an electrolytic can) that produces <strong>5 V DC</strong> for the controller and the display board.<br><strong style="color:#dc2626;">The trap for beginners:</strong> yes, it reads 5 V — but half that board is still at mains potential, and the capacitor <strong>stays charged after unplugging</strong>. Never handle the board while it is plugged in.</p>
+        </div>
+
+        <div class="bs-desc" data-step="8">
+          <p class="th-only"><strong>ขั้นที่ 8 — สมองกลอ่านอุณหภูมิจาก NTC แล้วคุยกับหน้าจอผ่าน UART:</strong> แป้นแม่เหล็กถูกแทนที่ด้วย <strong>เทอร์มิสเตอร์ NTC</strong> ที่ก้นหม้อ (ร้อนขึ้น = ความต้านทานลดลง) สมองกลอ่านค่านี้แล้วตัดสินใจแทนกลไกทั้งหมด จึงทำเมนูหุงหลายแบบได้<br>บอร์ด 2 แผ่น (บอร์ดกำลัง ↔ บอร์ดหน้าจอ) เชื่อมกันด้วยสาย 4 เส้น <strong>VCC / GND / TXD / RXD</strong> — ถ้าสายเส้นใดหลวมหรือหนูกัดขาด บอร์ดคุยกันไม่รู้เรื่อง เครื่องจะ<strong>ขึ้น Error และร้องเตือน</strong> ทั้งที่ฮีตเตอร์ยังดีอยู่</p>
+          <p class="en-only"><strong>Step 8 — the controller reads an NTC and talks to the display over UART:</strong> the magnet is replaced by an <strong>NTC thermistor</strong> in the base (hotter = lower resistance). The controller reads it and makes every decision the mechanism used to make, which is how it offers a menu of cooking programmes.<br>The two boards (power ↔ display) are joined by four wires: <strong>VCC / GND / TXD / RXD</strong>. If one works loose or gets chewed through, the boards stop understanding each other and the unit <strong>throws an error code and beeps</strong> even though the elements are perfectly fine.</p>
+        </div>
+
+        <div class="bs-desc" data-step="9">
+          <p class="th-only"><strong>ขั้นที่ 9 — รีเลย์คือสะพานไฟตัวใหญ่ และฮีตเตอร์ทุกชิ้น "ขนานกัน":</strong> เมื่อสมองกลสั่ง คอยล์รีเลย์จะดูดหน้าสัมผัส (ได้ยินเสียงคลิก) ปล่อยไฟ 220V ไปเข้า<strong>ฮีตเตอร์หลัก ฝา และข้าง พร้อมกันทีเดียวแบบขนาน</strong> — <strong>ตรงข้ามกับรุ่นกลไกที่ต่ออนุกรมกันในโหมดอุ่น</strong><br>แล้วโหมดอุ่นของรุ่นดิจิทัลทำยังไง? มันไม่ได้แบ่งแรงดัน แต่ใช้วิธี <strong>สั่งรีเลย์ตัด-ต่อเป็นจังหวะ</strong> คุมอุณหภูมิเฉลี่ยแทน — นี่คือเหตุผลที่หม้อดิจิทัลมีเสียง "คลิก" เป็นระยะตลอดวัน</p>
+          <p class="en-only"><strong>Step 9 — the relay is the big bridge, and every element is wired in parallel:</strong> on command the relay coil pulls its contact in (that audible click) and feeds 220 V to the <strong>main, lid and side elements together, in parallel</strong> — <strong>the opposite of the mechanical model's series warming path</strong>.<br>So how does a digital cooker keep warm? Not with a divider: it <strong>pulses the relay on and off</strong> to hold an average temperature. That is why a digital cooker clicks quietly all day long.</p>
+        </div>
+      </div>
+
+      <div class="info-box" style="margin-top:1rem;">
+        <strong class="th-only">🔗 อ่านต่อให้เข้าใจลึกขึ้น</strong>
+        <strong class="en-only">🔗 Related lessons</strong>
+        <p class="th-only" style="margin:.4rem 0 0;">การแบ่งแรงดันในขั้นที่ 6 คือกฎของโอห์มตรงๆ อ่านได้ในบท <a href="ohm.html"><strong>กฎของโอห์ม</strong></a> · หลักการรีเลย์และวงจรขับคอยล์อยู่ในบท <a href="relay.html"><strong>รีเลย์</strong></a> · ภาคจ่ายไฟสวิตชิ่งบนบอร์ดทำงานอย่างไร ดูบท <a href="switching-psu.html"><strong>ภาคจ่ายไฟสวิตชิ่ง</strong></a> · ส่วนเทอร์มิสเตอร์ NTC อยู่ในบท <a href="resistor.html"><strong>ตัวต้านทาน</strong></a></p>
+        <p class="en-only" style="margin:.4rem 0 0;">The divider in step 6 is pure <a href="ohm.html"><strong>Ohm's law</strong></a> · relays and coil-driver circuits are covered in the <a href="relay.html"><strong>Relay</strong></a> lesson · the board's supply section is explained in <a href="switching-psu.html"><strong>Switching Power Supply</strong></a> · and NTC thermistors appear in the <a href="resistor.html"><strong>Resistor</strong></a> lesson</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. กลไก vs ดิจิทัล -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">รุ่นกลไก vs รุ่นดิจิทัล ต่างกันตรงไหน</span><span class="en-only">Mechanical vs Digital</span></div>
+    <div class="card">
+      <div style="overflow-x:auto;">
+      <table class="rc-tbl">
+        <thead><tr>
+          <th><span class="th-only">หัวข้อ</span><span class="en-only">Aspect</span></th>
+          <th><span class="th-only">รุ่นกลไก (อุ่นทิพย์)</span><span class="en-only">Mechanical</span></th>
+          <th><span class="th-only">รุ่นดิจิทัล</span><span class="en-only">Digital</span></th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td class="hi"><span class="th-only">ตัวรู้อุณหภูมิ</span><span class="en-only">Temperature sensing</span></td>
+            <td><span class="th-only">แป้นแม่เหล็ก (จุดคูรี ~103°C)</span><span class="en-only">Magnet (Curie point ~103°C)</span></td>
+            <td><span class="th-only">เทอร์มิสเตอร์ NTC 50–100kΩ</span><span class="en-only">NTC thermistor, 50–100kΩ</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">ตัวตัด-ต่อไฟ 220V</span><span class="en-only">Switching the 220 V</span></td>
+            <td><span class="th-only">ไมโครสวิตช์ 3 ขา (กลไก)</span><span class="en-only">3-terminal micro switch</span></td>
+            <td><span class="th-only">รีเลย์บนบอร์ด สั่งด้วย MCU</span><span class="en-only">PCB relay driven by the MCU</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">การต่อฮีตเตอร์ตอนอุ่น</span><span class="en-only">Warm-mode wiring</span></td>
+            <td class="val"><span class="th-only">อนุกรม → แบ่งแรงดัน</span><span class="en-only">Series → voltage divider</span></td>
+            <td class="val"><span class="th-only">ขนาน → ตัด-ต่อเป็นจังหวะ</span><span class="en-only">Parallel → pulsed on/off</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">ไฟเลี้ยงวงจรควบคุม</span><span class="en-only">Control power</span></td>
+            <td><span class="th-only">ไม่มี — ใช้กลไกล้วน</span><span class="en-only">None — purely mechanical</span></td>
+            <td><span class="th-only">ภาคจ่ายไฟสวิตชิ่ง 220V → 5V</span><span class="en-only">Switching supply, 220 V → 5 V</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">จุดเสียที่พบบ่อย</span><span class="en-only">Common failures</span></td>
+            <td><span class="th-only">เทอร์โมฟิวส์ · แม่เหล็กเสื่อม · หน้าสัมผัสละลาย</span><span class="en-only">Thermal fuse · weak magnet · welded contacts</span></td>
+            <td><span class="th-only">เทอร์โมฟิวส์ · ภาคจ่ายไฟ · รีเลย์ · NTC · สาย UART</span><span class="en-only">Thermal fuse · supply section · relay · NTC · UART wires</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">ตั้งเวลาล่วงหน้า</span><span class="en-only">Delay start</span></td>
+            <td><span class="th-only">ทำไม่ได้</span><span class="en-only">Not possible</span></td>
+            <td><span class="th-only">ได้ — อาศัย<strong>แบตกระดุม</strong>หลังบอร์ดหน้าจอ (อายุ 3–5 ปี)</span><span class="en-only">Yes — via a <strong>coin cell</strong> behind the display board (3–5 years)</span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="info-box" style="margin-top:1rem;">
+        <strong class="th-only">💡 เกร็ด: อาการ "ความจำเสื่อม"</strong>
+        <strong class="en-only">💡 Field note: the "amnesia" symptom</strong>
+        <p class="th-only" style="margin:.4rem 0 0">ถ้าลูกค้าบอกว่า <strong>"ถอดปลั๊กทีไรนาฬิการีเซ็ตตลอด" หรือ "ตั้งเวลาหุงล่วงหน้าไม่ได้แล้ว"</strong> ให้ฟันธงไปที่<strong>แบตเตอรี่กระดุมหลังบอร์ดหน้าจอหมด</strong> บัดกรีเปลี่ยนก้อนใหม่แล้วอาการหายทันที — ไม่ต้องเปลี่ยนบอร์ดทั้งแผ่น</p>
+        <p class="en-only" style="margin:.4rem 0 0">If the customer says <strong>"the clock resets every time I unplug it"</strong> or <strong>"delay start doesn't work any more"</strong>, go straight to the <strong>coin cell behind the display board</strong>. Solder in a fresh one and the symptom disappears — no need to replace the whole board.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. ตารางจุดวัด -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ตารางจุดวัดและค่ามาตรฐาน</span><span class="en-only">Test Points &amp; Standard Readings</span></div>
+    <div class="card">
+      <p class="th-only"><strong>ถอดปลั๊กก่อนเสมอ</strong> และถอดสายที่จะวัดออกจากวงจรอย่างน้อย 1 ข้าง ไม่งั้นค่าที่อ่านได้จะเป็นค่าของทั้งวงจรที่พ่วงขนานกันอยู่ ไม่ใช่ค่าของอะไหล่ตัวนั้น</p>
+      <p class="en-only"><strong>Always unplug first</strong>, and disconnect at least one leg of whatever you are measuring — otherwise you are reading the whole parallel network, not the part in your hand.</p>
+      <div style="overflow-x:auto;">
+      <table class="rc-tbl">
+        <thead><tr>
+          <th><span class="th-only">จุดวัด</span><span class="en-only">Test point</span></th>
+          <th><span class="th-only">ย่านที่ใช้</span><span class="en-only">Range</span></th>
+          <th><span class="th-only">ค่าที่ควรได้</span><span class="en-only">Expected</span></th>
+          <th><span class="th-only">แปลผล</span><span class="en-only">Meaning</span></th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td class="hi"><span class="th-only">เทอร์โมฟิวส์ (หัว-ท้าย)</span><span class="en-only">Thermal fuse</span></td>
+            <td><span class="th-only">เสียงปี๊บ / Ω</span><span class="en-only">Continuity / Ω</span></td>
+            <td class="val"><span class="th-only">ดังปี๊บ ≈ 0Ω</span><span class="en-only">Beeps, ≈ 0Ω</span></td>
+            <td><span class="th-only">เงียบหรือ OL = <strong>ขาด 100%</strong> เปลี่ยนตัวใหม่ให้ตรงพิกัดอุณหภูมิเดิม</span><span class="en-only">Silent or OL = <strong>definitely blown</strong>; replace with the same temperature rating</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">ฮีตเตอร์หลัก</span><span class="en-only">Main element</span></td>
+            <td>Ω</td>
+            <td class="val">30 – 100 Ω</td>
+            <td><span class="th-only"><strong>OL = ขดลวดขาดใน · 0Ω = ช็อต</strong> ทั้งสองกรณีต้องเปลี่ยน</span><span class="en-only"><strong>OL = open winding · 0Ω = shorted</strong>; either way it must be replaced</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">ฮีตเตอร์อุ่น / ฝา / ข้าง</span><span class="en-only">Warm / lid / side elements</span></td>
+            <td>Ω</td>
+            <td class="val">1,000 – 3,000 Ω</td>
+            <td><span class="th-only">OL = ขาดใน <strong>แต่ให้เช็คสายตรงบานพับฝาก่อน</strong> เพราะหักในบ่อยกว่าตัวฮีตเตอร์มาก</span><span class="en-only">OL = open — <strong>but check the wiring through the lid hinge first</strong>, it breaks far more often than the element itself</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">หน้าสัมผัสสวิตช์ / เทอร์โมสตัท</span><span class="en-only">Switch &amp; thermostat contacts</span></td>
+            <td>Ω</td>
+            <td class="val"><span class="th-only">กด = 0Ω · ปล่อย = OL</span><span class="en-only">Closed 0Ω · open OL</span></td>
+            <td><span class="th-only">กดแล้วยังไม่ 0Ω = หน้าสัมผัสไหม้ · ปล่อยแล้วยังนำ = <strong>ละลายติดค้าง (อันตราย)</strong></span><span class="en-only">Not 0Ω when closed = burnt contact · still conducting when open = <strong>welded shut (dangerous)</strong></span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">เทอร์มิสเตอร์ NTC (รุ่นดิจิทัล)</span><span class="en-only">NTC thermistor (digital)</span></td>
+            <td>kΩ</td>
+            <td class="val"><span class="th-only">50 – 100 kΩ ที่อุณหภูมิห้อง</span><span class="en-only">50 – 100 kΩ at room temp</span></td>
+            <td><span class="th-only"><strong>ทริคเซียน:</strong> คีบมิเตอร์ไว้แล้วใช้ไดร์เป่าผมเป่า — ค่าต้อง<strong>ลดลงเรื่อยๆ อย่างนุ่มนวล</strong> ถ้าค่าสวิงมั่วหรือขึ้น OL = เสีย</span><span class="en-only"><strong>Pro trick:</strong> clip the meter on and warm it with a hairdryer — the reading must <strong>fall smoothly</strong>. Jumpy readings or OL mean it is faulty</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">ขั้วฮีตเตอร์ ↔ โครงเหล็ก</span><span class="en-only">Element terminal ↔ chassis</span></td>
+            <td>Ω</td>
+            <td class="val">OL</td>
+            <td><span class="th-only">อ่านค่าได้เมื่อไหร่ = <strong>ฮีตเตอร์รั่วลงตัวถัง</strong> ห้ามใช้งานต่อ ต้องเปลี่ยน</span><span class="en-only">Any reading at all = <strong>the element is leaking to the body</strong>. Do not return it to service; replace it</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">ไฟ 5V บนบอร์ด (รุ่นดิจิทัล)</span><span class="en-only">5 V rail (digital)</span></td>
+            <td>VDC</td>
+            <td class="val">4.8 – 5.2 V</td>
+            <td><span class="th-only">ไม่มี 5V ทั้งที่ฟิวส์ดี = <strong>ภาคจ่ายไฟสวิตชิ่งบนบอร์ดพัง</strong> (ตัวต้านทานฟิวส์ขาด / ไอซีระเบิด / ไดโอดช็อต)</span><span class="en-only">No 5 V with a healthy fuse = <strong>the board's switching supply has failed</strong> (open fusible resistor, blown IC, shorted diode)</span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. คลินิก -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">คลินิกวิเคราะห์อาการเสีย 7 เคส</span><span class="en-only">Fault-Diagnosis Clinic — 7 Cases</span></div>
+    <div class="card">
+
+      <div class="rc-fault" style="border-left-color:#dc2626;">
+        <span class="rc-fault-title th-only">🔴 อาการที่ 1: "เสียบปลั๊กแล้วเงียบสนิท ไฟไม่ติดเลย"</span>
+        <span class="rc-fault-title en-only">🔴 Symptom 1: "Plugged in and completely dead — no lights at all"</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> <strong>เทอร์โมฟิวส์ขาด ~90%</strong> ของเคสนี้</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> a <strong>blown thermal fuse in about 90%</strong> of these</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> ถอดปลั๊ก แกะฝาก้นหม้อ หาท่อใยแก้วสีขาวบนเส้น L แล้ววัดเสียงปี๊บคร่อมหัว-ท้าย ถ้าเงียบคือขาด เปลี่ยนตัวใหม่<strong>ให้ตรงพิกัดอุณหภูมิเดิม</strong> · ถ้าฟิวส์ดี (รุ่นดิจิทัล) ให้ไปวัดไฟ 5V บนบอร์ด — ไม่มี 5V แปลว่าภาคจ่ายไฟบนบอร์ดพัง<br><strong>⚠️ อย่าลืมถามตัวเองว่า "แล้วทำไมมันถึงขาด"</strong> ฟิวส์ที่ขาดเองโดยไม่มีสาเหตุมีน้อยมาก มักมาคู่กับสวิตช์ที่ไม่ยอมดีด (เคสที่ 3)</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> unplug, open the base, find the white fibreglass sleeve on the live wire and buzz across it. Silence means it is open — fit a replacement <strong>of the same temperature rating</strong>. If the fuse is good (digital models), check for 5 V on the board; no 5 V means the on-board supply has failed.<br><strong>⚠️ Always ask why it blew.</strong> Fuses rarely die of old age; this one usually accompanies a switch that refused to release (case 3).</p>
+      </div>
+
+      <div class="rc-fault" style="border-left-color:#f59e0b;">
+        <span class="rc-fault-title th-only">🟠 อาการที่ 2: "หม้อดีดขึ้นก่อน ข้าวยังดิบ น้ำยังฉ่ำ"</span>
+        <span class="rc-fault-title en-only">🟠 Symptom 2: "It clicks off early — the rice is still raw and wet"</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> แป้นแม่เหล็กเสื่อม สปริงล้า หรือหม้อในบิดเบี้ยวจนไม่แนบกับแป้น</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> a tired magnet, a weak spring, or a warped inner pot that no longer sits flat on the disc</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> กดแป้นแม่เหล็กตรงกลางก้นหม้อดู ต้องเด้งกลับคืนตัวนุ่มนวลไม่ฝืด · เอาหม้อในวางแล้วดูว่าก้นแนบสนิทไหม (หม้อในที่ตกจนบุบเป็นสาเหตุที่คนมองข้ามที่สุด) · ถ้ากลไกฝืดหรือแม่เหล็กอ่อน ให้เปลี่ยนแป้นแม่เหล็กทั้งชุด<br>💡 ลองเล่นซิมด้านบนโหมด <strong>"แม่เหล็กเสื่อม"</strong> จะเห็นชัดว่ามันดีดตั้งแต่ยังอยู่กลางช่วงน้ำเดือด</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> press the centre disc — it must spring back smoothly, not stick · set the inner pot in and check that its base sits flush (a dented pot is the most overlooked cause) · if the mechanism binds or the magnet is weak, replace the whole disc assembly.<br>💡 Try the <strong>"weak magnet"</strong> mode in the sim above: it releases while the water is still boiling.</p>
+      </div>
+
+      <div class="rc-fault" style="border-left-color:#eab308;">
+        <span class="rc-fault-title th-only">🟡 อาการที่ 3: "ข้าวไหม้ติดก้นหม้อ สวิตช์ไม่ยอมดีดขึ้น"</span>
+        <span class="rc-fault-title en-only">🟡 Symptom 3: "Burnt rice stuck to the bottom — the switch never pops up"</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> หน้าสัมผัสไมโครสวิตช์<strong>ละลายติดค้าง</strong> หรือกลไกคันโยกฝืด/แม่เหล็กค้าง</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> the micro-switch contacts have <strong>welded shut</strong>, or the lever mechanism is jammed</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> วัดหน้าสัมผัสตอนสวิตช์ปล่อย — ต้องขึ้น OL ถ้ายังนำกระแสอยู่คือละลายติด <strong>ต้องเปลี่ยนสวิตช์ ห้ามฝนหน้าสัมผัสแล้วใช้ต่อ</strong> · <strong style="color:#dc2626;">นี่คือเคสอันตรายที่สุดของหม้อหุงข้าว</strong> เพราะฮีตเตอร์เต็มกำลังจะไม่มีวันหยุด สุดท้ายเทอร์โมฟิวส์จะขาดเพื่อกันไฟไหม้ — ถ้าเจอฟิวส์ขาดคู่กับสวิตช์ติด <strong>ต้องเปลี่ยนทั้งคู่</strong></p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> ohm the contacts with the switch released — it must read OL. Still conducting means welded: <strong>replace the switch, never file the contacts and carry on</strong>. <strong style="color:#dc2626;">This is the most dangerous fault in the appliance</strong>, because full power never stops; eventually the thermal fuse blows to prevent a fire. Find a blown fuse alongside a stuck switch and <strong>replace both</strong>.</p>
+      </div>
+
+      <div class="rc-fault" style="border-left-color:#10b981;">
+        <span class="rc-fault-title th-only">🟢 อาการที่ 4: "หุงสุกปกติ แต่ทิ้งไว้แล้วข้าวเย็น / บูดเร็ว / มีน้ำหยดแฉะ"</span>
+        <span class="rc-fault-title en-only">🟢 Symptom 4: "Cooks fine, but the rice goes cold, spoils quickly, or gets wet"</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> วงจรโหมดอุ่นขาด — และ<strong>อันดับ 1 ไม่ใช่ฮีตเตอร์ แต่เป็นสายไฟตรงบานพับฝาหม้อหักใน</strong> จากการเปิด-ปิดฝากระชากทุกวัน</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> the warming path is open — and <strong>the number-one culprit is not the element but the wiring inside the lid hinge</strong>, broken by years of the lid being flung open</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> ถอดแจ็คสายเส้นเล็ก (ขาว/ดำ) ที่วิ่งขึ้นบานพับมาวัด ต้องได้ <strong>1,000–3,000Ω</strong> ถ้าขึ้น OL <strong>ให้แกะสายตรงบานพับมาเช็คและบัดกรีต่อใหม่ก่อนสั่งอะไหล่เสมอ</strong> · ถ้าสายดีแต่ยังไม่ร้อน ให้ไปวัดเทอร์โมสตัทคุมอุ่นว่าตัดค้างไหม<br><strong>อย่าเพิ่งด่วนสรุปว่าฮีตเตอร์ฝาเสีย</strong> — ส่วนใหญ่จบที่สายบานพับ</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> unplug the thin white/black lead running up the hinge and measure it: <strong>1,000–3,000Ω</strong> expected. If it reads OL, <strong>open up the hinge, inspect the wire and re-solder it before ordering any part</strong>. If the wiring is sound but there is still no heat, check the warm thermostat for a stuck-open contact.<br><strong>Do not condemn the lid element straight away</strong> — the hinge wiring is usually the answer.</p>
+      </div>
+
+      <div class="rc-fault" style="border-left-color:#2563eb;">
+        <span class="rc-fault-title th-only">🔵 อาการที่ 5: "หน้าจอติด กดสั่งงานได้ นับถอยหลังปกติ แต่น้ำไม่ร้อน" (รุ่นดิจิทัล)</span>
+        <span class="rc-fault-title en-only">🔵 Symptom 5: "Display works, countdown runs, but nothing heats" (digital)</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> ระบบควบคุมปกติดี แต่<strong>ภาคกำลังไม่จ่ายไฟ</strong> — รีเลย์หน้าสัมผัสไหม้ดำ หรือฮีตเตอร์หลักขาดใน</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> the control side is fine, the <strong>power side is not</strong> — burnt relay contacts, or an open main element</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> ฟังเสียงคลิกตอนกดหุงก่อน — ถ้าไม่คลิกเลย ให้ดูวงจรขับคอยล์รีเลย์ ถ้าคลิกแต่ไม่มีไฟออก แปลว่า<strong>หน้าสัมผัสรีเลย์ไหม้</strong> ให้เปลี่ยนรีเลย์ (เบอร์เดิม พิกัดกระแสเท่าเดิมหรือสูงกว่า) · จากนั้นวัดฮีตเตอร์หลักว่าอยู่ในช่วง 30–100Ω</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> listen for the click when you start a cook. No click points at the coil driver; a click with no output means <strong>burnt relay contacts</strong> — fit the same part with an equal or higher current rating. Then ohm the main element and confirm it falls in the 30–100Ω band.</p>
+      </div>
+
+      <div class="rc-fault" style="border-left-color:#7c3aed;">
+        <span class="rc-fault-title th-only">🟣 อาการที่ 6: "ขึ้น Error Code (E1/E2) ร้องตี๊ดตลอด หรือข้าวแฉะ/ไหม้ผิดปกติ" (รุ่นดิจิทัล)</span>
+        <span class="rc-fault-title en-only">🟣 Symptom 6: "Error code (E1/E2) with constant beeping, or oddly wet/burnt rice" (digital)</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> สมองกลได้ข้อมูลผิด — <strong>NTC เสีย/สายหักใน</strong> หรือ <strong>สาย TXD/RXD ระหว่าง 2 บอร์ดหลวมหรือขาด</strong></p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> the controller is being fed bad data — a <strong>failed NTC or broken sensor lead</strong>, or a <strong>loose/severed TXD-RXD link between the two boards</strong></p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> ถอด NTC มาวัดที่อุณหภูมิห้อง ต้องได้ 50–100kΩ แล้วเป่าไดร์ดูว่าค่าลดลงนุ่มนวลไหม · ถ้า NTC ดี ให้ตรวจขั้วต่อสาย 4 เส้น (VCC/GND/TXD/RXD) ว่าหลวม เขียว หรือหนูกัดไหม เสียบใหม่ให้แน่นแล้วลองอีกครั้ง — <strong>หลายเคสจบแค่เสียบขั้วให้แน่น ไม่ต้องเปลี่ยนอะไหล่เลย</strong></p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> pull the NTC and measure at room temperature (50–100kΩ), then warm it and confirm the reading falls smoothly. If the sensor is good, inspect the 4-wire connector (VCC/GND/TXD/RXD) for looseness, corrosion or rodent damage and reseat it — <strong>plenty of these end with nothing more than a properly seated connector</strong>.</p>
+      </div>
+
+      <div class="rc-fault" style="border-left-color:#0891b2;">
+        <span class="rc-fault-title th-only">🔷 อาการที่ 7: "ปุ่มกดไม่ติดบางปุ่ม กดเอง หรือรวน" (รุ่นดิจิทัล)</span>
+        <span class="rc-fault-title en-only">🔷 Symptom 7: "Some buttons don't respond, or it presses itself" (digital)</span>
+        <p class="th-only" style="margin:0"><strong>สาเหตุหลัก:</strong> ปุ่มสัมผัสของหม้อดิจิทัลใช้<strong>ขดสปริงชนกับแผ่นพลาสติกหน้าปัด</strong> ความชื้นและคราบไอน้ำจากครัวทำให้สัญญาณเพี้ยน</p>
+        <p class="en-only" style="margin:0"><strong>Root cause:</strong> the touch keys work through <strong>small springs pressed against the plastic fascia</strong>; kitchen steam and grime upset the readings</p>
+        <p class="th-only" style="margin:.4rem 0 0"><strong>สเต็ปซ่อม:</strong> แกะบอร์ดหน้าจอออกมาทำความสะอาด <strong>ใช้ยางลบถูปลายสปริงให้เงา</strong> เช็ดคราบบนแผ่นพลาสติกด้านใน แล้วดัดสปริงให้ตั้งตรงและสูงขึ้นเล็กน้อยเพื่อให้แนบสนิท ประกอบกลับแล้วอาการมักหายไปเลย</p>
+        <p class="en-only" style="margin:.4rem 0 0"><strong>Repair steps:</strong> take the display board out, <strong>polish the spring tips with a pencil eraser</strong>, clean the inside of the fascia, and gently stretch the springs so they sit straight and make firm contact. Reassemble and the problem is usually gone.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 7. ความปลอดภัย + แกะเครื่อง -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ความปลอดภัยและเทคนิคแกะเครื่อง</span><span class="en-only">Safety &amp; Teardown Technique</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li><strong style="color:#dc2626;">ห้ามใช้ลวดหรือฟอยล์ต่อตรงข้ามเทอร์โมฟิวส์เด็ดขาด</strong> — เครื่องจะกลับมาใช้ได้จริง แต่คุณเพิ่งถอดระบบกันไฟไหม้ตัวสุดท้ายออกจากบ้านลูกค้า และถ้าสวิตช์ละลายติดค้างเมื่อไหร่ ฮีตเตอร์จะไม่มีอะไรหยุดมันอีกเลย</li>
+        <li><strong>เปลี่ยนเทอร์โมฟิวส์ต้องตรงพิกัดอุณหภูมิเดิม</strong> (เช่น 172°C ก็ต้อง 172°C) ใส่ตัวที่ทนสูงกว่า = ยืดเวลาให้ไฟไหม้</li>
+        <li><strong>สายดินสีเขียว-เหลืองต้องกลับที่เดิมและขันแน่น</strong> ทุกครั้งที่ประกอบ — โครงเหล็กอยู่ใกล้ขั้ว 220V มาก และผู้ใช้จับหม้อด้วยมือเปียกเป็นเรื่องปกติในครัว</li>
+        <li><strong>รุ่นดิจิทัล: คาปาซิเตอร์บนบอร์ดยังอมไฟหลังถอดปลั๊ก</strong> รอสักครู่และอย่าจับขาอุปกรณ์ฝั่งอินพุตด้วยมือเปล่า ห้ามวัดหรือจับบอร์ดขณะเสียบปลั๊ก</li>
+        <li><strong>ระวังน็อตซ่อน:</strong> รุ่นใหม่มักซ่อนน็อตยึดฝาก้นหม้อไว้<strong>ใต้สติกเกอร์ฉลากเบอร์ 5 หรือใต้จุกยางรองขาตั้ง</strong> ให้คลำหาและไขออกให้ครบก่อนใช้เครื่องมืองัด ไม่งั้นกรอบพลาสติกของลูกค้าจะแตก</li>
+        <li><strong style="color:#dc2626;">ห้ามกระชากฝาหม้อออกเด็ดขาด</strong> — มีสายไฟของฮีตเตอร์ฝาร้อยผ่านแกนบานพับลงมาที่ฐาน ให้<strong>ถ่ายรูปจุดต่อไว้ก่อน</strong> ปลดสายที่ฐานล่างออก แล้วค่อยๆ ดึงสายย้อนขึ้นไปด้านบน</li>
+        <li><strong>ทดสอบหลังซ่อมด้วยน้ำเปล่า</strong> 2–3 ถ้วยก่อนส่งคืน ดูว่าดีดเข้าโหมดอุ่นเองจริง หลอดไฟเปลี่ยนสีถูกต้อง และไม่มีไฟรั่ว (วัดขั้วฮีตเตอร์ ↔ โครงเหล็กต้องขึ้น OL)</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li><strong style="color:#dc2626;">Never bridge the thermal fuse with wire or foil.</strong> The cooker will work again — and you will have removed the last fire protection from someone's kitchen. If the switch ever welds shut, nothing at all will stop the element.</li>
+        <li><strong>A replacement fuse must match the original temperature rating</strong> (172°C means 172°C). Fitting a higher one just buys the fire more time.</li>
+        <li><strong>The green/yellow earth wire goes back on tight, every time.</strong> The steel chassis sits close to live terminals, and wet hands are normal in a kitchen.</li>
+        <li><strong>Digital models: the board capacitor stays charged after unplugging.</strong> Give it a moment, keep bare fingers off the input-side components, and never probe or handle the board while it is plugged in.</li>
+        <li><strong>Watch for hidden screws:</strong> newer models tuck the base-plate screws <strong>under the energy-label sticker or the rubber feet</strong>. Find them all before levering anything, or you will crack the customer's plastic.</li>
+        <li><strong style="color:#dc2626;">Never yank the lid off.</strong> The lid element's wiring runs down through the hinge pin. <strong>Photograph the connections first</strong>, release the leads at the base, then feed the wire gently back up.</li>
+        <li><strong>Test with plain water</strong> — 2 or 3 cups — before returning it. Confirm it releases into Warm by itself, the lamps change correctly, and there is no leakage (element terminal to chassis must read OL).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 8. ดาวน์โหลด -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">เอกสารประกอบบทนี้</span><span class="en-only">Documents for This Lesson</span></div>
+    <div class="card">
+      <p class="th-only">ใบความรู้ 3 ไฟล์ที่เป็นที่มาของบทนี้ ดาวน์โหลดได้ในหมวด <strong>🛠️ งานซ่อม</strong> ของหน้าดาวน์โหลด:</p>
+      <p class="en-only">The three source sheets behind this lesson are in the <strong>🛠️ Repair</strong> section of the downloads page:</p>
+      <ul class="content-list th-only">
+        <li><a href="downloads.html?cat=repair&file=pdf/workshop/%E0%B8%95%E0%B8%A3%E0%B8%A7%E0%B8%88%E0%B9%80%E0%B8%8A%E0%B9%87%E0%B8%84_%E0%B8%A7%E0%B8%87%E0%B8%88%E0%B8%A3%E0%B8%AB%E0%B8%A1%E0%B9%89%E0%B8%AD%E0%B8%AB%E0%B8%B8%E0%B8%87%E0%B8%82%E0%B9%89%E0%B8%B2%E0%B8%A7%E0%B9%84%E0%B8%9F%E0%B8%9F%E0%B9%89%E0%B8%B2.pdf"><strong>ลายแทงวงจรหม้อหุงข้าวไฟฟ้า</strong></a> — รุ่นกลไกและรุ่นอุ่นทิพย์ 3D</li>
+        <li><a href="downloads.html?cat=repair"><strong>ลายแทงวงจรหม้อหุงข้าวดิจิทัล</strong></a> — เทียบสายไฟจริงกับสัญลักษณ์ในวงจร</li>
+        <li><a href="downloads.html?cat=repair"><strong>ผ่าระบบและวิเคราะห์จุดเสียแผงวงจรหม้อหุงข้าวดิจิทัล</strong></a> — บอร์ดกำลัง บอร์ดหน้าจอ และค่ามาตรฐานการวัด</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li><a href="downloads.html?cat=repair"><strong>Rice Cooker Wiring Diagram</strong></a> — mechanical and 3D-warming models</li>
+        <li><a href="downloads.html?cat=repair"><strong>Digital Rice Cooker Circuit Roadmap</strong></a> — real wiring against schematic symbols</li>
+        <li><a href="downloads.html?cat=repair"><strong>Digital Rice Cooker Boards &amp; Fault Analysis</strong></a> — power board, display board and standard readings</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
+<script>const CURRENT_PAGE='repair-rice-cooker';</script>
+<script src="js/nav.js"></script>
+<script src="js/rice-sim.js"></script>
+<script src="js/rice-circuit.js"></script>
+</body>
+</html>
