@@ -20,7 +20,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | 🔬 **เครื่องมือจำลองเชิงโต้ตอบ** | เบรดบอร์ดเสมือน, ออสซิลโลสโคป, BJT switch, เครื่องกำเนิดสัญญาณ, แหล่งจ่ายไฟ, เรียงกระแส AC→DC, ออปโตคัปเปลอร์, สวิตช์ความเร็วพัดลม, จำลองวงจร |
 | 🧮 **7 เครื่องคิดเลข** | รหัสสี, โอห์ม, กำลัง, พลังงาน, อนุกรม/ขนาน, แปลงหน่วย |
 | 📝 **แบบทดสอบ 84 ข้อ** | 13 หมวด, สุ่มข้อ, บันทึกคะแนนสูงสุด — มีทั้ง TH และ EN |
-| 📥 **PDF 53 ไฟล์** | ดาวน์โหลดใบเนื้อหา + ใบงานประกอบการเรียน |
+| 📥 **PDF 54 ไฟล์** | ดาวน์โหลดใบเนื้อหา + ใบงานประกอบการเรียน |
 | 🖨️ **Print-friendly** | หน้าสูตรสรุปพิมพ์ออกกระดาษ A4 ได้เลย |
 
 ---
@@ -73,6 +73,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | เตาไมโครเวฟ | Microwave Oven | `microwave.html` (วงจร 4 โซน • เซฟตี้ประตู 3 ตัว • ตารางจุดวัด Cold Test + วงจรโต้ตอบ 9 ขั้น พร้อมทวีแรงดัน 4,000V 2 จังหวะ) |
 | เครื่องทำน้ำอุ่น | Water Heater | `water-heater.html` (ทำน้ำร้อนทันที • ฟลุกซ์สวิตช์ • วงจรอย่างง่าย • ELCB กับสายดิน + ซิม 2 โหมด: อุณหภูมิน้ำตาม ΔT และไฟรั่ว/ELCB + วงจรโต้ตอบ 7 ขั้น) |
 | หม้อหุงข้าว | Rice Cooker | `rice-cooker.html` (จุดคูรีของแม่เหล็ก • วงจรหุง-อุ่น • อุ่นทิพย์ 3D • รุ่นดิจิทัล MCU + รีเลย์ + NTC + ซิมกราฟการหุง + วงจรโต้ตอบ 9 ขั้น 2 ฉาก) |
+| เครื่องซักผ้า | Washing Machine | `washing-machine.html` (ครบ 3 แบบ: 2 ถังกลไก • ฝาบนอินเวอร์เตอร์ • ฝาหน้า Direct Drive • บอร์ดไตรแอค vs บอร์ด IPM • รหัสสีสายไฟ • ตารางวัดค่า + วงจรโต้ตอบ 10 ขั้น 2 ฉาก + คลินิก 8 เคส) |
 
 **งานปฏิบัติ / Practical**
 | ไทย | English | หน้า |
@@ -89,7 +90,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | `formulas.html` | สูตรสรุป + พิมพ์ PDF | Formula summary + print |
 | `tools.html` | เครื่องคิดเลขเชิงโต้ตอบ 7 ตัว | 7 interactive calculators |
 | `quiz.html` | แบบทดสอบ 92 ข้อ 14 หมวด | 92-question quiz, 14 categories |
-| `downloads.html` | ดาวน์โหลด PDF 53 ไฟล์ (รวมหัวข้อ "ฟอร์มตรวจเช็ค" และ "งานซ่อม") | Download 53 PDF files (incl. "Check Forms" and "Repair" sections) |
+| `downloads.html` | ดาวน์โหลด PDF 54 ไฟล์ (รวมหัวข้อ "ฟอร์มตรวจเช็ค" และ "งานซ่อม") | Download 54 PDF files (incl. "Check Forms" and "Repair" sections) |
 
 ---
 
