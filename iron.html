@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="ซ่อมเตารีดไฟฟ้า | สื่อการเรียนการสอน" data-title-en="Electric Iron Repair | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ซ่อมเตารีดไฟฟ้า | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.ir-steps { display:grid; grid-template-columns:repeat(4,1fr); gap:.5rem; align-items:stretch; }
+@media (max-width:760px){ .ir-steps{ grid-template-columns:1fr 1fr; } }
+.ir-step { background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:.85rem .6rem; text-align:center; }
+.ir-step .ir-num { display:inline-block; width:24px; height:24px; line-height:24px; border-radius:50%; background:var(--primary); color:#fff; font-weight:700; font-size:.82rem; margin-bottom:.4rem; }
+.ir-step h4 { margin:.2rem 0 .35rem; font-size:.9rem; color:var(--primary-dark); }
+.ir-step p { margin:0; font-size:.78rem; color:var(--text-light); }
+/* ห้ามใส่ white-space:nowrap กับช่องเหล่านี้ — มันเก็บประโยค ไม่ใช่ค่าสั้นๆ ตารางจะดันออกนอกจอ */
+.ir-tbl td.hi { font-weight:700; color:var(--primary-dark); }
+.ir-tbl td.val { font-weight:700; color:var(--secondary); }
+.ir-tbl td.bad { font-weight:700; color:#dc2626; }
+.ir-tbl th, .ir-tbl td { vertical-align:top; line-height:1.45; }
+.ir-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; margin-top:1rem; }
+.ir-scroll table { min-width:600px; margin-top:0; }
+@media (max-width:640px){ .ir-tbl { font-size:.8rem; } }
+.ir-fault { border:1px solid var(--border); border-radius:12px; padding:1rem 1.15rem; margin:0 0 1rem; border-left-width:5px; border-left-style:solid; }
+.ir-fault:last-child { margin-bottom:0; }
+.ir-fault-title { font-weight:700; margin-bottom:.4rem; display:block; }
+.ir-formula { background:var(--bg); border:1px dashed var(--border); border-radius:10px; padding:.8rem 1rem; text-align:center; font-size:1.05rem; font-weight:700; color:var(--primary-dark); margin:.8rem 0; }
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🔌</div>
+    <div>
+      <h1 class="th-only">ซ่อมเตารีดไฟฟ้า (Electric Iron)</h1>
+      <h1 class="en-only">Electric Iron Repair</h1>
+      <p class="th-only">เทอร์โมสตัทไบเมทัล • เทอร์โมฟิวส์ • ฮีตเตอร์นิโครม • สายขาดในที่ขั้วยาง • คลินิกวิเคราะห์อาการเสีย</p>
+      <p class="en-only">Bimetal thermostat • Thermal fuse • Nichrome element • The cord that breaks at the boot • Fault-diagnosis clinic</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="card" style="border-left:4px solid #dc2626; display:flex; align-items:flex-start; gap:1rem; flex-wrap:wrap;">
+    <div style="font-size:1.6rem;">⚠️</div>
+    <div style="flex:1; min-width:220px;">
+      <strong class="th-only">เตารีดคือโครงโลหะที่ผู้ใช้จับด้วยมือเปล่า ห่างจากไฟ 220V แค่ฉนวนชั้นเดียว — 3 กฎนี้ห้ามละเมิด</strong>
+      <strong class="en-only">An iron is a metal body held in a bare hand, one layer of insulation away from 220 V — three rules you must never break</strong><br>
+      <span class="th-only">① <strong>สายดินเขียว/เหลืองต้องขันน็อตยึดกับโครงโลหะเสมอ ห้ามลืมและห้ามตัดทิ้ง</strong> — เช็คทุกครั้งก่อนปิดฝาครอบ<br>② <strong>เทอร์โมฟิวส์ขาดแล้วห้ามต่อตรงเด็ดขาด</strong> — มันคือด่านสุดท้ายที่กันไฟไหม้เมื่อเทอร์โมสตัทละลายติดตาย ถ้าลัดข้ามคือถอดระบบกันไฟไหม้ทิ้ง<br>③ <strong>ประกอบเสร็จแล้วห้ามเสียบปลั๊กบ้านตรงๆ</strong> — ต้องผ่านปลั๊กหลอดโหลดก่อนเสมอ (ดูหัวข้อสุดท้าย)</span>
+      <span class="en-only">① <strong>The green/yellow earth wire is bolted to the metal body, always — never forgotten, never cut off.</strong> Check it every time before the cover goes back on.<br>② <strong>Never bridge a blown thermal fuse.</strong> It is the last line of defence when the thermostat welds shut; bypassing it removes the fire protection entirely.<br>③ <strong>Never plug a reassembled iron straight into the wall</strong> — always go through a series lamp tester first (see the last section).</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">วัตถุประสงค์การเรียนรู้</span><span class="en-only">Learning Objectives</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li>อธิบายได้ว่าเตารีดเปลี่ยนพลังงานไฟฟ้าเป็นความร้อนอย่างไร และทำไมขดลวดต้องเป็น<strong>นิโครมที่มีความต้านทานสูง</strong></li>
+        <li>อธิบายกลไก<strong>แผ่นโลหะคู่ (ไบเมทัล)</strong> ได้ว่าทำไมหมุนปุ่มไปทาง Max แล้วเตาถึงร้อนขึ้น ทั้งที่ไม่ได้เพิ่มกำลังไฟเลยสักวัตต์</li>
+        <li>เข้าใจว่าเทอร์โมสตัทเป็นสวิตช์ <strong>ตัด-ต่อ (on/off)</strong> ไม่ใช่ตัวหรี่กำลัง จึงทำให้<strong>หลอดนีออนกระพริบเป็นจังหวะ = อาการปกติ</strong></li>
+        <li>ไล่วงจรจากปลั๊กถึงฮีตเตอร์ได้ครบทุกด่าน และรู้ว่า<strong>หลอดนีออนต่อคร่อมขั้วฮีตเตอร์</strong> ไม่ใช่ต่ออนุกรม</li>
+        <li>วัดค่ามาตรฐานของฮีตเตอร์ เทอร์โมสตัท เทอร์โมฟิวส์ และสายไฟด้วยมัลติมิเตอร์ได้ รวมถึง<strong>การวัดฉนวนเทียบโครง</strong></li>
+        <li>แยกอาการ "ไฟไม่เข้า" ออกจาก "ไฟเข้าแต่ไม่ร้อน" และ "ร้อนไม่ยอมตัด" ได้ พร้อมชี้ตัวต้องสงสัยตามลำดับ</li>
+        <li>บอกได้ว่าเตารีดไอน้ำเพิ่มอะไรเข้ามาจากเตารีดแห้ง และอาการเสียใหม่ที่ตามมาคืออะไร</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>Explain how an iron turns electrical energy into heat, and why the element must be <strong>high-resistance nichrome</strong></li>
+        <li>Explain the <strong>bimetallic strip</strong> well enough to say why turning the knob to Max makes it hotter without adding a single watt</li>
+        <li>Understand that the thermostat is an <strong>on/off switch</strong>, not a dimmer — which is why <strong>a blinking neon lamp is normal behaviour</strong></li>
+        <li>Trace every link from plug to element, and know that the <strong>neon sits across the element terminals</strong>, not in series with them</li>
+        <li>Measure the standard values of the element, thermostat, thermal fuse and cord — including the <strong>insulation check to the body</strong></li>
+        <li>Separate "no power" from "powered but cold" from "heats and never stops", and name the suspects for each in order</li>
+        <li>Say what a steam iron adds to a dry iron, and which new faults come with it</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 1. หลักการ + ซิมเทอร์โมสตัท -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">เตารีดควบคุมอุณหภูมิได้อย่างไร ทั้งที่ไม่มีอิเล็กทรอนิกส์เลย</span><span class="en-only">How It Holds a Temperature With No Electronics At All</span></div>
+    <div class="card">
+      <p class="th-only">เตารีดแบบแห้งเปลี่ยน<strong>พลังงานไฟฟ้าเป็นพลังงานความร้อน</strong> ด้วยวิธีที่ตรงไปตรงมาที่สุด คือปล่อยกระแส 220V ไหลผ่านตัวนำที่มี<strong>ความต้านทานสูง (ขดลวดนิโครม)</strong> ความร้อนที่ได้เป็นไปตามกฎของจูล:</p>
+      <p class="en-only">A dry iron converts <strong>electrical energy into heat</strong> in the most direct way possible: it pushes 220 V through a <strong>high-resistance nichrome conductor</strong>. The heat follows Joule's law:</p>
+
+      <div class="ir-formula">P = V² / R &nbsp;&nbsp;→&nbsp;&nbsp; 220² / 50 Ω ≈ 968 W</div>
+
+      <p class="th-only">นี่คือเหตุผลที่ฮีตเตอร์เตารีดวัดโอห์มได้ราว <strong>40–80 Ω</strong> — ไม่ใช่ตัวเลขที่ท่องจำมาลอยๆ แต่เป็นค่าที่ตกมาจากพิกัดกำลังไฟ: เตารีด 1,200W ได้ราว 40 Ω, 1,000W ได้ราว 48 Ω, 750W ได้ราว 64 Ω <strong>ถ้าวัดได้ต่ำกว่านี้มากคือมีการช็อตรอบ ถ้าสูงกว่านี้มากหรือขึ้น OL คือขดขาด</strong></p>
+      <p class="en-only">That is where the <strong>40–80 Ω</strong> figure for an iron element comes from — not a number to memorise, but one that falls straight out of the power rating: a 1,200 W iron reads about 40 Ω, a 1,000 W one about 48 Ω, a 750 W one about 64 Ω. <strong>Much lower means shorted turns; much higher, or OL, means an open winding.</strong></p>
+
+      <p class="th-only" style="margin-top:.9rem">แต่ลำพังฮีตเตอร์อย่างเดียวจะร้อนขึ้นเรื่อยๆ ไม่มีวันหยุด สิ่งที่ทำให้มันหยุดคือ <strong>เทอร์โมสตัทแบบแผ่นโลหะคู่ (Bimetal)</strong> — โลหะสองชนิดที่ขยายตัวไม่เท่ากันรีดติดกัน พอร้อนขึ้นด้านที่ขยายมากกว่าจะดันให้แผ่นโก่งตัว แล้ว<strong>ดันหน้าสัมผัสให้แยกออกจากกัน = ตัดไฟ</strong> พอเย็นลงแผ่นหดกลับ หน้าสัมผัสก็แตะกันใหม่ = ต่อไฟ</p>
+      <p class="en-only" style="margin-top:.9rem">On its own the element would simply keep getting hotter forever. What stops it is the <strong>bimetallic thermostat</strong>: two metals with different expansion rates bonded together. As it heats, the faster-expanding side makes the strip bow, and the bow <strong>pushes the contacts apart — power off</strong>. As it cools the strip straightens and the contacts touch again — power on.</p>
+
+      <div class="info-box">
+        <span class="th-only"><strong>ปุ่มหมุนปรับความร้อนทำงานยังไง — คำถามที่หลายคนตอบผิด:</strong> ปุ่มหมุนบนเตารีด <strong>ไม่ได้ปรับกำลังไฟ</strong> เลยสักวัตต์ ฮีตเตอร์กินไฟเท่าเดิมตลอด สิ่งที่ปุ่มไปปรับคือ <strong>แรงกดของสปริงที่กดหน้าสัมผัสไว้</strong><br>หมุนไปทาง <strong>Max</strong> = สปริงกดหน้าสัมผัสแน่นขึ้น → แผ่นไบเมทัลต้องโก่งตัวแรงขึ้น (คือต้องร้อนกว่าเดิม) จึงจะชนะแรงสปริงแล้วดีดหน้าสัมผัสออกได้ <strong>อุณหภูมิที่ตัดจึงสูงขึ้น</strong><br>หมุนไปทาง <strong>Min</strong> = สปริงหย่อน แค่ร้อนนิดเดียวไบเมทัลก็ดันหน้าสัมผัสออกได้แล้ว <strong>เตาจึงตัดที่อุณหภูมิต่ำ</strong></span>
+        <span class="en-only"><strong>What the temperature dial actually does — most people get this wrong:</strong> the knob <strong>does not change the power</strong> by a single watt. The element always draws the same current. What the knob adjusts is <strong>how hard a spring presses the contacts together</strong>.<br>Turn towards <strong>Max</strong> and the spring squeezes harder, so the bimetal must bow further — that is, get hotter — before it can win against the spring and force the contacts apart. <strong>The cut-out temperature rises.</strong><br>Turn towards <strong>Min</strong> and the spring is slack, so even a little heat is enough to push the contacts open. <strong>The iron cuts out cool.</strong></span>
+      </div>
+
+      <h3 style="margin:1.4rem 0 .6rem;font-size:1.05rem;">
+        <span class="th-only">🌡️ ซิมโต้ตอบ — ดูเทอร์โมสตัทตัด-ต่อรอบจุดตั้ง และเหตุผลที่หลอดนีออนกระพริบ</span>
+        <span class="en-only">🌡️ Interactive sim — watch the thermostat cycle around its set point, and see why the lamp blinks</span>
+      </h3>
+      <div class="sim-wrap" id="iron-sim">
+        <canvas id="ir-canvas" class="sim-screen" width="520" height="300" aria-label="Iron thermostat simulator"></canvas>
+        <div class="sim-panel">
+          <div class="sim-modes">
+            <button id="ir-mode-ok" class="active" type="button">✅ <span class="th-only">เทอร์โมสตัทปกติ</span><span class="en-only">Healthy thermostat</span></button>
+            <button id="ir-mode-weld" type="button">⚠️ <span class="th-only">ละลายติดตาย</span><span class="en-only">Welded shut</span></button>
+          </div>
+
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="ir-set"><span class="th-only">ตั้งอุณหภูมิ (ปุ่มหมุน)</span><span class="en-only">Temperature dial</span></label>
+              <span id="ir-set-val">150 °C</span>
+            </div>
+            <input type="range" id="ir-set" min="80" max="200" step="5" value="150">
+          </div>
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="ir-power"><span class="th-only">กำลังฮีตเตอร์ (พิกัด)</span><span class="en-only">Element rating</span></label>
+              <span id="ir-power-val">1000 W</span>
+            </div>
+            <input type="range" id="ir-power" min="600" max="1200" step="50" value="1000">
+          </div>
+          <button id="ir-restart" class="sim-btn" type="button">▶ <span class="th-only">เริ่มจากเตาเย็นใหม่</span><span class="en-only">Restart from cold</span></button>
+
+          <div class="sim-readout">
+            <div class="sim-rb"><div class="sim-rl" id="ir-l1">อุณหภูมิหน้าเตา</div><div class="sim-rv" id="ir-r1">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="ir-l2">หน้าสัมผัส</div><div class="sim-rv" id="ir-r2">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="ir-l3">ความต้านทาน</div><div class="sim-rv" id="ir-r3">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="ir-l4">ฮีตเตอร์ทำงาน</div><div class="sim-rv" id="ir-r4">—</div></div>
+          </div>
+          <div class="sim-verdict" id="ir-verdict">—</div>
+        </div>
+      </div>
+
+      <div class="info-box" style="margin-top:1rem;">
+        <strong class="th-only">🧪 ลองไล่ 3 สถานการณ์นี้</strong>
+        <strong class="en-only">🧪 Three scenarios worth trying</strong>
+        <p class="th-only" style="margin:.4rem 0 0;">
+          <strong>1) ทำไมหลอดนีออนถึงกระพริบ:</strong> ปล่อยให้เตาไต่ขึ้นจนถึงจุดตั้ง แล้วสังเกตว่าเส้นกราฟ<strong>แกว่งขึ้นลงอยู่ในแถบเขียว</strong>ไม่มีวันนิ่ง — เพราะเทอร์โมสตัทเป็นสวิตช์ตัด-ต่อ ไม่ใช่ตัวหรี่ หลอดนีออนที่ต่ออยู่กับฮีตเตอร์จึงติดๆ ดับๆ ตามไปด้วย <strong>ลูกค้าที่แจ้งว่า "ไฟกระพริบ เตาน่าจะเสีย" คือเตาปกติดี</strong><br>
+          <strong>2) ตั้งร้อนแล้วเตาทำงานหนักขึ้น:</strong> ลากจุดตั้งจาก 100°C ไป 200°C จะเห็นช่อง <strong>"ฮีตเตอร์ทำงาน"</strong> เพิ่มขึ้นเรื่อยๆ เพราะยิ่งร้อนก็ยิ่งสูญเสียความร้อนออกสู่อากาศเร็ว ต้องจ่ายไฟชดเชยถี่ขึ้น<br>
+          <strong>3) ฟิวส์คือด่านสุดท้ายจริงๆ:</strong> กดปุ่ม <strong>"ละลายติดตาย"</strong> แล้วรอ — หน้าสัมผัสไม่ยอมตัด อุณหภูมิไต่ทะลุจุดตั้งขึ้นไปเรื่อยๆ จนแตะเส้นม่วง 250°C แล้ว <strong>เทอร์โมฟิวส์จะหลอมตัวเองขาดต่อหน้า</strong> นี่คือเหตุผลที่ห้ามลัดข้ามมันเด็ดขาด
+        </p>
+        <p class="en-only" style="margin:.4rem 0 0;">
+          <strong>1) Why the neon blinks:</strong> let the iron climb to its set point, then watch the trace <strong>oscillate inside the green band</strong> and never settle — because the thermostat is an on/off switch, not a dimmer. The lamp wired to the element blinks along with it. <strong>A customer reporting "the light keeps flashing, it must be broken" has a perfectly healthy iron.</strong><br>
+          <strong>2) Hotter settings work the element harder:</strong> drag the set point from 100°C to 200°C and watch the <strong>duty cycle</strong> climb — the hotter the plate, the faster it loses heat to the air, so power has to be restored more often.<br>
+          <strong>3) The fuse really is the last line:</strong> press <strong>"welded shut"</strong> and wait. The contacts never open, the temperature sails past the set point, touches the purple 250°C line, and <strong>the thermal fuse melts itself open in front of you</strong>. That is precisely why you must never bridge it.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. ชิ้นส่วน -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ผ่าโครงสร้าง — 6 ชิ้นส่วนที่ต้องรู้จัก</span><span class="en-only">Inside the Iron — Six Parts You Must Know</span></div>
+    <div class="card">
+      <div class="ir-scroll">
+      <table class="fs-ref-table ir-tbl">
+        <colgroup><col style="width:22%"><col style="width:44%"><col style="width:34%"></colgroup>
+        <thead>
+          <tr>
+            <th><span class="th-only">ชิ้นส่วน</span><span class="en-only">Part</span></th>
+            <th><span class="th-only">กลไกและหน้าที่</span><span class="en-only">Mechanism and job</span></th>
+            <th><span class="th-only">จุดที่ช่างต้องระวัง</span><span class="en-only">What to watch for</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="hi"><span class="th-only">เทอร์โมสตัท (ไบเมทัล)</span><span class="en-only">Bimetal thermostat</span></td>
+            <td><span class="th-only">แผ่นโลหะคู่โก่งตัวเมื่อร้อน ดันหน้าสัมผัสให้แยกกัน = ตัดไฟ · เย็นลงแล้วหดกลับมาแตะกัน = ต่อไฟ · ปุ่มหมุนปรับ<strong>แรงกดสปริง</strong> ไม่ได้ปรับกำลังไฟ</span><span class="en-only">A bimetallic strip bows when hot, forcing the contacts apart; as it cools they touch again. The knob adjusts <strong>spring pressure</strong>, not power</span></td>
+            <td class="bad"><span class="th-only">หน้าสัมผัสเกิดเขม่าจากการอาร์กทุกครั้งที่ตัด-ต่อ · ถ้าละลายติดตายจะร้อนไม่ยอมหยุด</span><span class="en-only">Arcing at every cycle leaves soot; if it welds shut the iron never stops heating</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">เทอร์โมฟิวส์</span><span class="en-only">Thermal fuse</span></td>
+            <td><span class="th-only">อุปกรณ์นิรภัยขั้นสุดท้าย ตัดวงจรเมื่ออุณหภูมิเกินพิกัด (ราว 250°C) โดย<strong>หลอมละลายตัวเองขาดถาวร</strong></span><span class="en-only">The last safety device: past its rating (around 250°C) it <strong>melts itself permanently open</strong></span></td>
+            <td class="bad"><span class="th-only"><strong>ขาดแล้วต้องเปลี่ยน ห้ามต่อตรงเด็ดขาด</strong> · และต้องหาสาเหตุที่ทำให้ร้อนเกินด้วย ไม่งั้นตัวใหม่ก็ขาดซ้ำ</span><span class="en-only"><strong>Replace it, never bridge it</strong> — and find what overheated it, or the new one goes the same way</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">ฮีตเตอร์ (ขดลวดนิโครม)</span><span class="en-only">Nichrome element</span></td>
+            <td><span class="th-only">ขดลวดนิโครมฝังในท่อโลหะ อัดแน่นด้วย<strong>ผงแมกนีเซียมออกไซด์</strong> ซึ่งนำความร้อนได้ดีแต่เป็นฉนวนไฟฟ้า จึงกันไฟ 220V ไม่ให้ช็อตลงโครง</span><span class="en-only">Nichrome wire in a metal tube, packed with <strong>magnesium oxide powder</strong> — a good heat conductor but an electrical insulator, keeping the 220 V off the body</span></td>
+            <td class="val"><span class="th-only">วัดโอห์มได้ 40–80 Ω · <strong>ขั้วเทียบโครงต้องขึ้น OL เท่านั้น</strong> ถ้าผงฉนวนชื้นจะเริ่มรั่ว</span><span class="en-only">40–80 Ω · <strong>terminal to body must read OL</strong>; damp packing powder starts to leak</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">หลอดนีออนแสดงสถานะ + R</span><span class="en-only">Neon indicator + resistor</span></td>
+            <td><span class="th-only">หลอดนีออนทนความร้อน ต่ออนุกรมกับ<strong>ตัวต้านทานค่าสูง</strong>เพื่อดรอปไฟ 220V แล้วทั้งชุด<strong>ต่อคร่อมขั้วฮีตเตอร์</strong> จึงติดพร้อมกับที่ฮีตเตอร์ได้ไฟ</span><span class="en-only">A heat-tolerant neon lamp in series with a <strong>high-value resistor</strong> to drop the 220 V; the pair sits <strong>across the element terminals</strong>, so it lights whenever the element is powered</span></td>
+            <td class="bad"><span class="th-only">หลอดเสื่อมหรือ R ขาด → ไม่สว่าง แต่<strong>เตายังร้อนปกติ</strong> ไม่ใช่อาการอันตราย</span><span class="en-only">A tired lamp or open resistor means no light, but <strong>the iron still heats normally</strong> — not a dangerous fault</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">สายไฟและขั้วยางท้ายเตา</span><span class="en-only">Cord and strain relief</span></td>
+            <td><span class="th-only">สายหุ้มฉนวนถักทนความร้อน · บริเวณขั้วยางท้ายเตาคือจุดที่รับการหักงอและสะบัดตลอดอายุการใช้งาน</span><span class="en-only">Heat-resistant braided flex; the rubber boot at the back takes every bend and whip for the life of the iron</span></td>
+            <td class="bad"><span class="th-only"><strong>จุดขาดในอันดับ 1 ของทั้งเครื่อง</strong> — เส้นทองแดงล้าจนหักทีละเส้น ฉนวนข้างนอกยังดูดีเหมือนใหม่</span><span class="en-only"><strong>The single most common failure in the whole appliance</strong> — the copper fatigues strand by strand while the outer jacket still looks new</span></td>
+          </tr>
+          <tr>
+            <td class="hi"><span class="th-only">สายดิน (เขียว/เหลือง)</span><span class="en-only">Earth wire (green/yellow)</span></td>
+            <td><span class="th-only">ขันน็อตยึดกับโครงโลหะของเตารีดตามมาตรฐาน มอก. เพื่อดึงไฟรั่วลงดิน · <strong>ไม่อยู่ในวงจรทำงาน ไม่มีกระแสไหลตอนปกติ</strong></span><span class="en-only">Bolted to the metal body to give leakage a path to earth. <strong>It is not part of the working circuit and carries no current when healthy</strong></span></td>
+            <td class="bad"><span class="th-only">ลืมขันกลับตอนประกอบ = ผู้ใช้กลายเป็นทางลงดินแทน · ต้องรีเช็คทุกครั้งก่อนปิดฝา</span><span class="en-only">Forget to refit it and the user becomes the path to earth instead — check it every single time before closing up</span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. ซิมวงจร -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ไล่วงจรทีละขั้น — จากปลั๊กถึงฮีตเตอร์</span><span class="en-only">Trace the Circuit Step by Step — Plug to Element</span></div>
+    <div class="card">
+      <p class="th-only">วงจรเตารีดสั้นที่สุดในบรรดาเครื่องใช้ไฟฟ้าทั้งหมด: ส่วนควบคุมต่อ<strong>อนุกรม</strong>กันเป็นแถวเดียว ส่วนแสดงผลต่อ<strong>ขนาน</strong>คร่อมฮีตเตอร์</p>
+      <p class="en-only">This is the shortest circuit of any appliance on the site: the control side is one <strong>series</strong> chain, and the indicator hangs in <strong>parallel</strong> across the element.</p>
+      <ul class="content-list th-only" style="margin-bottom:.8rem">
+        <li><strong>เส้นทางสาย L (แดง):</strong> ปลั๊ก → สายไฟ/ขั้วยาง → เทอร์โมสตัท → เทอร์โมฟิวส์ → <strong>ขั้วที่ 1 ของฮีตเตอร์</strong></li>
+        <li><strong>เส้นทางสาย N (น้ำเงิน):</strong> ปลั๊ก → <strong>ตรงเข้าขั้วที่ 2 ของฮีตเตอร์</strong> ครบวงจร</li>
+        <li><strong>หลอดนีออน + R:</strong> ต่อคร่อมขั้วที่ 1 กับขั้วที่ 2 ของฮีตเตอร์</li>
+        <li><strong>สายดิน (E):</strong> ขันกับโครงโลหะ ไม่อยู่ในวงจรทำงาน</li>
+      </ul>
+      <ul class="content-list en-only" style="margin-bottom:.8rem">
+        <li><strong>Live (red):</strong> plug → cord and boot → thermostat → thermal fuse → <strong>element terminal 1</strong></li>
+        <li><strong>Neutral (blue):</strong> plug → <strong>straight to element terminal 2</strong>, completing the loop</li>
+        <li><strong>Neon + resistor:</strong> connected across element terminals 1 and 2</li>
+        <li><strong>Earth:</strong> bolted to the metal body, outside the working circuit</li>
+      </ul>
+
+      <div class="bs-wrap" id="iron-circuit">
+        <div class="bs-tabs">
+          <button class="bs-tab" data-step="1"><span class="bs-n">1</span><span class="th-only">ไฟเข้า + สายไฟ</span><span class="en-only">Power in + cord</span></button>
+          <button class="bs-tab" data-step="2"><span class="bs-n">2</span><span class="th-only">เทอร์โมสตัท</span><span class="en-only">Thermostat</span></button>
+          <button class="bs-tab" data-step="3"><span class="bs-n">3</span><span class="th-only">เทอร์โมฟิวส์</span><span class="en-only">Thermal fuse</span></button>
+          <button class="bs-tab" data-step="4"><span class="bs-n">4</span><span class="th-only">ฮีตเตอร์ + สายดิน</span><span class="en-only">Element + earth</span></button>
+          <button class="bs-tab" data-step="5"><span class="bs-n">5</span><span class="th-only">หลอดนีออน</span><span class="en-only">Neon lamp</span></button>
+        </div>
+
+        <canvas id="irc-canvas" class="bs-canvas" style="aspect-ratio:900/360;" aria-label="Electric iron circuit simulator"></canvas>
+
+        <div class="bs-nav" style="flex-wrap:wrap;">
+          <button id="irc-prev" class="bs-navbtn">◀ <span class="th-only">ก่อนหน้า</span><span class="en-only">Prev</span></button>
+          <button id="irc-play" class="bs-navbtn"><span class="th-only">▶ เล่นอัตโนมัติ</span><span class="en-only">▶ Auto-play</span></button>
+          <button id="irc-stat" class="bs-navbtn">
+            <span class="irc-on">🔴 <span class="th-only">กำลังร้อน — หน้าสัมผัสต่อ</span><span class="en-only">Heating — contacts closed</span></span>
+            <span class="irc-off">⚪ <span class="th-only">ถึงอุณหภูมิ — หน้าสัมผัสตัด</span><span class="en-only">At set point — contacts open</span></span>
+          </button>
+          <select id="irc-fault" class="bs-select" aria-label="fault mode">
+            <option value="ok">✅ ปกติ — Normal</option>
+            <option value="cord">🔴 สายไฟขาดในที่ขั้วยาง — cord broken at the boot</option>
+            <option value="stat">🟠 หน้าสัมผัสเทอร์โมสตัทมีเขม่า — sooty thermostat contacts</option>
+            <option value="fuse">🟡 เทอร์โมฟิวส์ขาด — thermal fuse open</option>
+            <option value="element">🟢 ฮีตเตอร์ขาดใน (หลอดยังติด!) — element open, lamp still lit</option>
+            <option value="neon">🔵 หลอดนีออน/R ขาด — indicator dead</option>
+            <option value="leak">🟣 ฮีตเตอร์รั่วลงโครง — element leaking to the body</option>
+          </select>
+          <button id="irc-next" class="bs-navbtn"><span class="th-only">ถัดไป</span><span class="en-only">Next</span> ▶</button>
+        </div>
+
+        <div class="bs-faultnote">
+          <span class="th-only">🔧 กำลังจำลองเตาที่เสียอยู่ — ไล่ป้ายจุดวัด TP1 → TP3 จากซ้ายไปขวา <b>จุดแรกที่กลายเป็นสีแดงคือด่านที่ขาด</b> · แต่ระวัง 2 เคสที่ไฟมาครบทุกจุดแล้วยังผิดปกติ และ 1 เคสที่ไฟดับหมดโดยไม่มีอะไรขาดสักชิ้น</span>
+          <span class="en-only">🔧 A faulty iron is being simulated — read TP1 → TP3 left to right: <b>the first badge that turns red is the broken link</b>. But watch for the two cases where every badge is green and something is still wrong, and the one case where everything is dead with nothing actually broken.</span>
+        </div>
+
+        <div class="bs-desc" data-step="1">
+          <p class="th-only"><strong>ขั้นที่ 1 — ไฟเข้า 3 เส้น แต่ทำงานแค่ 2:</strong> สาย <strong>L (แดง)</strong> กับ <strong>N (น้ำเงิน)</strong> คือคู่ที่จ่ายกำลัง ส่วน <strong>E (เขียว/เหลือง)</strong> ขันน็อตอยู่กับโครงโลหะเฉยๆ ไม่มีกระแสไหลตอนเตาปกติ<br>สังเกตกล่องแรกที่คร่อมทั้งสองราง — นั่นคือ <strong>สายไฟกับขั้วยางท้ายเตา</strong> ซึ่งเป็น<strong>จุดขาดในอันดับ 1 ของทั้งเครื่อง</strong> เพราะทุกครั้งที่รีดผ้า สายตรงนี้จะถูกหักงอและสะบัดซ้ำๆ จนทองแดงล้าและหักทีละเส้น โดยที่<strong>ฉนวนข้างนอกยังดูดีเหมือนใหม่</strong> มองด้วยตาไม่มีทางเห็น<br><strong>วิธีจับตัวการ:</strong> ตั้งมิเตอร์ย่านโอห์ม คีบขาปลั๊กกับปลายสายฝั่งในเครื่อง แล้ว <strong>ขยับและหักงอสายตรงขั้วยางไปมาขณะดูหน้าจอ</strong> ถ้าค่ากระพริบไปมาระหว่าง 0Ω กับ OL แปลว่าเจอแล้ว<br><strong>เรื่องจุดที่วิ่งในภาพ:</strong> ไฟบ้านเป็น <strong>ไฟสลับ (AC) 50 Hz</strong> กระแสกลับทิศ 50 ครั้งต่อวินาที ไม่มีขาไหนเป็นทางเข้าหรือออกถาวร จุดที่วิ่งบอกแค่ว่า<strong>วงจรครบวงและมีกระแสไหล</strong> ที่วาดให้เริ่มจากขั้ว L ก็เพื่อให้ตรงกับลำดับการไล่ซ่อมจริง</p>
+          <p class="en-only"><strong>Step 1 — three wires arrive, two do the work:</strong> <strong>L (red)</strong> and <strong>N (blue)</strong> carry the power; <strong>E (green/yellow)</strong> is simply bolted to the metal body and carries no current on a healthy iron.<br>Notice the first block, spanning both rails: that is the <strong>cord and its rubber strain relief</strong>, and it is <strong>the most common failure point in the entire appliance</strong>. Every time the iron is used, that spot is bent and whipped until the copper fatigues and breaks strand by strand — while <strong>the outer jacket still looks brand new</strong>. You will never see it by eye.<br><strong>How to catch it:</strong> set the meter to ohms, clip across a plug pin and the far end of that conductor, then <strong>flex and work the cord at the boot while watching the display</strong>. A reading that flickers between 0 Ω and OL has just confessed.<br><strong>About the moving dots:</strong> mains is <strong>alternating current at 50 Hz</strong>, reversing fifty times a second, so neither wire is permanently an "in" or an "out". The dots only show that <strong>the loop is complete and current is flowing</strong>; they start at live to match how you actually trace a fault.</p>
+        </div>
+
+        <div class="bs-desc" data-step="2">
+          <p class="th-only"><strong>ขั้นที่ 2 — เทอร์โมสตัทคือสวิตช์ที่เปิด-ปิดตัวเองด้วยความร้อน:</strong> แผ่นไบเมทัลรับความร้อนจากหน้าเตาโดยตรง พอถึงอุณหภูมิที่ตั้งไว้มันจะโก่งตัวดันหน้าสัมผัสให้แยกกัน สังเกตในภาพว่า<strong>แขนหน้าสัมผัสจะกระดกขึ้น</strong>เมื่ออยู่ในสถานะตัด<br><strong>กดปุ่ม "ถึงอุณหภูมิ — หน้าสัมผัสตัด" ดู</strong> แล้วสังเกตว่า TP2 กับ TP3 กลายเป็น 0V และหลอดนีออนดับ ทั้งที่<strong>เตาไม่ได้เสียเลยสักนิด</strong><br><strong>บทเรียนที่สำคัญที่สุดของขั้นนี้:</strong> การวัดแล้วเจอ 0V ที่ปลายเทอร์โมสตัท <strong>ไม่ได้แปลว่าเสียเสมอไป</strong> ต้องถามก่อนว่าตอนนั้นเตากำลังร้อนถึงจุดตั้งอยู่หรือเปล่า ถ้าไม่แน่ใจให้<strong>หมุนปุ่มไป Max แล้ววัดใหม่ตอนเตายังเย็น</strong> — ถ้ายังเป็น 0V อยู่ค่อยสรุปว่าหน้าสัมผัสมีปัญหา<br>หน้าสัมผัสจะเกิด<strong>ประกายไฟ (อาร์ก) ทุกครั้งที่ตัด-ต่อ</strong> ใช้ไปนานๆ จึงเกิดคราบเขม่าดำจนไฟผ่านไม่สะดวก — ขัดออกด้วยกระดาษทรายละเอียดได้ ถ้ายังไม่ละลายติดกัน</p>
+          <p class="en-only"><strong>Step 2 — the thermostat is a switch that opens and closes itself with heat:</strong> the bimetal takes its heat straight from the soleplate, and at the set temperature it bows and forces the contacts apart. In the drawing the <strong>contact arm tilts up</strong> when it is open.<br><strong>Press "at set point — contacts open"</strong> and watch TP2 and TP3 fall to 0 V and the lamp go dark, with <strong>absolutely nothing wrong with the iron</strong>.<br><strong>The most important lesson on this step:</strong> reading 0 V after the thermostat <strong>does not automatically mean it is faulty</strong>. First ask whether the iron had reached its set point. If you are unsure, <strong>turn the dial to Max and measure again with the iron cold</strong> — if it is still 0 V, then you can blame the contacts.<br>Those contacts <strong>arc every single time they open or close</strong>, so over the years they build up black soot that current struggles to cross. Fine abrasive paper cleans them up, provided they have not welded together.</p>
+        </div>
+
+        <div class="bs-desc" data-step="3">
+          <p class="th-only"><strong>ขั้นที่ 3 — เทอร์โมฟิวส์คือด่านสุดท้ายที่ยอมตายเพื่อกันไฟไหม้:</strong> มันไม่ได้ทำอะไรเลยตลอดอายุการใช้งานปกติ หน้าที่เดียวของมันคือ<strong>รอวันที่เทอร์โมสตัทเอาไม่อยู่</strong><br>ถ้าหน้าสัมผัสเทอร์โมสตัทละลายติดตาย ไฟจะจ่ายเข้าฮีตเตอร์ตลอดเวลา อุณหภูมิไต่ขึ้นเรื่อยๆ ไม่มีอะไรหยุด พอทะลุพิกัด (ราว <strong>250°C</strong>) เทอร์โมฟิวส์จะ<strong>หลอมละลายตัวเองขาดถาวร</strong> ตัดไฟทั้งวงจร — ผ้าไหม้ไปแล้วก็จริง แต่บ้านไม่ไหม้<br><strong>กฎเหล็ก:</strong> ฟิวส์ตัวนี้ <strong>ขาดแล้วขาดเลย ไม่รีเซ็ตเอง</strong> และ <strong>ห้ามใช้ลวดต่อตรงข้ามเด็ดขาด</strong> เพราะเท่ากับถอดระบบกันไฟไหม้ออกทั้งระบบ<br><strong>และที่สำคัญกว่านั้น:</strong> เจอเทอร์โมฟิวส์ขาด อย่าเปลี่ยนแล้วจบ — <strong>ฟิวส์ไม่เคยขาดเอง</strong> ต้องหาให้เจอว่าอะไรทำให้มันร้อนเกิน (มักเป็นเทอร์โมสตัทที่หน้าสัมผัสเริ่มติด) ไม่งั้นตัวใหม่ก็ขาดซ้ำในเวลาไม่นาน · ลองเปิดซิมด้านบนแล้วกด "ละลายติดตาย" เพื่อดูเหตุการณ์นี้เกิดขึ้นจริง</p>
+          <p class="en-only"><strong>Step 3 — the thermal fuse is the last line, and it dies to prevent a fire:</strong> through a normal working life it does nothing at all. Its only job is to <strong>wait for the day the thermostat cannot cope</strong>.<br>If the thermostat contacts weld shut, power flows into the element continuously and the temperature simply keeps climbing with nothing to stop it. Past its rating (around <strong>250°C</strong>) the thermal fuse <strong>melts itself permanently open</strong> and kills the circuit. The shirt is ruined, but the house is not.<br><strong>The iron rule:</strong> this fuse <strong>never resets</strong>, and you <strong>must never bridge it with a piece of wire</strong> — that removes the fire protection entirely.<br><strong>And more important still:</strong> when you find a blown thermal fuse, do not just replace it and close up. <strong>Fuses never blow on their own.</strong> Find what overheated it — usually a thermostat whose contacts are starting to stick — or the new one will follow it shortly. Open the simulator above and press "welded shut" to watch this happen for real.</p>
+        </div>
+
+        <div class="bs-desc" data-step="4">
+          <p class="th-only"><strong>ขั้นที่ 4 — ฮีตเตอร์และเหตุผลที่ต้องมีสายดิน:</strong> ขดลวดนิโครมถูกฝังอยู่ในท่อโลหะที่อัดแน่นด้วย<strong>ผงแมกนีเซียมออกไซด์</strong> ซึ่งเป็นวัสดุพิเศษที่<strong>นำความร้อนได้ดีแต่เป็นฉนวนไฟฟ้า</strong> — ความร้อนจึงส่งผ่านออกไปที่หน้าเตาได้ ในขณะที่ไฟ 220V ถูกกั้นไม่ให้ถึงโครงโลหะ<br>ค่าที่ควรวัดได้คือ <strong>40–80 Ω</strong> ตามพิกัดกำลังไฟ และที่สำคัญไม่แพ้กันคือ <strong>ขั้วฮีตเตอร์เทียบกับหน้าเตาต้องขึ้น OL เสมอ</strong><br><strong>วันที่ผงฉนวนชื้นหรือท่อร้าว</strong> ไฟจะเริ่มรั่วออกมาที่โครงโลหะ — และตรงนี้เองที่สายดินทำงาน มันดึงกระแสรั่วลงดินจนเบรกเกอร์กันดูดตัด <strong>ก่อนที่ผู้ใช้จะกลายเป็นทางลงดินแทน</strong><br>ลองเลือกอาการ <strong>"ฮีตเตอร์รั่วลงโครง"</strong> ดู จะเห็นว่าป้ายจุดวัดแดงหมดเหมือนกับตอนสายขาด — <strong>อาการสองอย่างนี้แยกกันไม่ออกด้วยการไล่แรงดัน</strong> ทางเดียวที่แยกได้คือวัดฉนวนเทียบโครง · เรื่องเบรกเกอร์กันดูดอ่านต่อได้ที่บท <a href="home-wiring.html">ระบบไฟบ้าน L/N/G</a></p>
+          <p class="en-only"><strong>Step 4 — the element, and why the earth wire exists:</strong> the nichrome coil lives inside a metal tube packed with <strong>magnesium oxide powder</strong>, an unusual material that <strong>conducts heat well while insulating electrically</strong>. The heat gets out to the soleplate; the 220 V does not get out to the body.<br>Expect <strong>40–80 Ω</strong> across the terminals, according to the power rating — and just as importantly, <strong>element terminal to soleplate must always read OL</strong>.<br><strong>The day that packing powder absorbs moisture or the tube cracks</strong>, current starts finding the metal body — and that is exactly when the earth wire earns its keep, pulling the leakage to ground so the RCD trips <strong>before the user becomes the path to earth instead</strong>.<br>Select the <strong>"element leaking to the body"</strong> fault and you will see every probe badge go red, exactly as with a broken cord. <strong>Voltage tracing cannot tell these two apart</strong> — only an insulation check to the body can. For more on RCDs see <a href="home-wiring.html">House wiring: L/N/G</a>.</p>
+        </div>
+
+        <div class="bs-desc" data-step="5">
+          <p class="th-only"><strong>ขั้นที่ 5 — หลอดนีออนบอกอะไรเรากันแน่:</strong> หลอดนีออนต่ออนุกรมกับ<strong>ตัวต้านทานค่าสูง</strong> (เพื่อดรอปไฟ 220V ลงมาให้หลอดรับไหว) แล้วทั้งชุด<strong>ต่อคร่อมขั้วฮีตเตอร์ทั้งสองข้าง</strong> ไม่ได้ต่ออนุกรมกับฮีตเตอร์<br>ความหมายคือ <strong>หลอดไม่ได้บอกว่า "ฮีตเตอร์กำลังร้อน" แต่บอกว่า "มีไฟ 220V มาถึงขั้วฮีตเตอร์แล้ว"</strong> — ฟังดูเหมือนกันแต่ต่างกันมากเวลาซ่อม<br><strong>ลองเลือกอาการ "ฮีตเตอร์ขาดใน" ดู</strong> จะเห็นว่า<strong>หลอดนีออนยังติดอยู่เฉยๆ</strong> ทั้งที่ขดลวดขาดและเตาเย็นสนิท เพราะกิ่งของหลอดมีวงจรครบของตัวเองผ่าน R ไม่ต้องพึ่งฮีตเตอร์เลย<br>นี่คือที่มาของอาการหน้างานที่หลอกช่างมือใหม่ได้เสมอ: <strong>"เสียบแล้วไฟติด แต่รีดยังไงก็ไม่ร้อน"</strong> — ถ้าเข้าใจว่าหลอดต่อขนาน ก็จะรู้ทันทีว่าต้องไปวัดโอห์มที่ฮีตเตอร์ ไม่ใช่ไล่หาว่าไฟไม่เข้า<br>ในทางกลับกัน อาการ <strong>"ร้อนปกติทุกอย่าง แต่หลอดไม่ติด"</strong> คือหลอดหรือ R ในกิ่งนั้นขาด <strong>ไม่กระทบการใช้งานและไม่อันตราย</strong> แต่ควรบอกลูกค้าให้เข้าใจตรงกันก่อนส่งคืน</p>
+          <p class="en-only"><strong>Step 5 — what the neon lamp is actually telling you:</strong> the neon sits in series with a <strong>high-value resistor</strong> (to drop the 220 V to something it can survive), and that pair is wired <strong>across both element terminals</strong> — not in series with the element.<br>Which means <strong>the lamp does not say "the element is heating", it says "220 V has arrived at the element terminals"</strong>. That sounds like the same thing until you are holding a meter.<br><strong>Select the "element open" fault</strong> and watch: <strong>the neon stays cheerfully lit</strong> while the winding is broken and the iron is stone cold, because the lamp branch has its own complete circuit through its resistor and never needed the element at all.<br>This is the origin of the symptom that catches every beginner: <strong>"the light comes on but it never gets hot."</strong> Once you know the lamp is in parallel, you go straight to an ohms check on the element instead of hunting for missing supply.<br>The reverse case — <strong>"heats perfectly, lamp never lights"</strong> — is simply an open lamp or resistor. It <strong>affects nothing and is not dangerous</strong>, but tell the customer before you hand it back so you are both agreed on it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. ตารางวัดค่า -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ตารางวัดค่ามาตรฐาน — ดี/เสียดูตรงไหน</span><span class="en-only">Standard Readings — Telling Good from Bad</span></div>
+    <div class="card">
+      <p class="th-only"><strong>ถอดปลั๊กก่อนวัดทุกครั้ง</strong> และถอดสายของชิ้นที่จะวัดออกจากวงจรก่อน ไม่งั้นจะอ่านค่าชิ้นอื่นที่ขนานอยู่มาปนกัน — โดยเฉพาะกิ่งหลอดนีออนที่คร่อมฮีตเตอร์อยู่</p>
+      <p class="en-only"><strong>Unplug before every measurement</strong>, and disconnect the part first — otherwise you are reading whatever is in parallel with it, especially the neon branch sitting across the element.</p>
+      <div class="ir-scroll">
+      <table class="fs-ref-table ir-tbl">
+        <colgroup><col style="width:21%"><col style="width:14%"><col style="width:33%"><col style="width:32%"></colgroup>
+        <thead>
+          <tr>
+            <th><span class="th-only">จุดที่วัด</span><span class="en-only">What to measure</span></th>
+            <th><span class="th-only">ย่านมิเตอร์</span><span class="en-only">Range</span></th>
+            <th><span class="th-only">ค่าปกติ</span><span class="en-only">Good</span></th>
+            <th><span class="th-only">ค่าที่แปลว่าเสีย</span><span class="en-only">Bad</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="hi"><span class="th-only">ฮีตเตอร์ (คร่อมขั้ว)</span><span class="en-only">Element, across terminals</span></td>
+              <td>Ω</td>
+              <td class="val">40–80 Ω <span class="th-only">ตามพิกัดวัตต์</span><span class="en-only">by wattage</span></td>
+              <td class="bad"><span class="th-only">OL = ขดขาด · ต่ำกว่ามาก = ช็อตรอบ</span><span class="en-only">OL = open · far lower = shorted turns</span></td></tr>
+          <tr><td class="hi"><span class="th-only">ฮีตเตอร์เทียบหน้าเตา</span><span class="en-only">Element to soleplate</span></td>
+              <td>Ω / <span class="th-only">ปี๊บ</span><span class="en-only">beep</span></td>
+              <td class="val"><span class="th-only"><strong>OL เท่านั้น</strong></span><span class="en-only"><strong>OL, always</strong></span></td>
+              <td class="bad"><span class="th-only">ขึ้นค่าหรือปี๊บ = <strong>ไฟรั่วลงโครง ห้ามส่งคืน</strong></span><span class="en-only">Any reading or beep = <strong>leaking to the body, do not return it</strong></span></td></tr>
+          <tr><td class="hi"><span class="th-only">สายไฟ (ขาปลั๊ก→ปลายสาย)</span><span class="en-only">Cord, pin to far end</span></td>
+              <td>Ω</td>
+              <td class="val"><span class="th-only">≈ 0 Ω และ<strong>นิ่ง</strong>ขณะหักงอสาย</span><span class="en-only">≈ 0 Ω and <strong>steady</strong> while flexing</span></td>
+              <td class="bad"><span class="th-only">ค่ากระพริบ 0 Ω ↔ OL ตอนขยับที่ขั้วยาง = ขาดใน</span><span class="en-only">Flickering 0 Ω ↔ OL when worked at the boot = broken inside</span></td></tr>
+          <tr><td class="hi"><span class="th-only">เทอร์โมสตัท (คร่อมหน้าสัมผัส)</span><span class="en-only">Thermostat contacts</span></td>
+              <td><span class="th-only">ปี๊บ</span><span class="en-only">Continuity</span></td>
+              <td class="val"><span class="th-only">เตาเย็น + หมุนไป Max = ปี๊บ · หมุนไป Min สุด = เงียบ</span><span class="en-only">Cold iron at Max = beep · fully at Min = silent</span></td>
+              <td class="bad"><span class="th-only">เตาเย็นแล้วยังเงียบ = เขม่า/ไม่ต่อ · หมุน Min แล้วยังปี๊บ = ละลายติดตาย</span><span class="en-only">Silent when cold = sooty or open · still beeping at Min = welded shut</span></td></tr>
+          <tr><td class="hi"><span class="th-only">เทอร์โมฟิวส์</span><span class="en-only">Thermal fuse</span></td>
+              <td><span class="th-only">ปี๊บ</span><span class="en-only">Continuity</span></td>
+              <td class="val"><span class="th-only">ปี๊บ (≈ 0 Ω)</span><span class="en-only">Beep (≈ 0 Ω)</span></td>
+              <td class="bad"><span class="th-only">OL = ขาดถาวร · <strong>เปลี่ยนใหม่ ห้ามต่อตรง</strong> และต้องหาต้นเหตุ</span><span class="en-only">OL = permanently open · <strong>replace, never bridge</strong>, and find the cause</span></td></tr>
+          <tr><td class="hi"><span class="th-only">กิ่งหลอดนีออน + R</span><span class="en-only">Neon branch + resistor</span></td>
+              <td>Ω</td>
+              <td class="val"><span class="th-only">อ่านได้หลักแสน Ω (ค่า R จำกัดกระแส)</span><span class="en-only">Hundreds of kΩ (the limiting resistor)</span></td>
+              <td class="bad"><span class="th-only">OL = R หรือหลอดขาด → ไม่สว่าง แต่เตายังร้อนปกติ</span><span class="en-only">OL = open resistor or lamp → dark, but the iron still heats</span></td></tr>
+          <tr><td class="hi"><span class="th-only">สายดินถึงโครงโลหะ</span><span class="en-only">Earth pin to metal body</span></td>
+              <td><span class="th-only">ปี๊บ</span><span class="en-only">Continuity</span></td>
+              <td class="val"><span class="th-only"><strong>ต้องปี๊บ</strong> (≈ 0 Ω)</span><span class="en-only"><strong>Must beep</strong> (≈ 0 Ω)</span></td>
+              <td class="bad"><span class="th-only">OL = ลืมขันน็อตสายดิน หรือหางปลาหลุด → <strong>ห้ามส่งคืน</strong></span><span class="en-only">OL = the earth screw was forgotten or the terminal is loose → <strong>do not return it</strong></span></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="warn-box">
+        <span class="th-only"><strong>ทริกวัดเทอร์โมสตัทให้ได้ผลจริง:</strong> ต้องวัดตอน<strong>เตาเย็นสนิท</strong>เท่านั้น ถ้าเตายังอุ่นค้างอยู่ ไบเมทัลอาจยังโก่งดันหน้าสัมผัสอยู่ แล้วจะได้ OL ทั้งที่เทอร์โมสตัทดีอยู่ · และให้<strong>หมุนปุ่มขึ้น-ลงระหว่างวัด</strong> เพื่อฟังเสียง "แช็ก" ของกลไก จะยืนยันได้ว่ากลไกยังทำงานอยู่จริง</span>
+        <span class="en-only"><strong>To measure the thermostat meaningfully:</strong> the iron must be <strong>completely cold</strong>. On a still-warm iron the bimetal may be holding the contacts open, giving you an OL from a perfectly good thermostat. And <strong>turn the knob up and down while measuring</strong> — the mechanical click confirms the mechanism itself is still working.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. คลินิก -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">คลินิกช่าง — วิเคราะห์อาการเสีย</span><span class="en-only">The Clinic — Reading the Symptoms</span></div>
+    <div class="card">
+      <p class="th-only">อาการเตารีดแบ่งได้เป็น <strong>3 กลุ่มใหญ่</strong> และแค่ฟังลูกค้าเล่าให้จบก็แบ่งกลุ่มได้แล้ว ก่อนจะหยิบไขควงด้วยซ้ำ</p>
+      <p class="en-only">Iron faults fall into <strong>three families</strong>, and you can usually place a job in one of them just by listening to the customer — before you pick up a screwdriver.</p>
+
+      <div class="ir-fault" style="border-left-color:#dc2626;">
+        <span class="ir-fault-title th-only">1. ไฟไม่เข้า เครื่องดับสนิท — หลอดไม่ติด ไม่ร้อนเลย</span>
+        <span class="ir-fault-title en-only">1. Completely dead — no lamp, no heat at all</span>
+        <p class="th-only"><strong>ผู้ต้องสงสัยอันดับ 1 — สายไฟขาดใน:</strong> ตั้งมิเตอร์ย่านโอห์ม คีบขาปลั๊กกับปลายสายฝั่งในเครื่อง แล้ว <strong>ขยับและหักงอสายบริเวณขั้วยางท้ายเตา</strong> ขณะจ้องหน้าจอ ถ้าค่ากระพริบ 0 Ω ↔ OL คือเจอตัวการ อย่าลืมทำทั้งเส้น L และ N<br><strong>ผู้ต้องสงสัยอันดับ 2 — เทอร์โมฟิวส์ขาด:</strong> วัดคร่อมด้วยย่านเสียงปี๊บ ถ้า OL คือขาด <strong>แต่ห้ามเปลี่ยนแล้วจบ ต้องหาว่าอะไรทำให้มันร้อนเกิน</strong><br><strong>ผู้ต้องสงสัยอันดับ 3 — หน้าสัมผัสเทอร์โมสตัทมีเขม่า:</strong> วัดตอนเตาเย็นและหมุนปุ่มไป Max ถ้ายังเงียบ ให้ขัดหน้าสัมผัสด้วยกระดาษทรายละเอียด<br><strong>และผู้ต้องสงสัยที่คนมักลืม — ฮีตเตอร์รั่วลงโครง:</strong> อาการนี้ก็ "ดับสนิท" เหมือนกัน เพราะเบรกเกอร์กันดูดที่บ้านลูกค้าตัดไปแล้ว <strong>ไล่แรงดันยังไงก็แยกไม่ออก</strong> ต้องวัดฉนวนขั้วฮีตเตอร์เทียบหน้าเตา ซึ่งต้องขึ้น OL</p>
+        <p class="en-only"><strong>Suspect one — a cord broken inside:</strong> on ohms, clip a plug pin to the far end of that conductor and <strong>flex and work the cord at the rubber boot</strong> while watching the display. A reading flickering between 0 Ω and OL has found it. Do both L and N.<br><strong>Suspect two — an open thermal fuse:</strong> check it on continuity. OL means open — <strong>but do not just fit a new one; find what overheated it</strong>.<br><strong>Suspect three — sooty thermostat contacts:</strong> measure with the iron cold and the dial at Max; if it is still silent, polish the contacts with fine abrasive paper.<br><strong>And the suspect people forget — an element leaking to the body:</strong> that presents as "completely dead" too, because the customer's RCD has already tripped. <strong>No amount of voltage tracing separates it</strong> from a broken cord; only an insulation check from element terminal to soleplate, which must read OL.</p>
+      </div>
+
+      <div class="ir-fault" style="border-left-color:#059669;">
+        <span class="ir-fault-title th-only">2. เสียบแล้วหลอดไฟติด แต่รีดยังไงก็ไม่ร้อน</span>
+        <span class="ir-fault-title en-only">2. The lamp lights but it never gets hot</span>
+        <p class="th-only"><strong>จุดสลบ:</strong> อาการนี้หลอกช่างมือใหม่ได้เสมอ เพราะหลอดติด = คนส่วนใหญ่สรุปว่า "ไฟเข้าปกติ ระบบน่าจะดี" แล้วก็ไปไล่หาที่อื่น<br>ความจริงคือ <strong>หลอดนีออนต่อขนานคร่อมขั้วฮีตเตอร์</strong> ไม่ได้ต่ออนุกรม มันจึงมีวงจรครบวงของตัวเองผ่านตัวต้านทาน <strong>ต่อให้ขดลวดฮีตเตอร์ขาดสนิท หลอดก็ยังติดตามปกติ</strong><br>แปลว่าสิ่งที่หลอดบอกเราคือ <strong>"ไฟ 220V มาถึงขั้วฮีตเตอร์แล้ว"</strong> ไม่ใช่ "ฮีตเตอร์กำลังทำงาน"<br><strong>วิธียืนยัน:</strong> ถอดปลั๊ก แล้ววัดโอห์มคร่อมขั้วฮีตเตอร์ ถ้าขึ้น OL คือขดขาด (ต้องถอดสายกิ่งหลอดออกก่อน ไม่งั้นจะอ่านค่า R ของกิ่งหลอดหลักแสนโอห์มมาแทน)<br><strong>ลองในซิมด้านบน:</strong> เลือกอาการ "ฮีตเตอร์ขาดใน" แล้วดูหลอดนีออนที่ยังติดเฉยอยู่</p>
+        <p class="en-only"><strong>Why it fools people:</strong> the lamp is on, so most technicians conclude "supply is fine, the front end must be healthy" and go hunting elsewhere.<br>In fact the <strong>neon is wired in parallel across the element terminals</strong>, not in series. It has its own complete circuit through its resistor, so <strong>even with the element completely open the lamp lights exactly as usual</strong>.<br>What the lamp really reports is <strong>"220 V has reached the element terminals"</strong> — not "the element is working".<br><strong>To confirm:</strong> unplug and measure across the element terminals. OL means an open winding. Disconnect the lamp branch first, or you will read its several-hundred-kΩ resistor instead.<br><strong>Try it in the simulator above:</strong> pick the "element open" fault and watch the neon sitting there, happily lit.</p>
+      </div>
+
+      <div class="ir-fault" style="border-left-color:#7c3aed;">
+        <span class="ir-fault-title th-only">3. ร้อนจัดจนควันขึ้น ไม่ยอมตัด จนผ้าไหม้</span>
+        <span class="ir-fault-title en-only">3. Overheats until it smokes — never cuts out, and scorches the fabric</span>
+        <p class="th-only"><strong>ผู้ต้องสงสัย: เทอร์โมสตัทหน้าสัมผัสละลายติดตาย (Contact Welded)</strong> — หน้าสัมผัสเกิดประกายไฟทุกครั้งที่ตัด-ต่อ พอสะสมนานๆ โลหะจะละลายแล้วเชื่อมติดกัน กลายเป็นสะพานไฟถาวร ไบเมทัลจะโก่งแค่ไหนก็ดันไม่ออกอีกแล้ว ไฟจึงจ่ายเข้าฮีตเตอร์ตลอดเวลา<br><strong>วิธียืนยัน:</strong> ถอดปลั๊ก วัดคร่อมหน้าสัมผัสด้วยย่านเสียงปี๊บ แล้ว<strong>หมุนปุ่มไปที่ Min จนสุด</strong> — ถ้าปกติต้องเงียบ ถ้ายัง<strong>ปี๊บอยู่แม้หมุน Min สุด</strong> คือละลายติดกันแน่นอน<br><strong>สิ่งที่มักเจอพ่วงมาด้วย:</strong> เตาที่มาด้วยอาการนี้ บ่อยครั้ง<strong>เทอร์โมฟิวส์ขาดไปแล้ว</strong> (มันทำงานถูกต้อง คือยอมขาดเพื่อกันไฟไหม้) ทำให้เตากลายเป็น "ดับสนิท" ตอนถึงมือช่าง<br><strong>กฎที่ห้ามละเมิด:</strong> เจอเคสนี้ต้อง<strong>เปลี่ยนทั้งเทอร์โมสตัทและเทอร์โมฟิวส์คู่กัน</strong> ถ้าเปลี่ยนแต่ฟิวส์แล้วปล่อยเทอร์โมสตัทเดิมไว้ ฟิวส์ตัวใหม่จะขาดซ้ำ และคราวหน้าอาจไม่ทันแล้ว</p>
+        <p class="en-only"><strong>The suspect: welded thermostat contacts.</strong> The contacts arc every time they open or close; eventually the metal melts and fuses into a permanent bridge. However far the bimetal bows, it can no longer force them apart, so power reaches the element continuously.<br><strong>To confirm:</strong> unplug, put continuity across the contacts and <strong>turn the dial all the way down to Min</strong>. A healthy thermostat goes silent. If it <strong>still beeps at full Min</strong>, the contacts are welded.<br><strong>What usually comes with it:</strong> an iron arriving with this history has often <strong>already blown its thermal fuse</strong> — which is the fuse doing its job — so it reaches your bench as a "completely dead" unit.<br><strong>The rule you must not break:</strong> on this fault, <strong>replace the thermostat and the thermal fuse together</strong>. Fit only the fuse and leave the old thermostat in place and the new fuse will blow too — and next time it might not be quick enough.</p>
+      </div>
+
+      <div class="ir-fault" style="border-left-color:#0891b2;">
+        <span class="ir-fault-title th-only">4. ร้อนปกติ ตัดต่อปกติ แต่หลอดไฟไม่สว่าง</span>
+        <span class="ir-fault-title en-only">4. Heats and cycles normally, but the lamp never lights</span>
+        <p class="th-only"><strong>ผู้ต้องสงสัย:</strong> หลอดนีออนเสื่อมสภาพ หรือ<strong>ตัวต้านทานในกิ่งหลอดขาด</strong> — วัดคร่อมกิ่งนั้นด้วยย่านโอห์ม ปกติต้องอ่านได้หลักแสนโอห์ม ถ้า OL คือขาด<br><strong>ข้อควรรู้:</strong> อาการนี้<strong>ไม่กระทบการใช้งานและไม่อันตราย</strong> เตารีดยังทำงานครบทุกอย่าง แต่ควรอธิบายให้ลูกค้าเข้าใจก่อนส่งคืน เพราะลูกค้าหลายคนใช้หลอดนี้เป็นตัวบอกว่าเสียบปลั๊กอยู่หรือเปล่า<br><strong>อาการที่ต้องแยกให้ออก:</strong> ถ้าลูกค้าแจ้งว่า "<strong>ไฟกระพริบติดๆ ดับๆ</strong>" นั่น<strong>ไม่ใช่อาการเสีย</strong> — มันคือเทอร์โมสตัทกำลังตัด-ต่อรอบจุดตั้งตามปกติ ให้เปิดซิมด้านบนให้ลูกค้าดูได้เลย</p>
+        <p class="en-only"><strong>The suspect:</strong> a worn-out neon or an <strong>open resistor in the lamp branch</strong>. Measure across that branch on ohms — you should read several hundred kΩ; OL means open.<br><strong>Worth knowing:</strong> this <strong>affects nothing and is not dangerous</strong>; the iron works completely. But explain it before handing the job back, because many customers use that lamp to tell whether the iron is plugged in.<br><strong>Do not confuse it with:</strong> a customer reporting "<strong>the light keeps flashing on and off</strong>". That is <strong>not a fault</strong> — it is the thermostat cycling around its set point exactly as designed. Show them the simulator above.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. เตารีดไอน้ำ -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">เตารีดไอน้ำต่างจากเตารีดแห้งตรงไหน</span><span class="en-only">How a Steam Iron Differs</span></div>
+    <div class="card">
+      <p class="th-only">ทุกอย่างข้างบนคือ<strong>เตารีดแบบแห้ง (Dry Iron)</strong> ซึ่งเป็นแกนกลางที่ต้องเข้าใจก่อน เพราะ<strong>เตารีดไอน้ำก็คือเตารีดแห้งที่เพิ่มระบบน้ำเข้าไป</strong> — วงจรไฟฟ้าหลัก (L → เทอร์โมสตัท → เทอร์โมฟิวส์ → ฮีตเตอร์ → N) <strong>ยังเหมือนเดิมทุกประการ</strong> และอาการเสียส่วนใหญ่ก็ยังเป็นชุดเดิม</p>
+      <p class="en-only">Everything above describes a <strong>dry iron</strong>, and that is the core to learn first, because <strong>a steam iron is a dry iron with a water system bolted on</strong>. The main electrical circuit — L → thermostat → thermal fuse → element → N — <strong>is completely unchanged</strong>, and most faults are still the same ones.</p>
+
+      <div class="ir-steps" style="margin-top:1rem;">
+        <div class="ir-step">
+          <span class="ir-num">1</span>
+          <h4 class="th-only">แท้งก์น้ำ + วาล์วหยด</h4><h4 class="en-only">Tank and drip valve</h4>
+          <p class="th-only">น้ำหยดลงห้องไอน้ำในหน้าเตาที่ร้อนจัด กลายเป็นไอทันที · ปุ่มปรับไอน้ำคือวาล์วปรับอัตราหยด ล้วนๆ ไม่ใช่วงจรไฟฟ้า</p>
+          <p class="en-only">Water drips onto the hot steam chamber in the soleplate and flashes to vapour. The steam dial is purely a drip valve — no electronics involved</p>
+        </div>
+        <div class="ir-step">
+          <span class="ir-num">2</span>
+          <h4 class="th-only">ปุ่มพ่นไอ / สเปรย์</h4><h4 class="en-only">Burst and spray buttons</h4>
+          <p class="th-only">เป็นปั๊มมือแบบกลไก กดแล้วดันน้ำออกทางรูพ่น <strong>ไม่มีไฟฟ้าเกี่ยวข้อง</strong> — เสียเพราะลูกยางแห้งหรือรูตัน ไม่ใช่เพราะวงจร</p>
+          <p class="en-only">Hand-operated mechanical pumps that push water out of the nozzle. <strong>No electrical connection</strong> — they fail from dried seals or blocked nozzles, not from the circuit</p>
+        </div>
+        <div class="ir-step">
+          <span class="ir-num">3</span>
+          <h4 class="th-only">ตะกรันหินปูน</h4><h4 class="en-only">Limescale</h4>
+          <p class="th-only"><strong>สาเหตุอันดับ 1 ของเตารีดไอน้ำ</strong> — น้ำประปาทิ้งหินปูนไว้จนรูไอตัน ไอออกน้อยลงเรื่อยๆ หรือพ่นน้ำขาวเป็นคราบใส่ผ้า</p>
+          <p class="en-only"><strong>The number-one steam iron complaint</strong> — tap water leaves scale until the vents block, so steam weakens or the iron spits white deposits onto the fabric</p>
+        </div>
+        <div class="ir-step">
+          <span class="ir-num">4</span>
+          <h4 class="th-only">ปุ่ม Self-Clean</h4><h4 class="en-only">Self-clean</h4>
+          <p class="th-only">เปิดวาล์วให้น้ำทะลักลงห้องไอน้ำพร้อมกันทีเดียว แรงดันไอจะดันตะกรันหลุดออกทางรูไอ — แก้อาการข้อ 3 ได้โดยไม่ต้องแกะเครื่อง</p>
+          <p class="en-only">Dumps the whole tank into the chamber at once so the steam pressure blows the scale out through the vents — it fixes item 3 without opening the iron</p>
+        </div>
+      </div>
+
+      <div class="warn-box" style="margin-top:1rem;">
+        <span class="th-only"><strong>สิ่งที่เปลี่ยนไปสำหรับช่าง เมื่อเจอเตารีดไอน้ำ:</strong><br>① <strong>ต้องเทน้ำออกให้หมดก่อนแกะทุกครั้ง</strong> — ในแท้งก์และในห้องไอน้ำมีน้ำค้างเสมอ แม้จะดูแห้งแล้วก็ตาม น้ำหยดใส่เทอร์โมสตัทหรือขั้วฮีตเตอร์คือหายนะ<br>② <strong>อาการ "ไม่มีไอน้ำ" 90% ไม่ใช่ปัญหาทางไฟฟ้า</strong> — ให้ลองสั่ง Self-Clean และแช่หน้าเตาในน้ำส้มสายชูก่อนเสมอ ก่อนคิดจะรื้อวงจร<br>③ <strong>อาการ "น้ำรั่วออกหน้าเตาแทนที่จะเป็นไอ"</strong> มักแปลว่า<strong>ตั้งอุณหภูมิต่ำเกินไป</strong> (ต่ำกว่าจุดที่น้ำจะกลายเป็นไอทัน) ไม่ใช่เครื่องเสีย — อธิบายให้ลูกค้าแทนการเปลี่ยนอะไหล่<br>④ <strong>ยิ่งมีน้ำ ยิ่งต้องเข้มงวดเรื่องสายดินและการวัดฉนวน</strong> — เตารีดไอน้ำมีน้ำอยู่ห่างจากขั้วฮีตเตอร์ 220V แค่ไม่กี่มิลลิเมตร</span>
+        <span class="en-only"><strong>What changes for you when a steam iron lands on the bench:</strong><br>① <strong>Empty the water completely before opening it, every time.</strong> The tank and chamber always hold some, however dry they look, and water dripping onto the thermostat or element terminals is a disaster.<br>② <strong>"No steam" is 90% not an electrical problem.</strong> Run the self-clean cycle and soak the soleplate in vinegar before you even think about the circuit.<br>③ <strong>"It leaks water instead of steaming"</strong> usually means the <strong>temperature is set too low</strong> for the water to flash to vapour — not a fault. Explain it rather than replacing parts.<br>④ <strong>With water present, earthing and insulation testing matter even more</strong> — a steam iron keeps water a few millimetres from 220 V element terminals.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. ความปลอดภัย + pro tips -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">มาตรฐานความปลอดภัยและเทคนิคเพิ่มมูลค่างาน</span><span class="en-only">Safety Standards and Professional Touches</span></div>
+    <div class="card">
+      <div class="section-subtitle"><span class="th-only">1. ทดสอบก่อนเสียบไฟจริง ด้วย "ปลั๊กหลอดโหลด"</span><span class="en-only">1. Test through a series lamp before the wall socket</span></div>
+      <p class="th-only">หลังประกอบเตารีดเสร็จ <strong>ห้ามเสียบปลั๊กไฟบ้านตรงๆ ทันที</strong> ให้เสียบผ่าน <strong>ปลั๊กโหลด</strong> ก่อนเสมอ — คือหลอดไส้ 100–200W ต่ออนุกรมอยู่ในสายจ่ายไฟ<br><strong>เหตุผล:</strong> ถ้าประกอบผิด เผลอหนีบสายไฟจนช็อต หรือเรียงแหวนรองขั้วฮีตเตอร์ผิดจนไฟรั่วลงโครง <strong>หลอดโหลดจะสว่างจ้าขึ้นมาแทนการเกิดระเบิดหรือเบรกเกอร์ตัด</strong> เพราะกระแสถูกจำกัดด้วยความต้านทานของหลอด<br><strong>วิธีอ่านผล:</strong> เตารีดปกติ หลอดโหลดจะ<strong>สว่างขึ้นแล้วค่อยๆ หรี่ลง</strong>เมื่อฮีตเตอร์ร้อนขึ้น และจะ<strong>ดับวูบตอนเทอร์โมสตัทตัด</strong> · ถ้าหลอดสว่างจ้าค้างตั้งแต่วินาทีแรกและไม่ยอมหรี่เลย = มีจุดช็อต ให้ถอดปลั๊กแล้วรื้อหาทันที</p>
+      <p class="en-only">With the iron reassembled, <strong>never plug it straight into the wall</strong>. Always go through a <strong>series lamp tester</strong> first — a 100–200 W incandescent bulb wired in series with the supply.<br><strong>Why:</strong> if you have pinched a wire into a short, or stacked the element terminal washers wrong so it leaks to the body, <strong>the lamp simply glows brightly instead of something exploding or the breaker tripping</strong>, because the bulb's resistance limits the current.<br><strong>Reading it:</strong> a healthy iron makes the lamp <strong>brighten then gradually dim</strong> as the element warms, and <strong>go out</strong> when the thermostat cuts. A lamp that blazes from the first second and never dims means a short — unplug and go looking for it.</p>
+
+      <div class="section-subtitle"><span class="th-only">2. กฎเหล็ก "สายดินห้ามลืมขัน"</span><span class="en-only">2. The earth screw is never forgotten</span></div>
+      <p class="th-only">ก่อนปิดฝาครอบเตารีดทุกครั้ง ต้องรีเช็คว่า<strong>หางปลาสายดิน (เขียว/เหลือง) ถูกขันน็อตยึดติดกับโครงโลหะแน่นหนาแล้ว</strong> — และยืนยันด้วยมิเตอร์ ตั้งย่านเสียงปี๊บ จิ้มขาดินของปลั๊กกับโครงโลหะของเตา <strong>ต้องดังปี๊บ</strong><br>นี่คือขั้นตอนที่ใช้เวลา 10 วินาที แต่เป็นสิ่งเดียวที่ยืนอยู่ระหว่างลูกค้ากับไฟ 220V ในวันที่ฉนวนฮีตเตอร์เริ่มเสื่อม</p>
+      <p class="en-only">Before the cover goes back on, re-check that the <strong>green/yellow earth tag is bolted tight to the metal body</strong> — then prove it with the meter: continuity from the plug's earth pin to the body of the iron <strong>must beep</strong>.<br>It is a ten-second step, and it is the only thing standing between the customer and 220 V on the day the element insulation starts to go.</p>
+
+      <div class="section-subtitle"><span class="th-only">3. บริการแถมฟรี — ขัดทำความสะอาดหน้าเตา</span><span class="en-only">3. The free extra — clean the soleplate</span></div>
+      <p class="th-only">ลูกค้ามักส่งซ่อมพร้อม<strong>คราบผ้าไหม้ติดหน้าเตา</strong> ช่างสามารถเพิ่มมูลค่างานบริการได้ง่ายๆ โดย<strong>อุ่นเตารีดให้พอร้อน (ไม่ต้องร้อนจัด)</strong> แล้วนำ <strong>เทียนไข</strong> มาถูบริเวณคราบไหม้ให้ละลาย จากนั้นใช้ผ้าหนาๆ เช็ดออกให้เกลี้ยง หรือใช้ครีมขัดโลหะขัดเงาซ้ำ<br>การคืนเตารีดที่ซ่อมเสร็จพร้อม<strong>หน้าเตาสะอาดเหมือนใหม่</strong> สร้างความประทับใจได้มากกว่าที่คิด และแทบไม่มีต้นทุน<br><span style="color:#d97706"><strong>ข้อควรระวัง:</strong></span> ทำตอนเตาอุ่นเท่านั้น อย่าให้ร้อนจัดจนเทียนเป็นควัน และ<strong>ต้องเช็ดคราบเทียนออกให้หมดจริงๆ</strong> ก่อนส่งคืน ไม่งั้นครั้งแรกที่ลูกค้าใช้จะไปเปื้อนผ้า · ถ้าเป็นเตารีดไอน้ำ ระวังอย่าให้เทียนอุดรูไอน้ำ</p>
+      <p class="en-only">Customers routinely send irons in with <strong>scorched fabric baked onto the soleplate</strong>. It costs almost nothing to fix: <strong>warm the iron gently</strong> (not fully hot), rub a <strong>candle</strong> over the burnt patch so the wax melts, then wipe it clean with a thick cloth and finish with metal polish if you like.<br>Handing back a repaired iron with a <strong>soleplate that looks new</strong> makes a bigger impression than the repair itself, and costs you nothing.<br><span style="color:#d97706"><strong>Take care:</strong></span> do it warm, never hot enough to make the wax smoke, and <strong>remove every trace of wax</strong> before it goes back, or the customer's first shirt will pay for it. On a steam iron, keep wax out of the steam vents.</p>
+
+      <div class="section-subtitle"><span class="th-only">4. ลำดับการทำงานก่อนส่งคืน</span><span class="en-only">4. The pre-handover checklist</span></div>
+      <ul class="content-list th-only">
+        <li><strong>วัดฉนวน:</strong> ขั้วฮีตเตอร์เทียบหน้าเตา และขาปลั๊ก L/N เทียบโครง <strong>ต้องขึ้น OL ทุกจุด</strong></li>
+        <li><strong>วัดสายดิน:</strong> ขาดินของปลั๊กเทียบโครงโลหะ <strong>ต้องดังปี๊บ</strong></li>
+        <li><strong>ทดสอบผ่านปลั๊กหลอดโหลด</strong> แล้วดูว่าหลอดหรี่ลงตามที่ควรจะเป็น</li>
+        <li><strong>ทดสอบเต็มรอบด้วยไฟบ้าน:</strong> หมุนปุ่มไป Max แล้วรอ ต้อง<strong>ได้ยินเสียง "แช็ก" ของเทอร์โมสตัทตัด</strong> และหลอดนีออนดับ จากนั้นรอให้ต่อกลับเองอีกรอบ — ยืนยันว่ามันตัด-ต่อได้จริง ไม่ได้ติดค้าง</li>
+        <li><strong>หมุนไป Min แล้วทดสอบซ้ำ</strong> ต้องตัดที่อุณหภูมิต่ำกว่าอย่างเห็นได้ชัด — ยืนยันว่าปุ่มปรับยังทำงาน</li>
+        <li><strong>เช็ดคราบและตรวจสายไฟรอบสุดท้าย</strong> โดยเฉพาะบริเวณขั้วยางท้ายเตาว่าฉนวนไม่แตกและปลอกกันหักยังอยู่ครบ</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li><strong>Insulation:</strong> element terminals to soleplate, and plug L/N pins to the body — <strong>all must read OL</strong></li>
+        <li><strong>Earth:</strong> plug earth pin to metal body <strong>must beep</strong></li>
+        <li><strong>Run it through the series lamp tester</strong> and confirm the lamp dims as it should</li>
+        <li><strong>Full test on mains:</strong> dial to Max and wait — you must <strong>hear the thermostat click out</strong> and see the neon go dark, then wait for it to come back on. That proves it really cycles and is not stuck</li>
+        <li><strong>Repeat at Min</strong> — it must cut out noticeably cooler, proving the dial still does its job</li>
+        <li><strong>Final wipe and cord inspection</strong>, especially at the rubber boot: no cracked insulation, strain relief intact</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 8. ดาวน์โหลด -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">เอกสารประกอบบทนี้</span><span class="en-only">Documents for This Lesson</span></div>
+    <div class="card">
+      <p class="th-only">ใบเนื้อหาที่เป็นที่มาของบทนี้ ดาวน์โหลดได้ในหมวด <strong>🛠️ งานซ่อม</strong> ของหน้าดาวน์โหลด:</p>
+      <p class="en-only">The source sheet behind this lesson is in the <strong>🛠️ Repair</strong> section of the downloads page:</p>
+      <ul class="content-list th-only">
+        <li><a href="downloads.html?cat=repair&amp;file=pdf/workshop/%E0%B8%95%E0%B8%A3%E0%B8%A7%E0%B8%88%E0%B9%80%E0%B8%8A%E0%B9%87%E0%B8%84_%E0%B9%80%E0%B8%95%E0%B8%B2%E0%B8%A3%E0%B8%B5%E0%B8%94%E0%B9%84%E0%B8%9F%E0%B8%9F%E0%B9%89%E0%B8%B2.pdf"><strong>ตรวจเช็คเตารีดไฟฟ้า — โครงสร้างและวงจรเตารีดแบบแห้ง</strong></a> — ชิ้นส่วนหลัก · การไล่วงจร · คลินิกอาการเสีย · มาตรฐานความปลอดภัย</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li><a href="downloads.html?cat=repair&amp;file=pdf/workshop/%E0%B8%95%E0%B8%A3%E0%B8%A7%E0%B8%88%E0%B9%80%E0%B8%8A%E0%B9%87%E0%B8%84_%E0%B9%80%E0%B8%95%E0%B8%B2%E0%B8%A3%E0%B8%B5%E0%B8%94%E0%B9%84%E0%B8%9F%E0%B8%9F%E0%B9%89%E0%B8%B2.pdf"><strong>Checking an Electric Iron — Dry Iron Structure and Circuit</strong></a> — main parts · circuit tracing · fault clinic · safety standards</li>
+      </ul>
+      <p class="th-only" style="margin-top:.8rem">บทเรียนที่เกี่ยวข้อง: <a href="ohm.html">กฎของโอห์ม</a> (P = V²/R ที่ใช้หาค่าฮีตเตอร์) · <a href="resistor.html">ตัวต้านทาน</a> (R จำกัดกระแสของหลอดนีออน) · <a href="multimeter.html">การใช้มัลติมิเตอร์</a> · <a href="home-wiring.html">ระบบไฟบ้าน L/N/G</a> (สายดินและเบรกเกอร์กันดูด) · <a href="water-heater.html">เครื่องทำน้ำอุ่น</a> (เทอร์โมสตัทกับเทอร์มอลคัตเอาต์ในวงจรอนุกรมแบบเดียวกัน) · <a href="rice-cooker.html">หม้อหุงข้าว</a> (เทอร์โมฟิวส์ที่ขาดแล้วขาดถาวรเหมือนกัน)</p>
+      <p class="en-only" style="margin-top:.8rem">Related lessons: <a href="ohm.html">Ohm's law</a> (the P = V²/R behind the element value) · <a href="resistor.html">Resistors</a> (the neon's current-limiting resistor) · <a href="multimeter.html">Using a multimeter</a> · <a href="home-wiring.html">House wiring: L/N/G</a> (earthing and RCDs) · <a href="water-heater.html">Water heater</a> (the same series chain of thermostat and thermal cutout) · <a href="rice-cooker.html">Rice cooker</a> (another thermal fuse that never resets)</p>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
+<script>const CURRENT_PAGE='repair-iron';</script>
+<script src="js/nav.js"></script>
+<script src="js/iron-sim.js"></script>
+<script src="js/iron-circuit.js"></script>
+</body>
+</html>
