@@ -111,6 +111,12 @@ nav {
 .nav-dropdown-menu a { display: flex; align-items: center; gap: 0.5rem; color: var(--text); text-decoration: none; padding: 0.5rem 0.85rem; border-radius: 10px; font-size: 0.9rem; transition: background 0.12s; white-space: nowrap; }
 .nav-dropdown-menu a:hover { background: var(--bg); }
 .nav-dropdown-menu a.active { background: #eff6ff; color: var(--primary); font-weight: 700; }
+/* หน้าลูกที่อยู่ใต้หน้าฮับในดรอปดาวน์ (เช่น เครื่องซักผ้า 3 แบบ) — เยื้องเข้าไปให้เห็นว่าเป็นกลุ่มเดียวกัน */
+.nav-dropdown-menu a.nav-sub { padding-left: 1.75rem; position: relative; font-size: 0.86rem; }
+/* เส้นไกด์ใช้ currentColor เพื่อให้อ่านออกทั้งดรอปดาวน์บนพื้นสว่าง โหมดมืด และเมนูมือถือที่พื้นเป็นสีทึบ */
+.nav-dropdown-menu a.nav-sub::before { content: ""; position: absolute; left: 0.95rem; top: 0.35rem; bottom: 0.35rem;
+  width: 2px; border-radius: 2px; background: currentColor; opacity: 0.3; }
+.nav-dropdown-menu a.nav-sub.active::before { opacity: 0.75; }
 [data-theme="dark"] .nav-dropdown-menu a.active { background: #1e3a5f; color: #93c5fd; }
 /* mega panel anchors to the nav-menu's right edge (not the toggle) so a wide
    4-column menu grows leftward and never overflows the right viewport edge */

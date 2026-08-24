@@ -63,9 +63,9 @@ const NAV_REPAIR = [
   { id: 'repair-rice-cooker', href: 'rice-cooker.html', label_th: '🍚 หม้อหุงข้าว', label_en: '🍚 Rice Cooker' },
   // เครื่องซักผ้าแยกเป็น 4 บรรทัดติดกัน — หน้าแรกคือหน้าเลือกชนิดเครื่อง อีก 3 คือหน้าลูก
   { id: 'repair-washing-machine', href: 'washing-machine.html', label_th: '🧺 เครื่องซักผ้า', label_en: '🧺 Washing Machine' },
-  { id: 'repair-wm-twin', href: 'washing-machine-twin.html', label_th: '　↳ 2 ถัง (กลไก)', label_en: '　↳ Twin tub' },
-  { id: 'repair-wm-top', href: 'washing-machine-top.html', label_th: '　↳ ฝาบนอินเวอร์เตอร์', label_en: '　↳ Inverter top load' },
-  { id: 'repair-wm-front', href: 'washing-machine-front.html', label_th: '　↳ ฝาหน้า Direct Drive', label_en: '　↳ Front load (DD)' },
+  { id: 'repair-wm-twin', sub: true, href: 'washing-machine-twin.html', label_th: '⚙️ เครื่อง 2 ถัง (กลไก)', label_en: '⚙️ Twin Tub (Mechanical)' },
+  { id: 'repair-wm-top', sub: true, href: 'washing-machine-top.html', label_th: '🔁 ฝาบนอินเวอร์เตอร์', label_en: '🔁 Inverter Top Loader' },
+  { id: 'repair-wm-front', sub: true, href: 'washing-machine-front.html', label_th: '🚪 ฝาหน้า Direct Drive', label_en: '🚪 Front Loader (DD)' },
   { id: 'repair-iron', href: 'iron.html', label_th: '🔌 เตารีดไฟฟ้า', label_en: '🔌 Electric Iron' },
 ];
 
@@ -98,8 +98,9 @@ const NAV_RESOURCES = [
   const toolsActive = NAV_TOOLS.some(page => page.id === cur);
   const resourcesActive = NAV_RESOURCES.some(page => page.id === cur);
 
+  // page.sub = true → เยื้องเข้าไปใต้รายการก่อนหน้า (ใช้กับหน้าลูกที่อยู่ใต้หน้าฮับ เช่น เครื่องซักผ้า 3 แบบ)
   function renderLink(page, className = '') {
-    const classes = [className, page.id === cur ? 'active' : ''].filter(Boolean).join(' ');
+    const classes = [className, page.sub ? 'nav-sub' : '', page.id === cur ? 'active' : ''].filter(Boolean).join(' ');
     return `<a${classes ? ` class="${classes}"` : ''} href="${page.href}"${page.id === cur ? ' aria-current="page"' : ''}><span class="th-only">${page.label_th}</span><span class="en-only">${page.label_en}</span></a>`;
   }
 
