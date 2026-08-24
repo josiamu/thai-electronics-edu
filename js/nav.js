@@ -61,7 +61,11 @@ const NAV_REPAIR = [
   { id: 'repair-microwave', href: 'microwave.html', label_th: '📡 เตาไมโครเวฟ', label_en: '📡 Microwave Oven' },
   { id: 'repair-water-heater', href: 'water-heater.html', label_th: '🚿 เครื่องทำน้ำอุ่น', label_en: '🚿 Water Heater' },
   { id: 'repair-rice-cooker', href: 'rice-cooker.html', label_th: '🍚 หม้อหุงข้าว', label_en: '🍚 Rice Cooker' },
+  // เครื่องซักผ้าแยกเป็น 4 บรรทัดติดกัน — หน้าแรกคือหน้าเลือกชนิดเครื่อง อีก 3 คือหน้าลูก
   { id: 'repair-washing-machine', href: 'washing-machine.html', label_th: '🧺 เครื่องซักผ้า', label_en: '🧺 Washing Machine' },
+  { id: 'repair-wm-twin', href: 'washing-machine-twin.html', label_th: '　↳ 2 ถัง (กลไก)', label_en: '　↳ Twin tub' },
+  { id: 'repair-wm-top', href: 'washing-machine-top.html', label_th: '　↳ ฝาบนอินเวอร์เตอร์', label_en: '　↳ Inverter top load' },
+  { id: 'repair-wm-front', href: 'washing-machine-front.html', label_th: '　↳ ฝาหน้า Direct Drive', label_en: '　↳ Front load (DD)' },
   { id: 'repair-iron', href: 'iron.html', label_th: '🔌 เตารีดไฟฟ้า', label_en: '🔌 Electric Iron' },
 ];
 
@@ -297,7 +301,7 @@ const NAV_RESOURCES = [
 
   // ── บรรทัด "ครอบคลุมเนื้อหาจาก N หัวข้อ": เติมเข้า footer ทุกหน้าอัตโนมัติ (bilingual) ──
   // แหล่งความจริงเดียว — แก้เลขที่ TOPIC_COUNT ที่เดียว ทุกหน้าอัปเดตพร้อมกัน (อย่า hardcode ในแต่ละหน้า)
-  const TOPIC_COUNT = 41;
+  const TOPIC_COUNT = 44;
   const pageFooter = document.querySelector('footer');
   if (pageFooter && !pageFooter.querySelector('.footer-topics')) {
     const topics = document.createElement('div');
