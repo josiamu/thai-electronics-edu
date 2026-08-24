@@ -20,8 +20,8 @@
     <div>
       <h1 class="th-only">เครื่องซักผ้าฝาบนอินเวอร์เตอร์</h1>
       <h1 class="en-only">Inverter Top-Load Washing Machine</h1>
-      <p class="th-only">สมองกลสั่งงาน แต่ยังใช้คลัตช์และสลิงแบบเครื่องเก่า • R-Factor • บอร์ดไตรแอค vs บอร์ด IPM • ไล่ซ่อม "เปิดไม่ติด"</p>
-      <p class="en-only">A controller in charge, but still clutch-and-cable underneath • The R-factor • Triac boards vs IPM boards • Working a dead machine</p>
+      <p class="th-only">สมองกลสั่งงาน แต่ยังใช้คลัตช์และสลิงแบบเครื่องเก่า • R-Factor • บอร์ดไตรแอค vs บอร์ด IPM • ไล่ซ่อม "เปิดไม่ติด" • วงจรโต้ตอบ 6 ขั้น</p>
+      <p class="en-only">A controller in charge, but still clutch-and-cable underneath • The R-factor • Triac boards vs IPM boards • Working a dead machine • 6-step interactive circuit</p>
     </div>
   </div>
 </div>
@@ -127,6 +127,78 @@
       </div>
     </div>
   </div>
+  <div class="section">
+    <div class="section-title"><span class="th-only">ไล่วงจรทีละขั้น — เครื่องฝาบนอินเวอร์เตอร์</span><span class="en-only">Trace the Circuit Step by Step — the Inverter Top Loader</span></div>
+    <div class="card">
+      <p class="th-only">ไล่ไฟจากปลั๊กจนจบรอบซักครบ <strong>6 ขั้น</strong> กดปุ่มโหมด (ปุ่มกลาง) เพื่อเดินจังหวะทีละจังหวะ และ <strong>เลือกอาการเสีย</strong> เพื่อฝึกอ่านป้ายจุดวัด — <strong>TP1 → TP2 → TP3 คือลำดับไล่ซ่อมอาการ "เปิดไม่ติด"</strong> ที่อธิบายไว้ในหัวข้อบอร์ดคอนโทรลด้านล่างพอดี</p>
+      <p class="en-only">Follow the machine from the plug to the end of a cycle in <strong>six steps</strong>. Use the middle button to advance one phase at a time, and pick a <strong>fault</strong> to practise reading the probe points — <strong>TP1 → TP2 → TP3 is exactly the order of work for a dead machine</strong> described in the control-board section below.</p>
+
+      <div class="bs-wrap" id="wmp-circuit">
+        <div class="bs-tabs">
+          <button class="bs-tab" data-step="1"><span class="bs-n">1</span><span class="th-only">ไฟเข้า + ฟิวส์ + R-Factor</span><span class="en-only">Power in + fuse + R-factor</span></button>
+          <button class="bs-tab" data-step="2"><span class="bs-n">2</span><span class="th-only">บัส 300V → SMPS → 5V/12V</span><span class="en-only">300 V bus → SMPS → 5 V/12 V</span></button>
+          <button class="bs-tab" data-step="3"><span class="bs-n">3</span><span class="th-only">ฝาถังเป็น "สัญญาณ"</span><span class="en-only">The lid is a signal</span></button>
+          <button class="bs-tab" data-step="4"><span class="bs-n">4</span><span class="th-only">เติมน้ำ + เซ็นเซอร์ระดับ</span><span class="en-only">Fill + level sensor</span></button>
+          <button class="bs-tab" data-step="5"><span class="bs-n">5</span><span class="th-only">ซักด้วย IPM 3 เฟส</span><span class="en-only">Wash on the 3-phase IPM</span></button>
+          <button class="bs-tab" data-step="6"><span class="bs-n">6</span><span class="th-only">เดรน + ปลดคลัตช์ + ปั่น</span><span class="en-only">Drain + clutch + spin</span></button>
+        </div>
+
+        <canvas id="wmp-canvas" class="bs-canvas" style="aspect-ratio:940/430;" aria-label="Inverter top loader circuit simulator"></canvas>
+
+        <div class="bs-nav" style="flex-wrap:wrap;">
+          <button id="wmp-prev" class="bs-navbtn">◀ <span class="th-only">ก่อนหน้า</span><span class="en-only">Prev</span></button>
+          <button id="wmp-play" class="bs-navbtn"><span class="th-only">▶ เล่นอัตโนมัติ</span><span class="en-only">▶ Auto-play</span></button>
+          <button id="wmp-mode" class="bs-navbtn">⏹</button>
+          <select id="wmp-fault" class="bs-select" aria-label="fault mode">
+            <option value="ok">✅ ปกติ — Normal</option>
+            <option value="fuse">🔴 ฟิวส์ขาด — blown fuse</option>
+            <option value="smps">🟠 ภาคจ่ายไฟบนบอร์ดเสีย (มี 300V ไม่มี 5V) — dead SMPS</option>
+            <option value="lidsw">🟡 สวิตช์ฝาถังไม่ส่งสัญญาณ — lid switch not reporting</option>
+            <option value="level">🔵 สายยางเซ็นเซอร์ระดับน้ำหลุด — level hose off</option>
+            <option value="tractor">🟣 มอเตอร์เดรนเฟืองรูด สลิงไม่ดึง — stripped drain tractor</option>
+            <option value="hall">🟤 ฮอลล์เซ็นเซอร์เสีย — hall sensor dead</option>
+          </select>
+          <button id="wmp-next" class="bs-navbtn"><span class="th-only">ถัดไป</span><span class="en-only">Next</span> ▶</button>
+        </div>
+
+        <div class="bs-faultnote">
+          <span class="th-only">🔧 กำลังจำลองเครื่องที่เสียอยู่ — ไล่ป้ายจุดวัด <b>TP1 → TP2 → TP3 ตามลำดับ จุดแรกที่เป็นสีแดงคือด่านที่ขาด</b> · แต่ระวัง บางอาการไฟครบทุกจุดแล้วเครื่องยังไม่ทำงาน นั่นแปลว่าปัญหาอยู่ที่สัญญาณหรือที่กลไก ไม่ใช่ที่ไฟ</span>
+          <span class="en-only">🔧 A faulty unit is being simulated — walk the badges <b>TP1 → TP2 → TP3 in order: the first red one is the broken link</b>. But watch out: on some faults every badge stays green and the machine still will not run, which means the problem is a signal or a mechanism, not the supply.</span>
+        </div>
+
+        <div class="bs-desc" data-step="1">
+          <p class="th-only"><strong>ขั้นที่ 1 — ไฟเข้า ฟิวส์ และตัวที่คนเข้าใจผิดบ่อยที่สุดบนสายไฟเข้า:</strong> ไฟบ้าน 220V เข้ามาทาง <strong>สาย L (แดง)</strong> และ <strong>สาย N (ดำ)</strong> ผ่าน <strong>ฟิวส์กับวาริสเตอร์</strong> เป็นด่านแรก — วาริสเตอร์ทำหน้าที่กินไฟกระชากแทนบอร์ด ถ้ามันแตกแล้วคุณถอดทิ้ง เครื่องจะกลับมาทำงานจริง แต่<strong>คุณเพิ่งถอดการป้องกันไฟกระชากออกถาวร</strong> ครั้งหน้าไฟกระชากจะเข้าไปพังบอร์ดทั้งแผ่นแทน<br>ถัดมาคือ <strong>R-Factor</strong> ขดลวดแกนเหล็กก้อนหนักๆ ที่หลายคนเรียกผิดว่าคาปาซิเตอร์ — มันคือ <strong>ตัวเหนี่ยวนำ</strong> ที่กรองฮาร์มอนิกและช่วยปรับตัวประกอบกำลัง <strong>วัดด้วยย่านโอห์มจะได้ไม่กี่โอห์ม ส่วนย่าน µF จะไม่ขึ้นค่า และนั่นไม่ได้แปลว่าเสีย</strong><br><strong>TP1</strong> คือจุดวัดแรกของการไล่ซ่อมทุกครั้ง: ถ้าไม่มีไฟที่นี่ อย่าเพิ่งไปยุ่งกับอะไรที่อยู่ถัดไป</p>
+          <p class="en-only"><strong>Step 1 — power in, the fuse, and the most misunderstood part on the incoming line:</strong> 220 V arrives on <strong>L (red)</strong> and <strong>N (black)</strong> through the <strong>fuse and varistor</strong>. The varistor's job is to absorb surges so the board does not have to. If it cracks and you simply remove it, the machine really does work again — but <strong>you have just removed its surge protection permanently</strong>, and the next surge takes the whole board instead.<br>Next comes the <strong>R-factor</strong>: a heavy iron-cored coil that many people wrongly call a capacitor. It is <strong>an inductor</strong> that filters harmonics and improves power factor. <strong>On ohms it reads a few ohms; on a capacitance range it reads nothing — and that is not a fault.</strong><br><strong>TP1</strong> is the first measurement of every job: with no power here, do not touch anything downstream yet.</p>
+        </div>
+
+        <div class="bs-desc" data-step="2">
+          <p class="th-only"><strong>ขั้นที่ 2 — จาก 220V AC เป็นไฟเลี้ยงสมองกล:</strong> ไฟเข้าบอร์ดถูก <strong>บริดจ์เรียงกระแส</strong> เป็นไฟตรงแรงดันสูงราว <strong>300V DC</strong> (นี่คือคาปาซิเตอร์ตัวใหญ่ที่ต้องคายประจุก่อนจับทุกครั้ง) จากนั้น <strong>ภาคจ่ายไฟสวิตชิ่ง (SMPS)</strong> สับย่อยลงมาเป็น <strong>5V</strong> เลี้ยงสมองกลกับหน้าจอ และ <strong>12V</strong> เลี้ยงคอยล์รีเลย์กับวงจรขับ<br><strong>นี่คือหัวใจของการไล่ซ่อมอาการ "เปิดไม่ติด"</strong> — ไล่ 3 จุดตามลำดับเท่านั้น: <strong>TP1</strong> มีไฟเข้าไหม → <strong>TP2</strong> บัส 300V ขึ้นไหม → <strong>TP3</strong> ไฟ 5V/12V ออกมาไหม<br>ลองเลือกอาการ <strong>"ภาคจ่ายไฟบนบอร์ดเสีย"</strong> ดู จะเห็นว่า <strong>TP2 ยังเขียวแต่ TP3 แดง</strong> — แปลว่าไฟเข้าบอร์ดครบแล้ว เสียแค่ภาคจ่ายไฟ ไม่ต้องเปลี่ยนบอร์ดทั้งแผ่น หลักการภาคนี้เหมือนกับบท <a href="switching-psu.html">ภาคจ่ายไฟสวิตชิ่ง</a> ทุกประการ</p>
+          <p class="en-only"><strong>Step 2 — from 220 V AC to the controller's supply:</strong> the incoming mains is <strong>rectified</strong> to a high-voltage DC rail of about <strong>300 V</strong> (this is the large capacitor you must discharge before touching anything). The <strong>switching supply (SMPS)</strong> then chops it down to <strong>5 V</strong> for the controller and display, and <strong>12 V</strong> for relay coils and drive circuitry.<br><strong>This is the heart of working a dead machine</strong> — three points, in order, and no guessing: <strong>TP1</strong> is power arriving? → <strong>TP2</strong> is the 300 V bus up? → <strong>TP3</strong> is 5 V/12 V coming out?<br>Select the <strong>"dead on-board supply"</strong> fault and watch <strong>TP2 stay green while TP3 goes red</strong>: mains is reaching the board perfectly, only the supply section has failed — no need for a whole new board. The principles here are exactly those of the <a href="switching-psu.html">switching power supply</a> lesson.</p>
+        </div>
+
+        <div class="bs-desc" data-step="3">
+          <p class="th-only"><strong>ขั้นที่ 3 — สวิตช์ฝาถังที่นี่ "ไม่ได้ตัดไฟ" แต่ "รายงาน":</strong> จุดนี้คือความต่างที่สำคัญที่สุดระหว่างเครื่องรุ่นนี้กับ <a href="washing-machine-twin.html">เครื่อง 2 ถัง</a> — ในเครื่อง 2 ถัง สวิตช์ฝาถังปั่น<strong>ต่ออนุกรมอยู่บนเส้นไฟ</strong> เปิดฝาเมื่อไหร่ไฟขาดทันที มอเตอร์หยุดเพราะไม่มีไฟ<br>แต่ในเครื่องฝาบนอินเวอร์เตอร์ สวิตช์ฝาถังเป็นเพียง <strong>หน้าสัมผัสไฟต่ำที่ส่งสัญญาณกลับบอร์ด</strong> ไฟ 220V ไม่ได้วิ่งผ่านมันเลย <strong>บอร์ดคือคนตัดสินใจ</strong>ว่าจะเดินโปรแกรมต่อหรือไม่<br><strong>ผลที่ตามมาเวลาวัด:</strong> ถ้าสวิตช์นี้เสีย คุณจะเจอเครื่องที่<strong>ไฟเข้าครบทุกจุด TP1–TP3 เขียวหมด แต่กดแล้วไม่ทำอะไรเลย</strong> — ลองเลือกอาการ "สวิตช์ฝาถังไม่ส่งสัญญาณ" ดู ป้ายจุดวัดจะเขียวทั้งแถวทั้งที่เครื่องนิ่งสนิท<br>จากนั้นบอร์ดจะขยับมอเตอร์เบาๆ อ่านแรงต้านจากฮอลล์เซ็นเซอร์เพื่อ<strong>ชั่งน้ำหนักผ้า</strong> แล้วคำนวณว่าจะเติมน้ำเท่าไหร่</p>
+          <p class="en-only"><strong>Step 3 — here the lid switch does not cut power, it reports:</strong> this is the single most important difference between this machine and the <a href="washing-machine-twin.html">twin tub</a>. On a twin tub the spin-lid switch sits <strong>in series with the supply</strong>: open the lid and the live is broken, so the motor stops because it has no power.<br>On an inverter top loader the lid switch is only a <strong>low-voltage contact reporting back to the board</strong>. No 220 V passes through it at all, and <strong>the board decides</strong> whether the programme continues.<br><strong>What that means at the meter:</strong> when this switch fails you get a machine where <strong>every supply is present — TP1 to TP3 all green — and yet nothing happens when you press start</strong>. Select the "lid switch not reporting" fault and you will see the whole row stay green while the machine sits dead.<br>The board then nudges the motor and reads the hall sensor's resistance to <strong>weigh the load</strong>, and from that works out how much water to admit.</p>
+        </div>
+
+        <div class="bs-desc" data-step="4">
+          <p class="th-only"><strong>ขั้นที่ 4 — เติมน้ำแล้วนับความถี่ ไม่ใช่ใช้ลูกลอย:</strong> สมองกลสั่ง <strong>ไตรแอค</strong> สับไฟ 220V ไปเปิด <strong>โซลินอยด์วาล์วน้ำเข้า</strong> (วัดขดลวดได้ราว 4–5 kΩ)<br>เครื่องรู้ระดับน้ำจาก <strong>แรงดันอากาศ</strong> — ปลายสายยางเส้นเล็กจุ่มอยู่ก้นถัง พอน้ำสูงขึ้นอากาศในสายถูกอัดไปดันเซ็นเซอร์ ทำให้ <strong>ความถี่ที่ส่งกลับบอร์ดเปลี่ยนไป</strong> (ถังแห้งราว 26 kHz แล้วลดลงเรื่อยๆ เมื่อน้ำสูงขึ้น) พอถึงระดับที่ตั้งไว้บอร์ดก็ตัดไฟวาล์วทันที<br><strong>ทริกหน้างานที่ประหยัดเงินลูกค้า:</strong> อาการ "น้ำล้นไม่ยอมตัด" หรือ "ฟ้อง Error น้ำไม่เต็ม" <strong>80% ไม่ได้เสียที่เซ็นเซอร์</strong> แต่เกิดจาก<strong>สายยางหลุด รั่ว หรือมีตะกรันอุดตันที่ข้อต่อก้นถัง</strong> — ลองเลือกอาการ "สายยางเซ็นเซอร์ระดับน้ำหลุด" ดู จะเห็นวาล์วค้างเปิดและเครื่องไม่ยอมไปจังหวะถัดไป ให้เป่าไล่ลมหรือเปลี่ยนสายยางก่อนเสนอเปลี่ยนเซ็นเซอร์เสมอ<br>ถ้าวาล์ววัดค่าได้ปกติแต่น้ำไม่เข้า ให้เช็ค<strong>ตะแกรงกรองฝุ่นที่ทางน้ำเข้า</strong>ว่าตันหรือไม่</p>
+          <p class="en-only"><strong>Step 4 — fill the tub and count a frequency, not float a ball:</strong> the controller tells a <strong>triac</strong> to switch 220 V to the <strong>solenoid inlet valve</strong> (its coil measures about 4–5 kΩ).<br>The machine senses the level by <strong>air pressure</strong>: a thin hose opens at the bottom of the tub, and as the water rises it compresses the air in that hose against the sensor, so <strong>the frequency it returns to the board shifts</strong> — around 26 kHz with an empty tub, falling as the water rises. At the set level the board cuts the valve.<br><strong>A bench trick that saves the customer money:</strong> for "overfills and never stops" or "says it cannot fill", <strong>80 % of the time the sensor is fine</strong>. The real cause is <strong>a hose that has come off, split, or silted up at the tub connection</strong>. Select the "level hose off" fault and you will see the valve stay open while the machine refuses to move on. Blow the hose through or replace it before you ever quote for a sensor.<br>If the valve measures correctly but no water arrives, check the <strong>inlet filter screen</strong> for blockage.</p>
+        </div>
+
+        <div class="bs-desc" data-step="5">
+          <p class="th-only"><strong>ขั้นที่ 5 — ซักด้วยไฟ 3 เฟสที่บอร์ดสร้างขึ้นเอง:</strong> สมองกลส่งสัญญาณ PWM ให้ <strong>ชิป IPM</strong> แปลงไฟ 300V DC เป็น <strong>ไฟกระแสสลับ 3 เฟส (U / V / W)</strong> ป้อนมอเตอร์ BLDC ให้กวนผ้าสลับซ้าย-ขวา โดยมี <strong>ฮอลล์เซ็นเซอร์</strong> คอยรายงานตำแหน่งโรเตอร์กลับมาตลอดเวลา<br><strong>จุดที่ต้องดูให้ออกก่อนหาอะไหล่:</strong> ชิป IPM มีเฉพาะในเครื่อง<strong>อินเวอร์เตอร์</strong>เท่านั้น ถ้าเครื่องที่คุณเปิดอยู่ใช้ <strong>มอเตอร์เหนี่ยวนำที่มีคาปาซิเตอร์รัน</strong> แสดงว่ามันเป็น <strong>บอร์ดไตรแอค</strong> ซึ่ง<strong>ไม่มี IPM ให้หา</strong> — ดูรายละเอียดการแยกสองแบบนี้ได้ในหัวข้อบอร์ดคอนโทรลด้านล่าง<br><strong>กับดักคลาสสิก:</strong> ขดลวด 3 เฟสวัดได้เท่ากันเป๊ะทั้ง 3 คู่ ไม่ได้แปลว่ามอเตอร์ดี — ถ้าฮอลล์เซ็นเซอร์ตาย บอร์ดจะไม่รู้ตำแหน่งโรเตอร์แล้วยิงเฟสผิดจังหวะ ผลคือ<strong>กระตุกแล้วหยุด ขึ้น Error</strong> ทั้งที่ขดลวดสมบูรณ์ (ข่าวดีคือมักเบิกเปลี่ยนเฉพาะแผงเซ็นเซอร์ได้)</p>
+          <p class="en-only"><strong>Step 5 — washing on three phases the board builds itself:</strong> the controller feeds PWM to the <strong>IPM chip</strong>, which turns the 300 V DC rail into <strong>three-phase AC (U / V / W)</strong> for the BLDC motor, swinging it back and forth to agitate — with the <strong>hall sensor</strong> reporting rotor position throughout.<br><strong>Check this before you order parts:</strong> an IPM chip only exists on an <strong>inverter</strong> machine. If the one in front of you drives an <strong>induction motor with a run capacitor</strong>, it is a <strong>triac board</strong> and <strong>there is no IPM to look for</strong> — the control-board section below explains how to tell the two apart.<br><strong>The classic trap:</strong> three phases measuring exactly equal does not mean the motor is good. With a dead hall sensor the board cannot find the rotor, fires the phases out of step, and the machine <strong>judders, stops and shows an error</strong> with perfectly healthy windings. The good news is that the sensor board alone can usually be replaced.</p>
+        </div>
+
+        <div class="bs-desc" data-step="6">
+          <p class="th-only"><strong>ขั้นที่ 6 — สลิงเส้นเดียวทำสองหน้าที่ นี่คือหัวใจของเครื่องรุ่นนี้:</strong> พอถึงจังหวะเดรน บอร์ดจ่ายไฟ 220V ให้ <strong>มอเตอร์เดรน (Drain Tractor)</strong> ซึ่ง<strong>ดึงสายสลิงเส้นเดียว</strong> แล้วสลิงเส้นนั้นทำ <strong>2 อย่างพร้อมกัน</strong>: <strong>① เปิดลูกยางวาล์วน้ำทิ้ง</strong> และ <strong>② ปลดสลักคลัตช์</strong> เพื่อให้ถังในกับถังนอกล็อกเข้าด้วยกันแล้วหมุนทั้งใบตอนปั่น<br><strong>ผลที่ช่างต้องเดาให้ออก:</strong> เมื่อสลิงเส้นเดียวรับสองหน้าที่ อาการเสียจุดเดียวจึงโผล่มาสองอย่างพร้อมกัน — <strong>ถ้ามอเตอร์เดรนเฟืองรูด (ครางแต่ไม่ดึง) เครื่องจะทั้งไม่ทิ้งน้ำและไม่ยอมปั่น</strong> ลองเลือกอาการนั้นดู จะเห็นว่ามอเตอร์ยังมีไฟเลี้ยงครบแต่ปั่นไม่ได้เพราะคลัตช์ยังไม่ปลด<br>อย่ารีบสรุปว่า "บอร์ดสั่งปั่นไม่ได้" หรือ "มอเตอร์เสีย" ทั้งที่ต้นเหตุคือเฟืองพลาสติกตัวเดียวในชุดมอเตอร์เดรน<br>เมื่อปั่นครบและเซ็นเซอร์ยืนยันว่าสมดุลดี บอร์ดจะ<strong>ตัดไฟตัวเองอัตโนมัติ (Auto Power Off)</strong> จบรอบการทำงาน</p>
+          <p class="en-only"><strong>Step 6 — one cable, two jobs: this is the defining detail of this machine.</strong> At the drain phase the board sends 220 V to the <strong>drain tractor</strong>, which <strong>pulls a single cable</strong> — and that one cable does <strong>two things at once</strong>: <strong>① it opens the drain valve bung</strong> and <strong>② it releases the clutch latch</strong>, locking the inner and outer tubs together so the whole drum can spin.<br><strong>What a technician has to infer from that:</strong> because one cable carries two duties, a single failure shows up as two symptoms — <strong>if the tractor's gear is stripped (it hums but never pulls), the machine will neither drain nor spin</strong>. Select that fault and you will see the motor still fully powered yet unable to spin, because the clutch was never released.<br>Do not jump to "the board will not command a spin" or "the motor is dead" when the real cause is one plastic gear inside the drain tractor.<br>When the spin completes and the sensors confirm a balanced load, the board <strong>switches itself off (auto power off)</strong> and the cycle is done.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- 6. บอร์ดคอนโทรล -->
   <div class="section">
     <div class="section-title"><span class="th-only">ผ่าบอร์ดคอนโทรล — และลำดับไล่ซ่อม "เปิดไม่ติด"</span><span class="en-only">Inside the Control Board — and the Order for a Dead Machine</span></div>
@@ -298,5 +370,6 @@
 <footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
 <script>const CURRENT_PAGE='repair-wm-top';</script>
 <script src="js/nav.js"></script>
+<script src="js/wm-top.js"></script>
 </body>
 </html>
