@@ -52,12 +52,12 @@
     colX: 636, colW: 128, colH: 40,                      // คอลัมน์โหลด 220V ฝั่งขวา
     busX: 614,                                           // บัสแนวตั้งที่แตกไปหาโหลดแต่ละตัว
     loads: [
-      { y: 84,  key: 'lock',  th: 'ล็อกประตู PTC', en: 'PTC door lock', wire: PINK },
-      { y: 136, key: 'valve', th: 'วาล์วน้ำเข้า',   en: 'inlet valve',   wire: BLUE },
-      { y: 188, key: 'heat',  th: 'ฮีตเตอร์ + NTC', en: 'heater + NTC',  wire: BROWN },
-      { y: 240, key: 'pump',  th: 'ปั๊มเดรนน้ำ',    en: 'drain pump',    wire: CYAN }
+      { y: 78,  key: 'lock',  th: 'ล็อกประตู PTC', en: 'PTC door lock', wire: PINK },
+      { y: 140, key: 'valve', th: 'วาล์วน้ำเข้า',   en: 'inlet valve',   wire: BLUE },
+      { y: 196, key: 'heat',  th: 'ฮีตเตอร์ + NTC', en: 'heater + NTC',  wire: BROWN },
+      { y: 252, key: 'pump',  th: 'ปั๊มเดรนน้ำ',    en: 'drain pump',    wire: CYAN }
     ],
-    mtX: 838, mtY: 310, mtR: 36                          // มอเตอร์ Direct Drive
+    mtX: 826, mtY: 286, mtR: 36                          // มอเตอร์ Direct Drive
   };
   const ldY = ld => ld.y + B.colH / 2;
 
@@ -279,16 +279,16 @@
     if (phaseB >= 1) {
       const okc = lockConfirmed() ? PINK : RED;
       dash([[B.colX, ldY(B.loads[0]) + 15], [B.colX - 44, ldY(B.loads[0]) + 15],
-            [B.colX - 44, B.mcu.y + 42], [B.mcu.x + B.mcu.w, B.mcu.y + 42]], okc, 2.2);
-      label(B.colX - 50, B.mcu.y + 38, lockConfirmed() ? t('ชมพู: ยืนยันประตูล็อกแล้ว', 'pink: door confirmed')
-                                                       : t('ชมพู: ไม่มีสัญญาณ → dE', 'pink: no signal → dE'), okc, 9.5, 'right', 700);
+            [B.colX - 44, 244], [B.mcu.x + 62, 244], [B.mcu.x + 62, B.mcu.y + B.mcu.h]], okc, 2.2);
+      label(B.colX + B.colW / 2, ldY(B.loads[0]) + 34, lockConfirmed() ? t('ชมพู: ยืนยันประตูล็อกแล้ว', 'pink: door confirmed')
+                                                                          : t('ชมพู: ไม่มีสัญญาณ → dE', 'pink: no signal → dE'), okc, 9.5, 'center', 700);
     }
     // สายส้ม: ความถี่จากเซ็นเซอร์ระดับน้ำ
     if (phaseB >= 2) {
       dash([[B.colX, ldY(B.loads[1]) + 15], [B.colX - 62, ldY(B.loads[1]) + 15],
-            [B.colX - 62, B.mcu.y + 10], [B.mcu.x + B.mcu.w, B.mcu.y + 10]], ORANGE, 2.2);
-      label(B.colX - 68, B.mcu.y + 6, t('ส้ม: ความถี่ระดับน้ำ (26 kHz = ถังแห้ง)',
-                                        'orange: level frequency (26 kHz = empty)'), ORANGE, 9.5, 'right', 700);
+            [B.colX - 62, 252], [B.mcu.x + 30, 252], [B.mcu.x + 30, B.mcu.y + B.mcu.h]], ORANGE, 2.2);
+      label(B.colX + B.colW / 2, ldY(B.loads[1]) + 31, t('ส้ม: ความถี่ระดับน้ำ', 'orange: level frequency'),
+            ORANGE, 9.5, 'center', 700);
     }
 
     // มอเตอร์ Direct Drive — รับไฟ 3 เฟสจาก IPM เท่านั้น ไม่มีสายนิวทรัล
@@ -297,18 +297,18 @@
       line(phasePath(i), motorLive() ? phC[i] : NCOL(), motorLive() ? 2.4 : 1.6);
       if (motorSpins()) flowDots(phasePath(i), phC[i], 120, true);
     }
-    label(B.mtX - B.mtR - 8, B.mtY - 26, 'U / V / W', motorLive() ? CYAN : NCOL(), 10, 'right', 700);
+    label(B.mtX - B.mtR - 6, 248, 'U / V / W', motorLive() ? CYAN : NCOL(), 10, 'right', 700);
     motor(B.mtX, B.mtY, B.mtR, motorLive(), motorSpins(),
           phaseB === 4 ? 1 : (Math.sin(swingT * 1.1) >= 0 ? 1 : -1),
-          t('มอเตอร์ Direct Drive', 'direct-drive motor'),
-          motorLive() && !motorSpins() ? t('กระตุกแล้วหยุด → LE', 'judders, stops → LE')
-          : motorSpins() ? (phaseB === 4 ? t('ปั่น 1,000+ รอบ', 'spinning 1,000+ rpm') : t('กวนผ้าซ้าย-ขวา', 'agitating')) : '');
+          t('มอเตอร์ DD', 'DD motor'),
+          motorLive() && !motorSpins() ? t('กระตุก → LE', 'judders → LE')
+          : motorSpins() ? (phaseB === 4 ? t('ปั่น 1,000+ รอบ', '1,000+ rpm') : t('กวนผ้าซ้าย-ขวา', 'agitating')) : '');
 
     // ฮอลล์เซ็นเซอร์กลับเข้า MCU
     const hallOK = fault !== 'hall';
     dash([[B.mtX, B.mtY + B.mtR], [B.mtX, B.nY - 7], [B.mcu.x + B.mcu.w / 2, B.nY - 7],
           [B.mcu.x + B.mcu.w / 2, B.mcu.y + B.mcu.h]], hallOK ? GREEN : RED, 2);
-    label(B.mtX - 14, B.nY - 13, t(hallOK ? 'ฮอลล์เซ็นเซอร์ → บอกตำแหน่งโรเตอร์' : 'ฮอลล์เซ็นเซอร์เสีย → ยิงเฟสผิดจังหวะ',
+    label(B.mtX - 150, B.nY - 16, t(hallOK ? 'ฮอลล์เซ็นเซอร์ → บอกตำแหน่งโรเตอร์' : 'ฮอลล์เซ็นเซอร์เสีย → ยิงเฟสผิดจังหวะ',
                                    hallOK ? 'hall sensor → rotor position' : 'hall sensor dead → phases fire out of step'),
           hallOK ? GREEN : RED, 9.5, 'right', 700);
 
@@ -316,8 +316,9 @@
 
     // สายดินตัวเครื่อง
     const eC = 'rgba(16,185,129,.55)';
-    dash([[B.bd.x + 40, B.bd.y + B.bd.h], [B.bd.x + 40, B.nY - 26]], eC, 1.8);
-    earthSym(B.bd.x + 40, B.nY - 26, eC, '');
+    // สั้นลงเพื่อไม่ให้สัญลักษณ์สายดินไปอยู่ใต้แถบเตือน ELCB ตอนเลือกอาการฮีตเตอร์รั่ว
+    dash([[B.bd.x + 40, B.bd.y + B.bd.h], [B.bd.x + 40, 274]], eC, 1.8);
+    earthSym(B.bd.x + 40, 274, eC, '');
 
     // ELCB ตัด (ฮีตเตอร์รั่วลงโครง)
     if (fault === 'heatleak' && phaseB >= 3) {

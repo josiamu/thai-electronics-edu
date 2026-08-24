@@ -37,7 +37,7 @@
   /* ---------- geometry ---------- */
   const A = {
     x0: 56, x1: 892,
-    pY: 84, nY: 356,                 // ราง P บน / ราง N ล่าง
+    pY: 84, nY: 368,                 // ราง P บน / ราง N ล่าง
     fuseX: 116, fuseW: 78,
     wtX: 262, wtY: 150, wtW: 132, wtH: 44,       // ลานซัก
     wa: 272, wb: 396,                            // x ของปลายขดที่ 1 / ที่ 2 (มอเตอร์ซัก)
@@ -50,7 +50,7 @@
     snX: 724, snY: 268,                          // โหนดหลังสวิตช์ฝาถัง
     scX: 774,                                    // คาปาฯ ปั่น (สายแนวนอน y = snY)
     sbX: 836,                                    // ปลายขดสตาร์ทของมอเตอร์ปั่น
-    smX: 780, smY: 310, smR: 28,                 // มอเตอร์ปั่น
+    smX: 780, smY: 304, smR: 28,                 // มอเตอร์ปั่น
     seX: 880                                     // สายดินมอเตอร์ปั่น
   };
 
@@ -354,9 +354,9 @@
     flowDots(buzzPath(), ORANGE, 60, bz);
 
     /* ---- ป้ายจุดวัด ---- */
-    probe(A.fuseX + A.fuseW + 26, A.pY - 32, 'TP1', true);
-    probe(A.wtX + A.wtW / 2, A.wtY - 26, 'TP2', washOn());
-    probe(A.stX + A.stW / 2, A.stY - 26, 'TP3', modeA === 2);
+    probe(A.fuseX + A.fuseW + 76, A.pY - 40, 'TP1', true);
+    probe(A.wtX + A.wtW / 2, A.wtY - 34, 'TP2', washOn());
+    probe(A.stX + A.stW / 2, A.stY - 34, 'TP3', modeA === 2);
     probe(A.dsX + 20, A.dsY + A.dsH + 30, 'TP4', spinPowered());
   }
 

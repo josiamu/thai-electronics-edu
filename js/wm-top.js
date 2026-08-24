@@ -46,18 +46,18 @@
     lY: 64, nY: 372,                                   // ราง L บน / ราง N ล่าง
     fuseX: 100, fuseW: 74,                             // ฟิวส์ + วาริสเตอร์ (บนราง L)
     reacA: 192, reacB: 262,                            // R-Factor (รีแอคเตอร์) บนราง L
-    bd: { x: 360, y: 88, w: 300, h: 222 },             // Main PCB
-    bridge: { x: 376, y: 100, w: 132, h: 52 },         // บริดจ์ + บัส 300V DC
-    smps:   { x: 376, y: 172, w: 132, h: 52 },         // SMPS → 5V / 12V
-    triac:  { x: 530, y: 100, w: 118, h: 52 },         // ไตรแอค/รีเลย์ ขับโหลด 220V
-    mcu:    { x: 530, y: 172, w: 118, h: 52 },         // สมองกล
-    ipm:    { x: 376, y: 244, w: 272, h: 52 },         // IPM 3 เฟส
+    bd: { x: 360, y: 96, w: 300, h: 218 },             // Main PCB
+    bridge: { x: 376, y: 108, w: 132, h: 52 },         // บริดจ์ + บัส 300V DC
+    smps:   { x: 376, y: 180, w: 132, h: 52 },         // SMPS → 5V / 12V
+    triac:  { x: 530, y: 108, w: 118, h: 52 },         // ไตรแอค/รีเลย์ ขับโหลด 220V
+    mcu:    { x: 530, y: 180, w: 118, h: 52 },         // สมองกล
+    ipm:    { x: 376, y: 252, w: 272, h: 52 },         // IPM 3 เฟส
     colX: 690, colW: 118, colH: 38,                    // คอลัมน์อุปกรณ์ฝั่งขวา
-    lidY: 92, valveY: 146, tracY: 200,                 // y ของกล่องแต่ละตัว
+    lidY: 84, valveY: 148, tracY: 212,                 // y ของกล่องแต่ละตัว
     busX: 684,                                         // บัส 220V จากไตรแอคไปหาโหลด
     retX: 870,                                         // สายกลับราง N ของโหลด
     sigPink: 666, sigOrange: 676,                      // ช่องเดินสายสัญญาณกลับบอร์ด
-    mtX: 750, mtY: 306, mtR: 30                        // มอเตอร์ BLDC 3 เฟส
+    mtX: 750, mtY: 300, mtR: 30                        // มอเตอร์ BLDC 3 เฟส
   };
   const midY = y => y + G.colH / 2;
 
@@ -219,7 +219,7 @@
                            [G.bridge.x, 126]]);
   const loadPath = y => ([[G.triac.x + G.triac.w, 126], [G.busX, 126], [G.busX, y], [G.colX, y],
                           [G.colX + G.colW, y], [G.retX, y], [G.retX, G.nY], [G.x0 + 14, G.nY]]);
-  const phasePath = i => ([[G.ipm.x + G.ipm.w, 256 + i * 14], [672 + i * 12, 256 + i * 14],
+  const phasePath = i => ([[G.ipm.x + G.ipm.w, 268 + i * 12], [672 + i * 12, 268 + i * 12],
                            [672 + i * 12, 292 + i * 8], [G.mtX - G.mtR, 292 + i * 8]]);
 
   function drawScene() {
@@ -252,7 +252,7 @@
 
     /* ---- บอร์ดคอนโทรล ---- */
     box(G.bd.x, G.bd.y, G.bd.w, G.bd.h, hotPwr || hotDC ? VIOLET : BLUE, 'rgba(37,99,235,.06)');
-    label(G.bd.x + G.bd.w / 2, G.bd.y - 10, t('บอร์ดคอนโทรล (Main PCB)', 'main control board'), BLUE, 11, 'center', 700);
+    label(G.bd.x + G.bd.w / 2, G.bd.y - 12, t('บอร์ดคอนโทรล (Main PCB)', 'main control board'), BLUE, 11, 'center', 700);
 
     // ไฟ L / N เข้าบอร์ด
     line([[G.bridge.x - 60, G.lY], [G.bridge.x - 60, 126], [G.bridge.x, 126]], live ? RED : NCOL(), 2.4);
@@ -288,7 +288,7 @@
                                                  'only an inverter has this chip — a triac board does not'), NCOL(), 9);
     line([[G.mcu.x + 30, G.mcu.y + G.mcu.h], [G.mcu.x + 30, G.ipm.y]], dc ? VIOLET : NCOL(), 2);
     // บัส 300V เลี้ยง IPM (อ้อมซ้ายของ SMPS ไม่ตัดผ่านบล็อกอื่น)
-    line([[G.bridge.x, G.bridge.y + 40], [368, G.bridge.y + 40], [368, 270], [G.ipm.x, 270]], bg ? RED : NCOL(), 2);
+    line([[G.bridge.x, G.bridge.y + 40], [368, G.bridge.y + 40], [368, G.ipm.y + 18], [G.ipm.x, G.ipm.y + 18]], bg ? RED : NCOL(), 2);
 
     // สายดินตัวเครื่อง
     const eC = 'rgba(16,185,129,.55)';
@@ -334,7 +334,7 @@
     if (fault === 'tractor' && tOn) label(G.colX + G.colW / 2, G.tracY + G.colH + 13,
                                           t('เฟืองรูด — ครางแต่สลิงไม่ดึง', 'gear stripped — hums, cable never pulls'), RED, 9.5, 'center', 700);
     else if (hotSpin) label(G.colX + G.colW / 2, G.tracY + G.colH + 14,
-                            t('สลิงเส้นเดียว → เปิดวาล์วน้ำทิ้ง + ปลดคลัตช์', 'one cable → opens the drain valve and releases the clutch'),
+                            t('สลิงเส้นเดียว → วาล์วน้ำทิ้ง + คลัตช์', 'one cable → drain valve + clutch'),
                             drainOK() ? GREEN : NCOL(), 9.5, 'center', 700);
 
     /* ---- มอเตอร์ BLDC 3 เฟส ---- */
@@ -354,8 +354,8 @@
 
     // ฮอลล์เซ็นเซอร์กลับเข้า IPM
     const hallOK = fault !== 'hall';
-    dash([[G.mtX, G.mtY + G.mtR], [G.mtX, 356], [600, 356], [600, G.ipm.y + G.ipm.h]], hallOK ? GREEN : RED, 2);
-    label(G.colX - 10, 350, t(hallOK ? 'ฮอลล์เซ็นเซอร์ → ตำแหน่งโรเตอร์' : 'ฮอลล์เสีย → ยิงเฟสผิดจังหวะ',
+    dash([[G.mtX, G.mtY + G.mtR], [G.mtX, 366], [600, 366], [600, G.ipm.y + G.ipm.h]], hallOK ? GREEN : RED, 2);
+    label(580, 362, t(hallOK ? 'ฮอลล์เซ็นเซอร์ → ตำแหน่งโรเตอร์' : 'ฮอลล์เสีย → ยิงเฟสผิดจังหวะ',
                               hallOK ? 'hall sensor → rotor position' : 'hall dead → phases out of step'),
           hallOK ? GREEN : RED, 9.5, 'right', 700);
 
