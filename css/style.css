@@ -559,3 +559,25 @@ footer strong { color: #fff; }
 .bs-faultnote.active { display:block; }
 [data-theme="dark"] .bs-faultnote { background:rgba(220,38,38,.12); border-color:rgba(220,38,38,.35); color:#fca5a5; }
 @media (max-width:700px){ .bs-tabs{ grid-template-columns:repeat(2,1fr); } }
+
+/* ── WASHING MACHINE (shared: washing-machine.html + หน้าลูก 2 ถัง / ฝาบน / ฝาหน้า) ──
+   ห้ามก๊อปกลับไปฝังใน <style> ของหน้าตัวเอง — ทั้ง 4 หน้าใช้ชุดนี้ร่วมกัน */
+.wm-steps { display:grid; grid-template-columns:repeat(4,1fr); gap:.5rem; align-items:stretch; }
+@media (max-width:760px){ .wm-steps{ grid-template-columns:1fr 1fr; } }
+.wm-step { background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:.85rem .6rem; text-align:center; }
+.wm-step .wm-num { display:inline-block; width:24px; height:24px; line-height:24px; border-radius:50%; background:var(--primary); color:#fff; font-weight:700; font-size:.82rem; margin-bottom:.4rem; }
+.wm-step h4 { margin:.2rem 0 .35rem; font-size:.9rem; color:var(--primary-dark); }
+.wm-step p { margin:0; font-size:.78rem; color:var(--text-light); }
+/* ห้ามใส่ white-space:nowrap กับช่องเหล่านี้ — มันเก็บประโยค ไม่ใช่ค่าสั้นๆ ตารางจะดันออกนอกจอ */
+.wm-tbl td.hi { font-weight:700; color:var(--primary-dark); }
+.wm-tbl td.val { font-weight:700; color:var(--secondary); }
+.wm-tbl td.bad { font-weight:700; color:#dc2626; }
+.wm-tbl th, .wm-tbl td { vertical-align:top; line-height:1.45; }
+.wm-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; margin-top:1rem; }
+.wm-scroll table { min-width:600px; margin-top:0; }
+@media (max-width:640px){ .wm-tbl { font-size:.8rem; } }
+.wm-fault { border:1px solid var(--border); border-radius:12px; padding:1rem 1.15rem; margin:0 0 1rem; border-left-width:5px; border-left-style:solid; }
+.wm-fault:last-child { margin-bottom:0; }
+.wm-fault-title { font-weight:700; margin-bottom:.4rem; display:block; }
+.wm-formula { background:var(--bg); border:1px dashed var(--border); border-radius:10px; padding:.8rem 1rem; text-align:center; font-size:1.05rem; font-weight:700; color:var(--primary-dark); margin:.8rem 0; }
+.wm-wire { display:inline-block; width:14px; height:14px; border-radius:4px; vertical-align:-2px; margin-right:.4rem; border:1px solid rgba(0,0,0,.15); }
