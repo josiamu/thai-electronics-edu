@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="ซ่อมเครื่องซักผ้าฝาหน้า | สื่อการเรียนการสอน" data-title-en="Front-Load Washing Machine Repair | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ซ่อมเครื่องซักผ้าฝาหน้า | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🧺</div>
+    <div>
+      <h1 class="th-only">เครื่องซักผ้าฝาหน้า Direct Drive</h1>
+      <h1 class="en-only">Direct-Drive Front-Load Washing Machine</h1>
+      <p class="th-only">สมองกลสั่งงานทุกอย่าง • ล็อกประตูก่อนเสมอ • ฮีตเตอร์ + NTC • IPM 3 เฟส ไม่มีสายพาน • คลินิก 5 เคส</p>
+      <p class="en-only">The controller decides everything • Door locks first, always • Heater and NTC • Three-phase IPM, no belt • Five clinic cases</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="card" style="border-left:4px solid var(--primary);">
+    <span class="th-only">📚 หน้านี้เป็น 1 ใน 3 หน้าของบทเครื่องซักผ้า — ถ้ายังไม่แน่ใจว่าเครื่องตรงหน้าเป็นแบบไหน เริ่มที่ <a href="washing-machine.html"><strong>หน้าเลือกชนิดเครื่อง</strong></a> ก่อน · อีกสองแบบคือ <a href="washing-machine-twin.html">เครื่อง 2 ถังกลไก</a> และ <a href="washing-machine-top.html">ฝาบนอินเวอร์เตอร์</a></span>
+    <span class="en-only">📚 This is one of three washing-machine pages. If you are not yet sure which machine is in front of you, start at the <a href="washing-machine.html"><strong>machine-type guide</strong></a>. The other two are the <a href="washing-machine-twin.html">mechanical twin tub</a> and the <a href="washing-machine-top.html">inverter top loader</a>.</span>
+  </div>
+
+  <div class="card" style="border-left:4px solid #dc2626; display:flex; align-items:flex-start; gap:1rem; flex-wrap:wrap;">
+    <div style="font-size:1.6rem;">⚠️</div>
+    <div style="flex:1; min-width:220px;">
+      <strong class="th-only">เครื่องฝาหน้ามีฮีตเตอร์แช่อยู่ในน้ำ และบอร์ดที่อมไฟ 300V — 3 กฎนี้ห้ามละเมิด</strong>
+      <strong class="en-only">A front loader has an element sitting in water and a board holding 300 V — three rules you must never break</strong><br>
+      <span class="th-only">① <strong>สายดินที่ขันกับโครงเหล็กต้องขันกลับให้แน่นทุกครั้ง ห้ามตัดทิ้ง</strong> — ฮีตเตอร์ ~2,000W แช่อยู่ในน้ำ ถ้ารั่วแล้วไม่มีสายดิน ผู้ใช้คือทางลงดิน<br>② <strong>ต้องเสียบกับเต้ารับที่มีเบรกเกอร์กันดูด (RCD/ELCB)</strong> — ดูวิธีวัดและเหตุผลได้ในบท <a href="home-wiring.html">ระบบไฟบ้าน L/N/G</a><br>③ <strong>บอร์ดคอนโทรลอมไฟ DC ~300V ค้างหลังถอดปลั๊ก</strong> — ต้องคายประจุคาปาซิเตอร์ตัวใหญ่ก่อนจับหรือบัดกรีเสมอ</span>
+      <span class="en-only">① <strong>The earth screw on the steel chassis goes back on, tight, every time — never cut it off.</strong> A ~2,000 W element sits in the water; with a leak and no earth, the user is the path to ground.<br>② <strong>It must be plugged into a socket protected by an RCD.</strong> See <a href="home-wiring.html">House wiring: L/N/G</a> for how to check one and why it matters.<br>③ <strong>The control board holds ~300 V DC after you unplug it.</strong> Always discharge the large capacitor before touching or soldering.</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">วัตถุประสงค์การเรียนรู้</span><span class="en-only">Learning Objectives</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li>ไล่วงจรเครื่องฝาหน้าได้ตั้งแต่ปลั๊ก → ชุดกรองไฟ → SMPS → สมองกล → โหลด 220V และมอเตอร์ 3 เฟส</li>
+        <li>อธิบายได้ว่า<strong>ทำไมเครื่องถึงไม่ยอมทำอะไรเลยถ้าประตูยังไม่ "ยืนยัน"</strong> — และทำไมนั่นไม่ใช่ความผิดของบอร์ด</li>
+        <li>แยกให้ออกระหว่าง <strong>อะไหล่เสียจริง</strong> กับ <strong>เซ็นเซอร์บอกข้อมูลผิดจนบอร์ดสั่งผิด</strong> (NTC ยืดค่า ฮอลล์เซ็นเซอร์ตาย)</li>
+        <li>รู้ว่า <strong>"มีไฟ 220V ถึงตัวมันจริง" ไม่ได้แปลว่ามันจะทำงาน</strong> — ปั๊มเดรนติดขยะคือตัวอย่างคลาสสิก</li>
+        <li>วัดฮีตเตอร์ NTC ปั๊มเดรน ชุดล็อกประตู และมอเตอร์ 3 เฟส แล้วตัดสินได้ว่าดีหรือเสีย</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>Trace a front loader from the plug through the EMI filter, SMPS and controller to the 220 V loads and the three-phase motor.</li>
+        <li>Explain <strong>why the machine refuses to do anything until the door is "confirmed"</strong> — and why that is not a board fault.</li>
+        <li>Separate <strong>a genuinely dead part</strong> from <strong>a sensor lying to the board</strong> (a drifted NTC, a dead hall sensor).</li>
+        <li>Understand that <strong>"220 V really does reach it" does not mean it will run</strong> — the jammed drain pump is the classic case.</li>
+        <li>Measure the heater, NTC, drain pump, door lock and three-phase motor, and judge each one good or bad.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">ไล่วงจรทีละขั้น — เครื่องฝาหน้า Direct Drive</span><span class="en-only">Trace the Circuit Step by Step — the Direct-Drive Front Loader</span></div>
+    <div class="card">
+      <p class="th-only">ไล่ตั้งแต่ไฟเข้าจนจบรอบซักครบ <strong>5 ขั้น</strong> กดปุ่มโหมด (ปุ่มกลาง) เพื่อเดินจังหวะการทำงานทีละจังหวะ และ <strong>เลือกอาการเสีย</strong> เพื่อฝึกอ่านป้ายจุดวัด TP1–TP4</p>
+      <p class="en-only">Follow the machine from power-in to the end of a cycle in <strong>five steps</strong>. Use the middle button to advance one phase at a time, and pick a <strong>fault</strong> to practise reading probe points TP1–TP4.</p>
+
+      <div class="bs-wrap" id="wmf-circuit">
+        <div class="bs-tabs">
+          <button class="bs-tab" data-step="1"><span class="bs-n">1</span><span class="th-only">กรองไฟ + SMPS</span><span class="en-only">Filter + SMPS</span></button>
+          <button class="bs-tab" data-step="2"><span class="bs-n">2</span><span class="th-only">ล็อกประตู PTC</span><span class="en-only">PTC door lock</span></button>
+          <button class="bs-tab" data-step="3"><span class="bs-n">3</span><span class="th-only">เติมน้ำ + เซ็นเซอร์ระดับ</span><span class="en-only">Fill + level sensor</span></button>
+          <button class="bs-tab" data-step="4"><span class="bs-n">4</span><span class="th-only">ต้มน้ำ + IPM 3 เฟส</span><span class="en-only">Heat + 3-phase IPM</span></button>
+          <button class="bs-tab" data-step="5"><span class="bs-n">5</span><span class="th-only">เดรน + ปั่น + ปลดล็อก</span><span class="en-only">Drain + spin + unlock</span></button>
+        </div>
+
+        <canvas id="wmf-canvas" class="bs-canvas" style="aspect-ratio:940/430;" aria-label="Front-load washing machine circuit simulator"></canvas>
+
+        <div class="bs-nav" style="flex-wrap:wrap;">
+          <button id="wmf-prev" class="bs-navbtn">◀ <span class="th-only">ก่อนหน้า</span><span class="en-only">Prev</span></button>
+          <button id="wmf-play" class="bs-navbtn"><span class="th-only">▶ เล่นอัตโนมัติ</span><span class="en-only">▶ Auto-play</span></button>
+          <button id="wmf-mode" class="bs-navbtn">⏹</button>
+          <select id="wmf-fault" class="bs-select" aria-label="fault mode">
+            <option value="ok">✅ ปกติ — Normal</option>
+            <option value="doorlock">🔵 คอยล์ล็อกประตูขาด → dE — door lock open</option>
+            <option value="heatleak">🟣 ฮีตเตอร์ช็อตลงโครง — heater leaking to chassis</option>
+            <option value="hall">🟤 ฮอลล์เซ็นเซอร์เสีย → LE — hall sensor dead</option>
+            <option value="drainjam">🟢 ปั๊มเดรนติดขยะ — jammed drain pump</option>
+          </select>
+          <button id="wmf-next" class="bs-navbtn"><span class="th-only">ถัดไป</span><span class="en-only">Next</span> ▶</button>
+        </div>
+
+        <div class="bs-faultnote">
+          <span class="th-only">🔧 กำลังจำลองเครื่องที่เสียอยู่ — ไล่ป้ายจุดวัดจากซ้ายไปขวา <b>จุดแรกที่เปลี่ยนเป็นสีแดงคือด่านที่ขาด</b> · แต่ระวัง บางอาการไฟครบทุกจุดแล้วยังไม่ทำงาน นั่นแปลว่าปัญหาไม่ได้อยู่ที่ไฟฟ้า</span>
+          <span class="en-only">🔧 A faulty unit is being simulated — read the probe badges left to right: <b>the first one that turns red is the broken link</b>. But watch out: on some faults every badge stays green and it still will not run, which tells you the problem is not electrical at all.</span>
+        </div>
+
+        <div class="bs-desc" data-step="1">
+          <p class="th-only"><strong>ขั้นที่ 1 — เครื่องฝาหน้า: ไฟเข้าและการแปลงพลังงาน:</strong> ไฟบ้าน AC 220V (<strong>สายแดง L</strong> และ <strong>สายดำ N</strong>) วิ่งเข้า <strong>ชุดกรองไฟ (EMI Filter)</strong> เป็นด่านแรก หน้าที่ของมันคือดักคลื่นรบกวนไม่ให้ระบบอินเวอร์เตอร์กวนอุปกรณ์อื่นในบ้าน และไม่ให้ไฟสกปรกจากข้างนอกเข้ามากวนบอร์ด<br>จากนั้นไฟเข้า <strong>บอร์ดคอนโทรล</strong> ผ่านวาริสเตอร์กับฟิวส์ แล้วถูกเรียงเป็นไฟตรงแรงดันสูง (~300V) ก่อนที่ <strong>ภาคจ่ายไฟสวิตชิ่ง (SMPS)</strong> จะสับย่อยลดแรงดันลงมาเป็นไฟ DC 2 ชุด: <strong>5V</strong> เลี้ยงชิปสมองกลกับหน้าจอ และ <strong>12V</strong> เลี้ยงคอยล์รีเลย์กับวงจรขับ<br>สายที่จ่ายไฟ DC จากภาคจ่ายไฟไปเลี้ยงสมองกลมักเป็น <strong>สายสีม่วง</strong> — ถ้า TP2 วัดได้ 0V ทั้งที่ TP1 มีไฟ 220V ปัญหาอยู่บนบอร์ด ไม่ต้องไปรื้ออะไหล่ปลายทางเลย · หลักการภาคนี้เหมือนกับบท <a href="switching-psu.html">ภาคจ่ายไฟสวิตชิ่ง</a> ทุกประการ</p>
+          <p class="en-only"><strong>Step 1 — the front loader: power in and power conversion:</strong> 220 V AC (<strong>red L</strong>, <strong>black N</strong>) meets the <strong>EMI filter</strong> first. Its job is to stop the inverter's switching noise leaking out into the house, and to stop dirty mains coming in and upsetting the board.<br>Power then enters the <strong>control board</strong> through a varistor and fuse, is rectified to a high-voltage DC rail (~300 V), and the <strong>switching supply (SMPS)</strong> chops it down to two low-voltage DC rails: <strong>5 V</strong> for the controller and display, <strong>12 V</strong> for relay coils and drive circuitry.<br>The DC feed from the supply to the controller is usually a <strong>purple wire</strong>. If TP2 reads 0 V while TP1 has its 220 V, the fault is on the board — there is no point pulling components off the machine. The principles here are exactly those of the <a href="switching-psu.html">switching power supply</a> lesson.</p>
+        </div>
+
+        <div class="bs-desc" data-step="2">
+          <p class="th-only"><strong>ขั้นที่ 2 — ล็อกประตูก่อน แล้วค่อยปล่อยน้ำ:</strong> กด Start แล้วเครื่องฝาหน้า<strong>ยังไม่ปล่อยน้ำทันที</strong> สมองกลจะจ่ายไฟ 220V ไปที่ <strong>ชุดล็อกประตู (Door Lock)</strong> ก่อน<br>กลไกข้างในเป็น <strong>PTC</strong> — แผ่นความร้อนทำให้ <strong>แผ่นไบเมทัลโก่งตัว ดันสลักล็อกบานประตูแน่นสนิท</strong> เพราะถ้าประตูเปิดได้ระหว่างซัก น้ำ (ที่อาจร้อนถึง 60–90°C) จะทะลักออกมาทั้งหมด<br>เมื่อล็อกแล้ว สวิตช์ภายในจะส่ง<strong>สัญญาณยืนยันกลับไปที่บอร์ดทางสายสีชมพู</strong> — บอร์ดต้องเห็นสัญญาณนี้ก่อนถึงจะเดินโปรแกรมต่อ <strong>ถ้าไม่เห็น มันจะหยุดนิ่งและขึ้น Error ประตู (เช่น dE)</strong> ทั้งที่ไฟเข้าเครื่องปกติทุกอย่าง<br>อีกอาการที่หลอกช่างคือ <strong>ซักเสร็จแล้วประตูเปิดไม่ออก</strong> — ปกติต้องรอ <strong>1–2 นาที</strong> ให้แผ่น PTC เย็นลงสลักจึงเด้ง ถ้ารอแล้วยังไม่เด้งคือแผ่นความร้อนค้าง</p>
+          <p class="en-only"><strong>Step 2 — lock the door first, fill afterwards:</strong> press Start and a front loader <strong>does not admit water straight away</strong>. The controller first sends 220 V to the <strong>door lock</strong>.<br>Inside it is a <strong>PTC</strong> device: a heating element makes a <strong>bimetallic strip bend, driving a latch that clamps the door shut</strong>. If the door could open mid-cycle, water at up to 60–90 °C would come out all at once.<br>Once locked, an internal switch sends a <strong>confirmation back to the board on the pink wire</strong>. The board must see that signal before it will continue. <strong>Without it, the machine simply sits there and shows a door error such as dE</strong>, even though the incoming supply is perfect.<br>The other trap is <strong>a door that will not open after the cycle</strong>. Normally you must wait <strong>one to two minutes</strong> for the PTC element to cool before the latch releases; if it still will not release after that, the heater element inside has stuck.</p>
+        </div>
+
+        <div class="bs-desc" data-step="3">
+          <p class="th-only"><strong>ขั้นที่ 3 — เติมน้ำแล้วนับความถี่:</strong> สมองกลจ่ายไฟ 220V ผ่าน<strong>สายสีน้ำเงิน</strong>ไปเปิด <strong>โซลินอยด์วาล์วน้ำเข้า</strong> น้ำจึงไหลเข้าถัง<br>เครื่องรู้ระดับน้ำได้อย่างไร? มันไม่ได้ใช้ลูกลอย แต่ใช้<strong>แรงดันอากาศ</strong> — ปลายสายยางเส้นเล็กจุ่มอยู่ก้นถัง พอน้ำสูงขึ้น อากาศในสายยางถูกอัด แล้ววิ่งไปดัน <strong>เซ็นเซอร์ระดับน้ำ (Water Level Sensor)</strong> ทำให้แกนแม่เหล็กข้างในขยับ และ<strong>ค่าความถี่ที่มันส่งออกมาเปลี่ยนไป</strong> (ถังแห้งราว 26 kHz แล้วลดลงเรื่อยๆ เมื่อน้ำสูงขึ้น) สัญญาณนี้วิ่งกลับบอร์ดทาง<strong>สายสีส้ม</strong> พอถึงระดับที่ตั้งไว้ บอร์ดก็ตัดไฟวาล์วทันที<br><strong>ทริกหน้างานที่ประหยัดเงินลูกค้า:</strong> อาการ "น้ำล้นไม่ยอมตัด" หรือ "ฟ้อง Error น้ำไม่เต็ม" <strong>80% ไม่ได้เสียที่เซ็นเซอร์</strong> แต่เกิดจาก<strong>สายยางหลุด รั่ว หรือมีตะกรันอุดตันที่ข้อต่อก้นถัง</strong> ให้เป่าไล่ลมหรือเปลี่ยนสายยางก่อนเสนอเปลี่ยนเซ็นเซอร์เสมอ<br>ทำนองเดียวกัน ถ้าวาล์ววัดค่าได้ปกติแต่น้ำไม่เข้า ให้เช็ค<strong>ตะแกรงกรองฝุ่นที่ทางน้ำเข้า</strong>ว่าตันหรือไม่</p>
+          <p class="en-only"><strong>Step 3 — fill the drum and count the frequency:</strong> the controller sends 220 V down the <strong>blue wire</strong> to the <strong>solenoid inlet valve</strong>, and water flows in.<br>How does the machine know the level? Not with a float, but with <strong>air pressure</strong>. A thin hose opens at the bottom of the tub; as the water rises it compresses the air in that hose, which pushes on the <strong>water level sensor</strong>. A magnetic core inside moves and <strong>the frequency it outputs shifts</strong> — around 26 kHz with an empty tub, falling as the water rises. That signal returns to the board on the <strong>orange wire</strong>, and at the set level the board cuts the valve.<br><strong>A bench trick that saves the customer money:</strong> for "overfills and never stops" or "says it cannot fill", <strong>80 % of the time the sensor is fine</strong>. The real cause is <strong>a hose that has come off, split, or silted up at the tub connection</strong>. Blow the hose through or replace it before you ever quote for a sensor.<br>Likewise, if the valve measures correctly but no water arrives, check the <strong>inlet filter screen</strong> for blockage.</p>
+        </div>
+
+        <div class="bs-desc" data-step="4">
+          <p class="th-only"><strong>ขั้นที่ 4 — ต้มน้ำและขับมอเตอร์ 3 เฟส:</strong> สมองกลสั่งรีเลย์สับไฟ 220V กระแสสูงผ่าน<strong>สายสีน้ำตาล</strong>ไปที่ <strong>ฮีตเตอร์ (~2,000 วัตต์ ตัวที่กินกระแสสูงที่สุดในเครื่อง)</strong> โดยมี <strong>เซ็นเซอร์ NTC</strong> เสียบฝังอยู่ข้างๆ คอยรายงานอุณหภูมิกลับมาให้บอร์ดตัดไฟเมื่อร้อนถึงที่ตั้งไว้<br>พร้อมกันนั้นสมองกลส่งสัญญาณ PWM ให้ <strong>ชิป IPM</strong> แปลงไฟ DC เป็น<strong>ไฟกระแสสลับ 3 เฟส (U / V / W)</strong> ไปขับ <strong>มอเตอร์ Direct Drive</strong> ที่ยึดติดหลังถังซักโดยตรง ไม่มีสายพานให้หย่อนหรือขาด<br>สังเกตในภาพว่า<strong>มอเตอร์ตัวนี้ไม่มีสายนิวทรัล</strong> — มันรับไฟจาก IPM 3 เส้นเท่านั้น และมี <strong>ฮอลล์เซ็นเซอร์</strong> คอยรายงานตำแหน่งโรเตอร์กลับมาให้บอร์ดรู้ว่าควรยิงเฟสไหนต่อ<br><strong>คู่หูที่ต้องรู้จัก:</strong> ฮีตเตอร์ไม่ได้คิดเองว่าควรหยุดต้มเมื่อไหร่ มันรอ NTC บอก ถ้า <strong>NTC ยืดค่า</strong> บอร์ดจะเข้าใจว่าน้ำยังไม่ร้อนแล้วสั่งต้มไปเรื่อยๆ — ช่างมือใหม่มักฟันธงว่าฮีตเตอร์พัง ทั้งที่ฮีตเตอร์ทำงานปกติทุกอย่าง</p>
+          <p class="en-only"><strong>Step 4 — heat the water and drive the three-phase motor:</strong> the controller closes a relay feeding high current down the <strong>brown wire</strong> to the <strong>heater (~2,000 W, the biggest current draw in the machine)</strong>, with an <strong>NTC sensor</strong> buried alongside it reporting the temperature so the board can cut the element at the set point.<br>At the same time the controller sends PWM to the <strong>IPM chip</strong>, which turns DC into <strong>three-phase AC (U / V / W)</strong> for the <strong>direct-drive motor</strong> bolted straight to the back of the drum — no belt to slip or snap.<br>Notice in the drawing that <strong>this motor has no neutral wire</strong>: it takes all its power from the IPM's three lines. A <strong>hall sensor</strong> reports the rotor position so the board knows which phase to fire next.<br><strong>The pair you must know:</strong> the heater does not decide when to stop — it waits for the NTC. If the <strong>NTC drifts</strong>, the board believes the water is still cold and keeps heating. Newcomers condemn the heater, when the heater was doing its job perfectly all along.</p>
+        </div>
+
+        <div class="bs-desc" data-step="5">
+          <p class="th-only"><strong>ขั้นที่ 5 — เดรนน้ำ ปั่นหมาด แล้วหน่วงเวลาปลดล็อก:</strong> บอร์ดจ่ายไฟ 220V ไปที่ <strong>ปั๊มเดรน</strong> เพื่อสูบน้ำทิ้งออกทางท่อ แล้วรอให้เซ็นเซอร์ระดับน้ำ<strong>ส่งความถี่กลับมายืนยันว่าถังแห้งสนิท</strong> ก่อนจะยอมเร่งรอบ<br>จากนั้น IPM เร่งมอเตอร์ขึ้นไป <strong>1,000–1,400 รอบ/นาที</strong> ระหว่างนั้นฮอลล์เซ็นเซอร์กับเซ็นเซอร์สมดุลคอยจับว่าถังแกว่งผิดปกติหรือไม่ — ถ้าผ้ากองอยู่ฝั่งเดียว ระบบจะ<strong>สั่งเบรกทันทีแล้วขึ้น Error เสียสมดุล (UE/UB)</strong> บางรุ่นจะเติมน้ำเข้ามาใหม่เพื่อตีผ้าให้กระจายแล้วลองปั่นอีกครั้ง<br>เมื่อจบงาน บอร์ดตัดไฟทั้งหมด แต่ประตู<strong>ยังเปิดไม่ได้ทันที ต้องรอ 1–2 นาที</strong>ให้ชุดล็อก PTC เย็นลงก่อน — <strong>นี่คือพฤติกรรมปกติ ไม่ใช่ของเสีย</strong> ต้องอธิบายให้ลูกค้าเข้าใจ<br><strong>ข้อควรรู้:</strong> ถ้าเครื่อง "เดินพล่านไปทั่วห้อง" ตอนปั่น อย่าเพิ่งโทษบอร์ดหรือเซ็นเซอร์ — ให้ไปเช็ค <strong>โช้คอัพ</strong> ก่อน (ดูคลินิกเคสที่ 8 ด้านล่าง)</p>
+          <p class="en-only"><strong>Step 5 — drain, spin, then a delayed unlock:</strong> the board powers the <strong>drain pump</strong> to push the water out, then waits for the level sensor to <strong>confirm by frequency that the tub is completely empty</strong> before it will allow any speed.<br>The IPM then ramps the motor to <strong>1,000–1,400 rpm</strong>. Throughout, the hall sensor and the balance detection watch for an abnormal wobble: if the load has bunched to one side the system <strong>brakes immediately and shows an out-of-balance error (UE/UB)</strong>. Some models refill briefly to redistribute the load and try again.<br>At the end the board cuts everything, but the door <strong>still will not open for one to two minutes</strong> while the PTC lock cools. <strong>That is normal behaviour, not a fault</strong> — explain it to the customer.<br><strong>Worth knowing:</strong> if the machine "walks across the room" while spinning, do not blame the board or a sensor — check the <strong>shock absorbers</strong> first (clinic case 8 below).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">ตารางวัดค่ามาตรฐาน — ดี/เสียดูตรงไหน</span><span class="en-only">Standard Readings — Telling Good from Bad</span></div>
+    <div class="card">
+      <p class="th-only"><strong>ถอดปลั๊กก่อนวัดทุกครั้ง</strong> และถอดสายไฟของอุปกรณ์ที่จะวัดออกจากบอร์ดก่อนเสมอ ไม่งั้นจะอ่านค่าอุปกรณ์ตัวอื่นที่ขนานอยู่มาปนกัน</p>
+      <p class="en-only"><strong>Unplug before every measurement</strong>, and disconnect the part from the board first — otherwise you are reading whatever else is in parallel with it.</p>
+      <div class="wm-scroll">
+      <table class="fs-ref-table wm-tbl">
+        <colgroup><col style="width:21%"><col style="width:14%"><col style="width:33%"><col style="width:32%"></colgroup>
+        <thead>
+          <tr>
+            <th><span class="th-only">อุปกรณ์</span><span class="en-only">Part</span></th>
+            <th><span class="th-only">ย่านมิเตอร์</span><span class="en-only">Range</span></th>
+            <th><span class="th-only">ค่าปกติ</span><span class="en-only">Good</span></th>
+            <th><span class="th-only">ค่าที่แปลว่าเสีย</span><span class="en-only">Bad</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="hi"><span class="th-only">มอเตอร์ 3 เฟส (อินเวอร์เตอร์ / DD)</span><span class="en-only">Three-phase motor (inverter / DD)</span></td><td>Ω</td><td class="val"><span class="th-only">U-V, U-W, V-W <strong>เท่ากันทั้ง 3 คู่</strong> · 5–15 Ω</span><span class="en-only">U-V, U-W, V-W <strong>all equal</strong> · 5–15 Ω</span></td><td class="bad"><span class="th-only">3 คู่ไม่เท่า · OL · เทียบโครงขึ้นค่า</span><span class="en-only">Unequal pairs · OL · reads to frame</span></td></tr>
+          <tr><td class="hi"><span class="th-only">ปั๊มเดรน (ฝาหน้า)</span><span class="en-only">Drain pump (front load)</span></td><td>Ω</td><td class="val">150–200 Ω</td><td class="bad"><span class="th-only">OL · มีไฟ 220V แต่ครางไม่หมุน</span><span class="en-only">OL · hums on 220 V without turning</span></td></tr>
+          <tr><td class="hi"><span class="th-only">ฮีตเตอร์ (ฝาหน้า ~2,000W)</span><span class="en-only">Heater (front load, ~2,000 W)</span></td><td><span class="th-only">Ω + เสียงปี๊บ</span><span class="en-only">Ω + continuity</span></td><td class="val"><span class="th-only">20–30 Ω · เทียบโครง <strong>ต้อง OL</strong></span><span class="en-only">20–30 Ω · to chassis <strong>must be OL</strong></span></td><td class="bad"><span class="th-only">OL = ขดขาด · เทียบโครงมีค่า = <strong>ไฟรั่ว RCD ตัด</strong></span><span class="en-only">OL = open element · reads to chassis = <strong>leakage, RCD trips</strong></span></td></tr>
+          <tr><td class="hi"><span class="th-only">NTC วัดอุณหภูมิน้ำ</span><span class="en-only">Water NTC</span></td><td>Ω</td><td class="val"><span class="th-only">อุณหภูมิห้อง 12k–50 kΩ · โดนร้อนแล้ว <strong>ลดนุ่มนวล</strong></span><span class="en-only">12k–50 kΩ at room temp · <strong>falls smoothly</strong> when heated</span></td><td class="bad"><span class="th-only">ค้างนิ่ง · สวิงมั่ว · OL</span><span class="en-only">Frozen · erratic · OL</span></td></tr>
+          <tr><td class="hi"><span class="th-only">สวิตช์ฝาถัง / ล็อกประตู</span><span class="en-only">Lid switch / door lock</span></td><td><span class="th-only">เสียงปี๊บ / Ω</span><span class="en-only">Continuity / Ω</span></td><td class="val"><span class="th-only">ปิดฝา = ปี๊บ · เปิดฝา = OL · คอยล์ล็อก หลักร้อย–พัน Ω</span><span class="en-only">Closed = beep · open = OL · lock coil hundreds of Ω to a few kΩ</span></td><td class="bad"><span class="th-only">ปิดฝาแล้วเงียบ = หน้าสัมผัสสกปรก · คอยล์ OL → Error ประตู</span><span class="en-only">Silent when shut = dirty contacts · coil OL → door error</span></td></tr>
+          <tr><td class="hi"><span class="th-only">ฮอลล์เซ็นเซอร์</span><span class="en-only">Hall sensor</span></td><td><span class="th-only">DCV (เสียบปลั๊ก)</span><span class="en-only">DCV (powered)</span></td><td class="val"><span class="th-only">VCC-GND มี 5–12V · หมุนถังด้วยมือ ขาสัญญาณ <strong>สวิง 0V ↔ 5V</strong></span><span class="en-only">5–12 V at VCC-GND · turn drum by hand, signal <strong>swings 0 V ↔ 5 V</strong></span></td><td class="bad"><span class="th-only">ไฟนิ่งไม่เปลี่ยน (เปลี่ยนเฉพาะแผงเซ็นเซอร์ได้)</span><span class="en-only">Dead steady voltage (sensor board alone can be replaced)</span></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="warn-box">
+        <span class="th-only"><strong>ขั้นตอนเดียวที่ต้องเสียบปลั๊ก</strong>คือการวัดฮอลล์เซ็นเซอร์และการวัดไฟขาเข้าบอร์ด — ทั้งสองอย่างต้องทำด้วยความระวังสูงสุด มือข้างเดียว ไม่ยืนบนพื้นเปียก และห้ามให้ปลายโพรบเลื่อนไปแตะขาอื่น · ที่เหลือในตารางนี้วัดตอนถอดปลั๊กได้ทั้งหมด</span>
+        <span class="en-only"><strong>The only steps that require the machine plugged in</strong> are the hall sensor test and the board input measurement. Do both with maximum care: one hand only, never standing on a wet floor, and never let a probe tip slip onto a neighbouring pin. Everything else in this table is measured unplugged.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">คลินิกช่าง — 5 อาการที่หลอกช่างมือใหม่</span><span class="en-only">The Clinic — Five Faults That Fool Beginners</span></div>
+    <div class="card">
+      <p class="th-only">อาการเหล่านี้เลือกมาเพราะมัน<strong>ชี้ไปผิดทางตั้งแต่แรก</strong> — บางเคสอะไหล่ที่ถูกกล่าวหาว่าเสียนั้นทำงานถูกต้องทุกอย่าง ผิดที่ข้อมูลที่มันได้รับ และเคสสุดท้ายวัดไฟฟ้าไม่มีวันเจอเลยเพราะต้นเหตุเป็นกลไกล้วนๆ</p>
+      <p class="en-only">These are chosen because they <strong>point you the wrong way from the start</strong>. In several of them the part you are about to condemn is working perfectly — what is wrong is the information it was given. And the last one no meter will ever find, because the cause is purely mechanical.</p>
+      <div class="wm-fault" style="border-left-color:#2563eb;">
+        <span class="wm-fault-title th-only">4. สั่งซักแล้วเครื่องนิ่งเงียบ ขึ้น Error ประตู (dE) ทั้งที่ประตูปิดแล้ว</span>
+        <span class="wm-fault-title en-only">4. It sits silent with a door error (dE) even though the door is shut</span>
+        <p class="th-only"><strong>จุดสลบ:</strong> บอร์ดไม่ได้ดูว่าประตู "ปิด" หรือไม่ แต่ดูว่า <strong>ได้รับสัญญาณยืนยันการล็อกกลับมาทางสายชมพูหรือยัง</strong> ถ้าคอยล์ในชุดล็อกขาดใน (วัดขึ้น OL) มันจะล็อกไม่ได้ ยืนยันไม่ได้ และบอร์ดจะไม่ยอมเดินโปรแกรมต่อ<br><strong>วิธีตรวจ:</strong> ถอดสายแล้ววัดคร่อมขั้วคอยล์สั่งล็อก ต้องอ่านค่าได้หลักร้อยถึงพันโอห์ม ถ้าขึ้น OL คือคอยล์ขาด<br><strong>อาการญาติกัน:</strong> <strong>ซักเสร็จแล้วประตูเปิดไม่ออก</strong> — ปกติต้องรอ 1–2 นาทีให้แผ่น PTC เย็นลงก่อน ถ้ารอครบแล้วยังค้าง มักเป็นแผ่นความร้อน PTC ภายในค้าง ต้องเปลี่ยนทั้งชุด</p>
+        <p class="en-only"><strong>The real cause:</strong> the board does not ask whether the door is "shut" — it asks whether <strong>the lock confirmation has come back on the pink wire</strong>. If the lock coil is open (reads OL), it cannot lock, cannot confirm, and the board refuses to continue.<br><strong>How to check:</strong> disconnect and measure across the lock coil terminals; you should read hundreds of ohms to a few kΩ. OL means an open coil.<br><strong>Its close relative:</strong> <strong>the door will not open after the cycle</strong>. Normally you wait one to two minutes for the PTC to cool; if it is still stuck after that, the PTC element inside has jammed and the assembly needs replacing.</p>
+      </div>
+
+      <div class="wm-fault" style="border-left-color:#7c3aed;">
+        <span class="wm-fault-title th-only">5. ต้มน้ำร้อนจัดจนควันขึ้น หรือ ซักแล้วเครื่องค้าง — แต่ฮีตเตอร์ไม่ได้เสีย</span>
+        <span class="wm-fault-title en-only">5. It overheats until it steams, or hangs mid-wash — and the heater is fine</span>
+        <p class="th-only"><strong>จุดสลบ:</strong> ฮีตเตอร์ไม่ได้คิดเองว่าควรหยุดต้มเมื่อไหร่ มัน<strong>รอคำสั่งจากค่าที่ NTC อ่านได้</strong> ถ้า <strong>NTC ยืดค่า</strong> บอร์ดจะเข้าใจผิดว่าน้ำยังไม่ร้อน แล้วสั่งต้มไปเรื่อยๆ ช่างมือใหม่มักฟันธงว่าฮีตเตอร์พัง ทั้งที่ฮีตเตอร์ทำงานถูกต้องทุกอย่าง<br><strong>วิธีเทสหน้างาน:</strong> ถอดแจ็ค NTC ออก วัดที่อุณหภูมิห้องก่อน (จะได้ค่าสูง ราว 12k–50 kΩ) แล้ว <strong>เอาน้ำร้อนราดหรือใช้ไดร์เป่าผมเป่าที่หัวเซ็นเซอร์</strong> ค่าโอห์มต้อง <strong>ลดลงอย่างนุ่มนวลและต่อเนื่อง</strong><br><strong>ตัวที่เสีย:</strong> ตัวเลขค้างนิ่งสนิท, ค่าสวิงมั่วไปมา, หรือขึ้น OL</p>
+        <p class="en-only"><strong>The real cause:</strong> the heater has no idea when to stop — it <strong>waits for what the NTC reports</strong>. If the <strong>NTC has drifted</strong>, the board thinks the water is still cold and keeps heating. Newcomers condemn the heater when the heater was behaving perfectly.<br><strong>Bench test:</strong> unplug the NTC and measure at room temperature (high — roughly 12k–50 kΩ), then <strong>pour hot water over the tip or play a hairdryer on it</strong>. The resistance must <strong>fall smoothly and continuously</strong>.<br><strong>A bad one:</strong> the number freezes, swings around erratically, or reads OL.</p>
+      </div>
+
+      <div class="wm-fault" style="border-left-color:#059669;">
+        <span class="wm-fault-title th-only">6. น้ำไม่ยอมทิ้ง — 90% ขดลวดปั๊มไม่ได้เสีย</span>
+        <span class="wm-fault-title en-only">6. It will not drain — nine times out of ten the pump is fine</span>
+        <p class="th-only"><strong>จุดสลบ:</strong> ปั๊มเดรนเป็นมอเตอร์ปั๊มหอยโข่งเล็กๆ ที่ใบพัดโดน <strong>เหรียญ คลิปหนีบกระดาษ กระดุม หรือคราบใยผ้า</strong> เข้าไปขัดได้ง่ายมาก ขดลวดดี วัดได้ 150–200 Ω ตามปกติ และไฟ 220V ก็มาถึงจริง แต่ใบพัดหมุนไม่ได้<br><strong>วิธีแก้:</strong> ต้อง<strong>หมุนเปิดฝาครอบกรองปั๊มที่มุมล่างด้านหน้าเครื่อง</strong> เพื่อเคลียร์ขยะออกก่อนเสนอเปลี่ยนอะไหล่เสมอ (เตรียมถาดรองน้ำไว้ด้วย น้ำจะไหลออกมาเยอะกว่าที่คิด)<br><strong>อาการเดียวกันในเครื่องฝาบน:</strong> ถ้าเป็นเครื่องที่ใช้มอเตอร์เดรนดึงสลิง ให้เช็คว่า <strong>สลิงยังดึงลูกยางวาล์วขึ้นได้จริงหรือไม่</strong> บางทีมอเตอร์ครางแต่เฟืองข้างในรูดแล้ว</p>
+        <p class="en-only"><strong>The real cause:</strong> the drain pump is a small centrifugal unit whose impeller is easily jammed by <strong>a coin, a paperclip, a button or a wad of lint</strong>. The winding is good at its normal 150–200 Ω and 220 V really does arrive, but the impeller cannot turn.<br><strong>The fix:</strong> <strong>open the pump filter cover at the front lower corner</strong> and clear the debris before you ever quote for a part. Have a tray ready — more water comes out than you expect.<br><strong>The same symptom on a top loader:</strong> on machines with a cable-pulled drain tractor, check whether <strong>the cable is actually lifting the valve plug</strong>. Sometimes the motor hums while the gears inside have stripped.</p>
+      </div>
+
+      <div class="wm-fault" style="border-left-color:#0891b2;">
+        <span class="wm-fault-title th-only">7. มอเตอร์กระตุกซ้ายทีขวาทีแล้วหยุด ขึ้น Error (เช่น LE) — ทั้งที่ขดลวด 3 เฟสวัดได้เท่ากันเป๊ะ</span>
+        <span class="wm-fault-title en-only">7. The motor judders, stops and throws an error (LE) — yet all three phases measure identically</span>
+        <p class="th-only"><strong>จุดสลบ:</strong> การวัดขดลวดว่าเท่ากันทั้ง 3 คู่ <strong>เป็นการเช็คแค่ครึ่งเดียว</strong> เพราะบ่อยครั้งขดลวดไม่ขาดเลย แต่ <strong>ฮอลล์เซ็นเซอร์</strong> (แผงวงจรเล็กๆ ใต้ขดลวด) เสื่อมสภาพ ทำให้บอร์ด<strong>ไม่รู้ตำแหน่งของแม่เหล็กและสั่งจ่ายไฟผิดจังหวะ</strong><br><strong>วิธีเทสหน้างาน:</strong> ต้องเสียบปลั๊กเปิดเครื่อง ตั้งย่าน DCV จิ้มที่ขั้ว VCC กับ GND ของแจ็คฮอลล์ก่อน (ต้องมีไฟเลี้ยง 5–12V มารอ) จากนั้นย้ายสายไปวัดที่<strong>ขาสัญญาณ</strong> แล้ว <strong>ใช้มือหมุนถังซักช้าๆ</strong><br><strong>สถานะดี:</strong> แรงดัน DC จะสวิงขึ้นลงสลับกัน (เช่น 0V ↔ 5V) ตามจังหวะที่ก้อนแม่เหล็กพาดผ่าน<br><strong>สถานะเสีย:</strong> ไฟนิ่งสนิทไม่มีการเปลี่ยนแปลง — ข่าวดีคือ<strong>เบิกเปลี่ยนเฉพาะแผงเซ็นเซอร์ได้ ไม่ต้องยกมอเตอร์ใหม่ทั้งลูก</strong><br><strong>อีกกรณีที่ต้องดู:</strong> บางครั้งขดลวดกับเซ็นเซอร์ดีทั้งคู่ แต่ <strong>ลูกปืนแตกจนแกนโรเตอร์ตกลงมาสีกับสเตเตอร์</strong></p>
+        <p class="en-only"><strong>The real cause:</strong> checking that all three winding pairs match is <strong>only half the job</strong>. Very often the windings are perfect and the <strong>hall sensor</strong> — a small board tucked under the windings — has degraded, so the controller <strong>cannot see where the magnets are and fires the phases at the wrong moments</strong>.<br><strong>Bench test:</strong> with the machine powered, on DCV, first check VCC to GND on the hall connector for the 5–12 V supply. Then move to the <strong>signal pin</strong> and <strong>turn the drum slowly by hand</strong>.<br><strong>Good:</strong> the DC voltage swings up and down (0 V ↔ 5 V) as each magnet passes.<br><strong>Bad:</strong> a dead steady voltage that never moves. The good news is that <strong>the sensor board alone can be replaced — you do not need a whole new motor</strong>.<br><strong>One more possibility:</strong> occasionally both windings and sensor are fine but <strong>a failed bearing has let the rotor drop onto the stator</strong>.</p>
+      </div>
+
+      <div class="wm-fault" style="border-left-color:#be185d;">
+        <span class="wm-fault-title th-only">8. ปั่นแล้วเครื่องเดินพล่านไปทั่วห้อง หรือขึ้น Error เสียสมดุล (UE/UB) ตลอด — ทั้งที่ระบบไฟฟ้าไม่ได้เสียเลย</span>
+        <span class="wm-fault-title en-only">8. It walks across the room, or throws unbalance errors (UE/UB) constantly — with nothing electrically wrong</span>
+        <p class="th-only"><strong>จุดสลบ:</strong> เครื่องฝาหน้าปั่นที่ <strong>1,000–1,400 รอบ/นาที</strong> ใต้ถังซักจึงต้องมี <strong>โช้คอัพ</strong> ซับแรงสั่นสะเทือน เมื่อใช้ไปหลายปี <strong>จาระบีจะแห้งและสูญเสียความหนืด</strong> ถังก็เด้งอิสระ เซ็นเซอร์จับได้ว่าแกว่งผิดปกติแล้วสั่งเบรก ช่างหลายคนหลงทางไปรื้อบอร์ดหรือเปลี่ยนเซ็นเซอร์ระดับน้ำ ทั้งที่ระบบไฟฟ้าไม่ได้เสียสักนิด<br><strong>วิธีเทสด้วยมือ (ไม่ต้องใช้มิเตอร์เลย):</strong> เปิดบานประตูหน้าเครื่อง <strong>ใช้มือกดขอบถังซักด้านในลงไปแรงๆ แล้วปล่อยมือทันที</strong><br><strong>สถานะดี:</strong> ถังเด้งกลับขึ้นมาแล้ว <strong>หยุดนิ่งทันที</strong> สัมผัสได้ถึงความหนืดและกระชับ<br><strong>สถานะเสีย:</strong> ถัง <strong>เด้งดึ๋งๆ ขึ้นลงหลายรอบ</strong> เหมือนสปริงที่ไม่มีตัวซับแรง — เจอแบบนี้ปิดจ๊อบได้เลย เปลี่ยนโช้คอัพคู่ใหม่แล้วเครื่องจะนิ่งสนิทโดย<strong>ไม่ต้องแตะสายไฟสักเส้น</strong></p>
+        <p class="en-only"><strong>The real cause:</strong> a front loader spins at <strong>1,000–1,400 rpm</strong>, so <strong>shock absorbers</strong> under the tub soak up the vibration. After some years <strong>the grease dries out and they lose their damping</strong>; the tub bounces freely, the sensors detect an abnormal wobble and call for a brake. Plenty of technicians go off to strip the board or change the level sensor, when nothing electrical is wrong at all.<br><strong>A hands-only test, no meter required:</strong> open the door, <strong>press the inner rim of the drum down hard and let go suddenly</strong>.<br><strong>Good:</strong> the tub springs back and <strong>stops dead immediately</strong> — you can feel the damping.<br><strong>Bad:</strong> the tub <strong>bounces up and down several times</strong> like an undamped spring. That closes the job: fit a new pair of shock absorbers and the machine runs quietly again <strong>without touching a single wire</strong>.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">ความปลอดภัยและลำดับการทำงานหน้างาน</span><span class="en-only">Safety and the Order of Work on Site</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li><strong>ถอดปลั๊กก่อนเสมอ แล้วปิดก๊อกน้ำเข้าเครื่อง</strong> — และถ้าจะถอดสายยาง ให้เตรียมถาดรองน้ำ เพราะในถังกับในปั๊มมักมีน้ำค้างอยู่มากกว่าที่คิด</li>
+        <li><strong>คายประจุคาปาซิเตอร์ตัวใหญ่บนบอร์ดด้วยหลอดไฟไส้ 100W ทุกครั้ง</strong> ก่อนจับหรือบัดกรี — ไฟ 300V DC ยังค้างอยู่ได้หลายนาทีหลังถอดปลั๊ก และห้ามใช้ไขควงเขี่ยให้สปาร์ค</li>
+        <li><strong>สายดินคือสิ่งสุดท้ายที่ถอด และสิ่งแรกที่ต่อกลับ</strong> — เครื่องฝาหน้ามีฮีตเตอร์ ~2,000W แช่อยู่ในน้ำ ถ้าไฟรั่วแล้วไม่มีสายดิน ผู้ใช้จะกลายเป็นทางลงดินแทน</li>
+        <li><strong>ยืนยันว่าเต้ารับมีเบรกเกอร์กันดูด (RCD/ELCB)</strong> ก่อนส่งเครื่องคืน — อ่านวิธีตรวจสอบได้ที่บท <a href="home-wiring.html">ระบบไฟบ้าน L/N/G</a></li>
+        <li><strong>วัดฉนวนก่อนส่งคืน:</strong> จิ้มขั้วฮีตเตอร์และขั้วมอเตอร์เทียบกับโครงเหล็ก <strong>ต้องขึ้น OL ทุกจุด</strong> ถ้ามีค่าโอห์มหรือเสียงปี๊บ แปลว่ายังมีไฟรั่วอยู่ ห้ามส่งคืนเด็ดขาด</li>
+        <li><strong>ห้ามงัดประตูตอนเครื่องค้างกลางรอบ</strong> — ในถังอาจมีน้ำร้อน 60–90°C อยู่ ให้เดรนน้ำออกให้หมดก่อน แล้วรอชุด PTC เย็นจนสลักคลายเอง</li>
+        <li><strong>ทดสอบเต็มรอบก่อนส่งคืน</strong> — ใส่น้ำจริง เดินให้ครบทั้งซัก เดรน และปั่น ฟังเสียงผิดปกติ ดูรอยรั่วใต้เครื่อง และตรวจว่าประตูล็อกและปลดล็อกได้จริง</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li><strong>Unplug first, then close the water tap.</strong> If you are pulling hoses, have a tray ready — the tub and pump hold more water than you would guess.</li>
+        <li><strong>Discharge the large board capacitor with a 100 W lamp every time</strong> before touching or soldering. 300 V DC lingers for minutes after unplugging, and never short it with a screwdriver.</li>
+        <li><strong>The earth wire is the last thing off and the first thing back on.</strong> A front loader has a ~2,000 W element in the water; with a leak and no earth, the user becomes the path to ground.</li>
+        <li><strong>Confirm the socket is RCD protected</strong> before you hand the machine back. See <a href="home-wiring.html">House wiring: L/N/G</a> for how to check.</li>
+        <li><strong>Insulation check before handover:</strong> heater and motor terminals against the steel chassis <strong>must all read OL</strong>. Any resistance or beep means live leakage, and the machine does not go back.</li>
+        <li><strong>Never force the door on a machine stopped mid-cycle</strong> — there may be 60–90 °C water inside. Drain it first, then let the PTC cool until the latch releases on its own.</li>
+        <li><strong>Run a full cycle before handover</strong> — real water, all the way through wash, drain and spin. Listen for noises, look underneath for leaks, and verify the door both locks and releases.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="th-only">เอกสารประกอบและบทที่เกี่ยวข้อง</span><span class="en-only">Documents and Related Lessons</span></div>
+    <div class="card">
+      <p class="th-only">ใบความรู้ทั้ง 4 ใบของบทเครื่องซักผ้าถูกรวมเป็นเล่มเดียว 13 หน้า พร้อมสารบัญกระโดดตามหัวข้อ (มีทั้งใบเครื่องฝาหน้าและใบวงจรบอร์ดควบคุม) ดาวน์โหลดได้ในหมวด <strong>🛠️ งานซ่อม</strong> ของหน้าดาวน์โหลด:</p>
+      <p class="en-only">All four source sheets for the washing-machine lessons are bound into a single 13-page document with bookmarks — including the front-loader sheet and the control-board sheet. Find it in the <strong>🛠️ Repair</strong> section of the downloads page:</p>
+      <ul class="content-list th-only">
+        <li><a href="downloads.html?cat=repair&amp;file=pdf/workshop/%E0%B8%95%E0%B8%A3%E0%B8%A7%E0%B8%88%E0%B9%80%E0%B8%8A%E0%B9%87%E0%B8%84_%E0%B9%80%E0%B8%84%E0%B8%A3%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B8%87%E0%B8%8B%E0%B8%B1%E0%B8%81%E0%B8%9C%E0%B9%89%E0%B8%B2.pdf"><strong>ตรวจเช็คเครื่องซักผ้า (รวม 4 ใบ)</strong></a> — เครื่อง 2 ถัง · ฝาบน · ฝาหน้า · วงจรบอร์ดควบคุม</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li><a href="downloads.html?cat=repair&amp;file=pdf/workshop/%E0%B8%95%E0%B8%A3%E0%B8%A7%E0%B8%88%E0%B9%80%E0%B8%8A%E0%B9%87%E0%B8%84_%E0%B9%80%E0%B8%84%E0%B8%A3%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B8%87%E0%B8%8B%E0%B8%B1%E0%B8%81%E0%B8%9C%E0%B9%89%E0%B8%B2.pdf"><strong>Washing Machine Inspection Sheets (4 in 1)</strong></a> — twin tub · top load · front load · control board</li>
+      </ul>
+      <p class="th-only" style="margin-top:.8rem">อ่านต่อ: <a href="washing-machine-top.html">เครื่องฝาบนอินเวอร์เตอร์</a> (บอร์ดไตรแอค vs บอร์ด IPM และการไล่ซ่อม "เปิดไม่ติด") · <a href="washing-machine-twin.html">เครื่อง 2 ถังกลไก</a> · <a href="washing-machine.html">กลับไปหน้าเลือกชนิดเครื่อง</a></p>
+      <p class="en-only" style="margin-top:.8rem">Read next: <a href="washing-machine-top.html">the inverter top loader</a> (triac boards vs IPM boards, and working a dead machine) · <a href="washing-machine-twin.html">the mechanical twin tub</a> · <a href="washing-machine.html">back to the machine-type guide</a></p>
+      <p class="th-only">บทเรียนที่เกี่ยวข้อง: <a href="switching-psu.html">ภาคจ่ายไฟสวิตชิ่ง</a> (ภาคจ่ายไฟบนบอร์ด) · <a href="igbt.html">IGBT</a> (ทรานซิสเตอร์กำลังในโมดูล IPM) · <a href="thyristor.html">ไทริสเตอร์ SCR/TRIAC</a> (ไตรแอคที่ขับโหลด 220V) · <a href="relay.html">รีเลย์</a> · <a href="home-wiring.html">ระบบไฟบ้าน L/N/G</a> (สายดินและเบรกเกอร์กันดูด)</p>
+      <p class="en-only">Related lessons: <a href="switching-psu.html">Switching power supplies</a> (the supply on the board) · <a href="igbt.html">IGBT</a> (the power transistors inside an IPM) · <a href="thyristor.html">Thyristors: SCR/TRIAC</a> (the triacs driving the 220 V loads) · <a href="relay.html">Relays</a> · <a href="home-wiring.html">House wiring: L/N/G</a> (earthing and RCDs)</p>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer><strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong><strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong></footer>
+<script>const CURRENT_PAGE='repair-wm-front';</script>
+<script src="js/nav.js"></script>
+<script src="js/wm-front.js"></script>
+</body>
+</html>
