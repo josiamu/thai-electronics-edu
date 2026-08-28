@@ -21,6 +21,7 @@ const NAV_LESSON_GROUPS = [
       { id: 'igbt', href: 'igbt.html', label_th: '⚡ IGBT ทรานซิสเตอร์กำลัง', label_en: '⚡ IGBT Power Transistor' },
       { id: 'thyristor', href: 'thyristor.html', label_th: '🔺 ไทริสเตอร์ SCR/TRIAC', label_en: '🔺 Thyristors (SCR/TRIAC)' },
       { id: 'inductor', href: 'inductor.html', label_th: '🌀 ตัวเหนี่ยวนำ', label_en: '🌀 Inductor' },
+      { id: 'transformer', href: 'transformer.html', label_th: '🔄 หม้อแปลงไฟฟ้า', label_en: '🔄 Transformer' },
       { id: 'relay', href: 'relay.html', label_th: '🧲 รีเลย์', label_en: '🧲 Relay' },
       { id: 'opto', href: 'optoelectronics.html', label_th: '🔦 ออปโตอิเล็กทรอนิกส์', label_en: '🔦 Optoelectronics' },
       { id: 'power-supply', href: 'power-supply.html', label_th: '🔌 แหล่งจ่ายไฟ', label_en: '🔌 Power Supply' },
@@ -303,7 +304,7 @@ const NAV_RESOURCES = [
 
   // ── บรรทัด "ครอบคลุมเนื้อหาจาก N หัวข้อ": เติมเข้า footer ทุกหน้าอัตโนมัติ (bilingual) ──
   // แหล่งความจริงเดียว — แก้เลขที่ TOPIC_COUNT ที่เดียว ทุกหน้าอัปเดตพร้อมกัน (อย่า hardcode ในแต่ละหน้า)
-  const TOPIC_COUNT = 45;
+  const TOPIC_COUNT = 46;
   const pageFooter = document.querySelector('footer');
   if (pageFooter && !pageFooter.querySelector('.footer-topics')) {
     const topics = document.createElement('div');

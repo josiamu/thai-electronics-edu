@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="หม้อแปลงไฟฟ้า | สื่อการเรียนการสอน" data-title-en="Transformer | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>หม้อแปลงไฟฟ้า | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🔄</div>
+    <div>
+      <h1 class="th-only">หม้อแปลงไฟฟ้า (Transformer)</h1>
+      <h1 class="en-only">Transformer</h1>
+      <p>V₁/V₂ = N₁/N₂ = I₂/I₁ • <span class="th-only">อัตราส่วนรอบ • การแยกทางไฟฟ้า • การวัดและตรวจเช็ค</span><span class="en-only">Turns ratio • Isolation • Testing</span></p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ── 1. หลักการ ──────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ทำงานอย่างไร</span><span class="en-only">How It Works</span></div>
+    <div class="card">
+      <p class="th-only">หม้อแปลงคือขดลวด 2 ชุดที่พันอยู่บนแกนเหล็กเดียวกัน <strong>โดยไม่ได้ต่อสายถึงกันเลย</strong> — พลังงานข้ามจากขดหนึ่งไปอีกขดหนึ่งด้วย <strong>สนามแม่เหล็กที่เปลี่ยนแปลง</strong> เท่านั้น</p>
+      <p class="en-only">A transformer is two coils on one iron core with <strong>no electrical connection between them</strong> — energy crosses over purely through a <strong>changing magnetic field</strong>.</p>
+      <div class="steps" style="margin-top:1rem;">
+        <div class="step"><div class="step-num">1</div><div class="step-content">
+          <strong class="th-only">ไฟ AC เข้าขดปฐมภูมิ</strong><strong class="en-only">AC enters the primary</strong>
+          <p class="th-only">กระแสที่สลับทิศไปมาสร้างสนามแม่เหล็กที่ <strong>เปลี่ยนแปลงตลอดเวลา</strong> ในแกนเหล็ก</p>
+          <p class="en-only">Alternating current builds a <strong>constantly changing</strong> magnetic field in the core.</p>
+        </div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content">
+          <strong class="th-only">แกนเหล็กนำสนามแม่เหล็กไปอีกฝั่ง</strong><strong class="en-only">The core guides the flux across</strong>
+          <p class="th-only">แกนเหล็กทำหน้าที่เหมือน "ท่อ" ของเส้นแรงแม่เหล็ก ให้เกือบทั้งหมดวิ่งไปถึงขดที่สอง</p>
+          <p class="en-only">The core acts as a pipe for the flux so nearly all of it reaches the second coil.</p>
+        </div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content">
+          <strong class="th-only">ขดทุติยภูมิเหนี่ยวนำแรงดันออกมา</strong><strong class="en-only">The secondary induces a voltage</strong>
+          <p class="th-only">ตาม <strong>กฎของฟาราเดย์</strong> สนามแม่เหล็กที่เปลี่ยนแปลงเหนี่ยวนำแรงดันในขดลวด — ได้แรงดันมากหรือน้อย ขึ้นกับ <strong>จำนวนรอบ</strong></p>
+          <p class="en-only">By <strong>Faraday's law</strong>, changing flux induces a voltage — how much depends on the <strong>number of turns</strong>.</p>
+        </div></div>
+      </div>
+      <div class="warn-box">
+        <span class="th-only">⚠️ <strong>ข้อสรุปสำคัญที่สุดของบทนี้:</strong> ต้องเป็นสนามแม่เหล็กที่ <strong>เปลี่ยนแปลง</strong> เท่านั้น — ป้อนไฟ DC เข้าไป ฟลักซ์จะนิ่งอยู่กับที่ ไม่มีแรงดันออกสักโวลต์ แถมขดปฐมภูมิจะเหลือแค่ความต้านทานเปล่า ๆ ไม่กี่โอห์ม แล้วกินกระแสจนไหม้ <strong>หม้อแปลงจึงใช้กับ AC เท่านั้น</strong> (ลองโหมด "ป้อนไฟ DC" ในซิมด้านล่าง)</span>
+        <span class="en-only">⚠️ <strong>The key takeaway:</strong> the field must be <strong>changing</strong>. Feed it DC and the flux sits still — no output at all, and the primary is left as a few bare ohms that will draw current until it burns. <strong>Transformers are AC-only</strong> (try the "DC input" mode below).</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 2. สูตร ─────────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">อัตราส่วนรอบ — สูตรเดียวที่ต้องจำ</span><span class="en-only">The Turns Ratio — The One Formula</span></div>
+    <div class="card">
+      <div class="formula-box" style="text-align:center;">
+        <div class="formula">V₁ / V₂ = N₁ / N₂ = I₂ / I₁</div>
+        <div style="font-size:0.9rem;margin-top:0.5rem;color:var(--text-light);">
+          <span class="th-only">สังเกตว่า <strong>กระแสกลับข้างกับแรงดัน</strong> — ฝั่งที่แรงดันต่ำคือฝั่งที่กระแสสูง</span>
+          <span class="en-only">Note the <strong>current ratio is inverted</strong> — the low-voltage side is the high-current side</span>
+        </div>
+      </div>
+      <p class="th-only"><strong>ทำไมกระแสถึงกลับข้าง?</strong> เพราะกำลังไฟฟ้าต้องเท่ากันทั้งสองฝั่ง (P = V × I) หม้อแปลง <strong>ไม่ได้สร้างพลังงานเพิ่ม</strong> มันแค่ <em>แลก</em> แรงดันกับกระแสเท่านั้น ได้แรงดันมาก็ต้องเสียกระแสไป</p>
+      <p class="en-only"><strong>Why is current inverted?</strong> Because power must match on both sides (P = V × I). A transformer <strong>creates no energy</strong> — it only <em>trades</em> voltage for current.</p>
+
+      <div style="overflow-x:auto;margin-top:1rem;">
+        <table>
+          <tr>
+            <th><span class="th-only">ชนิด</span><span class="en-only">Type</span></th>
+            <th><span class="th-only">อัตราส่วน</span><span class="en-only">Ratio</span></th>
+            <th><span class="th-only">ใช้ที่ไหน</span><span class="en-only">Where you meet it</span></th>
+          </tr>
+          <tr>
+            <td><strong>Step-Down</strong></td>
+            <td>N₁ &gt; N₂ <span class="th-only">(แรงดันลด กระแสเพิ่ม)</span><span class="en-only">(V down, I up)</span></td>
+            <td><span class="th-only">อะแดปเตอร์ 220V→12V, <a href="power-supply.html">แหล่งจ่ายไฟ</a>แบบเชิงเส้น, หม้อแปลงหน้าบ้าน</span><span class="en-only">220V→12V adapters, linear <a href="power-supply.html">power supplies</a>, pole transformers</span></td>
+          </tr>
+          <tr>
+            <td><strong>Step-Up</strong></td>
+            <td>N₂ &gt; N₁ <span class="th-only">(แรงดันเพิ่ม กระแสลด)</span><span class="en-only">(V up, I down)</span></td>
+            <td><span class="th-only">หม้อแปลงแรงสูงใน<a href="microwave.html">เตาไมโครเวฟ</a> (220V → 2,000V), คอยล์จุดระเบิด, สายส่งไฟฟ้าแรงสูง</span><span class="en-only">The HV transformer in a <a href="microwave.html">microwave</a> (220V → 2,000V), ignition coils, grid transmission</span></td>
+          </tr>
+          <tr>
+            <td><strong>Isolation</strong></td>
+            <td>N₁ = N₂ <span class="th-only">(1:1 แรงดันเท่าเดิม)</span><span class="en-only">(1:1, same voltage)</span></td>
+            <td><span class="th-only">แยกกราวด์เพื่อความปลอดภัยตอนใช้สโคปวัดวงจรที่ไม่แยกกราวด์ — ดู<a href="switching-psu.html">ภาคจ่ายไฟสวิตชิ่ง</a></span><span class="en-only">Ground separation for safe scoping of non-isolated boards — see <a href="switching-psu.html">switching PSU</a></span></td>
+          </tr>
+          <tr>
+            <td><strong>Auto</strong></td>
+            <td><span class="th-only">ขดเดียว มีแท็ป</span><span class="en-only">One winding with a tap</span></td>
+            <td><span class="th-only">หม้อแปลงปรับแรงดัน (variac), หม้อแปลง 110/220V ราคาถูก — <strong>ไม่แยกทางไฟฟ้า</strong></span><span class="en-only">Variacs, cheap 110/220V converters — <strong>no isolation</strong></span></td>
+          </tr>
+          <tr>
+            <td><strong>Current (CT)</strong></td>
+            <td><span class="th-only">คล้องสายเส้นเดียว = ขดปฐมภูมิ 1 รอบ</span><span class="en-only">Clamped on one wire = a 1-turn primary</span></td>
+            <td><span class="th-only">วัดกระแสโดยไม่ต้องตัดสาย — แคลมป์มิเตอร์ และตัววัดกระแสบนบอร์ด<a href="induction-stove.html">เตาแม่เหล็กไฟฟ้า</a></span><span class="en-only">Measuring current without breaking the circuit — clamp meters and the sensor on an <a href="induction-stove.html">induction hob</a> board</span></td>
+          </tr>
+        </table>
+      </div>
+      <div class="warn-box">
+        <span class="th-only">⚠️ <strong>ห้ามเปิดวงจรขดทุติยภูมิของ CT ขณะที่ยังมีกระแสไหลในสายที่คล้องอยู่</strong> — แรงดันจะพุ่งสูงมากจนอันตรายถึงชีวิตและฉนวนพัง ต้องลัดขั้วมันไว้ก่อนถอดเสมอ</span>
+        <span class="en-only">⚠️ <strong>Never open-circuit a CT's secondary while current flows in the wire it surrounds</strong> — the voltage rises to lethal levels and destroys the insulation. Short its terminals before disconnecting.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 3. ซิม ──────────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ทดลอง: หม้อแปลง 3 โหมด</span><span class="en-only">Try It: Three Modes</span></div>
+    <div class="card">
+      <p class="th-only">เทียบ <strong>หม้อแปลงอุดมคติ</strong> ในตำรา กับ <strong>ของจริงที่มีการสูญเสีย</strong> และดูว่าเกิดอะไรขึ้นถ้า <strong>ป้อนไฟ DC</strong></p>
+      <p class="en-only">Compare the <strong>ideal transformer</strong> of the textbook with a <strong>real lossy one</strong>, and see what happens on <strong>DC</strong>.</p>
+
+      <div class="sim-wrap" id="transformer-sim">
+        <canvas id="tf-canvas" class="sim-screen" width="520" height="300" aria-label="Transformer simulator"></canvas>
+        <div class="sim-panel">
+          <div class="sim-modes">
+            <button id="tf-mode-ideal" class="active" type="button">📐 <span class="th-only">อุดมคติ</span><span class="en-only">Ideal</span></button>
+            <button id="tf-mode-real" type="button">🔥 <span class="th-only">มีการสูญเสีย</span><span class="en-only">With losses</span></button>
+            <button id="tf-mode-dc" type="button">⚠️ <span class="th-only">ป้อนไฟ DC</span><span class="en-only">DC input</span></button>
+          </div>
+
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="tf-n1"><span class="th-only">รอบขดปฐมภูมิ N1</span><span class="en-only">Primary turns N1</span></label>
+              <span id="tf-n1-val">500 รอบ</span>
+            </div>
+            <input type="range" id="tf-n1" min="50" max="1200" step="10" value="500">
+          </div>
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="tf-n2"><span class="th-only">รอบขดทุติยภูมิ N2</span><span class="en-only">Secondary turns N2</span></label>
+              <span id="tf-n2-val">50 รอบ</span>
+            </div>
+            <input type="range" id="tf-n2" min="10" max="1200" step="10" value="50">
+          </div>
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="tf-v1"><span class="th-only">แรงดันเข้า V1</span><span class="en-only">Input voltage V1</span></label>
+              <span id="tf-v1-val">220 V</span>
+            </div>
+            <input type="range" id="tf-v1" min="12" max="240" step="1" value="220">
+          </div>
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="tf-rl"><span class="th-only">โหลด RL</span><span class="en-only">Load RL</span></label>
+              <span id="tf-rl-val">20 Ω</span>
+            </div>
+            <input type="range" id="tf-rl" min="2" max="200" step="1" value="20">
+          </div>
+
+          <div class="sim-readout">
+            <div class="sim-rb"><div class="sim-rl" id="tf-l1">แรงดันออก V2</div><div class="sim-rv" id="tf-out1">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="tf-l2">กระแสออก I2</div><div class="sim-rv" id="tf-out2">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="tf-l3">กระแสเข้า I1</div><div class="sim-rv" id="tf-out3">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="tf-l4">ประสิทธิภาพ η</div><div class="sim-rv" id="tf-out4">—</div></div>
+          </div>
+          <div class="sim-verdict" id="tf-verdict">—</div>
+        </div>
+      </div>
+
+      <div class="info-box" style="margin-top:1rem;">
+        <span class="th-only">🔎 <strong>ลองอันนี้:</strong> อยู่โหมด "มีการสูญเสีย" แล้วลากโหลด RL จาก 200 Ω ลงมาเหลือ 2 Ω — <strong>แรงดันออกจะตกลงเรื่อย ๆ</strong> ทั้งที่ไม่ได้แตะสไลเดอร์ V1 หรือจำนวนรอบเลย นี่คือ <strong>voltage regulation</strong> ของหม้อแปลง และเป็นเหตุผลที่อะแดปเตอร์ถูก ๆ วัดตอนไม่มีโหลดได้ 14 V แต่พอต่อโหลดจริงเหลือ 12 V</span>
+        <span class="en-only">🔎 <strong>Try this:</strong> in "with losses" mode, drag RL from 200 Ω down to 2 Ω — <strong>the output sags</strong> without touching V1 or the turns. That is a transformer's <strong>voltage regulation</strong>, and it is why a cheap adapter reads 14 V unloaded but 12 V in use.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 4. การสูญเสีย ───────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">การสูญเสียและประสิทธิภาพ</span><span class="en-only">Losses &amp; Efficiency</span></div>
+    <div class="card">
+      <div class="formula-box" style="text-align:center;">
+        <div class="formula">η = (P<sub>out</sub> / P<sub>in</sub>) × 100%</div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <tr>
+            <th><span class="th-only">การสูญเสีย</span><span class="en-only">Loss</span></th>
+            <th><span class="th-only">เกิดจาก</span><span class="en-only">Cause</span></th>
+            <th><span class="th-only">สังเกตยังไง</span><span class="en-only">How to spot it</span></th>
+          </tr>
+          <tr>
+            <td><span class="th-only">คอปเปอร์ลอส</span><span class="en-only">Copper loss</span><br>(I²R)</td>
+            <td><span class="th-only">ความต้านทานของลวดทองแดง — <strong>แปรตามกระแสยกกำลังสอง</strong></span><span class="en-only">Resistance of the copper — <strong>rises with the square of current</strong></span></td>
+            <td><span class="th-only">ยิ่งโหลดหนัก ยิ่งร้อนและแรงดันยิ่งตก</span><span class="en-only">Heavier load → hotter and more voltage sag</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">คอร์ลอส</span><span class="en-only">Core loss</span></td>
+            <td><span class="th-only">ฮิสเทอรีซิส + กระแสไหลวนในแกนเหล็ก — <strong>เกิดตลอดเวลาที่จ่ายไฟ</strong></span><span class="en-only">Hysteresis + eddy currents — <strong>present whenever it is energised</strong></span></td>
+            <td><span class="th-only">อุ่น ๆ และมีเสียงฮัมแม้ไม่ได้ต่อโหลดอะไรเลย</span><span class="en-only">Warm and humming even with nothing plugged in</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">ฟลักซ์รั่ว</span><span class="en-only">Leakage flux</span></td>
+            <td><span class="th-only">เส้นแรงแม่เหล็กบางส่วนไม่วิ่งผ่านขดที่สอง</span><span class="en-only">Some flux misses the second coil</span></td>
+            <td><span class="th-only">แรงดันออกต่ำกว่าที่คำนวณเล็กน้อย</span><span class="en-only">Output slightly below the calculated value</span></td>
+          </tr>
+        </table>
+      </div>
+      <div class="info-box">
+        <span class="th-only">💡 <strong>ทำไมแกนเหล็กถึงเป็นแผ่นบาง ๆ ซ้อนกัน</strong> ไม่ใช่เหล็กตัน? เพื่อตัดทางเดินของ <strong>กระแสไหลวน (eddy current)</strong> ให้สั้นลง — หลักการเดียวกับที่<a href="induction-stove.html">เตาแม่เหล็กไฟฟ้า</a>ใช้ <em>สร้าง</em> ความร้อน แต่ในหม้อแปลงเราต้องการ <em>กำจัด</em> มัน</span>
+        <span class="en-only">💡 <strong>Why is the core made of thin stacked laminations</strong> instead of solid iron? To break up the path of <strong>eddy currents</strong> — the very effect an <a href="induction-stove.html">induction hob</a> uses to <em>make</em> heat is the one a transformer must <em>suppress</em>.</span>
+      </div>
+      <p class="th-only" style="margin-top:0.75rem;"><strong>พิกัด VA ไม่ใช่วัตต์:</strong> หม้อแปลงระบุพิกัดเป็น <strong>VA</strong> (โวลต์-แอมป์) ไม่ใช่วัตต์ เพราะสิ่งที่ทำให้ขดลวดร้อนคือ <strong>กระแส</strong> ไม่ใช่กำลังจริงที่โหลดใช้ — โหลดที่มีเพาเวอร์แฟกเตอร์ต่ำจะดึงกระแสมากกว่าที่ตัวเลขวัตต์บอกไว้</p>
+      <p class="en-only" style="margin-top:0.75rem;"><strong>VA is not watts:</strong> transformers are rated in <strong>VA</strong> because what heats the winding is <strong>current</strong>, not the real power the load consumes — a poor power factor draws more current than the wattage suggests.</p>
+    </div>
+  </div>
+
+  <!-- ── 5. การวัดและตรวจเช็ค ────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">การวัดและตรวจเช็คด้วยมัลติมิเตอร์</span><span class="en-only">Testing with a Multimeter</span></div>
+    <div class="card">
+      <div style="overflow-x:auto;">
+        <table>
+          <tr>
+            <th><span class="th-only">วัดอะไร</span><span class="en-only">Measurement</span></th>
+            <th><span class="th-only">ค่าที่ควรได้</span><span class="en-only">Expected</span></th>
+            <th><span class="th-only">ถ้าผิดแปลว่า</span><span class="en-only">If wrong</span></th>
+          </tr>
+          <tr>
+            <td><span class="th-only">ความต้านทานขดปฐมภูมิ</span><span class="en-only">Primary resistance</span></td>
+            <td><span class="th-only">ไม่กี่โอห์มถึงหลายร้อยโอห์ม (รอบมาก = โอห์มสูง)</span><span class="en-only">A few ohms to a few hundred (more turns = more ohms)</span></td>
+            <td><span class="th-only">OL = ขดขาด (มักขาดที่ <strong>เทอร์มอลฟิวส์ในตัว</strong> ใต้เทปพันขด ไม่ใช่ลวดขาด)</span><span class="en-only">OL = open (often the <strong>built-in thermal fuse</strong> under the tape, not the wire)</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">ความต้านทานขดทุติยภูมิ</span><span class="en-only">Secondary resistance</span></td>
+            <td><span class="th-only">ต่ำกว่าขดปฐมภูมิเสมอ (ในหม้อแปลง step-down)</span><span class="en-only">Always lower than the primary (in a step-down)</span></td>
+            <td><span class="th-only">0 Ω สนิท = ช็อตรอบ</span><span class="en-only">A dead 0 Ω suggests shorted turns</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only"><strong>ขดปฐมภูมิ ↔ ขดทุติยภูมิ</strong></span><span class="en-only"><strong>Primary ↔ secondary</strong></span></td>
+            <td><span class="th-only"><strong>ต้อง OL เท่านั้น</strong> — สองขดไม่ต่อถึงกันทางไฟฟ้า</span><span class="en-only"><strong>Must be OL</strong> — the coils are not electrically connected</span></td>
+            <td><span class="th-only">ถ้าขึ้นค่า = ฉนวนพัง <strong>ไฟบ้านทะลุมาฝั่งแรงดันต่ำ อันตรายมาก ทิ้งอย่างเดียว</strong></span><span class="en-only">Any reading = failed insulation, <strong>mains on the low-voltage side. Scrap it.</strong></span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">ขดลวด ↔ แกนเหล็ก/ตัวถัง</span><span class="en-only">Winding ↔ core/frame</span></td>
+            <td><span class="th-only">ต้อง OL</span><span class="en-only">Must be OL</span></td>
+            <td><span class="th-only">มีค่า = ไฟรั่วลงโครง จะทำให้<a href="home-wiring.html">เครื่องตัดไฟรั่ว</a>ตัด</span><span class="en-only">A reading means leakage to the frame — the <a href="home-wiring.html">RCD</a> will trip</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">แรงดันออกขณะจ่ายไฟ</span><span class="en-only">Output voltage, energised</span></td>
+            <td><span class="th-only">ตอนไม่มีโหลดจะ <strong>สูงกว่า</strong> ที่ระบุ ~10% ถือว่าปกติ</span><span class="en-only">About 10% <strong>above</strong> the rating with no load — normal</span></td>
+            <td><span class="th-only">ต่ำมากหรือตกฮวบเมื่อต่อโหลด = ช็อตรอบบางส่วน</span><span class="en-only">Very low, or collapsing under load = partially shorted turns</span></td>
+          </tr>
+        </table>
+      </div>
+      <div class="warn-box">
+        <span class="th-only">⚠️ <strong>ช็อตรอบ (shorted turns) วัดด้วยโอห์มมิเตอร์แทบไม่เจอ</strong> เพราะขดที่ช็อตไปไม่กี่รอบทำให้ค่าโอห์มเปลี่ยนน้อยมาก อาการที่บอกได้จริงคือ <strong>ร้อนจัดและเสียงฮัมดังผิดปกติทั้งที่ยังไม่ได้ต่อโหลด</strong> และกินกระแสด้านเข้าสูงผิดปกติ</span>
+        <span class="en-only">⚠️ <strong>Shorted turns barely show on an ohmmeter</strong> — a few shorted turns change the reading very little. The real symptoms are <strong>getting hot and humming loudly with no load connected</strong>, plus abnormally high input current.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 6. ความปลอดภัย ─────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ความปลอดภัย</span><span class="en-only">Safety</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li><strong>หม้อแปลงแรงสูงในไมโครเวฟจ่ายได้ 2,000 V ขึ้นไป</strong> — ห้ามจ่ายไฟทดสอบขณะเปิดฝา และต้อง<a href="microwave.html">คายประจุคาปาซิเตอร์แรงสูง</a>ก่อนแตะทุกครั้ง</li>
+        <li><strong>Auto transformer ไม่แยกทางไฟฟ้า</strong> — ฝั่ง "แรงดันต่ำ" ยังต่อถึงไฟบ้านอยู่ อย่านึกว่าปลอดภัยเหมือน isolation</li>
+        <li><strong>อย่าลัดขั้วขดทุติยภูมิ</strong> ขณะจ่ายไฟ — กระแสจะพุ่งจนขดไหม้ในไม่กี่วินาที</li>
+        <li>เปลี่ยนหม้อแปลงต้องได้ <strong>ทั้งแรงดันและพิกัด VA</strong> เท่าเดิมหรือมากกว่า — ตัวเล็กกว่าจะร้อนจนพัง</li>
+        <li>หม้อแปลงหลายรุ่นมี <strong>เทอร์มอลฟิวส์ฝังในขด</strong> ที่ซ่อมไม่ได้ — ขาดแล้วต้องเปลี่ยนทั้งตัว</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li><strong>A microwave HV transformer delivers 2,000 V or more</strong> — never energise it with the case open, and always <a href="microwave.html">discharge the HV capacitor</a> first.</li>
+        <li><strong>An auto transformer gives no isolation</strong> — its "low-voltage" side is still tied to the mains.</li>
+        <li><strong>Never short the secondary</strong> while energised — the winding burns within seconds.</li>
+        <li>A replacement must match <strong>both the voltage and the VA rating</strong> or exceed them; undersized runs hot and fails.</li>
+        <li>Many units hide a <strong>thermal fuse inside the winding</strong> that cannot be replaced — once open, the transformer is scrap.</li>
+      </ul>
+      <div class="info-box">
+        <span class="th-only">📚 อ่านต่อ: <a href="inductor.html">ตัวเหนี่ยวนำ</a> (ที่มาของการเหนี่ยวนำแม่เหล็กไฟฟ้า) · <a href="power-supply.html">แหล่งจ่ายไฟ</a> (หม้อแปลงเป็นภาคแรกของแหล่งจ่ายไฟเชิงเส้น) · <a href="switching-psu.html">ภาคจ่ายไฟสวิตชิ่ง</a> (ทำไมสมัยนี้ถึงใช้หม้อแปลงตัวจิ๋วแทนตัวใหญ่ได้)</span>
+        <span class="en-only">📚 See also: <a href="inductor.html">Inductor</a> (where induction comes from) · <a href="power-supply.html">Power Supply</a> (the transformer is the first stage of a linear supply) · <a href="switching-psu.html">Switching PSU</a> (why a tiny transformer can replace a big one today)</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer>
+  <strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong>
+  <strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong>
+</footer>
+<script>const CURRENT_PAGE='transformer';</script>
+<script src="js/transformer-sim.js"></script>
+<script src="js/nav.js"></script>
+</body>
+</html>

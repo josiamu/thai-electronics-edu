@@ -14,6 +14,10 @@
  *             (cat/file จะถูกแนบเป็น query string ให้เอง → downloads.js อ่านตอนโหลดหน้า)
  */
 const ANNOUNCEMENTS = [
+  { id:'lesson-transformer-2026-08-28', date:'2026-08-28', type:'lesson',
+    th:"บทเรียนใหม่: <b>🔄 หม้อแปลงไฟฟ้า</b> — แยกออกมาเป็นบทเต็มของตัวเอง · ซิม <b>3 โหมด</b>: อุดมคติ (V กับ I แลกกันพอดี) / มีการสูญเสีย (<b>ลากโหลดหนักขึ้นแล้วแรงดันออกตกให้เห็น</b> = เหตุผลที่อะแดปเตอร์วัดตอนไม่มีโหลดได้ 14V แต่ใช้จริงเหลือ 12V) / <b>ป้อนไฟ DC</b> ที่ฟลักซ์หยุดนิ่ง ไม่มีไฟออก และขดปฐมภูมิกินกระแสจนไหม้ · พร้อมตารางวัดค่าด้วยมัลติมิเตอร์ที่เน้นว่า <b>ขดปฐมภูมิกับทุติยภูมิต้องวัดได้ OL เท่านั้น</b> ถ้าขึ้นค่าเมื่อไหร่คือไฟบ้านทะลุมาฝั่งแรงดันต่ำ",
+    en:"New lesson: <b>🔄 Transformers</b> — now a full lesson of its own · a <b>three-mode simulator</b>: ideal (voltage and current trade evenly), with losses (<b>drag the load heavier and watch the output sag</b> — why a cheap adapter reads 14V unloaded but 12V in use), and <b>DC input</b>, where the flux freezes, nothing comes out, and the primary draws current until it burns · plus a testing table stressing that <b>primary to secondary must read OL</b> — any reading means mains has reached the low-voltage side",
+    href:'transformer.html' },
   { id:'lesson-kirchhoff-2026-08-28', date:'2026-08-28', type:'lesson',
     th:'บทเรียนใหม่: <b>🔗 กฎของเคอร์ชฮอฟฟ์ (KVL/KCL)</b> — กฎที่ใช้ตอนที่กฎของโอห์มตัวเดียวเอาไม่อยู่ · มี <b>ซิมวงจร 2 ลูป 2 แหล่งจ่ายโต้ตอบได้</b> ปรับค่าอะไรก็ได้แล้วกฎทั้งสองข้อยังเป็นจริงเสมอ · ลองลาก V2 ลงต่ำๆ แล้วดู <b>กระแสไหลกลับทาง</b> = แบตเตอรี่กำลังถูกชาร์จ — สอนว่าคำตอบติดลบไม่ใช่คำตอบผิด · ท้ายบทโยงให้เห็นว่า KCL คือสมการที่<b>เบรดบอร์ดเสมือนในเว็บนี้แก้ทุกเฟรม</b>',
     en:"New lesson: <b>🔗 Kirchhoff's Laws (KVL/KCL)</b> — what you reach for when Ohm's Law alone runs out · includes an <b>interactive two-loop, two-source circuit</b>: change anything you like and both laws still hold · drag V2 low and watch the <b>current reverse</b> — a battery being charged, and proof that a negative answer is not a wrong answer · the lesson closes by showing that KCL is the very equation <b>this site's breadboard solves every frame</b>",

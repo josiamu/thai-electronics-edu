@@ -21,7 +21,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | 📱 **Responsive** | ใช้งานได้ทั้ง Desktop, Tablet, Mobile |
 | 🔬 **เครื่องมือจำลองเชิงโต้ตอบ** | เบรดบอร์ดเสมือน, ออสซิลโลสโคป, BJT switch, เครื่องกำเนิดสัญญาณ, แหล่งจ่ายไฟ, เรียงกระแส AC→DC, ออปโตคัปเปลอร์, สวิตช์ความเร็วพัดลม, จำลองวงจร |
 | 🧮 **7 เครื่องคิดเลข** | รหัสสี, โอห์ม, กำลัง, พลังงาน, อนุกรม/ขนาน, แปลงหน่วย |
-| 📝 **แบบทดสอบ 100 ข้อ** | 15 หมวด, สุ่มข้อ, บันทึกคะแนนสูงสุด — มีทั้ง TH และ EN |
+| 📝 **แบบทดสอบ 108 ข้อ** | 16 หมวด, สุ่มข้อ, บันทึกคะแนนสูงสุด — มีทั้ง TH และ EN |
 | 📥 **PDF 55 ไฟล์** | ดาวน์โหลดใบเนื้อหา + ใบงานประกอบการเรียน |
 | 🖨️ **Print-friendly** | หน้าสูตรสรุปพิมพ์ออกกระดาษ A4 ได้เลย |
 
@@ -48,6 +48,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | IGBT ทรานซิสเตอร์กำลัง | IGBT Power Transistor | `igbt.html` (มีซิมเทียบกำลังสูญเสีย MOSFET/IGBT) |
 | ไทริสเตอร์ SCR/TRIAC/DIAC | Thyristors (SCR/TRIAC/DIAC) | `thyristor.html` |
 | ตัวเหนี่ยวนำและหม้อแปลง | Inductor & Transformer | `inductor.html` |
+| หม้อแปลงไฟฟ้า | Transformer | `transformer.html` (มีซิม 3 โหมด: อุดมคติ / มีการสูญเสีย / ป้อนไฟ DC) |
 | รีเลย์ | Relay | `relay.html` |
 | ออปโตอิเล็กทรอนิกส์ | Optoelectronics | `optoelectronics.html` |
 | แหล่งจ่ายไฟ | Power Supply | `power-supply.html` |
@@ -96,7 +97,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | `relay-lab.html` | ห้องแล็บวงจรควบคุมรีเลย์ MY4 (4PDT 24VDC + ปุ่มกด/ไฟ/บัซเซอร์, รางไฟ + จุดพักไฟ TB-1…TB-10 ลดสายพันกัน, คลิกไฮไลต์ไล่วงจร, 🎯 ภารกิจ 7 ข้อพร้อมตรวจคำตอบอัตโนมัติ, 9 ตัวอย่าง self-holding/interlock/AND-OR/fail-safe NC/กลับทางหมุนมอเตอร์, มุมมองแผนภาพ Ladder, บันทึก/แชร์ลิงก์) | MY4 relay control lab (4PDT 24VDC + buttons/lamps/buzzer, power rails + TB-1…TB-10 terminal block, click-to-trace highlight, 7 auto-graded missions, 9 examples incl. fail-safe NC and motor forward/reverse, ladder view, save/share) |
 | `formulas.html` | สูตรสรุป + พิมพ์ PDF | Formula summary + print |
 | `tools.html` | เครื่องคิดเลขเชิงโต้ตอบ 7 ตัว | 7 interactive calculators |
-| `quiz.html` | แบบทดสอบ 100 ข้อ 15 หมวด | 100-question quiz, 15 categories |
+| `quiz.html` | แบบทดสอบ 108 ข้อ 16 หมวด | 108-question quiz, 16 categories |
 | `downloads.html` | ดาวน์โหลด PDF 55 ไฟล์ (รวมหัวข้อ "ฟอร์มตรวจเช็ค" และ "งานซ่อม") | Download 55 PDF files (incl. "Check Forms" and "Repair" sections) |
 
 ---
@@ -113,13 +114,12 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 
 | # | บท | ต่อยอดจาก |
 |---|---|---|
-| 4 | 🔄 **หม้อแปลง** | อัตราส่วนรอบ, step up/down, Vp/Vs — โยงเข้าไมโครเวฟ/SMPS ที่มีอยู่ |
-| 5 | 🎛️ **อินเวอร์เตอร์ / VFD** | DC→AC คุมความเร็วมอเตอร์ — ต่อยอดจาก `power-supply.html` + `igbt.html` |
-| 6 | 📉 **ฟิลเตอร์และเรโซแนนซ์** | RC/RL/RLC low/high-pass, ความถี่ตัด, เรโซแนนซ์ |
-| 7 | 🧊 **เครื่องใช้ไฟฟ้าระบบอินเวอร์เตอร์** | มุมผู้ใช้ (กลุ่มงานปฏิบัติ) — ประหยัดไฟ วิธีเลือก ข้อควรระวัง |
+| 4 | 🎛️ **อินเวอร์เตอร์ / VFD** | DC→AC คุมความเร็วมอเตอร์ — ต่อยอดจาก `power-supply.html` + `igbt.html` |
+| 5 | 📉 **ฟิลเตอร์และเรโซแนนซ์** | RC/RL/RLC low/high-pass, ความถี่ตัด, เรโซแนนซ์ |
+| 6 | 🧊 **เครื่องใช้ไฟฟ้าระบบอินเวอร์เตอร์** | มุมผู้ใช้ (กลุ่มงานปฏิบัติ) — ประหยัดไฟ วิธีเลือก ข้อควรระวัง |
 
 > ✅ **เสร็จแล้ว (เคยอยู่ใน roadmap):** บทลอจิกเกต (`logic-gates.html`), ไอซี 555 (`555.html`),
-> ออปแอมป์ (`op-amp.html`), **ห้องแล็บวงจรรีเลย์ MY4 (`relay-lab.html`)**, **ไทริสเตอร์ SCR/TRIAC/DIAC (`thyristor.html`)**, **กฎของเคอร์ชฮอฟฟ์ (`kirchhoff.html`)** — ทั้งหมดมี sim เชิงโต้ตอบครบแล้ว
+> ออปแอมป์ (`op-amp.html`), **ห้องแล็บวงจรรีเลย์ MY4 (`relay-lab.html`)**, **ไทริสเตอร์ SCR/TRIAC/DIAC (`thyristor.html`)**, **กฎของเคอร์ชฮอฟฟ์ (`kirchhoff.html`)**, **หม้อแปลงไฟฟ้า (`transformer.html`)** — ทั้งหมดมี sim เชิงโต้ตอบครบแล้ว
 
 ---
 
@@ -194,6 +194,7 @@ git push
 ├── js/simulation.js        — Circuit simulator logic
 ├── js/oscilloscope.js      — Interactive I-V curve simulator
 ├── js/osc-reader.js        — Scope reading trainer
+├── js/transformer-sim.js   — Transformer sim (ideal / lossy with real voltage regulation / DC input that burns the primary)
 ├── js/kirchhoff-sim.js     — Two-loop, two-source circuit sim (live nodal solve; KCL and KVL both measured from the same answer)
 ├── js/bjt-steps.js         — Interactive step-by-step: how a BJT works (5 clickable steps, animated cross-section)
 ├── js/bjt-circuit.js       — Interactive step-by-step: a real 5V circuit (R_B → NPN → LED + R_C, 6 steps, HIGH/LOW toggle)
@@ -226,7 +227,7 @@ git push
 ├── index.html           — Home page
 │   ├── electricity.html / ohm.html / kirchhoff.html   — Fundamentals
 │   ├── resistor.html / diode.html / transistor.html / igbt.html / thyristor.html / ic.html / 555.html / op-amp.html / logic-gates.html / relay.html
-│   │   capacitor.html / inductor.html / optoelectronics.html / power-supply.html   — Components
+│   │   capacitor.html / inductor.html / transformer.html / optoelectronics.html / power-supply.html   — Components
 │   ├── multimeter.html / signal-generator.html / oscilloscope.html  — Measurement
 │   ├── fan-motor.html / switching-psu.html / induction-stove.html / microwave.html
 │   │   water-heater.html / rice-cooker.html / iron.html                 — Appliance repair
