@@ -21,7 +21,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | 📱 **Responsive** | ใช้งานได้ทั้ง Desktop, Tablet, Mobile |
 | 🔬 **เครื่องมือจำลองเชิงโต้ตอบ** | เบรดบอร์ดเสมือน, ออสซิลโลสโคป, BJT switch, เครื่องกำเนิดสัญญาณ, แหล่งจ่ายไฟ, เรียงกระแส AC→DC, ออปโตคัปเปลอร์, สวิตช์ความเร็วพัดลม, จำลองวงจร |
 | 🧮 **7 เครื่องคิดเลข** | รหัสสี, โอห์ม, กำลัง, พลังงาน, อนุกรม/ขนาน, แปลงหน่วย |
-| 📝 **แบบทดสอบ 84 ข้อ** | 13 หมวด, สุ่มข้อ, บันทึกคะแนนสูงสุด — มีทั้ง TH และ EN |
+| 📝 **แบบทดสอบ 92 ข้อ** | 14 หมวด, สุ่มข้อ, บันทึกคะแนนสูงสุด — มีทั้ง TH และ EN |
 | 📥 **PDF 55 ไฟล์** | ดาวน์โหลดใบเนื้อหา + ใบงานประกอบการเรียน |
 | 🖨️ **Print-friendly** | หน้าสูตรสรุปพิมพ์ออกกระดาษ A4 ได้เลย |
 
@@ -106,7 +106,17 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 |---|---|---|
 | 1 | 🎮 **Resistor Color Code Game** | เกม drill แบบเร็ว — สุ่มแถบสีให้ทายค่าความต้านทาน มีคะแนนและจับเวลา เล่นซ้ำได้ |
 | 2 | ↩️ **Undo / Redo บนเบรดบอร์ด** | ย้อน/ทำซ้ำการวาง–ลบอุปกรณ์ (Ctrl+Z / Ctrl+Y) |
-| 3 | 🎯 **โจทย์/ภารกิจบนเบรดบอร์ด** | การ์ดเป้าหมาย เช่น "ทำให้ LED ติด" / "แบ่งแรงดันให้ได้ ~5V" พร้อมระบบตรวจอัตโนมัติ |
+| 3 | 🎯 **โจทย์/ภารกิจบนเบรดบอร์ด** | การ์ดเป้าหมาย เช่น "ทำให้ LED ติด" / "แบ่งแรงดันให้ได้ ~5V" พร้อมระบบตรวจอัตโนมัติ — แบบเดียวกับภารกิจ 7 ข้อใน `relay-lab.html` ที่ทำไปแล้ว |
+
+**บทเรียนที่วางแผนไว้ / Planned lessons**
+
+| # | บท | ต่อยอดจาก |
+|---|---|---|
+| 4 | ⚡ **กฎของเคอร์ชฮอฟฟ์ (KVL/KCL)** | ทฤษฎีเบื้องหลังโซลเวอร์ MNA ที่เบรดบอร์ดใช้อยู่ — ต่อยอดจาก `ohm.html` |
+| 5 | 🔄 **หม้อแปลง** | อัตราส่วนรอบ, step up/down, Vp/Vs — โยงเข้าไมโครเวฟ/SMPS ที่มีอยู่ |
+| 6 | 🎛️ **อินเวอร์เตอร์ / VFD** | DC→AC คุมความเร็วมอเตอร์ — ต่อยอดจาก `power-supply.html` + `igbt.html` |
+| 7 | 📉 **ฟิลเตอร์และเรโซแนนซ์** | RC/RL/RLC low/high-pass, ความถี่ตัด, เรโซแนนซ์ |
+| 8 | 🧊 **เครื่องใช้ไฟฟ้าระบบอินเวอร์เตอร์** | มุมผู้ใช้ (กลุ่มงานปฏิบัติ) — ประหยัดไฟ วิธีเลือก ข้อควรระวัง |
 
 > ✅ **เสร็จแล้ว (เคยอยู่ใน roadmap):** บทลอจิกเกต (`logic-gates.html`), ไอซี 555 (`555.html`),
 > ออปแอมป์ (`op-amp.html`), **ห้องแล็บวงจรรีเลย์ MY4 (`relay-lab.html`)**, **ไทริสเตอร์ SCR/TRIAC/DIAC (`thyristor.html`)** — ทั้งหมดมี sim เชิงโต้ตอบครบแล้ว
@@ -193,6 +203,11 @@ git push
 ├── js/water-heater-sim.js  — Instant water heater sim (ΔT vs power/flow/inlet temperature, plus an earth-leakage mode where the ELCB trips at 30 mA)
 ├── js/rice-circuit.js      — Interactive step-by-step: rice cooker (6 mechanical steps + 3 digital steps, 7 fault modes, Cook button with a real Curie-point release)
 ├── js/rice-sim.js          — Rice cooking curve (ramp → 100°C plateau → Curie release, with a weak-magnet mode)
+├── js/wm-twin.js            — Interactive step-by-step: twin-tub washer (5 steps, 4 fault modes, wash/spin motors + dual run capacitor)
+├── js/wm-top.js             — Interactive step-by-step: inverter top-loader (6 steps, 7 fault modes, 300V bus → SMPS → IPM → BLDC, TP1–TP3 readouts)
+├── js/wm-front.js           — Interactive step-by-step: direct-drive front loader (5 steps, 5 fault modes, door lock gates every other load)
+├── js/iron-sim.js           — Dry-iron thermostat sim (heat-up curve + ±6°C hysteresis, welded-contact mode ends with the thermal fuse blowing)
+├── js/iron-circuit.js       — Interactive step-by-step: dry-iron circuit (5 steps, 7 fault modes, neon lamp wired across the element)
 ├── js/signal-gen-sim.js    — Waveform generator
 ├── js/capacitor-sim.js     — RC charge/discharge simulator
 ├── js/power-supply-sim.js  — Power supply (AC→DC) simulator
@@ -212,6 +227,9 @@ git push
 │   ├── resistor.html / diode.html / transistor.html / igbt.html / thyristor.html / ic.html / 555.html / op-amp.html / logic-gates.html / relay.html
 │   │   capacitor.html / inductor.html / optoelectronics.html / power-supply.html   — Components
 │   ├── multimeter.html / signal-generator.html / oscilloscope.html  — Measurement
+│   ├── fan-motor.html / switching-psu.html / induction-stove.html / microwave.html
+│   │   water-heater.html / rice-cooker.html / iron.html                 — Appliance repair
+│   ├── washing-machine.html (hub) / -twin.html / -top.html / -front.html   — Washing machines
 │   ├── soldering.html / home-wiring.html           — Practical
 │   ├── simulation.html / breadboard.html / relay-lab.html   — Interactive labs
 │   └── formulas.html / tools.html / quiz.html / downloads.html      — Tools & resources
