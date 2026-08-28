@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="กฎของเคอร์ชฮอฟฟ์ (KVL/KCL) | สื่อการเรียนการสอน" data-title-en="Kirchhoff's Laws (KVL/KCL) | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>กฎของเคอร์ชฮอฟฟ์ (KVL/KCL) | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🔗</div>
+    <div>
+      <h1 class="th-only">กฎของเคอร์ชฮอฟฟ์ (Kirchhoff's Laws)</h1>
+      <h1 class="en-only">Kirchhoff's Laws</h1>
+      <p>ΣI<sub>เข้า</sub> = ΣI<sub>ออก</sub> • ΣV<sub>รอบลูป</sub> = 0 • <span class="th-only">วิเคราะห์วงจรที่กฎของโอห์มตัวเดียวเอาไม่อยู่</span><span class="en-only">Solving circuits Ohm's Law alone cannot</span></p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ── 1. ทำไมต้องมีกฎนี้ ─────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ทำไมกฎของโอห์มถึงไม่พอ</span><span class="en-only">Why Ohm's Law Is Not Enough</span></div>
+    <div class="card">
+      <p class="th-only"><a href="ohm.html"><strong>กฎของโอห์ม</strong></a> ใช้ได้กับ <strong>อุปกรณ์ทีละตัว</strong> — รู้สองค่าก็หาค่าที่สามได้ แต่พอวงจรมีทางแยกหลายทาง หรือมีแหล่งจ่ายมากกว่าหนึ่งตัว เราจะเจอปัญหาว่า <strong>ไม่รู้ทั้งกระแสและแรงดันของสาขานั้นสักค่าเดียว</strong> จึงเริ่มต้นด้วยกฎของโอห์มไม่ได้</p>
+      <p class="en-only"><a href="ohm.html"><strong>Ohm's Law</strong></a> works on <strong>one component at a time</strong> — know two values and you get the third. But once a circuit has branches or more than one source, you often know <strong>neither the current nor the voltage</strong> of a branch, so there is nowhere to start.</p>
+      <p class="th-only" style="margin-top:0.75rem;"><strong>กุสตาฟ เคอร์ชฮอฟฟ์ (Gustav Kirchhoff, ค.ศ. 1845)</strong> เติมกฎอีก 2 ข้อที่บอกว่า <em>วงจรทั้งวงจร</em> ต้องประพฤติตัวยังไง ทำให้เราตั้งสมการได้มากพอที่จะแก้หาค่าที่ไม่รู้ทุกตัว</p>
+      <p class="en-only" style="margin-top:0.75rem;"><strong>Gustav Kirchhoff (1845)</strong> added two laws describing how the <em>whole circuit</em> must behave, giving us enough equations to solve for every unknown.</p>
+
+      <div class="grid-3" style="margin-top:1rem;">
+        <div class="formula-box">
+          <div style="color:var(--text-light);font-size:0.85rem;">KCL <span class="th-only">— กฎกระแส</span><span class="en-only">— Current Law</span></div>
+          <div class="formula">ΣI<sub>in</sub> = ΣI<sub>out</sub></div>
+          <div style="font-size:0.85rem;margin-top:0.25rem;"><span class="th-only">ที่ทุก <strong>จุดต่อ</strong> (node)</span><span class="en-only">At every <strong>node</strong></span></div>
+        </div>
+        <div class="formula-box">
+          <div style="color:var(--text-light);font-size:0.85rem;">KVL <span class="th-only">— กฎแรงดัน</span><span class="en-only">— Voltage Law</span></div>
+          <div class="formula">ΣV = 0</div>
+          <div style="font-size:0.85rem;margin-top:0.25rem;"><span class="th-only">รอบทุก <strong>ลูปปิด</strong> (loop)</span><span class="en-only">Around every closed <strong>loop</strong></span></div>
+        </div>
+        <div class="formula-box">
+          <div style="color:var(--text-light);font-size:0.85rem;"><span class="th-only">รากฐาน</span><span class="en-only">Foundation</span></div>
+          <div class="formula">V = I × R</div>
+          <div style="font-size:0.85rem;margin-top:0.25rem;"><span class="th-only">ยังใช้กับอุปกรณ์แต่ละตัวเหมือนเดิม</span><span class="en-only">Still applies per component</span></div>
+        </div>
+      </div>
+      <div class="info-box">
+        <span class="th-only">💡 กฎทั้งสองไม่ได้มาแทนกฎของโอห์ม แต่ทำงาน <strong>ด้วยกัน</strong> — เคอร์ชฮอฟฟ์บอกว่าค่าต่าง ๆ ต้องสัมพันธ์กันยังไง ส่วนโอห์มบอกว่าอุปกรณ์แต่ละตัวแปลงแรงดันเป็นกระแสยังไง</span>
+        <span class="en-only">💡 These laws do not replace Ohm's Law — they work <strong>together</strong>. Kirchhoff says how the values must relate; Ohm says how each component turns voltage into current.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 2. KCL ─────────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">กฎกระแสของเคอร์ชฮอฟฟ์ (KCL)</span><span class="en-only">Kirchhoff's Current Law (KCL)</span></div>
+    <div class="card">
+      <p class="th-only"><strong>ที่จุดต่อใด ๆ ผลรวมของกระแสที่ไหลเข้า เท่ากับผลรวมของกระแสที่ไหลออกเสมอ</strong></p>
+      <p class="en-only"><strong>At any node, the sum of currents flowing in equals the sum flowing out.</strong></p>
+      <div class="formula-box" style="text-align:center;">
+        <div class="formula">I₁ + I₂ + I₃ + … = I₄ + I₅ + …</div>
+        <div style="font-size:0.9rem;margin-top:0.4rem;color:var(--text-light);">
+          <span class="th-only">หรือเขียนรวมเป็น ΣI = 0 เมื่อกำหนดให้กระแสไหลออกมีเครื่องหมายลบ</span>
+          <span class="en-only">Or as ΣI = 0, taking outgoing currents as negative</span>
+        </div>
+      </div>
+      <p class="th-only"><strong>เหตุผลทางฟิสิกส์:</strong> จุดต่อคือรอยเชื่อมของสายไฟ มันไม่ใช่ถังเก็บ — <strong>ประจุไฟฟ้าเก็บสะสมอยู่ที่จุดต่อไม่ได้</strong> ประจุที่ไหลเข้ามาเท่าไหร่ต้องออกไปเท่านั้นในทันที (นี่คือกฎอนุรักษ์ประจุ)</p>
+      <p class="en-only"><strong>The physics:</strong> a node is just a junction of wires, not a tank — <strong>charge cannot pile up there</strong>. Whatever flows in must flow straight back out (conservation of charge).</p>
+
+      <div class="info-box">
+        <span class="th-only">🚰 <strong>เทียบกับน้ำ:</strong> ท่อสามทาง น้ำเข้า 10 ลิตร/นาที ถ้าออกทางหนึ่ง 4 ลิตร/นาที อีกทางต้องออก 6 ลิตร/นาทีเป๊ะ ๆ ไม่มีทางเป็นอย่างอื่น</span>
+        <span class="en-only">🚰 <strong>Water analogy:</strong> a tee fitting takes 10 L/min in; if one outlet carries 4 L/min, the other carries exactly 6 L/min. There is no other option.</span>
+      </div>
+      <p class="th-only" style="margin-top:0.75rem;"><strong>ใช้ทำอะไรได้จริง:</strong> นี่คือเหตุผลที่ <a href="electricity.html">วงจรขนาน</a> แบ่งกระแส และเป็นหลักการทำงานของ <a href="home-wiring.html">ELCB / เครื่องตัดไฟรั่ว</a> — มันวัดว่ากระแสที่ออกไปทางสาย L กับที่กลับมาทางสาย N <em>ไม่เท่ากัน</em> เมื่อไหร่ ส่วนต่างนั้นแปลว่ามีกระแสรั่วออกนอกวงจร</p>
+      <p class="en-only" style="margin-top:0.75rem;"><strong>Where you actually use it:</strong> this is why <a href="electricity.html">parallel circuits</a> divide current, and it is exactly how an <a href="home-wiring.html">ELCB / RCD</a> works — it watches for the current out on L and the current back on N <em>not matching</em>. The difference is leakage.</p>
+    </div>
+  </div>
+
+  <!-- ── 3. KVL ─────────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">กฎแรงดันของเคอร์ชฮอฟฟ์ (KVL)</span><span class="en-only">Kirchhoff's Voltage Law (KVL)</span></div>
+    <div class="card">
+      <p class="th-only"><strong>เดินรอบลูปปิดใด ๆ ครบหนึ่งรอบ ผลรวมของแรงดันทั้งหมดต้องเป็นศูนย์</strong></p>
+      <p class="en-only"><strong>Going once around any closed loop, all the voltages sum to zero.</strong></p>
+      <div class="formula-box" style="text-align:center;">
+        <div class="formula">ΣV<sub>แหล่งจ่าย</sub> = ΣV<sub>ตกคร่อม</sub></div>
+        <div style="font-size:0.9rem;margin-top:0.4rem;color:var(--text-light);">
+          <span class="th-only">แรงดันที่จ่ายเข้าไป ถูกใช้หมดพอดีในอุปกรณ์ที่อยู่ในลูปนั้น</span>
+          <span class="en-only">Every volt supplied is used up by the components in that loop</span>
+        </div>
+      </div>
+      <p class="th-only"><strong>เหตุผลทางฟิสิกส์:</strong> แรงดันคือ "พลังงานต่อประจุ" การเดินรอบลูปแล้วกลับมาที่จุดเดิม ก็เหมือนเดินขึ้นเขาแล้ววนกลับมาที่เดิม — <strong>ระดับความสูงสุทธิต้องเป็นศูนย์</strong> ไม่งั้นก็ไม่ได้กลับมาที่เดิมจริง</p>
+      <p class="en-only"><strong>The physics:</strong> voltage is energy per charge. Walking a loop back to where you started is like walking a hill and returning to the same spot — <strong>the net change in height must be zero</strong>, or you did not really return.</p>
+
+      <div class="warn-box">
+        <span class="th-only">⚠️ <strong>เรื่องเครื่องหมายที่พลาดกันบ่อยที่สุด:</strong> ต้องเลือกทิศเดินรอบลูปก่อน (เช่น ตามเข็มนาฬิกา) แล้ว <strong>ยึดทิศนั้นตลอดทั้งลูป</strong> — ผ่านแหล่งจ่ายจากขั้วลบไปบวก = <strong>+V</strong> · ผ่านตัวต้านทานตามทิศกระแส = <strong>−IR</strong> (แรงดันตก)</span>
+        <span class="en-only">⚠️ <strong>The most common sign mistake:</strong> pick a direction to walk the loop (say clockwise) and <strong>keep it for the whole loop</strong> — through a source from − to + is <strong>+V</strong>; through a resistor along the current is <strong>−IR</strong> (a drop).</span>
+      </div>
+      <p class="th-only" style="margin-top:0.75rem;"><strong>ใช้ทำอะไรได้จริง:</strong> KVL คือเหตุผลที่ <a href="resistor.html">วงจรแบ่งแรงดัน</a> ทำงาน และเป็นหลักที่ช่างใช้ตอน <strong>ไล่วัดแรงดันทีละจุด</strong> — ถ้าแรงดันที่จ่ายเข้าลูปไม่ได้หายไปกับโหลด แสดงว่ามันไปตกอยู่กับอย่างอื่นแทน เช่นหน้าสัมผัสที่ไหม้หรือสายที่ขาดใน</p>
+      <p class="en-only" style="margin-top:0.75rem;"><strong>Where you actually use it:</strong> KVL is why a <a href="resistor.html">voltage divider</a> works, and it is what a technician relies on when <strong>probing a chain point by point</strong> — if the supplied voltage is not dropping across the load, it is dropping across something else, like a burnt contact or a wire broken inside.</p>
+    </div>
+  </div>
+
+  <!-- ── 4. ซิมโต้ตอบ ───────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ทดลอง: วงจร 2 ลูป 2 แหล่งจ่าย</span><span class="en-only">Try It: A Two-Loop, Two-Source Circuit</span></div>
+    <div class="card">
+      <p class="th-only">วงจรนี้ <strong>กฎของโอห์มตัวเดียวแก้ไม่ได้</strong> เพราะมีแหล่งจ่ายสองตัวป้อนเข้าจุดต่อเดียวกัน ลองปรับค่าดู แล้วสังเกตว่าไม่ว่าจะปรับยังไง กฎทั้งสองข้อก็ยังเป็นจริงเสมอ</p>
+      <p class="en-only">Ohm's Law alone <strong>cannot solve this circuit</strong> — two sources feed the same node. Change any value and watch both laws stay true no matter what.</p>
+
+      <div class="sim-wrap" id="kirchhoff-sim">
+        <canvas id="kf-canvas" class="sim-screen" width="520" height="300" aria-label="Kirchhoff's laws two-loop circuit simulator"></canvas>
+        <div class="sim-panel">
+          <div class="sim-modes">
+            <button id="kf-mode-kcl" class="active" type="button">🔵 <span class="th-only">KCL ที่จุดต่อ</span><span class="en-only">KCL at the node</span></button>
+            <button id="kf-mode-kvl1" type="button">🟡 <span class="th-only">KVL ลูปซ้าย</span><span class="en-only">KVL left loop</span></button>
+            <button id="kf-mode-kvl2" type="button">🟡 <span class="th-only">KVL ลูปขวา</span><span class="en-only">KVL right loop</span></button>
+          </div>
+
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="kf-v1"><span class="th-only">แหล่งจ่าย V1</span><span class="en-only">Source V1</span></label>
+              <span id="kf-v1-val">12 V</span>
+            </div>
+            <input type="range" id="kf-v1" min="0" max="24" step="1" value="12">
+          </div>
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="kf-v2"><span class="th-only">แหล่งจ่าย V2</span><span class="en-only">Source V2</span></label>
+              <span id="kf-v2-val">9 V</span>
+            </div>
+            <input type="range" id="kf-v2" min="0" max="24" step="1" value="9">
+          </div>
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="kf-r1">R1</label>
+              <span id="kf-r1-val">100 Ω</span>
+            </div>
+            <input type="range" id="kf-r1" min="10" max="1000" step="10" value="100">
+          </div>
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="kf-r2">R2</label>
+              <span id="kf-r2-val">150 Ω</span>
+            </div>
+            <input type="range" id="kf-r2" min="10" max="1000" step="10" value="150">
+          </div>
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="kf-r3"><span class="th-only">R3 (ตัวร่วม)</span><span class="en-only">R3 (shared)</span></label>
+              <span id="kf-r3-val">220 Ω</span>
+            </div>
+            <input type="range" id="kf-r3" min="10" max="1000" step="10" value="220">
+          </div>
+
+          <div class="sim-readout">
+            <div class="sim-rb"><div class="sim-rl" id="kf-l1">กระแส I1 (ผ่าน R1)</div><div class="sim-rv" id="kf-out1">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="kf-l2">กระแส I2 (ผ่าน R2)</div><div class="sim-rv" id="kf-out2">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="kf-l3">กระแส I3 (ผ่าน R3)</div><div class="sim-rv" id="kf-out3">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="kf-l4">แรงดันที่จุดต่อ A</div><div class="sim-rv" id="kf-out4">—</div></div>
+          </div>
+          <div class="sim-verdict" id="kf-verdict">—</div>
+        </div>
+      </div>
+
+      <div class="warn-box" style="margin-top:1rem;">
+        <span class="th-only">🔎 <strong>ลองอันนี้:</strong> ตั้ง V1 = 24 V แล้วลาก V2 ลงมาเหลือ 3 V — <strong>I2 จะกลายเป็นค่าติดลบ</strong> และจุดกระแสจะวิ่งกลับทาง นั่นแปลว่า V2 ไม่ได้จ่ายไฟแล้ว แต่กำลัง <em>ถูกอัดไฟเข้า</em> จาก V1 (แบตเตอรี่กำลังถูกชาร์จ) — <strong>เครื่องหมายลบไม่ใช่คำตอบผิด</strong> มันแปลว่ากระแสไหลตรงข้ามกับทิศที่เราสมมติไว้ตอนแรกเท่านั้น</span>
+        <span class="en-only">🔎 <strong>Try this:</strong> set V1 = 24 V and drag V2 down to 3 V — <strong>I2 goes negative</strong> and the dots reverse. V2 is no longer supplying; it is <em>being driven</em> by V1 (a battery being charged). <strong>A negative answer is not a wrong answer</strong> — it simply means the current runs opposite to the direction you assumed.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 5. ขั้นตอนแก้โจทย์ ─────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ขั้นตอนแก้โจทย์ 5 ขั้น</span><span class="en-only">Solving a Circuit in 5 Steps</span></div>
+    <div class="card">
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-content">
+          <strong class="th-only">ตั้งชื่อจุดต่อและสาขา</strong><strong class="en-only">Name the nodes and branches</strong>
+          <p class="th-only">เลือกจุดต่อหนึ่งจุดเป็น <strong>กราวด์ (0 V)</strong> — ปกติเลือกขั้วลบของแหล่งจ่ายหรือรางล่างของวงจร</p>
+          <p class="en-only">Pick one node as <strong>ground (0 V)</strong> — usually the negative rail of the supply.</p>
+        </div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content">
+          <strong class="th-only">สมมติทิศกระแสของทุกสาขา</strong><strong class="en-only">Assume a current direction for every branch</strong>
+          <p class="th-only">เดาผิดได้ ไม่ต้องกลัว — ถ้าเดาผิดคำตอบจะออกมาติดลบเอง แล้วเราก็อ่านว่า "ไหลกลับทาง" ได้เลย</p>
+          <p class="en-only">Guessing wrong is fine — the answer simply comes out negative, which reads as "flows the other way".</p>
+        </div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content">
+          <strong class="th-only">เขียนสมการ KCL ที่จุดต่อ</strong><strong class="en-only">Write KCL at the nodes</strong>
+          <p class="th-only">ถ้าวงจรมีจุดต่อ n จุด จะเขียนสมการอิสระได้ n−1 สมการ (จุดกราวด์ไม่ต้องเขียน)</p>
+          <p class="en-only">With n nodes you get n−1 independent equations (the ground node needs none).</p>
+        </div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-content">
+          <strong class="th-only">เขียนสมการ KVL รอบลูป</strong><strong class="en-only">Write KVL around the loops</strong>
+          <p class="th-only">เขียนให้ครบทุกลูปที่ไม่ซ้อนทับกัน แล้วแทน V ของตัวต้านทานด้วย I×R ตามกฎของโอห์ม</p>
+          <p class="en-only">One per non-overlapping loop, substituting I×R for each resistor's voltage.</p>
+        </div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-content">
+          <strong class="th-only">แก้ระบบสมการ แล้วตรวจคำตอบ</strong><strong class="en-only">Solve the system, then check</strong>
+          <p class="th-only"><strong>ตรวจเสมอ:</strong> เอาคำตอบไปแทนกลับใน KCL — ถ้ากระแสเข้าไม่เท่ากระแสออก แปลว่าคำนวณผิดที่ไหนสักแห่ง</p>
+          <p class="en-only"><strong>Always check:</strong> substitute back into KCL — if in does not equal out, something is wrong.</p>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 6. ตัวอย่างโจทย์ ───────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ตัวอย่างโจทย์ (วงจรในซิมด้านบน)</span><span class="en-only">Worked Example (the circuit above)</span></div>
+    <div class="card">
+      <p class="th-only"><strong>โจทย์:</strong> V1 = 12 V, V2 = 9 V, R1 = 100 Ω, R2 = 150 Ω, R3 = 220 Ω จงหา I1, I2, I3</p>
+      <p class="en-only"><strong>Given:</strong> V1 = 12 V, V2 = 9 V, R1 = 100 Ω, R2 = 150 Ω, R3 = 220 Ω. Find I1, I2, I3.</p>
+
+      <div class="formula-box">
+        <div style="font-size:0.85rem;color:var(--text-light);margin-bottom:0.4rem;"><span class="th-only">ขั้นที่ 1 — KCL ที่จุดต่อ A (สมมติ I1, I2 ไหลเข้า / I3 ไหลออก)</span><span class="en-only">Step 1 — KCL at node A (I1, I2 in; I3 out)</span></div>
+        <div class="formula">I₁ + I₂ = I₃</div>
+      </div>
+      <div class="formula-box">
+        <div style="font-size:0.85rem;color:var(--text-light);margin-bottom:0.4rem;"><span class="th-only">ขั้นที่ 2 — เขียนกระแสแต่ละตัวด้วยแรงดันที่จุดต่อ V<sub>A</sub> (กฎของโอห์ม)</span><span class="en-only">Step 2 — Express each current from the node voltage V<sub>A</sub> (Ohm's Law)</span></div>
+        <div class="formula" style="font-size:1rem;">(12 − V<sub>A</sub>)/100 + (9 − V<sub>A</sub>)/150 = V<sub>A</sub>/220</div>
+      </div>
+      <div class="formula-box">
+        <div style="font-size:0.85rem;color:var(--text-light);margin-bottom:0.4rem;"><span class="th-only">ขั้นที่ 3 — แก้หา V<sub>A</sub></span><span class="en-only">Step 3 — Solve for V<sub>A</sub></span></div>
+        <div class="formula" style="font-size:1rem;">V<sub>A</sub> = (12/100 + 9/150) ÷ (1/100 + 1/150 + 1/220) = <strong>8.486 V</strong></div>
+      </div>
+
+      <div style="overflow-x:auto;margin-top:1rem;">
+        <table>
+          <tr>
+            <th><span class="th-only">กระแส</span><span class="en-only">Current</span></th>
+            <th><span class="th-only">คำนวณ</span><span class="en-only">Calculation</span></th>
+            <th><span class="th-only">ผลลัพธ์</span><span class="en-only">Result</span></th>
+          </tr>
+          <tr><td>I₁</td><td>(12 − 8.486) / 100</td><td><strong>35.1 mA</strong></td></tr>
+          <tr><td>I₂</td><td>(9 − 8.486) / 150</td><td><strong>3.4 mA</strong></td></tr>
+          <tr><td>I₃</td><td>8.486 / 220</td><td><strong>38.6 mA</strong></td></tr>
+        </table>
+      </div>
+
+      <div class="info-box" style="margin-top:1rem;">
+        <span class="th-only">✅ <strong>ตรวจคำตอบด้วย KCL:</strong> 35.1 + 3.4 = 38.5 ≈ 38.6 mA ✓ (ต่างกันนิดเดียวเพราะปัดทศนิยม)<br>
+        ✅ <strong>ตรวจด้วย KVL ลูปซ้าย:</strong> 12 − (0.0351 × 100) − (0.0386 × 220) = 12 − 3.51 − 8.49 ≈ 0 ✓</span>
+        <span class="en-only">✅ <strong>Check with KCL:</strong> 35.1 + 3.4 = 38.5 ≈ 38.6 mA ✓ (rounding only)<br>
+        ✅ <strong>Check with KVL, left loop:</strong> 12 − (0.0351 × 100) − (0.0386 × 220) = 12 − 3.51 − 8.49 ≈ 0 ✓</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 7. โยงเข้ากับโปรแกรมจำลองวงจร ──────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">กฎนี้คือหัวใจของโปรแกรมจำลองวงจร</span><span class="en-only">These Laws Run Every Circuit Simulator</span></div>
+    <div class="card">
+      <p class="th-only">สมการที่คุณเพิ่งเขียนด้วยมือ คือสิ่งเดียวกับที่ <a href="breadboard.html"><strong>เบรดบอร์ดเสมือน</strong></a> ในเว็บนี้ทำอยู่ทุกเฟรม — วิธีนี้ชื่อ <strong>Nodal Analysis / MNA</strong> (Modified Nodal Analysis) ซึ่งเป็นวิธีเดียวกับที่ SPICE และโปรแกรมออกแบบวงจรทุกตัวใช้:</p>
+      <p class="en-only">The equation you just wrote by hand is exactly what this site's <a href="breadboard.html"><strong>virtual breadboard</strong></a> solves every frame. The method is <strong>Nodal Analysis / MNA</strong> — the same one SPICE and every circuit design tool uses:</p>
+      <ul class="content-list th-only">
+        <li>โปรแกรมไล่หา <strong>จุดต่อทุกจุด</strong> ในวงจรก่อน (รูที่ต่อถึงกันบนเบรดบอร์ด = จุดต่อเดียวกัน)</li>
+        <li>เขียนสมการ <strong>KCL หนึ่งสมการต่อหนึ่งจุดต่อ</strong> → ได้เมทริกซ์ขนาด n×n</li>
+        <li>แก้เมทริกซ์ออกมาเป็น <strong>แรงดันที่ทุกจุดต่อ</strong> แล้วย้อนกลับไปหากระแสด้วยกฎของโอห์ม</li>
+        <li>อุปกรณ์ที่ไม่เป็นเส้นตรง (ไดโอด/ทรานซิสเตอร์) ใช้วิธีเดา-แก้-เดาใหม่ซ้ำ ๆ จนคำตอบนิ่ง</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li>Find <strong>every node</strong> first (holes connected on the breadboard are one node)</li>
+        <li>Write <strong>one KCL equation per node</strong> → an n×n matrix</li>
+        <li>Solve it for <strong>the voltage at every node</strong>, then get currents back from Ohm's Law</li>
+        <li>Non-linear parts (diodes, transistors) are guessed and re-solved until the answer settles</li>
+      </ul>
+      <div class="info-box">
+        <span class="th-only">🧪 อยากเห็นของจริง? เปิด <a href="breadboard.html">หน้าเบรดบอร์ด</a> วางตัวต้านทานขนานกัน 2 ตัว แล้วใช้มัลติมิเตอร์เสมือนวัดกระแสทีละกิ่ง — ผลรวมจะเท่ากับกระแสก่อนแยกเสมอ นั่นคือ KCL ที่กำลังทำงานอยู่</span>
+        <span class="en-only">🧪 See it live: open the <a href="breadboard.html">breadboard</a>, put two resistors in parallel and meter each branch — the two always add up to the current before the split. That is KCL at work.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 8. ข้อผิดพลาดที่พบบ่อย ─────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ข้อผิดพลาดที่พบบ่อย</span><span class="en-only">Common Mistakes</span></div>
+    <div class="card">
+      <div style="overflow-x:auto;">
+        <table>
+          <tr>
+            <th><span class="th-only">ข้อผิดพลาด</span><span class="en-only">Mistake</span></th>
+            <th><span class="th-only">ทำไมถึงผิด</span><span class="en-only">Why it is wrong</span></th>
+          </tr>
+          <tr>
+            <td><span class="th-only">เปลี่ยนทิศเดินลูปกลางคัน</span><span class="en-only">Changing loop direction midway</span></td>
+            <td><span class="th-only">เครื่องหมายของพจน์ที่เหลือจะกลับหมด — เลือกทิศแล้วต้องยึดจนจบลูป</span><span class="en-only">Every remaining sign flips — pick one direction and keep it</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">กลัวคำตอบติดลบ แล้วย้อนไปแก้ทิศที่สมมติ</span><span class="en-only">Panicking at a negative answer and redoing the assumption</span></td>
+            <td><span class="th-only">ไม่ต้องแก้ ค่าติดลบคือคำตอบที่ถูกแล้ว แค่แปลว่าไหลกลับทางที่สมมติไว้</span><span class="en-only">No need — a negative value is the correct answer; it just flows the other way</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">นับจุดต่อซ้ำ ทั้งที่เป็นจุดเดียวกัน</span><span class="en-only">Counting one node twice</span></td>
+            <td><span class="th-only">สายไฟที่ต่อถึงกันโดยไม่มีอุปกรณ์คั่น = <strong>จุดต่อเดียวกัน</strong> แม้จะวาดห่างกันคนละมุมกระดาษ</span><span class="en-only">Wires joined with no component between them are <strong>one node</strong>, however far apart they are drawn</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">ลืมว่าแหล่งจ่ายจริงมีความต้านทานภายใน</span><span class="en-only">Forgetting a real source has internal resistance</span></td>
+            <td><span class="th-only">แบตเตอรี่เก่าจ่ายกระแสมาก ๆ แรงดันจะตก — เพราะ IR ตกในตัวมันเอง ไม่ใช่กฎผิด</span><span class="en-only">An old battery sags under load — an IR drop inside it, not a broken law</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">ใช้กับวงจรความถี่สูงมากโดยไม่คิดถึงผลข้างเคียง</span><span class="en-only">Using it at very high frequency without care</span></td>
+            <td><span class="th-only">ที่ความถี่สูง ค่าเหนี่ยวนำ/ความจุแฝงของสายกลายเป็นอุปกรณ์ไปด้วย ต้องนับเข้าไปในวงจรด้วย</span><span class="en-only">Stray inductance and capacitance become real components and must be included</span></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer>
+  <strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong>
+  <strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong>
+</footer>
+<script>const CURRENT_PAGE='kirchhoff';</script>
+<script src="js/kirchhoff-sim.js"></script>
+<script src="js/nav.js"></script>
+</body>
+</html>

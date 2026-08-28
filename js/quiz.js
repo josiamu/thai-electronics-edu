@@ -19,6 +19,16 @@ const QUIZ_CATEGORIES_TH = [
     {q:'ถ้า P = 50W และ R = 2Ω แรงดัน E มีค่าเท่าไร?',opts:['10 V','100 V','25 V','5 V'],ans:0,exp:'E = √(P×R) = √(50×2) = √100 = 10 V'},
     {q:'1 mA เท่ากับกี่ A?',opts:['0.1 A','0.01 A','0.001 A','0.0001 A'],ans:2,exp:'m = มิลลิ = 10⁻³ ดังนั้น 1 mA = 0.001 A'},
   ]},
+  { id:'kirchhoff', icon:'🔗', name:'กฎของเคอร์ชฮอฟฟ์', questions:[
+    {q:'กฎกระแสของเคอร์ชฮอฟฟ์ (KCL) กล่าวว่าอย่างไร?',opts:['กระแสในวงจรอนุกรมเท่ากันทุกจุด','ผลรวมกระแสที่ไหลเข้าจุดต่อ เท่ากับผลรวมที่ไหลออก','กระแสแปรผกผันกับความต้านทาน','ผลรวมแรงดันรอบลูปเป็นศูนย์'],ans:1,exp:'KCL มาจากกฎอนุรักษ์ประจุ — จุดต่อไม่ใช่ถังเก็บ ประจุสะสมอยู่ไม่ได้ เข้าเท่าไหร่ต้องออกเท่านั้น'},
+    {q:'กฎแรงดันของเคอร์ชฮอฟฟ์ (KVL) กล่าวว่าอย่างไร?',opts:['แรงดันตกคร่อมทุกตัวเท่ากัน','ผลรวมแรงดันรอบลูปปิดใดๆ เป็นศูนย์','แรงดันแปรผันตรงกับกระแสเสมอ','แรงดันในวงจรขนานรวมกันได้'],ans:1,exp:'เดินรอบลูปครบหนึ่งรอบแล้วกลับมาที่จุดเดิม ระดับพลังงานต่อประจุต้องเท่าเดิม ผลรวมแรงดันจึงเป็นศูนย์'},
+    {q:'จุดต่อหนึ่งมีกระแสไหลเข้า 5 A และ 3 A มีกระแสไหลออกทางหนึ่ง 6 A อีกทางหนึ่งไหลออกเท่าไหร่?',opts:['2 A','8 A','14 A','3 A'],ans:0,exp:'KCL: เข้า 5+3 = 8 A ออกไปแล้ว 6 A จึงเหลือออกอีกทาง 8−6 = 2 A'},
+    {q:'แหล่งจ่าย 12 V ต่อกับตัวต้านทาน 2 ตัวอนุกรมกัน ถ้าตัวแรกตกคร่อม 5 V ตัวที่สองตกคร่อมกี่โวลต์?',opts:['5 V','7 V','12 V','17 V'],ans:1,exp:'KVL: 12 − 5 − V₂ = 0 → V₂ = 7 V แรงดันที่จ่ายเข้าถูกใช้หมดพอดีในลูป'},
+    {q:'คำนวณแล้วได้กระแสเป็นค่าติดลบ ควรทำอย่างไร?',opts:['คำนวณผิด ต้องทำใหม่ทั้งหมด','ใส่ค่าสัมบูรณ์แทน','อ่านว่ากระแสไหลกลับทางกับที่สมมติไว้ ค่าที่ได้ถูกต้องแล้ว','เปลี่ยนขั้วแหล่งจ่ายแล้วคำนวณใหม่'],ans:2,exp:'เครื่องหมายลบคือคำตอบที่ถูกแล้ว แปลว่ากระแสไหลตรงข้ามกับทิศที่เราสมมติไว้ตอนแรกเท่านั้น ไม่ต้องแก้อะไร'},
+    {q:'ในวงจรที่มีจุดต่อ 4 จุด จะเขียนสมการ KCL ที่เป็นอิสระต่อกันได้กี่สมการ?',opts:['4 สมการ','3 สมการ','2 สมการ','5 สมการ'],ans:1,exp:'ได้ n−1 = 3 สมการ เพราะจุดที่เลือกเป็นกราวด์ (อ้างอิง 0 V) ไม่ต้องเขียน สมการของมันเป็นผลรวมของสมการอื่นอยู่แล้ว'},
+    {q:'เครื่องตัดไฟรั่ว (ELCB/RCD) ทำงานโดยอาศัยกฎข้อใด?',opts:['KVL — วัดแรงดันตกคร่อมโหลด','KCL — เทียบกระแสไปสาย L กับกระแสกลับสาย N','กฎของโอห์ม — วัดความต้านทานสายดิน','กฎของฟาราเดย์ — วัดสนามแม่เหล็กของโหลด'],ans:1,exp:'ELCB ใช้ KCL: กระแสที่ออกไปทางสาย L ต้องกลับมาทางสาย N เท่ากันเป๊ะ ถ้าไม่เท่า ส่วนต่างคือกระแสที่รั่วออกนอกวงจร จึงสั่งตัด'},
+    {q:'ถ้าเลือกทิศเดินรอบลูปเป็นตามเข็มนาฬิกา แล้วเดินผ่านตัวต้านทานไปในทิศเดียวกับกระแส พจน์นั้นมีเครื่องหมายอะไร?',opts:['+IR เพราะได้พลังงานเพิ่ม','−IR เพราะเป็นแรงดันตก','ไม่มีเครื่องหมาย ใส่ค่าดิบ','ขึ้นกับค่าความต้านทาน'],ans:1,exp:'เดินตามทิศกระแสผ่านตัวต้านทาน = ไหลจากศักย์สูงไปต่ำ จึงเป็นแรงดันตก −IR (ถ้าเดินสวนทางกระแสจะเป็น +IR)'},
+  ]},
   { id:'resistor', icon:'🎨', name:'ตัวต้านทาน', questions:[
     {q:'ตัวต้านทานสี น้ำตาล-ดำ-แดง-ทอง มีค่าเท่าไร?',opts:['102 Ω','1,000 Ω ±5%','120 Ω','10,200 Ω'],ans:1,exp:'น้ำตาล=1, ดำ=0 → 10; แดง=×100; ทอง=±5% → 10×100 = 1,000 Ω = 1kΩ ±5%'},
     {q:'แถบสี Gold ในตำแหน่งที่ 4 หมายถึงอะไร?',opts:['ตัวคูณ ×0.1','ค่าผิดพลาด ±5%','เลขหน้า 0','ค่าผิดพลาด ±10%'],ans:1,exp:'แถบที่ 4 คือค่าผิดพลาด (Tolerance) ทอง = ±5%'},
@@ -141,6 +151,16 @@ const QUIZ_CATEGORIES_EN = [
     {q:'How many Ω is 1 kΩ?',opts:['10 Ω','100 Ω','1,000 Ω','10,000 Ω'],ans:2,exp:'k = kilo = 1,000 — so 1 kΩ = 1,000 Ω'},
     {q:'If P = 50W and R = 2Ω, what is the voltage E?',opts:['10 V','100 V','25 V','5 V'],ans:0,exp:'E = √(P×R) = √(50×2) = √100 = 10 V'},
     {q:'How many amperes is 1 mA?',opts:['0.1 A','0.01 A','0.001 A','0.0001 A'],ans:2,exp:'m = milli = 10⁻³ — so 1 mA = 0.001 A'},
+  ]},
+  { id:'kirchhoff', icon:'🔗', name:"Kirchhoff's Laws", questions:[
+    {q:"What does Kirchhoff's Current Law (KCL) state?",opts:['Current is the same everywhere in a series circuit','The sum of currents into a node equals the sum out of it','Current is inversely proportional to resistance','The sum of voltages around a loop is zero'],ans:1,exp:'KCL follows from conservation of charge — a node is not a tank, so whatever flows in must flow straight back out.'},
+    {q:"What does Kirchhoff's Voltage Law (KVL) state?",opts:['Every component drops the same voltage','The sum of voltages around any closed loop is zero','Voltage is always proportional to current','Voltages in a parallel circuit add up'],ans:1,exp:'Walk a loop back to the starting point and the energy per charge must be unchanged, so the voltages sum to zero.'},
+    {q:'A node has 5 A and 3 A flowing in, and 6 A flowing out on one branch. How much leaves on the other branch?',opts:['2 A','8 A','14 A','3 A'],ans:0,exp:'KCL: 5+3 = 8 A in, 6 A already out, so the other branch carries 8−6 = 2 A.'},
+    {q:'A 12 V source feeds two series resistors. If the first drops 5 V, what does the second drop?',opts:['5 V','7 V','12 V','17 V'],ans:1,exp:'KVL: 12 − 5 − V₂ = 0 → V₂ = 7 V. Every volt supplied is used up around the loop.'},
+    {q:'Your calculation gives a negative current. What should you do?',opts:['Start over, it must be a mistake','Use the absolute value instead','Read it as flowing opposite to your assumed direction — the answer is correct','Reverse the source polarity and recalculate'],ans:2,exp:'A negative sign is a valid answer. It only means the current runs opposite to the direction you assumed; nothing needs fixing.'},
+    {q:'In a circuit with 4 nodes, how many independent KCL equations can you write?',opts:['4','3','2','5'],ans:1,exp:'n−1 = 3. The node chosen as ground (the 0 V reference) needs none — its equation is just the sum of the others.'},
+    {q:'Which law does an earth-leakage breaker (ELCB/RCD) rely on?',opts:['KVL — measuring the drop across the load','KCL — comparing current out on L with current back on N','Ohm\'s Law — measuring earth resistance','Faraday\'s Law — sensing the load\'s magnetic field'],ans:1,exp:'It applies KCL: current out on L must return on N exactly. Any difference is current leaking out of the circuit, so it trips.'},
+    {q:'Walking a loop clockwise, you pass through a resistor in the same direction as the current. What sign does that term take?',opts:['+IR, because energy is gained','−IR, because it is a voltage drop','No sign, use the raw value','It depends on the resistance value'],ans:1,exp:'Moving with the current through a resistor means going from higher to lower potential — a drop, −IR. Against the current it would be +IR.'},
   ]},
   { id:'resistor', icon:'🎨', name:'Resistor', questions:[
     {q:'A resistor with bands Brown-Black-Red-Gold has what value?',opts:['102 Ω','1,000 Ω ±5%','120 Ω','10,200 Ω'],ans:1,exp:'Brown=1, Black=0 → 10; Red=×100; Gold=±5% → 10×100 = 1,000 Ω = 1kΩ ±5%'},

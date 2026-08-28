@@ -21,7 +21,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | 📱 **Responsive** | ใช้งานได้ทั้ง Desktop, Tablet, Mobile |
 | 🔬 **เครื่องมือจำลองเชิงโต้ตอบ** | เบรดบอร์ดเสมือน, ออสซิลโลสโคป, BJT switch, เครื่องกำเนิดสัญญาณ, แหล่งจ่ายไฟ, เรียงกระแส AC→DC, ออปโตคัปเปลอร์, สวิตช์ความเร็วพัดลม, จำลองวงจร |
 | 🧮 **7 เครื่องคิดเลข** | รหัสสี, โอห์ม, กำลัง, พลังงาน, อนุกรม/ขนาน, แปลงหน่วย |
-| 📝 **แบบทดสอบ 92 ข้อ** | 14 หมวด, สุ่มข้อ, บันทึกคะแนนสูงสุด — มีทั้ง TH และ EN |
+| 📝 **แบบทดสอบ 100 ข้อ** | 15 หมวด, สุ่มข้อ, บันทึกคะแนนสูงสุด — มีทั้ง TH และ EN |
 | 📥 **PDF 55 ไฟล์** | ดาวน์โหลดใบเนื้อหา + ใบงานประกอบการเรียน |
 | 🖨️ **Print-friendly** | หน้าสูตรสรุปพิมพ์ออกกระดาษ A4 ได้เลย |
 
@@ -36,6 +36,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 |---|---|---|
 | แหล่งกำเนิดและประเภทไฟฟ้า | Electricity Sources & Types | `electricity.html` |
 | กฎของโอห์ม กำลังและพลังงาน | Ohm's Law, Power & Energy | `ohm.html` |
+| กฎของเคอร์ชฮอฟฟ์ (KVL/KCL) | Kirchhoff's Laws (KVL/KCL) | `kirchhoff.html` (มีซิมวงจร 2 ลูป 2 แหล่งจ่ายโต้ตอบได้) |
 
 **อุปกรณ์อิเล็กทรอนิกส์ / Electronic Components**
 | ไทย | English | หน้า |
@@ -95,7 +96,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | `relay-lab.html` | ห้องแล็บวงจรควบคุมรีเลย์ MY4 (4PDT 24VDC + ปุ่มกด/ไฟ/บัซเซอร์, รางไฟ + จุดพักไฟ TB-1…TB-10 ลดสายพันกัน, คลิกไฮไลต์ไล่วงจร, 🎯 ภารกิจ 7 ข้อพร้อมตรวจคำตอบอัตโนมัติ, 9 ตัวอย่าง self-holding/interlock/AND-OR/fail-safe NC/กลับทางหมุนมอเตอร์, มุมมองแผนภาพ Ladder, บันทึก/แชร์ลิงก์) | MY4 relay control lab (4PDT 24VDC + buttons/lamps/buzzer, power rails + TB-1…TB-10 terminal block, click-to-trace highlight, 7 auto-graded missions, 9 examples incl. fail-safe NC and motor forward/reverse, ladder view, save/share) |
 | `formulas.html` | สูตรสรุป + พิมพ์ PDF | Formula summary + print |
 | `tools.html` | เครื่องคิดเลขเชิงโต้ตอบ 7 ตัว | 7 interactive calculators |
-| `quiz.html` | แบบทดสอบ 92 ข้อ 14 หมวด | 92-question quiz, 14 categories |
+| `quiz.html` | แบบทดสอบ 100 ข้อ 15 หมวด | 100-question quiz, 15 categories |
 | `downloads.html` | ดาวน์โหลด PDF 55 ไฟล์ (รวมหัวข้อ "ฟอร์มตรวจเช็ค" และ "งานซ่อม") | Download 55 PDF files (incl. "Check Forms" and "Repair" sections) |
 
 ---
@@ -112,14 +113,13 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 
 | # | บท | ต่อยอดจาก |
 |---|---|---|
-| 4 | ⚡ **กฎของเคอร์ชฮอฟฟ์ (KVL/KCL)** | ทฤษฎีเบื้องหลังโซลเวอร์ MNA ที่เบรดบอร์ดใช้อยู่ — ต่อยอดจาก `ohm.html` |
-| 5 | 🔄 **หม้อแปลง** | อัตราส่วนรอบ, step up/down, Vp/Vs — โยงเข้าไมโครเวฟ/SMPS ที่มีอยู่ |
-| 6 | 🎛️ **อินเวอร์เตอร์ / VFD** | DC→AC คุมความเร็วมอเตอร์ — ต่อยอดจาก `power-supply.html` + `igbt.html` |
-| 7 | 📉 **ฟิลเตอร์และเรโซแนนซ์** | RC/RL/RLC low/high-pass, ความถี่ตัด, เรโซแนนซ์ |
-| 8 | 🧊 **เครื่องใช้ไฟฟ้าระบบอินเวอร์เตอร์** | มุมผู้ใช้ (กลุ่มงานปฏิบัติ) — ประหยัดไฟ วิธีเลือก ข้อควรระวัง |
+| 4 | 🔄 **หม้อแปลง** | อัตราส่วนรอบ, step up/down, Vp/Vs — โยงเข้าไมโครเวฟ/SMPS ที่มีอยู่ |
+| 5 | 🎛️ **อินเวอร์เตอร์ / VFD** | DC→AC คุมความเร็วมอเตอร์ — ต่อยอดจาก `power-supply.html` + `igbt.html` |
+| 6 | 📉 **ฟิลเตอร์และเรโซแนนซ์** | RC/RL/RLC low/high-pass, ความถี่ตัด, เรโซแนนซ์ |
+| 7 | 🧊 **เครื่องใช้ไฟฟ้าระบบอินเวอร์เตอร์** | มุมผู้ใช้ (กลุ่มงานปฏิบัติ) — ประหยัดไฟ วิธีเลือก ข้อควรระวัง |
 
 > ✅ **เสร็จแล้ว (เคยอยู่ใน roadmap):** บทลอจิกเกต (`logic-gates.html`), ไอซี 555 (`555.html`),
-> ออปแอมป์ (`op-amp.html`), **ห้องแล็บวงจรรีเลย์ MY4 (`relay-lab.html`)**, **ไทริสเตอร์ SCR/TRIAC/DIAC (`thyristor.html`)** — ทั้งหมดมี sim เชิงโต้ตอบครบแล้ว
+> ออปแอมป์ (`op-amp.html`), **ห้องแล็บวงจรรีเลย์ MY4 (`relay-lab.html`)**, **ไทริสเตอร์ SCR/TRIAC/DIAC (`thyristor.html`)**, **กฎของเคอร์ชฮอฟฟ์ (`kirchhoff.html`)** — ทั้งหมดมี sim เชิงโต้ตอบครบแล้ว
 
 ---
 
@@ -194,6 +194,7 @@ git push
 ├── js/simulation.js        — Circuit simulator logic
 ├── js/oscilloscope.js      — Interactive I-V curve simulator
 ├── js/osc-reader.js        — Scope reading trainer
+├── js/kirchhoff-sim.js     — Two-loop, two-source circuit sim (live nodal solve; KCL and KVL both measured from the same answer)
 ├── js/bjt-steps.js         — Interactive step-by-step: how a BJT works (5 clickable steps, animated cross-section)
 ├── js/bjt-circuit.js       — Interactive step-by-step: a real 5V circuit (R_B → NPN → LED + R_C, 6 steps, HIGH/LOW toggle)
 ├── js/smps-steps.js        — Interactive step-by-step: LNK304 switching PSU (8 steps, 6 fault modes, TP1–TP4 readouts)
@@ -223,7 +224,7 @@ git push
 ├── js/fan-motor-sim.js     — Fan speed-switch sim (press 0/1/2/3 → live current path through choke, run & start windings + blown-thermal-fuse mode)
 ├── js/relay-lab.js         — MY4 relay control lab (DC nodal solver + power rails + terminal block + ladder view + auto-graded missions + save/share)
 ├── index.html           — Home page
-│   ├── electricity.html / ohm.html                 — Fundamentals
+│   ├── electricity.html / ohm.html / kirchhoff.html   — Fundamentals
 │   ├── resistor.html / diode.html / transistor.html / igbt.html / thyristor.html / ic.html / 555.html / op-amp.html / logic-gates.html / relay.html
 │   │   capacitor.html / inductor.html / optoelectronics.html / power-supply.html   — Components
 │   ├── multimeter.html / signal-generator.html / oscilloscope.html  — Measurement
