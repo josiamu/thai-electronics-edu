@@ -6,6 +6,8 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 
 🌐 **Live Site:** https://josiamu.github.io/thai-electronics-edu/
 
+👨‍💻 **ผู้พัฒนา / Developer:** ประเสริฐ บำเพ็ญ (Prasert Bumphen) — [github.com/josiamu](https://github.com/josiamu)
+
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 
 ---
@@ -217,6 +219,20 @@ git push
 ├── LICENSE              — CC BY-NC 4.0 (+ note carving out third-party PDFs)
 └── pdf/                 — Thai PDF learning materials (~24 MB)
 ```
+
+---
+
+## 👨‍💻 ผู้พัฒนา / Author
+
+**ประเสริฐ บำเพ็ญ (Prasert Bumphen)** — ออกแบบ พัฒนา และเขียนเนื้อหาทั้งหมดของเว็บไซต์นี้
+(Design, development, and all original lesson content)
+
+- GitHub: [github.com/josiamu](https://github.com/josiamu) — ช่องทางติดต่ออื่นๆ อยู่ในโปรไฟล์
+
+หากนำเนื้อหาหรือโค้ดไปใช้ต่อ กรุณาให้เครดิตตามรูปแบบ / When reusing, please credit as:
+
+> "สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์" โดย ประเสริฐ บำเพ็ญ (Prasert Bumphen) —
+> https://josiamu.github.io/thai-electronics-edu/ (CC BY-NC 4.0)
 
 ---
 

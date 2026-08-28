@@ -313,6 +313,29 @@ const NAV_RESOURCES = [
     pageFooter.appendChild(topics);
   }
 
+  // ── เครดิตผู้พัฒนา: เติมเข้า footer ทุกหน้าอัตโนมัติ (bilingual) ──
+  // แหล่งความจริงเดียว — อย่า hardcode ชื่อผู้พัฒนาซ้ำในแต่ละหน้า
+  const AUTHOR_TH   = 'ประเสริฐ บำเพ็ญ';
+  const AUTHOR_EN   = 'Prasert Bumphen';
+  const AUTHOR_URL  = 'https://github.com/josiamu';
+  if (pageFooter && !pageFooter.querySelector('.footer-credit')) {
+    const credit = document.createElement('div');
+    credit.className = 'footer-credit';
+    credit.innerHTML =
+      '<span class="th-only">พัฒนาโดย <strong>' + AUTHOR_TH + '</strong></span>' +
+      '<span class="en-only">Developed by <strong>' + AUTHOR_EN + '</strong></span> · ' +
+      '<a href="' + AUTHOR_URL + '" target="_blank" rel="noopener">GitHub</a>';
+    pageFooter.appendChild(credit);
+  }
+
+  // ── <meta name="author"> ทุกหน้า (สำหรับ search engine / ตัวอ่านอัตโนมัติ) ──
+  if (!document.querySelector('meta[name="author"]')) {
+    const meta = document.createElement('meta');
+    meta.name = 'author';
+    meta.content = AUTHOR_TH + ' (' + AUTHOR_EN + ')';
+    document.head.appendChild(meta);
+  }
+
   // ── สัญญาอนุญาต: เติมบรรทัด CC BY-NC 4.0 เข้า footer ทุกหน้าอัตโนมัติ (bilingual) ──
   if (pageFooter && !pageFooter.querySelector('.footer-license')) {
     const lic = document.createElement('div');
