@@ -312,7 +312,8 @@
     if (step === 6) {
       label(A.heatX - 52, A.lY + 100, 'V ' + t('คร่อมฮีตเตอร์หลัก', 'across main') + ' = ' + v.main + 'V',
             v.main > 100 ? RED : GREEN, 11, 'right', 700);
-      label(A.warmX + A.warmW / 2, A.warmY - 46, 'V ' + t('คร่อมชุดอุ่น', 'across warm') + ' = ' + v.warm + 'V',
+      // ยกป้ายแรงดันขึ้นเหนือป้าย 'ขาดใน (สายบานพับ?)' ที่โผล่มาในอาการ warmopen
+      label(A.warmX + A.warmW / 2, A.warmY - 64, 'V ' + t('คร่อมชุดอุ่น', 'across warm') + ' = ' + v.warm + 'V',
             v.warm > 100 ? GREEN : css('--text-light'), 11, 'center', 700);
     }
   }
@@ -475,7 +476,8 @@
     label(B.x1 - 40, B.busY - 70, t('บัสฮีตเตอร์', 'element bus'), dim, 9.5, 'center', 700);
 
     if (step === 7) {
-      label(W / 2, 34, t('⚠️ วัดได้ 5V ก็จริง แต่ครึ่งบอร์ดฝั่งอินพุตยังเป็นไฟบ้านเต็ม — ห้ามจับขณะเสียบปลั๊ก',
+      // วางไว้แถวบนสุด — แถว y≈30 เป็นที่ของป้ายจุดวัด 'หลังฟิวส์'
+      label(W / 2, 18, t('⚠️ วัดได้ 5V ก็จริง แต่ครึ่งบอร์ดฝั่งอินพุตยังเป็นไฟบ้านเต็ม — ห้ามจับขณะเสียบปลั๊ก',
                          '⚠️ Yes it reads 5 V — but half this board is still at mains potential. Never handle it plugged in'),
             RED, 12, 'center', 700);
     }
