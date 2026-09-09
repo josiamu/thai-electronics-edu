@@ -34,7 +34,7 @@
 
 <div class="container">
 
-  <!-- ── 1. อินเวอร์เตอร์คืออะไร ─────────────────────────── -->
+  <!-- ── 1. อินเวอร์เตอร์คืออะไร ──────────── -->
   <div class="section">
     <div class="section-title"><span class="th-only">อินเวอร์เตอร์คืออะไร</span><span class="en-only">What an Inverter Is</span></div>
     <div class="card">
@@ -52,10 +52,185 @@
       </div>
       <p class="th-only">เหตุผลที่ต้องคุมความเร็วมอเตอร์แทนการเปิด-ปิด: มอเตอร์เหนี่ยวนำหมุนตามความถี่ของไฟที่ป้อนเข้าไป ไฟบ้าน 50 Hz จึงได้ความเร็วเดียวตายตัว <strong>เครื่องใช้ไฟฟ้ารุ่นเก่าจึงคุมอุณหภูมิด้วยการเปิด-ปิดคอมเพรสเซอร์เป็นช่วง ๆ</strong> ส่วนรุ่นอินเวอร์เตอร์ลดความถี่ลงให้คอมเพรสเซอร์เดินช้า ๆ ต่อเนื่องแทน จึงกินไฟน้อยกว่าและอุณหภูมิแกว่งน้อยกว่า</p>
       <p class="en-only">Why control speed instead of switching on and off? An induction motor follows the frequency it is fed, so 50 Hz mains gives exactly one speed. <strong>Older appliances therefore hold temperature by cycling the compressor on and off</strong>, while an inverter model drops the frequency and lets it run slowly and continuously — less energy, and far less temperature swing.</p>
+
+      <div class="info-box">
+        <span class="th-only">🔃 <strong>มอเตอร์เหนี่ยวนำหมุนได้อย่างไร (3 บรรทัด)</strong><br>
+          ① ไฟสลับที่ป้อนเข้าขดลวดรอบ ๆ ทำให้เกิด <strong>สนามแม่เหล็กที่หมุนไปรอบตัวมอเตอร์</strong> ความเร็วของสนามขึ้นกับความถี่ล้วน ๆ<br>
+          ② สนามที่หมุนตัดผ่านแกนโรเตอร์ตรงกลาง ทำให้เกิดกระแสเหนี่ยวนำในโรเตอร์ และกระแสนั้นสร้างสนามของตัวเองขึ้นมาต้าน<br>
+          ③ สองสนามดูดกัน <strong>โรเตอร์จึงวิ่งไล่ตามสนามที่หมุน</strong> โดยตามช้ากว่าเล็กน้อยเสมอ (เรียกว่าสลิป) — เปลี่ยนความถี่จึงเท่ากับเปลี่ยนความเร็ว<br>
+          อยากดูมอเตอร์แบบเฟสเดียวที่ใช้คาปาซิเตอร์ช่วยออกตัว อ่านต่อที่บท<a href="fan-motor.html">มอเตอร์พัดลมไฟฟ้า</a></span>
+        <span class="en-only">🔃 <strong>How an induction motor turns, in three lines</strong><br>
+          ① AC in the surrounding windings creates <strong>a magnetic field that rotates around the motor</strong>, at a speed set purely by the frequency.<br>
+          ② That rotating field sweeps across the rotor in the middle, inducing current in it, and that current makes a field of its own.<br>
+          ③ The two fields attract, so <strong>the rotor chases the rotating field</strong>, always lagging slightly behind (that lag is called slip). Change the frequency and you change the speed.<br>
+          For the single-phase kind that needs a capacitor to start, see the <a href="fan-motor.html">fan motor</a> lesson.</span>
+      </div>
+
+      <div class="card" style="box-shadow:none;border:1px dashed var(--border);">
+        <strong class="th-only">📖 ศัพท์ 5 คำที่จะเจอทั้งบท</strong>
+        <strong class="en-only">📖 Five words you will meet throughout</strong>
+        <ul class="content-list th-only" style="margin-bottom:0;">
+          <li><strong>บัส DC</strong> — รางไฟตรงแรงสูงในเครื่อง ประมาณ 310 V ที่ภาคกำลังดึงไปใช้</li>
+          <li><strong>PWM</strong> — การสับสวิตช์เร็ว ๆ แล้วปรับความกว้างของช่วงที่ต่อ เพื่อให้ค่าเฉลี่ยได้เท่าที่ต้องการ</li>
+          <li><strong>ฟลักซ์</strong> — ปริมาณเส้นแรงแม่เหล็กในแกนเหล็กของมอเตอร์ · มากไปแกนอิ่มตัวและร้อน น้อยไปแรงบิดตก</li>
+          <li><strong>V/f</strong> — อัตราส่วนแรงดันต่อความถี่ ตัวเลขเดียวที่บอกว่าฟลักซ์กำลังพอดีหรือไม่</li>
+          <li><strong>IGBT</strong> — <a href="igbt.html">ทรานซิสเตอร์กำลัง</a>ที่ทำหน้าที่เป็นสวิตช์สับไฟให้มอเตอร์</li>
+        </ul>
+        <ul class="content-list en-only" style="margin-bottom:0;">
+          <li><strong>DC bus</strong> — the high-voltage rail inside the machine, about 310 V, that the power stage draws from.</li>
+          <li><strong>PWM</strong> — switching quickly and varying how long the switch stays on, so the average comes out where you want it.</li>
+          <li><strong>Flux</strong> — how much magnetic field sits in the motor's iron core. Too much saturates and overheats it; too little loses torque.</li>
+          <li><strong>V/f</strong> — the voltage-to-frequency ratio, the single number that says whether the flux is right.</li>
+          <li><strong>IGBT</strong> — the <a href="igbt.html">power transistor</a> that does the switching for the motor.</li>
+        </ul>
+      </div>
     </div>
   </div>
 
-  <!-- ── 2. ภายใน VFD ────────────────────────────────────── -->
+  <!-- ── 2. ความถี่คุมความเร็ว ──────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ความถี่คุมความเร็วอย่างไร และทำไมแรงดันต้องเปลี่ยนตาม</span><span class="en-only">How Frequency Sets Speed, and Why Voltage Must Follow</span></div>
+    <div class="card">
+      <p class="th-only">หัวข้อนี้มีสองสูตร และเป็นสองสูตรที่อธิบายทั้งบทได้เกือบหมด — <strong>สูตรแรกบอกว่าความถี่กำหนดความเร็ว</strong> ส่วน<strong>สูตรที่สองบอกว่าทำไมเปลี่ยนความถี่เฉย ๆ ไม่ได้</strong></p>
+      <p class="en-only">This section has two formulas, and between them they explain almost the whole lesson: <strong>the first says frequency sets the speed</strong>, the second says <strong>why you cannot change the frequency alone</strong>.</p>
+      <div class="inv-two">
+        <div>
+          <div class="formula-box">
+            <div class="formula">n<sub>s</sub> = 120 × f ÷ P</div>
+            <p class="th-only" style="margin:.5rem 0 0;font-size:.9rem;">ความเร็วสนามหมุน (rpm) — f คือความถี่ (Hz) และ P คือจำนวนขั้วของมอเตอร์ · มอเตอร์ 4 ขั้วที่ 50 Hz ได้ 1,500 rpm</p>
+            <p class="en-only" style="margin:.5rem 0 0;font-size:.9rem;">Synchronous speed in rpm, where f is the frequency and P the number of poles. A 4-pole motor at 50 Hz gives 1,500 rpm.</p>
+          </div>
+          <div class="formula-box">
+            <div class="formula">Φ ∝ V ÷ f</div>
+            <p class="th-only" style="margin:.5rem 0 0;font-size:.9rem;">ฟลักซ์ในแกนเหล็กแปรตามอัตราส่วนแรงดันต่อความถี่ · มอเตอร์ 220 V 50 Hz มีพิกัด <strong>4.4 V ต่อ Hz</strong></p>
+            <p class="en-only" style="margin:.5rem 0 0;font-size:.9rem;">Core flux follows the voltage-to-frequency ratio. A 220 V 50 Hz motor is rated at <strong>4.4 V per Hz</strong>.</p>
+          </div>
+        </div>
+        <div>
+          <p class="th-only">ขดลวดของมอเตอร์ก็คือขดลวดบนแกนเหล็ก เหมือน<a href="transformer.html">หม้อแปลง</a>ทุกประการ ปัญหาจึงเหมือนกัน: <strong>ถ้าลดความถี่แต่ไม่ลดแรงดัน ฟลักซ์จะพุ่งจนแกนอิ่มตัว</strong> พออิ่มตัวแล้วขดลวดจะเหลือแค่ความต้านทานเปล่า ๆ กระแสจึงพุ่งขึ้นโดยไม่ได้แรงบิดเพิ่มเลย มอเตอร์ร้อนไหม้ทั้งที่หมุนเบา ๆ</p>
+          <p class="th-only">อินเวอร์เตอร์จึง<strong>ลดแรงดันลงพร้อมกับความถี่เสมอ</strong> ให้อัตราส่วน V/f คงที่ ฟลักซ์คงที่ แรงบิดจึงคงที่ตลอดย่านความเร็ว</p>
+          <p class="en-only">A motor winding is a coil on an iron core, exactly like a <a href="transformer.html">transformer</a>, so it has the same problem: <strong>lower the frequency without lowering the voltage and the flux climbs until the core saturates.</strong> Once saturated, the winding is little more than bare resistance — current soars with no extra torque, and the motor cooks while barely turning.</p>
+          <p class="en-only">So a drive <strong>always drops the voltage along with the frequency</strong>, keeping V/f, and therefore flux and torque, constant across the speed range.</p>
+        </div>
+      </div>
+
+      <div style="overflow-x:auto;margin-top:1rem;">
+        <table>
+          <tr>
+            <th><span class="th-only">ย่านการทำงาน</span><span class="en-only">Region</span></th>
+            <th><span class="th-only">แรงดันและฟลักซ์</span><span class="en-only">Voltage &amp; flux</span></th>
+            <th><span class="th-only">แรงบิด</span><span class="en-only">Torque</span></th>
+          </tr>
+          <tr>
+            <td><span class="th-only">ต่ำกว่าพิกัด (0–50 Hz)</span><span class="en-only">Below rated (0–50 Hz)</span></td>
+            <td><span class="th-only">แรงดันลดตามความถี่ ฟลักซ์คงที่ 100%</span><span class="en-only">Voltage tracks frequency, flux stays at 100%</span></td>
+            <td><span class="th-only"><strong>เต็มพิกัดตลอดย่าน</strong> — ปั่นช้าแต่ยังมีแรง</span><span class="en-only"><strong>Full torque throughout</strong> — slow but still strong</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">เหนือพิกัด (&gt; 50 Hz)</span><span class="en-only">Above rated (&gt; 50 Hz)</span></td>
+            <td><span class="th-only">แรงดันชนเพดานของบัส DC แล้ว ฟลักซ์จึงลดลง</span><span class="en-only">Voltage hits the DC-bus ceiling, so flux falls</span></td>
+            <td><span class="th-only">ตกลงตามส่วน — <strong>ย่านลดฟลักซ์</strong> เร็วขึ้นแต่แรงน้อยลง</span><span class="en-only">Falls proportionally — the <strong>field-weakening region</strong>: faster but weaker</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">ความถี่ต่ำมาก (&lt; 5 Hz)</span><span class="en-only">Very low (&lt; 5 Hz)</span></td>
+            <td><span class="th-only">แรงดันเหลือน้อยจนถูกความต้านทานขดลวดกินไปหมด ต้องใส่ <strong>torque boost</strong> ชดเชย</span><span class="en-only">So little voltage that winding resistance eats it all — needs a <strong>torque boost</strong></span></td>
+            <td><span class="th-only">ตกถ้าไม่ชดเชย — ตั้ง boost มากเกินก็ร้อนตอนเดินเบา</span><span class="en-only">Drops without boost — but too much boost overheats it at light load</span></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 3. ซิม V/f ────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ทดลอง: ความถี่ แรงดัน และฟลักซ์</span><span class="en-only">Try It: Frequency, Voltage &amp; Flux</span></div>
+    <div class="card">
+      <p class="th-only">ปรับความถี่กับโหลด แล้วสลับระหว่าง <strong>V/f คงที่</strong> (สิ่งที่อินเวอร์เตอร์ของจริงทำ) กับ <strong>คาแรงดันไว้ 220 V</strong> (สิ่งที่จะเกิดถ้าเปลี่ยนแค่ความถี่อย่างเดียว)</p>
+      <p class="en-only">Set the frequency and load, then switch between <strong>constant V/f</strong> — what a real drive does — and <strong>holding 220 V</strong>, which is what happens if you change frequency alone.</p>
+
+      <div class="sim-wrap" id="inverter-sim">
+        <canvas id="inv-canvas" class="sim-screen" width="560" height="330" aria-label="Inverter and V/f simulator"></canvas>
+        <div class="sim-panel">
+          <div class="sim-modes">
+            <button id="inv-w-square" type="button">⬛ <span class="th-only">สี่เหลี่ยม</span><span class="en-only">Square</span></button>
+            <button id="inv-w-mod" type="button">▤ <span class="th-only">ดัดแปลง</span><span class="en-only">Modified</span></button>
+            <button id="inv-w-pwm" class="active" type="button">〜 PWM</button>
+          </div>
+          <div class="sim-modes">
+            <button id="inv-c-vf" class="active" type="button">✅ <span class="th-only">V/f คงที่</span><span class="en-only">Constant V/f</span></button>
+            <button id="inv-c-fixed" type="button">⚠️ <span class="th-only">คา 220 V</span><span class="en-only">Hold 220 V</span></button>
+          </div>
+
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="inv-f"><span class="th-only">ความถี่ขาออก</span><span class="en-only">Output frequency</span></label>
+              <span id="inv-f-val">50 Hz</span>
+            </div>
+            <input type="range" id="inv-f" min="5" max="70" step="1" value="50">
+          </div>
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="inv-load"><span class="th-only">โหลดที่เพลา</span><span class="en-only">Shaft load</span></label>
+              <span id="inv-load-val">60%</span>
+            </div>
+            <input type="range" id="inv-load" min="0" max="150" step="5" value="60">
+          </div>
+
+          <div class="sim-readout">
+            <div class="sim-rb"><div class="sim-rl" id="inv-l1">แรงดันขาออก</div><div class="sim-rv" id="inv-out1">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="inv-l2">ความเร็วรอบ</div><div class="sim-rv" id="inv-out2">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="inv-l3">ฟลักซ์ในแกน</div><div class="sim-rv" id="inv-out3">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="inv-l4">แรงบิดที่ทำได้</div><div class="sim-rv" id="inv-out4">—</div></div>
+          </div>
+          <div class="sim-verdict" id="inv-verdict">—</div>
+        </div>
+      </div>
+
+      <div class="info-box" style="margin-top:1rem;">
+        <span class="th-only">🔎 <strong>ลองอันนี้:</strong> กด "คา 220 V" แล้วลากความถี่ลงมาที่ 20 Hz — ฟลักซ์จะพุ่งเป็น 250% ของพิกัดทันที <strong>มอเตอร์ร้อนจัดทั้งที่หมุนช้าลงและยังไม่ได้ออกแรงอะไรเลย</strong> จากนั้นกดกลับไป "V/f คงที่" ที่ความถี่เดิม จะเห็นแรงดันลดลงเหลือ 88 V และฟลักซ์กลับมาที่ 100% พอดี — <strong>นี่คือสิ่งที่อินเวอร์เตอร์ทำจริง ๆ และเป็นเหตุผลว่าทำไมการ "ลดความถี่เฉย ๆ" ถึงใช้ไม่ได้</strong></span>
+        <span class="en-only">🔎 <strong>Try this:</strong> press "hold 220 V" and drag the frequency down to 20 Hz — flux jumps to 250% of rated. <strong>The motor overheats while turning slower and doing no work at all.</strong> Now switch back to constant V/f at the same frequency: the voltage falls to 88 V and flux lands exactly on 100%. <strong>That is what a drive really does, and why "just lower the frequency" does not work.</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 4. เกรดรูปคลื่น ──────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">เกรดของรูปคลื่นขาออก</span><span class="en-only">Output Waveform Grades</span></div>
+    <div class="card">
+      <p class="th-only">สวิตช์ทำได้แค่ "ต่อ" กับ "ตัด" มันจึงสร้างไซน์เนียน ๆ ตรง ๆ ไม่ได้ ต่างกันแค่ว่า<strong>สับเร็วแค่ไหนและฉลาดแค่ไหน</strong></p>
+      <p class="en-only">A switch can only connect or disconnect, so it cannot draw a smooth sine directly. The grades differ only in <strong>how fast and how cleverly it switches</strong>.</p>
+      <div style="overflow-x:auto;">
+        <table>
+          <tr>
+            <th><span class="th-only">รูปคลื่น</span><span class="en-only">Waveform</span></th>
+            <th><span class="th-only">ทำอย่างไร</span><span class="en-only">How it is made</span></th>
+            <th><span class="th-only">ใช้กับอะไร</span><span class="en-only">Used for</span></th>
+          </tr>
+          <tr>
+            <td><span class="th-only"><strong>สี่เหลี่ยม</strong></span><span class="en-only"><strong>Square</strong></span></td>
+            <td><span class="th-only">สลับบวก-ลบเต็มบัสทุกครึ่งคาบ — ง่ายและถูกที่สุด แต่มีฮาร์มอนิกสูงมาก</span><span class="en-only">Flip the full bus every half cycle — simplest and cheapest, but very rich in harmonics</span></td>
+            <td><span class="th-only">โหลดความร้อนหรือของเล่นราคาถูก <strong>ห้ามใช้กับมอเตอร์และหม้อแปลง</strong> จะร้อนจัด</span><span class="en-only">Heating loads and cheap gadgets. <strong>Not for motors or transformers</strong> — they overheat</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only"><strong>สี่เหลี่ยมดัดแปลง</strong><br>(modified sine)</span><span class="en-only"><strong>Modified sine</strong></span></td>
+            <td><span class="th-only">เพิ่มช่วงพักที่ศูนย์ก่อนสลับขั้ว ทำให้ค่า RMS ใกล้ไซน์ขึ้น</span><span class="en-only">Adds a rest at zero before flipping, bringing the RMS closer to a sine</span></td>
+            <td><span class="th-only">เครื่องสำรองไฟราคาประหยัด — พัดลมและอะแดปเตอร์บางตัวจะครางและร้อนกว่าปกติ</span><span class="en-only">Budget UPS units — some fans and adapters buzz and run warmer</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only"><strong>PWM ไซน์</strong><br>(SPWM)</span><span class="en-only"><strong>Sine PWM</strong></span></td>
+            <td><span class="th-only">สับเร็วหลักพันถึงหมื่นครั้งต่อวินาที แล้ว<strong>ปรับความกว้างพัลส์ตามรูปไซน์</strong> ค่าเฉลี่ยจึงเป็นไซน์</span><span class="en-only">Switches thousands of times a second and <strong>varies the pulse width along a sine</strong>, so the average is a sine</span></td>
+            <td><span class="th-only">อินเวอร์เตอร์คุมมอเตอร์ทุกตัวและเครื่องสำรองไฟเกรดดี</span><span class="en-only">Every motor drive, and good-grade UPS units</span></td>
+          </tr>
+        </table>
+      </div>
+      <div class="info-box">
+        <span class="th-only">🔎 <strong>ทำไม PWM ถึงกลายเป็นไซน์ได้</strong> — มอเตอร์คือ<a href="inductor.html">ตัวเหนี่ยวนำ</a>ก้อนใหญ่ กระแสในตัวเหนี่ยวนำเปลี่ยนทันทีไม่ได้ พัลส์ที่สับเร็วมากจึงถูก<strong>เฉลี่ยทิ้งไปเองด้วยตัวมอเตอร์</strong> เหลือแต่คลื่นมูลฐาน นี่คือเหตุผลที่ <strong>เอามัลติมิเตอร์ธรรมดาไปวัดแรงดันขาออกของอินเวอร์เตอร์แล้วอ่านค่าผิด</strong> เพราะมิเตอร์เห็นพัลส์ ไม่ได้เห็นไซน์</span>
+        <span class="en-only">🔎 <strong>Why PWM becomes a sine</strong> — a motor is a large <a href="inductor.html">inductor</a>, and current in an inductor cannot jump. Fast pulses are therefore <strong>averaged out by the motor itself</strong>, leaving the fundamental. This is also why <strong>an ordinary multimeter misreads a drive's output voltage</strong>: it sees the pulses, not the sine.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 5. ภายในเครื่อง + วงจรทีละขั้น ──── -->
   <div class="section">
     <div class="section-title"><span class="th-only">ภายในอินเวอร์เตอร์คุมมอเตอร์</span><span class="en-only">Inside a Motor Drive</span></div>
     <div class="card">
@@ -211,10 +386,10 @@
         <div class="bs-desc" data-step="7">
           <p class="th-only"><strong>ขั้นที่ 7 — เปลี่ยนความถี่ต้องเปลี่ยนแรงดันตามเสมอ:</strong> ครึ่งสะพานเปลี่ยนความถี่ได้อิสระอยู่แล้ว แต่ถ้าเปลี่ยนความถี่เฉย ๆ โดยคาความกว้างพัลส์ไว้เท่าเดิม อัตราส่วน <strong>V/f จะเพี้ยนทันที</strong> และฟลักซ์ในแกนเหล็กของมอเตอร์จะพุ่งจนอิ่มตัว
             <br>MCU จึงคุมสองอย่างพร้อมกันเสมอ: ความถี่ของคลื่นมูลฐาน และ <strong>ความกว้างพัลส์ (modulation index) ที่กำหนดแรงดันขาออก</strong> ให้ V/f คงที่ที่ 4.4 V/Hz สำหรับมอเตอร์ 220 V 50 Hz
-            <br>👉 เลื่อนลงไปลอง<strong>ซิม V/f</strong> ด้านล่าง กดปุ่ม "คา 220 V" แล้วลากความถี่ลงมา จะเห็นฟลักซ์พุ่งเป็น 250% ของพิกัดทันที</p>
+            <br>👉 ย้อนขึ้นไปที่<strong>ซิม V/f</strong> ด้านบน กดปุ่ม "คา 220 V" แล้วลากความถี่ลงมา จะเห็นฟลักซ์พุ่งเป็น 250% ของพิกัดทันที</p>
           <p class="en-only"><strong>Step 7 — change the frequency and the voltage must follow:</strong> the half-bridges can change frequency freely, but changing it while holding the pulse widths would immediately upset the <strong>V/f ratio</strong> and drive the motor's core into saturation.
             <br>So the MCU always controls two things at once: the fundamental frequency, and the <strong>pulse width (modulation index) that sets the output voltage</strong>, holding V/f at 4.4 V per Hz for a 220 V 50 Hz motor.
-            <br>👉 Scroll down to the <strong>V/f simulator</strong>, press "hold 220 V" and drag the frequency down — the flux jumps to 250% of rated at once.</p>
+            <br>👉 Go back up to the <strong>V/f simulator</strong>, press "hold 220 V" and drag the frequency down — the flux jumps to 250% of rated at once.</p>
         </div>
 
         <div class="bs-desc" data-step="8">
@@ -229,148 +404,7 @@
     </div>
   </div>
 
-  <!-- ── 3. เกรดของรูปคลื่น ──────────────────────────────── -->
-  <div class="section">
-    <div class="section-title"><span class="th-only">เกรดของรูปคลื่นขาออก</span><span class="en-only">Output Waveform Grades</span></div>
-    <div class="card">
-      <p class="th-only">สวิตช์ทำได้แค่ "ต่อ" กับ "ตัด" มันจึงสร้างไซน์เนียน ๆ ตรง ๆ ไม่ได้ ต่างกันแค่ว่า<strong>สับเร็วแค่ไหนและฉลาดแค่ไหน</strong></p>
-      <p class="en-only">A switch can only connect or disconnect, so it cannot draw a smooth sine directly. The grades differ only in <strong>how fast and how cleverly it switches</strong>.</p>
-      <div style="overflow-x:auto;">
-        <table>
-          <tr>
-            <th><span class="th-only">รูปคลื่น</span><span class="en-only">Waveform</span></th>
-            <th><span class="th-only">ทำอย่างไร</span><span class="en-only">How it is made</span></th>
-            <th><span class="th-only">ใช้กับอะไร</span><span class="en-only">Used for</span></th>
-          </tr>
-          <tr>
-            <td><span class="th-only"><strong>สี่เหลี่ยม</strong></span><span class="en-only"><strong>Square</strong></span></td>
-            <td><span class="th-only">สลับบวก-ลบเต็มบัสทุกครึ่งคาบ — ง่ายและถูกที่สุด แต่มีฮาร์มอนิกสูงมาก</span><span class="en-only">Flip the full bus every half cycle — simplest and cheapest, but very rich in harmonics</span></td>
-            <td><span class="th-only">โหลดความร้อนหรือของเล่นราคาถูก <strong>ห้ามใช้กับมอเตอร์และหม้อแปลง</strong> จะร้อนจัด</span><span class="en-only">Heating loads and cheap gadgets. <strong>Not for motors or transformers</strong> — they overheat</span></td>
-          </tr>
-          <tr>
-            <td><span class="th-only"><strong>สี่เหลี่ยมดัดแปลง</strong><br>(modified sine)</span><span class="en-only"><strong>Modified sine</strong></span></td>
-            <td><span class="th-only">เพิ่มช่วงพักที่ศูนย์ก่อนสลับขั้ว ทำให้ค่า RMS ใกล้ไซน์ขึ้น</span><span class="en-only">Adds a rest at zero before flipping, bringing the RMS closer to a sine</span></td>
-            <td><span class="th-only">เครื่องสำรองไฟราคาประหยัด — พัดลมและอะแดปเตอร์บางตัวจะครางและร้อนกว่าปกติ</span><span class="en-only">Budget UPS units — some fans and adapters buzz and run warmer</span></td>
-          </tr>
-          <tr>
-            <td><span class="th-only"><strong>PWM ไซน์</strong><br>(SPWM)</span><span class="en-only"><strong>Sine PWM</strong></span></td>
-            <td><span class="th-only">สับเร็วหลักพันถึงหมื่นครั้งต่อวินาที แล้ว<strong>ปรับความกว้างพัลส์ตามรูปไซน์</strong> ค่าเฉลี่ยจึงเป็นไซน์</span><span class="en-only">Switches thousands of times a second and <strong>varies the pulse width along a sine</strong>, so the average is a sine</span></td>
-            <td><span class="th-only">อินเวอร์เตอร์คุมมอเตอร์ทุกตัวและเครื่องสำรองไฟเกรดดี</span><span class="en-only">Every motor drive, and good-grade UPS units</span></td>
-          </tr>
-        </table>
-      </div>
-      <div class="info-box">
-        <span class="th-only">🔎 <strong>ทำไม PWM ถึงกลายเป็นไซน์ได้</strong> — มอเตอร์คือ<a href="inductor.html">ตัวเหนี่ยวนำ</a>ก้อนใหญ่ กระแสในตัวเหนี่ยวนำเปลี่ยนทันทีไม่ได้ พัลส์ที่สับเร็วมากจึงถูก<strong>เฉลี่ยทิ้งไปเองด้วยตัวมอเตอร์</strong> เหลือแต่คลื่นมูลฐาน นี่คือเหตุผลที่ <strong>เอามัลติมิเตอร์ธรรมดาไปวัดแรงดันขาออกของอินเวอร์เตอร์แล้วอ่านค่าผิด</strong> เพราะมิเตอร์เห็นพัลส์ ไม่ได้เห็นไซน์</span>
-        <span class="en-only">🔎 <strong>Why PWM becomes a sine</strong> — a motor is a large <a href="inductor.html">inductor</a>, and current in an inductor cannot jump. Fast pulses are therefore <strong>averaged out by the motor itself</strong>, leaving the fundamental. This is also why <strong>an ordinary multimeter misreads a drive's output voltage</strong>: it sees the pulses, not the sine.</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── 4. ซิม ──────────────────────────────────────────── -->
-  <div class="section">
-    <div class="section-title"><span class="th-only">ทดลอง: ความถี่ แรงดัน และฟลักซ์</span><span class="en-only">Try It: Frequency, Voltage &amp; Flux</span></div>
-    <div class="card">
-      <p class="th-only">ปรับความถี่กับโหลด แล้วสลับระหว่าง <strong>V/f คงที่</strong> (สิ่งที่อินเวอร์เตอร์ของจริงทำ) กับ <strong>คาแรงดันไว้ 220 V</strong> (สิ่งที่จะเกิดถ้าเปลี่ยนแค่ความถี่อย่างเดียว)</p>
-      <p class="en-only">Set the frequency and load, then switch between <strong>constant V/f</strong> — what a real drive does — and <strong>holding 220 V</strong>, which is what happens if you change frequency alone.</p>
-
-      <div class="sim-wrap" id="inverter-sim">
-        <canvas id="inv-canvas" class="sim-screen" width="560" height="330" aria-label="Inverter and V/f simulator"></canvas>
-        <div class="sim-panel">
-          <div class="sim-modes">
-            <button id="inv-w-square" type="button">⬛ <span class="th-only">สี่เหลี่ยม</span><span class="en-only">Square</span></button>
-            <button id="inv-w-mod" type="button">▤ <span class="th-only">ดัดแปลง</span><span class="en-only">Modified</span></button>
-            <button id="inv-w-pwm" class="active" type="button">〜 PWM</button>
-          </div>
-          <div class="sim-modes">
-            <button id="inv-c-vf" class="active" type="button">✅ <span class="th-only">V/f คงที่</span><span class="en-only">Constant V/f</span></button>
-            <button id="inv-c-fixed" type="button">⚠️ <span class="th-only">คา 220 V</span><span class="en-only">Hold 220 V</span></button>
-          </div>
-
-          <div class="sim-ctrl">
-            <div class="sim-ctrl-row">
-              <label for="inv-f"><span class="th-only">ความถี่ขาออก</span><span class="en-only">Output frequency</span></label>
-              <span id="inv-f-val">50 Hz</span>
-            </div>
-            <input type="range" id="inv-f" min="5" max="70" step="1" value="50">
-          </div>
-          <div class="sim-ctrl">
-            <div class="sim-ctrl-row">
-              <label for="inv-load"><span class="th-only">โหลดที่เพลา</span><span class="en-only">Shaft load</span></label>
-              <span id="inv-load-val">60%</span>
-            </div>
-            <input type="range" id="inv-load" min="0" max="150" step="5" value="60">
-          </div>
-
-          <div class="sim-readout">
-            <div class="sim-rb"><div class="sim-rl" id="inv-l1">แรงดันขาออก</div><div class="sim-rv" id="inv-out1">—</div></div>
-            <div class="sim-rb"><div class="sim-rl" id="inv-l2">ความเร็วรอบ</div><div class="sim-rv" id="inv-out2">—</div></div>
-            <div class="sim-rb"><div class="sim-rl" id="inv-l3">ฟลักซ์ในแกน</div><div class="sim-rv" id="inv-out3">—</div></div>
-            <div class="sim-rb"><div class="sim-rl" id="inv-l4">แรงบิดที่ทำได้</div><div class="sim-rv" id="inv-out4">—</div></div>
-          </div>
-          <div class="sim-verdict" id="inv-verdict">—</div>
-        </div>
-      </div>
-
-      <div class="info-box" style="margin-top:1rem;">
-        <span class="th-only">🔎 <strong>ลองอันนี้:</strong> กด "คา 220 V" แล้วลากความถี่ลงมาที่ 20 Hz — ฟลักซ์จะพุ่งเป็น 250% ของพิกัดทันที <strong>มอเตอร์ร้อนจัดทั้งที่หมุนช้าลงและยังไม่ได้ออกแรงอะไรเลย</strong> จากนั้นกดกลับไป "V/f คงที่" ที่ความถี่เดิม จะเห็นแรงดันลดลงเหลือ 88 V และฟลักซ์กลับมาที่ 100% พอดี — <strong>นี่คือสิ่งที่อินเวอร์เตอร์ทำจริง ๆ และเป็นเหตุผลว่าทำไมการ "ลดความถี่เฉย ๆ" ถึงใช้ไม่ได้</strong></span>
-        <span class="en-only">🔎 <strong>Try this:</strong> press "hold 220 V" and drag the frequency down to 20 Hz — flux jumps to 250% of rated. <strong>The motor overheats while turning slower and doing no work at all.</strong> Now switch back to constant V/f at the same frequency: the voltage falls to 88 V and flux lands exactly on 100%. <strong>That is what a drive really does, and why "just lower the frequency" does not work.</strong></span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── 5. V/f ─────────────────────────────────────────── -->
-  <div class="section">
-    <div class="section-title"><span class="th-only">หัวใจของ VFD: V/f คงที่</span><span class="en-only">The Heart of a VFD: Constant V/f</span></div>
-    <div class="card">
-      <div class="inv-two">
-        <div>
-          <div class="formula-box">
-            <div class="formula">n<sub>s</sub> = 120 × f ÷ P</div>
-            <p class="th-only" style="margin:.5rem 0 0;font-size:.9rem;">ความเร็วสนามหมุน (rpm) — f คือความถี่ (Hz) และ P คือจำนวนขั้วของมอเตอร์ · มอเตอร์ 4 ขั้วที่ 50 Hz ได้ 1,500 rpm</p>
-            <p class="en-only" style="margin:.5rem 0 0;font-size:.9rem;">Synchronous speed in rpm, where f is the frequency and P the number of poles. A 4-pole motor at 50 Hz gives 1,500 rpm.</p>
-          </div>
-          <div class="formula-box">
-            <div class="formula">Φ ∝ V ÷ f</div>
-            <p class="th-only" style="margin:.5rem 0 0;font-size:.9rem;">ฟลักซ์ในแกนเหล็กแปรตามอัตราส่วนแรงดันต่อความถี่ · มอเตอร์ 220 V 50 Hz มีพิกัด <strong>4.4 V ต่อ Hz</strong></p>
-            <p class="en-only" style="margin:.5rem 0 0;font-size:.9rem;">Core flux follows the voltage-to-frequency ratio. A 220 V 50 Hz motor is rated at <strong>4.4 V per Hz</strong>.</p>
-          </div>
-        </div>
-        <div>
-          <p class="th-only">ขดลวดของมอเตอร์ก็คือขดลวดบนแกนเหล็ก เหมือน<a href="transformer.html">หม้อแปลง</a>ทุกประการ ปัญหาจึงเหมือนกัน: <strong>ถ้าลดความถี่แต่ไม่ลดแรงดัน ฟลักซ์จะพุ่งจนแกนอิ่มตัว</strong> พออิ่มตัวแล้วขดลวดจะเหลือแค่ความต้านทานเปล่า ๆ กระแสจึงพุ่งขึ้นโดยไม่ได้แรงบิดเพิ่มเลย มอเตอร์ร้อนไหม้ทั้งที่หมุนเบา ๆ</p>
-          <p class="th-only">อินเวอร์เตอร์จึง<strong>ลดแรงดันลงพร้อมกับความถี่เสมอ</strong> ให้อัตราส่วน V/f คงที่ ฟลักซ์คงที่ แรงบิดจึงคงที่ตลอดย่านความเร็ว</p>
-          <p class="en-only">A motor winding is a coil on an iron core, exactly like a <a href="transformer.html">transformer</a>, so it has the same problem: <strong>lower the frequency without lowering the voltage and the flux climbs until the core saturates.</strong> Once saturated, the winding is little more than bare resistance — current soars with no extra torque, and the motor cooks while barely turning.</p>
-          <p class="en-only">So a drive <strong>always drops the voltage along with the frequency</strong>, keeping V/f, and therefore flux and torque, constant across the speed range.</p>
-        </div>
-      </div>
-
-      <div style="overflow-x:auto;margin-top:1rem;">
-        <table>
-          <tr>
-            <th><span class="th-only">ย่านการทำงาน</span><span class="en-only">Region</span></th>
-            <th><span class="th-only">แรงดันและฟลักซ์</span><span class="en-only">Voltage &amp; flux</span></th>
-            <th><span class="th-only">แรงบิด</span><span class="en-only">Torque</span></th>
-          </tr>
-          <tr>
-            <td><span class="th-only">ต่ำกว่าพิกัด (0–50 Hz)</span><span class="en-only">Below rated (0–50 Hz)</span></td>
-            <td><span class="th-only">แรงดันลดตามความถี่ ฟลักซ์คงที่ 100%</span><span class="en-only">Voltage tracks frequency, flux stays at 100%</span></td>
-            <td><span class="th-only"><strong>เต็มพิกัดตลอดย่าน</strong> — ปั่นช้าแต่ยังมีแรง</span><span class="en-only"><strong>Full torque throughout</strong> — slow but still strong</span></td>
-          </tr>
-          <tr>
-            <td><span class="th-only">เหนือพิกัด (&gt; 50 Hz)</span><span class="en-only">Above rated (&gt; 50 Hz)</span></td>
-            <td><span class="th-only">แรงดันชนเพดานของบัส DC แล้ว ฟลักซ์จึงลดลง</span><span class="en-only">Voltage hits the DC-bus ceiling, so flux falls</span></td>
-            <td><span class="th-only">ตกลงตามส่วน — <strong>ย่านลดฟลักซ์</strong> เร็วขึ้นแต่แรงน้อยลง</span><span class="en-only">Falls proportionally — the <strong>field-weakening region</strong>: faster but weaker</span></td>
-          </tr>
-          <tr>
-            <td><span class="th-only">ความถี่ต่ำมาก (&lt; 5 Hz)</span><span class="en-only">Very low (&lt; 5 Hz)</span></td>
-            <td><span class="th-only">แรงดันเหลือน้อยจนถูกความต้านทานขดลวดกินไปหมด ต้องใส่ <strong>torque boost</strong> ชดเชย</span><span class="en-only">So little voltage that winding resistance eats it all — needs a <strong>torque boost</strong></span></td>
-            <td><span class="th-only">ตกถ้าไม่ชดเชย — ตั้ง boost มากเกินก็ร้อนตอนเดินเบา</span><span class="en-only">Drops without boost — but too much boost overheats it at light load</span></td>
-          </tr>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── 6. เรื่องที่ทำให้ IGBT ระเบิด ───────────────────── -->
+  <!-- ── 6. สองเรื่องที่ทำให้ภาคกำลังพัง ──── -->
   <div class="section">
     <div class="section-title"><span class="th-only">สองเรื่องที่ทำให้ภาคกำลังพัง</span><span class="en-only">Two Ways the Power Stage Dies</span></div>
     <div class="card">
@@ -395,10 +429,14 @@
     </div>
   </div>
 
-  <!-- ── 7. การวัดและตรวจเช็ค ───────────────────────────── -->
+  <!-- ── 7. การวัดและตรวจเช็ค ────────────────── -->
   <div class="section">
     <div class="section-title"><span class="th-only">การวัดและตรวจเช็ค</span><span class="en-only">Measuring &amp; Testing</span></div>
     <div class="card">
+      <div class="warn-box" style="margin-top:0;">
+        <span class="th-only">⚠️ <strong>อ่านก่อนหยิบมิเตอร์:</strong> ทุกแถวที่เขียนว่า "ถอดปลั๊ก" หมายถึง <strong>ถอดปลั๊กแล้ววัดยืนยันว่าบัส DC ต่ำกว่า 30 V ก่อน</strong> คาปาซิเตอร์บัสอมประจุ 310 V ไว้ได้หลายนาที และห้ามคายประจุด้วยการช็อตไขควง · ดูกฎเต็มในหัวข้อความปลอดภัยท้ายบท</span>
+        <span class="en-only">⚠️ <strong>Before you pick up the meter:</strong> every row that says "unplugged" means <strong>unplug it and then confirm the DC bus is below 30 V</strong>. The bus capacitor holds 310 V for minutes, and it must never be discharged by shorting a screwdriver across it. The full rules are in the safety section at the end.</span>
+      </div>
       <div style="overflow-x:auto;">
         <table>
           <tr>
@@ -445,7 +483,7 @@
     </div>
   </div>
 
-  <!-- ── 8. ความปลอดภัย ─────────────────────────────────── -->
+  <!-- ── 8. ความปลอดภัย ────────────────────────────── -->
   <div class="section">
     <div class="section-title"><span class="th-only">ความปลอดภัย</span><span class="en-only">Safety</span></div>
     <div class="card">
@@ -463,6 +501,20 @@
         <li><strong>The motor can start at any moment</strong> while the board is powered. Keep hands and tools clear of fans and belts before every test run.</li>
         <li>For the first run after a repair, <strong>power it through a series incandescent lamp</strong> and run it with no load attached.</li>
       </ul>
+      <div class="formula-box">
+        <strong class="th-only">✅ จำ 3 อย่างนี้พอ</strong>
+        <strong class="en-only">✅ Three things to remember</strong>
+        <ul class="content-list th-only" style="margin-bottom:0;">
+          <li><strong>เปลี่ยนความถี่ = เปลี่ยนความเร็ว</strong> เพราะมอเตอร์วิ่งตามสนามที่หมุน และสนามหมุนเร็วตามความถี่ (n<sub>s</sub> = 120f ÷ P)</li>
+          <li><strong>เปลี่ยนความถี่แล้วต้องเปลี่ยนแรงดันตามเสมอ</strong> ให้ V/f คงที่ ไม่งั้นฟลักซ์พุ่งจนแกนอิ่มตัวและมอเตอร์ไหม้ทั้งที่หมุนเบา ๆ</li>
+          <li><strong>ถอดปลั๊กแล้วบัสยังมีไฟ</strong> ต้องวัดยืนยันต่ำกว่า 30 V ก่อนแตะบอร์ดทุกครั้ง</li>
+        </ul>
+        <ul class="content-list en-only" style="margin-bottom:0;">
+          <li><strong>Change the frequency and you change the speed</strong>, because the rotor follows a field whose speed comes straight from the frequency (n<sub>s</sub> = 120f / P).</li>
+          <li><strong>Whenever the frequency changes, the voltage must follow</strong> to keep V/f constant, or the flux saturates the core and the motor burns while barely turning.</li>
+          <li><strong>Unplugged does not mean dead.</strong> Confirm the bus is below 30 V before touching the board, every time.</li>
+        </ul>
+      </div>
       <div class="info-box">
         <span class="th-only">📚 อ่านต่อ: <a href="igbt.html">IGBT</a> (สวิตช์ที่ใช้ในภาคกำลัง) · <a href="power-supply.html">แหล่งจ่ายไฟ</a> (ทิศทางตรงข้าม AC→DC) · <a href="transformer.html">หม้อแปลงไฟฟ้า</a> (ที่มาของเรื่องฟลักซ์อิ่มตัว) · <a href="washing-machine-top.html">เครื่องซักผ้าฝาบนอินเวอร์เตอร์</a> และ <a href="washing-machine-front.html">ฝาหน้า Direct Drive</a> (วงจรเดียวกันนี้ในเครื่องจริง)</span>
         <span class="en-only">📚 See also: <a href="igbt.html">IGBT</a> (the switch in the power stage) · <a href="power-supply.html">Power Supply</a> (the same road in the other direction) · <a href="transformer.html">Transformer</a> (where core saturation comes from) · <a href="washing-machine-top.html">Inverter top loader</a> and <a href="washing-machine-front.html">direct-drive front loader</a> (this circuit in a real appliance)</span>
