@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="ฟิลเตอร์และเรโซแนนซ์ | สื่อการเรียนการสอน" data-title-en="Filters &amp; Resonance | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ฟิลเตอร์และเรโซแนนซ์ | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  /* คลาสเฉพาะหน้านี้ — วงจรฟิลเตอร์ 4 แบบเรียงเป็นการ์ด */
+  .flt-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1rem; }
+  .flt-card { border:1px solid var(--border); border-radius:12px; padding:.9rem; background:var(--bg); }
+  .flt-card svg { width:100%; height:auto; display:block; }
+  .flt-card h4 { margin:.1rem 0 .5rem; font-size:.98rem; }
+  .flt-card p { margin:.5rem 0 0; font-size:.86rem; color:var(--text-light); }
+  .flt-two { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; align-items:start; }
+  @media (max-width:760px){ .flt-two{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">📉</div>
+    <div>
+      <h1 class="th-only">ฟิลเตอร์และเรโซแนนซ์ (Filters &amp; Resonance)</h1>
+      <h1 class="en-only">Filters &amp; Resonance</h1>
+      <p>f<sub>c</sub> = 1/(2πRC) • <span class="th-only">ผ่านต่ำ ผ่านสูง • −3 dB • วงจรเรโซแนนซ์ RLC</span><span class="en-only">Low-pass • High-pass • −3 dB • RLC resonance</span></p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ── 1. ทำไมต้องมีฟิลเตอร์ ──────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ทำไมวงจรถึงต้องมีฟิลเตอร์</span><span class="en-only">Why Circuits Need Filters</span></div>
+    <div class="card">
+      <p class="th-only">ในสายไฟเส้นเดียวมักมีทั้ง <strong>สัญญาณที่เราต้องการ</strong> และ <strong>สิ่งที่เราไม่ต้องการ</strong> ปนกันอยู่ และสองอย่างนี้แทบทุกครั้ง <strong>อยู่คนละความถี่กัน</strong> ฟิลเตอร์คือวงจรที่แยกมันออกจากกันด้วยความถี่ ไม่ใช่ด้วยขนาดของสัญญาณ</p>
+      <p class="en-only">One wire usually carries both <strong>the signal you want</strong> and <strong>things you do not</strong> — and almost always the two <strong>sit at different frequencies</strong>. A filter separates them by frequency, not by size.</p>
+      <ul class="content-list th-only">
+        <li><strong>คาปาซิเตอร์กรองใน<a href="power-supply.html">แหล่งจ่ายไฟ</a></strong> — ปล่อยไฟ DC (0 Hz) ผ่าน แล้วรีดริปเปิล 100 Hz ทิ้ง คือฟิลเตอร์ผ่านความถี่ต่ำเต็มตัว</li>
+        <li><strong>EMI filter หน้าเครื่องซักผ้าและบอร์ดสวิตชิ่ง</strong> — กันสัญญาณรบกวนความถี่สูงจากบอร์ดไม่ให้ย้อนออกไปกวนไฟบ้าน</li>
+        <li><strong>คาปาซิเตอร์ 0.1 µF คร่อมขาไฟของ<a href="ic.html">ไอซี</a></strong> — ลัดสัญญาณรบกวนความถี่สูงลงกราวด์ตรงจุดที่มันเกิด</li>
+        <li><strong>วงจรเลือกสถานีวิทยุ</strong> — วงจรเรโซแนนซ์ที่ยอมให้ผ่านเฉพาะความถี่แคบ ๆ ความถี่เดียว</li>
+        <li><strong>ครอสโอเวอร์ในตู้ลำโพง</strong> — ส่งเสียงทุ้มไปวูฟเฟอร์และเสียงแหลมไปทวีตเตอร์ ด้วยฟิลเตอร์คนละแบบ</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li><strong>The smoothing capacitor in a <a href="power-supply.html">power supply</a></strong> passes DC (0 Hz) and strips the 100 Hz ripple — a low-pass filter through and through.</li>
+        <li><strong>The EMI filter at the mains inlet</strong> of a washing machine or switching board keeps high-frequency noise from escaping back into the house wiring.</li>
+        <li><strong>The 0.1 µF capacitor across an <a href="ic.html">IC</a>'s supply pins</strong> shunts high-frequency noise to ground right where it is created.</li>
+        <li><strong>A radio's tuning circuit</strong> is a resonant filter that admits one narrow band and rejects the rest.</li>
+        <li><strong>A loudspeaker crossover</strong> sends bass to the woofer and treble to the tweeter using two different filters.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── 2. รีแอกแตนซ์ ──────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">กุญแจของทั้งบท: ความต้านทานที่ขึ้นกับความถี่</span><span class="en-only">The Key: Resistance That Depends on Frequency</span></div>
+    <div class="card">
+      <p class="th-only">ตัวต้านทานต้านกระแสเท่ากันทุกความถี่ แต่ <a href="capacitor.html">ตัวเก็บประจุ</a> กับ <a href="inductor.html">ตัวเหนี่ยวนำ</a> ไม่ใช่ — ความต้านทานของมันเปลี่ยนตามความถี่ เรียกว่า <strong>รีแอกแตนซ์</strong> และนี่คือสิ่งเดียวที่ทำให้ฟิลเตอร์เป็นไปได้</p>
+      <p class="en-only">A resistor opposes current equally at every frequency. A <a href="capacitor.html">capacitor</a> and an <a href="inductor.html">inductor</a> do not — their opposition changes with frequency, and it is called <strong>reactance</strong>. That single fact is what makes filters possible.</p>
+      <div class="flt-two">
+        <div class="formula-box">
+          <div class="formula">X<sub>C</sub> = 1 / (2πfC)</div>
+          <p class="th-only" style="margin:.5rem 0 0;font-size:.9rem;">ความถี่ยิ่งสูง X<sub>C</sub> ยิ่งต่ำ — <strong>ตัวเก็บประจุกั้นไฟ DC แต่ปล่อยความถี่สูงผ่าน</strong> ที่ 0 Hz ค่าเป็นอนันต์ (วงจรเปิด)</p>
+          <p class="en-only" style="margin:.5rem 0 0;font-size:.9rem;">Higher frequency, lower X<sub>C</sub> — <strong>a capacitor blocks DC and passes high frequencies</strong>. At 0 Hz it is infinite: an open circuit.</p>
+        </div>
+        <div class="formula-box">
+          <div class="formula">X<sub>L</sub> = 2πfL</div>
+          <p class="th-only" style="margin:.5rem 0 0;font-size:.9rem;">ความถี่ยิ่งสูง X<sub>L</sub> ยิ่งสูง — <strong>ตัวเหนี่ยวนำปล่อย DC ผ่านสบาย แต่ขวางความถี่สูง</strong> ตรงข้ามกับตัวเก็บประจุพอดี</p>
+          <p class="en-only" style="margin:.5rem 0 0;font-size:.9rem;">Higher frequency, higher X<sub>L</sub> — <strong>an inductor passes DC easily and obstructs high frequencies</strong>, the exact opposite of a capacitor.</p>
+        </div>
+      </div>
+      <div class="info-box">
+        <span class="th-only">💡 <strong>อ่านวงจรฟิลเตอร์ให้ออกใน 3 วินาที:</strong> ดูว่า<strong>อะไรอยู่ขนานกับขาออก</strong> — ถ้าเป็นตัวเก็บประจุ มันจะลัดความถี่สูงลงกราวด์ ได้ฟิลเตอร์ผ่านความถี่ต่ำ · ถ้าเป็นตัวเหนี่ยวนำ มันจะลัดความถี่ต่ำลงกราวด์ ได้ฟิลเตอร์ผ่านความถี่สูง ใช้กฎนี้อ่านวงจรได้ทุกแบบโดยไม่ต้องจำภาพ</span>
+        <span class="en-only">💡 <strong>Read any filter in three seconds:</strong> look at <strong>what sits in parallel with the output</strong>. A capacitor there shunts high frequencies to ground, so it is a low-pass. An inductor there shunts low frequencies, so it is a high-pass. That rule reads every filter without memorising pictures.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 3. วงจรพื้นฐาน 4 แบบ ───────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ฟิลเตอร์พื้นฐาน 4 แบบ</span><span class="en-only">The Four Basic Filters</span></div>
+    <div class="card">
+      <div class="flt-grid">
+        <div class="flt-card">
+          <h4><span class="th-only">RC ผ่านความถี่ต่ำ</span><span class="en-only">RC low-pass</span></h4>
+          <svg viewBox="0 0 200 90" role="img" aria-label="RC low-pass">
+            <g stroke="var(--primary)" stroke-width="2" fill="none">
+              <line x1="10" y1="26" x2="60" y2="26"/><rect x="60" y="19" width="34" height="14"/>
+              <line x1="94" y1="26" x2="150" y2="26"/><line x1="150" y1="26" x2="190" y2="26"/>
+              <line x1="150" y1="26" x2="150" y2="44"/>
+              <line x1="136" y1="44" x2="164" y2="44"/><line x1="136" y1="52" x2="164" y2="52"/>
+              <line x1="150" y1="52" x2="150" y2="72"/><line x1="10" y1="72" x2="190" y2="72"/>
+              <line x1="138" y1="72" x2="162" y2="72"/>
+            </g>
+            <text x="77" y="14" text-anchor="middle" font-size="11" fill="var(--text)">R</text>
+            <text x="172" y="50" text-anchor="middle" font-size="11" fill="var(--text)">C</text>
+            <text x="14" y="18" font-size="10" fill="var(--text-light)">in</text>
+            <text x="180" y="18" font-size="10" fill="var(--text-light)">out</text>
+          </svg>
+          <p class="th-only">C ขนานกับขาออก → ความถี่สูงถูกลัดลงกราวด์ · f<sub>c</sub> = 1/(2πRC)</p>
+          <p class="en-only">C across the output shunts highs to ground · f<sub>c</sub> = 1/(2πRC)</p>
+        </div>
+        <div class="flt-card">
+          <h4><span class="th-only">RC ผ่านความถี่สูง</span><span class="en-only">RC high-pass</span></h4>
+          <svg viewBox="0 0 200 90" role="img" aria-label="RC high-pass">
+            <g stroke="var(--primary)" stroke-width="2" fill="none">
+              <line x1="10" y1="26" x2="66" y2="26"/>
+              <line x1="66" y1="12" x2="66" y2="40"/><line x1="74" y1="12" x2="74" y2="40"/>
+              <line x1="74" y1="26" x2="150" y2="26"/><line x1="150" y1="26" x2="190" y2="26"/>
+              <line x1="150" y1="26" x2="150" y2="40"/><rect x="143" y="40" width="14" height="26"/>
+              <line x1="150" y1="66" x2="150" y2="72"/><line x1="10" y1="72" x2="190" y2="72"/>
+            </g>
+            <text x="70" y="52" text-anchor="middle" font-size="11" fill="var(--text)">C</text>
+            <text x="170" y="56" text-anchor="middle" font-size="11" fill="var(--text)">R</text>
+            <text x="14" y="18" font-size="10" fill="var(--text-light)">in</text>
+            <text x="180" y="18" font-size="10" fill="var(--text-light)">out</text>
+          </svg>
+          <p class="th-only">สลับที่ R กับ C แล้วผลกลับข้าง · f<sub>c</sub> สูตรเดิม</p>
+          <p class="en-only">Swap R and C and the response flips · same f<sub>c</sub> formula</p>
+        </div>
+        <div class="flt-card">
+          <h4><span class="th-only">RL ผ่านความถี่ต่ำ</span><span class="en-only">RL low-pass</span></h4>
+          <svg viewBox="0 0 200 90" role="img" aria-label="RL low-pass">
+            <g stroke="var(--primary)" stroke-width="2" fill="none">
+              <line x1="10" y1="26" x2="58" y2="26"/>
+              <path d="M58 26 a7 7 0 0 1 14 0 a7 7 0 0 1 14 0 a7 7 0 0 1 14 0"/>
+              <line x1="100" y1="26" x2="150" y2="26"/><line x1="150" y1="26" x2="190" y2="26"/>
+              <line x1="150" y1="26" x2="150" y2="40"/><rect x="143" y="40" width="14" height="26"/>
+              <line x1="150" y1="66" x2="150" y2="72"/><line x1="10" y1="72" x2="190" y2="72"/>
+            </g>
+            <text x="79" y="14" text-anchor="middle" font-size="11" fill="var(--text)">L</text>
+            <text x="170" y="56" text-anchor="middle" font-size="11" fill="var(--text)">R</text>
+            <text x="14" y="18" font-size="10" fill="var(--text-light)">in</text>
+            <text x="180" y="18" font-size="10" fill="var(--text-light)">out</text>
+          </svg>
+          <p class="th-only">L ขวางความถี่สูงไว้ที่ทางเข้า · f<sub>c</sub> = R/(2πL)</p>
+          <p class="en-only">L blocks highs on the way in · f<sub>c</sub> = R/(2πL)</p>
+        </div>
+        <div class="flt-card">
+          <h4><span class="th-only">RL ผ่านความถี่สูง</span><span class="en-only">RL high-pass</span></h4>
+          <svg viewBox="0 0 200 90" role="img" aria-label="RL high-pass">
+            <g stroke="var(--primary)" stroke-width="2" fill="none">
+              <line x1="10" y1="26" x2="60" y2="26"/><rect x="60" y="19" width="34" height="14"/>
+              <line x1="94" y1="26" x2="150" y2="26"/><line x1="150" y1="26" x2="190" y2="26"/>
+              <line x1="150" y1="26" x2="150" y2="38"/>
+              <path d="M150 38 a7 7 0 0 0 0 14 a7 7 0 0 0 0 14"/>
+              <line x1="150" y1="66" x2="150" y2="72"/><line x1="10" y1="72" x2="190" y2="72"/>
+            </g>
+            <text x="77" y="14" text-anchor="middle" font-size="11" fill="var(--text)">R</text>
+            <text x="172" y="52" text-anchor="middle" font-size="11" fill="var(--text)">L</text>
+            <text x="14" y="18" font-size="10" fill="var(--text-light)">in</text>
+            <text x="180" y="18" font-size="10" fill="var(--text-light)">out</text>
+          </svg>
+          <p class="th-only">L ขนานกับขาออก ลัดความถี่ต่ำลงกราวด์ · f<sub>c</sub> = R/(2πL)</p>
+          <p class="en-only">L across the output shunts lows · f<sub>c</sub> = R/(2πL)</p>
+        </div>
+      </div>
+
+      <div class="formula-box" style="text-align:center;margin-top:1.25rem;">
+        <div class="formula">f<sub>c</sub> = 1 / (2πRC)&nbsp;&nbsp;&nbsp;·&nbsp;&nbsp;&nbsp;f<sub>c</sub> = R / (2πL)</div>
+        <p class="th-only" style="margin:.5rem 0 0;font-size:.9rem;">ทั้งสองสูตรมาจากเงื่อนไขเดียวกัน คือ <strong>จุดที่รีแอกแตนซ์เท่ากับความต้านทานพอดี</strong> ไม่ต้องท่องแยกกัน</p>
+        <p class="en-only" style="margin:.5rem 0 0;font-size:.9rem;">Both formulas come from one condition — <strong>the point where reactance equals resistance</strong>. No need to memorise them separately.</p>
+      </div>
+
+      <div class="info-box">
+        <span class="th-only">🧮 <strong>ตัวอย่าง:</strong> R = 1 kΩ กับ C = 0.1 µF → f<sub>c</sub> = 1 ÷ (2π × 1000 × 0.0000001) ≈ <strong>1,591 Hz</strong> · สัญญาณ 160 Hz ผ่านได้เกือบเต็ม ส่วน 16 kHz เหลือราวหนึ่งในสิบ</span>
+        <span class="en-only">🧮 <strong>Worked example:</strong> R = 1 kΩ with C = 0.1 µF gives f<sub>c</sub> = 1 ÷ (2π × 1000 × 0.0000001) ≈ <strong>1,591 Hz</strong>. A 160 Hz signal passes almost untouched; 16 kHz is cut to roughly a tenth.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 4. −3 dB ───────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ความถี่ตัดและ −3 dB</span><span class="en-only">Cutoff and −3 dB</span></div>
+    <div class="card">
+      <p class="th-only"><strong>ความถี่ตัดไม่ใช่กำแพง</strong> — ที่ f<sub>c</sub> สัญญาณยังผ่านได้ตั้ง 70.7% ของเดิม ที่เรียกว่า "ตัด" เพราะเป็นจุดที่ <strong>กำลังไฟฟ้าเหลือครึ่งเดียว</strong> พอดี (0.707² = 0.5) และเมื่อคิดเป็นเดซิเบลจะได้ −3 dB พอดี จึงใช้เป็นหมุดหมายสากล</p>
+      <p class="en-only"><strong>Cutoff is not a wall.</strong> At f<sub>c</sub> the signal is still 70.7% of what went in. It counts as "cut" because that is where <strong>the power is halved</strong> (0.707² = 0.5), which works out to exactly −3 dB — hence the universal marker.</p>
+      <div style="overflow-x:auto;">
+        <table>
+          <tr>
+            <th><span class="th-only">ความถี่เทียบ f<sub>c</sub></span><span class="en-only">Frequency vs f<sub>c</sub></span></th>
+            <th><span class="th-only">แรงดันที่ผ่าน</span><span class="en-only">Voltage through</span></th>
+            <th><span class="th-only">เดซิเบล</span><span class="en-only">Decibels</span></th>
+            <th><span class="th-only">ความหมาย</span><span class="en-only">Meaning</span></th>
+          </tr>
+          <tr>
+            <td>0.1 × f<sub>c</sub></td><td>≈ 99.5%</td><td>≈ 0 dB</td>
+            <td><span class="th-only">อยู่ในย่านผ่านเต็ม ๆ</span><span class="en-only">Solidly in the pass band</span></td>
+          </tr>
+          <tr>
+            <td><strong>f<sub>c</sub></strong></td><td><strong>70.7%</strong></td><td><strong>−3 dB</strong></td>
+            <td><span class="th-only"><strong>กำลังเหลือครึ่งเดียว</strong> — นิยามของความถี่ตัด</span><span class="en-only"><strong>Half the power</strong> — the definition of cutoff</span></td>
+          </tr>
+          <tr>
+            <td>10 × f<sub>c</sub></td><td>≈ 10%</td><td>−20 dB</td>
+            <td><span class="th-only">ห่างไป 1 decade เหลือหนึ่งในสิบ</span><span class="en-only">One decade out, a tenth remains</span></td>
+          </tr>
+          <tr>
+            <td>100 × f<sub>c</sub></td><td>≈ 1%</td><td>−40 dB</td>
+            <td><span class="th-only">2 decade เหลือหนึ่งในร้อย — <strong>ยังไม่เป็นศูนย์</strong></span><span class="en-only">Two decades, a hundredth — <strong>still not zero</strong></span></td>
+          </tr>
+        </table>
+      </div>
+      <div class="info-box">
+        <span class="th-only">📐 ฟิลเตอร์ที่มีอุปกรณ์เก็บพลังงาน 1 ตัว (C หรือ L หนึ่งตัว) เรียกว่า <strong>อันดับหนึ่ง</strong> ความชันคงที่ที่ <strong>−20 dB ต่อ decade</strong> · ถ้าต้องการชันกว่านี้ต้องต่อหลายชั้น สองชั้นได้ −40 dB/decade แต่แลกมาด้วยการเลื่อนเฟสที่มากขึ้นและวงจรที่แกว่งง่ายขึ้น</span>
+        <span class="en-only">📐 A filter with one energy-storing part (a single C or L) is <strong>first order</strong> and rolls off at a steady <strong>−20 dB per decade</strong>. Steeper needs more stages — two gives −40 dB/decade, at the cost of more phase shift and a circuit that is easier to make ring.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 5. ซิม ─────────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ทดลอง: กราฟผลตอบสนองความถี่</span><span class="en-only">Try It: The Frequency Response</span></div>
+    <div class="card">
+      <p class="th-only">เลือกชนิดฟิลเตอร์ ปรับค่าอุปกรณ์ แล้วเลื่อน <strong>ความถี่สัญญาณ</strong> ไปดูว่าที่ความถี่นั้นเหลือผ่านมาเท่าไร · แกนนอนเป็นลอการิทึม ความชันคงที่จึงกลายเป็นเส้นตรง</p>
+      <p class="en-only">Pick a filter, set the parts, then slide <strong>the signal frequency</strong> to see how much survives. The horizontal axis is logarithmic, which turns a constant roll-off into a straight line.</p>
+
+      <div class="sim-wrap" id="filter-sim">
+        <canvas id="flt-canvas" class="sim-screen" width="560" height="330" aria-label="Filter frequency response simulator"></canvas>
+        <div class="sim-panel">
+          <div class="sim-modes">
+            <button id="flt-m-lp" class="active" type="button">↘ <span class="th-only">ผ่านต่ำ</span><span class="en-only">Low-pass</span></button>
+            <button id="flt-m-hp" type="button">↗ <span class="th-only">ผ่านสูง</span><span class="en-only">High-pass</span></button>
+            <button id="flt-m-rlc" type="button">🔔 RLC</button>
+          </div>
+
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="flt-r"><span class="th-only">ตัวต้านทาน R</span><span class="en-only">Resistor R</span></label>
+              <span id="flt-r-val">1.0 kΩ</span>
+            </div>
+            <input type="range" id="flt-r" min="0" max="100" step="1" value="50">
+          </div>
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="flt-c"><span class="th-only">ตัวเก็บประจุ C</span><span class="en-only">Capacitor C</span></label>
+              <span id="flt-c-val">100 nF</span>
+            </div>
+            <input type="range" id="flt-c" min="0" max="100" step="1" value="50">
+          </div>
+          <div class="sim-ctrl" id="flt-l-row">
+            <div class="sim-ctrl-row">
+              <label for="flt-l"><span class="th-only">ตัวเหนี่ยวนำ L <span style="font-weight:400">(เฉพาะ RLC)</span></span><span class="en-only">Inductor L <span style="font-weight:400">(RLC only)</span></span></label>
+              <span id="flt-l-val">10 mH</span>
+            </div>
+            <input type="range" id="flt-l" min="0" max="100" step="1" value="67">
+          </div>
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="flt-f"><span class="th-only">ความถี่สัญญาณ</span><span class="en-only">Signal frequency</span></label>
+              <span id="flt-f-val">1.00 kHz</span>
+            </div>
+            <input type="range" id="flt-f" min="0" max="100" step="1" value="40">
+          </div>
+
+          <div class="sim-readout">
+            <div class="sim-rb"><div class="sim-rl" id="flt-l1">ความถี่ตัด fc</div><div class="sim-rv" id="flt-out1">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="flt-l2">ผ่านได้</div><div class="sim-rv" id="flt-out2">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="flt-l3">เป็นเดซิเบล</div><div class="sim-rv" id="flt-out3">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="flt-l4">มุมเฟส</div><div class="sim-rv" id="flt-out4">—</div></div>
+          </div>
+          <div class="sim-verdict" id="flt-verdict">—</div>
+        </div>
+      </div>
+
+      <div class="info-box" style="margin-top:1rem;">
+        <span class="th-only">🔎 <strong>ลองอันนี้:</strong> อยู่โหมดผ่านความถี่ต่ำ แล้วเลื่อนความถี่สัญญาณไปให้ตรงเส้นประ จะเห็นตัวเลขหยุดที่ <strong>70.7% พอดี</strong> นั่นคือ −3 dB · จากนั้นกดโหมด <strong>RLC</strong> แล้ว<strong>ลากค่า R ลงให้ต่ำ</strong> ยอดกราฟจะแหลมขึ้นเรื่อย ๆ และแถบผ่านแคบลง — นั่นคือค่า Q ที่สูงขึ้น และเป็นหลักการที่วิทยุใช้เลือกสถานีเดียวจากคลื่นทั้งอากาศ</span>
+        <span class="en-only">🔎 <strong>Try this:</strong> in low-pass, slide the signal frequency onto the dashed line and the number stops at <strong>exactly 70.7%</strong> — that is −3 dB. Then switch to <strong>RLC</strong> and <strong>drag R down</strong>: the peak sharpens and the band narrows. That is Q rising, and it is how a radio picks one station out of the whole sky.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 6. เรโซแนนซ์ ───────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">เรโซแนนซ์: เมื่อ X<sub>L</sub> หักล้าง X<sub>C</sub></span><span class="en-only">Resonance: When X<sub>L</sub> Cancels X<sub>C</sub></span></div>
+    <div class="card">
+      <p class="th-only">X<sub>C</sub> ลดลงเมื่อความถี่สูงขึ้น ส่วน X<sub>L</sub> เพิ่มขึ้น จึงต้องมีความถี่หนึ่งที่ <strong>สองค่านี้เท่ากันพอดี</strong> และเนื่องจากมันมีเฟสตรงข้ามกัน 180° มันจึง <strong>หักล้างกันหมดจนเหลือแต่ R</strong> ความถี่นั้นเรียกว่าความถี่เรโซแนนซ์</p>
+      <p class="en-only">X<sub>C</sub> falls with frequency while X<sub>L</sub> rises, so there must be one frequency where <strong>the two are equal</strong>. Because they act 180° apart, they <strong>cancel completely and leave only R</strong>. That frequency is the resonant frequency.</p>
+
+      <div class="flt-two">
+        <div>
+          <div class="formula-box">
+            <div class="formula">f<sub>0</sub> = 1 / (2π√(LC))</div>
+            <p class="th-only" style="margin:.5rem 0 0;font-size:.9rem;"><strong>ไม่มี R อยู่ในสูตร</strong> — ค่า R ไม่ได้ย้ายตำแหน่งยอด แต่เป็นตัวกำหนดว่ายอดจะแหลมหรือป้าน</p>
+            <p class="en-only" style="margin:.5rem 0 0;font-size:.9rem;"><strong>R is not in the formula.</strong> It does not move the peak — it decides how sharp or blunt the peak is.</p>
+          </div>
+          <div class="formula-box">
+            <div class="formula">Q = (1/R)·√(L/C)&nbsp;&nbsp;·&nbsp;&nbsp;BW = f<sub>0</sub> / Q</div>
+            <p class="th-only" style="margin:.5rem 0 0;font-size:.9rem;">Q สูง = ยอดแหลม แถบผ่านแคบ เลือกความถี่ได้เฉียบ · Q ต่ำ = แถบกว้าง</p>
+            <p class="en-only" style="margin:.5rem 0 0;font-size:.9rem;">High Q means a sharp peak and a narrow band; low Q means a wide one.</p>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table>
+            <tr>
+              <th><span class="th-only">แบบ</span><span class="en-only">Type</span></th>
+              <th><span class="th-only">ที่ f<sub>0</sub> เกิดอะไร</span><span class="en-only">At f<sub>0</sub></span></th>
+              <th><span class="th-only">ใช้ทำอะไร</span><span class="en-only">Used for</span></th>
+            </tr>
+            <tr>
+              <td><span class="th-only"><strong>อนุกรม</strong></span><span class="en-only"><strong>Series</strong></span></td>
+              <td><span class="th-only">อิมพีแดนซ์ <strong>ต่ำสุด</strong> เหลือแค่ R กระแสสูงสุด</span><span class="en-only"><strong>Minimum</strong> impedance, just R, so maximum current</span></td>
+              <td><span class="th-only">ปล่อยความถี่เดียวผ่าน หรือลัดความถี่ที่ไม่ต้องการทิ้ง</span><span class="en-only">Let one frequency through, or short an unwanted one away</span></td>
+            </tr>
+            <tr>
+              <td><span class="th-only"><strong>ขนาน</strong> (แทงก์)</span><span class="en-only"><strong>Parallel</strong> (tank)</span></td>
+              <td><span class="th-only">อิมพีแดนซ์ <strong>สูงสุด</strong> กระแสวนอยู่ในวงจร LC เอง</span><span class="en-only"><strong>Maximum</strong> impedance, with current circulating inside the LC loop</span></td>
+              <td><span class="th-only">วงจรเลือกสถานีวิทยุ · วงจรออสซิลเลเตอร์ · คาปาเรโซแนนซ์ใน<a href="induction-stove.html">เตาแม่เหล็กไฟฟ้า</a></span><span class="en-only">Radio tuning · oscillators · the resonant capacitor in an <a href="induction-stove.html">induction stove</a></span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="warn-box">
+        <span class="th-only">⚠️ <strong>เรโซแนนซ์สร้างแรงดันที่สูงกว่าแหล่งจ่ายได้จริง</strong> — ในวงจรอนุกรม แรงดันคร่อม L และคร่อม C แต่ละตัวจะสูงเป็น <strong>Q เท่า</strong> ของแรงดันที่ป้อนเข้าไป (หักล้างกันเฉพาะเมื่อรวมกันเท่านั้น) นี่คือเหตุผลที่<a href="induction-stove.html">เตาแม่เหล็กไฟฟ้า</a>ที่ใช้ไฟบ้าน 310 V มีแรงดันที่ขา C ของ IGBT พุ่งถึงเกือบ 800 V ได้ตามปกติ — และเป็นเหตุผลที่ต้องเลือกอุปกรณ์พิกัดสูงกว่าแรงดันแหล่งจ่ายมาก</span>
+        <span class="en-only">⚠️ <strong>Resonance really does produce voltages higher than the supply.</strong> In a series circuit the voltage across L and across C each reaches <strong>Q times</strong> the input — they only cancel when added together. That is why an <a href="induction-stove.html">induction stove</a> running from a 310 V bus normally shows nearly 800 V at the IGBT collector, and why the parts must be rated far above the supply.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 7. วัดจริง ─────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">วัดหาความถี่ตัดด้วยของจริง</span><span class="en-only">Finding the Cutoff on the Bench</span></div>
+    <div class="card">
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-content">
+          <strong class="th-only">ป้อนคลื่นไซน์เข้าวงจร</strong><strong class="en-only">Feed in a sine wave</strong>
+          <p class="th-only">ใช้<a href="signal-generator.html">เครื่องกำเนิดสัญญาณ</a>ตั้งคลื่นไซน์แอมพลิจูดพอประมาณ แล้วคีบ<a href="oscilloscope.html">สโคป</a>ช่อง 1 ที่ขาเข้า ช่อง 2 ที่ขาออก</p>
+          <p class="en-only">Set a sine of moderate amplitude on the <a href="signal-generator.html">signal generator</a>, then put <a href="oscilloscope.html">scope</a> channel 1 on the input and channel 2 on the output.</p>
+        </div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content">
+          <strong class="th-only">เริ่มที่ย่านผ่าน แล้วกวาดความถี่</strong><strong class="en-only">Start in the pass band and sweep</strong>
+          <p class="th-only">ตั้งความถี่ต่ำ ๆ ก่อน (สำหรับฟิลเตอร์ผ่านความถี่ต่ำ) ให้ขาออกเกือบเท่าขาเข้า จำค่า V<sub>pp</sub> ไว้ แล้วค่อย ๆ เพิ่มความถี่ขึ้น</p>
+          <p class="en-only">Begin low (for a low-pass) where the output nearly equals the input, note that V<sub>pp</sub>, then raise the frequency gradually.</p>
+        </div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content">
+          <strong class="th-only">หาจุดที่ขาออกเหลือ 70.7%</strong><strong class="en-only">Find where the output hits 70.7%</strong>
+          <p class="th-only">ความถี่ตรงนั้นคือ f<sub>c</sub> ของวงจรจริง <strong>เทียบกับที่คำนวณได้</strong> — ต่างกันไม่กี่เปอร์เซ็นต์ถือว่าปกติ เพราะค่าคลาดเคลื่อนของอุปกรณ์เอง</p>
+          <p class="en-only">That frequency is the real f<sub>c</sub>. <strong>Compare it with the calculation</strong> — a few percent apart is normal, given component tolerances.</p>
+        </div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-content">
+          <strong class="th-only">ยืนยันด้วยมุมเฟส</strong><strong class="en-only">Confirm with the phase</strong>
+          <p class="th-only">ที่ f<sub>c</sub> พอดี คลื่นขาออกจะเลื่อนเฟสจากขาเข้า <strong>45°</strong> เสมอในฟิลเตอร์อันดับหนึ่ง — เป็นการยืนยันที่แม่นกว่าการอ่านความสูงของคลื่นด้วยตา</p>
+          <p class="en-only">At f<sub>c</sub> a first-order filter always shifts the output by <strong>45°</strong> — a sharper confirmation than eyeballing amplitude.</p>
+        </div></div>
+      </div>
+      <div class="warn-box">
+        <span class="th-only">⚠️ <strong>โพรบสโคปเองก็เป็นฟิลเตอร์</strong> — โพรบ ×1 มีความจุแฝงหลายสิบ pF ซึ่งขนานเข้ากับวงจรที่กำลังวัด ทำให้ f<sub>c</sub> ที่วัดได้ต่ำกว่าความจริงเมื่อวงจรมีอิมพีแดนซ์สูง <strong>ใช้โพรบ ×10 เสมอเมื่อวัดวงจรความถี่สูงหรืออิมพีแดนซ์สูง</strong></span>
+        <span class="en-only">⚠️ <strong>The probe is a filter too.</strong> A ×1 probe adds tens of pF in parallel with the circuit under test, dragging the measured f<sub>c</sub> below the true value in high-impedance circuits. <strong>Always use ×10 for high-frequency or high-impedance work.</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 8. ข้อผิดพลาดที่พบบ่อย ─────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ข้อผิดพลาดที่พบบ่อย</span><span class="en-only">Common Mistakes</span></div>
+    <div class="card">
+      <div style="overflow-x:auto;">
+        <table>
+          <tr>
+            <th><span class="th-only">เข้าใจผิดว่า</span><span class="en-only">The mistake</span></th>
+            <th><span class="th-only">ความจริง</span><span class="en-only">What actually happens</span></th>
+          </tr>
+          <tr>
+            <td><span class="th-only">เลย f<sub>c</sub> ไปแล้วสัญญาณจะหายไปเลย</span><span class="en-only">Past f<sub>c</sub> the signal disappears</span></td>
+            <td><span class="th-only">ที่ f<sub>c</sub> ยังผ่านตั้ง 70.7% และแม้ห่างไป 2 decade ก็ยังเหลือ 1% — ฟิลเตอร์ลดทอน ไม่ได้ตัดขาด</span><span class="en-only">At f<sub>c</sub> it is still 70.7%, and two decades out 1% remains. Filters attenuate; they do not cut.</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">ต่อโหลดเข้าไปแล้ว f<sub>c</sub> ยังเท่าเดิม</span><span class="en-only">Adding a load leaves f<sub>c</sub> unchanged</span></td>
+            <td><span class="th-only">ความต้านทานของโหลดขนานเข้ากับวงจร ทำให้ค่า R ที่มีผลจริงลดลงและ <strong>f<sub>c</sub> ขยับ</strong> — คำนวณโดยรวมโหลดด้วยเสมอ</span><span class="en-only">The load sits in parallel, lowering the effective R and <strong>moving f<sub>c</sub></strong>. Always include the load in the calculation.</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">ตัวเก็บประจุตัวใหญ่กรองความถี่สูงได้ดีกว่า</span><span class="en-only">A bigger capacitor filters high frequencies better</span></td>
+            <td><span class="th-only">ตัวเก็บประจุมี<strong>ความเหนี่ยวนำแฝง</strong>ในขาและตัวมันเอง เลยความถี่เรโซแนนซ์ในตัวไปแล้วมันจะกลายเป็นตัวเหนี่ยวนำ — จึงต้องใส่ตัวเล็กขนานกับตัวใหญ่ ไม่ใช่เปลี่ยนเป็นตัวใหญ่ตัวเดียว</span><span class="en-only">Every capacitor has <strong>parasitic inductance</strong> in its leads and body, and above its self-resonance it behaves as an inductor. That is why small ones are added in parallel with large ones, rather than fitting one big one.</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">Q สูงยิ่งดีเสมอ</span><span class="en-only">Higher Q is always better</span></td>
+            <td><span class="th-only">Q สูงแปลว่าแถบผ่านแคบ ถ้าความถี่เลื่อนไปนิดเดียวสัญญาณจะหายไปเลย และวงจรจะแกว่งเป็นสัญญาณค้าง (ringing) ง่ายขึ้นด้วย</span><span class="en-only">High Q means a narrow band — a small frequency drift loses the signal entirely, and the circuit rings more easily.</span></td>
+          </tr>
+        </table>
+      </div>
+      <div class="info-box">
+        <span class="th-only">📚 อ่านต่อ: <a href="capacitor.html">ตัวเก็บประจุ</a> และ <a href="inductor.html">ตัวเหนี่ยวนำ</a> (ที่มาของรีแอกแตนซ์) · <a href="power-supply.html">แหล่งจ่ายไฟ</a> (ฟิลเตอร์ผ่านความถี่ต่ำที่ใช้งานจริงที่สุด) · <a href="oscilloscope.html">ออสซิลโลสโคป</a> และ <a href="signal-generator.html">เครื่องกำเนิดสัญญาณ</a> (เครื่องมือที่ใช้วัดจริง) · <a href="induction-stove.html">เตาแม่เหล็กไฟฟ้า</a> (เรโซแนนซ์กำลังสูงในเครื่องใช้ไฟฟ้าจริง)</span>
+        <span class="en-only">📚 See also: <a href="capacitor.html">Capacitor</a> and <a href="inductor.html">Inductor</a> (where reactance comes from) · <a href="power-supply.html">Power Supply</a> (the most practical low-pass of all) · <a href="oscilloscope.html">Oscilloscope</a> and <a href="signal-generator.html">Signal Generator</a> (the instruments for measuring it) · <a href="induction-stove.html">Induction Stove</a> (high-power resonance in a real appliance)</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer>
+  <strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong>
+  <strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong>
+</footer>
+<script>const CURRENT_PAGE='filter';</script>
+<script src="js/filter-sim.js"></script>
+<script src="js/nav.js"></script>
+</body>
+</html>

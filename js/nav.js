@@ -7,6 +7,7 @@ const NAV_LESSON_GROUPS = [
       { id: 'electricity', href: 'electricity.html', label_th: '⚡ ไฟฟ้าเบื้องต้น', label_en: '⚡ Electricity Basics' },
       { id: 'ohm', href: 'ohm.html', label_th: '🔢 กฎของโอห์ม', label_en: "🔢 Ohm's Law" },
       { id: 'kirchhoff', href: 'kirchhoff.html', label_th: '🔗 กฎของเคอร์ชฮอฟฟ์', label_en: "🔗 Kirchhoff's Laws" },
+      { id: 'filter', href: 'filter.html', label_th: '📉 ฟิลเตอร์และเรโซแนนซ์', label_en: '📉 Filters & Resonance' },
     ],
   },
   {
@@ -305,7 +306,7 @@ const NAV_RESOURCES = [
 
   // ── บรรทัด "ครอบคลุมเนื้อหาจาก N หัวข้อ": เติมเข้า footer ทุกหน้าอัตโนมัติ (bilingual) ──
   // แหล่งความจริงเดียว — แก้เลขที่ TOPIC_COUNT ที่เดียว ทุกหน้าอัปเดตพร้อมกัน (อย่า hardcode ในแต่ละหน้า)
-  const TOPIC_COUNT = 47;
+  const TOPIC_COUNT = 48;
   const pageFooter = document.querySelector('footer');
   if (pageFooter && !pageFooter.querySelector('.footer-topics')) {
     const topics = document.createElement('div');
