@@ -152,7 +152,7 @@
     line([[NTC_X + 52, y], [D1_X - 2, y]], css('--text'));
     label(NTC_X + 26, y - 18, 'NTC 12D-9', hot ? ORANGE : css('--text-light'), 10.5);
   }
-  function drawDiode(x, y, dir, name, hot, color) {
+  function drawDiode(x, y, dir, name, hot, color, labLeft) {
     // dir: 'R' cathode right (horizontal), 'U' cathode up (vertical)
     const c = hot ? (color || GREEN) : css('--text');
     ctx.fillStyle = c; ctx.strokeStyle = c; ctx.lineWidth = 2.2;
@@ -163,7 +163,9 @@
     } else {
       ctx.beginPath(); ctx.moveTo(x - 10, y + 18); ctx.lineTo(x + 10, y + 18); ctx.lineTo(x, y); ctx.closePath(); ctx.fill();
       line([[x - 11, y], [x + 11, y]], c, 2.6);
-      label(x + 16, y + 14, name, hot ? c : css('--text-light'), 10.5, 'left');
+      // labLeft: วางชื่อไว้ซ้ายไดโอด — D3 อยู่ใต้ป้ายจุดวัด TP4 พอดี ถ้าวางขวาจะทับกัน
+      label(x + (labLeft ? -16 : 16), y + 14, name, hot ? c : css('--text-light'),
+            10.5, labLeft ? 'right' : 'left');
     }
   }
   function drawZener(x, y0, y1, hot) {
@@ -269,7 +271,9 @@
     badge(215, 62, 'TP1', v[0], f.c[0], 'left');
     badge(DF_X - 6, 62, 'TP2', v[1], f.c[1], 'left');
     badge(SW_X - 8, 342, 'TP3', v[2], f.c[2], 'right');
-    badge(TERM_X, 262, 'TP4', v[3], f.c[3], 'right');
+    // ยกป้าย TP4 ขึ้นเหนือแนวไดโอด D3 — ค่าที่อ่านได้บางอาการยาว (เช่น '0–5V flickering')
+    // ป้ายจึงยืดไปทางซ้ายจนทับชื่อ D3 ถ้าวางไว้ระดับเดิม
+    badge(TERM_X, 228, 'TP4', v[3], f.c[3], 'right');
   }
 
   /* ---------- scope strip ---------- */
@@ -430,7 +434,7 @@
     // stage 5 — feedback divider (returns to S, not to ground)
     line([[DIV_X, FB_Y], [DIV_X, SB_Y]], step === 6 ? VIOLET : txt);
     drawResV(DIV_X, FB_Y + 26, SB_Y - 2, 'R 4.3K', step === 6, VIOLET, true);
-    drawDiode(DIV_X, FB_Y + 2, 'U', 'D3', step === 6, VIOLET);
+    drawDiode(DIV_X, FB_Y + 2, 'U', 'D3', step === 6, VIOLET, true);
     line([[DIV_X, FB_Y], [FB_X, FB_Y]], step === 6 ? VIOLET : txt);
     drawResV(FB_X, FB_Y, SB_Y, 'R 2K', step === 6, VIOLET);
     drawGnd(AC_X + 120, GND_Y);
