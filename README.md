@@ -182,6 +182,25 @@ git push
 
 ---
 
+## 🧪 การทดสอบ / Testing
+
+ซิมบนแคนวาสเขียนป้ายด้วย `fillText` ล้วน ๆ ข้อความอังกฤษยาวกว่าไทยมาก และแต่ละตัวมีหลายขั้น
+หลายอาการเสีย การไล่ดูด้วยตาจึงช้าและพลาดง่าย — ใช้ฮาร์เนสนี้แทน (ไม่ต้องเปิดเบราว์เซอร์ ไม่มี dependency)
+
+```bash
+node test/smoke-canvas-sim.js            # ตรวจซิมแคนวาสทุกตัวในเว็บ
+node test/smoke-canvas-sim.js smps       # ตรวจเฉพาะซิมที่ชื่อมีคำนี้
+node test/smoke-canvas-sim.js --list     # ดูรายชื่อซิมที่ตรวจได้
+node test/smoke-canvas-sim.js --verbose  # แสดงทุกจุดที่พบ ไม่ยุบรายการซ้ำ
+```
+
+ฮาร์เนสอ่าน HTML ของหน้าจริงมาสร้าง DOM ปลอม รันสคริปต์ซิมบนนั้น แล้ววัดกรอบข้อความที่วาดออกมา
+ไล่ครบทุก **ภาษา × ขั้น × อาการเสีย × โหมด × ค่าสุดขอบของสไลเดอร์** เพื่อจับ 2 อย่าง:
+ตัวอักษรทับกัน และตัวอักษรล้นขอบแคนวาส · ออกด้วยรหัส 1 เมื่อพบปัญหา
+ข้อยกเว้นที่ยอมรับแล้วใส่ได้ใน `test/smoke-canvas-sim.ignore.json`
+
+---
+
 ## 📁 File Structure
 
 ```
@@ -235,6 +254,10 @@ git push
 │   ├── soldering.html / home-wiring.html           — Practical
 │   ├── simulation.html / breadboard.html / relay-lab.html   — Interactive labs
 │   └── formulas.html / tools.html / quiz.html / downloads.html      — Tools & resources
+├── test/smoke-canvas-sim.js — Canvas-sim smoke test: runs every canvas sim on a DOM shim and flags
+│   │                          overlapping / off-canvas labels across lang × step × fault × slider extremes
+├── test/dom-shim.js         — Minimal DOM + HTML parser used by the harness
+├── test/canvas-shim.js      — Fake 2D context that records real text boxes (transform-aware)
 ├── CLAUDE.md / AGENTS.md — Developer notes (kept in sync)
 ├── LICENSE              — CC BY-NC 4.0 (+ note carving out third-party PDFs)
 └── pdf/                 — Thai PDF learning materials (~24 MB)

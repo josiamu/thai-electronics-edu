@@ -94,6 +94,7 @@ website/
 ├── tools.html          — เครื่องคิดเลข 7 ตัว (4-band + 5-band มีชื่อไทย-อังกฤษครบ)
 ├── quiz.html           — แบบทดสอบ 108 ข้อ 16 หมวด — มีข้อสอบ EN ครบทุกข้อ
 ├── downloads.html      — ดาวน์โหลด PDF 55 ไฟล์ (มีหัวข้อ "ใบงาน" → pdf/worksheet/ + "ฟอร์มตรวจเช็ค" → pdf/chec_list/ + "งานซ่อม" → pdf/workshop/) + toolbar ค้นหา/กรองหมวด (sticky: #dl-search + #dl-chips, sections มี data-cat)
+├── test/               — ฮาร์เนสทดสอบซิมแคนวาสใน Node (ไม่มี dependency): `smoke-canvas-sim.js` รันซิมทุกตัวบน DOM ปลอมที่สร้างจาก HTML ของหน้าจริง แล้ววัดกรอบข้อความที่ `fillText` วาด → จับ **ตัวอักษรทับกัน** กับ **ตัวอักษรล้นขอบแคนวาส** ครบทุก ภาษา × ขั้น × อาการเสีย × โหมด × ค่าสุดขอบสไลเดอร์ (`dom-shim.js` = DOM + ตัวแยก HTML, `canvas-shim.js` = ctx ปลอมที่จำกรอบข้อความและตามเมทริกซ์ transform) — **ทำซิมใหม่หรือแก้ป้ายบนแคนวาสเมื่อไหร่ ให้รัน `node test/smoke-canvas-sim.js` ก่อน commit เสมอ** ข้อยกเว้นที่ยอมรับแล้วใส่ใน `test/smoke-canvas-sim.ignore.json`
 ├── pdf/                — ไฟล์ PDF ภาษาไทย (~24 MB) — สื่อจากหลายแหล่ง ไม่อยู่ใต้ CC (ดู LICENSE)
 └── LICENSE             — CC BY-NC 4.0 (คลุมเฉพาะเนื้อหา/โค้ดต้นฉบับ; PDF แยกออกตาม NOTICE ในไฟล์)
 ```
