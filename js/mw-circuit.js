@@ -24,7 +24,7 @@
   if (!root || !cv) return;
   const ctx = cv.getContext('2d');
 
-  const W = 940, H = 560;
+  const W = 940, H = 600;
   const LX = 190, NX = 830;                     // รางไฟ L (ซ้าย) / N (ขวา)
   const TOP_Y = 74, BOT_Y = 500;
   const RUNG = [166, 246, 326, 406, 470];       // y ของรัง 1–5
@@ -367,10 +367,37 @@
                    '⏸ Door closed but Start not pressed → no relay is energised and no rung runs')
       : t('✅ ปิดประตู + กด Start → ครบทุกเงื่อนไข เตาทำงานเต็มระบบ',
           '✅ Door closed and Start pressed → every condition is met and the oven runs');
+    // ข้อความอาการเสียบางอันยาวมาก (โดยเฉพาะภาษาอังกฤษ) — ตัดคำเป็น 2 บรรทัดและย่อฟอนต์เอง
+    // ห้ามปล่อยให้วาดยาวเลยขอบแคนวาส เพราะส่วนที่เกินจะหายไปเงียบ ๆ
+    const [lines, sz] = fitLines(msg, W - 88, 11.5, 9, 2);
+    const boxH = lines.length > 1 ? 44 : 28;
     ctx.fillStyle = bad ? 'rgba(239,68,68,.10)' : 'rgba(16,185,129,.10)';
     ctx.strokeStyle = bad ? RED : GREEN; ctx.lineWidth = 1.4;
-    rrect(30, H - 40, W - 60, 28, 8); ctx.fill(); ctx.stroke();
-    label(44, H - 21, msg, bad ? RED : GREEN, 11.5, 'left', 700);
+    rrect(30, H - 12 - boxH, W - 60, boxH, 8); ctx.fill(); ctx.stroke();
+    const y0 = H - 12 - boxH + (lines.length > 1 ? sz + 6 : boxH / 2 + sz * 0.35);
+    lines.forEach((ln, i) => label(44, y0 + i * (sz + 5), ln, bad ? RED : GREEN, sz, 'left', 700));
+  }
+
+  /* ตัดคำให้พอดีความกว้าง โดยลดขนาดฟอนต์ลงก่อน แล้วค่อยยอมขึ้นบรรทัดใหม่ */
+  function fitLines(s, maxW, size, minSize, maxLines) {
+    for (let sz = size; sz >= minSize; sz -= 0.5) {
+      ctx.font = '700 ' + sz + 'px Anuphan, sans-serif';
+      const ls = wrapLines(s, maxW);
+      if (ls.length <= maxLines) return [ls, sz];
+    }
+    ctx.font = '700 ' + minSize + 'px Anuphan, sans-serif';
+    return [wrapLines(s, maxW).slice(0, maxLines), minSize];
+  }
+  function wrapLines(s, maxW) {
+    const out = [];
+    let cur = '';
+    for (const w of String(s).split(' ')) {
+      const next = cur ? cur + ' ' + w : w;
+      if (!cur || ctx.measureText(next).width <= maxW) cur = next;
+      else { out.push(cur); cur = w; }
+    }
+    if (cur) out.push(cur);
+    return out;
   }
 
   function draw() {
