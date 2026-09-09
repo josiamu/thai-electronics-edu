@@ -21,7 +21,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | 📱 **Responsive** | ใช้งานได้ทั้ง Desktop, Tablet, Mobile |
 | 🔬 **เครื่องมือจำลองเชิงโต้ตอบ** | เบรดบอร์ดเสมือน, ออสซิลโลสโคป, BJT switch, เครื่องกำเนิดสัญญาณ, แหล่งจ่ายไฟ, เรียงกระแส AC→DC, ออปโตคัปเปลอร์, สวิตช์ความเร็วพัดลม, จำลองวงจร |
 | 🧮 **7 เครื่องคิดเลข** | รหัสสี, โอห์ม, กำลัง, พลังงาน, อนุกรม/ขนาน, แปลงหน่วย |
-| 📝 **แบบทดสอบ 124 ข้อ** | 18 หมวด, สุ่มข้อ, บันทึกคะแนนสูงสุด — มีทั้ง TH และ EN |
+| 📝 **แบบทดสอบ 132 ข้อ** | 19 หมวด, สุ่มข้อ, บันทึกคะแนนสูงสุด — มีทั้ง TH และ EN |
 | 📥 **PDF 55 ไฟล์** | ดาวน์โหลดใบเนื้อหา + ใบงานประกอบการเรียน |
 | 🖨️ **Print-friendly** | หน้าสูตรสรุปพิมพ์ออกกระดาษ A4 ได้เลย |
 
@@ -90,6 +90,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 |---|---|---|
 | การบัดกรี | Soldering | `soldering.html` |
 | ไฟบ้านและความปลอดภัย | Home Wiring & Safety | `home-wiring.html` |
+| เครื่องใช้ไฟฟ้าระบบอินเวอร์เตอร์ | Inverter Appliances | `inverter-appliances.html` (มุมผู้ใช้ ไม่มีวงจร • ต่างจากรุ่นธรรมดาอย่างไร • คุ้มไหม • ซิมเดินสองระบบพร้อมกันในห้องเดียวกัน) |
 
 ### เครื่องมือ (Tools & Resources)
 | หน้า | ไทย | English |
@@ -99,7 +100,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | `relay-lab.html` | ห้องแล็บวงจรควบคุมรีเลย์ MY4 (4PDT 24VDC + ปุ่มกด/ไฟ/บัซเซอร์, รางไฟ + จุดพักไฟ TB-1…TB-10 ลดสายพันกัน, คลิกไฮไลต์ไล่วงจร, 🎯 ภารกิจ 7 ข้อพร้อมตรวจคำตอบอัตโนมัติ, 9 ตัวอย่าง self-holding/interlock/AND-OR/fail-safe NC/กลับทางหมุนมอเตอร์, มุมมองแผนภาพ Ladder, บันทึก/แชร์ลิงก์) | MY4 relay control lab (4PDT 24VDC + buttons/lamps/buzzer, power rails + TB-1…TB-10 terminal block, click-to-trace highlight, 7 auto-graded missions, 9 examples incl. fail-safe NC and motor forward/reverse, ladder view, save/share) |
 | `formulas.html` | สูตรสรุป + พิมพ์ PDF | Formula summary + print |
 | `tools.html` | เครื่องคิดเลขเชิงโต้ตอบ 7 ตัว | 7 interactive calculators |
-| `quiz.html` | แบบทดสอบ 124 ข้อ 18 หมวด | 124-question quiz, 18 categories |
+| `quiz.html` | แบบทดสอบ 132 ข้อ 19 หมวด | 132-question quiz, 19 categories |
 | `downloads.html` | ดาวน์โหลด PDF 55 ไฟล์ (รวมหัวข้อ "ฟอร์มตรวจเช็ค" และ "งานซ่อม") | Download 55 PDF files (incl. "Check Forms" and "Repair" sections) |
 
 ---
@@ -216,6 +217,7 @@ node test/smoke-canvas-sim.js --verbose  # แสดงทุกจุดที�
 ├── js/vfd-circuit.js       — Step-by-step motor-drive circuit (8 steps, 7 faults, TP1-TP5 probes, dead time, freewheel diodes)
 ├── js/filter-sim.js        — Filter response sim (RC low/high-pass and series RLC on a log Bode plot, with a movable signal-frequency marker)
 ├── js/inverter-sim.js      — Inverter / VFD sim (square / modified / sine-PWM output, constant V/f vs held 220 V, flux and torque readouts)
+├── js/inverter-appliances-sim.js — Fixed-speed vs inverter air conditioner running side by side in one room (room temperature and drawn power, energy totals, and the case where the saving collapses)
 ├── js/transformer-sim.js   — Transformer sim (ideal / lossy with real voltage regulation / DC input that burns the primary)
 ├── js/kirchhoff-sim.js     — Two-loop, two-source circuit sim (live nodal solve; KCL and KVL both measured from the same answer)
 ├── js/bjt-steps.js         — Interactive step-by-step: how a BJT works (5 clickable steps, animated cross-section)
@@ -254,7 +256,7 @@ node test/smoke-canvas-sim.js --verbose  # แสดงทุกจุดที�
 │   ├── fan-motor.html / switching-psu.html / induction-stove.html / microwave.html
 │   │   water-heater.html / rice-cooker.html / iron.html                 — Appliance repair
 │   ├── washing-machine.html (hub) / -twin.html / -top.html / -front.html   — Washing machines
-│   ├── soldering.html / home-wiring.html           — Practical
+│   ├── soldering.html / home-wiring.html / inverter-appliances.html   — Practical
 │   ├── simulation.html / breadboard.html / relay-lab.html   — Interactive labs
 │   └── formulas.html / tools.html / quiz.html / downloads.html      — Tools & resources
 ├── test/smoke-canvas-sim.js — Canvas-sim smoke test: runs every canvas sim on a DOM shim and flags

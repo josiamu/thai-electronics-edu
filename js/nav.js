@@ -55,6 +55,7 @@ const NAV_LESSON_GROUPS = [
 const NAV_PRACTICE = [
   { id: 'soldering', href: 'soldering.html', label_th: '🔥 การบัดกรี', label_en: '🔥 Soldering' },
   { id: 'home-wiring', href: 'home-wiring.html', label_th: '🔌 ไฟบ้านและความปลอดภัย', label_en: '🔌 Home Wiring & Safety' },
+  { id: 'inverter-appliances', href: 'inverter-appliances.html', label_th: '❄️ เครื่องใช้ไฟฟ้าระบบอินเวอร์เตอร์', label_en: '❄️ Inverter Appliances' },
 ];
 
 // เมนูบนสุดของตัวเอง (ไม่อยู่ใน mega menu บทเรียน) — กลุ่มที่โตได้เรื่อยๆ ตามเครื่องใช้ไฟฟ้าที่เพิ่ม
@@ -306,7 +307,7 @@ const NAV_RESOURCES = [
 
   // ── บรรทัด "ครอบคลุมเนื้อหาจาก N หัวข้อ": เติมเข้า footer ทุกหน้าอัตโนมัติ (bilingual) ──
   // แหล่งความจริงเดียว — แก้เลขที่ TOPIC_COUNT ที่เดียว ทุกหน้าอัปเดตพร้อมกัน (อย่า hardcode ในแต่ละหน้า)
-  const TOPIC_COUNT = 48;
+  const TOPIC_COUNT = 49;
   const pageFooter = document.querySelector('footer');
   if (pageFooter && !pageFooter.querySelector('.footer-topics')) {
     const topics = document.createElement('div');
