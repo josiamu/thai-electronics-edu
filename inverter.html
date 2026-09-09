@@ -102,41 +102,21 @@
       </div>
 
       <div class="inv-two" style="margin-top:1.25rem;">
-        <div>
-          <ul class="content-list th-only">
-            <li><strong>ภาคเรียงกระแส</strong> — <a href="diode.html">บริดจ์ไดโอด</a> เปลี่ยนไฟบ้าน 220 V เป็น DC ประมาณ 310 V (= 220 × √2)</li>
-            <li><strong>บัส DC</strong> — คาปาซิเตอร์ตัวใหญ่ทำให้แรงดันนิ่ง <strong>คือจุดที่อันตรายที่สุดในเครื่อง</strong> และเป็นจุดวัดแรกเสมอเมื่อเครื่องเปิดไม่ติด</li>
-            <li><strong>ตัวจำกัดกระแสตอนเสียบปลั๊ก</strong> — NTC หรือรีเลย์ลัดตัวต้านทาน กันคาปาซิเตอร์เปล่ากระชากจนฟิวส์ขาด (หลักการเดียวกับ<a href="induction-stove.html">เตาแม่เหล็กไฟฟ้า</a>)</li>
-            <li><strong>ภาคอินเวอร์เตอร์</strong> — <a href="igbt.html">IGBT</a> 6 ตัวจัดเป็น 3 คู่ คู่ละเฟส แต่ละคู่สลับต่อสาย U V W ไปที่ไฟบวกหรือไฟลบของบัส</li>
-            <li><strong>IPM</strong> (Intelligent Power Module) คือ IGBT ทั้ง 6 ตัวพร้อมวงจรขับและวงจรป้องกันรวมในก้อนเดียว — ที่เจอในบอร์ด<a href="washing-machine-front.html">เครื่องซักผ้า</a>ส่วนใหญ่</li>
-          </ul>
-          <ul class="content-list en-only">
-            <li><strong>Rectifier</strong> — a <a href="diode.html">diode bridge</a> turns 220 V mains into roughly 310 V DC (220 × √2).</li>
-            <li><strong>DC bus</strong> — a large capacitor holds that steady. <strong>It is the most dangerous point in the machine</strong>, and always the first thing to measure on a dead unit.</li>
-            <li><strong>Inrush limiter</strong> — an NTC or a relay shorting a resistor, so an empty capacitor cannot blow the fuse on plug-in (the same trick as in an <a href="induction-stove.html">induction stove</a>).</li>
-            <li><strong>Inverter stage</strong> — six <a href="igbt.html">IGBTs</a> in three pairs, one pair per phase, each tying U, V or W to the positive or the negative rail.</li>
-            <li><strong>An IPM</strong> (intelligent power module) packs all six devices plus their drivers and protection into one block — what you find on most <a href="washing-machine-front.html">washing machine</a> boards.</li>
-          </ul>
+        <div class="formula-box" style="margin:0;">
+          <div class="formula">V<sub>DC</sub> ≈ V<sub>AC</sub> × √2 ≈ 310 V</div>
+          <p class="th-only" style="margin:.5rem 0 0;font-size:.9rem;">บัส DC ของเครื่องใช้ไฟฟ้าในบ้านจึงอยู่ราว 300–320 V เสมอ ไม่ว่ายี่ห้อไหน — และเป็นจุดวัดแรกเสมอเมื่อเครื่องเปิดไม่ติด</p>
+          <p class="en-only" style="margin:.5rem 0 0;font-size:.9rem;">So a domestic drive's bus always sits near 300–320 V whatever the brand — and it is always the first thing to measure on a dead unit.</p>
         </div>
-        <div>
-          <div class="formula-box">
-            <div class="formula">V<sub>DC</sub> ≈ V<sub>AC</sub> × √2 ≈ 310 V</div>
-            <p class="th-only" style="margin:.5rem 0 0;font-size:.9rem;">บัส DC ของเครื่องใช้ไฟฟ้าในบ้านจึงอยู่ราว 300–320 V เสมอ ไม่ว่ายี่ห้อไหน</p>
-            <p class="en-only" style="margin:.5rem 0 0;font-size:.9rem;">So a domestic drive's bus always sits near 300–320 V, whatever the brand.</p>
-          </div>
-          <div class="warn-box">
-            <span class="th-only">⚠️ <strong>บัสยังมีไฟหลังถอดปลั๊ก</strong> คาปาซิเตอร์ค้างแรงดันไว้ได้หลายนาที <strong>ต้องวัดยืนยันว่าต่ำกว่า 30 V ก่อนแตะบอร์ดทุกครั้ง</strong> อย่านับเวลาเอาเอง</span>
-            <span class="en-only">⚠️ <strong>The bus stays live after unplugging.</strong> The capacitor can hold its charge for minutes — <strong>measure and confirm it is below 30 V before touching the board</strong>, every time. Never just count seconds.</span>
-          </div>
+        <div class="info-box" style="margin:0;">
+          <span class="th-only">🧩 ภาคอินเวอร์เตอร์ใช้ <a href="igbt.html">IGBT</a> 6 ตัวจัดเป็น 3 คู่ คู่ละเฟส · หลายบอร์ดรวมทั้ง 6 ตัวพร้อมวงจรขับและวงจรป้องกันไว้ในก้อนเดียวเรียกว่า <strong>IPM</strong> (Intelligent Power Module) — ที่เจอในบอร์ด<a href="washing-machine-front.html">เครื่องซักผ้า</a>ส่วนใหญ่ เปลี่ยนทีต้องยกทั้งก้อน</span>
+          <span class="en-only">🧩 The inverter stage uses six <a href="igbt.html">IGBTs</a> in three pairs, one pair per phase. Many boards pack all six plus their drivers and protection into one block called an <strong>IPM</strong> (intelligent power module) — what you find on most <a href="washing-machine-front.html">washing machine</a> boards, and it is replaced as a whole.</span>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- ── 2.5 วงจรทีละขั้น ────────────────────────────────── -->
-  <div class="section">
-    <div class="section-title"><span class="th-only">วงจรอินเวอร์เตอร์คุมมอเตอร์ทีละขั้น</span><span class="en-only">The Drive Circuit, Step by Step</span></div>
     <div class="card">
+      <h3 class="th-only" style="margin:0 0 .5rem;">วงจรจริงทีละขั้น</h3>
+      <h3 class="en-only" style="margin:0 0 .5rem;">The same machine, step by step</h3>
       <p class="th-only">ไล่จากปลั๊กไปจนถึงเพลามอเตอร์ทีละด่าน · <strong>เส้นทึบคือทางเดินกำลัง เส้นประคือสายควบคุมและไฟเลี้ยงภาคต่ำ</strong> (เส้นประที่พาดข้ามรางไฟไม่ใช่จุดต่อ) · ป้าย TP1–TP5 คือจุดวัดจริงตามลำดับไล่ซ่อม</p>
       <p class="en-only">Follow it from the plug to the motor shaft, one link at a time. <strong>Solid lines are the power path; dashed lines are control wiring and the low-voltage supply</strong> — a dashed line crossing a rail is not a connection. The TP1–TP5 badges are the real probe points, in the order you would use them.</p>
 
