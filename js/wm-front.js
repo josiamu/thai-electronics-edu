@@ -267,12 +267,17 @@
       line([[B.tri.x + B.tri.w, B.tri.y + 18], [B.busX, B.tri.y + 18], [B.busX, y], [B.colX, y]], c, on ? 2.6 : 1.8);
       line([[B.colX + B.colW, y], [B.x1 - 2, y], [B.x1 - 2, B.nY]], NCOL(), 1.8);
       box(B.colX, ld.y, B.colW, B.colH, c);
-      label(B.colX + B.colW / 2, ld.y + 25, t(ld.th, ld.en), c, 10.5, 'center', 700);
+      // ชื่อโหลดกับป้ายอาการเสียอยู่ "ในกล่อง" ทั้งคู่ — ใต้กล่องเป็นที่ของคำอธิบายสายสัญญาณ
+      // (ชมพู = ยืนยันประตู · ส้ม = ระดับน้ำ) ส่วนเหนือกล่องคือกล่องของโหลดตัวก่อนหน้า
+      label(B.colX + B.colW / 2, ld.y + (bad ? 17 : 25), t(ld.th, ld.en), c, 10.5, 'center', 700);
       if (on && !bad) flowDots(loadPath(ld), ld.wire, 80, true);
-      if (bad) label(B.colX + B.colW / 2, ld.y + B.colH + 13,
-                     ld.key === 'lock' ? t('คอยล์ขาด (OL)', 'coil open (OL)')
-                     : ld.key === 'heat' ? t('ช็อตลงโครง!', 'shorted to chassis!')
-                     : t('ใบพัดติดขยะ — ขดลวดดี', 'impeller jammed — winding fine'), RED, 9.5, 'center', 700);
+      if (bad) {
+        const msg = ld.key === 'lock' ? t('คอยล์ขาด (OL)', 'coil open (OL)')
+                  : ld.key === 'heat' ? t('ช็อตลงโครง!', 'shorted to chassis!')
+                  : t('ใบพัดติดขยะ — ขดลวดดี', 'impeller jammed — winding fine');
+        const [txt2, sz] = fitText(msg, B.colW + 32, 9.5);   // อังกฤษยาวกว่ากล่อง ย่อให้พอดี
+        label(B.colX + B.colW / 2, ld.y + 34, txt2, RED, sz, 'center', 700);
+      }
     });
 
     // สายชมพู: สัญญาณยืนยันประตูกลับเข้า MCU
