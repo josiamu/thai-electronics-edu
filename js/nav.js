@@ -25,6 +25,7 @@ const NAV_LESSON_GROUPS = [
       { id: 'relay', href: 'relay.html', label_th: '🧲 รีเลย์', label_en: '🧲 Relay' },
       { id: 'opto', href: 'optoelectronics.html', label_th: '🔦 ออปโตอิเล็กทรอนิกส์', label_en: '🔦 Optoelectronics' },
       { id: 'power-supply', href: 'power-supply.html', label_th: '🔌 แหล่งจ่ายไฟ', label_en: '🔌 Power Supply' },
+      { id: 'inverter', href: 'inverter.html', label_th: '🔁 อินเวอร์เตอร์ / VFD', label_en: '🔁 Inverter / VFD' },
     ],
   },
   {
@@ -304,7 +305,7 @@ const NAV_RESOURCES = [
 
   // ── บรรทัด "ครอบคลุมเนื้อหาจาก N หัวข้อ": เติมเข้า footer ทุกหน้าอัตโนมัติ (bilingual) ──
   // แหล่งความจริงเดียว — แก้เลขที่ TOPIC_COUNT ที่เดียว ทุกหน้าอัปเดตพร้อมกัน (อย่า hardcode ในแต่ละหน้า)
-  const TOPIC_COUNT = 46;
+  const TOPIC_COUNT = 47;
   const pageFooter = document.querySelector('footer');
   if (pageFooter && !pageFooter.querySelector('.footer-topics')) {
     const topics = document.createElement('div');

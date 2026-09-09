@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="th" data-title-th="อินเวอร์เตอร์และ VFD | สื่อการเรียนการสอน" data-title-en="Inverters &amp; VFDs | Teaching Materials">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>อินเวอร์เตอร์และ VFD | สื่อการเรียนการสอน</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script>!function(){var l=localStorage.getItem('lang');if(l==='en')document.documentElement.lang='en'}()</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  /* คลาสเฉพาะหน้านี้ — แผนภาพบล็อกของ VFD */
+  .inv-svg { width:100%; height:auto; display:block; background:var(--bg); border:1px solid var(--border); border-radius:12px; }
+  .inv-cap { font-size:.85rem; color:var(--text-light); text-align:center; margin-top:.6rem; }
+  .inv-two { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; align-items:start; }
+  @media (max-width:760px){ .inv-two{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<main id="main-content" tabindex="-1">
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-icon">🔁</div>
+    <div>
+      <h1 class="th-only">อินเวอร์เตอร์และ VFD (Inverter / Variable Frequency Drive)</h1>
+      <h1 class="en-only">Inverters &amp; Variable Frequency Drives</h1>
+      <p>DC → AC • <span class="th-only">คุมความเร็วมอเตอร์ด้วยความถี่ • V/f คงที่ • PWM</span><span class="en-only">Motor speed by frequency • Constant V/f • PWM</span></p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ── 1. อินเวอร์เตอร์คืออะไร ─────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">อินเวอร์เตอร์คืออะไร</span><span class="en-only">What an Inverter Is</span></div>
+    <div class="card">
+      <p class="th-only"><a href="power-supply.html">แหล่งจ่ายไฟ</a> ทำหน้าที่เปลี่ยนไฟ AC ให้เป็น DC <strong>อินเวอร์เตอร์คือวงจรที่ทำกลับทาง</strong> — รับไฟ DC เข้ามาแล้วสับสวิตช์ให้กลายเป็นไฟ AC ออกไป</p>
+      <p class="en-only">A <a href="power-supply.html">power supply</a> turns AC into DC. <strong>An inverter runs the same road backwards</strong> — it takes DC in and switches it into AC.</p>
+      <div class="info-box">
+        <span class="th-only">📌 <strong>คำว่า "อินเวอร์เตอร์" ใช้เรียกของ 2 อย่างที่ต่างกัน</strong> — อย่าสับสน<br>
+          ① <strong>อินเวอร์เตอร์จ่ายไฟ</strong> เช่นในเครื่องสำรองไฟหรือระบบโซลาร์เซลล์ เป้าหมายคือ <strong>ไฟ 220 V 50 Hz ที่นิ่งที่สุด</strong> เหมือนไฟบ้าน<br>
+          ② <strong>อินเวอร์เตอร์คุมมอเตอร์ (VFD)</strong> เช่นในแอร์ ตู้เย็น เครื่องซักผ้า และเครื่องจักรโรงงาน เป้าหมายตรงข้ามกัน คือ <strong>เปลี่ยนความถี่ไปมาได้ตามต้องการ</strong> เพื่อคุมความเร็วมอเตอร์<br>
+          บทนี้เน้นตัวที่ ② เพราะเป็นตัวที่เจอในงานซ่อมเครื่องใช้ไฟฟ้าจริง</span>
+        <span class="en-only">📌 <strong>"Inverter" names two different things</strong> — keep them apart.<br>
+          ① A <strong>supply inverter</strong>, as in a UPS or a solar system, aims for <strong>the steadiest possible 220 V 50 Hz</strong>, just like the mains.<br>
+          ② A <strong>motor drive (VFD)</strong>, as in an air conditioner, fridge, washing machine or factory machine, wants the opposite: <strong>a frequency it can move at will</strong> to set motor speed.<br>
+          This lesson is about ②, the one you meet in appliance repair.</span>
+      </div>
+      <p class="th-only">เหตุผลที่ต้องคุมความเร็วมอเตอร์แทนการเปิด-ปิด: มอเตอร์เหนี่ยวนำหมุนตามความถี่ของไฟที่ป้อนเข้าไป ไฟบ้าน 50 Hz จึงได้ความเร็วเดียวตายตัว <strong>เครื่องใช้ไฟฟ้ารุ่นเก่าจึงคุมอุณหภูมิด้วยการเปิด-ปิดคอมเพรสเซอร์เป็นช่วง ๆ</strong> ส่วนรุ่นอินเวอร์เตอร์ลดความถี่ลงให้คอมเพรสเซอร์เดินช้า ๆ ต่อเนื่องแทน จึงกินไฟน้อยกว่าและอุณหภูมิแกว่งน้อยกว่า</p>
+      <p class="en-only">Why control speed instead of switching on and off? An induction motor follows the frequency it is fed, so 50 Hz mains gives exactly one speed. <strong>Older appliances therefore hold temperature by cycling the compressor on and off</strong>, while an inverter model drops the frequency and lets it run slowly and continuously — less energy, and far less temperature swing.</p>
+    </div>
+  </div>
+
+  <!-- ── 2. ภายใน VFD ────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ภายในอินเวอร์เตอร์คุมมอเตอร์</span><span class="en-only">Inside a Motor Drive</span></div>
+    <div class="card">
+      <p class="th-only">ทุกยี่ห้อมีโครงเดียวกัน 3 ภาค — <strong>เรียงกระแสให้เป็น DC ก่อน แล้วค่อยสร้าง AC ความถี่ใหม่ขึ้นมาเอง</strong> ไม่มีวงจรไหนเปลี่ยนความถี่ของ AC ได้ตรง ๆ</p>
+      <p class="en-only">Every brand shares the same three stages — <strong>rectify to DC first, then build a brand-new AC at whatever frequency you want</strong>. No circuit changes the frequency of AC directly.</p>
+
+      <svg class="inv-svg" viewBox="0 0 720 220" role="img" aria-label="VFD block diagram">
+        <g fill="none" stroke="var(--border)" stroke-width="2">
+          <rect x="90" y="60" width="110" height="70" rx="8"/>
+          <rect x="250" y="60" width="110" height="70" rx="8"/>
+          <rect x="410" y="60" width="110" height="70" rx="8"/>
+          <rect x="250" y="160" width="270" height="40" rx="8"/>
+        </g>
+        <g stroke="var(--primary)" stroke-width="2.5" fill="none">
+          <line x1="24" y1="95" x2="90" y2="95"/>
+          <line x1="200" y1="95" x2="250" y2="95"/>
+          <line x1="360" y1="95" x2="410" y2="95"/>
+          <line x1="520" y1="95" x2="600" y2="95"/>
+        </g>
+        <g stroke="var(--text-light)" stroke-width="1.5" fill="none" stroke-dasharray="4 4">
+          <line x1="385" y1="160" x2="385" y2="130"/>
+        </g>
+        <circle cx="640" cy="95" r="34" fill="none" stroke="var(--secondary)" stroke-width="2.5"/>
+        <circle cx="640" cy="95" r="24" fill="none" stroke="var(--secondary)" stroke-width="2.5"/>
+        <g font-size="13" text-anchor="middle" fill="var(--text)" font-weight="600">
+          <text x="145" y="90"><tspan class="th-only">เรียงกระแส</tspan><tspan class="en-only">Rectifier</tspan></text>
+          <text x="305" y="90"><tspan class="th-only">บัส DC</tspan><tspan class="en-only">DC bus</tspan></text>
+          <text x="465" y="90"><tspan class="th-only">อินเวอร์เตอร์</tspan><tspan class="en-only">Inverter</tspan></text>
+          <text x="385" y="185"><tspan class="th-only">ไมโครคอนโทรลเลอร์ + วงจรขับเกต</tspan><tspan class="en-only">Microcontroller + gate drivers</tspan></text>
+        </g>
+        <g font-size="11.5" text-anchor="middle" fill="var(--text-light)">
+          <text x="145" y="112"><tspan class="th-only">บริดจ์ไดโอด</tspan><tspan class="en-only">Diode bridge</tspan></text>
+          <text x="305" y="112"><tspan class="th-only">คาปาซิเตอร์ 310 V</tspan><tspan class="en-only">310 V capacitor</tspan></text>
+          <text x="465" y="112">IGBT / IPM</text>
+          <text x="55" y="80">220 V~</text>
+          <text x="55" y="118">50 Hz</text>
+          <text x="560" y="80">U V W</text>
+          <text x="640" y="150"><tspan class="th-only">มอเตอร์ 3 เฟส</tspan><tspan class="en-only">3-phase motor</tspan></text>
+        </g>
+      </svg>
+      <div class="inv-cap">
+        <span class="th-only">ไฟบ้านเฟสเดียวเข้าทางซ้าย ออกทางขวาเป็นไฟ 3 เฟสที่ความถี่เท่าไรก็ได้ — มอเตอร์ไม่มีสายนิวทรัล รับไฟจากสาย U V W เท่านั้น</span>
+        <span class="en-only">Single-phase mains goes in on the left and comes out as three-phase at any frequency — the motor has no neutral, only U, V and W.</span>
+      </div>
+
+      <div class="inv-two" style="margin-top:1.25rem;">
+        <div>
+          <ul class="content-list th-only">
+            <li><strong>ภาคเรียงกระแส</strong> — <a href="diode.html">บริดจ์ไดโอด</a> เปลี่ยนไฟบ้าน 220 V เป็น DC ประมาณ 310 V (= 220 × √2)</li>
+            <li><strong>บัส DC</strong> — คาปาซิเตอร์ตัวใหญ่ทำให้แรงดันนิ่ง <strong>คือจุดที่อันตรายที่สุดในเครื่อง</strong> และเป็นจุดวัดแรกเสมอเมื่อเครื่องเปิดไม่ติด</li>
+            <li><strong>ตัวจำกัดกระแสตอนเสียบปลั๊ก</strong> — NTC หรือรีเลย์ลัดตัวต้านทาน กันคาปาซิเตอร์เปล่ากระชากจนฟิวส์ขาด (หลักการเดียวกับ<a href="induction-stove.html">เตาแม่เหล็กไฟฟ้า</a>)</li>
+            <li><strong>ภาคอินเวอร์เตอร์</strong> — <a href="igbt.html">IGBT</a> 6 ตัวจัดเป็น 3 คู่ คู่ละเฟส แต่ละคู่สลับต่อสาย U V W ไปที่ไฟบวกหรือไฟลบของบัส</li>
+            <li><strong>IPM</strong> (Intelligent Power Module) คือ IGBT ทั้ง 6 ตัวพร้อมวงจรขับและวงจรป้องกันรวมในก้อนเดียว — ที่เจอในบอร์ด<a href="washing-machine-front.html">เครื่องซักผ้า</a>ส่วนใหญ่</li>
+          </ul>
+          <ul class="content-list en-only">
+            <li><strong>Rectifier</strong> — a <a href="diode.html">diode bridge</a> turns 220 V mains into roughly 310 V DC (220 × √2).</li>
+            <li><strong>DC bus</strong> — a large capacitor holds that steady. <strong>It is the most dangerous point in the machine</strong>, and always the first thing to measure on a dead unit.</li>
+            <li><strong>Inrush limiter</strong> — an NTC or a relay shorting a resistor, so an empty capacitor cannot blow the fuse on plug-in (the same trick as in an <a href="induction-stove.html">induction stove</a>).</li>
+            <li><strong>Inverter stage</strong> — six <a href="igbt.html">IGBTs</a> in three pairs, one pair per phase, each tying U, V or W to the positive or the negative rail.</li>
+            <li><strong>An IPM</strong> (intelligent power module) packs all six devices plus their drivers and protection into one block — what you find on most <a href="washing-machine-front.html">washing machine</a> boards.</li>
+          </ul>
+        </div>
+        <div>
+          <div class="formula-box">
+            <div class="formula">V<sub>DC</sub> ≈ V<sub>AC</sub> × √2 ≈ 310 V</div>
+            <p class="th-only" style="margin:.5rem 0 0;font-size:.9rem;">บัส DC ของเครื่องใช้ไฟฟ้าในบ้านจึงอยู่ราว 300–320 V เสมอ ไม่ว่ายี่ห้อไหน</p>
+            <p class="en-only" style="margin:.5rem 0 0;font-size:.9rem;">So a domestic drive's bus always sits near 300–320 V, whatever the brand.</p>
+          </div>
+          <div class="warn-box">
+            <span class="th-only">⚠️ <strong>บัสยังมีไฟหลังถอดปลั๊ก</strong> คาปาซิเตอร์ค้างแรงดันไว้ได้หลายนาที <strong>ต้องวัดยืนยันว่าต่ำกว่า 30 V ก่อนแตะบอร์ดทุกครั้ง</strong> อย่านับเวลาเอาเอง</span>
+            <span class="en-only">⚠️ <strong>The bus stays live after unplugging.</strong> The capacitor can hold its charge for minutes — <strong>measure and confirm it is below 30 V before touching the board</strong>, every time. Never just count seconds.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 3. เกรดของรูปคลื่น ──────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">เกรดของรูปคลื่นขาออก</span><span class="en-only">Output Waveform Grades</span></div>
+    <div class="card">
+      <p class="th-only">สวิตช์ทำได้แค่ "ต่อ" กับ "ตัด" มันจึงสร้างไซน์เนียน ๆ ตรง ๆ ไม่ได้ ต่างกันแค่ว่า<strong>สับเร็วแค่ไหนและฉลาดแค่ไหน</strong></p>
+      <p class="en-only">A switch can only connect or disconnect, so it cannot draw a smooth sine directly. The grades differ only in <strong>how fast and how cleverly it switches</strong>.</p>
+      <div style="overflow-x:auto;">
+        <table>
+          <tr>
+            <th><span class="th-only">รูปคลื่น</span><span class="en-only">Waveform</span></th>
+            <th><span class="th-only">ทำอย่างไร</span><span class="en-only">How it is made</span></th>
+            <th><span class="th-only">ใช้กับอะไร</span><span class="en-only">Used for</span></th>
+          </tr>
+          <tr>
+            <td><span class="th-only"><strong>สี่เหลี่ยม</strong></span><span class="en-only"><strong>Square</strong></span></td>
+            <td><span class="th-only">สลับบวก-ลบเต็มบัสทุกครึ่งคาบ — ง่ายและถูกที่สุด แต่มีฮาร์มอนิกสูงมาก</span><span class="en-only">Flip the full bus every half cycle — simplest and cheapest, but very rich in harmonics</span></td>
+            <td><span class="th-only">โหลดความร้อนหรือของเล่นราคาถูก <strong>ห้ามใช้กับมอเตอร์และหม้อแปลง</strong> จะร้อนจัด</span><span class="en-only">Heating loads and cheap gadgets. <strong>Not for motors or transformers</strong> — they overheat</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only"><strong>สี่เหลี่ยมดัดแปลง</strong><br>(modified sine)</span><span class="en-only"><strong>Modified sine</strong></span></td>
+            <td><span class="th-only">เพิ่มช่วงพักที่ศูนย์ก่อนสลับขั้ว ทำให้ค่า RMS ใกล้ไซน์ขึ้น</span><span class="en-only">Adds a rest at zero before flipping, bringing the RMS closer to a sine</span></td>
+            <td><span class="th-only">เครื่องสำรองไฟราคาประหยัด — พัดลมและอะแดปเตอร์บางตัวจะครางและร้อนกว่าปกติ</span><span class="en-only">Budget UPS units — some fans and adapters buzz and run warmer</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only"><strong>PWM ไซน์</strong><br>(SPWM)</span><span class="en-only"><strong>Sine PWM</strong></span></td>
+            <td><span class="th-only">สับเร็วหลักพันถึงหมื่นครั้งต่อวินาที แล้ว<strong>ปรับความกว้างพัลส์ตามรูปไซน์</strong> ค่าเฉลี่ยจึงเป็นไซน์</span><span class="en-only">Switches thousands of times a second and <strong>varies the pulse width along a sine</strong>, so the average is a sine</span></td>
+            <td><span class="th-only">อินเวอร์เตอร์คุมมอเตอร์ทุกตัวและเครื่องสำรองไฟเกรดดี</span><span class="en-only">Every motor drive, and good-grade UPS units</span></td>
+          </tr>
+        </table>
+      </div>
+      <div class="info-box">
+        <span class="th-only">🔎 <strong>ทำไม PWM ถึงกลายเป็นไซน์ได้</strong> — มอเตอร์คือ<a href="inductor.html">ตัวเหนี่ยวนำ</a>ก้อนใหญ่ กระแสในตัวเหนี่ยวนำเปลี่ยนทันทีไม่ได้ พัลส์ที่สับเร็วมากจึงถูก<strong>เฉลี่ยทิ้งไปเองด้วยตัวมอเตอร์</strong> เหลือแต่คลื่นมูลฐาน นี่คือเหตุผลที่ <strong>เอามัลติมิเตอร์ธรรมดาไปวัดแรงดันขาออกของอินเวอร์เตอร์แล้วอ่านค่าผิด</strong> เพราะมิเตอร์เห็นพัลส์ ไม่ได้เห็นไซน์</span>
+        <span class="en-only">🔎 <strong>Why PWM becomes a sine</strong> — a motor is a large <a href="inductor.html">inductor</a>, and current in an inductor cannot jump. Fast pulses are therefore <strong>averaged out by the motor itself</strong>, leaving the fundamental. This is also why <strong>an ordinary multimeter misreads a drive's output voltage</strong>: it sees the pulses, not the sine.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 4. ซิม ──────────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ทดลอง: ความถี่ แรงดัน และฟลักซ์</span><span class="en-only">Try It: Frequency, Voltage &amp; Flux</span></div>
+    <div class="card">
+      <p class="th-only">ปรับความถี่กับโหลด แล้วสลับระหว่าง <strong>V/f คงที่</strong> (สิ่งที่อินเวอร์เตอร์ของจริงทำ) กับ <strong>คาแรงดันไว้ 220 V</strong> (สิ่งที่จะเกิดถ้าเปลี่ยนแค่ความถี่อย่างเดียว)</p>
+      <p class="en-only">Set the frequency and load, then switch between <strong>constant V/f</strong> — what a real drive does — and <strong>holding 220 V</strong>, which is what happens if you change frequency alone.</p>
+
+      <div class="sim-wrap" id="inverter-sim">
+        <canvas id="inv-canvas" class="sim-screen" width="560" height="330" aria-label="Inverter and V/f simulator"></canvas>
+        <div class="sim-panel">
+          <div class="sim-modes">
+            <button id="inv-w-square" type="button">⬛ <span class="th-only">สี่เหลี่ยม</span><span class="en-only">Square</span></button>
+            <button id="inv-w-mod" type="button">▤ <span class="th-only">ดัดแปลง</span><span class="en-only">Modified</span></button>
+            <button id="inv-w-pwm" class="active" type="button">〜 PWM</button>
+          </div>
+          <div class="sim-modes">
+            <button id="inv-c-vf" class="active" type="button">✅ <span class="th-only">V/f คงที่</span><span class="en-only">Constant V/f</span></button>
+            <button id="inv-c-fixed" type="button">⚠️ <span class="th-only">คา 220 V</span><span class="en-only">Hold 220 V</span></button>
+          </div>
+
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="inv-f"><span class="th-only">ความถี่ขาออก</span><span class="en-only">Output frequency</span></label>
+              <span id="inv-f-val">50 Hz</span>
+            </div>
+            <input type="range" id="inv-f" min="5" max="70" step="1" value="50">
+          </div>
+          <div class="sim-ctrl">
+            <div class="sim-ctrl-row">
+              <label for="inv-load"><span class="th-only">โหลดที่เพลา</span><span class="en-only">Shaft load</span></label>
+              <span id="inv-load-val">60%</span>
+            </div>
+            <input type="range" id="inv-load" min="0" max="150" step="5" value="60">
+          </div>
+
+          <div class="sim-readout">
+            <div class="sim-rb"><div class="sim-rl" id="inv-l1">แรงดันขาออก</div><div class="sim-rv" id="inv-out1">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="inv-l2">ความเร็วรอบ</div><div class="sim-rv" id="inv-out2">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="inv-l3">ฟลักซ์ในแกน</div><div class="sim-rv" id="inv-out3">—</div></div>
+            <div class="sim-rb"><div class="sim-rl" id="inv-l4">แรงบิดที่ทำได้</div><div class="sim-rv" id="inv-out4">—</div></div>
+          </div>
+          <div class="sim-verdict" id="inv-verdict">—</div>
+        </div>
+      </div>
+
+      <div class="info-box" style="margin-top:1rem;">
+        <span class="th-only">🔎 <strong>ลองอันนี้:</strong> กด "คา 220 V" แล้วลากความถี่ลงมาที่ 20 Hz — ฟลักซ์จะพุ่งเป็น 250% ของพิกัดทันที <strong>มอเตอร์ร้อนจัดทั้งที่หมุนช้าลงและยังไม่ได้ออกแรงอะไรเลย</strong> จากนั้นกดกลับไป "V/f คงที่" ที่ความถี่เดิม จะเห็นแรงดันลดลงเหลือ 88 V และฟลักซ์กลับมาที่ 100% พอดี — <strong>นี่คือสิ่งที่อินเวอร์เตอร์ทำจริง ๆ และเป็นเหตุผลว่าทำไมการ "ลดความถี่เฉย ๆ" ถึงใช้ไม่ได้</strong></span>
+        <span class="en-only">🔎 <strong>Try this:</strong> press "hold 220 V" and drag the frequency down to 20 Hz — flux jumps to 250% of rated. <strong>The motor overheats while turning slower and doing no work at all.</strong> Now switch back to constant V/f at the same frequency: the voltage falls to 88 V and flux lands exactly on 100%. <strong>That is what a drive really does, and why "just lower the frequency" does not work.</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 5. V/f ─────────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">หัวใจของ VFD: V/f คงที่</span><span class="en-only">The Heart of a VFD: Constant V/f</span></div>
+    <div class="card">
+      <div class="inv-two">
+        <div>
+          <div class="formula-box">
+            <div class="formula">n<sub>s</sub> = 120 × f ÷ P</div>
+            <p class="th-only" style="margin:.5rem 0 0;font-size:.9rem;">ความเร็วสนามหมุน (rpm) — f คือความถี่ (Hz) และ P คือจำนวนขั้วของมอเตอร์ · มอเตอร์ 4 ขั้วที่ 50 Hz ได้ 1,500 rpm</p>
+            <p class="en-only" style="margin:.5rem 0 0;font-size:.9rem;">Synchronous speed in rpm, where f is the frequency and P the number of poles. A 4-pole motor at 50 Hz gives 1,500 rpm.</p>
+          </div>
+          <div class="formula-box">
+            <div class="formula">Φ ∝ V ÷ f</div>
+            <p class="th-only" style="margin:.5rem 0 0;font-size:.9rem;">ฟลักซ์ในแกนเหล็กแปรตามอัตราส่วนแรงดันต่อความถี่ · มอเตอร์ 220 V 50 Hz มีพิกัด <strong>4.4 V ต่อ Hz</strong></p>
+            <p class="en-only" style="margin:.5rem 0 0;font-size:.9rem;">Core flux follows the voltage-to-frequency ratio. A 220 V 50 Hz motor is rated at <strong>4.4 V per Hz</strong>.</p>
+          </div>
+        </div>
+        <div>
+          <p class="th-only">ขดลวดของมอเตอร์ก็คือขดลวดบนแกนเหล็ก เหมือน<a href="transformer.html">หม้อแปลง</a>ทุกประการ ปัญหาจึงเหมือนกัน: <strong>ถ้าลดความถี่แต่ไม่ลดแรงดัน ฟลักซ์จะพุ่งจนแกนอิ่มตัว</strong> พออิ่มตัวแล้วขดลวดจะเหลือแค่ความต้านทานเปล่า ๆ กระแสจึงพุ่งขึ้นโดยไม่ได้แรงบิดเพิ่มเลย มอเตอร์ร้อนไหม้ทั้งที่หมุนเบา ๆ</p>
+          <p class="th-only">อินเวอร์เตอร์จึง<strong>ลดแรงดันลงพร้อมกับความถี่เสมอ</strong> ให้อัตราส่วน V/f คงที่ ฟลักซ์คงที่ แรงบิดจึงคงที่ตลอดย่านความเร็ว</p>
+          <p class="en-only">A motor winding is a coil on an iron core, exactly like a <a href="transformer.html">transformer</a>, so it has the same problem: <strong>lower the frequency without lowering the voltage and the flux climbs until the core saturates.</strong> Once saturated, the winding is little more than bare resistance — current soars with no extra torque, and the motor cooks while barely turning.</p>
+          <p class="en-only">So a drive <strong>always drops the voltage along with the frequency</strong>, keeping V/f, and therefore flux and torque, constant across the speed range.</p>
+        </div>
+      </div>
+
+      <div style="overflow-x:auto;margin-top:1rem;">
+        <table>
+          <tr>
+            <th><span class="th-only">ย่านการทำงาน</span><span class="en-only">Region</span></th>
+            <th><span class="th-only">แรงดันและฟลักซ์</span><span class="en-only">Voltage &amp; flux</span></th>
+            <th><span class="th-only">แรงบิด</span><span class="en-only">Torque</span></th>
+          </tr>
+          <tr>
+            <td><span class="th-only">ต่ำกว่าพิกัด (0–50 Hz)</span><span class="en-only">Below rated (0–50 Hz)</span></td>
+            <td><span class="th-only">แรงดันลดตามความถี่ ฟลักซ์คงที่ 100%</span><span class="en-only">Voltage tracks frequency, flux stays at 100%</span></td>
+            <td><span class="th-only"><strong>เต็มพิกัดตลอดย่าน</strong> — ปั่นช้าแต่ยังมีแรง</span><span class="en-only"><strong>Full torque throughout</strong> — slow but still strong</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">เหนือพิกัด (&gt; 50 Hz)</span><span class="en-only">Above rated (&gt; 50 Hz)</span></td>
+            <td><span class="th-only">แรงดันชนเพดานของบัส DC แล้ว ฟลักซ์จึงลดลง</span><span class="en-only">Voltage hits the DC-bus ceiling, so flux falls</span></td>
+            <td><span class="th-only">ตกลงตามส่วน — <strong>ย่านลดฟลักซ์</strong> เร็วขึ้นแต่แรงน้อยลง</span><span class="en-only">Falls proportionally — the <strong>field-weakening region</strong>: faster but weaker</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">ความถี่ต่ำมาก (&lt; 5 Hz)</span><span class="en-only">Very low (&lt; 5 Hz)</span></td>
+            <td><span class="th-only">แรงดันเหลือน้อยจนถูกความต้านทานขดลวดกินไปหมด ต้องใส่ <strong>torque boost</strong> ชดเชย</span><span class="en-only">So little voltage that winding resistance eats it all — needs a <strong>torque boost</strong></span></td>
+            <td><span class="th-only">ตกถ้าไม่ชดเชย — ตั้ง boost มากเกินก็ร้อนตอนเดินเบา</span><span class="en-only">Drops without boost — but too much boost overheats it at light load</span></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 6. เรื่องที่ทำให้ IGBT ระเบิด ───────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">สองเรื่องที่ทำให้ภาคกำลังพัง</span><span class="en-only">Two Ways the Power Stage Dies</span></div>
+    <div class="card">
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-content">
+          <strong class="th-only">ชู้ตทรู (shoot-through) และเวลาตายของเกต</strong>
+          <strong class="en-only">Shoot-through and dead time</strong>
+          <p class="th-only">IGBT คู่บน-ล่างของเฟสเดียวกัน <strong>ห้ามนำกระแสพร้อมกันเด็ดขาด</strong> เพราะจะลัดวงจรบัส 310 V ผ่านตัวมันเอง พังในเสี้ยวไมโครวินาที วงจรขับจึงเว้น <strong>ช่วงดับทั้งคู่ (dead time) ราว 1–3 ไมโครวินาที</strong> ทุกครั้งที่สลับ — ถ้าไดรเวอร์เสียหรือคาปาบูตสแตรปแห้ง จังหวะนี้จะเพี้ยนแล้วโมดูลระเบิด</p>
+          <p class="en-only">The upper and lower IGBT of one phase <strong>must never conduct together</strong>, or they short the 310 V bus through themselves and die in a fraction of a microsecond. Drivers therefore insert <strong>1–3 µs of dead time</strong> at every transition. A failed driver or a dried-out bootstrap capacitor upsets that timing, and the module blows.</p>
+        </div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content">
+          <strong class="th-only">ขอบสัญญาณชันกับสายมอเตอร์ยาว (dv/dt)</strong>
+          <strong class="en-only">Fast edges and long motor cables (dv/dt)</strong>
+          <p class="th-only">พัลส์ของ PWM ขึ้นลงชันมาก สายมอเตอร์ที่ยาวจะทำตัวเป็นสายส่งและเกิด <strong>แรงดันสะท้อนที่ปลายมอเตอร์สูงได้เกือบ 2 เท่าของบัส</strong> กัดฉนวนขดลวดจนพังก่อนเวลา — จึงต้องใช้สายมอเตอร์แบบมีชีลด์ เดินให้สั้นที่สุด และ<strong>ห้ามใช้สายเดียวกับสายสัญญาณ</strong></p>
+          <p class="en-only">PWM edges are extremely steep, so a long motor cable behaves like a transmission line and produces <strong>reflections at the motor of nearly twice the bus voltage</strong>, eroding the winding insulation early. Use screened motor cable, keep it short, and <strong>never run it alongside signal wiring</strong>.</p>
+        </div></div>
+      </div>
+      <div class="warn-box">
+        <span class="th-only">⚠️ <strong>ห้ามใส่คอนแทกเตอร์หรือสวิตช์คั่นระหว่างอินเวอร์เตอร์กับมอเตอร์แล้วสับขณะเครื่องทำงาน</strong> — การตัดกระแสของโหลดเหนี่ยวนำกลางอากาศทำให้เกิดแรงดันย้อนกระชากเข้าภาคกำลัง เป็นสาเหตุยอดฮิตที่ IGBT พังทั้งชุด ถ้าต้องมีสวิตช์ ต้องสั่งให้อินเวอร์เตอร์หยุดก่อนเสมอ</span>
+        <span class="en-only">⚠️ <strong>Never switch a contactor between the drive and the motor while it is running.</strong> Breaking an inductive current mid-flight throws a surge straight back into the power stage — a classic way to lose the whole IGBT set. If a switch is required, always command the drive to stop first.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 7. การวัดและตรวจเช็ค ───────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">การวัดและตรวจเช็ค</span><span class="en-only">Measuring &amp; Testing</span></div>
+    <div class="card">
+      <div style="overflow-x:auto;">
+        <table>
+          <tr>
+            <th><span class="th-only">วัดอะไร</span><span class="en-only">What to measure</span></th>
+            <th><span class="th-only">ค่าที่ควรได้</span><span class="en-only">Expected</span></th>
+            <th><span class="th-only">แปลผล</span><span class="en-only">What it means</span></th>
+          </tr>
+          <tr>
+            <td><span class="th-only"><strong>บัส DC</strong> (ขณะเสียบปลั๊ก)</span><span class="en-only"><strong>DC bus</strong>, energised</span></td>
+            <td>300–320 V DC</td>
+            <td><span class="th-only">0 V = ดูฟิวส์ บริดจ์ และตัวจำกัดกระแสก่อน · ต่ำผิดปกติ = คาปาซิเตอร์เสื่อมหรือมีตัวกินไฟอยู่</span><span class="en-only">0 V → check fuse, bridge and inrush limiter first · low → tired capacitor or something loading the bus</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">ไฟเลี้ยงบอร์ด 15 V และ 5 V</span><span class="en-only">Board rails, 15 V and 5 V</span></td>
+            <td><span class="th-only">ตรงตามป้ายบนบอร์ด</span><span class="en-only">As silkscreened</span></td>
+            <td><span class="th-only">15 V คือไฟขับเกต ถ้าหายไปข้างเดียว มอเตอร์จะสั่นแต่ไม่หมุน</span><span class="en-only">The 15 V rail drives the gates — lose one and the motor shakes without turning</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only"><strong>ขดมอเตอร์ U-V, V-W, U-W</strong></span><span class="en-only"><strong>Motor windings U-V, V-W, U-W</strong></span></td>
+            <td><span class="th-only"><strong>ต้องเท่ากันทั้งสามคู่</strong> (ต่างกันได้ไม่กี่เปอร์เซ็นต์)</span><span class="en-only"><strong>All three must match</strong> within a few percent</span></td>
+            <td><span class="th-only">คู่ใดต่ำกว่าเพื่อน = ช็อตรอบ · OL = ขดขาด</span><span class="en-only">One pair lower = shorted turns · OL = open winding</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">ขดลวด ↔ โครงมอเตอร์</span><span class="en-only">Winding ↔ motor frame</span></td>
+            <td><span class="th-only">ต้อง OL</span><span class="en-only">Must read OL</span></td>
+            <td><span class="th-only">มีค่า = ไฟรั่วลงโครง <a href="home-wiring.html">เครื่องตัดไฟรั่ว</a>จะตัดและอาจพาภาคกำลังพังไปด้วย</span><span class="en-only">Any reading is leakage to the frame — the <a href="home-wiring.html">RCD</a> trips, and it can take the power stage with it</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only"><strong>โมดูล IGBT</strong> (ถอดปลั๊กและคายประจุแล้ว)</span><span class="en-only"><strong>IGBT module</strong>, unplugged and discharged</span></td>
+            <td><span class="th-only">ย่านไดโอด: จาก U V W ไปบัสลบและบัสบวก ต้องอ่านได้เหมือนกันทั้งสามเฟส</span><span class="en-only">Diode range: U, V and W to each rail must read alike on all three phases</span></td>
+            <td><span class="th-only">เฟสใดอ่านเป็น 0 V ทั้งสองทิศ = <strong>ช็อต ต้องเปลี่ยนทั้งโมดูล</strong> และต้องหาสาเหตุก่อนใส่ตัวใหม่</span><span class="en-only">A phase reading near 0 V both ways is <strong>shorted — replace the module</strong>, and find the cause before fitting a new one</span></td>
+          </tr>
+          <tr>
+            <td><span class="th-only">แรงดันขาออก U-V ขณะทำงาน</span><span class="en-only">Output U-V while running</span></td>
+            <td><span class="th-only">อ่านด้วยมิเตอร์ธรรมดา<strong>ไม่ได้</strong></span><span class="en-only"><strong>Not readable</strong> with an ordinary meter</span></td>
+            <td><span class="th-only">ต้องใช้มิเตอร์ True-RMS ที่มีโหมดสำหรับอินเวอร์เตอร์ หรือ<a href="oscilloscope.html">สโคป</a>ผ่านหม้อแปลงแยกกราวด์ · เทียบสามเฟสให้เท่ากันสำคัญกว่าตัวเลข</span><span class="en-only">Use a true-RMS meter with a drive mode, or a <a href="oscilloscope.html">scope</a> through an isolation transformer. Matching the three phases matters more than the number</span></td>
+          </tr>
+        </table>
+      </div>
+      <div class="info-box">
+        <span class="th-only">🔧 <strong>ลำดับไล่ซ่อมที่ใช้ได้กับทุกยี่ห้อ:</strong> ไฟเข้าและฟิวส์ → บัส DC → ไฟเลี้ยงบอร์ด → ขดมอเตอร์และฉนวน → โมดูลกำลัง · เจอโมดูลช็อตอย่าเพิ่งเปลี่ยนทันที <strong>ต้องดูก่อนว่าอะไรฆ่ามัน</strong> (ไดรเวอร์ ฉนวนมอเตอร์ หรือสายมอเตอร์) ไม่งั้นตัวใหม่จะพังซ้ำ</span>
+        <span class="en-only">🔧 <strong>A brand-agnostic order of work:</strong> incoming supply and fuse → DC bus → board rails → motor windings and insulation → power module. When you find a shorted module, <strong>work out what killed it</strong> — driver, motor insulation or cable — before fitting a new one, or the replacement dies too.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 8. ความปลอดภัย ─────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">ความปลอดภัย</span><span class="en-only">Safety</span></div>
+    <div class="card">
+      <ul class="content-list th-only">
+        <li><strong>คาปาซิเตอร์บัส DC ค้างไฟหลายนาทีหลังถอดปลั๊ก</strong> — วัดยืนยันต่ำกว่า 30 V ก่อนแตะบอร์ดเสมอ อย่าคายประจุด้วยการช็อตไขควง จะทำให้ขั้วละลายและคาปาเสียหาย</li>
+        <li><strong>กราวด์ของบอร์ดควบคุมไม่ใช่กราวด์ของบ้าน</strong> ในหลายรุ่นมันอ้างอิงกับบัสลบ — <strong>ห้ามหนีบกราวด์สโคปลงบอร์ดตรง ๆ</strong> ถ้าไม่ผ่านหม้อแปลงแยกกราวด์ (กฎเดียวกับ<a href="switching-psu.html">ภาคจ่ายไฟสวิตชิ่ง</a>)</li>
+        <li><strong>แผ่นหลังโลหะของโมดูลกำลังมีไฟ</strong> — ยึดกับฮีตซิงก์ผ่านแผ่นฉนวนเสมอ และวัดยืนยันว่าไม่ช็อตกับฮีตซิงก์ก่อนจ่ายไฟ</li>
+        <li><strong>มอเตอร์อาจหมุนเองได้ทุกเมื่อ</strong> ขณะบอร์ดมีไฟ — เอามือและเครื่องมือออกจากใบพัดและสายพานก่อนจ่ายไฟทดสอบทุกครั้ง</li>
+        <li>ทดสอบครั้งแรกหลังซ่อม ให้<strong>จ่ายไฟผ่านหลอดไส้อนุกรม</strong>และเดินโดยไม่ต่อโหลดก่อน</li>
+      </ul>
+      <ul class="content-list en-only">
+        <li><strong>The DC-bus capacitor holds a charge for minutes after unplugging.</strong> Always confirm below 30 V before touching the board, and never discharge by shorting a screwdriver across it — that pits the terminals and damages the capacitor.</li>
+        <li><strong>The control board's ground is not the building's ground.</strong> On many units it references the negative bus, so <strong>never clip a scope ground to it</strong> without an isolation transformer (the same rule as for a <a href="switching-psu.html">switching supply</a>).</li>
+        <li><strong>The module's metal back tab is live</strong> — always mount it to the heatsink through an insulator, and confirm it is not shorted to the heatsink before powering up.</li>
+        <li><strong>The motor can start at any moment</strong> while the board is powered. Keep hands and tools clear of fans and belts before every test run.</li>
+        <li>For the first run after a repair, <strong>power it through a series incandescent lamp</strong> and run it with no load attached.</li>
+      </ul>
+      <div class="info-box">
+        <span class="th-only">📚 อ่านต่อ: <a href="igbt.html">IGBT</a> (สวิตช์ที่ใช้ในภาคกำลัง) · <a href="power-supply.html">แหล่งจ่ายไฟ</a> (ทิศทางตรงข้าม AC→DC) · <a href="transformer.html">หม้อแปลงไฟฟ้า</a> (ที่มาของเรื่องฟลักซ์อิ่มตัว) · <a href="washing-machine-top.html">เครื่องซักผ้าฝาบนอินเวอร์เตอร์</a> และ <a href="washing-machine-front.html">ฝาหน้า Direct Drive</a> (วงจรเดียวกันนี้ในเครื่องจริง)</span>
+        <span class="en-only">📚 See also: <a href="igbt.html">IGBT</a> (the switch in the power stage) · <a href="power-supply.html">Power Supply</a> (the same road in the other direction) · <a href="transformer.html">Transformer</a> (where core saturation comes from) · <a href="washing-machine-top.html">Inverter top loader</a> and <a href="washing-machine-front.html">direct-drive front loader</a> (this circuit in a real appliance)</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer>
+  <strong class="th-only">สื่อการเรียนการสอน วิชาไฟฟ้าและอิเล็กทรอนิกส์</strong>
+  <strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong>
+</footer>
+<script>const CURRENT_PAGE='inverter';</script>
+<script src="js/inverter-sim.js"></script>
+<script src="js/nav.js"></script>
+</body>
+</html>
