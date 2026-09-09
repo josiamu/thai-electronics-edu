@@ -16,6 +16,10 @@
   .flt-card svg { width:100%; height:auto; display:block; }
   .flt-card h4 { margin:.1rem 0 .5rem; font-size:.98rem; }
   .flt-card p { margin:.5rem 0 0; font-size:.86rem; color:var(--text-light); }
+  .flt-use { margin-top:.65rem; padding-top:.55rem; border-top:1px dashed var(--border); font-size:.85rem; color:var(--text); }
+  .flt-use ul { margin:.3rem 0 0; padding-left:1.05rem; color:var(--text-light); }
+  .flt-use li { margin:.22rem 0; }
+  .flt-eg { margin-top:.5rem; font-size:.83rem; }
   .flt-two { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; align-items:start; }
   @media (max-width:760px){ .flt-two{ grid-template-columns:1fr; } }
 </style>
@@ -41,6 +45,20 @@
   <div class="section">
     <div class="section-title"><span class="th-only">ทำไมวงจรถึงต้องมีฟิลเตอร์</span><span class="en-only">Why Circuits Need Filters</span></div>
     <div class="card">
+      <div class="formula-box" style="margin-top:0;">
+        <strong class="th-only">🎯 ทั้งบทนี้พาไปหา 3 ข้อนี้</strong>
+        <strong class="en-only">🎯 Where this whole lesson is heading</strong>
+        <ul class="content-list th-only" style="margin-bottom:0;">
+          <li><strong>ตัวเก็บประจุกับตัวเหนี่ยวนำต้านกระแสไม่เท่ากันทุกความถี่</strong> นี่คือสิ่งเดียวที่ทำให้แยกสัญญาณด้วยความถี่ได้</li>
+          <li><strong>ดูว่าอะไรขนานอยู่กับขาออก แล้วอ่านวงจรออกทันที</strong> เป็นตัวเก็บประจุคือผ่านความถี่ต่ำ เป็นตัวเหนี่ยวนำคือผ่านความถี่สูง</li>
+          <li><strong>ความถี่ตัดไม่ใช่กำแพง</strong> ที่จุดตัดสัญญาณยังผ่านได้ 70.7% ฟิลเตอร์ลดทอน ไม่ได้ตัดขาด</li>
+        </ul>
+        <ul class="content-list en-only" style="margin-bottom:0;">
+          <li><strong>A capacitor and an inductor oppose current differently at every frequency.</strong> That one fact is what lets a circuit sort signals by frequency at all.</li>
+          <li><strong>Look at what sits in parallel with the output and you have read the circuit</strong> — a capacitor means low-pass, an inductor means high-pass.</li>
+          <li><strong>Cutoff is not a wall.</strong> At the cutoff frequency 70.7% still gets through. Filters attenuate; they do not cut.</li>
+        </ul>
+      </div>
       <p class="th-only">ในสายไฟเส้นเดียวมักมีทั้ง <strong>สัญญาณที่เราต้องการ</strong> และ <strong>สิ่งที่เราไม่ต้องการ</strong> ปนกันอยู่ และสองอย่างนี้แทบทุกครั้ง <strong>อยู่คนละความถี่กัน</strong> ฟิลเตอร์คือวงจรที่แยกมันออกจากกันด้วยความถี่ ไม่ใช่ด้วยขนาดของสัญญาณ</p>
       <p class="en-only">One wire usually carries both <strong>the signal you want</strong> and <strong>things you do not</strong> — and almost always the two <strong>sit at different frequencies</strong>. A filter separates them by frequency, not by size.</p>
       <ul class="content-list th-only">
@@ -57,6 +75,27 @@
         <li><strong>A radio's tuning circuit</strong> is a resonant filter that admits one narrow band and rejects the rest.</li>
         <li><strong>A loudspeaker crossover</strong> sends bass to the woofer and treble to the tweeter using two different filters.</li>
       </ul>
+
+      <div class="card" style="box-shadow:none;border:1px dashed var(--border);">
+        <strong class="th-only">📖 ศัพท์ 6 คำที่จะเจอทั้งบท</strong>
+        <strong class="en-only">📖 Six words you will meet throughout</strong>
+        <ul class="content-list th-only" style="margin-bottom:0;">
+          <li><strong>รีแอกแตนซ์</strong> — ความต้านทานกระแสของตัวเก็บประจุหรือตัวเหนี่ยวนำ ที่ค่าเปลี่ยนไปตามความถี่ หน่วยเป็นโอห์มเหมือนกัน</li>
+          <li><strong>แถบผ่าน</strong> — ช่วงความถี่ที่ฟิลเตอร์ยอมให้ผ่านเกือบเต็ม ส่วนนอกช่วงนั้นเรียกแถบกั้น</li>
+          <li><strong>เดซิเบล (dB)</strong> — มาตราส่วนที่บีบอัตราส่วนใหญ่ ๆ ให้เป็นเลขน้อย ๆ · เหลือครึ่งกำลังคือ −3 dB เหลือหนึ่งในสิบของแรงดันคือ −20 dB</li>
+          <li><strong>decade</strong> — ระยะทางบนแกนความถี่ที่เท่ากับ <strong>คูณสิบ</strong> · จาก 100 Hz ไป 1 kHz คือหนึ่ง decade</li>
+          <li><strong>มุมเฟส</strong> — คลื่นขาออกช้าหรือเร็วกว่าคลื่นขาเข้ากี่องศา · ฟิลเตอร์ทำให้เกิดค่านี้เสมอ ไม่ได้ลดแค่ขนาด</li>
+          <li><strong>ค่า Q</strong> — ความแหลมของยอดในวงจรเรโซแนนซ์ · Q สูงคือเลือกความถี่ได้เฉียบแต่แถบแคบ</li>
+        </ul>
+        <ul class="content-list en-only" style="margin-bottom:0;">
+          <li><strong>Reactance</strong> — the opposition to current from a capacitor or inductor, in ohms like resistance, but changing with frequency.</li>
+          <li><strong>Pass band</strong> — the range of frequencies a filter lets through nearly untouched; outside it is the stop band.</li>
+          <li><strong>Decibel (dB)</strong> — a scale that squeezes big ratios into small numbers. Half the power is −3 dB; a tenth of the voltage is −20 dB.</li>
+          <li><strong>Decade</strong> — a distance along the frequency axis equal to <strong>a factor of ten</strong>. From 100 Hz to 1 kHz is one decade.</li>
+          <li><strong>Phase angle</strong> — how many degrees the output wave lags or leads the input. A filter always produces one; it does not only change size.</li>
+          <li><strong>Q</strong> — how sharp the peak of a resonant circuit is. High Q selects a frequency keenly but over a narrow band.</li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -89,6 +128,8 @@
   <div class="section">
     <div class="section-title"><span class="th-only">ฟิลเตอร์พื้นฐาน 4 แบบ</span><span class="en-only">The Four Basic Filters</span></div>
     <div class="card">
+      <p class="th-only">ลองใช้<strong>กฎ 3 วินาที</strong>จากหัวข้อที่แล้วกับทั้งสี่ใบก่อน — ดูรูปแล้วทายเองว่าอะไรขนานอยู่กับขาออก แล้วค่อยอ่านบรรทัดใต้รูปเพื่อเฉลย ฝึกแบบนี้ไม่กี่ครั้งก็อ่านฟิลเตอร์ได้โดยไม่ต้องจำภาพอีกเลย</p>
+      <p class="en-only">Try the <strong>three-second rule</strong> from the previous section on all four first: look at each drawing, decide for yourself what is parallel with the output, and only then read the caption. A few rounds of that and you will never need to memorise these pictures.</p>
       <div class="flt-grid">
         <div class="flt-card">
           <h4><span class="th-only">RC ผ่านความถี่ต่ำ</span><span class="en-only">RC low-pass</span></h4>
@@ -108,6 +149,22 @@
           </svg>
           <p class="th-only">C ขนานกับขาออก → ความถี่สูงถูกลัดลงกราวด์ · f<sub>c</sub> = 1/(2πRC)</p>
           <p class="en-only">C across the output shunts highs to ground · f<sub>c</sub> = 1/(2πRC)</p>
+          <div class="flt-use">
+            <span class="th-only"><strong>ใช้กับอะไร</strong> — แบบที่เจอบ่อยที่สุดในบอร์ดจริง
+              <ul>
+                <li>กรองสัญญาณรบกวนออกจากสายเซ็นเซอร์ก่อนเข้าขาอ่านค่าของไมโครคอนโทรลเลอร์</li>
+                <li>กันปุ่มกดเด้ง โดยให้แรงดันค่อย ๆ ขึ้นแทนที่จะกระตุกเป็นพัลส์หลายลูก</li>
+                <li>เกลี่ยพัลส์ <a href="inverter.html">PWM</a> ให้กลายเป็นแรงดันไฟตรงเฉลี่ยเรียบ ๆ</li>
+              </ul>
+              <div class="flt-eg">📐 <strong>ตัวอย่าง:</strong> R 10 kΩ + C 100 nF → f<sub>c</sub> ≈ 159 Hz · สัญญาณอุณหภูมิที่เปลี่ยนช้า ๆ ผ่านได้หมด ส่วนสัญญาณรบกวนหลัก kHz ถูกรีดทิ้ง</div></span>
+            <span class="en-only"><strong>Where you meet it</strong> — the most common filter on a real board
+              <ul>
+                <li>Cleaning noise off a sensor line before it reaches a microcontroller input.</li>
+                <li>Debouncing a pushbutton, so the voltage rises smoothly instead of chattering.</li>
+                <li>Smoothing a <a href="inverter.html">PWM</a> output into a steady average DC voltage.</li>
+              </ul>
+              <div class="flt-eg">📐 <strong>Example:</strong> R 10 kΩ with C 100 nF gives f<sub>c</sub> ≈ 159 Hz — a slowly changing temperature signal passes intact while kilohertz noise is stripped away.</div></span>
+          </div>
         </div>
         <div class="flt-card">
           <h4><span class="th-only">RC ผ่านความถี่สูง</span><span class="en-only">RC high-pass</span></h4>
@@ -126,6 +183,22 @@
           </svg>
           <p class="th-only">สลับที่ R กับ C แล้วผลกลับข้าง · f<sub>c</sub> สูตรเดิม</p>
           <p class="en-only">Swap R and C and the response flips · same f<sub>c</sub> formula</p>
+          <div class="flt-use">
+            <span class="th-only"><strong>ใช้กับอะไร</strong> — งานหลักคือ <strong>ตัดไฟตรงทิ้ง เหลือแต่สัญญาณ</strong>
+              <ul>
+                <li>คัปปลิงระหว่างภาคขยาย ส่งสัญญาณข้ามไปโดยไม่พาไฟไบอัสของภาคก่อนไปด้วย</li>
+                <li>ปุ่ม AC ของ<a href="oscilloscope.html">ออสซิลโลสโคป</a> คือฟิลเตอร์ตัวนี้ กดแล้วไฟตรงหายไป เหลือแต่ริปเปิลให้ดู</li>
+                <li>ตัดเสียงฮัม 50 Hz และเสียงลมออกจากไมโครโฟน</li>
+              </ul>
+              <div class="flt-eg">📐 <strong>ตัวอย่าง:</strong> C 1 µF + R 10 kΩ → f<sub>c</sub> ≈ 16 Hz · ต่ำกว่าย่านเสียงที่หูได้ยิน (20 Hz ขึ้นไป) เสียงจึงผ่านครบ แต่ไฟตรงถูกกั้นไว้หมด</div></span>
+            <span class="en-only"><strong>Where you meet it</strong> — its main job is to <strong>strip DC and keep the signal</strong>
+              <ul>
+                <li>Coupling between amplifier stages, passing the signal without dragging the previous stage's bias along.</li>
+                <li>The AC button on an <a href="oscilloscope.html">oscilloscope</a> is exactly this filter: press it and the DC level vanishes, leaving the ripple to look at.</li>
+                <li>Removing 50 Hz hum and wind rumble from a microphone.</li>
+              </ul>
+              <div class="flt-eg">📐 <strong>Example:</strong> C 1 µF with R 10 kΩ gives f<sub>c</sub> ≈ 16 Hz — below the audible band, so all the sound passes while DC is blocked completely.</div></span>
+          </div>
         </div>
         <div class="flt-card">
           <h4><span class="th-only">RL ผ่านความถี่ต่ำ</span><span class="en-only">RL low-pass</span></h4>
@@ -144,6 +217,22 @@
           </svg>
           <p class="th-only">L ขวางความถี่สูงไว้ที่ทางเข้า · f<sub>c</sub> = R/(2πL)</p>
           <p class="en-only">L blocks highs on the way in · f<sub>c</sub> = R/(2πL)</p>
+          <div class="flt-use">
+            <span class="th-only"><strong>ใช้กับอะไร</strong> — <strong>ภาคกำลังที่กระแสสูง</strong> ซึ่งใช้ตัวต้านทานไม่ได้เพราะจะร้อน
+              <ul>
+                <li>โช้กใน EMI filter หน้าเครื่อง กันสัญญาณรบกวนจากบอร์ดไม่ให้ย้อนออกไปกวนไฟบ้าน</li>
+                <li>ตัวเหนี่ยวนำในภาค<a href="switching-psu.html">จ่ายไฟสวิตชิ่ง</a> ที่เกลี่ยกระแสสับความถี่สูงให้เป็นไฟตรงเรียบ</li>
+                <li>ตัว R-Factor บนบอร์ด<a href="washing-machine-top.html">เครื่องซักผ้าฝาบน</a> ก็คือตัวเหนี่ยวนำที่ทำหน้าที่นี้</li>
+              </ul>
+              <div class="flt-eg">📐 <strong>ตัวอย่าง:</strong> L 1 mH + R 100 Ω → f<sub>c</sub> ≈ 16 kHz · ไฟบ้าน 50 Hz ผ่านสบาย แต่สัญญาณรบกวนจากการสับสวิตช์ที่หลักสิบ kHz ถูกกั้นไว้</div></span>
+            <span class="en-only"><strong>Where you meet it</strong> — in <strong>high-current power stages</strong>, where a resistor would simply get hot
+              <ul>
+                <li>The choke in a mains EMI filter, stopping board noise from escaping into the house wiring.</li>
+                <li>The inductor in a <a href="switching-psu.html">switching supply</a>, smoothing chopped high-frequency current into steady DC.</li>
+                <li>The R-Factor part on a <a href="washing-machine-top.html">top-loader board</a> is an inductor doing this job.</li>
+              </ul>
+              <div class="flt-eg">📐 <strong>Example:</strong> L 1 mH with R 100 Ω gives f<sub>c</sub> ≈ 16 kHz — 50 Hz mains passes easily while tens-of-kilohertz switching noise is held back.</div></span>
+          </div>
         </div>
         <div class="flt-card">
           <h4><span class="th-only">RL ผ่านความถี่สูง</span><span class="en-only">RL high-pass</span></h4>
@@ -162,7 +251,34 @@
           </svg>
           <p class="th-only">L ขนานกับขาออก ลัดความถี่ต่ำลงกราวด์ · f<sub>c</sub> = R/(2πL)</p>
           <p class="en-only">L across the output shunts lows · f<sub>c</sub> = R/(2πL)</p>
+          <div class="flt-use">
+            <span class="th-only"><strong>ใช้กับอะไร</strong> — <strong>เจอน้อยที่สุดในสี่แบบ</strong> เพราะจะกันความถี่ต่ำต้องใช้ L ค่ามาก ซึ่งใหญ่และแพงกว่าคาปาซิเตอร์มาก
+              <ul>
+                <li>ครอสโอเวอร์ในตู้ลำโพง ฝั่งที่ต้องกันเสียงทุ้มไม่ให้เข้าทวีตเตอร์</li>
+                <li>วงจรความถี่วิทยุ ที่ค่า L ต่ำ ๆ ก็พอแล้วเพราะความถี่สูงมาก</li>
+                <li>งานทั่วไปจึงเลือกใช้ RC ผ่านความถี่สูงแทนเกือบทุกครั้ง</li>
+              </ul>
+              <div class="flt-eg">📐 <strong>ตัวอย่าง:</strong> L 100 µH + R 50 Ω → f<sub>c</sub> ≈ 80 kHz · จะให้ได้ f<sub>c</sub> ต่ำระดับเสียงพูด ต้องใช้ L ใหญ่ขึ้นเป็นร้อยเท่า</div></span>
+            <span class="en-only"><strong>Where you meet it</strong> — <strong>the rarest of the four</strong>, because blocking low frequencies needs a large inductor, far bulkier and dearer than a capacitor
+              <ul>
+                <li>Loudspeaker crossovers, on the side that must keep bass out of the tweeter.</li>
+                <li>Radio-frequency circuits, where the frequencies are so high that a tiny inductor suffices.</li>
+                <li>For everyday work an RC high-pass is chosen almost every time instead.</li>
+              </ul>
+              <div class="flt-eg">📐 <strong>Example:</strong> L 100 µH with R 50 Ω gives f<sub>c</sub> ≈ 80 kHz. To reach speech frequencies the inductor would have to be a hundred times larger.</div></span>
+          </div>
         </div>
+      </div>
+
+      <div class="info-box">
+        <span class="th-only">🤔 <strong>แล้วจะเลือก RC หรือ RL</strong> — ทั้งคู่ทำงานเหมือนกัน ต่างกันที่ของจริง<br>
+          <strong>RC ใช้กับสายสัญญาณ</strong> เพราะคาปาซิเตอร์เล็ก ถูก และไม่แผ่สนามแม่เหล็กไปกวนใคร กระแสในสายสัญญาณน้อยอยู่แล้ว ตัวต้านทานจึงไม่ร้อน<br>
+          <strong>RL ใช้กับสายไฟกำลัง</strong> เพราะถ้าเอาตัวต้านทานไปคั่นทางเดินกระแสหลายแอมป์ มันจะร้อนและกินแรงดันทิ้งเปล่า ๆ ส่วนตัวเหนี่ยวนำขวางเฉพาะความถี่สูง แต่ปล่อยไฟที่ต้องการผ่านโดยแทบไม่เสียกำลังเลย<br>
+          จำสั้น ๆ ว่า <strong>เจอฟิลเตอร์บนสายสัญญาณให้มองหา C · เจอบนสายไฟหลักให้มองหาโช้ก</strong></span>
+        <span class="en-only">🤔 <strong>So which one, RC or RL?</strong> They do the same job; the difference is practical.<br>
+          <strong>RC belongs on signal lines.</strong> Capacitors are small, cheap and radiate no magnetic field, and signal currents are tiny, so the resistor never gets warm.<br>
+          <strong>RL belongs on power lines.</strong> Putting a resistor in the path of several amps means heat and wasted voltage, whereas an inductor obstructs only the high frequencies and passes the useful current at almost no loss.<br>
+          Short version: <strong>a filter on a signal line means look for a capacitor; one on a mains line means look for a choke.</strong></span>
       </div>
 
       <div class="formula-box" style="text-align:center;margin-top:1.25rem;">
@@ -172,8 +288,16 @@
       </div>
 
       <div class="info-box">
-        <span class="th-only">🧮 <strong>ตัวอย่าง:</strong> R = 1 kΩ กับ C = 0.1 µF → f<sub>c</sub> = 1 ÷ (2π × 1000 × 0.0000001) ≈ <strong>1,591 Hz</strong> · สัญญาณ 160 Hz ผ่านได้เกือบเต็ม ส่วน 16 kHz เหลือราวหนึ่งในสิบ</span>
-        <span class="en-only">🧮 <strong>Worked example:</strong> R = 1 kΩ with C = 0.1 µF gives f<sub>c</sub> = 1 ÷ (2π × 1000 × 0.0000001) ≈ <strong>1,591 Hz</strong>. A 160 Hz signal passes almost untouched; 16 kHz is cut to roughly a tenth.</span>
+        <span class="th-only">🧮 <strong>ตัวอย่าง แทนค่าทีละขั้น:</strong> R = 1 kΩ และ C = 0.1 µF<br>
+          ① เปลี่ยนหน่วยให้เป็นโอห์มกับฟารัดก่อน: R = 1,000 Ω · C = 0.1 µF = 1 × 10⁻⁷ F<br>
+          ② คูณกันก่อน: 2π × 1,000 × 1 × 10⁻⁷ ≈ 6.28 × 10⁻⁴<br>
+          ③ กลับเศษส่วน: f<sub>c</sub> = 1 ÷ 0.000628 ≈ <strong>1,591 Hz</strong><br>
+          แปลว่าสัญญาณ 160 Hz ผ่านได้เกือบเต็ม ส่วน 16 kHz เหลือราวหนึ่งในสิบ</span>
+        <span class="en-only">🧮 <strong>Worked example, one step at a time:</strong> R = 1 kΩ and C = 0.1 µF<br>
+          ① Convert to ohms and farads first: R = 1,000 Ω, C = 0.1 µF = 1 × 10⁻⁷ F<br>
+          ② Multiply the bottom out: 2π × 1,000 × 1 × 10⁻⁷ ≈ 6.28 × 10⁻⁴<br>
+          ③ Take the reciprocal: f<sub>c</sub> = 1 ÷ 0.000628 ≈ <strong>1,591 Hz</strong><br>
+          So a 160 Hz signal passes almost untouched, while 16 kHz is cut to roughly a tenth.</span>
       </div>
     </div>
   </div>
@@ -184,6 +308,14 @@
     <div class="card">
       <p class="th-only"><strong>ความถี่ตัดไม่ใช่กำแพง</strong> — ที่ f<sub>c</sub> สัญญาณยังผ่านได้ตั้ง 70.7% ของเดิม ที่เรียกว่า "ตัด" เพราะเป็นจุดที่ <strong>กำลังไฟฟ้าเหลือครึ่งเดียว</strong> พอดี (0.707² = 0.5) และเมื่อคิดเป็นเดซิเบลจะได้ −3 dB พอดี จึงใช้เป็นหมุดหมายสากล</p>
       <p class="en-only"><strong>Cutoff is not a wall.</strong> At f<sub>c</sub> the signal is still 70.7% of what went in. It counts as "cut" because that is where <strong>the power is halved</strong> (0.707² = 0.5), which works out to exactly −3 dB — hence the universal marker.</p>
+      <div class="info-box">
+        <span class="th-only">📏 <strong>สองคำที่ต้องรู้ก่อนอ่านตารางข้างล่าง</strong><br>
+          <strong>เดซิเบล (dB)</strong> คือมาตราส่วนที่บีบอัตราส่วนใหญ่ ๆ ให้เป็นเลขน้อย ๆ อ่านง่ายขึ้น · จำสามหมุดนี้พอ: ผ่านเต็ม = 0 dB · เหลือ 70.7% = −3 dB · เหลือหนึ่งในสิบ = −20 dB · ตัวเลขติดลบแปลว่าลดลง<br>
+          <strong>decade</strong> คือระยะบนแกนความถี่ที่เท่ากับ <strong>คูณสิบ</strong> · จาก 100 Hz ไป 1 kHz คือหนึ่ง decade และจาก 1 kHz ไป 10 kHz ก็อีกหนึ่ง decade เท่ากัน แม้ตัวเลขจะห่างกันมากกว่า</span>
+        <span class="en-only">📏 <strong>Two words to know before the table below</strong><br>
+          A <strong>decibel (dB)</strong> is a scale that squeezes big ratios into small, readable numbers. Three landmarks are enough: full signal = 0 dB, 70.7% left = −3 dB, a tenth left = −20 dB. A negative number means a reduction.<br>
+          A <strong>decade</strong> is a distance along the frequency axis equal to <strong>a factor of ten</strong>. From 100 Hz to 1 kHz is one decade, and 1 kHz to 10 kHz is another one of exactly the same size, even though the numbers are further apart.</span>
+      </div>
       <div style="overflow-x:auto;">
         <table>
           <tr>
@@ -293,7 +425,11 @@
             <p class="th-only" style="margin:.5rem 0 0;font-size:.9rem;"><strong>ไม่มี R อยู่ในสูตร</strong> — ค่า R ไม่ได้ย้ายตำแหน่งยอด แต่เป็นตัวกำหนดว่ายอดจะแหลมหรือป้าน</p>
             <p class="en-only" style="margin:.5rem 0 0;font-size:.9rem;"><strong>R is not in the formula.</strong> It does not move the peak — it decides how sharp or blunt the peak is.</p>
           </div>
-          <div class="formula-box">
+          <p style="margin:1rem 0 .4rem;font-size:.9rem;color:var(--text-light);">
+            <span class="th-only">⏭️ <strong>กล่องนี้ข้ามได้ในรอบแรก</strong> — รู้แค่ว่า "R น้อย ยอดแหลม" ก็พอสำหรับตอนนี้ กลับมาดูสูตรตอนต้องออกแบบเองก็ทัน</span>
+            <span class="en-only">⏭️ <strong>Skip this box on a first read</strong> — "less R, sharper peak" is enough for now. Come back to the formulas when you have one to design.</span>
+          </p>
+          <div class="formula-box" style="margin-top:0;">
             <div class="formula">Q = (1/R)·√(L/C)&nbsp;&nbsp;·&nbsp;&nbsp;BW = f<sub>0</sub> / Q</div>
             <p class="th-only" style="margin:.5rem 0 0;font-size:.9rem;">Q สูง = ยอดแหลม แถบผ่านแคบ เลือกความถี่ได้เฉียบ · Q ต่ำ = แถบกว้าง</p>
             <p class="en-only" style="margin:.5rem 0 0;font-size:.9rem;">High Q means a sharp peak and a narrow band; low Q means a wide one.</p>
@@ -379,7 +515,7 @@
             <td><span class="th-only">ความต้านทานของโหลดขนานเข้ากับวงจร ทำให้ค่า R ที่มีผลจริงลดลงและ <strong>f<sub>c</sub> ขยับ</strong> — คำนวณโดยรวมโหลดด้วยเสมอ</span><span class="en-only">The load sits in parallel, lowering the effective R and <strong>moving f<sub>c</sub></strong>. Always include the load in the calculation.</span></td>
           </tr>
           <tr>
-            <td><span class="th-only">ตัวเก็บประจุตัวใหญ่กรองความถี่สูงได้ดีกว่า</span><span class="en-only">A bigger capacitor filters high frequencies better</span></td>
+            <td><span class="th-only">ตัวเก็บประจุตัวใหญ่กรองความถี่สูงได้ดีกว่า<br><span style="font-size:.85em;color:var(--text-light);">⏭️ ระดับถัดไป ข้ามได้ในรอบแรก</span></span><span class="en-only">A bigger capacitor filters high frequencies better<br><span style="font-size:.85em;color:var(--text-light);">⏭️ Next level — skip on a first read</span></span></td>
             <td><span class="th-only">ตัวเก็บประจุมี<strong>ความเหนี่ยวนำแฝง</strong>ในขาและตัวมันเอง เลยความถี่เรโซแนนซ์ในตัวไปแล้วมันจะกลายเป็นตัวเหนี่ยวนำ — จึงต้องใส่ตัวเล็กขนานกับตัวใหญ่ ไม่ใช่เปลี่ยนเป็นตัวใหญ่ตัวเดียว</span><span class="en-only">Every capacitor has <strong>parasitic inductance</strong> in its leads and body, and above its self-resonance it behaves as an inductor. That is why small ones are added in parallel with large ones, rather than fitting one big one.</span></td>
           </tr>
           <tr>
@@ -387,6 +523,20 @@
             <td><span class="th-only">Q สูงแปลว่าแถบผ่านแคบ ถ้าความถี่เลื่อนไปนิดเดียวสัญญาณจะหายไปเลย และวงจรจะแกว่งเป็นสัญญาณค้าง (ringing) ง่ายขึ้นด้วย</span><span class="en-only">High Q means a narrow band — a small frequency drift loses the signal entirely, and the circuit rings more easily.</span></td>
           </tr>
         </table>
+      </div>
+      <div class="formula-box">
+        <strong class="th-only">✅ จำ 3 อย่างนี้พอ</strong>
+        <strong class="en-only">✅ Three things to remember</strong>
+        <ul class="content-list th-only" style="margin-bottom:0;">
+          <li><strong>ฟิลเตอร์แยกสัญญาณด้วยความถี่ ไม่ใช่ด้วยขนาด</strong> ทำได้เพราะรีแอกแตนซ์ของตัวเก็บประจุกับตัวเหนี่ยวนำเปลี่ยนไปตามความถี่ และเปลี่ยนไปคนละทาง</li>
+          <li><strong>ดูว่าอะไรขนานกับขาออก</strong> เป็นตัวเก็บประจุคือผ่านความถี่ต่ำ เป็นตัวเหนี่ยวนำคือผ่านความถี่สูง · f<sub>c</sub> คือจุดที่รีแอกแตนซ์เท่ากับความต้านทานพอดี</li>
+          <li><strong>ที่ f<sub>c</sub> ยังผ่าน 70.7% และห่างไป 2 decade ก็ยังเหลือ 1%</strong> ฟิลเตอร์ลดทอนเป็นลาดเสมอ ไม่มีกำแพง</li>
+        </ul>
+        <ul class="content-list en-only" style="margin-bottom:0;">
+          <li><strong>A filter sorts signals by frequency, not by size</strong>, and it can do so because the reactance of a capacitor and an inductor changes with frequency, in opposite directions.</li>
+          <li><strong>Look at what is parallel with the output</strong> — a capacitor means low-pass, an inductor high-pass. The cutoff is where reactance equals resistance.</li>
+          <li><strong>At f<sub>c</sub> 70.7% still passes, and two decades out 1% remains.</strong> A filter is always a slope, never a wall.</li>
+        </ul>
       </div>
       <div class="info-box">
         <span class="th-only">📚 อ่านต่อ: <a href="capacitor.html">ตัวเก็บประจุ</a> และ <a href="inductor.html">ตัวเหนี่ยวนำ</a> (ที่มาของรีแอกแตนซ์) · <a href="power-supply.html">แหล่งจ่ายไฟ</a> (ฟิลเตอร์ผ่านความถี่ต่ำที่ใช้งานจริงที่สุด) · <a href="oscilloscope.html">ออสซิลโลสโคป</a> และ <a href="signal-generator.html">เครื่องกำเนิดสัญญาณ</a> (เครื่องมือที่ใช้วัดจริง) · <a href="induction-stove.html">เตาแม่เหล็กไฟฟ้า</a> (เรโซแนนซ์กำลังสูงในเครื่องใช้ไฟฟ้าจริง)</span>
