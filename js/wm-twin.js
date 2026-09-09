@@ -286,8 +286,9 @@
     line([[A.wb, A.capY], [A.wb, A.wmY]], washOn() && right ? RED : NCOL(), 2);
     coil(A.wa, A.wmY, A.wmX - A.wmR, A.wmY, washOn() && !right ? RED : NCOL(), 4, 6);
     coil(A.wb, A.wmY, A.wmX + A.wmR, A.wmY, washOn() && right ? RED : NCOL(), 4, 6);
-    label(A.wa, A.wmY - 16, t('ขดที่ 1', 'winding 1'), NCOL(), 9.5, 'center', 600);
-    label(A.wb, A.wmY - 16, t('ขดที่ 2', 'winding 2'), NCOL(), 9.5, 'center', 600);
+    // ป้ายขดลวดอยู่ใต้ขด — เหนือขดเป็นที่ของคำอธิบายคาปาซิเตอร์ซึ่งกว้างคร่อมทั้งสองขด
+    label(A.wa, A.wmY + 20, t('ขดที่ 1', 'winding 1'), NCOL(), 9.5, 'center', 600);
+    label(A.wb, A.wmY + 20, t('ขดที่ 2', 'winding 2'), NCOL(), 9.5, 'center', 600);
     motor(A.wmX, A.wmY, A.wmR, washOn(), washSpins(), right ? 1 : -1, t('มอเตอร์ซัก', 'wash motor'),
           washSpins() ? t(right ? 'หมุนขวา ▶' : '◀ หมุนซ้าย', right ? 'CW ▶' : '◀ CCW')
                       : washOn() ? t('ครางแต่ไม่ออกตัว', 'humming, will not start') : '');
