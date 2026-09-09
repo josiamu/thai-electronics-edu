@@ -495,11 +495,22 @@
     if (fault !== 'ok') {
       ctx.fillStyle = 'rgba(239,68,68,.10)'; ctx.strokeStyle = RED; ctx.lineWidth = 1.4;
       rrect(SX0, 8, SX1 - SX0, 24, 6); ctx.fill(); ctx.stroke();
-      label(SX0 + 12, 24, '🔧 ' + t(f.th, f.en), RED, 11, 'left', 700);
+      const msg = '🔧 ' + t(f.th, f.en);
+      label(SX0 + 12, 24, msg, RED, fitSize(msg, SX1 - SX0 - 24, 11), 'left', 700);
     } else {
       label(SX1, 24, t('จุดที่วิ่ง = กระแสสมมติ (+ → −)', 'moving dots = conventional current (+ → −)'),
             css('--text-light'), 10.5, 'right');
     }
+  }
+
+  /* ย่อขนาดฟอนต์ให้ข้อความอยู่ในกรอบ — คำอธิบายอาการเสียภาษาอังกฤษยาวกว่าไทยมาก
+     ถ้าปล่อยขนาดคงที่จะวาดเลยขอบแคนวาสและตัวหนังสือหายไปเงียบ ๆ */
+  function fitSize(s, maxW, size) {
+    for (let sz = size; sz > 8.5; sz -= 0.25) {
+      ctx.font = '700 ' + sz + 'px Anuphan, sans-serif';
+      if (ctx.measureText(s).width <= maxW) return sz;
+    }
+    return 8.5;
   }
 
   /* ---------- main draw ---------- */
