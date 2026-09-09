@@ -53,7 +53,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | รีเลย์ | Relay | `relay.html` |
 | ออปโตอิเล็กทรอนิกส์ | Optoelectronics | `optoelectronics.html` |
 | แหล่งจ่ายไฟ | Power Supply | `power-supply.html` |
-| อินเวอร์เตอร์ / VFD | Inverter / VFD | `inverter.html` (มีซิม V/f: PWM / สี่เหลี่ยม / คา 220V แล้วแกนอิ่มตัว) |
+| อินเวอร์เตอร์ / VFD | Inverter / VFD | `inverter.html` (วงจรโต้ตอบ 8 ขั้น + ซิม V/f: PWM / สี่เหลี่ยม / คา 220V แล้วแกนอิ่มตัว) |
 
 **วงจรรวมและดิจิทัล / ICs & Digital**
 | ไทย | English | หน้า |
@@ -213,6 +213,7 @@ node test/smoke-canvas-sim.js --verbose  # แสดงทุกจุดที�
 ├── js/simulation.js        — Circuit simulator logic
 ├── js/oscilloscope.js      — Interactive I-V curve simulator
 ├── js/osc-reader.js        — Scope reading trainer
+├── js/vfd-circuit.js       — Step-by-step motor-drive circuit (8 steps, 7 faults, TP1-TP5 probes, dead time, freewheel diodes)
 ├── js/filter-sim.js        — Filter response sim (RC low/high-pass and series RLC on a log Bode plot, with a movable signal-frequency marker)
 ├── js/inverter-sim.js      — Inverter / VFD sim (square / modified / sine-PWM output, constant V/f vs held 220 V, flux and torque readouts)
 ├── js/transformer-sim.js   — Transformer sim (ideal / lossy with real voltage regulation / DC input that burns the primary)

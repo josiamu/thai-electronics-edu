@@ -133,6 +133,122 @@
     </div>
   </div>
 
+  <!-- ── 2.5 วงจรทีละขั้น ────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title"><span class="th-only">วงจรอินเวอร์เตอร์คุมมอเตอร์ทีละขั้น</span><span class="en-only">The Drive Circuit, Step by Step</span></div>
+    <div class="card">
+      <p class="th-only">ไล่จากปลั๊กไปจนถึงเพลามอเตอร์ทีละด่าน · <strong>เส้นทึบคือทางเดินกำลัง เส้นประคือสายควบคุมและไฟเลี้ยงภาคต่ำ</strong> (เส้นประที่พาดข้ามรางไฟไม่ใช่จุดต่อ) · ป้าย TP1–TP5 คือจุดวัดจริงตามลำดับไล่ซ่อม</p>
+      <p class="en-only">Follow it from the plug to the motor shaft, one link at a time. <strong>Solid lines are the power path; dashed lines are control wiring and the low-voltage supply</strong> — a dashed line crossing a rail is not a connection. The TP1–TP5 badges are the real probe points, in the order you would use them.</p>
+
+      <div class="bs-wrap" id="vfd-circuit">
+        <div class="bs-tabs">
+          <button class="bs-tab" data-step="1"><span class="bs-n">1</span><span class="th-only">ไฟเข้า + ฟิวส์ + NTC</span><span class="en-only">Mains, fuse, inrush</span></button>
+          <button class="bs-tab" data-step="2"><span class="bs-n">2</span><span class="th-only">บริดจ์เรียงกระแส</span><span class="en-only">Rectifier</span></button>
+          <button class="bs-tab" data-step="3"><span class="bs-n">3</span><span class="th-only">บัส DC 310V</span><span class="en-only">310 V DC bus</span></button>
+          <button class="bs-tab" data-step="4"><span class="bs-n">4</span><span class="th-only">ไฟเลี้ยง + ไดรเวอร์</span><span class="en-only">Supply + drivers</span></button>
+          <button class="bs-tab" data-step="5"><span class="bs-n">5</span><span class="th-only">ครึ่งสะพาน + dead time</span><span class="en-only">Half-bridge + dead time</span></button>
+          <button class="bs-tab" data-step="6"><span class="bs-n">6</span><span class="th-only">สามเฟส 120°</span><span class="en-only">Three phases 120°</span></button>
+          <button class="bs-tab" data-step="7"><span class="bs-n">7</span><span class="th-only">V/f</span><span class="en-only">V/f</span></button>
+          <button class="bs-tab" data-step="8"><span class="bs-n">8</span><span class="th-only">ไล่วัด TP1–TP5</span><span class="en-only">Probing TP1–TP5</span></button>
+        </div>
+
+        <canvas id="vfd-canvas" class="bs-canvas" style="aspect-ratio:940/430;"></canvas>
+
+        <div class="bs-nav" style="flex-wrap:wrap;">
+          <button id="vfd-prev" class="bs-navbtn">◀ <span class="th-only">ก่อนหน้า</span><span class="en-only">Prev</span></button>
+          <button id="vfd-play" class="bs-navbtn"><span class="th-only">▶ เล่นอัตโนมัติ</span><span class="en-only">▶ Auto-play</span></button>
+          <button id="vfd-run" class="bs-navbtn">
+            <span class="vfd-on">▶ <span class="th-only">สั่งเดินเครื่อง</span><span class="en-only">Running</span></span>
+            <span class="vfd-off">⏸ <span class="th-only">สั่งหยุด</span><span class="en-only">Stopped</span></span>
+          </button>
+          <select id="vfd-fault" class="bs-select" aria-label="fault mode">
+            <option value="ok">✅ ปกติ — Normal</option>
+            <option value="fuse">🔴 ฟิวส์ขาด — fuse open</option>
+            <option value="ntc">🟠 NTC จำกัดกระแสขาด — inrush limiter open</option>
+            <option value="cap">🟡 คาปาซิเตอร์บัสเสื่อม — tired bus capacitor</option>
+            <option value="smps">🔵 ภาคจ่ายไฟบนบอร์ดเสีย — dead board supply</option>
+            <option value="gate">🟣 ขับเกตหายไปหนึ่งเฟส — one phase lost its gate drive</option>
+            <option value="igbt">⚫ IGBT ช็อต — shorted IGBT</option>
+          </select>
+          <button id="vfd-next" class="bs-navbtn"><span class="th-only">ถัดไป</span><span class="en-only">Next</span> ▶</button>
+        </div>
+
+        <div class="bs-faultnote">
+          <span class="th-only">🔧 กำลังจำลองเครื่องที่เสียอยู่ — ไล่ป้าย <b>TP1 → TP2 → TP3</b> ตามลำดับ จุดแรกที่ค่าหายไปคือภาคที่เสีย</span>
+          <span class="en-only">🔧 A faulty drive is being simulated — read <b>TP1 → TP2 → TP3</b> in order: the first badge that loses its value is the failed stage</span>
+        </div>
+
+        <div class="bs-desc" data-step="1">
+          <p class="th-only"><strong>ขั้นที่ 1 — ไฟเข้า ฟิวส์ และตัวจำกัดกระแสตอนเสียบปลั๊ก:</strong> ถัดจากฟิวส์จะมี <strong>NTC หรือรีเลย์ลัดตัวต้านทาน</strong> คั่นอยู่เสมอ เพราะวินาทีที่เสียบปลั๊ก คาปาซิเตอร์บัสยังว่างเปล่า มันจึงเหมือน<strong>ลัดวงจร</strong>ชั่วขณะ กระแสพุ่งได้หลายสิบแอมป์จนฟิวส์ขาดถ้าไม่มีตัวจำกัด
+            <br>NTC เย็นมีค่าความต้านทานสูง พอร้อนขึ้นค่าจะลดลงจนแทบไม่กินแรงดัน — <strong>ลองเลือกอาการ "NTC ขาด" ดู จะเห็น TP1 ยังมี 220V แต่ TP2 เป็นศูนย์</strong> นี่คือเคสยอดฮิตของอาการเปิดไม่ติดทั้งที่ฟิวส์ยังดี</p>
+          <p class="en-only"><strong>Step 1 — mains, fuse and inrush limiter:</strong> right after the fuse there is always an <strong>NTC or a relay shorting a resistor</strong>, because at the instant of plug-in the bus capacitor is empty and behaves like a <strong>short circuit</strong>. Without a limiter the surge reaches tens of amps and takes the fuse with it.
+            <br>A cold NTC has high resistance and drops as it warms until it costs almost nothing. <strong>Pick the "inrush limiter open" fault: TP1 still reads 220 V while TP2 sits at zero</strong> — the classic dead-with-a-good-fuse case.</p>
+        </div>
+
+        <div class="bs-desc" data-step="2">
+          <p class="th-only"><strong>ขั้นที่ 2 — บริดจ์ไดโอดเปลี่ยน AC เป็น DC:</strong> ไดโอด 4 ตัวจับคู่กันทำงานคนละครึ่งคลื่น พลิกครึ่งลบขึ้นมาเป็นบวก ผลลัพธ์คือ <strong>DC ที่ยังเต้นเป็นลูกคลื่น 100 ครั้งต่อวินาที</strong> ยังใช้กับภาคกำลังไม่ได้จนกว่าจะผ่านคาปาซิเตอร์ในขั้นถัดไป
+            <br>วัดบริดจ์ต้องถอดปลั๊กและคายประจุก่อน แล้ววัดในย่านไดโอดทีละตัว — <a href="diode.html">ทบทวนเรื่องไดโอดและวงจรเรียงกระแส</a></p>
+          <p class="en-only"><strong>Step 2 — the bridge turns AC into DC:</strong> the four diodes work in pairs, one pair per half cycle, flipping the negative half up. What comes out is <strong>DC that still pulses a hundred times a second</strong> — unusable by the power stage until the capacitor in the next step smooths it.
+            <br>Test a bridge unplugged and discharged, one diode at a time on the diode range — <a href="diode.html">see the diode lesson</a>.</p>
+        </div>
+
+        <div class="bs-desc" data-step="3">
+          <p class="th-only"><strong>ขั้นที่ 3 — คาปาซิเตอร์บัส คือจุดที่อันตรายที่สุดในเครื่อง:</strong> มันเก็บไฟ <strong>ประมาณ 310 V (= 220 × √2)</strong> เอาไว้ให้นิ่ง ภาคกำลังจึงมีแหล่งจ่ายที่แข็งพอจะสับกระแสมอเตอร์ได้
+            <br><strong style="color:#dc2626;">ถอดปลั๊กแล้วมันยังอมประจุอยู่หลายนาที ต้องวัดยืนยันว่าต่ำกว่า 30 V ก่อนแตะบอร์ดทุกครั้ง</strong> และห้ามคายประจุด้วยการช็อตไขควง จะทำให้ขั้วละลาย
+            <br>ลองเลือกอาการ "คาปาซิเตอร์บัสเสื่อม" — TP2 จะตกลงและมอเตอร์เดินกระตุก เพราะบัสมีริปเปิลสูงจนบอร์ดแจ้งแรงดันต่ำเป็นช่วง ๆ</p>
+          <p class="en-only"><strong>Step 3 — the bus capacitor is the most dangerous point in the machine:</strong> it holds <strong>about 310 V (220 × √2)</strong> steady so the power stage has a supply stiff enough to chop motor current.
+            <br><strong style="color:#dc2626;">It stays charged for minutes after unplugging — always measure and confirm below 30 V before touching the board</strong>, and never discharge it by shorting a screwdriver across it.
+            <br>Try the "tired bus capacitor" fault: TP2 sags and the motor runs rough, because the ripple makes the board report undervoltage on and off.</p>
+        </div>
+
+        <div class="bs-desc" data-step="4">
+          <p class="th-only"><strong>ขั้นที่ 4 — ไฟเลี้ยงภาคต่ำ MCU และไดรเวอร์เกต:</strong> บอร์ดแยกไฟจากบัสไปเข้าภาคจ่ายไฟเล็ก ได้ <strong>15 V สำหรับขับเกต</strong> และ <strong>5 V สำหรับ MCU</strong> · IGBT ไม่ได้ถูกสั่งจาก MCU ตรง ๆ ต้องผ่านไดรเวอร์ที่จ่ายกระแสประจุเกตได้ทันใจ
+            <br><strong style="color:#dc2626;">กราวด์ของภาคควบคุมคือราง DC− ไม่ใช่กราวด์ของบ้าน</strong> (สัญลักษณ์กราวด์ในภาพอยู่บนราง DC−) — <strong>ห้ามหนีบกราวด์สโคปลงบอร์ดถ้าไม่ผ่านหม้อแปลงแยกกราวด์</strong> กฎเดียวกับ<a href="switching-psu.html">ภาคจ่ายไฟสวิตชิ่ง</a>
+            <br>ลองเลือกอาการ "ภาคจ่ายไฟบนบอร์ดเสีย" — <strong>TP2 ยังมี 310 V เต็ม แต่ TP3 เป็นศูนย์</strong> เครื่องเงียบสนิททั้งที่อันตรายเต็มที่</p>
+          <p class="en-only"><strong>Step 4 — the low-voltage supply, the MCU and the gate drivers:</strong> the board taps the bus for a small supply that produces <strong>15 V for the gates</strong> and <strong>5 V for the MCU</strong>. The MCU never drives an IGBT directly — a driver is needed to charge the gate fast enough.
+            <br><strong style="color:#dc2626;">The control ground is the DC− rail, not the building's earth</strong> (the ground symbol in the drawing sits on DC−) — <strong>never clip a scope ground to the board without an isolation transformer</strong>, the same rule as for a <a href="switching-psu.html">switching supply</a>.
+            <br>Try the "dead board supply" fault: <strong>TP2 still holds 310 V while TP3 reads zero</strong>. The machine is silent and fully lethal at the same time.</p>
+        </div>
+
+        <div class="bs-desc" data-step="5">
+          <p class="th-only"><strong>ขั้นที่ 5 — ครึ่งสะพานหนึ่งเฟส:</strong> IGBT สองตัวต่ออนุกรมคร่อมบัส จุดกลางระหว่างมันคือขาออกของเฟสนั้น ตัวบนต่อขาออกขึ้นไฟบวก ตัวล่างต่อขาออกลงไฟลบ <strong>สลับกันไปมาเร็ว ๆ แล้วค่าเฉลี่ยที่ได้คือแรงดันที่มอเตอร์รู้สึก</strong>
+            <br><strong style="color:#dc2626;">ทั้งคู่ห้ามนำกระแสพร้อมกันเด็ดขาด</strong> เพราะจะลัดบัส 310 V ผ่านตัวมันเองและพังในเสี้ยวไมโครวินาที ไดรเวอร์จึงเว้น <strong>ช่วงดับทั้งคู่ (dead time) ราว 1–3 ไมโครวินาที</strong> ทุกครั้งที่สลับ — ในภาพจะเห็นจังหวะที่กล่องทั้งสองจางพร้อมกันชั่วขณะ นั่นคือ dead time
+            <br>ลองเลือกอาการ "IGBT ช็อต" จะเห็นว่าฟิวส์ขาดทันที เพราะบัสถูกลัดผ่านคู่ที่ช็อตนั้น</p>
+          <p class="en-only"><strong>Step 5 — one half-bridge:</strong> two IGBTs in series across the bus, with the phase output taken from the point between them. The upper one ties the output to the positive rail, the lower one to the negative. <strong>Switch between them quickly and the average is the voltage the motor feels.</strong>
+            <br><strong style="color:#dc2626;">They must never conduct together</strong> — that shorts the 310 V bus through themselves and destroys them in a fraction of a microsecond. So the driver inserts <strong>1–3 µs of dead time</strong> at every transition; in the drawing you can catch the instant when both boxes go dim together.
+            <br>Pick "shorted IGBT" and the fuse goes immediately, because the bus is shorted straight through that pair.</p>
+        </div>
+
+        <div class="bs-desc" data-step="6">
+          <p class="th-only"><strong>ขั้นที่ 6 — สามครึ่งสะพาน สามเฟส ต่างกัน 120°:</strong> ครึ่งสะพานชุดเดียวสร้างได้แค่ไฟสลับเฟสเดียว แต่พอมีสามชุดและสั่งให้มันสลับ <strong>เหลื่อมกันชุดละ 120°</strong> ขดลวดทั้งสามในมอเตอร์จะได้ยอดสนามแม่เหล็กไม่พร้อมกัน ผลรวมคือ <strong>สนามแม่เหล็กที่หมุนไปรอบ ๆ</strong> และโรเตอร์ก็วิ่งตามสนามนั้น
+            <br>สังเกตว่า <strong>มอเตอร์ไม่มีสายนิวทรัลเลย</strong> — รับไฟจาก U V W สามเส้นเท่านั้น กระแสที่ไหลเข้าเฟสหนึ่งต้องไหลกลับออกทางอีกสองเฟสเสมอ
+            <br>อยากกลับทางหมุน ไม่ต้องแตะสายเลย <strong>แค่สั่งให้ลำดับเฟสสลับกัน</strong> ซึ่งเป็นเหตุผลที่เครื่องซักผ้าอินเวอร์เตอร์กลับทางถังได้ทุกไม่กี่วินาทีโดยไม่มีหน้าสัมผัสสักตัว</p>
+          <p class="en-only"><strong>Step 6 — three half-bridges, three phases, 120° apart:</strong> one half-bridge can only make single-phase AC. Three of them, switching <strong>120° apart</strong>, give the three windings their magnetic peaks at different moments, and the sum is <strong>a magnetic field that rotates</strong>. The rotor chases it.
+            <br>Note that <strong>the motor has no neutral at all</strong> — it is fed by U, V and W only, so current entering one phase always returns through the other two.
+            <br>To reverse it you touch no wiring: <strong>the drive simply swaps the phase order</strong>. That is how an inverter washing machine reverses the drum every few seconds with no contacts at all.</p>
+        </div>
+
+        <div class="bs-desc" data-step="7">
+          <p class="th-only"><strong>ขั้นที่ 7 — เปลี่ยนความถี่ต้องเปลี่ยนแรงดันตามเสมอ:</strong> ครึ่งสะพานเปลี่ยนความถี่ได้อิสระอยู่แล้ว แต่ถ้าเปลี่ยนความถี่เฉย ๆ โดยคาความกว้างพัลส์ไว้เท่าเดิม อัตราส่วน <strong>V/f จะเพี้ยนทันที</strong> และฟลักซ์ในแกนเหล็กของมอเตอร์จะพุ่งจนอิ่มตัว
+            <br>MCU จึงคุมสองอย่างพร้อมกันเสมอ: ความถี่ของคลื่นมูลฐาน และ <strong>ความกว้างพัลส์ (modulation index) ที่กำหนดแรงดันขาออก</strong> ให้ V/f คงที่ที่ 4.4 V/Hz สำหรับมอเตอร์ 220 V 50 Hz
+            <br>👉 เลื่อนลงไปลอง<strong>ซิม V/f</strong> ด้านล่าง กดปุ่ม "คา 220 V" แล้วลากความถี่ลงมา จะเห็นฟลักซ์พุ่งเป็น 250% ของพิกัดทันที</p>
+          <p class="en-only"><strong>Step 7 — change the frequency and the voltage must follow:</strong> the half-bridges can change frequency freely, but changing it while holding the pulse widths would immediately upset the <strong>V/f ratio</strong> and drive the motor's core into saturation.
+            <br>So the MCU always controls two things at once: the fundamental frequency, and the <strong>pulse width (modulation index) that sets the output voltage</strong>, holding V/f at 4.4 V per Hz for a 220 V 50 Hz motor.
+            <br>👉 Scroll down to the <strong>V/f simulator</strong>, press "hold 220 V" and drag the frequency down — the flux jumps to 250% of rated at once.</p>
+        </div>
+
+        <div class="bs-desc" data-step="8">
+          <p class="th-only"><strong>ขั้นที่ 8 — ลำดับไล่วัดที่ใช้ได้กับทุกยี่ห้อ:</strong> <strong>TP1</strong> ไฟเข้าหลังฟิวส์ (220 V~) → <strong>TP2</strong> บัส DC (300–320 V) → <strong>TP3</strong> ไฟเลี้ยงบอร์ด (15 V) → <strong>TP4</strong> พัลส์เกต → <strong>TP5</strong> แรงดันขาออก U V W · <strong>จุดแรกที่ค่าหายไปคือภาคที่เสีย</strong> ลองเลือกอาการต่าง ๆ แล้วไล่ดูทีละป้าย
+            <br>ที่ตัว IGBT แต่ละตัวมี <strong>ไดโอดฟรีวีล</strong> ต่อขนานอยู่ (เส้นสีส้มในภาพ) — ขดลวดมอเตอร์เป็นตัวเหนี่ยวนำ กระแสในนั้นหยุดทันทีไม่ได้ ทุกครั้งที่ปิด IGBT กระแสจะวิ่งกลับเข้าบัสผ่านไดโอดคู่นี้ <strong>ถ้าไม่มีมัน แรงดันย้อนจะทะลุ IGBT พังทันที</strong>
+            <br>เวลาวัดโมดูลด้วยย่านไดโอด สิ่งที่มิเตอร์อ่านได้ก็คือไดโอดฟรีวีลชุดนี้ — <strong>ทั้งสามเฟสต้องอ่านได้เหมือนกัน</strong> เฟสไหนอ่านเป็นศูนย์ทั้งสองทิศคือช็อต</p>
+          <p class="en-only"><strong>Step 8 — an order of work that fits every brand:</strong> <strong>TP1</strong> mains after the fuse (220 V~) → <strong>TP2</strong> DC bus (300–320 V) → <strong>TP3</strong> board supply (15 V) → <strong>TP4</strong> gate pulses → <strong>TP5</strong> output at U, V, W. <strong>The first badge that loses its value is the failed stage</strong> — pick each fault above and walk the badges.
+            <br>Every IGBT has a <strong>freewheel diode</strong> across it (orange in the drawing). The windings are inductive and their current cannot stop instantly, so each time an IGBT turns off the current returns to the bus through these diodes. <strong>Without them the reverse voltage would punch straight through the IGBT.</strong>
+            <br>When you test a module on the diode range, those freewheel diodes are what the meter reads — <strong>all three phases must read alike</strong>. A phase reading zero both ways is shorted.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ── 3. เกรดของรูปคลื่น ──────────────────────────────── -->
   <div class="section">
     <div class="section-title"><span class="th-only">เกรดของรูปคลื่นขาออก</span><span class="en-only">Output Waveform Grades</span></div>
@@ -383,6 +499,7 @@
   <strong class="en-only">Teaching Materials: Electricity &amp; Electronics</strong>
 </footer>
 <script>const CURRENT_PAGE='inverter';</script>
+<script src="js/vfd-circuit.js"></script>
 <script src="js/inverter-sim.js"></script>
 <script src="js/nav.js"></script>
 </body>
