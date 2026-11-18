@@ -20,8 +20,8 @@
     <div>
       <h1 class="th-only">เครื่องคิดเลขเชิงโต้ตอบ</h1>
       <h1 class="en-only">Interactive Calculators</h1>
-      <p class="th-only">รหัสสีตัวต้านทาน • กฎโอห์ม • กำลังไฟฟ้า • อนุกรม/ขนาน • แปลงหน่วย</p>
-      <p class="en-only">Resistor color code • Ohm's law • Power • Series/Parallel • Unit conversion</p>
+      <p class="th-only">รหัสสีตัวต้านทาน • กฎโอห์ม • กำลังไฟฟ้า • ค่าไฟ • อนุกรม/ขนาน • แปลงหน่วย • ตัวต้านทาน LED • อ่านรหัสคาปาฯ/SMD</p>
+      <p class="en-only">Resistor color code • Ohm's law • Power • Electricity cost • Series/Parallel • Unit conversion • LED resistor • Capacitor/SMD codes</p>
     </div>
   </div>
 </div>
@@ -184,12 +184,16 @@
 
   <!-- 4. ENERGY -->
   <div class="tool-box">
-    <div class="tool-title"><span>4</span> <span class="th-only">พลังงานไฟฟ้า (W = P × t)</span><span class="en-only">Electrical Energy (W = P × t)</span></div>
-    <div class="grid-3">
+    <div class="tool-title"><span>4</span> <span class="th-only">พลังงานไฟฟ้าและค่าไฟ (W = P × t)</span><span class="en-only">Electrical Energy &amp; Cost (W = P × t)</span></div>
+    <p style="color:var(--text-light);font-size:0.92rem;" class="th-only">1 หน่วยในบิลค่าไฟ = 1 kWh · ค่าไฟต่อหน่วยตั้งไว้ที่ 4.2 บาทเป็นค่าประมาณ ให้แก้ตามบิลจริงของบ้าน (รวมค่า Ft แล้ว) · ดูวิธีคิดความคุ้มของเครื่องอินเวอร์เตอร์ได้ที่ <a href="inverter-appliances.html">เครื่องใช้ไฟฟ้าระบบอินเวอร์เตอร์</a></p>
+    <p style="color:var(--text-light);font-size:0.92rem;" class="en-only">1 unit on the bill = 1 kWh · the 4.2 THB/unit rate is only an estimate — change it to match your own bill (including Ft) · see how to judge whether an inverter model pays off in <a href="inverter-appliances.html">Inverter Appliances</a></p>
+    <div class="grid-2">
       <div><label><span class="th-only">กำลังไฟฟ้า (W)</span><span class="en-only">Power (W)</span></label><input type="number" id="eng_p" placeholder="e.g. 100" step="any"></div>
-      <div><label><span class="th-only">เวลา (ชั่วโมง)</span><span class="en-only">Time (hours)</span></label><input type="number" id="eng_t" placeholder="e.g. 5" step="any"></div>
-      <div style="display:flex;align-items:flex-end;"><button class="btn btn-green" data-action="calcEnergy" style="width:100%;margin-top:0;"><span class="th-only">คำนวณ</span><span class="en-only">Calculate</span></button></div>
+      <div><label><span class="th-only">ใช้วันละ (ชั่วโมง)</span><span class="en-only">Hours per day</span></label><input type="number" id="eng_t" placeholder="e.g. 5" step="any"></div>
+      <div><label><span class="th-only">จำนวนวัน</span><span class="en-only">Number of days</span></label><input type="number" id="eng_d" value="30" step="any"></div>
+      <div><label><span class="th-only">ค่าไฟต่อหน่วย (บาท)</span><span class="en-only">Rate per unit (THB)</span></label><input type="number" id="eng_rate" value="4.2" step="any"></div>
     </div>
+    <button class="btn btn-green" data-action="calcEnergy"><span class="th-only">คำนวณ</span><span class="en-only">Calculate</span></button>
     <div class="result-box" id="eng_result"></div>
   </div>
 
@@ -304,6 +308,49 @@
       <div id="rev_band_labels" style="display:flex;justify-content:center;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.75rem;"></div>
       <div class="result-box" id="rev_result"></div>
     </div>
+  </div>
+
+  <!-- 8. LED SERIES RESISTOR -->
+  <div class="tool-box">
+    <div class="tool-title"><span>8</span> <span class="th-only">ตัวต้านทานจำกัดกระแส LED</span><span class="en-only">LED Series Resistor</span></div>
+    <p style="color:var(--text-light);font-size:0.92rem;" class="th-only">R = (V<sub>supply</sub> − n × V<sub>f</sub>) ÷ I<sub>f</sub> · เลือกสีแล้วใส่ V<sub>f</sub> ให้อัตโนมัติ (แก้เองได้ถ้ามีดาต้าชีต) · ที่มาของสูตรดูในบท <a href="diode.html">ไดโอด</a></p>
+    <p style="color:var(--text-light);font-size:0.92rem;" class="en-only">R = (V<sub>supply</sub> − n × V<sub>f</sub>) ÷ I<sub>f</sub> · picking a color fills in V<sub>f</sub> (edit it if you have a datasheet) · the formula is explained in the <a href="diode.html">Diode</a> lesson</p>
+    <div class="grid-2">
+      <div><label><span class="th-only">แรงดันจ่าย (V)</span><span class="en-only">Supply voltage (V)</span></label><input type="number" id="led_vs" value="5" step="any"></div>
+      <div><label><span class="th-only">สี LED</span><span class="en-only">LED color</span></label>
+        <select id="led_color">
+          <option value="1.4">IR — <span class="th-only">อินฟราเรด</span> Infrared (1.4 V)</option>
+          <option value="2.0" selected><span class="th-only">แดง</span> Red (2.0 V)</option>
+          <option value="2.1"><span class="th-only">ส้ม/เหลือง</span> Orange/Yellow (2.1 V)</option>
+          <option value="2.2"><span class="th-only">เขียว</span> Green (2.2 V)</option>
+          <option value="3.2"><span class="th-only">น้ำเงิน/ขาว</span> Blue/White (3.2 V)</option>
+          <option value="3.4"><span class="th-only">ม่วง</span> UV (3.4 V)</option>
+        </select>
+      </div>
+      <div><label>V<sub>f</sub> <span class="th-only">ต่อดวง (V)</span><span class="en-only">per LED (V)</span></label><input type="number" id="led_vf" value="2.0" step="any"></div>
+      <div><label><span class="th-only">กระแส LED (mA)</span><span class="en-only">LED current (mA)</span></label><input type="number" id="led_i" value="20" step="any"></div>
+      <div><label><span class="th-only">จำนวน LED ต่ออนุกรม</span><span class="en-only">LEDs in series</span></label><input type="number" id="led_n" value="1" min="1" step="1"></div>
+    </div>
+    <button class="btn" data-action="calcLed"><span class="th-only">คำนวณ</span><span class="en-only">Calculate</span></button>
+    <div class="result-box" id="led_result"></div>
+  </div>
+
+  <!-- 9. CAPACITOR / SMD CODE -->
+  <div class="tool-box">
+    <div class="tool-title"><span>9</span> <span class="th-only">อ่านรหัสตัวเก็บประจุ / ตัวต้านทาน SMD</span><span class="en-only">Capacitor / SMD Resistor Code Reader</span></div>
+    <p style="color:var(--text-light);font-size:0.92rem;" class="th-only">ต้องเลือกชนิดก่อน เพราะรหัสเดียวกันแปลต่างกัน: <strong>103</strong> บนตัวเก็บประจุ = 10 nF แต่บนตัวต้านทาน SMD = 10 kΩ · วิธีอ่านรหัสตัวเก็บประจุดูในบท <a href="capacitor.html">ตัวเก็บประจุ</a></p>
+    <p style="color:var(--text-light);font-size:0.92rem;" class="en-only">Pick the part type first, because the same code means different things: <strong>103</strong> on a capacitor = 10 nF, but on an SMD resistor = 10 kΩ · capacitor codes are explained in the <a href="capacitor.html">Capacitor</a> lesson</p>
+    <div class="grid-2">
+      <div><label><span class="th-only">ชนิดอุปกรณ์</span><span class="en-only">Part type</span></label>
+        <select id="code_type">
+          <option value="cap"><span class="th-only">ตัวเก็บประจุ</span> Capacitor (104, 4n7, 2u2)</option>
+          <option value="smd"><span class="th-only">ตัวต้านทาน SMD</span> SMD resistor (103, 1002, 4R7, 01C)</option>
+        </select>
+      </div>
+      <div><label><span class="th-only">รหัสบนตัวอุปกรณ์</span><span class="en-only">Code on the part</span></label><input type="text" id="code_val" placeholder="e.g. 104" autocomplete="off"></div>
+    </div>
+    <button class="btn btn-green" data-action="calcCode"><span class="th-only">อ่านค่า</span><span class="en-only">Read value</span></button>
+    <div class="result-box" id="code_result"></div>
   </div>
 
 </div>

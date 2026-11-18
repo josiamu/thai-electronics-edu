@@ -1,4 +1,7 @@
 // ===== SHARED HELPERS =====
+// Results carry both languages; style.css hides the inactive one, so a language switch needs no recalculation.
+function L(th, en) { return '<span class="th-only">' + th + '</span><span class="en-only">' + en + '</span>'; }
+function showError(res, th, en) { res.innerHTML = L(th, en); res.className = 'result-box result-error'; }
 function formatOhm(val) {
   if (val >= 1e6) return (val/1e6).toPrecision(4) + ' MΩ (' + val.toLocaleString() + ' Ω)';
   if (val >= 1000) return (val/1000).toPrecision(4) + ' kΩ (' + val.toLocaleString() + ' Ω)';
@@ -33,8 +36,8 @@ function calcR4() {
   const tol = parseFloat(document.getElementById('r4b4').value);
   const val = (b1 * 10 + b2) * mult;
   const min = val * (1 - tol/100), max = val * (1 + tol/100);
-  document.getElementById('r4result').textContent =
-    'ค่าความต้านทาน: ' + formatOhm(val) + ' ±' + tol + '% (ช่วง: ' + formatOhm(min) + ' ถึง ' + formatOhm(max) + ')';
+  document.getElementById('r4result').innerHTML =
+    L('ค่าความต้านทาน: ', 'Resistance: ') + formatOhm(val) + ' ±' + tol + '% (' + L('ช่วง: ', 'range: ') + formatOhm(min) + L(' ถึง ', ' to ') + formatOhm(max) + ')';
   if (document.getElementById('r4_b1')) {
     document.getElementById('r4_b1').style.background = colorBg[b1.toString()];
     document.getElementById('r4_b2').style.background = colorBg[b2.toString()];
@@ -51,8 +54,8 @@ function calcR5() {
   const tol = parseFloat(document.getElementById('r5b5').value);
   const val = (b1 * 100 + b2 * 10 + b3) * mult;
   const min = val * (1 - tol/100), max = val * (1 + tol/100);
-  document.getElementById('r5result').textContent =
-    'ค่าความต้านทาน: ' + formatOhm(val) + ' ±' + tol + '% (ช่วง: ' + formatOhm(min) + ' ถึง ' + formatOhm(max) + ')';
+  document.getElementById('r5result').innerHTML =
+    L('ค่าความต้านทาน: ', 'Resistance: ') + formatOhm(val) + ' ±' + tol + '% (' + L('ช่วง: ', 'range: ') + formatOhm(min) + L(' ถึง ', ' to ') + formatOhm(max) + ')';
   if (document.getElementById('r5_b1')) {
     document.getElementById('r5_b1').style.background = colorBg[b1.toString()];
     document.getElementById('r5_b2').style.background = colorBg[b2.toString()];
@@ -69,28 +72,28 @@ function calcOhm() {
   const R = parseFloat(document.getElementById('ohm_r').value);
   const res = document.getElementById('ohm_result');
   const vals = [!isNaN(E), !isNaN(I), !isNaN(R)].filter(Boolean).length;
-  if (vals < 2) { res.textContent = 'กรุณากรอกอย่างน้อย 2 ค่า'; res.className='result-box result-error'; return; }
+  if (vals < 2) { showError(res, 'กรุณากรอกอย่างน้อย 2 ค่า', 'Enter at least 2 values'); return; }
   res.className = 'result-box';
   let out = [];
   if (isNaN(E) && !isNaN(I) && !isNaN(R)) {
     const e = I*R; document.getElementById('ohm_e').value = e.toPrecision(6);
-    out.push('แรงดัน E = I × R = ' + I + ' × ' + R + ' = ' + e.toPrecision(6) + ' V');
+    out.push(L('แรงดัน', 'Voltage') + ' E = I × R = ' + I + ' × ' + R + ' = ' + e.toPrecision(6) + ' V');
   } else if (isNaN(I) && !isNaN(E) && !isNaN(R)) {
     const i = E/R; document.getElementById('ohm_i').value = i.toPrecision(6);
-    out.push('กระแส I = E / R = ' + E + ' / ' + R + ' = ' + i.toPrecision(6) + ' A (' + (i*1000).toPrecision(4) + ' mA)');
+    out.push(L('กระแส', 'Current') + ' I = E / R = ' + E + ' / ' + R + ' = ' + i.toPrecision(6) + ' A (' + (i*1000).toPrecision(4) + ' mA)');
   } else if (isNaN(R) && !isNaN(E) && !isNaN(I)) {
     const r = E/I; document.getElementById('ohm_r').value = r.toPrecision(6);
-    out.push('ความต้านทาน R = E / I = ' + E + ' / ' + I + ' = ' + formatOhm(r));
+    out.push(L('ความต้านทาน', 'Resistance') + ' R = E / I = ' + E + ' / ' + I + ' = ' + formatOhm(r));
   } else {
     out.push('E = ' + E + ' V, I = ' + I + ' A, R = ' + formatOhm(R));
-    out.push('ตรวจสอบ E = I×R = ' + (I*R).toPrecision(6) + ' V');
-    out.push('กำลังไฟฟ้า P = E×I = ' + (E*I).toPrecision(6) + ' W');
+    out.push(L('ตรวจสอบ', 'Check') + ' E = I×R = ' + (I*R).toPrecision(6) + ' V');
+    out.push(L('กำลังไฟฟ้า', 'Power') + ' P = E×I = ' + (E*I).toPrecision(6) + ' W');
   }
-  res.textContent = out.join(' | ');
+  res.innerHTML = out.join(' | ');
 }
 function clearOhm() {
   ['ohm_e','ohm_i','ohm_r'].forEach(id => document.getElementById(id).value='');
-  document.getElementById('ohm_result').textContent='';
+  document.getElementById('ohm_result').innerHTML='';
   document.getElementById('ohm_result').className='result-box';
 }
 
@@ -103,7 +106,7 @@ function calcPower() {
   const res = document.getElementById('pow_result');
   res.className='result-box';
   const known = {P:!isNaN(P),E:!isNaN(E),I:!isNaN(I),R:!isNaN(R)};
-  if (Object.values(known).filter(Boolean).length < 2) { res.textContent='กรุณากรอกอย่างน้อย 2 ค่า'; res.className='result-box result-error'; return; }
+  if (Object.values(known).filter(Boolean).length < 2) { showError(res, 'กรุณากรอกอย่างน้อย 2 ค่า', 'Enter at least 2 values'); return; }
   let out = [];
   if (known.E && known.I) {
     const p=E*I,r=E/I; out.push('P = E×I = '+p.toPrecision(6)+' W'); out.push('R = '+formatOhm(r));
@@ -128,18 +131,124 @@ function calcPower() {
 }
 function clearPower() {
   ['pow_p','pow_e','pow_i','pow_r'].forEach(id => document.getElementById(id).value='');
-  document.getElementById('pow_result').textContent=''; document.getElementById('pow_result').className='result-box';
+  document.getElementById('pow_result').innerHTML=''; document.getElementById('pow_result').className='result-box';
 }
 
 // ===== ENERGY =====
+function energyBill(p, hoursPerDay, days, rate) {
+  const kwhDay = p * hoursPerDay / 1000, kwh = kwhDay * days;
+  return { kwhDay, kwh, baht: kwh * rate };
+}
 function calcEnergy() {
-  const p = parseFloat(document.getElementById('eng_p').value);
-  const t = parseFloat(document.getElementById('eng_t').value);
+  const num = id => parseFloat(document.getElementById(id).value);
+  const p = num('eng_p'), t = num('eng_t'), d = num('eng_d'), rate = num('eng_rate');
   const res = document.getElementById('eng_result');
-  if (isNaN(p)||isNaN(t)||p<=0||t<=0) { res.textContent='กรุณากรอกค่าที่ถูกต้อง'; res.className='result-box result-error'; return; }
-  res.className='result-box';
-  const wh = p * t, kwh = wh / 1000;
-  res.textContent = 'W = P × t = ' + p + ' W × ' + t + ' h = ' + wh.toLocaleString() + ' Wh = ' + kwh.toPrecision(4) + ' kWh (' + kwh.toPrecision(4) + ' หน่วย)';
+  if ([p, t, d].some(v => isNaN(v) || v <= 0) || t > 24 || isNaN(rate) || rate < 0) {
+    showError(res, 'กรุณากรอกค่าที่ถูกต้อง (ชั่วโมงต่อวันไม่เกิน 24)', 'Enter valid values (hours per day up to 24)'); return;
+  }
+  res.className = 'result-box';
+  const b = energyBill(p, t, d, rate);
+  const f = v => v.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  res.innerHTML =
+    'W = P × t = ' + p + ' W × ' + t + ' h = ' + f(b.kwhDay) + ' kWh ' + L('ต่อวัน', 'per day') + '<br>' +
+    f(b.kwhDay) + ' × ' + d + ' ' + L('วัน', 'days') + ' = <strong>' + f(b.kwh) + ' kWh</strong> (' + L(f(b.kwh) + ' หน่วย', f(b.kwh) + ' units') + ')<br>' +
+    L('ค่าไฟ', 'Cost') + ' ≈ ' + f(b.kwh) + ' × ' + rate + ' = <strong>' + f(b.baht) + ' ' + L('บาท', 'THB') + '</strong>';
+}
+
+// ===== LED SERIES RESISTOR =====
+const E12 = [1.0, 1.2, 1.5, 1.8, 2.2, 2.7, 3.3, 3.9, 4.7, 5.6, 6.8, 8.2];
+const WATT_RATINGS = [0.125, 0.25, 0.5, 1, 2, 3, 5];
+// Next E12 value at or above r, so the real current never exceeds the target.
+function e12Up(r) {
+  const dec = Math.pow(10, Math.floor(Math.log10(r)));
+  for (const m of [...E12, 10]) if (m * dec >= r * (1 - 1e-9)) return +(m * dec).toPrecision(3);
+}
+function ledResistor(vs, vf, n, ma) {
+  const vr = vs - vf * n;
+  if (vr <= 0) return null;
+  const r = vr / (ma / 1000), rStd = e12Up(r), i = vr / rStd, p = i * i * rStd;
+  return { vr, r, rStd, i, p, watt: WATT_RATINGS.find(w => w >= 2 * p) };
+}
+function calcLed() {
+  const num = id => parseFloat(document.getElementById(id).value);
+  const vs = num('led_vs'), vf = num('led_vf'), n = parseInt(document.getElementById('led_n').value), ma = num('led_i');
+  const res = document.getElementById('led_result');
+  if ([vs, vf, ma].some(v => isNaN(v) || v <= 0) || !(n >= 1)) { showError(res, 'กรุณากรอกค่าที่ถูกต้อง', 'Enter valid values'); return; }
+  const x = ledResistor(vs, vf, n, ma);
+  if (!x) {
+    showError(res, 'แรงดันจ่ายต้องมากกว่า V<sub>f</sub> รวมของ LED (' + (vf * n).toFixed(2) + ' V) — ลดจำนวน LED ที่ต่ออนุกรม หรือเพิ่มแรงดัน',
+      'Supply must exceed the total LED V<sub>f</sub> (' + (vf * n).toFixed(2) + ' V) — use fewer LEDs in series or a higher supply'); return;
+  }
+  res.className = 'result-box';
+  const fw = w => w < 1 ? '1/' + Math.round(1 / w) + ' W' : w + ' W';
+  res.innerHTML =
+    'R = (' + vs + ' − ' + n + ' × ' + vf + ') ÷ ' + (ma / 1000) + ' A = ' + formatOhm(x.r) + '<br>' +
+    L('ใช้ค่ามาตรฐาน E12 ที่สูงถัดไป', 'Use the next higher E12 value') + ': <strong>' + formatOhm(x.rStd) + '</strong> → I ≈ ' + (x.i * 1000).toFixed(1) + ' mA<br>' +
+    L('ตัวต้านทานร้อน', 'Resistor dissipates') + ' P = I²R ≈ ' + (x.p * 1000).toFixed(0) + ' mW → ' +
+    (x.watt ? L('เลือกพิกัดอย่างน้อย', 'choose at least') + ' <strong>' + fw(x.watt) + '</strong> ' + L('(เผื่อ 2 เท่า)', '(2× margin)')
+            : L('เกิน 5 W — ควรใช้วงจรจ่ายกระแสคงที่แทน', 'over 5 W — use a constant-current driver instead'));
+}
+
+// ===== CAPACITOR / SMD CODE =====
+const CAP_TOL = { B:'±0.1 pF', C:'±0.25 pF', D:'±0.5 pF', F:'±1%', G:'±2%', J:'±5%', K:'±10%', M:'±20%', Z:'+80% / −20%' };
+// EIA-96 codes 01–96 index the E96 series; Y=R=0.01 and X=S=0.1 are aliases.
+// R is left out on purpose: "47R" on a part almost always means 47 Ω, not EIA-96.
+const EIA96_MULT = { Z:0.001, Y:0.01, X:0.1, S:0.1, A:1, B:10, H:10, C:100, D:1e3, E:1e4, F:1e5 };
+const e96 = i => Math.round(Math.pow(10, (i - 1) / 96) * 100);
+function formatCap(pf) {
+  const p = v => +v.toPrecision(4);
+  return p(pf) + ' pF = ' + p(pf / 1000) + ' nF = ' + p(pf / 1e6) + ' µF';
+}
+// Returns {pf, tol} or null.
+function parseCapCode(code) {
+  let m;
+  code = code.replace(/\s/g, '').toUpperCase().replace('µ', 'U').replace('Μ', 'U');
+  if ((m = code.match(/^(\d)(\d)(\d)([BCDFGJKMZ])?$/))) {
+    const mult = { 8: 0.01, 9: 0.1 }[m[3]] ?? Math.pow(10, +m[3]);
+    return { pf: (+m[1] * 10 + +m[2]) * mult, tol: CAP_TOL[m[4]] };
+  }
+  if ((m = code.match(/^(\d{1,2})([BCDFGJKMZ])?$/))) return { pf: +m[1], tol: CAP_TOL[m[2]] };
+  if ((m = code.match(/^(\d*)([PNUR])(\d*)([BCDFGJKMZ])?$/)) && (m[1] || m[3])) {
+    const scale = { P: 1, R: 1, N: 1e3, U: 1e6 }[m[2]];
+    return { pf: parseFloat((m[1] || '0') + '.' + (m[3] || '0')) * scale, tol: CAP_TOL[m[4]] };
+  }
+  if ((m = code.match(/^(\d*\.\d+)$/))) return { pf: parseFloat(m[1]) * 1e6 };  // "0.1" / ".1" printed on film caps = µF
+  return null;
+}
+// Returns {ohm, kind} or null.
+function parseSmdCode(code) {
+  let m;
+  code = code.replace(/\s/g, '').toUpperCase();
+  if (/^0+$/.test(code)) return { ohm: 0, kind: 'jumper' };
+  if ((m = code.match(/^(\d{2})(\d)$/))) return { ohm: +m[1] * Math.pow(10, +m[2]), kind: '3' };
+  if ((m = code.match(/^(\d{3})(\d)$/))) return { ohm: +m[1] * Math.pow(10, +m[2]), kind: '4' };
+  if ((m = code.match(/^(\d*)R(\d*)$/)) && (m[1] || m[2])) return { ohm: parseFloat((m[1] || '0') + '.' + (m[2] || '0')), kind: 'R' };
+  if ((m = code.match(/^(\d{2})([ZYXSABHCDEF])$/)) && +m[1] >= 1 && +m[1] <= 96) return { ohm: +(e96(+m[1]) * EIA96_MULT[m[2]]).toPrecision(3), kind: 'eia' };
+  return null;
+}
+function calcCode() {
+  const type = document.getElementById('code_type').value;
+  const raw = document.getElementById('code_val').value.trim();
+  const res = document.getElementById('code_result');
+  if (type === 'cap') {
+    const x = parseCapCode(raw);
+    if (!x) { showError(res, 'อ่านรหัสนี้ไม่ได้ — ลองรูปแบบ 104, 104K, 4n7, 2u2 หรือ 0.1', 'Cannot read this code — try 104, 104K, 4n7, 2u2 or 0.1'); return; }
+    res.className = 'result-box';
+    res.innerHTML = '<strong>' + formatCap(x.pf) + '</strong>' + (x.tol ? ' &nbsp;' + L('ค่าผิดพลาด', 'tolerance') + ' ' + x.tol : '') +
+      '<br>' + L('รหัสสามหลัก: สองหลักแรกคือตัวเลข หลักที่สามคือจำนวนศูนย์ต่อท้าย หน่วยเป็น pF', '3-digit code: first two digits are the value, the third is the number of zeros, in pF');
+    return;
+  }
+  const x = parseSmdCode(raw);
+  if (!x) { showError(res, 'อ่านรหัสนี้ไม่ได้ — ลองรูปแบบ 103, 1002, 4R7 หรือ 01C', 'Cannot read this code — try 103, 1002, 4R7 or 01C'); return; }
+  res.className = 'result-box';
+  const kindTxt = {
+    jumper: L('ตัวต้านทาน 0 Ω ใช้แทนสายจัมเปอร์', '0 Ω resistor used as a jumper'),
+    '3': L('รหัส 3 หลัก (มักเป็น ±5%)', '3-digit code (usually ±5%)'),
+    '4': L('รหัส 4 หลัก (มักเป็น ±1%)', '4-digit code (usually ±1%)'),
+    R: L('R คือจุดทศนิยม', 'R marks the decimal point'),
+    eia: L('รหัส EIA-96 (±1%) — ตัวเลขคือลำดับในอนุกรม E96 ตัวอักษรคือตัวคูณ', 'EIA-96 code (±1%) — the number indexes the E96 series, the letter is the multiplier'),
+  }[x.kind];
+  res.innerHTML = '<strong>' + (x.ohm === 0 ? '0 Ω' : formatOhm(x.ohm)) + '</strong><br>' + kindTxt;
 }
 
 // ===== SERIES/PARALLEL =====
@@ -148,8 +257,7 @@ function parseList(id) {
 }
 function checkMinVals(vals, res) {
   if (vals.length < 2) {
-    res.textContent = 'กรุณากรอกอย่างน้อย 2 ค่า';
-    res.className = 'result-box result-error';
+    showError(res, 'กรุณากรอกอย่างน้อย 2 ค่า', 'Enter at least 2 values');
     return false;
   }
   res.className = 'result-box';
@@ -178,35 +286,35 @@ function calcCP() {
 
 // ===== REVERSE RESISTOR =====
 const REV_DIGITS = [
-  {n:'ดำ (Black)',   bg:'#111'},
-  {n:'น้ำตาล (Brown)', bg:'#8B4513'},
-  {n:'แดง (Red)',    bg:'#f00'},
-  {n:'ส้ม (Orange)', bg:'#ff7700'},
-  {n:'เหลือง (Yellow)',bg:'#ffee00'},
-  {n:'เขียว (Green)', bg:'#0a0'},
-  {n:'น้ำเงิน (Blue)', bg:'#00f'},
-  {n:'ม่วง (Violet)', bg:'#8b008b'},
-  {n:'เทา (Gray)',   bg:'#888'},
-  {n:'ขาว (White)',  bg:'#eee'},
+  {n:L('ดำ','Black'), nm:'Black',   bg:'#111'},
+  {n:L('น้ำตาล','Brown'), nm:'Brown', bg:'#8B4513'},
+  {n:L('แดง','Red'), nm:'Red',    bg:'#f00'},
+  {n:L('ส้ม','Orange'), nm:'Orange', bg:'#ff7700'},
+  {n:L('เหลือง','Yellow'), nm:'Yellow',bg:'#ffee00'},
+  {n:L('เขียว','Green'), nm:'Green', bg:'#0a0'},
+  {n:L('น้ำเงิน','Blue'), nm:'Blue', bg:'#00f'},
+  {n:L('ม่วง','Violet'), nm:'Violet', bg:'#8b008b'},
+  {n:L('เทา','Gray'), nm:'Gray',   bg:'#888'},
+  {n:L('ขาว','White'), nm:'White',  bg:'#eee'},
 ];
 const REV_MULTS = [
-  {v:0.01, n:'เงิน (Silver)',   bg:'#aaa'},
-  {v:0.1,  n:'ทอง (Gold)',      bg:'#d4af37'},
-  {v:1,    n:'ดำ (Black)',      bg:'#111'},
-  {v:10,   n:'น้ำตาล (Brown)',  bg:'#8B4513'},
-  {v:100,  n:'แดง (Red)',       bg:'#f00'},
-  {v:1000, n:'ส้ม (Orange)',    bg:'#ff7700'},
-  {v:10000,n:'เหลือง (Yellow)', bg:'#ffee00'},
-  {v:1e5,  n:'เขียว (Green)',   bg:'#0a0'},
-  {v:1e6,  n:'น้ำเงิน (Blue)',  bg:'#00f'},
-  {v:1e7,  n:'ม่วง (Violet)',   bg:'#8b008b'},
+  {v:0.01, n:L('เงิน','Silver'), nm:'Silver',   bg:'#aaa'},
+  {v:0.1,  n:L('ทอง','Gold'), nm:'Gold',      bg:'#d4af37'},
+  {v:1,    n:L('ดำ','Black'), nm:'Black',      bg:'#111'},
+  {v:10,   n:L('น้ำตาล','Brown'), nm:'Brown',  bg:'#8B4513'},
+  {v:100,  n:L('แดง','Red'), nm:'Red',       bg:'#f00'},
+  {v:1000, n:L('ส้ม','Orange'), nm:'Orange',    bg:'#ff7700'},
+  {v:10000,n:L('เหลือง','Yellow'), nm:'Yellow', bg:'#ffee00'},
+  {v:1e5,  n:L('เขียว','Green'), nm:'Green',   bg:'#0a0'},
+  {v:1e6,  n:L('น้ำเงิน','Blue'), nm:'Blue',  bg:'#00f'},
+  {v:1e7,  n:L('ม่วง','Violet'), nm:'Violet',   bg:'#8b008b'},
 ];
 const REV_TOLS = {
-  '5':  {n:'ทอง (Gold)',      bg:'#d4af37', t:'±5%'},
-  '10': {n:'เงิน (Silver)',   bg:'#aaa',    t:'±10%'},
-  '1':  {n:'น้ำตาล (Brown)', bg:'#8B4513', t:'±1%'},
-  '2':  {n:'แดง (Red)',       bg:'#f00',    t:'±2%'},
-  '0.5':{n:'เขียว (Green)',   bg:'#0a0',    t:'±0.5%'},
+  '5':  {n:L('ทอง','Gold'), nm:'Gold',      bg:'#d4af37', t:'±5%'},
+  '10': {n:L('เงิน','Silver'), nm:'Silver',   bg:'#aaa',    t:'±10%'},
+  '1':  {n:L('น้ำตาล','Brown'), nm:'Brown', bg:'#8B4513', t:'±1%'},
+  '2':  {n:L('แดง','Red'), nm:'Red',       bg:'#f00',    t:'±2%'},
+  '0.5':{n:L('เขียว','Green'), nm:'Green',   bg:'#0a0',    t:'±0.5%'},
 };
 
 function calcReverse() {
@@ -219,8 +327,7 @@ function calcReverse() {
   const res  = document.getElementById('rev_result');
 
   if (isNaN(raw) || raw <= 0) {
-    res.textContent = 'กรุณากรอกค่าความต้านทานที่ถูกต้อง';
-    res.className = 'result-box result-error';
+    showError(res, 'กรุณากรอกค่าความต้านทานที่ถูกต้อง', 'Enter a valid resistance value');
     vis.style.display = 'none';
     return;
   }
@@ -241,8 +348,7 @@ function calcReverse() {
   }
 
   if (!bestMult) {
-    res.textContent = 'ค่านี้อยู่นอกช่วงที่รองรับ (0.1 Ω – 99 MΩ)';
-    res.className = 'result-box result-error';
+    showError(res, 'ค่านี้อยู่นอกช่วงที่รองรับ (0.1 Ω – 99 MΩ)', 'Value out of supported range (0.1 Ω – 99 MΩ)');
     vis.style.display = 'block';
     return;
   }
@@ -260,7 +366,8 @@ function calcReverse() {
   const actualVal = bestDigits * bestMult.v;
   const tolPct    = parseFloat(tolK);
   const bandObjs  = [...dArr.map(d => REV_DIGITS[d]), bestMult, tol];
-  const bandLabels = [...dArr.map((d,i)=>`แถบ${i+1}: ${REV_DIGITS[d].n}`), `แถบ${sigFigs+1}: ${bestMult.n} (×${bestMult.v})`, `แถบ${sigFigs+2}: ${tol.n} (${tol.t})`];
+  const band = i => L('แถบ' + i, 'Band ' + i);
+  const bandLabels = [...dArr.map((d,i)=>`${band(i+1)}: ${REV_DIGITS[d].n}`), `${band(sigFigs+1)}: ${bestMult.n} (×${bestMult.v})`, `${band(sigFigs+2)}: ${tol.n} (${tol.t})`];
 
   // Render resistor visual
   const bandW = bands === 4 ? 26 : 22;
@@ -268,12 +375,12 @@ function calcReverse() {
   inner += `<div style="background:#d4a96a;width:14px;"></div>`;
   dArr.forEach((d, i) => {
     if (i > 0) inner += `<div style="background:#d4a96a;width:8px;"></div>`;
-    inner += `<div style="background:${REV_DIGITS[d].bg};width:${bandW}px;" title="${REV_DIGITS[d].n}"></div>`;
+    inner += `<div style="background:${REV_DIGITS[d].bg};width:${bandW}px;" title="${REV_DIGITS[d].nm}"></div>`;
   });
   inner += `<div style="background:#d4a96a;width:8px;"></div>`;
-  inner += `<div style="background:${bestMult.bg};width:${bandW}px;" title="${bestMult.n}"></div>`;
+  inner += `<div style="background:${bestMult.bg};width:${bandW}px;" title="${bestMult.nm}"></div>`;
   inner += `<div style="background:#d4a96a;width:18px;"></div>`;
-  inner += `<div style="background:${tol.bg};width:${bandW}px;" title="${tol.n}"></div>`;
+  inner += `<div style="background:${tol.bg};width:${bandW}px;" title="${tol.nm}"></div>`;
   inner += `<div style="background:#d4a96a;width:14px;"></div>`;
 
   document.getElementById('rev_resistor_wrap').innerHTML =
@@ -293,9 +400,9 @@ function calcReverse() {
   const pct = Math.round(bestErr * 10000) / 100;
   res.className = 'result-box';
   res.innerHTML =
-    `<strong>ค่าความต้านทาน: ${formatOhm(actualVal)}</strong> ${tol.t}<br>` +
-    `ช่วงค่าจริง: ${formatOhm(actualVal*(1-tolPct/100))} – ${formatOhm(actualVal*(1+tolPct/100))}` +
-    (pct > 0.01 ? `<br><span style="color:#92400e;">⚠️ ค่าที่ใกล้ที่สุด (ปัดเศษ ${pct.toFixed(2)}%)</span>` : '');
+    `<strong>${L('ค่าความต้านทาน', 'Resistance')}: ${formatOhm(actualVal)}</strong> ${tol.t}<br>` +
+    `${L('ช่วงค่าจริง', 'Actual range')}: ${formatOhm(actualVal*(1-tolPct/100))} – ${formatOhm(actualVal*(1+tolPct/100))}` +
+    (pct > 0.01 ? `<br><span style="color:#92400e;">⚠️ ${L('ค่าที่ใกล้ที่สุด (ปัดเศษ ' + pct.toFixed(2) + '%)', 'Nearest value (rounded by ' + pct.toFixed(2) + '%)')}</span>` : '');
 
   vis.style.display = 'block';
 }
@@ -322,9 +429,9 @@ function calcUnit() {
   const from = document.getElementById('uc_from').value;
   const to = document.getElementById('uc_to').value;
   const res = document.getElementById('uc_result');
-  if (isNaN(val)) { res.textContent='กรุณากรอกค่าตัวเลข'; res.className='result-box result-error'; return; }
-  if (from.split('_')[0] !== to.split('_')[0]) { res.textContent='ไม่สามารถแปลงหน่วยต่างประเภทกันได้'; res.className='result-box result-error'; return; }
-  if (!toBase[from] || !toBase[to] || !unitNames[from] || !unitNames[to]) { res.textContent='หน่วยไม่รองรับ'; res.className='result-box result-error'; return; }
+  if (isNaN(val)) { showError(res, 'กรุณากรอกค่าตัวเลข', 'Enter a number'); return; }
+  if (from.split('_')[0] !== to.split('_')[0]) { showError(res, 'ไม่สามารถแปลงหน่วยต่างประเภทกันได้', 'Cannot convert between different quantities'); return; }
+  if (!toBase[from] || !toBase[to] || !unitNames[from] || !unitNames[to]) { showError(res, 'หน่วยไม่รองรับ', 'Unsupported unit'); return; }
   res.className='result-box';
   res.textContent = val + ' ' + unitNames[from] + ' = ' + (val * toBase[from] / toBase[to]).toPrecision(6) + ' ' + unitNames[to];
 }
@@ -332,8 +439,16 @@ function calcUnit() {
 // ===== PAGE EVENT BINDINGS =====
 const toolActions = {
   calcOhm, clearOhm, calcPower, clearPower, calcEnergy,
-  calcRS, calcRP, calcCS, calcCP, calcUnit, calcReverse,
+  calcRS, calcRP, calcCS, calcCP, calcUnit, calcReverse, calcLed, calcCode,
 };
+
+document.getElementById('led_color')?.addEventListener('change', e => {
+  if (e.target.value) document.getElementById('led_vf').value = e.target.value;
+});
+document.getElementById('code_val')?.addEventListener('keydown', e => { if (e.key === 'Enter') calcCode(); });
+document.getElementById('code_type')?.addEventListener('change', () => {
+  document.getElementById('code_val').placeholder = document.getElementById('code_type').value === 'cap' ? 'e.g. 104' : 'e.g. 103';
+});
 
 document.querySelectorAll('[data-action]').forEach(button => {
   const action = toolActions[button.dataset.action];
