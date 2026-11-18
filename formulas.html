@@ -44,10 +44,11 @@
     </button>
   </div>
 
-  <!-- Formula Cards Grid -->
+  <!-- Formula cards, grouped like the lesson menu -->
+  <h2 class="fs-group"><span class="th-only">⚡ พื้นฐานไฟฟ้า</span><span class="en-only">⚡ Electrical Basics</span></h2>
   <div class="formula-sheet-grid">
 
-    <!-- 1: Ohm's Law -->
+<!-- 1: Ohm's Law -->
     <div class="fs-card fs-blue">
       <div class="fs-card-title">🔌 <span class="th-only">กฎของโอห์ม (Ohm's Law)</span><span class="en-only">Ohm's Law</span></div>
       <div class="fs-main">V = I × R</div>
@@ -57,9 +58,10 @@
       </div>
       <div class="fs-legend th-only">V = แรงดันไฟฟ้า (Volt, V)<br>I = กระแสไฟฟ้า (Ampere, A)<br>R = ความต้านทาน (Ohm, Ω)</div>
       <div class="fs-legend en-only">V = Voltage (Volt, V)<br>I = Current (Ampere, A)<br>R = Resistance (Ohm, Ω)</div>
+      <a class="fs-link print-hide" href="ohm.html">📘 <span class="th-only">กฎของโอห์ม</span><span class="en-only">Ohm's Law</span></a>
     </div>
 
-    <!-- 2: Power & Energy -->
+<!-- 2: Power & Energy -->
     <div class="fs-card fs-green">
       <div class="fs-card-title">⚡ <span class="th-only">กำลังและพลังงานไฟฟ้า</span><span class="en-only">Power &amp; Energy</span></div>
       <div class="fs-main">P = V × I</div>
@@ -67,12 +69,13 @@
         <span>P = I²R</span>
         <span>P = V²/R</span>
       </div>
-      <div class="fs-sub">W = P × t</div>
-      <div class="fs-legend th-only">P = กำลังไฟฟ้า (Watt, W)<br>W = พลังงาน (Joule, J) &nbsp;|&nbsp; t = เวลา (วินาที, s)</div>
-      <div class="fs-legend en-only">P = Power (Watt, W)<br>W = Energy (Joule, J) &nbsp;|&nbsp; t = Time (seconds, s)</div>
+      <div class="fs-sub">W = P × t &nbsp;·&nbsp; kWh = W × h ÷ 1000</div>
+      <div class="fs-legend th-only">P = กำลังไฟฟ้า (Watt, W)<br>W = พลังงาน (Joule, J) &nbsp;|&nbsp; t = เวลา (วินาที, s)<br>1 kWh = 1 หน่วยในบิลค่าไฟ</div>
+      <div class="fs-legend en-only">P = Power (Watt, W)<br>W = Energy (Joule, J) &nbsp;|&nbsp; t = Time (seconds, s)<br>1 kWh = 1 unit on the electricity bill</div>
+      <a class="fs-link print-hide" href="electricity.html">📘 <span class="th-only">ไฟฟ้าเบื้องต้น</span><span class="en-only">Electricity Basics</span></a>
     </div>
 
-    <!-- 3: Resistor Circuits -->
+<!-- 3: Resistor Circuits -->
     <div class="fs-card fs-orange">
       <div class="fs-card-title">🎨 <span class="th-only">วงจรความต้านทาน (R)</span><span class="en-only">Resistor Circuits (R)</span></div>
       <table class="fs-tbl">
@@ -90,9 +93,59 @@
       <div class="fs-sub" style="font-size:0.92rem;"><span class="th-only">ขนาน 2 ตัว: </span><span class="en-only">2 parallel: </span>R<sub>T</sub> = (R<sub>1</sub> × R<sub>2</sub>) ÷ (R<sub>1</sub> + R<sub>2</sub>)</div>
       <div class="fs-legend th-only">อนุกรม: I เท่ากัน, V แบ่ง &nbsp;|&nbsp; ขนาน: V เท่ากัน, I แบ่ง</div>
       <div class="fs-legend en-only">Series: I same, V divides &nbsp;|&nbsp; Parallel: V same, I divides</div>
+      <a class="fs-link print-hide" href="resistor.html">📘 <span class="th-only">ตัวต้านทาน</span><span class="en-only">Resistor</span></a>
     </div>
 
-    <!-- 4: Capacitor Circuits -->
+    <div class="fs-card fs-purple">
+      <div class="fs-card-title"><span class="th-only">🔗 กฎของเคอร์ชฮอฟฟ์ (KCL / KVL)</span><span class="en-only">🔗 Kirchhoff's Laws (KCL / KVL)</span></div>
+      <div class="fs-main fs-main-sm">ΣI<sub>in</sub> = ΣI<sub>out</sub></div>
+      <div class="fs-sub" style="font-size:0.92rem;">ΣV <span class="th-only">รอบลูป</span><span class="en-only">around a loop</span> = 0</div>
+      <div class="fs-legend th-only">KCL: กระแสเข้าจุดต่อ = กระแสออก (ประจุไม่หายไปไหน)<br>KVL: แรงดันจ่ายรวม = แรงดันตกคร่อมรวม · คำตอบติดลบ = กระแสไหลกลับทาง</div>
+      <div class="fs-legend en-only">KCL: current into a node = current out (charge is conserved)<br>KVL: sum of sources = sum of drops · a negative answer = current flows the other way</div>
+      <a class="fs-link print-hide" href="kirchhoff.html">📘 <span class="th-only">กฎของเคอร์ชฮอฟฟ์</span><span class="en-only">Kirchhoff's Laws</span></a>
+    </div>
+
+    <div class="fs-card fs-teal">
+      <div class="fs-card-title"><span class="th-only">➗ วงจรแบ่งแรงดัน</span><span class="en-only">➗ Voltage Divider</span></div>
+      <div class="fs-main fs-main-sm">V<sub>out</sub> = V<sub>in</sub> × R₂ ÷ (R₁ + R₂)</div>
+      <div class="fs-legend th-only">V<sub>out</sub> วัดคร่อม R₂ (ตัวล่าง)<br>ต่อโหลดคร่อม R₂ แล้ว V<sub>out</sub> จะตกลง เพราะโหลดขนานกับ R₂</div>
+      <div class="fs-legend en-only">V<sub>out</sub> is measured across R₂ (the lower resistor)<br>A load across R₂ pulls V<sub>out</sub> down because it sits in parallel with R₂</div>
+      <a class="fs-link print-hide" href="kirchhoff.html">📘 <span class="th-only">กฎของเคอร์ชฮอฟฟ์</span><span class="en-only">Kirchhoff's Laws</span></a>
+    </div>
+
+    <div class="fs-card fs-blue">
+      <div class="fs-card-title"><span class="th-only">〰️ ค่าของไฟสลับ (AC) และการอ่านสโคป</span><span class="en-only">〰️ AC Values &amp; Reading a Scope</span></div>
+      <div class="fs-main fs-main-sm">V<sub>rms</sub> = V<sub>P</sub> ÷ √2</div>
+      <div class="fs-variants">
+        <span>V<sub>P-P</sub> = 2 × V<sub>P</sub></span>
+        <span>f = 1 ÷ T</span>
+        <span>D = t<sub>on</sub> ÷ T × 100%</span>
+      </div>
+      <div class="fs-sub" style="font-size:0.92rem;">V<sub>P</sub> = <span class="th-only">ช่อง</span><span class="en-only">div</span> × V/div &nbsp;·&nbsp; T = <span class="th-only">ช่อง</span><span class="en-only">div</span> × Time/div</div>
+      <div class="fs-legend th-only">ไฟบ้าน 220 V คือค่า rms → ยอดคลื่น ≈ 311 V<br>V<sub>rms</sub> ≈ 0.707 × V<sub>P</sub> (ใช้ได้กับคลื่นไซน์เท่านั้น)</div>
+      <div class="fs-legend en-only">Mains 220 V is the rms value → peak ≈ 311 V<br>V<sub>rms</sub> ≈ 0.707 × V<sub>P</sub> (sine waves only)</div>
+      <a class="fs-link print-hide" href="oscilloscope.html">📘 <span class="th-only">ออสซิลโลสโคป</span><span class="en-only">Oscilloscope</span></a>
+    </div>
+
+    <div class="fs-card fs-green">
+      <div class="fs-card-title"><span class="th-only">📉 ฟิลเตอร์และเรโซแนนซ์</span><span class="en-only">📉 Filters &amp; Resonance</span></div>
+      <div class="fs-main fs-main-sm">f<sub>c</sub> = 1 ÷ (2πRC)</div>
+      <div class="fs-variants">
+        <span>f<sub>c</sub> = R ÷ (2πL)</span>
+        <span>f<sub>0</sub> = 1 ÷ (2π√(LC))</span>
+      </div>
+      <div class="fs-sub" style="font-size:0.92rem;">Q = (1/R)·√(L/C) &nbsp;·&nbsp; BW = f<sub>0</sub> ÷ Q</div>
+      <div class="fs-legend th-only">ที่ f<sub>c</sub> สัญญาณเหลือ 70.7% (−3 dB) · อันดับหนึ่งชัน −20 dB/decade<br>C ขนานขาออก = ผ่านต่ำ · L ขนานขาออก = ผ่านสูง</div>
+      <div class="fs-legend en-only">At f<sub>c</sub> the signal is 70.7% (−3 dB) · first order rolls off −20 dB/decade<br>C across the output = low-pass · L across the output = high-pass</div>
+      <a class="fs-link print-hide" href="filter.html">📘 <span class="th-only">ฟิลเตอร์และเรโซแนนซ์</span><span class="en-only">Filters &amp; Resonance</span></a>
+    </div>
+
+  </div>
+
+  <h2 class="fs-group"><span class="th-only">🔧 อุปกรณ์อิเล็กทรอนิกส์</span><span class="en-only">🔧 Electronic Components</span></h2>
+  <div class="formula-sheet-grid">
+
+<!-- 4: Capacitor Circuits -->
     <div class="fs-card fs-purple">
       <div class="fs-card-title">🔋 <span class="th-only">วงจรตัวเก็บประจุ (C)</span><span class="en-only">Capacitor Circuits (C)</span></div>
       <table class="fs-tbl">
@@ -108,11 +161,13 @@
         </tbody>
       </table>
       <div class="fs-sub" style="font-size:0.95rem;">Q = C × V &nbsp;&nbsp;&nbsp; X<sub>C</sub> = 1 ÷ (2πfC)</div>
-      <div class="fs-legend th-only">Q = ประจุ (Coulomb, C) &nbsp;|&nbsp; X<sub>C</sub> = รีแอกแตนซ์ (Ω)<br>หน่วย C: F &gt; mF &gt; μF &gt; nF &gt; pF</div>
-      <div class="fs-legend en-only">Q = Charge (Coulomb, C) &nbsp;|&nbsp; X<sub>C</sub> = Reactance (Ω)<br>Units: F &gt; mF &gt; μF &gt; nF &gt; pF</div>
+      <div class="fs-sub" style="font-size:0.95rem;">τ = R × C &nbsp;&nbsp;&nbsp; W = ½CV²</div>
+      <div class="fs-legend th-only">Q = ประจุ (Coulomb, C) &nbsp;|&nbsp; X<sub>C</sub> = รีแอกแตนซ์ (Ω)<br>1τ = ชาร์จได้ 63.2% · 5τ ≈ เต็ม<br>หน่วย C: F &gt; mF &gt; μF &gt; nF &gt; pF</div>
+      <div class="fs-legend en-only">Q = Charge (Coulomb, C) &nbsp;|&nbsp; X<sub>C</sub> = Reactance (Ω)<br>1τ = 63.2% charged · 5τ ≈ full<br>Units: F &gt; mF &gt; μF &gt; nF &gt; pF</div>
+      <a class="fs-link print-hide" href="capacitor.html">📘 <span class="th-only">ตัวเก็บประจุ</span><span class="en-only">Capacitor</span></a>
     </div>
 
-    <!-- 5: Inductor Circuits -->
+<!-- 5: Inductor Circuits -->
     <div class="fs-card fs-teal">
       <div class="fs-card-title">🌀 <span class="th-only">วงจรตัวเหนี่ยวนำ (L)</span><span class="en-only">Inductor Circuits (L)</span></div>
       <table class="fs-tbl">
@@ -130,15 +185,150 @@
       <div class="fs-sub" style="font-size:0.95rem;">X<sub>L</sub> = 2πfL</div>
       <div class="fs-legend th-only">X<sub>L</sub> = อินดักทีฟรีแอกแตนซ์ (Ω)<br>f = ความถี่ (Hz) &nbsp;|&nbsp; หน่วย L: H &gt; mH &gt; μH</div>
       <div class="fs-legend en-only">X<sub>L</sub> = Inductive Reactance (Ω)<br>f = Frequency (Hz) &nbsp;|&nbsp; Units: H &gt; mH &gt; μH</div>
+      <a class="fs-link print-hide" href="inductor.html">📘 <span class="th-only">ตัวเหนี่ยวนำ</span><span class="en-only">Inductor</span></a>
     </div>
 
-    <!-- 6: Transformer -->
+<!-- 6: Transformer -->
     <div class="fs-card fs-red">
       <div class="fs-card-title">🔁 <span class="th-only">หม้อแปลงไฟฟ้า (Transformer)</span><span class="en-only">Transformer</span></div>
       <div class="fs-main">V₁/V₂ = N₁/N₂ = I₂/I₁</div>
       <div class="fs-sub" style="font-size:0.9rem;">Step-up: N₁ &lt; N₂ → V₂ &gt; V₁<br>Step-down: N₁ &gt; N₂ → V₂ &lt; V₁</div>
+      <div class="fs-sub" style="font-size:0.9rem;">P<sub>in</sub> ≈ P<sub>out</sub> &nbsp;·&nbsp; VA ≠ W</div>
       <div class="fs-legend th-only">V = แรงดัน &nbsp;|&nbsp; N = จำนวนรอบขดลวด &nbsp;|&nbsp; I = กระแส</div>
       <div class="fs-legend en-only">V = Voltage &nbsp;|&nbsp; N = Number of turns &nbsp;|&nbsp; I = Current</div>
+      <a class="fs-link print-hide" href="transformer.html">📘 <span class="th-only">หม้อแปลงไฟฟ้า</span><span class="en-only">Transformer</span></a>
+    </div>
+
+    <div class="fs-card fs-orange">
+      <div class="fs-card-title"><span class="th-only">💡 ตัวต้านทานจำกัดกระแส LED</span><span class="en-only">💡 LED Series Resistor</span></div>
+      <div class="fs-main fs-main-sm">R = (V<sub>supply</sub> − V<sub>f</sub>) ÷ I<sub>f</sub></div>
+      <div class="fs-sub" style="font-size:0.92rem;"><span class="th-only">ตัวอย่าง</span><span class="en-only">Example</span>: (5 − 2) ÷ 0.01 = 300 Ω</div>
+      <div class="fs-legend th-only">V<sub>f</sub>: แดง ~1.8–2.2 V · น้ำเงิน/ขาว ~3.0–3.5 V · ไดโอดซิลิคอน 0.7 V<br>I<sub>f</sub> LED ทั่วไป ~10–20 mA</div>
+      <div class="fs-legend en-only">V<sub>f</sub>: red ~1.8–2.2 V · blue/white ~3.0–3.5 V · silicon diode 0.7 V<br>Typical LED I<sub>f</sub> ~10–20 mA</div>
+      <a class="fs-link print-hide" href="diode.html">📘 <span class="th-only">ไดโอด</span><span class="en-only">Diode</span></a>
+    </div>
+
+    <div class="fs-card fs-purple">
+      <div class="fs-card-title"><span class="th-only">🔌 เรียงกระแสและกรองแรงดัน</span><span class="en-only">🔌 Rectifying &amp; Filtering</span></div>
+      <div class="fs-main fs-main-sm">V<sub>ripple(pp)</sub> ≈ I<sub>load</sub> ÷ (f<sub>r</sub> × C)</div>
+      <div class="fs-variants">
+        <span><span class="th-only">ครึ่งคลื่น</span><span class="en-only">Half-wave</span> V<sub>dc</sub> = 0.318 × V<sub>pk</sub></span>
+        <span><span class="th-only">บริดจ์</span><span class="en-only">Bridge</span> V<sub>dc</sub> = 0.637 × V<sub>pk</sub></span>
+      </div>
+      <div class="fs-sub" style="font-size:0.92rem;"><span class="th-only">มีคาปากรอง</span><span class="en-only">With filter C</span>: V<sub>DC</sub> ≈ V<sub>AC</sub> × √2</div>
+      <div class="fs-legend th-only">f<sub>r</sub> = 50 Hz (ครึ่งคลื่น) · 100 Hz (บริดจ์)<br>ไฟบ้าน 220 V เรียงแล้วกรอง ≈ 310 V DC</div>
+      <div class="fs-legend en-only">f<sub>r</sub> = 50 Hz (half-wave) · 100 Hz (bridge)<br>220 V mains rectified and filtered ≈ 310 V DC</div>
+      <a class="fs-link print-hide" href="power-supply.html">📘 <span class="th-only">แหล่งจ่ายไฟ</span><span class="en-only">Power Supply</span></a>
+    </div>
+
+    <div class="fs-card fs-blue">
+      <div class="fs-card-title"><span class="th-only">🔺 ทรานซิสเตอร์ BJT</span><span class="en-only">🔺 BJT Transistor</span></div>
+      <div class="fs-main">I<sub>C</sub> = β × I<sub>B</sub></div>
+      <div class="fs-variants">
+        <span>I<sub>E</sub> = I<sub>C</sub> + I<sub>B</sub></span>
+        <span>V<sub>CE</sub> = V<sub>CC</sub> − I<sub>C</sub>R<sub>C</sub></span>
+      </div>
+      <div class="fs-legend th-only">β (h<sub>FE</sub>) = อัตราขยายกระแส · V<sub>BE</sub> ≈ 0.7 V<br>อิ่มตัว (สวิตช์ ON): V<sub>CE</sub> ≈ 0.2 V และ I<sub>C</sub> &lt; β × I<sub>B</sub></div>
+      <div class="fs-legend en-only">β (h<sub>FE</sub>) = current gain · V<sub>BE</sub> ≈ 0.7 V<br>Saturated (switch ON): V<sub>CE</sub> ≈ 0.2 V and I<sub>C</sub> &lt; β × I<sub>B</sub></div>
+      <a class="fs-link print-hide" href="transistor.html">📘 <span class="th-only">ทรานซิสเตอร์</span><span class="en-only">Transistor</span></a>
+    </div>
+
+    <div class="fs-card fs-teal">
+      <div class="fs-card-title"><span class="th-only">🔆 ออปโตคัปเปลอร์</span><span class="en-only">🔆 Optocoupler</span></div>
+      <div class="fs-main fs-main-sm">CTR = (I<sub>C</sub> ÷ I<sub>F</sub>) × 100%</div>
+      <div class="fs-legend th-only">I<sub>F</sub> = กระแส LED ฝั่งเข้า · I<sub>C</sub> = กระแสโฟโตทรานซิสเตอร์ฝั่งออก<br>สองฝั่งไม่มีสายถึงกัน ส่งผ่านแสงอย่างเดียว</div>
+      <div class="fs-legend en-only">I<sub>F</sub> = input LED current · I<sub>C</sub> = output phototransistor current<br>No wire between the two sides — only light crosses</div>
+      <a class="fs-link print-hide" href="optoelectronics.html">📘 <span class="th-only">ออปโตอิเล็กทรอนิกส์</span><span class="en-only">Optoelectronics</span></a>
+    </div>
+
+    <div class="fs-card fs-red">
+      <div class="fs-card-title"><span class="th-only">🎛️ คุมมุมเฟสด้วยไทริสเตอร์</span><span class="en-only">🎛️ Thyristor Phase Control</span></div>
+      <div class="fs-main fs-main-sm">V<sub>rms</sub> = V<sub>s</sub>·√[(π − α + sin2α/2) ÷ π]</div>
+      <div class="fs-sub" style="font-size:0.92rem;">SCR: <span class="th-only">หารด้วย</span><span class="en-only">divide by</span> 2π <span class="th-only">แทน</span><span class="en-only">instead of</span> π &nbsp;·&nbsp; P = V<sub>rms</sub>² ÷ R</div>
+      <div class="fs-legend th-only">สูตรบนคือ TRIAC (เต็มคลื่น) · α = มุมจุดชนวน หน่วยเรเดียน<br>SCR ที่ α = 0 ได้แค่ 50% ของกำลังเต็ม เพราะใช้ครึ่งคลื่นเดียว</div>
+      <div class="fs-legend en-only">The top formula is for a TRIAC (full wave) · α = firing angle in radians<br>An SCR at α = 0 gives only 50% power because it uses one half-cycle</div>
+      <a class="fs-link print-hide" href="thyristor.html">📘 <span class="th-only">ไทริสเตอร์</span><span class="en-only">Thyristor</span></a>
+    </div>
+
+    <div class="fs-card fs-orange">
+      <div class="fs-card-title"><span class="th-only">⚙️ IGBT กับ MOSFET</span><span class="en-only">⚙️ IGBT vs MOSFET</span></div>
+      <div class="fs-variants">
+        <span>P<sub>MOSFET</sub> = I² × R<sub>DS(on)</sub></span>
+        <span>P<sub>IGBT</sub> = I × (V<sub>CE0</sub> + I × r)</span>
+      </div>
+      <div class="fs-sub" style="font-size:0.92rem;"><span class="th-only">จุดตัด</span><span class="en-only">Break-even</span>: I* = V<sub>CE0</sub> ÷ (R<sub>DS(on)</sub> − r)</div>
+      <div class="fs-legend th-only">กระแสต่ำกว่า I* → MOSFET สูญเสียน้อยกว่า · สูงกว่า I* → IGBT ชนะ<br>สูตรนี้คิดเฉพาะการสูญเสียขณะนำกระแส</div>
+      <div class="fs-legend en-only">Below I* the MOSFET loses less · above I* the IGBT wins<br>Conduction loss only</div>
+      <a class="fs-link print-hide" href="igbt.html">📘 <span class="th-only">IGBT</span><span class="en-only">IGBT</span></a>
+    </div>
+
+    <div class="fs-card fs-green">
+      <div class="fs-card-title"><span class="th-only">🔁 อินเวอร์เตอร์คุมมอเตอร์ (VFD)</span><span class="en-only">🔁 Motor Drive (VFD)</span></div>
+      <div class="fs-main">n<sub>s</sub> = 120 × f ÷ P</div>
+      <div class="fs-variants">
+        <span>Φ ∝ V ÷ f</span>
+        <span>V<sub>DC</sub> ≈ V<sub>AC</sub> × √2</span>
+      </div>
+      <div class="fs-legend th-only">n<sub>s</sub> = รอบซิงโครนัส (rpm) · P = จำนวนขั้ว · มอเตอร์จริงหมุนช้ากว่านี้นิดหน่อย (สลิป)<br>ลดความถี่ต้องลดแรงดันตาม (V/f คงที่) ไม่งั้นแกนอิ่มตัว</div>
+      <div class="fs-legend en-only">n<sub>s</sub> = synchronous speed (rpm) · P = number of poles · real motors run slightly slower (slip)<br>Lower f needs lower V (constant V/f) or the core saturates</div>
+      <a class="fs-link print-hide" href="inverter.html">📘 <span class="th-only">อินเวอร์เตอร์และ VFD</span><span class="en-only">Inverters &amp; VFDs</span></a>
+    </div>
+
+  </div>
+
+  <h2 class="fs-group"><span class="th-only">🧩 วงจรรวม (IC)</span><span class="en-only">🧩 Integrated Circuits</span></h2>
+  <div class="formula-sheet-grid">
+
+    <div class="fs-card fs-purple">
+      <div class="fs-card-title"><span class="th-only">⏱️ IC 555</span><span class="en-only">⏱️ 555 Timer</span></div>
+      <div class="fs-variants">
+        <span>t<sub>HIGH</sub> = 0.693 × (R1 + R2) × C</span>
+        <span>t<sub>LOW</sub> = 0.693 × R2 × C</span>
+      </div>
+      <div class="fs-sub" style="font-size:0.92rem;">f = 1.44 ÷ ((R1 + 2R2) × C)</div>
+      <div class="fs-sub" style="font-size:0.92rem;">Duty = (R1 + R2) ÷ (R1 + 2R2) × 100%</div>
+      <div class="fs-legend th-only">สูตรบนเป็นโหมด Astable (Duty &gt; 50% เสมอ)<br>Monostable: T = 1.1 × R × C</div>
+      <div class="fs-legend en-only">Formulas above are Astable mode (duty always &gt; 50%)<br>Monostable: T = 1.1 × R × C</div>
+      <a class="fs-link print-hide" href="555.html">📘 <span class="th-only">IC 555</span><span class="en-only">555 Timer</span></a>
+    </div>
+
+    <div class="fs-card fs-blue">
+      <div class="fs-card-title"><span class="th-only">🔼 ออปแอมป์</span><span class="en-only">🔼 Op-Amp</span></div>
+      <div class="fs-variants">
+        <span><span class="th-only">กลับเฟส</span><span class="en-only">Inverting</span>: A<sub>v</sub> = −R<sub>f</sub> ÷ R<sub>in</sub></span>
+        <span><span class="th-only">ไม่กลับเฟส</span><span class="en-only">Non-inverting</span>: A<sub>v</sub> = 1 + R<sub>f</sub> ÷ R<sub>in</sub></span>
+      </div>
+      <div class="fs-sub" style="font-size:0.92rem;">V<sub>out</sub> = A<sub>v</sub> × V<sub>in</sub></div>
+      <div class="fs-legend th-only">กฎทอง: V+ = V− และไม่มีกระแสไหลเข้าขาอินพุต<br>V<sub>out</sub> ไม่เกินไฟเลี้ยง (คลิปที่ ±V<sub>sat</sub>)</div>
+      <div class="fs-legend en-only">Golden rules: V+ = V− and no current flows into the inputs<br>V<sub>out</sub> cannot exceed the supply (clips at ±V<sub>sat</sub>)</div>
+      <a class="fs-link print-hide" href="op-amp.html">📘 <span class="th-only">ออปแอมป์</span><span class="en-only">Op-Amp</span></a>
+    </div>
+
+  </div>
+
+  <h2 class="fs-group"><span class="th-only">🛠️ คำนวณเร็วสำหรับงานซ่อม</span><span class="en-only">🛠️ Quick Math for Repair Work</span></h2>
+  <div class="formula-sheet-grid">
+
+    <div class="fs-card fs-red">
+      <div class="fs-card-title"><span class="th-only">🔥 ฮีตเตอร์: หาค่าความต้านทานจากกำลัง</span><span class="en-only">🔥 Heater: Resistance from Power</span></div>
+      <div class="fs-main">R = V² ÷ P</div>
+      <div class="fs-variants">
+        <span>1200 W ≈ 40 Ω</span>
+        <span>4500 W ≈ 10.8 Ω</span>
+        <span>6000 W ≈ 8.1 Ω</span>
+      </div>
+      <div class="fs-legend th-only">คิดที่ 220 V · วัดได้ OL = ฮีตเตอร์ขาด · ใกล้ 0 Ω = ช็อต<br>ใช้ได้กับเตารีด เครื่องทำน้ำอุ่น หม้อหุงข้าว</div>
+      <div class="fs-legend en-only">At 220 V · OL = open element · near 0 Ω = shorted<br>Works for irons, water heaters and rice cookers</div>
+      <a class="fs-link print-hide" href="iron.html">📘 <span class="th-only">เตารีด</span><span class="en-only">Iron</span></a>
+    </div>
+
+    <div class="fs-card fs-teal">
+      <div class="fs-card-title"><span class="th-only">🚿 น้ำอุ่นขึ้นกี่องศา</span><span class="en-only">🚿 Water Heater Temperature Rise</span></div>
+      <div class="fs-main">ΔT ≈ P ÷ (70 × Q)</div>
+      <div class="fs-sub" style="font-size:0.92rem;"><span class="th-only">ตัวอย่าง</span><span class="en-only">Example</span>: 4500 ÷ (70 × 3) ≈ 21 °C</div>
+      <div class="fs-legend th-only">P = กำลัง (W) · Q = อัตราการไหล (ลิตร/นาที)<br>น้ำเข้าเย็นหรือเปิดน้ำแรง = ไม่ร้อน ทั้งที่เครื่องไม่เสีย</div>
+      <div class="fs-legend en-only">P = power (W) · Q = flow (litres/min)<br>Cold inlet water or a strong flow = lukewarm, with nothing broken</div>
+      <a class="fs-link print-hide" href="water-heater.html">📘 <span class="th-only">เครื่องทำน้ำอุ่น</span><span class="en-only">Water Heater</span></a>
     </div>
 
   </div>
@@ -203,6 +393,26 @@
         </tbody>
       </table>
     </div>
+  </div>
+
+  <!-- Logic Gate Truth Table -->
+  <div class="fs-ref-section">
+    <div class="fs-ref-title">🔣 <span class="th-only">ตารางความจริงลอจิกเกต</span><span class="en-only">Logic Gate Truth Table</span></div>
+    <div style="overflow-x:auto;">
+      <table class="fs-ref-table">
+        <thead>
+          <tr><th>A</th><th>B</th><th>AND</th><th>OR</th><th>NAND</th><th>NOR</th><th>XOR</th><th>XNOR</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+          <tr><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+          <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:0.8rem; color:var(--text-light); margin-top:0.5rem;" class="th-only">💡 NOT: กลับค่า 0 ↔ 1 · De Morgan: (A·B)' = A' + B' และ (A+B)' = A'·B'</p>
+    <p style="font-size:0.8rem; color:var(--text-light); margin-top:0.5rem;" class="en-only">💡 NOT flips 0 ↔ 1 · De Morgan: (A·B)' = A' + B' and (A+B)' = A'·B'</p>
   </div>
 
 </div>

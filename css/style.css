@@ -407,6 +407,10 @@ input[type=number]:focus, input[type=text]:focus, select:focus { outline: none; 
 [data-theme="dark"] .fs-tbl td { border-color: rgba(255,255,255,0.06); }
 
 /* Reference tables */
+.fs-group { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 0 0 1rem; padding-bottom: 0.4rem; border-bottom: 2px solid var(--border); }
+.fs-main.fs-main-sm { font-size: 1.3rem; }
+.fs-link { display: block; text-align: center; font-size: 0.78rem; margin-top: 0.6rem; color: var(--primary); text-decoration: none; }
+.fs-link:hover { text-decoration: underline; }
 .fs-ref-section { margin-bottom: 2.25rem; }
 .fs-ref-title { font-size: 1.05rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 0.85rem; display: flex; align-items: center; gap: 0.4rem; }
 .fs-ref-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; border-radius: 12px; overflow: hidden; }
@@ -441,6 +445,8 @@ input[type=number]:focus, input[type=text]:focus, select:focus { outline: none; 
   .fs-card { background: #fff !important; border: 1.5px solid #999 !important; padding: 0.7rem; break-inside: avoid; }
   .fs-card-title { color: #000 !important; font-size: 0.82rem; }
   .fs-main { color: #000 !important; font-size: 1.5rem; }
+  .fs-main.fs-main-sm { font-size: 1.1rem; }
+  .fs-group { color: #000 !important; font-size: 1rem; margin-bottom: 0.5rem; break-after: avoid; }
   .fs-variants span { background: #eee !important; }
   .fs-sub { background: #f2f2f2 !important; color: #000; }
   .fs-legend { color: #555; }
