@@ -155,8 +155,153 @@ function calcEnergy() {
     L('ค่าไฟ', 'Cost') + ' ≈ ' + f(b.kwh) + ' × ' + rate + ' = <strong>' + f(b.baht) + ' ' + L('บาท', 'THB') + '</strong>';
 }
 
+// ===== SECOND-ROUND HELPERS =====
+const sig = (v, n = 4) => +v.toPrecision(n);
+function formatHz(f) {
+  if (f >= 1e6) return sig(f / 1e6) + ' MHz';
+  if (f >= 1e3) return sig(f / 1e3) + ' kHz';
+  return sig(f) + ' Hz';
+}
+function formatTime(t) {
+  if (t >= 1) return sig(t) + ' s';
+  if (t >= 1e-3) return sig(t * 1e3) + ' ms';
+  if (t >= 1e-6) return sig(t * 1e6) + ' µs';
+  return sig(t * 1e9) + ' ns';
+}
+
+// ===== AC VALUES (sine wave) =====
+// kind: 'vp' | 'vrms' | 'vpp' | 'vavg' (full-wave average = 2Vp/π)
+function acValues(v, kind) {
+  const vp = { vp: v, vrms: v * Math.SQRT2, vpp: v / 2, vavg: v * Math.PI / 2 }[kind];
+  return { vp, vrms: vp / Math.SQRT2, vpp: 2 * vp, vavg: 2 * vp / Math.PI };
+}
+function calcAc() {
+  const v = parseFloat(document.getElementById('ac_v').value), kind = document.getElementById('ac_kind').value;
+  const fRaw = document.getElementById('ac_f').value.trim(), tRaw = document.getElementById('ac_t').value.trim();
+  const f = parseFloat(fRaw), tMs = parseFloat(tRaw);
+  const res = document.getElementById('ac_result');
+  const hasV = !isNaN(v) && v > 0, hasF = f > 0, hasT = tMs > 0;
+  if (!hasV && !hasF && !hasT) { showError(res, 'กรอกแรงดัน หรือความถี่ หรือคาบ อย่างน้อยหนึ่งช่อง', 'Enter a voltage, a frequency or a period'); return; }
+  res.className = 'result-box';
+  const out = [];
+  if (hasV) {
+    const a = acValues(v, kind);
+    out.push('V<sub>P</sub> = <strong>' + sig(a.vp) + ' V</strong> · V<sub>rms</sub> = <strong>' + sig(a.vrms) + ' V</strong> · V<sub>P-P</sub> = <strong>' + sig(a.vpp) + ' V</strong> · V<sub>avg</sub> = ' + sig(a.vavg) + ' V');
+  }
+  if (hasF) out.push('f = ' + formatHz(f) + ' → T = 1 ÷ f = <strong>' + formatTime(1 / f) + '</strong>');
+  else if (hasT) out.push('T = ' + formatTime(tMs / 1000) + ' → f = 1 ÷ T = <strong>' + formatHz(1000 / tMs) + '</strong>');
+  out.push('<span style="font-size:0.85rem;">' + L('ใช้ได้กับคลื่นไซน์เท่านั้น · V<sub>avg</sub> คือค่าเฉลี่ยของคลื่นที่เรียงเต็มคลื่นแล้ว · ไฟบ้าน 220 V คือค่า rms ยอดจริง ≈ 311 V',
+    'Sine waves only · V<sub>avg</sub> is the full-wave rectified average · 220 V mains is the rms value, the real peak ≈ 311 V') + '</span>');
+  res.innerHTML = out.join('<br>');
+}
+
+// ===== 555 TIMER =====
+// r1, r2 in ohms, c in farads.
+function timer555(r1, r2, c) {
+  const tH = 0.693 * (r1 + r2) * c, tL = 0.693 * r2 * c;
+  return { tH, tL, f: 1 / (tH + tL), duty: tH / (tH + tL) * 100, mono: 1.1 * r1 * c };
+}
+function calc555() {
+  const num = id => parseFloat(document.getElementById(id).value);
+  const mode = document.getElementById('t555_mode').value;
+  const r1 = num('t555_r1') * 1000, r2 = num('t555_r2') * 1000, c = num('t555_c') * 1e-6;
+  const res = document.getElementById('t555_result');
+  if (!(r1 > 0) || !(c > 0) || (mode === 'astable' && !(r2 > 0))) { showError(res, 'กรุณากรอกค่าที่ถูกต้อง (มากกว่า 0)', 'Enter valid values (greater than 0)'); return; }
+  res.className = 'result-box';
+  if (mode === 'mono') {
+    const x = timer555(r1, 0, c);
+    res.innerHTML = 'T = 1.1 × R1 × C = <strong>' + formatTime(x.mono) + '</strong><br>' +
+      L('เอาต์พุตเป็น HIGH นานเท่านี้ทุกครั้งที่ขา 2 (TRIG) ถูกดึงลงต่ำกว่า ⅓V<sub>cc</sub>', 'The output stays HIGH this long each time pin 2 (TRIG) is pulled below ⅓V<sub>cc</sub>');
+    return;
+  }
+  const x = timer555(r1, r2, c);
+  let out = 't<sub>HIGH</sub> = 0.693 × (R1 + R2) × C = ' + formatTime(x.tH) + ' · t<sub>LOW</sub> = 0.693 × R2 × C = ' + formatTime(x.tL) + '<br>' +
+    'f = <strong>' + formatHz(x.f) + '</strong> · Duty = <strong>' + x.duty.toFixed(1) + '%</strong>';
+  if (r1 < 1000) out += '<br><span style="color:#92400e;">⚠️ ' + L('R1 ต่ำกว่า 1 kΩ — ขา 7 (DISCH) ต้องรับกระแสมากตอนคายประจุ ควรใช้ R1 ≥ 1 kΩ', 'R1 below 1 kΩ — pin 7 (DISCH) sinks a lot of current while discharging; use R1 ≥ 1 kΩ') + '</span>';
+  if (x.f > 20 && x.f < 20000) out += '<br>' + L('ความถี่นี้อยู่ในย่านที่หูได้ยิน ต่อลำโพงเล็ก/บัซเซอร์จะได้เสียง', 'This frequency is audible — a small speaker or piezo will beep');
+  else if (x.f <= 20) out += '<br>' + L('ช้าพอที่จะเห็น LED กะพริบได้ด้วยตา (ถ้าต่ำกว่าราว 20 Hz)', 'Slow enough to see an LED blink (below about 20 Hz)');
+  res.innerHTML = out;
+}
+
+// ===== FILTER / RESONANCE =====
+// r ohms, l henries, c farads; any of them may be NaN. Returns only what the given values allow.
+function filterCalc(r, l, c) {
+  const has = v => v > 0, out = {};
+  if (has(r) && has(c)) out.fcRC = 1 / (2 * Math.PI * r * c);
+  if (has(r) && has(l)) out.fcRL = r / (2 * Math.PI * l);
+  if (has(l) && has(c)) out.f0 = 1 / (2 * Math.PI * Math.sqrt(l * c));
+  if (has(r) && has(l) && has(c)) { out.q = Math.sqrt(l / c) / r; out.bw = out.f0 / out.q; }
+  return out;
+}
+function calcFilter() {
+  const num = id => parseFloat(document.getElementById(id).value);
+  const x = filterCalc(num('flt_r'), num('flt_l') * 1e-3, num('flt_c') * 1e-6);
+  const res = document.getElementById('flt_result');
+  if (!Object.keys(x).length) { showError(res, 'กรอกอย่างน้อย 2 ค่า (R+C, R+L หรือ L+C)', 'Enter at least 2 values (R+C, R+L or L+C)'); return; }
+  res.className = 'result-box';
+  const out = [];
+  if (x.fcRC) out.push(L('ฟิลเตอร์ RC', 'RC filter') + ': f<sub>c</sub> = 1 ÷ (2πRC) = <strong>' + formatHz(x.fcRC) + '</strong>');
+  if (x.fcRL) out.push(L('ฟิลเตอร์ RL', 'RL filter') + ': f<sub>c</sub> = R ÷ (2πL) = <strong>' + formatHz(x.fcRL) + '</strong>');
+  if (x.f0) out.push(L('เรโซแนนซ์ LC', 'LC resonance') + ': f<sub>0</sub> = 1 ÷ (2π√(LC)) = <strong>' + formatHz(x.f0) + '</strong>');
+  if (x.q) out.push(L('RLC อนุกรม', 'Series RLC') + ': Q = (1/R)·√(L/C) = <strong>' + sig(x.q, 3) + '</strong> · BW = f<sub>0</sub> ÷ Q = ' + formatHz(x.bw) +
+    (x.q > 1 ? ' · ' + L('แรงดันคร่อม L และ C สูงถึง ' + sig(x.q, 3) + ' เท่าของแหล่งจ่าย', 'voltage across L and C reaches ' + sig(x.q, 3) + '× the source') : ''));
+  out.push('<span style="font-size:0.85rem;">' + L('ที่ f<sub>c</sub> สัญญาณยังผ่าน 70.7% (−3 dB) ไม่ได้ถูกตัดทิ้ง', 'At f<sub>c</sub> the signal is still 70.7% (−3 dB), not cut off') + '</span>');
+  res.innerHTML = out.join('<br>');
+}
+
+// ===== REPAIR: HEATER RESISTANCE & WATER HEATER =====
+function heater(p, v) { return { r: v * v / p, i: p / v }; }
+// ΔT ≈ P ÷ (70 × Q) — the same rule as water-heater.html (water ≈ 70 W per °C per L/min).
+function waterOut(p, q, tin) { const dt = p / (70 * q); return { dt, tout: tin + dt }; }
+function calcHeater() {
+  const num = id => parseFloat(document.getElementById(id).value);
+  const p = num('ht_p'), v = num('ht_v'), rMeas = num('ht_meas');
+  const res = document.getElementById('ht_result');
+  if (!(p > 0) || !(v > 0)) { showError(res, 'กรุณากรอกกำลังและแรงดัน', 'Enter the power and voltage'); return; }
+  res.className = 'result-box';
+  const x = heater(p, v);
+  let out = 'R = V² ÷ P = ' + v + '² ÷ ' + p + ' = <strong>' + formatOhm(x.r) + '</strong> · I = P ÷ V ≈ ' + sig(x.i, 3) + ' A';
+  if (rMeas >= 0 && document.getElementById('ht_meas').value.trim() !== '') {
+    const dev = (rMeas - x.r) / x.r * 100;
+    let verdict;
+    if (rMeas < x.r * 0.1) verdict = L('❌ ต่ำผิดปกติ — สงสัยช็อต ห้ามเสียบไฟ', '❌ Far too low — suspect a short, do not power it');
+    else if (Math.abs(dev) <= 20) verdict = L('✅ อยู่ในช่วงปกติ (±20%) — ฮีตเตอร์ไม่ขาด', '✅ Within the normal range (±20%) — the element is intact');
+    else verdict = L('⚠️ ต่างจากที่ควรเป็นมาก — เช็คพิกัดบนป้ายเครื่อง หรือวัดซ้ำตอนเย็นตัว', '⚠️ Far from the expected value — check the rating plate, or re-measure when cold');
+    out += '<br>' + L('ค่าที่วัดได้', 'Measured') + ' ' + formatOhm(rMeas) + ' (' + (dev >= 0 ? '+' : '') + dev.toFixed(0) + '%) → ' + verdict;
+  }
+  out += '<br><span style="font-size:0.85rem;">' + L('วัดตอนถอดปลั๊กและเย็นแล้วเท่านั้น · วัดได้ OL = ฮีตเตอร์ขาด · ขั้วฮีตเตอร์เทียบตัวถังต้อง OL เสมอ', 'Measure unplugged and cold only · OL = open element · element terminal to the metal body must always read OL') + '</span>';
+  res.innerHTML = out;
+}
+function calcWater() {
+  const num = id => parseFloat(document.getElementById(id).value);
+  const p = num('wh_p'), q = num('wh_q'), tin = num('wh_tin');
+  const res = document.getElementById('wh_result');
+  if (!(p > 0) || !(q > 0) || isNaN(tin)) { showError(res, 'กรุณากรอกค่าที่ถูกต้อง', 'Enter valid values'); return; }
+  res.className = 'result-box';
+  const x = waterOut(p, q, tin);
+  // Same bands as zone() in water-heater-sim.js — keep them in step.
+  let zone;
+  if (x.tout > 45) zone = L('🔥 ลวกผิวหนัง — ลดกำลังหรือเปิดน้ำแรงขึ้น', '🔥 Scalding — lower the power or open the tap more');
+  else if (x.tout > 43) zone = L('ร้อน', 'Hot');
+  else if (x.tout >= 40) zone = L('✅ สบาย', '✅ Comfortable');
+  else if (x.tout >= 35) zone = L('อุ่นพอใช้', 'Lukewarm');
+  else zone = L('❄️ เย็นเกินไป — เปิดน้ำเบาลง หรือเพิ่มกำลัง (เครื่องไม่ได้เสีย)', '❄️ Too cold — reduce the flow or raise the power (nothing is broken)');
+  res.innerHTML = 'ΔT ≈ ' + p + ' ÷ (70 × ' + q + ') = ' + sig(x.dt, 3) + ' °C → ' + L('น้ำออก', 'outlet') + ' ≈ <strong>' + sig(x.tout, 3) + ' °C</strong> · ' + zone;
+}
+
 // ===== LED SERIES RESISTOR =====
 const E12 = [1.0, 1.2, 1.5, 1.8, 2.2, 2.7, 3.3, 3.9, 4.7, 5.6, 6.8, 8.2];
+const E24 = [1.0, 1.1, 1.2, 1.3, 1.5, 1.6, 1.8, 2.0, 2.2, 2.4, 2.7, 3.0, 3.3, 3.6, 3.9, 4.3, 4.7, 5.1, 5.6, 6.2, 6.8, 7.5, 8.2, 9.1];
+// Closest standard value in the series (by ratio, so 1 kΩ vs 1.2 kΩ is judged fairly).
+function nearestE(r, series) {
+  const dec = Math.pow(10, Math.floor(Math.log10(r)));
+  let best = null;
+  for (const m of [...series.map(x => x * dec / 10), ...series.map(x => x * dec), 10 * dec]) {
+    const err = Math.abs(Math.log(m / r));
+    if (!best || err < best.err) best = { v: +m.toPrecision(3), err };
+  }
+  return best.v;
+}
 const WATT_RATINGS = [0.125, 0.25, 0.5, 1, 2, 3, 5];
 // Next E12 value at or above r, so the real current never exceeds the target.
 function e12Up(r) {
@@ -353,6 +498,15 @@ const REV_TOLS = {
   '0.5':{n:L('เขียว','Green'), nm:'Green',   bg:'#0a0',    t:'±0.5%'},
 };
 
+// Tells whether a value can be bought off the shelf, and the closest one that can.
+function standardHint(ohms) {
+  const e12 = nearestE(ohms, E12), e24 = nearestE(ohms, E24);
+  const same = v => Math.abs(v - ohms) / ohms < 0.005;
+  if (same(e12)) return '<br>✅ ' + L('เป็นค่ามาตรฐาน E12 หาซื้อได้ทั่วไป', 'A standard E12 value — easy to buy');
+  if (same(e24)) return '<br>✅ ' + L('เป็นค่ามาตรฐาน E24 (ถ้าหาไม่ได้ ใช้ E12 ที่ใกล้สุด ' + formatOhm(e12) + ')', 'A standard E24 value (if unavailable, the nearest E12 is ' + formatOhm(e12) + ')');
+  return '<br>🛒 ' + L('ไม่ใช่ค่ามาตรฐาน — ค่าที่ใกล้สุดที่หาซื้อได้: E12 ' + formatOhm(e12) + ' · E24 ' + formatOhm(e24),
+    'Not a standard value — nearest you can buy: E12 ' + formatOhm(e12) + ' · E24 ' + formatOhm(e24));
+}
 function calcReverse() {
   const raw  = parseFloat(document.getElementById('rev_val').value);
   const unit = parseFloat(document.getElementById('rev_unit').value);
@@ -438,7 +592,8 @@ function calcReverse() {
   res.innerHTML =
     `<strong>${L('ค่าความต้านทาน', 'Resistance')}: ${formatOhm(actualVal)}</strong> ${tol.t}<br>` +
     `${L('ช่วงค่าจริง', 'Actual range')}: ${formatOhm(actualVal*(1-tolPct/100))} – ${formatOhm(actualVal*(1+tolPct/100))}` +
-    (pct > 0.01 ? `<br><span style="color:#92400e;">⚠️ ${L('ค่าที่ใกล้ที่สุด (ปัดเศษ ' + pct.toFixed(2) + '%)', 'Nearest value (rounded by ' + pct.toFixed(2) + '%)')}</span>` : '');
+    (pct > 0.01 ? `<br><span style="color:#92400e;">⚠️ ${L('ค่าที่ใกล้ที่สุด (ปัดเศษ ' + pct.toFixed(2) + '%)', 'Nearest value (rounded by ' + pct.toFixed(2) + '%)')}</span>` : '') +
+    standardHint(ohms);
 
   vis.style.display = 'block';
 }
@@ -476,7 +631,11 @@ function calcUnit() {
 const toolActions = {
   calcOhm, clearOhm, calcPower, clearPower, calcEnergy,
   calcRS, calcRP, calcCS, calcCP, calcUnit, calcReverse, calcLed, calcCode, calcLS, calcLP, calcDivider,
+  calcAc, calc555, calcFilter, calcHeater, calcWater,
 };
+document.getElementById('t555_mode')?.addEventListener('change', e => {
+  document.getElementById('t555_r2_row').style.opacity = e.target.value === 'mono' ? 0.4 : 1;
+});
 
 document.getElementById('led_color')?.addEventListener('change', e => {
   if (e.target.value) document.getElementById('led_vf').value = e.target.value;

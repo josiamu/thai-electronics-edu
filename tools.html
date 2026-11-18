@@ -20,8 +20,8 @@
     <div>
       <h1 class="th-only">เครื่องคิดเลขเชิงโต้ตอบ</h1>
       <h1 class="en-only">Interactive Calculators</h1>
-      <p class="th-only">รหัสสีตัวต้านทาน • กฎโอห์ม • กำลังไฟฟ้า • ค่าไฟ • อนุกรม/ขนาน • แปลงหน่วย • ตัวต้านทาน LED • อ่านรหัสคาปาฯ/SMD</p>
-      <p class="en-only">Resistor color code • Ohm's law • Power • Electricity cost • Series/Parallel • Unit conversion • LED resistor • Capacitor/SMD codes</p>
+      <p class="th-only">รหัสสีตัวต้านทาน • กฎโอห์ม • กำลังไฟฟ้า • ค่าไฟ • อนุกรม/ขนาน • แปลงหน่วย • แบ่งแรงดัน • ไฟ AC • ตัวต้านทาน LED • อ่านรหัสคาปาฯ/SMD • 555 • ฟิลเตอร์ • งานซ่อม</p>
+      <p class="en-only">Resistor color code • Ohm's law • Power • Electricity cost • Series/Parallel • Unit conversion • Voltage divider • AC values • LED resistor • Capacitor/SMD codes • 555 • Filters • Repair math</p>
     </div>
   </div>
 </div>
@@ -380,6 +380,93 @@
     </div>
     <button class="btn btn-green" data-action="calcCode"><span class="th-only">อ่านค่า</span><span class="en-only">Read value</span></button>
     <div class="result-box" id="code_result"></div>
+  </div>
+
+  <!-- 11. AC VALUES -->
+  <div class="tool-box">
+    <div class="tool-title"><span>11</span> <span class="th-only">แปลงค่าไฟสลับ (V<sub>P</sub> / V<sub>rms</sub> / V<sub>P-P</sub> · f / T)</span><span class="en-only">AC Values (V<sub>P</sub> / V<sub>rms</sub> / V<sub>P-P</sub> · f / T)</span></div>
+    <p style="color:var(--text-light);font-size:0.92rem;" class="th-only">กรอกแรงดันแบบใดแบบหนึ่ง แล้วได้ครบทุกแบบ · กรอกความถี่หรือคาบช่องใดช่องหนึ่ง · ใช้คู่กับการอ่านสโคปในบท <a href="oscilloscope.html">ออสซิลโลสโคป</a></p>
+    <p style="color:var(--text-light);font-size:0.92rem;" class="en-only">Enter any one voltage to get all of them · enter either the frequency or the period · pairs with scope reading in the <a href="oscilloscope.html">Oscilloscope</a> lesson</p>
+    <div class="grid-2">
+      <div><label><span class="th-only">แรงดัน (V)</span><span class="en-only">Voltage (V)</span></label><input type="number" id="ac_v" value="220" step="any"></div>
+      <div><label><span class="th-only">ค่าที่กรอกคือ</span><span class="en-only">This value is</span></label>
+        <select id="ac_kind">
+          <option value="vrms" selected>V<sub>rms</sub> (<span class="th-only">ค่าที่มิเตอร์อ่าน</span> meter reading)</option>
+          <option value="vp">V<sub>P</sub> (<span class="th-only">ยอดคลื่น</span> peak)</option>
+          <option value="vpp">V<sub>P-P</sub> (<span class="th-only">ยอดถึงยอด</span> peak-to-peak)</option>
+          <option value="vavg">V<sub>avg</sub> (<span class="th-only">ค่าเฉลี่ยหลังเรียงกระแส</span> rectified average)</option>
+        </select>
+      </div>
+      <div><label><span class="th-only">ความถี่ f (Hz)</span><span class="en-only">Frequency f (Hz)</span></label><input type="number" id="ac_f" value="50" step="any"></div>
+      <div><label><span class="th-only">หรือคาบ T (ms) — ใช้เมื่อเว้นความถี่ว่าง</span><span class="en-only">or period T (ms) — used when f is blank</span></label><input type="number" id="ac_t" placeholder="e.g. 20" step="any"></div>
+    </div>
+    <button class="btn" data-action="calcAc"><span class="th-only">คำนวณ</span><span class="en-only">Calculate</span></button>
+    <div class="result-box" id="ac_result"></div>
+  </div>
+
+  <!-- 12. 555 TIMER -->
+  <div class="tool-box">
+    <div class="tool-title"><span>12</span> <span class="th-only">IC ตั้งเวลา 555</span><span class="en-only">555 Timer</span></div>
+    <p style="color:var(--text-light);font-size:0.92rem;" class="th-only">Astable = กะพริบเอง (ใช้ R1, R2, C) · Monostable = กดทีเดียวค้างตามเวลา (ใช้ R1 กับ C) · ดูการทำงานแบบเคลื่อนไหวในบท <a href="555.html">IC 555</a></p>
+    <p style="color:var(--text-light);font-size:0.92rem;" class="en-only">Astable = free-running blinker (uses R1, R2, C) · Monostable = one timed pulse per trigger (uses R1 and C) · see it animated in the <a href="555.html">555 Timer</a> lesson</p>
+    <div class="grid-2">
+      <div><label><span class="th-only">โหมด</span><span class="en-only">Mode</span></label>
+        <select id="t555_mode">
+          <option value="astable" selected>Astable (<span class="th-only">กะพริบ</span> blinker)</option>
+          <option value="mono">Monostable (<span class="th-only">ตั้งเวลาครั้งเดียว</span> one-shot)</option>
+        </select>
+      </div>
+      <div><label>R1 (kΩ)</label><input type="number" id="t555_r1" value="1" step="any"></div>
+      <div id="t555_r2_row"><label>R2 (kΩ) <span class="th-only">— เฉพาะ Astable</span><span class="en-only">— Astable only</span></label><input type="number" id="t555_r2" value="68" step="any"></div>
+      <div><label>C (µF)</label><input type="number" id="t555_c" value="10" step="any"></div>
+    </div>
+    <button class="btn btn-green" data-action="calc555"><span class="th-only">คำนวณ</span><span class="en-only">Calculate</span></button>
+    <div class="result-box" id="t555_result"></div>
+  </div>
+
+  <!-- 13. FILTER / RESONANCE -->
+  <div class="tool-box">
+    <div class="tool-title"><span>13</span> <span class="th-only">ความถี่ตัดของฟิลเตอร์ / เรโซแนนซ์</span><span class="en-only">Filter Cutoff / Resonance</span></div>
+    <p style="color:var(--text-light);font-size:0.92rem;" class="th-only">กรอกค่าที่มี 2–3 ตัว: R+C → f<sub>c</sub> ของ RC · R+L → f<sub>c</sub> ของ RL · L+C → f<sub>0</sub> · ครบทั้งสามได้ Q และแถบผ่านของ RLC อนุกรม · ดูกราฟผลตอบสนองในบท <a href="filter.html">ฟิลเตอร์และเรโซแนนซ์</a></p>
+    <p style="color:var(--text-light);font-size:0.92rem;" class="en-only">Fill in 2–3 values: R+C → RC f<sub>c</sub> · R+L → RL f<sub>c</sub> · L+C → f<sub>0</sub> · all three adds Q and bandwidth of a series RLC · see the response plot in the <a href="filter.html">Filters &amp; Resonance</a> lesson</p>
+    <div class="grid-3">
+      <div><label>R (Ω)</label><input type="number" id="flt_r" value="1000" step="any"></div>
+      <div><label>L (mH)</label><input type="number" id="flt_l" placeholder="e.g. 10" step="any"></div>
+      <div><label>C (µF)</label><input type="number" id="flt_c" value="0.1" step="any"></div>
+    </div>
+    <button class="btn" data-action="calcFilter"><span class="th-only">คำนวณ</span><span class="en-only">Calculate</span></button>
+    <div class="result-box" id="flt_result"></div>
+  </div>
+
+  <!-- 14. REPAIR QUICK MATH -->
+  <div class="tool-box">
+    <div class="tool-title"><span>14</span> <span class="th-only">คำนวณเร็วสำหรับงานซ่อม</span><span class="en-only">Quick Math for Repair Work</span></div>
+    <div class="tabs">
+<button class="tab-btn active" data-tab-show="rep_heater" data-tab-hide="rep_water"><span class="th-only">🔥 ค่าโอห์มฮีตเตอร์</span><span class="en-only">🔥 Heater resistance</span></button>
+<button class="tab-btn" data-tab-show="rep_water" data-tab-hide="rep_heater"><span class="th-only">🚿 น้ำอุ่นขึ้นกี่องศา</span><span class="en-only">🚿 Water heater temperature</span></button>
+    </div>
+    <div id="rep_heater" class="tab-content active">
+      <p style="color:var(--text-light);font-size:0.9rem;" class="th-only">ดูกำลังจากป้ายเครื่อง แล้วรู้ว่าฮีตเตอร์ควรวัดได้กี่โอห์ม (R = V² ÷ P) · ใส่ค่าที่วัดได้จริงเพื่อให้ตัดสินให้ · ใช้ได้กับ <a href="iron.html">เตารีด</a> <a href="water-heater.html">เครื่องทำน้ำอุ่น</a> <a href="rice-cooker.html">หม้อหุงข้าว</a></p>
+      <p style="color:var(--text-light);font-size:0.9rem;" class="en-only">Read the wattage off the rating plate to know what the element should measure (R = V² ÷ P) · enter your reading to get a verdict · works for <a href="iron.html">irons</a>, <a href="water-heater.html">water heaters</a> and <a href="rice-cooker.html">rice cookers</a></p>
+      <div class="grid-3">
+        <div><label><span class="th-only">กำลังบนป้าย (W)</span><span class="en-only">Rated power (W)</span></label><input type="number" id="ht_p" value="1200" step="any"></div>
+        <div><label><span class="th-only">แรงดัน (V)</span><span class="en-only">Voltage (V)</span></label><input type="number" id="ht_v" value="220" step="any"></div>
+        <div><label><span class="th-only">ค่าที่วัดได้ (Ω, ไม่ใส่ก็ได้)</span><span class="en-only">Measured (Ω, optional)</span></label><input type="number" id="ht_meas" placeholder="e.g. 41" step="any"></div>
+      </div>
+      <button class="btn" data-action="calcHeater"><span class="th-only">คำนวณ</span><span class="en-only">Calculate</span></button>
+      <div class="result-box" id="ht_result"></div>
+    </div>
+    <div id="rep_water" class="tab-content">
+      <p style="color:var(--text-light);font-size:0.9rem;" class="th-only">ΔT ≈ P ÷ (70 × Q) — อธิบายว่าทำไมหน้าหนาวน้ำไม่ร้อนทั้งที่เครื่องไม่เสีย · ที่มาของสูตรดูในบท <a href="water-heater.html">เครื่องทำน้ำอุ่น</a></p>
+      <p style="color:var(--text-light);font-size:0.9rem;" class="en-only">ΔT ≈ P ÷ (70 × Q) — why the shower runs cool in winter with nothing broken · the formula is explained in the <a href="water-heater.html">Water Heater</a> lesson</p>
+      <div class="grid-3">
+        <div><label><span class="th-only">กำลังเครื่อง (W)</span><span class="en-only">Heater power (W)</span></label><input type="number" id="wh_p" value="4500" step="any"></div>
+        <div><label><span class="th-only">อัตราการไหล (ลิตร/นาที)</span><span class="en-only">Flow (L/min)</span></label><input type="number" id="wh_q" value="4" step="any"></div>
+        <div><label><span class="th-only">น้ำเข้า (°C)</span><span class="en-only">Inlet water (°C)</span></label><input type="number" id="wh_tin" value="25" step="any"></div>
+      </div>
+      <button class="btn btn-green" data-action="calcWater"><span class="th-only">คำนวณ</span><span class="en-only">Calculate</span></button>
+      <div class="result-box" id="wh_result"></div>
+    </div>
   </div>
 
 </div>

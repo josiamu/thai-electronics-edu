@@ -4,7 +4,7 @@ const fs = require('fs'), path = require('path'), assert = require('assert');
 const el = () => ({ value: '', style: {}, classList: { add() {}, remove() {} }, addEventListener() {} });
 global.document = { getElementById: el, querySelectorAll: () => [] };
 const src = fs.readFileSync(path.join(__dirname, '..', 'js', 'tools.js'), 'utf8');
-const T = new Function(src + '; return { parseCapCode, parseSmdCode, ledResistor, e12Up, energyBill, e96, divider };')();
+const T = new Function(src + '; return { parseCapCode, parseSmdCode, ledResistor, e12Up, energyBill, e96, divider, acValues, timer555, filterCalc, heater, waterOut, nearestE, E12, E24 };')();
 
 const near = (a, b) => assert.ok(Math.abs(a - b) <= Math.abs(b) * 1e-9 + 1e-12, `${a} != ${b}`);
 
@@ -56,5 +56,37 @@ let d = T.divider(12, 10000, 10000, null);
 near(d.vNoLoad, 6); near(d.vout, 6); near(d.i, 0.0006); near(d.drop, 0);
 d = T.divider(12, 10000, 10000, 10000);
 near(d.r2eff, 5000); near(d.vout, 4); near(d.drop, 100 / 3);
+
+// AC: 220 Vrms → 311 Vp, 622 Vpp; every input kind round-trips
+let a = T.acValues(220, 'vrms');
+near(a.vp, 220 * Math.SQRT2); near(a.vpp, 440 * Math.SQRT2); near(a.vavg, 2 * a.vp / Math.PI);
+for (const k of ['vp', 'vpp', 'vavg']) near(T.acValues(a[k], k).vrms, 220);
+
+// 555 astable: R1 1k, R2 68k, C 10µF → f ≈ 1.044 Hz, duty ≈ 50.4%  (1.44 / ((1k + 136k) × 10µ))
+let t = T.timer555(1000, 68000, 10e-6);
+near(t.tH, 0.693 * 69000 * 10e-6); near(t.f, 1 / (0.693 * 137000 * 10e-6));
+assert.ok(Math.abs(t.f - 1.44 / (137000 * 10e-6)) / t.f < 0.005);   // matches the 1.44 form in 555.html (1/0.693 = 1.443)
+assert.ok(t.duty > 50);
+near(T.timer555(100000, 0, 10e-6).mono, 1.1);
+
+// Filters: 1k + 0.1µF → 1591.5 Hz; 10mH + 0.1µF → f0 5032.9 Hz; Q = √(L/C)/R
+let fl = T.filterCalc(1000, NaN, 0.1e-6);
+near(fl.fcRC, 1 / (2 * Math.PI * 1e-4)); assert.ok(!('f0' in fl));
+fl = T.filterCalc(1000, 10e-3, 0.1e-6);
+near(fl.f0, 1 / (2 * Math.PI * Math.sqrt(1e-9))); near(fl.q, Math.sqrt(1e5) / 1000); near(fl.bw, fl.f0 / fl.q);
+near(T.filterCalc(1000, 10e-3, NaN).fcRL, 1000 / (2 * Math.PI * 0.01));
+assert.deepStrictEqual(T.filterCalc(NaN, NaN, 1e-6), {});
+
+// Repair: lesson values 1200 W ≈ 40 Ω, 4500 W ≈ 10.8 Ω; water 4500 W at 3 L/min ≈ +21.4 °C
+near(T.heater(1200, 220).r, 220 * 220 / 1200); assert.strictEqual(+T.heater(4500, 220).r.toFixed(1), 10.8);
+const w = T.waterOut(4500, 3, 25); near(w.dt, 4500 / 210); near(w.tout, 25 + 4500 / 210);
+
+// Standard values
+assert.strictEqual(T.nearestE(4700, T.E12), 4700);
+assert.strictEqual(T.nearestE(5000, T.E12), 4700);
+assert.strictEqual(T.nearestE(5000, T.E24), 5100);
+assert.strictEqual(T.nearestE(9500, T.E12), 10000);
+assert.strictEqual(T.nearestE(1040, T.E24), 1000);
+assert.strictEqual(T.nearestE(1050, T.E24), 1100);   // closer by ratio: 1100/1050 < 1050/1000
 
 console.log('tools-calc: all checks passed');
