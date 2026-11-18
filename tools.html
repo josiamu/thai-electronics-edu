@@ -201,10 +201,12 @@
   <div class="tool-box">
     <div class="tool-title"><span>5</span> <span class="th-only">วงจรอนุกรม/ขนาน</span><span class="en-only">Series / Parallel Circuits</span></div>
     <div class="tabs">
-<button class="tab-btn active" data-tab-show="circ_rs" data-tab-hide="circ_rp circ_cs circ_cp"><span class="th-only">R อนุกรม</span><span class="en-only">R Series</span></button>
-<button class="tab-btn" data-tab-show="circ_rp" data-tab-hide="circ_rs circ_cs circ_cp"><span class="th-only">R ขนาน</span><span class="en-only">R Parallel</span></button>
-<button class="tab-btn" data-tab-show="circ_cs" data-tab-hide="circ_rs circ_rp circ_cp"><span class="th-only">C อนุกรม</span><span class="en-only">C Series</span></button>
-<button class="tab-btn" data-tab-show="circ_cp" data-tab-hide="circ_rs circ_rp circ_cs"><span class="th-only">C ขนาน</span><span class="en-only">C Parallel</span></button>
+<button class="tab-btn active" data-tab-show="circ_rs" data-tab-hide="circ_rp circ_cs circ_cp circ_ls circ_lp"><span class="th-only">R อนุกรม</span><span class="en-only">R Series</span></button>
+<button class="tab-btn" data-tab-show="circ_rp" data-tab-hide="circ_rs circ_cs circ_cp circ_ls circ_lp"><span class="th-only">R ขนาน</span><span class="en-only">R Parallel</span></button>
+<button class="tab-btn" data-tab-show="circ_cs" data-tab-hide="circ_rs circ_rp circ_cp circ_ls circ_lp"><span class="th-only">C อนุกรม</span><span class="en-only">C Series</span></button>
+<button class="tab-btn" data-tab-show="circ_cp" data-tab-hide="circ_rs circ_rp circ_cs circ_ls circ_lp"><span class="th-only">C ขนาน</span><span class="en-only">C Parallel</span></button>
+<button class="tab-btn" data-tab-show="circ_ls" data-tab-hide="circ_rs circ_rp circ_cs circ_cp circ_lp"><span class="th-only">L อนุกรม</span><span class="en-only">L Series</span></button>
+<button class="tab-btn" data-tab-show="circ_lp" data-tab-hide="circ_rs circ_rp circ_cs circ_cp circ_ls"><span class="th-only">L ขนาน</span><span class="en-only">L Parallel</span></button>
     </div>
     <div id="circ_rs" class="tab-content active">
       <p style="color:var(--text-light);font-size:0.9rem;margin-bottom:0.75rem;">R<sub>T</sub> = R₁ + R₂ + ... (<span class="th-only">Ω คั่นด้วย ,</span><span class="en-only">Ω separated by ,</span>)</p>
@@ -230,11 +232,38 @@
       <button class="btn btn-green" data-action="calcCP"><span class="th-only">คำนวณ</span><span class="en-only">Calculate</span></button>
       <div class="result-box" id="cp_result"></div>
     </div>
+    <div id="circ_ls" class="tab-content">
+      <p style="color:var(--text-light);font-size:0.9rem;margin-bottom:0.75rem;">L<sub>T</sub> = L₁ + L₂ + ... (<span class="th-only">mH คั่นด้วย , · ถือว่าขดลวดไม่เหนี่ยวนำถึงกัน</span><span class="en-only">mH separated by , · assumes no coupling between coils</span>)</p>
+      <input type="text" id="ls_vals" placeholder="e.g. 1, 2.2, 4.7">
+      <button class="btn" data-action="calcLS"><span class="th-only">คำนวณ</span><span class="en-only">Calculate</span></button>
+      <div class="result-box" id="ls_result"></div>
+    </div>
+    <div id="circ_lp" class="tab-content">
+      <p style="color:var(--text-light);font-size:0.9rem;margin-bottom:0.75rem;">1/L<sub>T</sub> = 1/L₁ + 1/L₂ + ... (<span class="th-only">mH คั่นด้วย , · ถือว่าขดลวดไม่เหนี่ยวนำถึงกัน</span><span class="en-only">mH separated by , · assumes no coupling between coils</span>)</p>
+      <input type="text" id="lp_vals" placeholder="e.g. 10, 22, 47">
+      <button class="btn" data-action="calcLP"><span class="th-only">คำนวณ</span><span class="en-only">Calculate</span></button>
+      <div class="result-box" id="lp_result"></div>
+    </div>
   </div>
 
-  <!-- 6. UNIT CONVERTER -->
+  <!-- 6. VOLTAGE DIVIDER -->
   <div class="tool-box">
-    <div class="tool-title"><span>6</span> <span class="th-only">แปลงหน่วย (Unit Converter)</span><span class="en-only">Unit Converter</span></div>
+    <div class="tool-title"><span>6</span> <span class="th-only">วงจรแบ่งแรงดัน (Voltage Divider)</span><span class="en-only">Voltage Divider</span></div>
+    <p style="color:var(--text-light);font-size:0.92rem;" class="th-only">V<sub>out</sub> วัดคร่อม R2 (ตัวล่าง) · ใส่ค่าโหลด R<sub>L</sub> เพื่อดูว่าต่อโหลดแล้ว V<sub>out</sub> ตกลงเท่าไหร่ (เว้นว่าง = ไม่มีโหลด) · ที่มาของสูตรดูในบท <a href="kirchhoff.html">กฎของเคอร์ชฮอฟฟ์</a></p>
+    <p style="color:var(--text-light);font-size:0.92rem;" class="en-only">V<sub>out</sub> is measured across R2 (the lower resistor) · enter a load R<sub>L</sub> to see how far V<sub>out</sub> drops (leave blank = no load) · the formula is explained in the <a href="kirchhoff.html">Kirchhoff's Laws</a> lesson</p>
+    <div class="grid-2">
+      <div><label><span class="th-only">แรงดันเข้า V<sub>in</sub> (V)</span><span class="en-only">Input voltage V<sub>in</sub> (V)</span></label><input type="number" id="vd_vin" value="12" step="any"></div>
+      <div><label>R1 (Ω) <span class="th-only">— ตัวบน</span><span class="en-only">— upper</span></label><input type="number" id="vd_r1" value="10000" step="any"></div>
+      <div><label>R2 (Ω) <span class="th-only">— ตัวล่าง</span><span class="en-only">— lower</span></label><input type="number" id="vd_r2" value="10000" step="any"></div>
+      <div><label><span class="th-only">โหลด R<sub>L</sub> (Ω, ไม่ใส่ก็ได้)</span><span class="en-only">Load R<sub>L</sub> (Ω, optional)</span></label><input type="number" id="vd_rl" placeholder="e.g. 10000" step="any"></div>
+    </div>
+    <button class="btn" data-action="calcDivider"><span class="th-only">คำนวณ</span><span class="en-only">Calculate</span></button>
+    <div class="result-box" id="vd_result"></div>
+  </div>
+
+  <!-- 7. UNIT CONVERTER -->
+  <div class="tool-box">
+    <div class="tool-title"><span>7</span> <span class="th-only">แปลงหน่วย (Unit Converter)</span><span class="en-only">Unit Converter</span></div>
     <div class="grid-2">
       <div>
         <label><span class="th-only">ค่าที่ต้องการแปลง</span><span class="en-only">Value to convert</span></label>
@@ -265,9 +294,9 @@
     <div class="result-box" id="uc_result"></div>
   </div>
 
-  <!-- 7. REVERSE RESISTOR -->
+  <!-- 8. REVERSE RESISTOR -->
   <div class="tool-box">
-    <div class="tool-title"><span>7</span> <span class="th-only">ค้นหารหัสสีจากค่าความต้านทาน (Value → Color)</span><span class="en-only">Find Color Code from Resistance Value</span></div>
+    <div class="tool-title"><span>8</span> <span class="th-only">ค้นหารหัสสีจากค่าความต้านทาน (Value → Color)</span><span class="en-only">Find Color Code from Resistance Value</span></div>
     <p style="color:var(--text-light);font-size:0.92rem;" class="th-only">กรอกค่าที่ต้องการ แล้วดูว่าต้องหยิบตัวต้านทานสีอะไร</p>
     <p style="color:var(--text-light);font-size:0.92rem;" class="en-only">Enter the target value to find the correct resistor color bands</p>
     <div class="grid-2" style="gap:0.75rem;align-items:end;">
@@ -310,9 +339,9 @@
     </div>
   </div>
 
-  <!-- 8. LED SERIES RESISTOR -->
+  <!-- 9. LED SERIES RESISTOR -->
   <div class="tool-box">
-    <div class="tool-title"><span>8</span> <span class="th-only">ตัวต้านทานจำกัดกระแส LED</span><span class="en-only">LED Series Resistor</span></div>
+    <div class="tool-title"><span>9</span> <span class="th-only">ตัวต้านทานจำกัดกระแส LED</span><span class="en-only">LED Series Resistor</span></div>
     <p style="color:var(--text-light);font-size:0.92rem;" class="th-only">R = (V<sub>supply</sub> − n × V<sub>f</sub>) ÷ I<sub>f</sub> · เลือกสีแล้วใส่ V<sub>f</sub> ให้อัตโนมัติ (แก้เองได้ถ้ามีดาต้าชีต) · ที่มาของสูตรดูในบท <a href="diode.html">ไดโอด</a></p>
     <p style="color:var(--text-light);font-size:0.92rem;" class="en-only">R = (V<sub>supply</sub> − n × V<sub>f</sub>) ÷ I<sub>f</sub> · picking a color fills in V<sub>f</sub> (edit it if you have a datasheet) · the formula is explained in the <a href="diode.html">Diode</a> lesson</p>
     <div class="grid-2">
@@ -335,9 +364,9 @@
     <div class="result-box" id="led_result"></div>
   </div>
 
-  <!-- 9. CAPACITOR / SMD CODE -->
+  <!-- 10. CAPACITOR / SMD CODE -->
   <div class="tool-box">
-    <div class="tool-title"><span>9</span> <span class="th-only">อ่านรหัสตัวเก็บประจุ / ตัวต้านทาน SMD</span><span class="en-only">Capacitor / SMD Resistor Code Reader</span></div>
+    <div class="tool-title"><span>10</span> <span class="th-only">อ่านรหัสตัวเก็บประจุ / ตัวต้านทาน SMD</span><span class="en-only">Capacitor / SMD Resistor Code Reader</span></div>
     <p style="color:var(--text-light);font-size:0.92rem;" class="th-only">ต้องเลือกชนิดก่อน เพราะรหัสเดียวกันแปลต่างกัน: <strong>103</strong> บนตัวเก็บประจุ = 10 nF แต่บนตัวต้านทาน SMD = 10 kΩ · วิธีอ่านรหัสตัวเก็บประจุดูในบท <a href="capacitor.html">ตัวเก็บประจุ</a></p>
     <p style="color:var(--text-light);font-size:0.92rem;" class="en-only">Pick the part type first, because the same code means different things: <strong>103</strong> on a capacitor = 10 nF, but on an SMD resistor = 10 kΩ · capacitor codes are explained in the <a href="capacitor.html">Capacitor</a> lesson</p>
     <div class="grid-2">

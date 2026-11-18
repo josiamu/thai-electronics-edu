@@ -20,7 +20,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | 🌙 **Dark Mode** | ธีมสว่าง/มืด — จำการตั้งค่าไว้ |
 | 📱 **Responsive** | ใช้งานได้ทั้ง Desktop, Tablet, Mobile |
 | 🔬 **เครื่องมือจำลองเชิงโต้ตอบ** | เบรดบอร์ดเสมือน, ออสซิลโลสโคป, BJT switch, เครื่องกำเนิดสัญญาณ, แหล่งจ่ายไฟ, เรียงกระแส AC→DC, ออปโตคัปเปลอร์, สวิตช์ความเร็วพัดลม, จำลองวงจร |
-| 🧮 **9 เครื่องคิดเลข** | รหัสสี, โอห์ม, กำลัง, พลังงานและค่าไฟ, อนุกรม/ขนาน, แปลงหน่วย, ตัวต้านทาน LED, อ่านรหัสคาปาฯ/SMD |
+| 🧮 **10 เครื่องคิดเลข** | รหัสสี, โอห์ม, กำลัง, พลังงานและค่าไฟ, อนุกรม/ขนาน R/C/L, วงจรแบ่งแรงดัน, แปลงหน่วย, ตัวต้านทาน LED, อ่านรหัสคาปาฯ/SMD |
 | 📝 **แบบทดสอบ 132 ข้อ** | 19 หมวด, สุ่มข้อ, บันทึกคะแนนสูงสุด — มีทั้ง TH และ EN |
 | 📥 **PDF 55 ไฟล์** | ดาวน์โหลดใบเนื้อหา + ใบงานประกอบการเรียน |
 | 🖨️ **Print-friendly** | หน้าสูตรสรุปพิมพ์ออกกระดาษ A4 ได้เลย |
@@ -99,7 +99,7 @@ A bilingual teaching website for Electricity & Electronics — **Thai / English*
 | `breadboard.html` | ทดลองบนเบรดบอร์ดเสมือน + มัลติมิเตอร์ (ตัวต้านทานแถบสีจริง, LED หรี่ตามกระแส, ปุ่มกดแบบกดติด-ปล่อยดับ, SCR/ไทรแอก/ไดแอกที่ยิงเกตแล้วล็อกตัว (มีตัวอย่างดิมเมอร์ RC+DIAC+TRIAC), ทรานซิสเตอร์ NPN/PNP/MOSFET + โหมด avalanche (ไฟกระพริบ relaxation oscillator), โพเทนชิโอมิเตอร์ 3 ขา, ออปโตคัปเปลอร์ 4 ขา, รีเลย์ SPDT 5 ขา, แหล่งจ่าย AC, กราฟ transient) | Virtual breadboard lab + multimeter (real colour-coded resistors, current-proportional LEDs, momentary pushbutton, latching SCR/TRIAC/DIAC (with an RC+DIAC+TRIAC dimmer example), NPN/PNP/MOSFET transistors + avalanche relaxation-oscillator mode, 3-pin potentiometer, 4-pin optocoupler, SPDT relay, AC source, transient graph) |
 | `relay-lab.html` | ห้องแล็บวงจรควบคุมรีเลย์ MY4 (4PDT 24VDC + ปุ่มกด/ไฟ/บัซเซอร์, รางไฟ + จุดพักไฟ TB-1…TB-10 ลดสายพันกัน, คลิกไฮไลต์ไล่วงจร, 🎯 ภารกิจ 7 ข้อพร้อมตรวจคำตอบอัตโนมัติ, 9 ตัวอย่าง self-holding/interlock/AND-OR/fail-safe NC/กลับทางหมุนมอเตอร์, มุมมองแผนภาพ Ladder, บันทึก/แชร์ลิงก์) | MY4 relay control lab (4PDT 24VDC + buttons/lamps/buzzer, power rails + TB-1…TB-10 terminal block, click-to-trace highlight, 7 auto-graded missions, 9 examples incl. fail-safe NC and motor forward/reverse, ladder view, save/share) |
 | `formulas.html` | สูตรสรุป + พิมพ์ PDF | Formula summary + print |
-| `tools.html` | เครื่องคิดเลขเชิงโต้ตอบ 9 ตัว | 9 interactive calculators |
+| `tools.html` | เครื่องคิดเลขเชิงโต้ตอบ 10 ตัว | 10 interactive calculators |
 | `quiz.html` | แบบทดสอบ 132 ข้อ 19 หมวด | 132-question quiz, 19 categories |
 | `downloads.html` | ดาวน์โหลด PDF 55 ไฟล์ (รวมหัวข้อ "ฟอร์มตรวจเช็ค" และ "งานซ่อม") | Download 55 PDF files (incl. "Check Forms" and "Repair" sections) |
 
@@ -168,6 +168,8 @@ html:not([lang="en"]) .en-only { display: none !important; }
 | `calcCode()` | อ่านรหัสตัวเก็บประจุ / ตัวต้านทาน SMD |
 | `calcRS()` / `calcRP()` | ตัวต้านทานอนุกรม / ขนาน |
 | `calcCS()` / `calcCP()` | ตัวเก็บประจุอนุกรม / ขนาน |
+| `calcLS()` / `calcLP()` | ตัวเหนี่ยวนำอนุกรม / ขนาน |
+| `calcDivider()` | วงจรแบ่งแรงดัน + ผลของโหลด |
 | `calcUnit()` | แปลงหน่วย (V, A, Ω, W, F, H) |
 
 ---

@@ -4,7 +4,7 @@ const fs = require('fs'), path = require('path'), assert = require('assert');
 const el = () => ({ value: '', style: {}, classList: { add() {}, remove() {} }, addEventListener() {} });
 global.document = { getElementById: el, querySelectorAll: () => [] };
 const src = fs.readFileSync(path.join(__dirname, '..', 'js', 'tools.js'), 'utf8');
-const T = new Function(src + '; return { parseCapCode, parseSmdCode, ledResistor, e12Up, energyBill, e96 };')();
+const T = new Function(src + '; return { parseCapCode, parseSmdCode, ledResistor, e12Up, energyBill, e96, divider };')();
 
 const near = (a, b) => assert.ok(Math.abs(a - b) <= Math.abs(b) * 1e-9 + 1e-12, `${a} != ${b}`);
 
@@ -50,5 +50,11 @@ assert.strictEqual(T.e12Up(9.9), 10); assert.strictEqual(T.e12Up(1000), 1000); a
 // Energy bill: 1000 W × 2 h × 30 days × 4 THB = 60 kWh = 240 THB
 const b = T.energyBill(1000, 2, 30, 4);
 near(b.kwhDay, 2); near(b.kwh, 60); near(b.baht, 240);
+
+// Voltage divider: 12 V, 10k/10k → 6 V; a 10k load makes R2 = 5k → 4 V (33.3% drop)
+let d = T.divider(12, 10000, 10000, null);
+near(d.vNoLoad, 6); near(d.vout, 6); near(d.i, 0.0006); near(d.drop, 0);
+d = T.divider(12, 10000, 10000, 10000);
+near(d.r2eff, 5000); near(d.vout, 4); near(d.drop, 100 / 3);
 
 console.log('tools-calc: all checks passed');

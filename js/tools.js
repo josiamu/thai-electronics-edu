@@ -283,6 +283,42 @@ function calcCP() {
   if (!checkMinVals(vals, res)) return;
   res.textContent = 'C_T = ' + vals.join(' + ') + ' = ' + vals.reduce((a,b)=>a+b,0).toPrecision(4) + ' μF';
 }
+function calcLS() {
+  const vals = parseList('ls_vals'), res = document.getElementById('ls_result');
+  if (!checkMinVals(vals, res)) return;
+  res.textContent = 'L_T = ' + vals.join(' + ') + ' = ' + vals.reduce((a,b)=>a+b,0).toPrecision(4) + ' mH';
+}
+function calcLP() {
+  const vals = parseList('lp_vals'), res = document.getElementById('lp_result');
+  if (!checkMinVals(vals, res)) return;
+  res.textContent = '1/L_T = ' + vals.map(v=>'1/'+v).join('+') + ' → L_T = ' + (1/vals.reduce((a,b)=>a+1/b,0)).toPrecision(4) + ' mH';
+}
+
+// ===== VOLTAGE DIVIDER =====
+// rl = null means no load.
+function divider(vin, r1, r2, rl) {
+  const vNoLoad = vin * r2 / (r1 + r2);
+  const r2eff = rl ? r2 * rl / (r2 + rl) : r2;
+  const vout = vin * r2eff / (r1 + r2eff), i = vin / (r1 + r2eff);
+  return { vNoLoad, r2eff, vout, i, drop: (vNoLoad - vout) / vNoLoad * 100, p: vin * i };
+}
+function calcDivider() {
+  const num = id => parseFloat(document.getElementById(id).value);
+  const vin = num('vd_vin'), r1 = num('vd_r1'), r2 = num('vd_r2'), rlRaw = document.getElementById('vd_rl').value.trim(), rl = parseFloat(rlRaw);
+  const res = document.getElementById('vd_result');
+  if ([vin, r1, r2].some(v => isNaN(v) || v <= 0) || (rlRaw !== '' && !(rl > 0))) { showError(res, 'กรุณากรอกค่าที่ถูกต้อง (มากกว่า 0)', 'Enter valid values (greater than 0)'); return; }
+  res.className = 'result-box';
+  const x = divider(vin, r1, r2, rlRaw === '' ? null : rl);
+  const v = n => +n.toPrecision(4) + ' V';
+  let out = 'V<sub>out</sub> = ' + vin + ' × ' + r2 + ' ÷ (' + r1 + ' + ' + r2 + ') = <strong>' + v(x.vNoLoad) + '</strong> ' + L('(ไม่มีโหลด)', '(no load)');
+  if (rlRaw !== '') {
+    out += '<br>' + L('ต่อโหลด: R2 ขนาน R<sub>L</sub> = ', 'With load: R2 ∥ R<sub>L</sub> = ') + formatOhm(x.r2eff) + ' → V<sub>out</sub> = <strong>' + v(x.vout) + '</strong> ' +
+      L('(ตกลง ' + x.drop.toFixed(1) + '%)', '(drops ' + x.drop.toFixed(1) + '%)');
+    if (x.drop > 10) out += '<br><span style="color:#92400e;">⚠️ ' + L('โหลดกินกระแสมากเกินไปสำหรับวงจรแบ่งแรงดันนี้ — ใช้ R1/R2 ค่าต่ำลง (ราว 1/10 ของ R<sub>L</sub>) หรือใช้เรกูเลเตอร์แทน', 'The load draws too much for this divider — use R1/R2 around 1/10 of R<sub>L</sub>, or a regulator instead') + '</span>';
+  }
+  out += '<br>' + L('กระแสในวงจร', 'Current drawn') + ' ≈ ' + +(x.i * 1000).toPrecision(3) + ' mA · ' + L('กำลังรวม', 'total power') + ' ≈ ' + +(x.p * 1000).toPrecision(3) + ' mW';
+  res.innerHTML = out;
+}
 
 // ===== REVERSE RESISTOR =====
 const REV_DIGITS = [
@@ -439,7 +475,7 @@ function calcUnit() {
 // ===== PAGE EVENT BINDINGS =====
 const toolActions = {
   calcOhm, clearOhm, calcPower, clearPower, calcEnergy,
-  calcRS, calcRP, calcCS, calcCP, calcUnit, calcReverse, calcLed, calcCode,
+  calcRS, calcRP, calcCS, calcCP, calcUnit, calcReverse, calcLed, calcCode, calcLS, calcLP, calcDivider,
 };
 
 document.getElementById('led_color')?.addEventListener('change', e => {
